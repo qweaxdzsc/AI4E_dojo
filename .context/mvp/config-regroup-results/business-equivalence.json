@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "comparison": "原始案例与五段映射的完整生效业务参数",
+  "allowed_difference": "仅外部阶段 datapre 改为 rawprep",
+  "algorithm_and_sampling_values": "identical"
+}

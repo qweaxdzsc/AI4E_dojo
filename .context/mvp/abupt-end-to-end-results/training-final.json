@@ -1,0 +1,173 @@
+{
+  "reference": "/tmp/dojo-audit-20260909/noether-runs/reference/checkpoints/ab_upt_cp=last_model.th",
+  "checkpoint": "/tmp/dojo-audit-20260909/final-runs/2026-09-09T10-09-24_1b3717/checkpoints/last.pt",
+  "tolerance": {
+    "reference_a": "/tmp/dojo-audit-20260909/noether-runs/reference/checkpoints/ab_upt_cp=last_model.th",
+    "reference_b": "/tmp/dojo-three-stage-full/noether/reference-a/checkpoints/ab_upt_cp=last_model.th",
+    "reference_repeat_exact": true,
+    "rtol": 1e-05,
+    "atol": 1e-06,
+    "passed": true,
+    "reason": "Predeclared CPU FP32 tolerance; official repeated run must be exact; never relaxed after Dojo comparison."
+  },
+  "epoch": 2,
+  "updates": 1578,
+  "same_iteration": true,
+  "model_parameters": {
+    "dim": 192,
+    "geometry_depth": 6,
+    "num_heads": 3,
+    "blocks": "pscscscscsc",
+    "radius": 9.0,
+    "require_features": false,
+    "num_domain_decoder_blocks": {
+      "surface": 12,
+      "volume": 12
+    }
+  },
+  "max_abs": 0.0,
+  "failed_tensors": [],
+  "passed": true,
+  "metrics": [
+    {
+      "epoch": 1,
+      "metric": "loss/online/total/E1",
+      "actual": 0.6530808109332098,
+      "reference": 0.6530808210372925,
+      "passed": true
+    },
+    {
+      "epoch": 1,
+      "metric": "loss/test/total",
+      "actual": 0.1998126396536827,
+      "reference": 0.1998126357793808,
+      "passed": true
+    },
+    {
+      "epoch": 1,
+      "metric": "loss/test/surface_pressure_loss",
+      "actual": 0.1074065419100225,
+      "reference": 0.10740654170513153,
+      "passed": true
+    },
+    {
+      "epoch": 1,
+      "metric": "loss/test/volume_velocity_loss",
+      "actual": 0.09240609779953957,
+      "reference": 0.09240610152482986,
+      "passed": true
+    },
+    {
+      "epoch": 1,
+      "metric": "loss/test/surface_pressure_mse",
+      "actual": 255.2416437149048,
+      "reference": 255.24163818359375,
+      "passed": true
+    },
+    {
+      "epoch": 1,
+      "metric": "loss/test/surface_pressure_mae",
+      "actual": 8.498555288314819,
+      "reference": 8.498555183410645,
+      "passed": true
+    },
+    {
+      "epoch": 1,
+      "metric": "loss/test/surface_pressure_l2err",
+      "actual": 0.2599835766851902,
+      "reference": 0.2599835693836212,
+      "passed": true
+    },
+    {
+      "epoch": 1,
+      "metric": "loss/test/volume_velocity_mse",
+      "actual": 0.8544005858898163,
+      "reference": 0.854400634765625,
+      "passed": true
+    },
+    {
+      "epoch": 1,
+      "metric": "loss/test/volume_velocity_mae",
+      "actual": 0.48235672324895856,
+      "reference": 0.4823567271232605,
+      "passed": true
+    },
+    {
+      "epoch": 1,
+      "metric": "loss/test/volume_velocity_l2err",
+      "actual": 0.08502471577376128,
+      "reference": 0.08502472192049026,
+      "passed": true
+    },
+    {
+      "epoch": 2,
+      "metric": "loss/online/total/E1",
+      "actual": 0.17027973251462133,
+      "reference": 0.17027972638607025,
+      "passed": true
+    },
+    {
+      "epoch": 2,
+      "metric": "loss/test/total",
+      "actual": 0.14248741053044797,
+      "reference": 0.14248740673065186,
+      "passed": true
+    },
+    {
+      "epoch": 2,
+      "metric": "loss/test/surface_pressure_loss",
+      "actual": 0.07975627483800053,
+      "reference": 0.07975628226995468,
+      "passed": true
+    },
+    {
+      "epoch": 2,
+      "metric": "loss/test/volume_velocity_loss",
+      "actual": 0.06273113576695323,
+      "reference": 0.06273113191127777,
+      "passed": true
+    },
+    {
+      "epoch": 2,
+      "metric": "loss/test/surface_pressure_mse",
+      "actual": 177.8437138748169,
+      "reference": 177.8437042236328,
+      "passed": true
+    },
+    {
+      "epoch": 2,
+      "metric": "loss/test/surface_pressure_mae",
+      "actual": 7.175684461593628,
+      "reference": 7.175684928894043,
+      "passed": true
+    },
+    {
+      "epoch": 2,
+      "metric": "loss/test/surface_pressure_l2err",
+      "actual": 0.21529834859073163,
+      "reference": 0.2152983695268631,
+      "passed": true
+    },
+    {
+      "epoch": 2,
+      "metric": "loss/test/volume_velocity_mse",
+      "actual": 0.5467286750674247,
+      "reference": 0.5467286705970764,
+      "passed": true
+    },
+    {
+      "epoch": 2,
+      "metric": "loss/test/volume_velocity_mae",
+      "actual": 0.3722100859880447,
+      "reference": 0.3722100853919983,
+      "passed": true
+    },
+    {
+      "epoch": 2,
+      "metric": "loss/test/volume_velocity_l2err",
+      "actual": 0.06750080958008767,
+      "reference": 0.06750080734491348,
+      "passed": true
+    }
+  ]
+}

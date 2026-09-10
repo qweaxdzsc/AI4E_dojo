@@ -1,0 +1,1402 @@
+[
+  {
+    "id": 1,
+    "name": "解析预处理命令行参数",
+    "reference": "`user_project/preprocess.py :: parse_args, main`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_aero_cfd_examples.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "A1",
+    "dojo": "recipes/aero_cfd/pipeline.py",
+    "note": "配置/CLI 格式允许不同，当前五段 YAML 入口已验；不表示兼容旧公开 YAML。"
+  },
+  {
+    "id": 2,
+    "name": "加载并校验统一 TOML 配置",
+    "reference": "`user_project/config.py :: load_config`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_aero_cfd_examples.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "A1",
+    "dojo": "recipes/aero_cfd/pipeline.py",
+    "note": "配置/CLI 格式允许不同，当前五段 YAML 入口已验；不表示兼容旧公开 YAML。"
+  },
+  {
+    "id": 3,
+    "name": "定位并检查官方训练 HDF5",
+    "reference": "`user_project/preprocess.py :: inspect_h5, _sample_names`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B1",
+    "dojo": "packages/ai4e-contrib/application/datasets/nasa_crm/adapter.py",
+    "note": ""
+  },
+  {
+    "id": 4,
+    "name": "定位并检查官方测试 HDF5",
+    "reference": "`user_project/preprocess.py :: inspect_h5, _sample_names`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B1",
+    "dojo": "packages/ai4e-contrib/application/datasets/nasa_crm/adapter.py",
+    "note": ""
+  },
+  {
+    "id": 5,
+    "name": "校验每个样本的必需 datasets 与 attributes",
+    "reference": "`user_project/constants.py :: REQUIRED_DATASETS, REQUIRED_ATTRIBUTES`; `user_project/preprocess.py :: _validate_group`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B1",
+    "dojo": "packages/ai4e-contrib/application/datasets/nasa_crm/adapter.py",
+    "note": ""
+  },
+  {
+    "id": 6,
+    "name": "校验点字段形状与非空性",
+    "reference": "`user_project/preprocess.py :: _validate_group`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B1",
+    "dojo": "packages/ai4e-contrib/application/datasets/nasa_crm/adapter.py",
+    "note": ""
+  },
+  {
+    "id": 7,
+    "name": "校验 train/test 点数契约一致",
+    "reference": "`user_project/preprocess.py :: run_preprocess`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B1",
+    "dojo": "packages/ai4e-contrib/application/datasets/nasa_crm/adapter.py",
+    "note": ""
+  },
+  {
+    "id": 8,
+    "name": "执行 `--check-only` 元数据检查",
+    "reference": "`user_project/preprocess.py :: run_preprocess`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B1",
+    "dojo": "packages/ai4e-contrib/application/datasets/nasa_crm/adapter.py",
+    "note": "对应 rawprep --dry-run：只检查而不写数据，除元数据外还校验实际点场。"
+  },
+  {
+    "id": 9,
+    "name": "固定种子拆分官方训练集",
+    "reference": "`user_project/preprocess.py :: create_splits`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/rawprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 10,
+    "name": "保持官方 test 完全隔离",
+    "reference": "`user_project/preprocess.py :: create_splits`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/rawprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 11,
+    "name": "组装坐标与法向矩阵",
+    "reference": "`user_project/preprocess.py :: _read_sample`; `user_project/constants.py`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/rawprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 12,
+    "name": "组装面积与四通道监督标签",
+    "reference": "`user_project/preprocess.py :: _read_sample`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/rawprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 13,
+    "name": "提取六维工况与全局参考量",
+    "reference": "`user_project/preprocess.py :: _read_sample`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/rawprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 14,
+    "name": "拒绝 NaN/Inf",
+    "reference": "`user_project/preprocess.py :: _read_sample`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/rawprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 15,
+    "name": "拒绝误覆盖非空 processed 目录",
+    "reference": "`user_project/preprocess.py :: run_preprocess`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/rawprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 16,
+    "name": "建立 split/sample 输出目录",
+    "reference": "`user_project/preprocess.py :: _write_sample`; `user_project/data.py :: sample_directory`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/rawprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 17,
+    "name": "原子保存样本级工况",
+    "reference": "`user_project/preprocess.py :: _write_sample`; `user_project/io_utils.py :: atomic_save_npy`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/rawprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 18,
+    "name": "按官方方式切分几何和监督场",
+    "reference": "`user_project/preprocess.py :: _write_sample`; `user_project/io_utils.py :: part_path`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/rawprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 19,
+    "name": "保证切块无丢失、无重复且可恢复",
+    "reference": "`user_project/data.py :: reconstruct_stride_parts`; `tests/test_nasa_crm_pipeline.py`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/rawprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 20,
+    "name": "写入单样本 metadata",
+    "reference": "`user_project/preprocess.py :: _write_sample`; `user_project/io_utils.py :: atomic_write_json`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/rawprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 21,
+    "name": "校验并复用已完成样本",
+    "reference": "`user_project/preprocess.py :: _sample_complete, _write_sample`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/rawprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 22,
+    "name": "仅用 84 个 train 样本计算六维工况统计",
+    "reference": "`user_project/preprocess.py :: RunningMoments, _compute_train_statistics`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B3",
+    "dojo": "packages/ai4e-core/abilities/data/stats/population.py",
+    "note": ""
+  },
+  {
+    "id": 23,
+    "name": "仅用 84 个 train 样本计算四通道标签统计",
+    "reference": "`user_project/preprocess.py :: RunningMoments, _compute_train_statistics`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B3",
+    "dojo": "packages/ai4e-core/abilities/data/stats/population.py",
+    "note": ""
+  },
+  {
+    "id": 24,
+    "name": "拒绝零标准差与非有限统计输入",
+    "reference": "`user_project/preprocess.py :: RunningMoments.update, finalize`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B3",
+    "dojo": "packages/ai4e-core/abilities/data/stats/population.py",
+    "note": ""
+  },
+  {
+    "id": 25,
+    "name": "生成并原子写入可校验 manifest",
+    "reference": "`user_project/preprocess.py :: run_preprocess`; `user_project/io_utils.py :: manifest_fingerprint`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_nasa_crm_data.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/full-data.json"
+    ],
+    "leaf": "B3",
+    "dojo": "packages/ai4e-core/abilities/data/stats/population.py",
+    "note": ""
+  },
+  {
+    "id": 26,
+    "name": "解析单卡训练参数",
+    "reference": "`user_project/train.py :: parse_args, main`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_aero_cfd_examples.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "A1",
+    "dojo": "packages/ai4e-contrib/ability/model/transolver3/component.py",
+    "note": "配置/CLI 格式允许不同，当前五段 YAML 入口已验；不表示兼容旧公开 YAML。"
+  },
+  {
+    "id": 27,
+    "name": "加载并验证 manifest 指纹",
+    "reference": "`user_project/io_utils.py :: load_manifest`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_aero_cfd_examples.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "A1",
+    "dojo": "packages/ai4e-contrib/ability/model/transolver3/component.py",
+    "note": "配置/CLI 格式允许不同，当前五段 YAML 入口已验；不表示兼容旧公开 YAML。"
+  },
+  {
+    "id": 28,
+    "name": "校验字段顺序与 12/4 维",
+    "reference": "`user_project/data.py :: validate_manifest_contract`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_aero_cfd_examples.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "A1",
+    "dojo": "packages/ai4e-contrib/ability/model/transolver3/component.py",
+    "note": "配置/CLI 格式允许不同，当前五段 YAML 入口已验；不表示兼容旧公开 YAML。"
+  },
+  {
+    "id": 29,
+    "name": "解析并检查单一计算设备",
+    "reference": "`user_project/model_utils.py :: resolve_device`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_aero_cfd_examples.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "A1",
+    "dojo": "packages/ai4e-contrib/ability/model/transolver3/component.py",
+    "note": "配置/CLI 格式允许不同，当前五段 YAML 入口已验；不表示兼容旧公开 YAML。"
+  },
+  {
+    "id": 30,
+    "name": "固定 Python/NumPy/PyTorch 随机状态",
+    "reference": "`user_project/model_utils.py :: seed_everything`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_reference.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/trainprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 31,
+    "name": "建立训练样本索引",
+    "reference": "`user_project/data.py :: RandomChunkDataset.__init__, __len__`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_reference.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/trainprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 32,
+    "name": "为每个训练样本随机选择一个 chunk",
+    "reference": "`user_project/data.py :: RandomChunkDataset.__getitem__`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_reference.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/trainprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 33,
+    "name": "在 chunk 内随机 offset 后 stride 抽 1/4",
+    "reference": "`user_project/data.py :: RandomChunkDataset.__getitem__`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_reference.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/trainprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 34,
+    "name": "标准化并广播六维工况",
+    "reference": "`user_project/data.py :: build_features`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_reference.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/trainprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 35,
+    "name": "拼接固定 12 维模型输入",
+    "reference": "`user_project/data.py :: build_features`; `user_project/constants.py :: INPUT_FIELDS`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_reference.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/trainprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 36,
+    "name": "标准化四通道监督标签",
+    "reference": "`user_project/data.py :: normalize_labels`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_reference.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/trainprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 37,
+    "name": "建立 batch_size=1 的随机训练 DataLoader",
+    "reference": "`user_project/train.py :: run_training`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_reference.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/trainprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 38,
+    "name": "枚举 validation 的全部样本与全部 chunk",
+    "reference": "`user_project/data.py :: SequentialChunkDataset`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_reference.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/trainprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 39,
+    "name": "建立不打乱的验证 DataLoader",
+    "reference": "`user_project/train.py :: run_training`; `user_project/data.py :: SequentialChunkDataset.__getitem__`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_reference.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/trainprep/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 40,
+    "name": "实例化官方 chunked Transolver",
+    "reference": "`user_project/model_utils.py :: build_training_model`; `models/Transolver_chunk_opt_matrix_mul.py :: Model`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C1",
+    "dojo": "packages/ai4e-contrib/ability/model/transolver3/model.py",
+    "note": ""
+  },
+  {
+    "id": 41,
+    "name": "区分正式模型与 CPU 冒烟模型",
+    "reference": "`user_project/configs/nasa_crm.toml`; `user_project/configs/nasa_crm_cpu_smoke.toml`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C1",
+    "dojo": "packages/ai4e-contrib/ability/model/transolver3/model.py",
+    "note": "格式入口允许不同；业务含义及数值按原流程核对。"
+  },
+  {
+    "id": 42,
+    "name": "创建 AdamW",
+    "reference": "`user_project/train.py :: run_training`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C3",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/pointfield_workflow.py",
+    "note": ""
+  },
+  {
+    "id": 43,
+    "name": "创建余弦退火调度器",
+    "reference": "`user_project/train.py :: run_training`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C3",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/pointfield_workflow.py",
+    "note": ""
+  },
+  {
+    "id": 44,
+    "name": "加载本管线 checkpoint",
+    "reference": "`user_project/model_utils.py :: load_checkpoint`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-resume.json"
+    ],
+    "leaf": "C4",
+    "dojo": "packages/ai4e-core/abilities/training/checkpoint.py",
+    "note": "真实第一轮恢复配对；参考 RNG 张量搬回 CPU 的运输修正记录在 provenance。"
+  },
+  {
+    "id": 45,
+    "name": "校验 checkpoint 与当前数据/模型一致",
+    "reference": "`user_project/model_utils.py :: validate_checkpoint`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-resume.json"
+    ],
+    "leaf": "C4",
+    "dojo": "packages/ai4e-core/abilities/training/checkpoint.py",
+    "note": ""
+  },
+  {
+    "id": 46,
+    "name": "恢复模型、优化器和调度器状态",
+    "reference": "`user_project/train.py :: run_training`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-resume.json"
+    ],
+    "leaf": "C4",
+    "dojo": "packages/ai4e-core/abilities/training/checkpoint.py",
+    "note": "真实第一轮恢复配对；参考 RNG 张量搬回 CPU 的运输修正记录在 provenance。"
+  },
+  {
+    "id": 47,
+    "name": "恢复 epoch、best 指标与 history",
+    "reference": "`user_project/train.py :: run_training`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-resume.json"
+    ],
+    "leaf": "C4",
+    "dojo": "packages/ai4e-core/abilities/training/checkpoint.py",
+    "note": "真实第一轮恢复配对；参考 RNG 张量搬回 CPU 的运输修正记录在 provenance。"
+  },
+  {
+    "id": 48,
+    "name": "恢复全部随机状态",
+    "reference": "`user_project/train.py :: run_training`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-resume.json"
+    ],
+    "leaf": "C4",
+    "dojo": "packages/ai4e-core/abilities/training/checkpoint.py",
+    "note": "真实第一轮恢复配对；参考 RNG 张量搬回 CPU 的运输修正记录在 provenance。"
+  },
+  {
+    "id": 49,
+    "name": "切换 train 模式并搬运 batch",
+    "reference": "`user_project/train.py :: _train_epoch`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C3",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 50,
+    "name": "执行官方列表式前向",
+    "reference": "`user_project/train.py :: _train_epoch`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C3",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 51,
+    "name": "计算四通道等权标准化 MSE",
+    "reference": "`user_project/train.py :: _train_epoch`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C3",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 52,
+    "name": "反向传播",
+    "reference": "`user_project/train.py :: _train_epoch`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C3",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 53,
+    "name": "裁剪梯度范数",
+    "reference": "`user_project/train.py :: _train_epoch`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C3",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 54,
+    "name": "执行 optimizer step",
+    "reference": "`user_project/train.py :: _train_epoch`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C3",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 55,
+    "name": "按真实元素数累计 epoch MSE",
+    "reference": "`user_project/train.py :: _train_epoch`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C3",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 56,
+    "name": "进入 eval/no_grad 模式",
+    "reference": "`user_project/train.py :: _validate`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C3",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 57,
+    "name": "全量前向 21×20 个验证 chunk",
+    "reference": "`user_project/train.py :: _validate`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C3",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 58,
+    "name": "将验证预测反归一化",
+    "reference": "`user_project/train.py :: _validate`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C3",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 59,
+    "name": "累计四通道 physical MSE/MAE",
+    "reference": "`user_project/train.py :: _validate`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C3",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 60,
+    "name": "更新学习率并按间隔触发验证",
+    "reference": "`user_project/train.py :: run_training`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "C3",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 61,
+    "name": "构建完整可恢复 checkpoint payload",
+    "reference": "`user_project/train.py :: _checkpoint_payload`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-resume.json"
+    ],
+    "leaf": "C4",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 62,
+    "name": "原子维护 latest、best 与 history",
+    "reference": "`user_project/train.py :: run_training`; `user_project/model_utils.py :: atomic_torch_save`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-resume.json"
+    ],
+    "leaf": "C4",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 63,
+    "name": "记录每个 epoch 的核心运行历史",
+    "reference": "`user_project/train.py :: run_training`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-resume.json"
+    ],
+    "leaf": "C4",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 64,
+    "name": "仅按 validation normalized MSE 选择 best",
+    "reference": "`user_project/train.py :: run_training`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-resume.json"
+    ],
+    "leaf": "C4",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 65,
+    "name": "检查并返回最佳 checkpoint",
+    "reference": "`user_project/train.py :: run_training, main`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_training.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-resume.json"
+    ],
+    "leaf": "C4",
+    "dojo": "packages/ai4e-core/abilities/training/loop.py",
+    "note": ""
+  },
+  {
+    "id": 66,
+    "name": "完成真实数据 2 epoch 训练烟测",
+    "reference": "`user_project/README.md :: 已验证的真实数据 CPU 冒烟结果`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_reference.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-training.json"
+    ],
+    "leaf": "E3",
+    "dojo": "tools/verification/transolver3/dojo.py",
+    "note": ""
+  },
+  {
+    "id": 67,
+    "name": "解析 split、样本、checkpoint、设备与 resume",
+    "reference": "`user_project/inference.py :: parse_args, main`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": "格式入口允许不同；业务含义及数值按原流程核对。"
+  },
+  {
+    "id": 68,
+    "name": "加载并校验 manifest 与字段顺序",
+    "reference": "`user_project/inference.py :: run_inference`; `user_project/data.py :: validate_manifest_contract`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 69,
+    "name": "限制推理 split 为 validation/test",
+    "reference": "`user_project/inference.py :: run_inference`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 70,
+    "name": "校验指定样本属于目标 split",
+    "reference": "`user_project/inference.py :: run_inference`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 71,
+    "name": "解析设备并加载 checkpoint",
+    "reference": "`user_project/inference.py :: run_inference`; `user_project/model_utils.py`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 72,
+    "name": "校验模型配置与 manifest 指纹",
+    "reference": "`user_project/model_utils.py :: validate_checkpoint`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 73,
+    "name": "建立物理状态缓存模型和全网格解码模型",
+    "reference": "`user_project/inference.py :: run_inference`; `models/Transolver_chunk_opt_matrix_mul_amortize.py`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-cache.json"
+    ],
+    "leaf": "D1",
+    "dojo": "packages/ai4e-contrib/ability/model/transolver3/inference.py",
+    "note": ""
+  },
+  {
+    "id": 74,
+    "name": "校验并跳过完整预测样本",
+    "reference": "`user_project/inference.py :: _prediction_complete, _infer_sample`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-cache.json"
+    ],
+    "leaf": "D1",
+    "dojo": "packages/ai4e-contrib/ability/model/transolver3/inference.py",
+    "note": ""
+  },
+  {
+    "id": 75,
+    "name": "逐层初始化聚合分子与分母",
+    "reference": "`user_project/inference.py :: _infer_sample`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-cache.json"
+    ],
+    "leaf": "D1",
+    "dojo": "packages/ai4e-contrib/ability/model/transolver3/inference.py",
+    "note": ""
+  },
+  {
+    "id": 76,
+    "name": "为每层遍历全部 20 个 chunk",
+    "reference": "`user_project/inference.py :: _infer_sample`; `user_project/data.py :: build_features`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-cache.json"
+    ],
+    "leaf": "D1",
+    "dojo": "packages/ai4e-contrib/ability/model/transolver3/inference.py",
+    "note": ""
+  },
+  {
+    "id": 77,
+    "name": "聚合每个 chunk 的物理状态贡献",
+    "reference": "`user_project/inference.py :: _infer_sample`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-cache.json"
+    ],
+    "leaf": "D1",
+    "dojo": "packages/ai4e-contrib/ability/model/transolver3/inference.py",
+    "note": ""
+  },
+  {
+    "id": 78,
+    "name": "完成当前层全表面状态缓存",
+    "reference": "`user_project/inference.py :: _infer_sample`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-cache.json"
+    ],
+    "leaf": "D1",
+    "dojo": "packages/ai4e-contrib/ability/model/transolver3/inference.py",
+    "note": ""
+  },
+  {
+    "id": 79,
+    "name": "使用完整 cache 逐 chunk 解码并反归一化",
+    "reference": "`user_project/inference.py :: _infer_sample`; `user_project/data.py :: denormalize_labels`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-cache.json"
+    ],
+    "leaf": "D1",
+    "dojo": "packages/ai4e-contrib/ability/model/transolver3/inference.py",
+    "note": ""
+  },
+  {
+    "id": 80,
+    "name": "原子保存 prediction chunks 与 metadata",
+    "reference": "`user_project/inference.py :: _infer_sample`; `user_project/io_utils.py :: atomic_save_npy`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-cache.json"
+    ],
+    "leaf": "D1",
+    "dojo": "packages/ai4e-contrib/ability/model/transolver3/inference.py",
+    "note": ""
+  },
+  {
+    "id": 81,
+    "name": "解析 split、样本选择、VTK 与覆盖开关",
+    "reference": "`user_project/post.py :: parse_args, main, select_samples`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": "格式入口允许不同；业务含义及数值按原流程核对。"
+  },
+  {
+    "id": 82,
+    "name": "校验 manifest、split 与样本集合",
+    "reference": "`user_project/post.py :: run_postprocess`; `user_project/data.py :: validate_manifest_contract`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 83,
+    "name": "按需加载官方 connectivity 并检查点数",
+    "reference": "`user_project/post.py :: run_postprocess`; `user_project/mesh.py :: reconstruct_surface_topology`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D3",
+    "dojo": "packages/ai4e-contrib/application/datasets/nasa_crm/topology.py",
+    "note": ""
+  },
+  {
+    "id": 84,
+    "name": "读取并验证官方节点邻接表",
+    "reference": "`user_project/mesh.py :: load_adjacency`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D3",
+    "dojo": "packages/ai4e-contrib/application/datasets/nasa_crm/topology.py",
+    "note": ""
+  },
+  {
+    "id": 85,
+    "name": "枚举三角形 clique",
+    "reference": "`user_project/mesh.py :: reconstruct_surface_topology`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D3",
+    "dojo": "packages/ai4e-contrib/application/datasets/nasa_crm/topology.py",
+    "note": ""
+  },
+  {
+    "id": 86,
+    "name": "枚举无弦四边形 cycle",
+    "reference": "`user_project/mesh.py :: reconstruct_surface_topology`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D3",
+    "dojo": "packages/ai4e-contrib/application/datasets/nasa_crm/topology.py",
+    "note": ""
+  },
+  {
+    "id": 87,
+    "name": "计算边数、面数与 Euler 特征",
+    "reference": "`user_project/mesh.py :: SurfaceTopology, reconstruct_surface_topology`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D3",
+    "dojo": "packages/ai4e-contrib/application/datasets/nasa_crm/topology.py",
+    "note": ""
+  },
+  {
+    "id": 88,
+    "name": "恢复 source 几何与真值原始点序",
+    "reference": "`user_project/post.py :: _reconstruct_source`; `user_project/data.py :: reconstruct_stride_parts`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 89,
+    "name": "恢复 prediction 原始点序",
+    "reference": "`user_project/post.py :: _reconstruct_prediction`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 90,
+    "name": "检查 prediction 与 truth shape 完全一致",
+    "reference": "`user_project/post.py :: run_postprocess`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 91,
+    "name": "拒绝覆盖已有 HDF5/VTP",
+    "reference": "`user_project/post.py :: run_postprocess`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 92,
+    "name": "计算逐样本四通道误差",
+    "reference": "`user_project/post.py :: MetricAccumulator`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 93,
+    "name": "计算 Cf 向量模长误差与总体聚合",
+    "reference": "`user_project/post.py :: MetricAccumulator.update, finalize`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 94,
+    "name": "写入完整可审计的单样本结果",
+    "reference": "`user_project/post.py :: _write_sample_h5`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 95,
+    "name": "比较重建面面积与 NASA 节点面积和",
+    "reference": "`user_project/mesh.py :: surface_area_ratio`; `user_project/post.py :: run_postprocess`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D3",
+    "dojo": "packages/ai4e-core/abilities/postproc/export/field_surface.py",
+    "note": ""
+  },
+  {
+    "id": 96,
+    "name": "按 NASA 节点法向统一三角形/四边形方向",
+    "reference": "`user_project/mesh.py :: orient_topology`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D3",
+    "dojo": "packages/ai4e-core/abilities/postproc/export/field_surface.py",
+    "note": ""
+  },
+  {
+    "id": 97,
+    "name": "构造真实混合单元 PolyData",
+    "reference": "`user_project/mesh.py :: write_vtp`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D3",
+    "dojo": "packages/ai4e-core/abilities/postproc/export/field_surface.py",
+    "note": ""
+  },
+  {
+    "id": 98,
+    "name": "写入 ParaView Point Data 与 Field Data",
+    "reference": "`user_project/mesh.py :: write_vtp`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D3",
+    "dojo": "packages/ai4e-core/abilities/postproc/export/field_surface.py",
+    "note": ""
+  },
+  {
+    "id": 99,
+    "name": "按选择模式生成不冲突的 CSV/JSON",
+    "reference": "`user_project/post.py :: _metrics_stem, _flatten_metrics, run_postprocess`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_post.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "D2",
+    "dojo": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+    "note": ""
+  },
+  {
+    "id": 100,
+    "name": "验证真实 NASA CRM 后处理与 ParaView 使用边界",
+    "reference": "`user_project/README.md :: Post, 已验证的真实数据 CPU 冒烟结果`; `tests/test_nasa_crm_pipeline.py`",
+    "status": "formal_path_and_scoped_tests_passed",
+    "evidence": [
+      "tests/integration/test_transolver_reference.py",
+      ".context/mvp/transolver3-results/new-suite.xml",
+      ".context/mvp/transolver3-results/formal-post.json"
+    ],
+    "leaf": "E3",
+    "dojo": "tools/verification/transolver3/reference.py",
+    "note": "全部 44 样本真实 HDF5/VTP 与指标通过；VTP 由 VTK 读回验证，不声明人工 ParaView GUI 验收。"
+  }
+]

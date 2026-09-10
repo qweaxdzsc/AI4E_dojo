@@ -1,0 +1,854 @@
+{
+  "passed": true,
+  "sample": "Sample001",
+  "layers": 24,
+  "point_count": 454404,
+  "comparisons": [
+    {
+      "identity": "Sample001/cache/0",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/1",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/2",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/3",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/4",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/5",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/6",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/7",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/8",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/9",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/10",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/11",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/12",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/13",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/14",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/15",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/16",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/17",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/18",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/19",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/20",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/21",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/22",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/cache/23",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "expected_shape": [
+        1,
+        8,
+        64,
+        32
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/0",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22721,
+        4
+      ],
+      "expected_shape": [
+        22721,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/1",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22721,
+        4
+      ],
+      "expected_shape": [
+        22721,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/2",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22721,
+        4
+      ],
+      "expected_shape": [
+        22721,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/3",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22721,
+        4
+      ],
+      "expected_shape": [
+        22721,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/4",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/5",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/6",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/7",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/8",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/9",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/10",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/11",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/12",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/13",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/14",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/15",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/16",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/17",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/18",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    },
+    {
+      "identity": "Sample001/prediction/19",
+      "rtol": 1e-05,
+      "atol": 1e-06,
+      "actual_shape": [
+        22720,
+        4
+      ],
+      "expected_shape": [
+        22720,
+        4
+      ],
+      "passed": true,
+      "mismatch_count": 0,
+      "max_absolute_error": 0.0,
+      "first_mismatch": null
+    }
+  ],
+  "mismatch_count": 0,
+  "max_absolute_error": 0
+}

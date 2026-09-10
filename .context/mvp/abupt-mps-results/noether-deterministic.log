@@ -1,0 +1,97 @@
+2026-09-09T12:34:08 I logging to file: /tmp/dojo-mps-research-20260909/noether-runs/deterministic/log.txt
+[33;20m2026-09-09T12:34:08 W overrides could not be included into name -> this occours if starting multi-GPU runs without SLURM as the hydra config is not initialized in spawned processes[0m
+2026-09-09T12:34:08 I Running experiment name: , run_id: deterministic, stage_name: None
+[33;20m2026-09-09T12:34:08 W could not retrieve current git commit hash from ./.git/FETCH_HEAD[0m
+2026-09-09T12:34:08 I Dumped resolved hyperparameters to /tmp/dojo-mps-research-20260909/noether-runs/deterministic/hp_resolved.yaml
+2026-09-09T12:34:08 I Seeding process RNG with seed=17
+2026-09-09T12:34:08 I Initializing dataset train
+2026-09-09T12:34:08 I Initialized ShapeNetCarDataset with 789 samples for split 'train'
+2026-09-09T12:34:08 I Initializing dataset test
+2026-09-09T12:34:08 I Initialized ShapeNetCarDataset with 100 samples for split 'test'
+2026-09-09T12:34:08 I Initializing dataset test_repeat
+2026-09-09T12:34:08 I Initialized ShapeNetCarDataset with 100 samples for split 'test'
+2026-09-09T12:34:08 I  Instantiating dataset_wrapper: noether.data.base.wrappers.RepeatWrapper
+2026-09-09T12:34:08 I using precision: torch.float32 (desired=float32)
+2026-09-09T12:34:08 I Initialized trainer WeightedLossTrainer
+2026-09-09T12:34:08 I Initialized model AeroABUPT
+fatal: not a git repository (or any of the parent directories): .git
+[33;20m2026-09-09T12:34:08 W Failed to create code archive using git.[0m
+2026-09-09T12:34:08 I OfflineLossCallback(every_n_epochs=1) registered sampler test of <noether.data.datasets.cfd.shapenet_car.dataset.ShapeNetCarDataset object at 0x11646a180> (properties=volume_velocity,surface_normals,surface_position,index,surface_pressure,surface_sdf,volume_sdf,volume_position,volume_normals) using MultiStagePipeline with 9 sample_processors 3 collators
+2026-09-09T12:34:08 I AeroMetricsCallback(every_n_epochs=1) registered sampler test of <noether.data.datasets.cfd.shapenet_car.dataset.ShapeNetCarDataset object at 0x11646a180> (properties=volume_velocity,surface_normals,surface_position,index,surface_pressure,surface_sdf,volume_sdf,volume_position,volume_normals) using MultiStagePipeline with 9 sample_processors 3 collators
+[33;20m2026-09-09T12:34:08 W No tracking intervals set, defaulting to every 3 updates for tracking callbacks.[0m
+2026-09-09T12:34:08 I Using 2 param groups: default len(params)=259, weight_decay=0.0 len(params)=344
+2026-09-09T12:34:08 I Initialized Lion(clip_grad_norm=1.0, schedule_config={'max_value': 8e-05, 'warmup_percent': 0.05}) optimizer for ab_upt
+2026-09-09T12:34:08 I Calculated local batch_size: 1, accumulation_steps_total: 1 (effective_batch_size=1), train_batches per epoch: 789 (world_size=1)
+2026-09-09T12:34:08 I Using RandomSampler as main_sampler
+2026-09-09T12:34:08 I Created dataloader (batch_size=1 num_workers=0 pin_memory=False total_cpu_count=18 prefetch_factor=None seeded=True multiprocessing_context=None persistent_workers=False)
+2026-09-09T12:34:08 I Running before_training callbacks
+2026-09-09T12:34:08 I Estimated sizes: checkpoint: 223.6MB, weights: 74.5MB, optimizer: 149.1MB, all 1 checkpoints: 74.5MB
+2026-09-09T12:34:08 I Dataset lengths: train=789, test=100, test_repeat=1000
+2026-09-09T12:34:08 I Parameter count of total: trainable=18.6M frozen=0
+2026-09-09T12:34:08 I Parameter count of aero_abupt: trainable=18.6M frozen=0
+2026-09-09T12:34:08 I Running training loop
+/Users/zonghui/work/new_code_project/noether/src/noether/training/trainers/base.py:666: UserWarning: Batch contains additional keys {'surface_normals', 'index'} or is missing keys: set()
+  warnings.warn(f"Batch contains additional keys {additional_keys} or is missing keys: {missing_keys}")
+/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+Traceback (most recent call last):
+  File "/Users/zonghui/work/new_code_project/AI4E_Dojo/tools/verification/reference_env.py", line 41, in <module>
+    main()
+  File "/Users/zonghui/work/new_code_project/AI4E_Dojo/tools/verification/reference_env.py", line 37, in main
+    runpy.run_path(str(tool), run_name="__main__")
+  File "<frozen runpy>", line 287, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/Users/zonghui/work/new_code_project/AI4E_Dojo/tools/verification/run_noether_reference.py", line 64, in <module>
+    train(args.dataset, args.output, args.run_id, args.experiment)
+  File "/Users/zonghui/work/new_code_project/AI4E_Dojo/tools/verification/run_noether_reference.py", line 51, in train
+    HydraRunner().main(device=device, config=config)
+  File "/Users/zonghui/work/new_code_project/noether/src/noether/training/runners/hydra_runner.py", line 142, in main
+    trainer.train(model)
+  File "/Users/zonghui/work/new_code_project/noether/src/noether/training/trainers/base.py", line 803, in train
+    self._train(
+  File "/Users/zonghui/work/new_code_project/noether/src/noether/training/trainers/base.py", line 850, in _train
+    should_stop = self._run_epoch(
+                  ^^^^^^^^^^^^^^^^
+  File "/Users/zonghui/work/new_code_project/noether/src/noether/training/trainers/base.py", line 978, in _run_epoch
+    losses, additional_outputs, times_dict = self.update(
+                                             ^^^^^^^^^^^^
+  File "/Users/zonghui/work/new_code_project/noether/src/noether/training/trainers/base.py", line 1118, in update
+    trainer_result = self.train_step(batch, model=dist_model)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/zonghui/work/new_code_project/noether/src/noether/training/trainers/base.py", line 705, in train_step
+    forward_output = model(**forward_batch)
+                     ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/zonghui/work/new_code_project/noether/src/noether/modeling/models/aerodynamics.py", line 436, in forward
+    predictions, _ = self.backbone(
+                     ^^^^^^^^^^^^^^
+  File "/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/zonghui/work/new_code_project/noether/src/noether/modeling/models/ab_upt.py", line 1018, in forward
+    geometry_encoding = self.geometry_branch_forward(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/zonghui/work/new_code_project/noether/src/noether/modeling/models/ab_upt.py", line 589, in geometry_branch_forward
+    geometry_encoding: torch.Tensor = self.encoder(
+                                      ^^^^^^^^^^^^^
+  File "/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/zonghui/work/new_code_project/noether/src/noether/modeling/modules/encoders/supernode_pooling.py", line 391, in forward
+    x = self.accumulate_messages(x, local_dst_idx, supernode_idx)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/zonghui/work/new_code_project/noether/src/noether/modeling/modules/encoders/supernode_pooling.py", line 329, in accumulate_messages
+    out.scatter_reduce_(
+RuntimeError: scatter_reduce_mps does not have a deterministic implementation, but you set 'torch.use_deterministic_algorithms(True)'. You can turn off determinism just for this operation, or you can use the 'warn_only=True' option, if that's acceptable for your application. You can also file an issue at https://github.com/pytorch/pytorch/issues to help us prioritize adding deterministic support for this operation.

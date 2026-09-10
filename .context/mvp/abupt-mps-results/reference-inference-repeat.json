@@ -1,0 +1,14 @@
+{
+  "samples": 100,
+  "same_weights": true,
+  "framework": "Noether",
+  "device": "mps",
+  "max_abs": {
+    "surface_pressure": 7.62939453125e-05,
+    "volume_velocity": 9.5367431640625e-06,
+    "surface_anchor_position": 0,
+    "volume_anchor_position": 0
+  },
+  "failed_fields_at_rtol_1e_5_atol_1e_6": 23,
+  "strict_passed": false
+}

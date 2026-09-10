@@ -1,0 +1,101 @@
+{
+  "samples": 100,
+  "max_abs": {
+    "surface_pressure": 0,
+    "packed/surface_pressure": 0,
+    "volume_velocity": 0,
+    "packed/volume_velocity": 0,
+    "surface_anchor_position": 0,
+    "packed/surface_anchor_position": 0,
+    "volume_anchor_position": 0,
+    "packed/volume_anchor_position": 0,
+    "anchors/surface/points": 0,
+    "anchors/surface/cells": 0,
+    "anchors/surface/GetVerts/GetOffsetsArray": 0,
+    "anchors/surface/GetVerts/GetConnectivityArray": 0,
+    "anchors/surface/GetLines/GetOffsetsArray": 0,
+    "anchors/surface/GetLines/GetConnectivityArray": 0,
+    "anchors/surface/GetPolys/GetOffsetsArray": 0,
+    "anchors/surface/GetPolys/GetConnectivityArray": 0,
+    "anchors/surface/GetStrips/GetOffsetsArray": 0,
+    "anchors/surface/GetStrips/GetConnectivityArray": 0,
+    "anchors/surface/surface_pressure": 0,
+    "anchors/volume/points": 0,
+    "anchors/volume/cells": 0,
+    "anchors/volume/GetVerts/GetOffsetsArray": 0,
+    "anchors/volume/GetVerts/GetConnectivityArray": 0,
+    "anchors/volume/GetLines/GetOffsetsArray": 0,
+    "anchors/volume/GetLines/GetConnectivityArray": 0,
+    "anchors/volume/GetPolys/GetOffsetsArray": 0,
+    "anchors/volume/GetPolys/GetConnectivityArray": 0,
+    "anchors/volume/GetStrips/GetOffsetsArray": 0,
+    "anchors/volume/GetStrips/GetConnectivityArray": 0,
+    "anchors/volume/volume_velocity": 0,
+    "mesh/sample_0000_surface/points": 0,
+    "mesh/sample_0000_surface/cells": 0,
+    "mesh/sample_0000_surface/GetVerts/GetOffsetsArray": 0,
+    "mesh/sample_0000_surface/GetVerts/GetConnectivityArray": 0,
+    "mesh/sample_0000_surface/GetLines/GetOffsetsArray": 0,
+    "mesh/sample_0000_surface/GetLines/GetConnectivityArray": 0,
+    "mesh/sample_0000_surface/GetPolys/GetOffsetsArray": 0,
+    "mesh/sample_0000_surface/GetPolys/GetConnectivityArray": 0,
+    "mesh/sample_0000_surface/GetStrips/GetOffsetsArray": 0,
+    "mesh/sample_0000_surface/GetStrips/GetConnectivityArray": 0,
+    "mesh/sample_0000_surface/point_scalars": 0,
+    "mesh/sample_0000_surface/pred_pressure": 0,
+    "mesh/sample_0000_surface/gt_pressure": 0,
+    "mesh/sample_0000_surface/error_pressure": 0,
+    "mesh/sample_0000_surface/vtkOriginalPointIds": 0,
+    "mesh/sample_0000_surface/cells/vtkOriginalCellIds": 0,
+    "mesh/sample_0000_volume/points": 0,
+    "mesh/sample_0000_volume/cells": 0,
+    "mesh/sample_0000_volume/GetCells/GetOffsetsArray": 0,
+    "mesh/sample_0000_volume/GetCells/GetConnectivityArray": 0,
+    "mesh/sample_0000_volume/point_vectors": 0,
+    "mesh/sample_0000_volume/pred_velocity": 0,
+    "mesh/sample_0000_volume/gt_velocity": 0,
+    "mesh/sample_0000_volume/error_velocity": 0
+  },
+  "failures": [],
+  "rtol": 1e-05,
+  "atol": 1e-06,
+  "metrics": [
+    {
+      "metric": "surface_pressure/mse",
+      "actual": 184.8067756652832,
+      "reference": 184.80677795410156,
+      "passed": true
+    },
+    {
+      "metric": "surface_pressure/mae",
+      "actual": 7.316034965515136,
+      "reference": 7.316034317016602,
+      "passed": true
+    },
+    {
+      "metric": "surface_pressure/relative_l2",
+      "actual": 0.2202927490323782,
+      "reference": 0.22029274702072144,
+      "passed": true
+    },
+    {
+      "metric": "volume_velocity/mse",
+      "actual": 0.520728243291378,
+      "reference": 0.5207282900810242,
+      "passed": true
+    },
+    {
+      "metric": "volume_velocity/mae",
+      "actual": 0.36676722586154936,
+      "reference": 0.3667672276496887,
+      "passed": true
+    },
+    {
+      "metric": "volume_velocity/relative_l2",
+      "actual": 0.06592513240873814,
+      "reference": 0.06592512875795364,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

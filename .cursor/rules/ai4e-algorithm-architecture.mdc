@@ -1,0 +1,23 @@
+---
+description: AI4E_Dojo 算法包的能力分层、高内聚低耦合与代码书写规范
+globs: packages/{ai4e-spec,ai4e-core,ai4e-viz,ai4e-contrib}/**/*.py
+alwaysApply: false
+---
+
+# 算法包架构规范
+
+- 适用包：`ai4e-spec`、`ai4e-core`、`ai4e-viz`、`ai4e-contrib`。
+- 先读 `AGENTS.md`、`.context/index.md` 和目标模块索引；目录与业务边界以 `docs/AI4E_Dojo_ARCHITECTURE (1).md` 为设计依据。
+- 跳出 DDD 的目录表象：不得为算法包套用 `api/domain/application/infrastructure`；按科学概念、base、abilities、applications、Stage 和 Artifact 组织。
+- 高内聚：一个模块只表达一个稳定能力；数据语义、几何、采样、模型、Constraint、训练、评估、后处理和可视表达各归其位。
+- 低耦合：只依赖公开契约；不得跨层导入内部实现，不得用万能 `utils.py`、巨型 Trainer/Solver 或共享可变状态绕过边界。
+- 原子能力不认识具体案例；`applications/base` 提供 Stage 编排机制，领域 application 按 rawprep/trainprep/model/train/post 提供标准业务装配；recipe 只选择、配置或轻量覆盖标准装配，不写算法、循环或新模型类。
+- `ai4e-spec` 只定义轻量稳定契约；core 只依赖 spec；viz 不依赖 core；contrib 不取得内部 API 特权。
+- Constraint 显式描述作用域、字段、表达式、目标、loss、权重调度和计算空间，不把领域语义塞进训练循环。
+- Stage 通过 Artifact/Manifest 交接；`run/writer` 是 run 目录唯一写入方，运行记录与数据产物目录独立配置，禁止写入包源码。
+- AB-UPT 通过 contrib 组件及 recipe 注入接入；新 packages 禁止导入 Noether。
+- 每个包只使用 `packages/ai4e-*/` 一层物理目录，由构建配置映射 `ai4e_*` 导入名。
+- 公开 API 使用类型标注与中文 Docstring；非平凡逻辑必须有单元或契约测试，功能变化同步文档和 `.context`。
+- 建立 workspace 后使用 `uv run pytest <affected>`、`uv run ruff check .`、`uv run ruff format --check .`，必要时运行 mypy。
+
+- AB-UPT 域/字段/条件声明与推理缓存归 contrib；trainprep 绑定来源，post 注入上下文。模型结构版本 3；运行检查点容器仍为版本 2；真实多样本、输入参考夹具及逐层缓存等价按 `.context/mvp/abupt-multidomain-acceptance.md` 验收。

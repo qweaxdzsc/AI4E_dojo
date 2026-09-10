@@ -1,0 +1,8 @@
+{
+  "inputs_equal": true,
+  "updates": 84,
+  "reference_transport_corrections": [
+    "torch_random_state_to_cpu"
+  ],
+  "resume_is_not_continuous_training": true
+}

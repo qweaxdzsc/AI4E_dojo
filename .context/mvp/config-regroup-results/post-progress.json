@@ -1,0 +1,5309 @@
+{
+  "mode": "post",
+  "status": "succeeded",
+  "operations": {
+    "evaluation": {
+      "status": "succeeded",
+      "completed": 100,
+      "samples": [
+        {
+          "samples": [
+            {
+              "sample_id": "param0/100715345ee54d7ae38b52b4ee9d36a3",
+              "index": 0
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/10247b51a42b41603ffe0e5069bf1eb5",
+              "index": 1
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/10555502fa7b3027283ffcfc40c29975",
+              "index": 2
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/10716a366de708b8fac96522b26f7fd",
+              "index": 3
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/107699ca67fcdf3fea999fe4ffdc2504",
+              "index": 4
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1089cbe82dc0e72133d7c9e122eec9b6",
+              "index": 5
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/109567d7d55b8fe515a520abec2f04dd",
+              "index": 6
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/10e15fd62309a13d1812324a4c0d910",
+              "index": 7
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/10e99b1475098c0aaa69dfdc5532bb13",
+              "index": 8
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1100f9eac1ca426a3dc399576707b67",
+              "index": 9
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1104f0924e03f2b6fc5886e868449015",
+              "index": 10
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1137cd58d6a45c6659a47b1880958de9",
+              "index": 11
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1159faf9bf78998493680c5a9a367b4a",
+              "index": 12
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1176dff7f0ec879719d740e0f6a9a113",
+              "index": 13
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/119033fe083145e22f31600ac759c763",
+              "index": 14
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/11a96098620b2ebac2f9fb5458a091d1",
+              "index": 15
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/11d1fdaedf3ab83b8fb28f8a689c8ba3",
+              "index": 16
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/11dba0c2ec8127356c2fe9dcfa1ee2f8",
+              "index": 17
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1213742aa7815fd0e23d60a1b706b44f",
+              "index": 18
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1284876ac0e2371aa4dbb766064f8bbf",
+              "index": 19
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/12a034b6be9afb50ae983613a2e0a741",
+              "index": 20
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/12b5e4f52c22b348d8499d8846cb4c3b",
+              "index": 21
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/12cd99c20b1a5a932e877e82c90c24d",
+              "index": 22
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/12cf05b9f5f2d2c195c8d3a7db4dbe65",
+              "index": 23
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/12d463649ed6c176ab98a7077c964a60",
+              "index": 24
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/12d7c4013415ea147f5b0cb87a91de52",
+              "index": 25
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1328a95d69cefe32f200a72c9245aee7",
+              "index": 26
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1336353d15efdf010f6f717db02df67",
+              "index": 27
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/137f67657cdc9da5f985cd98f7d73e9a",
+              "index": 28
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/139718b631cbca546a36136419d55d5c",
+              "index": 29
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1399eab8ad7262eb7f3efc94c2d31dc5",
+              "index": 30
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/139df45393b6847838805e546aa28d99",
+              "index": 31
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/13d090612aec3d80ca92a4cdad802b45",
+              "index": 32
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/147889b73fa491d82e877e82c90c24d",
+              "index": 33
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/14ace3e8d05f8d21a413908c0e169330",
+              "index": 34
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/150f2cf6e9c54d08c24a350006d347c",
+              "index": 35
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1523402e11400b75becf71e2e014ff6f",
+              "index": 36
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/156d4748560997c9a848f24544821b25",
+              "index": 37
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/158a95b4da25aa1fa37f3fc191551700",
+              "index": 38
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/15c3b923c85d22796d8b9531f93cc8de",
+              "index": 39
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/15c785a7505992c3a9be8fd09fb14f4f",
+              "index": 40
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/15cc37ac9b3b756acfd826dd468a5497",
+              "index": 41
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/163786646ae2578749a5fc144a874235",
+              "index": 42
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1641efa5c92514d86c4f4dbcda5f2fc0",
+              "index": 43
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/165aec174bb93968a114c8c036e29a08",
+              "index": 44
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1687b77b048d1aaf635b88185c42637a",
+              "index": 45
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/16bd0438de54fc91b1bb46d2556ba67d",
+              "index": 46
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/171c20ce4de5ee8730f65ce13e7c1910",
+              "index": 47
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1724ae84377e0b9ba6c2c95b41a5446d",
+              "index": 48
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/173669aeeba92aaec4929b8bd41b8bc6",
+              "index": 49
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1736b8494abf38ba4eb766e5a46fceab",
+              "index": 50
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/175a289947f549b0e088606e38104b2",
+              "index": 51
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/17600a4881b1ff6a5c14de0cb75f4d3e",
+              "index": 52
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1768f55a3c29cd483337cb9d908ce86e",
+              "index": 53
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1782558e47730989b96212c8f6cd06e",
+              "index": 54
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/180d1e3463c29355bda72093f9b5aa73",
+              "index": 55
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/18927999d0c5a9687ba2618ede0d52ff",
+              "index": 56
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/18a9275b78be4b9ec6d3267fc5334296",
+              "index": 57
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/18aad9d102afbca57ba2273581c30cb",
+              "index": 58
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/18d2959d79af059e476502dcb0dc5465",
+              "index": 59
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/18e16129375e723e6f8f8c736fcc7940",
+              "index": 60
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/18ff13d7f181e7625fa21635eac9e4ed",
+              "index": 61
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/19042f5a90290859441c11ab4641b257",
+              "index": 62
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/19245fb8ee79038fcd059a326bfe20ef",
+              "index": 63
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/192fdf42f5a2623d673ddeabdcc8c6e",
+              "index": 64
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/193ec1089f0a98a36518e6cd1fbc5fab",
+              "index": 65
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/198d8e274c59511b36a1a31af8f59",
+              "index": 66
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/198dfa16ba9f5f6617e76f36a4eac3ec",
+              "index": 67
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/19cd3489f05d203f9ed410a010efa019",
+              "index": 68
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/19d0843797b8b2216abce8cb03e7794",
+              "index": 69
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/19d49c8015948b742d60c8689a64d7a0",
+              "index": 70
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/19f52dd4592c3fb5531e940de4b7770d",
+              "index": 71
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1a0bc9ab92c915167ae33d942430658c",
+              "index": 72
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1a56d596c77ad5936fa87a658faf1d26",
+              "index": 73
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1ab80bc91a45b7d0a31091d2234b9f68",
+              "index": 74
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1abeca7159db7ed9f200a72c9245aee7",
+              "index": 75
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1acfbda4ce0ec524bedced414fad522f",
+              "index": 76
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1ae530f49a914595b491214a0cc2380",
+              "index": 77
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1aef0af3cdafb118c6a40bdf315062da",
+              "index": 78
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1b5b5a43e0281030b96212c8f6cd06e",
+              "index": 79
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1b85c850cb4b93a6e9415adaaf77fdbf",
+              "index": 80
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1b94aad142e6c2b8af9f38a1ee687286",
+              "index": 81
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1ba30d64da90ea05283ffcfc40c29975",
+              "index": 82
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1bb6b1ff46096f592dfac2620a0cf07b",
+              "index": 83
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1be81460e620aea65cde8c99e4b182f9",
+              "index": 84
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1c1bd2dcbb13aa5a6b652ed61c4ad126",
+              "index": 85
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1c4590ebc214e029816bd8f64e08b2bc",
+              "index": 86
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1c490bf1c6b32ef6ff213501a803f212",
+              "index": 87
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1c53bc6a3992b0843677ee89898ae463",
+              "index": 88
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1c5a350ea0f55f793fbce9ec40e1f047",
+              "index": 89
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1c6591c3fc686bf24132f89b3e69f40f",
+              "index": 90
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1c66dbe15a6be89a7bfe055aeab68431",
+              "index": 91
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1cd50bde9a3e711637b0898eccd7168",
+              "index": 92
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1cde62b063e14777c9152a706245d48",
+              "index": 93
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1cf17a1e1841d10c9e6a3356df3f3d9a",
+              "index": 94
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1cff510c0630c3cc673ddeabdcc8c6e",
+              "index": 95
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1d0a46cfc2799eefdeea60824a43a0b",
+              "index": 96
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1d4066f8ae88a1ebec8ca19d7516cb42",
+              "index": 97
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1d4b2404a00ef4bb627014ff98c41eb1",
+              "index": 98
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1dbb02c20bb93af81c1b3b2ed8d13bf8",
+              "index": 99
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": []
+        }
+      ],
+      "artifacts": [],
+      "error": null
+    },
+    "predictions": {
+      "status": "succeeded",
+      "completed": 100,
+      "samples": [
+        {
+          "samples": [
+            {
+              "sample_id": "param0/100715345ee54d7ae38b52b4ee9d36a3",
+              "index": 0
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/100715345ee54d7ae38b52b4ee9d36a3",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0000.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0000_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0000_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/10247b51a42b41603ffe0e5069bf1eb5",
+              "index": 1
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/10247b51a42b41603ffe0e5069bf1eb5",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0001.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0001_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0001_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/10555502fa7b3027283ffcfc40c29975",
+              "index": 2
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/10555502fa7b3027283ffcfc40c29975",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0002.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0002_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0002_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/10716a366de708b8fac96522b26f7fd",
+              "index": 3
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/10716a366de708b8fac96522b26f7fd",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0003.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0003_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0003_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/107699ca67fcdf3fea999fe4ffdc2504",
+              "index": 4
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/107699ca67fcdf3fea999fe4ffdc2504",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0004.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0004_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0004_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1089cbe82dc0e72133d7c9e122eec9b6",
+              "index": 5
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1089cbe82dc0e72133d7c9e122eec9b6",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0005.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0005_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0005_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/109567d7d55b8fe515a520abec2f04dd",
+              "index": 6
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/109567d7d55b8fe515a520abec2f04dd",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0006.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0006_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0006_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/10e15fd62309a13d1812324a4c0d910",
+              "index": 7
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/10e15fd62309a13d1812324a4c0d910",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0007.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0007_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0007_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/10e99b1475098c0aaa69dfdc5532bb13",
+              "index": 8
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/10e99b1475098c0aaa69dfdc5532bb13",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0008.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0008_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0008_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1100f9eac1ca426a3dc399576707b67",
+              "index": 9
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1100f9eac1ca426a3dc399576707b67",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0009.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0009_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0009_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1104f0924e03f2b6fc5886e868449015",
+              "index": 10
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1104f0924e03f2b6fc5886e868449015",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0010.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0010_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0010_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1137cd58d6a45c6659a47b1880958de9",
+              "index": 11
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1137cd58d6a45c6659a47b1880958de9",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0011.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0011_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0011_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1159faf9bf78998493680c5a9a367b4a",
+              "index": 12
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1159faf9bf78998493680c5a9a367b4a",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0012.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0012_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0012_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1176dff7f0ec879719d740e0f6a9a113",
+              "index": 13
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1176dff7f0ec879719d740e0f6a9a113",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0013.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0013_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0013_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/119033fe083145e22f31600ac759c763",
+              "index": 14
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/119033fe083145e22f31600ac759c763",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0014.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0014_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0014_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/11a96098620b2ebac2f9fb5458a091d1",
+              "index": 15
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/11a96098620b2ebac2f9fb5458a091d1",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0015.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0015_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0015_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/11d1fdaedf3ab83b8fb28f8a689c8ba3",
+              "index": 16
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/11d1fdaedf3ab83b8fb28f8a689c8ba3",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0016.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0016_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0016_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/11dba0c2ec8127356c2fe9dcfa1ee2f8",
+              "index": 17
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/11dba0c2ec8127356c2fe9dcfa1ee2f8",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0017.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0017_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0017_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1213742aa7815fd0e23d60a1b706b44f",
+              "index": 18
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1213742aa7815fd0e23d60a1b706b44f",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0018.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0018_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0018_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1284876ac0e2371aa4dbb766064f8bbf",
+              "index": 19
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1284876ac0e2371aa4dbb766064f8bbf",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0019.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0019_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0019_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/12a034b6be9afb50ae983613a2e0a741",
+              "index": 20
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12a034b6be9afb50ae983613a2e0a741",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0020.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0020_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0020_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/12b5e4f52c22b348d8499d8846cb4c3b",
+              "index": 21
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12b5e4f52c22b348d8499d8846cb4c3b",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0021.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0021_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0021_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/12cd99c20b1a5a932e877e82c90c24d",
+              "index": 22
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12cd99c20b1a5a932e877e82c90c24d",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0022.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0022_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0022_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/12cf05b9f5f2d2c195c8d3a7db4dbe65",
+              "index": 23
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12cf05b9f5f2d2c195c8d3a7db4dbe65",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0023.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0023_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0023_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/12d463649ed6c176ab98a7077c964a60",
+              "index": 24
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12d463649ed6c176ab98a7077c964a60",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0024.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0024_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0024_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/12d7c4013415ea147f5b0cb87a91de52",
+              "index": 25
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12d7c4013415ea147f5b0cb87a91de52",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0025.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0025_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0025_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1328a95d69cefe32f200a72c9245aee7",
+              "index": 26
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1328a95d69cefe32f200a72c9245aee7",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0026.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0026_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0026_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1336353d15efdf010f6f717db02df67",
+              "index": 27
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1336353d15efdf010f6f717db02df67",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0027.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0027_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0027_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/137f67657cdc9da5f985cd98f7d73e9a",
+              "index": 28
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/137f67657cdc9da5f985cd98f7d73e9a",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0028.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0028_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0028_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/139718b631cbca546a36136419d55d5c",
+              "index": 29
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/139718b631cbca546a36136419d55d5c",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0029.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0029_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0029_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1399eab8ad7262eb7f3efc94c2d31dc5",
+              "index": 30
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1399eab8ad7262eb7f3efc94c2d31dc5",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0030.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0030_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0030_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/139df45393b6847838805e546aa28d99",
+              "index": 31
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/139df45393b6847838805e546aa28d99",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0031.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0031_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0031_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/13d090612aec3d80ca92a4cdad802b45",
+              "index": 32
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/13d090612aec3d80ca92a4cdad802b45",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0032.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0032_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0032_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/147889b73fa491d82e877e82c90c24d",
+              "index": 33
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/147889b73fa491d82e877e82c90c24d",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0033.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0033_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0033_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/14ace3e8d05f8d21a413908c0e169330",
+              "index": 34
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/14ace3e8d05f8d21a413908c0e169330",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0034.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0034_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0034_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/150f2cf6e9c54d08c24a350006d347c",
+              "index": 35
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/150f2cf6e9c54d08c24a350006d347c",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0035.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0035_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0035_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1523402e11400b75becf71e2e014ff6f",
+              "index": 36
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1523402e11400b75becf71e2e014ff6f",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0036.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0036_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0036_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/156d4748560997c9a848f24544821b25",
+              "index": 37
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/156d4748560997c9a848f24544821b25",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0037.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0037_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0037_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/158a95b4da25aa1fa37f3fc191551700",
+              "index": 38
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/158a95b4da25aa1fa37f3fc191551700",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0038.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0038_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0038_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/15c3b923c85d22796d8b9531f93cc8de",
+              "index": 39
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/15c3b923c85d22796d8b9531f93cc8de",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0039.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0039_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0039_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/15c785a7505992c3a9be8fd09fb14f4f",
+              "index": 40
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/15c785a7505992c3a9be8fd09fb14f4f",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0040.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0040_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0040_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/15cc37ac9b3b756acfd826dd468a5497",
+              "index": 41
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/15cc37ac9b3b756acfd826dd468a5497",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0041.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0041_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0041_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/163786646ae2578749a5fc144a874235",
+              "index": 42
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/163786646ae2578749a5fc144a874235",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0042.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0042_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0042_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1641efa5c92514d86c4f4dbcda5f2fc0",
+              "index": 43
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1641efa5c92514d86c4f4dbcda5f2fc0",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0043.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0043_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0043_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/165aec174bb93968a114c8c036e29a08",
+              "index": 44
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/165aec174bb93968a114c8c036e29a08",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0044.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0044_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0044_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1687b77b048d1aaf635b88185c42637a",
+              "index": 45
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1687b77b048d1aaf635b88185c42637a",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0045.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0045_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0045_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/16bd0438de54fc91b1bb46d2556ba67d",
+              "index": 46
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/16bd0438de54fc91b1bb46d2556ba67d",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0046.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0046_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0046_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/171c20ce4de5ee8730f65ce13e7c1910",
+              "index": 47
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/171c20ce4de5ee8730f65ce13e7c1910",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0047.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0047_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0047_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1724ae84377e0b9ba6c2c95b41a5446d",
+              "index": 48
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1724ae84377e0b9ba6c2c95b41a5446d",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0048.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0048_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0048_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/173669aeeba92aaec4929b8bd41b8bc6",
+              "index": 49
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/173669aeeba92aaec4929b8bd41b8bc6",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0049.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0049_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0049_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1736b8494abf38ba4eb766e5a46fceab",
+              "index": 50
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1736b8494abf38ba4eb766e5a46fceab",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0050.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0050_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0050_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/175a289947f549b0e088606e38104b2",
+              "index": 51
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/175a289947f549b0e088606e38104b2",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0051.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0051_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0051_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/17600a4881b1ff6a5c14de0cb75f4d3e",
+              "index": 52
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/17600a4881b1ff6a5c14de0cb75f4d3e",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0052.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0052_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0052_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1768f55a3c29cd483337cb9d908ce86e",
+              "index": 53
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1768f55a3c29cd483337cb9d908ce86e",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0053.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0053_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0053_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1782558e47730989b96212c8f6cd06e",
+              "index": 54
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1782558e47730989b96212c8f6cd06e",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0054.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0054_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0054_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/180d1e3463c29355bda72093f9b5aa73",
+              "index": 55
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/180d1e3463c29355bda72093f9b5aa73",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0055.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0055_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0055_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/18927999d0c5a9687ba2618ede0d52ff",
+              "index": 56
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18927999d0c5a9687ba2618ede0d52ff",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0056.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0056_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0056_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/18a9275b78be4b9ec6d3267fc5334296",
+              "index": 57
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18a9275b78be4b9ec6d3267fc5334296",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0057.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0057_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0057_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/18aad9d102afbca57ba2273581c30cb",
+              "index": 58
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18aad9d102afbca57ba2273581c30cb",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0058.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0058_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0058_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/18d2959d79af059e476502dcb0dc5465",
+              "index": 59
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18d2959d79af059e476502dcb0dc5465",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0059.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0059_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0059_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/18e16129375e723e6f8f8c736fcc7940",
+              "index": 60
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18e16129375e723e6f8f8c736fcc7940",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0060.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0060_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0060_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/18ff13d7f181e7625fa21635eac9e4ed",
+              "index": 61
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18ff13d7f181e7625fa21635eac9e4ed",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0061.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0061_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0061_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/19042f5a90290859441c11ab4641b257",
+              "index": 62
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19042f5a90290859441c11ab4641b257",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0062.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0062_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0062_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/19245fb8ee79038fcd059a326bfe20ef",
+              "index": 63
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19245fb8ee79038fcd059a326bfe20ef",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0063.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0063_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0063_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/192fdf42f5a2623d673ddeabdcc8c6e",
+              "index": 64
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/192fdf42f5a2623d673ddeabdcc8c6e",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0064.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0064_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0064_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/193ec1089f0a98a36518e6cd1fbc5fab",
+              "index": 65
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/193ec1089f0a98a36518e6cd1fbc5fab",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0065.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0065_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0065_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/198d8e274c59511b36a1a31af8f59",
+              "index": 66
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/198d8e274c59511b36a1a31af8f59",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0066.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0066_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0066_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/198dfa16ba9f5f6617e76f36a4eac3ec",
+              "index": 67
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/198dfa16ba9f5f6617e76f36a4eac3ec",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0067.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0067_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0067_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/19cd3489f05d203f9ed410a010efa019",
+              "index": 68
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19cd3489f05d203f9ed410a010efa019",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0068.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0068_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0068_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/19d0843797b8b2216abce8cb03e7794",
+              "index": 69
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19d0843797b8b2216abce8cb03e7794",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0069.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0069_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0069_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/19d49c8015948b742d60c8689a64d7a0",
+              "index": 70
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19d49c8015948b742d60c8689a64d7a0",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0070.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0070_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0070_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/19f52dd4592c3fb5531e940de4b7770d",
+              "index": 71
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19f52dd4592c3fb5531e940de4b7770d",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0071.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0071_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0071_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1a0bc9ab92c915167ae33d942430658c",
+              "index": 72
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1a0bc9ab92c915167ae33d942430658c",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0072.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0072_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0072_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1a56d596c77ad5936fa87a658faf1d26",
+              "index": 73
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1a56d596c77ad5936fa87a658faf1d26",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0073.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0073_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0073_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1ab80bc91a45b7d0a31091d2234b9f68",
+              "index": 74
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1ab80bc91a45b7d0a31091d2234b9f68",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0074.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0074_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0074_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1abeca7159db7ed9f200a72c9245aee7",
+              "index": 75
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1abeca7159db7ed9f200a72c9245aee7",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0075.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0075_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0075_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1acfbda4ce0ec524bedced414fad522f",
+              "index": 76
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1acfbda4ce0ec524bedced414fad522f",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0076.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0076_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0076_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1ae530f49a914595b491214a0cc2380",
+              "index": 77
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1ae530f49a914595b491214a0cc2380",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0077.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0077_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0077_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1aef0af3cdafb118c6a40bdf315062da",
+              "index": 78
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1aef0af3cdafb118c6a40bdf315062da",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0078.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0078_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0078_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1b5b5a43e0281030b96212c8f6cd06e",
+              "index": 79
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1b5b5a43e0281030b96212c8f6cd06e",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0079.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0079_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0079_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1b85c850cb4b93a6e9415adaaf77fdbf",
+              "index": 80
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1b85c850cb4b93a6e9415adaaf77fdbf",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0080.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0080_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0080_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1b94aad142e6c2b8af9f38a1ee687286",
+              "index": 81
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1b94aad142e6c2b8af9f38a1ee687286",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0081.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0081_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0081_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1ba30d64da90ea05283ffcfc40c29975",
+              "index": 82
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1ba30d64da90ea05283ffcfc40c29975",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0082.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0082_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0082_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1bb6b1ff46096f592dfac2620a0cf07b",
+              "index": 83
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1bb6b1ff46096f592dfac2620a0cf07b",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0083.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0083_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0083_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1be81460e620aea65cde8c99e4b182f9",
+              "index": 84
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1be81460e620aea65cde8c99e4b182f9",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0084.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0084_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0084_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1c1bd2dcbb13aa5a6b652ed61c4ad126",
+              "index": 85
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c1bd2dcbb13aa5a6b652ed61c4ad126",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0085.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0085_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0085_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1c4590ebc214e029816bd8f64e08b2bc",
+              "index": 86
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c4590ebc214e029816bd8f64e08b2bc",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0086.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0086_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0086_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1c490bf1c6b32ef6ff213501a803f212",
+              "index": 87
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c490bf1c6b32ef6ff213501a803f212",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0087.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0087_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0087_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1c53bc6a3992b0843677ee89898ae463",
+              "index": 88
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c53bc6a3992b0843677ee89898ae463",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0088.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0088_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0088_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1c5a350ea0f55f793fbce9ec40e1f047",
+              "index": 89
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c5a350ea0f55f793fbce9ec40e1f047",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0089.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0089_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0089_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1c6591c3fc686bf24132f89b3e69f40f",
+              "index": 90
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c6591c3fc686bf24132f89b3e69f40f",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0090.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0090_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0090_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1c66dbe15a6be89a7bfe055aeab68431",
+              "index": 91
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c66dbe15a6be89a7bfe055aeab68431",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0091.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0091_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0091_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1cd50bde9a3e711637b0898eccd7168",
+              "index": 92
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1cd50bde9a3e711637b0898eccd7168",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0092.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0092_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0092_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1cde62b063e14777c9152a706245d48",
+              "index": 93
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1cde62b063e14777c9152a706245d48",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0093.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0093_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0093_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1cf17a1e1841d10c9e6a3356df3f3d9a",
+              "index": 94
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1cf17a1e1841d10c9e6a3356df3f3d9a",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0094.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0094_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0094_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1cff510c0630c3cc673ddeabdcc8c6e",
+              "index": 95
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1cff510c0630c3cc673ddeabdcc8c6e",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0095.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0095_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0095_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1d0a46cfc2799eefdeea60824a43a0b",
+              "index": 96
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1d0a46cfc2799eefdeea60824a43a0b",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0096.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0096_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0096_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1d4066f8ae88a1ebec8ca19d7516cb42",
+              "index": 97
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1d4066f8ae88a1ebec8ca19d7516cb42",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0097.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0097_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0097_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1d4b2404a00ef4bb627014ff98c41eb1",
+              "index": 98
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1d4b2404a00ef4bb627014ff98c41eb1",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0098.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0098_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0098_volume.vtp"
+          ]
+        },
+        {
+          "samples": [
+            {
+              "sample_id": "param0/1dbb02c20bb93af81c1b3b2ed8d13bf8",
+              "index": 99
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1dbb02c20bb93af81c1b3b2ed8d13bf8",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0099.pt",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0099_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0099_volume.vtp"
+          ]
+        }
+      ],
+      "artifacts": [
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/100715345ee54d7ae38b52b4ee9d36a3",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0000.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0000_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0000_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/10247b51a42b41603ffe0e5069bf1eb5",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0001.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0001_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0001_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/10555502fa7b3027283ffcfc40c29975",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0002.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0002_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0002_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/10716a366de708b8fac96522b26f7fd",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0003.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0003_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0003_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/107699ca67fcdf3fea999fe4ffdc2504",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0004.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0004_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0004_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1089cbe82dc0e72133d7c9e122eec9b6",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0005.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0005_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0005_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/109567d7d55b8fe515a520abec2f04dd",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0006.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0006_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0006_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/10e15fd62309a13d1812324a4c0d910",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0007.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0007_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0007_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/10e99b1475098c0aaa69dfdc5532bb13",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0008.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0008_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0008_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1100f9eac1ca426a3dc399576707b67",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0009.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0009_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0009_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1104f0924e03f2b6fc5886e868449015",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0010.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0010_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0010_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1137cd58d6a45c6659a47b1880958de9",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0011.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0011_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0011_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1159faf9bf78998493680c5a9a367b4a",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0012.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0012_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0012_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1176dff7f0ec879719d740e0f6a9a113",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0013.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0013_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0013_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/119033fe083145e22f31600ac759c763",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0014.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0014_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0014_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/11a96098620b2ebac2f9fb5458a091d1",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0015.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0015_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0015_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/11d1fdaedf3ab83b8fb28f8a689c8ba3",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0016.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0016_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0016_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/11dba0c2ec8127356c2fe9dcfa1ee2f8",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0017.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0017_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0017_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1213742aa7815fd0e23d60a1b706b44f",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0018.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0018_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0018_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1284876ac0e2371aa4dbb766064f8bbf",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0019.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0019_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0019_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12a034b6be9afb50ae983613a2e0a741",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0020.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0020_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0020_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12b5e4f52c22b348d8499d8846cb4c3b",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0021.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0021_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0021_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12cd99c20b1a5a932e877e82c90c24d",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0022.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0022_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0022_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12cf05b9f5f2d2c195c8d3a7db4dbe65",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0023.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0023_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0023_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12d463649ed6c176ab98a7077c964a60",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0024.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0024_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0024_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12d7c4013415ea147f5b0cb87a91de52",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0025.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0025_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0025_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1328a95d69cefe32f200a72c9245aee7",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0026.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0026_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0026_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1336353d15efdf010f6f717db02df67",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0027.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0027_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0027_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/137f67657cdc9da5f985cd98f7d73e9a",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0028.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0028_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0028_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/139718b631cbca546a36136419d55d5c",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0029.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0029_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0029_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1399eab8ad7262eb7f3efc94c2d31dc5",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0030.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0030_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0030_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/139df45393b6847838805e546aa28d99",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0031.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0031_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0031_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/13d090612aec3d80ca92a4cdad802b45",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0032.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0032_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0032_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/147889b73fa491d82e877e82c90c24d",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0033.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0033_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0033_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/14ace3e8d05f8d21a413908c0e169330",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0034.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0034_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0034_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/150f2cf6e9c54d08c24a350006d347c",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0035.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0035_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0035_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1523402e11400b75becf71e2e014ff6f",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0036.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0036_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0036_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/156d4748560997c9a848f24544821b25",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0037.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0037_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0037_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/158a95b4da25aa1fa37f3fc191551700",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0038.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0038_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0038_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/15c3b923c85d22796d8b9531f93cc8de",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0039.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0039_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0039_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/15c785a7505992c3a9be8fd09fb14f4f",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0040.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0040_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0040_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/15cc37ac9b3b756acfd826dd468a5497",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0041.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0041_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0041_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/163786646ae2578749a5fc144a874235",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0042.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0042_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0042_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1641efa5c92514d86c4f4dbcda5f2fc0",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0043.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0043_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0043_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/165aec174bb93968a114c8c036e29a08",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0044.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0044_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0044_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1687b77b048d1aaf635b88185c42637a",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0045.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0045_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0045_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/16bd0438de54fc91b1bb46d2556ba67d",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0046.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0046_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0046_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/171c20ce4de5ee8730f65ce13e7c1910",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0047.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0047_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0047_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1724ae84377e0b9ba6c2c95b41a5446d",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0048.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0048_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0048_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/173669aeeba92aaec4929b8bd41b8bc6",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0049.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0049_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0049_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1736b8494abf38ba4eb766e5a46fceab",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0050.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0050_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0050_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/175a289947f549b0e088606e38104b2",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0051.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0051_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0051_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/17600a4881b1ff6a5c14de0cb75f4d3e",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0052.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0052_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0052_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1768f55a3c29cd483337cb9d908ce86e",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0053.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0053_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0053_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1782558e47730989b96212c8f6cd06e",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0054.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0054_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0054_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/180d1e3463c29355bda72093f9b5aa73",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0055.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0055_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0055_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18927999d0c5a9687ba2618ede0d52ff",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0056.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0056_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0056_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18a9275b78be4b9ec6d3267fc5334296",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0057.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0057_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0057_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18aad9d102afbca57ba2273581c30cb",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0058.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0058_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0058_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18d2959d79af059e476502dcb0dc5465",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0059.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0059_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0059_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18e16129375e723e6f8f8c736fcc7940",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0060.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0060_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0060_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18ff13d7f181e7625fa21635eac9e4ed",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0061.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0061_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0061_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19042f5a90290859441c11ab4641b257",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0062.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0062_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0062_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19245fb8ee79038fcd059a326bfe20ef",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0063.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0063_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0063_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/192fdf42f5a2623d673ddeabdcc8c6e",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0064.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0064_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0064_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/193ec1089f0a98a36518e6cd1fbc5fab",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0065.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0065_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0065_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/198d8e274c59511b36a1a31af8f59",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0066.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0066_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0066_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/198dfa16ba9f5f6617e76f36a4eac3ec",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0067.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0067_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0067_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19cd3489f05d203f9ed410a010efa019",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0068.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0068_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0068_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19d0843797b8b2216abce8cb03e7794",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0069.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0069_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0069_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19d49c8015948b742d60c8689a64d7a0",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0070.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0070_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0070_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19f52dd4592c3fb5531e940de4b7770d",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0071.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0071_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0071_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1a0bc9ab92c915167ae33d942430658c",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0072.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0072_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0072_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1a56d596c77ad5936fa87a658faf1d26",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0073.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0073_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0073_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1ab80bc91a45b7d0a31091d2234b9f68",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0074.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0074_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0074_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1abeca7159db7ed9f200a72c9245aee7",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0075.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0075_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0075_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1acfbda4ce0ec524bedced414fad522f",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0076.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0076_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0076_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1ae530f49a914595b491214a0cc2380",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0077.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0077_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0077_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1aef0af3cdafb118c6a40bdf315062da",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0078.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0078_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0078_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1b5b5a43e0281030b96212c8f6cd06e",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0079.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0079_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0079_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1b85c850cb4b93a6e9415adaaf77fdbf",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0080.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0080_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0080_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1b94aad142e6c2b8af9f38a1ee687286",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0081.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0081_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0081_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1ba30d64da90ea05283ffcfc40c29975",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0082.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0082_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0082_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1bb6b1ff46096f592dfac2620a0cf07b",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0083.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0083_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0083_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1be81460e620aea65cde8c99e4b182f9",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0084.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0084_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0084_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c1bd2dcbb13aa5a6b652ed61c4ad126",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0085.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0085_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0085_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c4590ebc214e029816bd8f64e08b2bc",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0086.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0086_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0086_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c490bf1c6b32ef6ff213501a803f212",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0087.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0087_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0087_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c53bc6a3992b0843677ee89898ae463",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0088.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0088_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0088_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c5a350ea0f55f793fbce9ec40e1f047",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0089.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0089_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0089_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c6591c3fc686bf24132f89b3e69f40f",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0090.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0090_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0090_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c66dbe15a6be89a7bfe055aeab68431",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0091.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0091_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0091_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1cd50bde9a3e711637b0898eccd7168",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0092.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0092_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0092_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1cde62b063e14777c9152a706245d48",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0093.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0093_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0093_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1cf17a1e1841d10c9e6a3356df3f3d9a",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0094.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0094_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0094_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1cff510c0630c3cc673ddeabdcc8c6e",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0095.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0095_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0095_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1d0a46cfc2799eefdeea60824a43a0b",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0096.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0096_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0096_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1d4066f8ae88a1ebec8ca19d7516cb42",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0097.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0097_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0097_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1d4b2404a00ef4bb627014ff98c41eb1",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0098.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0098_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0098_volume.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1dbb02c20bb93af81c1b3b2ed8d13bf8",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0099.pt",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0099_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/vtk/sample_0099_volume.vtp"
+      ],
+      "error": null
+    },
+    "mesh": {
+      "status": "succeeded",
+      "completed": 1,
+      "samples": [
+        {
+          "samples": [
+            {
+              "sample_id": "param0/100715345ee54d7ae38b52b4ee9d36a3",
+              "index": 0
+            }
+          ],
+          "status": "succeeded",
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/data/predictions/mesh_vtk/sample_0000_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/data/predictions/mesh_vtk/sample_0000_volume.vtu"
+          ]
+        }
+      ],
+      "artifacts": [
+        "/private/tmp/dojo-regroup-20260909/data/predictions/mesh_vtk/sample_0000_surface.vtp",
+        "/private/tmp/dojo-regroup-20260909/data/predictions/mesh_vtk/sample_0000_volume.vtu"
+      ],
+      "error": null
+    }
+  },
+  "checkpoint": "/private/tmp/dojo-regroup-20260909/runs/2026-09-09T18-40-50_fb0006/checkpoints/last.pt",
+  "split": "test",
+  "evaluation": {
+    "loss": 0.14013253897428513,
+    "losses": {
+      "surface_pressure": 0.0786113147623837,
+      "volume_velocity": 0.06152122423052788
+    },
+    "scope": "declared_predictions",
+    "metrics": {
+      "surface_pressure/mse": {
+        "value": 186.25563232421874,
+        "valid": 100,
+        "skipped": 0
+      },
+      "surface_pressure/mae": {
+        "value": 7.320202531814576,
+        "valid": 100,
+        "skipped": 0
+      },
+      "surface_pressure/relative_l2": {
+        "value": 0.22106114007532596,
+        "valid": 100,
+        "skipped": 0
+      },
+      "volume_velocity/mse": {
+        "value": 0.5157441979646683,
+        "valid": 100,
+        "skipped": 0
+      },
+      "volume_velocity/mae": {
+        "value": 0.36538713991641997,
+        "valid": 100,
+        "skipped": 0
+      },
+      "volume_velocity/relative_l2": {
+        "value": 0.06564032442867757,
+        "valid": 100,
+        "skipped": 0
+      }
+    },
+    "split": "test"
+  },
+  "predictions": [
+    {
+      "sample_id": "param0/100715345ee54d7ae38b52b4ee9d36a3",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/100715345ee54d7ae38b52b4ee9d36a3",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0000.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/10247b51a42b41603ffe0e5069bf1eb5",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/10247b51a42b41603ffe0e5069bf1eb5",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0001.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/10555502fa7b3027283ffcfc40c29975",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/10555502fa7b3027283ffcfc40c29975",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0002.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/10716a366de708b8fac96522b26f7fd",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/10716a366de708b8fac96522b26f7fd",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0003.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/107699ca67fcdf3fea999fe4ffdc2504",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/107699ca67fcdf3fea999fe4ffdc2504",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0004.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1089cbe82dc0e72133d7c9e122eec9b6",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1089cbe82dc0e72133d7c9e122eec9b6",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0005.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/109567d7d55b8fe515a520abec2f04dd",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/109567d7d55b8fe515a520abec2f04dd",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0006.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/10e15fd62309a13d1812324a4c0d910",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/10e15fd62309a13d1812324a4c0d910",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0007.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/10e99b1475098c0aaa69dfdc5532bb13",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/10e99b1475098c0aaa69dfdc5532bb13",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0008.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1100f9eac1ca426a3dc399576707b67",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1100f9eac1ca426a3dc399576707b67",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0009.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1104f0924e03f2b6fc5886e868449015",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1104f0924e03f2b6fc5886e868449015",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0010.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1137cd58d6a45c6659a47b1880958de9",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1137cd58d6a45c6659a47b1880958de9",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0011.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1159faf9bf78998493680c5a9a367b4a",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1159faf9bf78998493680c5a9a367b4a",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0012.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1176dff7f0ec879719d740e0f6a9a113",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1176dff7f0ec879719d740e0f6a9a113",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0013.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/119033fe083145e22f31600ac759c763",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/119033fe083145e22f31600ac759c763",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0014.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/11a96098620b2ebac2f9fb5458a091d1",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/11a96098620b2ebac2f9fb5458a091d1",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0015.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/11d1fdaedf3ab83b8fb28f8a689c8ba3",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/11d1fdaedf3ab83b8fb28f8a689c8ba3",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0016.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/11dba0c2ec8127356c2fe9dcfa1ee2f8",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/11dba0c2ec8127356c2fe9dcfa1ee2f8",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0017.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1213742aa7815fd0e23d60a1b706b44f",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1213742aa7815fd0e23d60a1b706b44f",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0018.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1284876ac0e2371aa4dbb766064f8bbf",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1284876ac0e2371aa4dbb766064f8bbf",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0019.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/12a034b6be9afb50ae983613a2e0a741",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12a034b6be9afb50ae983613a2e0a741",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0020.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/12b5e4f52c22b348d8499d8846cb4c3b",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12b5e4f52c22b348d8499d8846cb4c3b",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0021.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/12cd99c20b1a5a932e877e82c90c24d",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12cd99c20b1a5a932e877e82c90c24d",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0022.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/12cf05b9f5f2d2c195c8d3a7db4dbe65",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12cf05b9f5f2d2c195c8d3a7db4dbe65",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0023.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/12d463649ed6c176ab98a7077c964a60",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12d463649ed6c176ab98a7077c964a60",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0024.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/12d7c4013415ea147f5b0cb87a91de52",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/12d7c4013415ea147f5b0cb87a91de52",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0025.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1328a95d69cefe32f200a72c9245aee7",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1328a95d69cefe32f200a72c9245aee7",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0026.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1336353d15efdf010f6f717db02df67",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1336353d15efdf010f6f717db02df67",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0027.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/137f67657cdc9da5f985cd98f7d73e9a",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/137f67657cdc9da5f985cd98f7d73e9a",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0028.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/139718b631cbca546a36136419d55d5c",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/139718b631cbca546a36136419d55d5c",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0029.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1399eab8ad7262eb7f3efc94c2d31dc5",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1399eab8ad7262eb7f3efc94c2d31dc5",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0030.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/139df45393b6847838805e546aa28d99",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/139df45393b6847838805e546aa28d99",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0031.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/13d090612aec3d80ca92a4cdad802b45",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/13d090612aec3d80ca92a4cdad802b45",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0032.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/147889b73fa491d82e877e82c90c24d",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/147889b73fa491d82e877e82c90c24d",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0033.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/14ace3e8d05f8d21a413908c0e169330",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/14ace3e8d05f8d21a413908c0e169330",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0034.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/150f2cf6e9c54d08c24a350006d347c",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/150f2cf6e9c54d08c24a350006d347c",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0035.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1523402e11400b75becf71e2e014ff6f",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1523402e11400b75becf71e2e014ff6f",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0036.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/156d4748560997c9a848f24544821b25",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/156d4748560997c9a848f24544821b25",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0037.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/158a95b4da25aa1fa37f3fc191551700",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/158a95b4da25aa1fa37f3fc191551700",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0038.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/15c3b923c85d22796d8b9531f93cc8de",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/15c3b923c85d22796d8b9531f93cc8de",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0039.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/15c785a7505992c3a9be8fd09fb14f4f",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/15c785a7505992c3a9be8fd09fb14f4f",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0040.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/15cc37ac9b3b756acfd826dd468a5497",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/15cc37ac9b3b756acfd826dd468a5497",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0041.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/163786646ae2578749a5fc144a874235",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/163786646ae2578749a5fc144a874235",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0042.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1641efa5c92514d86c4f4dbcda5f2fc0",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1641efa5c92514d86c4f4dbcda5f2fc0",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0043.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/165aec174bb93968a114c8c036e29a08",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/165aec174bb93968a114c8c036e29a08",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0044.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1687b77b048d1aaf635b88185c42637a",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1687b77b048d1aaf635b88185c42637a",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0045.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/16bd0438de54fc91b1bb46d2556ba67d",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/16bd0438de54fc91b1bb46d2556ba67d",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0046.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/171c20ce4de5ee8730f65ce13e7c1910",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/171c20ce4de5ee8730f65ce13e7c1910",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0047.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1724ae84377e0b9ba6c2c95b41a5446d",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1724ae84377e0b9ba6c2c95b41a5446d",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0048.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/173669aeeba92aaec4929b8bd41b8bc6",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/173669aeeba92aaec4929b8bd41b8bc6",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0049.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1736b8494abf38ba4eb766e5a46fceab",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1736b8494abf38ba4eb766e5a46fceab",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0050.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/175a289947f549b0e088606e38104b2",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/175a289947f549b0e088606e38104b2",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0051.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/17600a4881b1ff6a5c14de0cb75f4d3e",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/17600a4881b1ff6a5c14de0cb75f4d3e",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0052.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1768f55a3c29cd483337cb9d908ce86e",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1768f55a3c29cd483337cb9d908ce86e",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0053.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1782558e47730989b96212c8f6cd06e",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1782558e47730989b96212c8f6cd06e",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0054.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/180d1e3463c29355bda72093f9b5aa73",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/180d1e3463c29355bda72093f9b5aa73",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0055.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/18927999d0c5a9687ba2618ede0d52ff",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18927999d0c5a9687ba2618ede0d52ff",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0056.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/18a9275b78be4b9ec6d3267fc5334296",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18a9275b78be4b9ec6d3267fc5334296",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0057.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/18aad9d102afbca57ba2273581c30cb",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18aad9d102afbca57ba2273581c30cb",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0058.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/18d2959d79af059e476502dcb0dc5465",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18d2959d79af059e476502dcb0dc5465",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0059.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/18e16129375e723e6f8f8c736fcc7940",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18e16129375e723e6f8f8c736fcc7940",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0060.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/18ff13d7f181e7625fa21635eac9e4ed",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/18ff13d7f181e7625fa21635eac9e4ed",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0061.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/19042f5a90290859441c11ab4641b257",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19042f5a90290859441c11ab4641b257",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0062.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/19245fb8ee79038fcd059a326bfe20ef",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19245fb8ee79038fcd059a326bfe20ef",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0063.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/192fdf42f5a2623d673ddeabdcc8c6e",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/192fdf42f5a2623d673ddeabdcc8c6e",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0064.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/193ec1089f0a98a36518e6cd1fbc5fab",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/193ec1089f0a98a36518e6cd1fbc5fab",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0065.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/198d8e274c59511b36a1a31af8f59",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/198d8e274c59511b36a1a31af8f59",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0066.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/198dfa16ba9f5f6617e76f36a4eac3ec",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/198dfa16ba9f5f6617e76f36a4eac3ec",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0067.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/19cd3489f05d203f9ed410a010efa019",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19cd3489f05d203f9ed410a010efa019",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0068.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/19d0843797b8b2216abce8cb03e7794",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19d0843797b8b2216abce8cb03e7794",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0069.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/19d49c8015948b742d60c8689a64d7a0",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19d49c8015948b742d60c8689a64d7a0",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0070.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/19f52dd4592c3fb5531e940de4b7770d",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/19f52dd4592c3fb5531e940de4b7770d",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0071.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1a0bc9ab92c915167ae33d942430658c",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1a0bc9ab92c915167ae33d942430658c",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0072.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1a56d596c77ad5936fa87a658faf1d26",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1a56d596c77ad5936fa87a658faf1d26",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0073.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1ab80bc91a45b7d0a31091d2234b9f68",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1ab80bc91a45b7d0a31091d2234b9f68",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0074.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1abeca7159db7ed9f200a72c9245aee7",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1abeca7159db7ed9f200a72c9245aee7",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0075.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1acfbda4ce0ec524bedced414fad522f",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1acfbda4ce0ec524bedced414fad522f",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0076.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1ae530f49a914595b491214a0cc2380",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1ae530f49a914595b491214a0cc2380",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0077.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1aef0af3cdafb118c6a40bdf315062da",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1aef0af3cdafb118c6a40bdf315062da",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0078.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1b5b5a43e0281030b96212c8f6cd06e",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1b5b5a43e0281030b96212c8f6cd06e",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0079.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1b85c850cb4b93a6e9415adaaf77fdbf",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1b85c850cb4b93a6e9415adaaf77fdbf",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0080.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1b94aad142e6c2b8af9f38a1ee687286",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1b94aad142e6c2b8af9f38a1ee687286",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0081.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1ba30d64da90ea05283ffcfc40c29975",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1ba30d64da90ea05283ffcfc40c29975",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0082.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1bb6b1ff46096f592dfac2620a0cf07b",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1bb6b1ff46096f592dfac2620a0cf07b",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0083.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1be81460e620aea65cde8c99e4b182f9",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1be81460e620aea65cde8c99e4b182f9",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0084.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1c1bd2dcbb13aa5a6b652ed61c4ad126",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c1bd2dcbb13aa5a6b652ed61c4ad126",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0085.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1c4590ebc214e029816bd8f64e08b2bc",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c4590ebc214e029816bd8f64e08b2bc",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0086.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1c490bf1c6b32ef6ff213501a803f212",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c490bf1c6b32ef6ff213501a803f212",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0087.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1c53bc6a3992b0843677ee89898ae463",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c53bc6a3992b0843677ee89898ae463",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0088.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1c5a350ea0f55f793fbce9ec40e1f047",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c5a350ea0f55f793fbce9ec40e1f047",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0089.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1c6591c3fc686bf24132f89b3e69f40f",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c6591c3fc686bf24132f89b3e69f40f",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0090.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1c66dbe15a6be89a7bfe055aeab68431",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1c66dbe15a6be89a7bfe055aeab68431",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0091.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1cd50bde9a3e711637b0898eccd7168",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1cd50bde9a3e711637b0898eccd7168",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0092.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1cde62b063e14777c9152a706245d48",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1cde62b063e14777c9152a706245d48",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0093.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1cf17a1e1841d10c9e6a3356df3f3d9a",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1cf17a1e1841d10c9e6a3356df3f3d9a",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0094.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1cff510c0630c3cc673ddeabdcc8c6e",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1cff510c0630c3cc673ddeabdcc8c6e",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0095.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1d0a46cfc2799eefdeea60824a43a0b",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1d0a46cfc2799eefdeea60824a43a0b",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0096.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1d4066f8ae88a1ebec8ca19d7516cb42",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1d4066f8ae88a1ebec8ca19d7516cb42",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0097.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1d4b2404a00ef4bb627014ff98c41eb1",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1d4b2404a00ef4bb627014ff98c41eb1",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0098.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    },
+    {
+      "sample_id": "param0/1dbb02c20bb93af81c1b3b2ed8d13bf8",
+      "output": "/private/tmp/dojo-regroup-20260909/data/predictions/param0/1dbb02c20bb93af81c1b3b2ed8d13bf8",
+      "packed": "/private/tmp/dojo-regroup-20260909/data/predictions/sample_0099.pt",
+      "shapes": {
+        "surface_pressure": [
+          256,
+          1
+        ],
+        "volume_velocity": [
+          256,
+          3
+        ],
+        "surface_anchor_position": [
+          256,
+          3
+        ],
+        "volume_anchor_position": [
+          256,
+          3
+        ]
+      }
+    }
+  ],
+  "export_vtk": true,
+  "meshes": [
+    {
+      "index": 0,
+      "sample_id": "param0/100715345ee54d7ae38b52b4ee9d36a3",
+      "surface": "/private/tmp/dojo-regroup-20260909/data/predictions/mesh_vtk/sample_0000_surface.vtp",
+      "volume": "/private/tmp/dojo-regroup-20260909/data/predictions/mesh_vtk/sample_0000_volume.vtu",
+      "points": {
+        "surface": 3682,
+        "volume": 29498
+      }
+    }
+  ],
+  "output": "/private/tmp/dojo-regroup-20260909/data/predictions/mesh_vtk",
+  "indices": [
+    0
+  ]
+}

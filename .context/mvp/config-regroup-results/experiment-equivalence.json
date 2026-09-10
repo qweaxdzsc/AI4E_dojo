@@ -1,0 +1,15 @@
+{
+  "reference": "/tmp/dojo-correctness-20260909/runs/2026-09-09T14-44-55_bfe5b9/artifacts/training-protocol.json",
+  "actual": "runs/2026-09-09T18-40-50_fb0006/artifacts/training-protocol.json",
+  "checks": {
+    "dataset": true,
+    "partitions": true,
+    "normalization": true,
+    "model": true,
+    "initialization": true,
+    "sampling": true,
+    "bindings": true,
+    "training": true
+  },
+  "note": "相同 Dojo 实验条件核验，不等于训练输出或 Noether 数值一致"
+}

@@ -1,0 +1,2514 @@
+{
+  "total": 889,
+  "attempted": 889,
+  "success": 889,
+  "unexecuted": 0,
+  "failed": false,
+  "failed_count": 0,
+  "failures": [],
+  "dry_run": false,
+  "run_dir": "/private/tmp/dojo-mps-research-20260909/final-runs/2026-09-09T12-31-02_a4366e",
+  "reports": {
+    "trainprep": {
+      "mode": "trainprep",
+      "preparation": "/private/tmp/dojo-mps-research-20260909/final-runs/2026-09-09T12-31-02_a4366e/artifacts/preparation.json",
+      "digest": "4c0c762f437d078355c30530f4708b36f8f3285ea036c4fe95a2dd71b3a4c34b",
+      "split_counts": {
+        "train": 789,
+        "test": 100
+      }
+    },
+    "train": {
+      "epochs": 2,
+      "updates": 1578,
+      "best": 0.1550901071727276,
+      "history": [
+        {
+          "epoch": 1,
+          "updates": 789,
+          "loss": 0.667443813262708,
+          "evaluation": {
+            "loss": 0.24226186148822307,
+            "losses": {
+              "surface_pressure": 0.13487420443445444,
+              "volume_velocity": 0.10738765586167574
+            },
+            "scope": "declared_predictions",
+            "metrics": {
+              "surface_pressure/mse": {
+                "value": 299.3629406356811,
+                "valid": 100,
+                "skipped": 0
+              },
+              "surface_pressure/mae": {
+                "value": 8.966834201812745,
+                "valid": 100,
+                "skipped": 0
+              },
+              "surface_pressure/relative_l2": {
+                "value": 0.2812955620139837,
+                "valid": 100,
+                "skipped": 0
+              },
+              "volume_velocity/mse": {
+                "value": 1.1348518222570418,
+                "valid": 100,
+                "skipped": 0
+              },
+              "volume_velocity/mae": {
+                "value": 0.503269588649273,
+                "valid": 100,
+                "skipped": 0
+              },
+              "volume_velocity/relative_l2": {
+                "value": 0.09676180239766836,
+                "valid": 100,
+                "skipped": 0
+              }
+            },
+            "split": "test"
+          },
+          "seconds": 117.09926845808513,
+          "online": {
+            "loss": 0.6674438118934631,
+            "surface_pressure": 0.31512394547462463,
+            "volume_velocity": 0.3523198962211609
+          }
+        },
+        {
+          "epoch": 2,
+          "updates": 1578,
+          "loss": 0.18962463118485323,
+          "evaluation": {
+            "loss": 0.1550901071727276,
+            "losses": {
+              "surface_pressure": 0.09361660027876496,
+              "volume_velocity": 0.06147350575774908
+            },
+            "scope": "declared_predictions",
+            "metrics": {
+              "surface_pressure/mse": {
+                "value": 232.74885187149047,
+                "valid": 100,
+                "skipped": 0
+              },
+              "surface_pressure/mae": {
+                "value": 7.923185625076294,
+                "valid": 100,
+                "skipped": 0
+              },
+              "surface_pressure/relative_l2": {
+                "value": 0.24530175507068633,
+                "valid": 100,
+                "skipped": 0
+              },
+              "volume_velocity/mse": {
+                "value": 0.6249478079378605,
+                "valid": 100,
+                "skipped": 0
+              },
+              "volume_velocity/mae": {
+                "value": 0.37865578025579455,
+                "valid": 100,
+                "skipped": 0
+              },
+              "volume_velocity/relative_l2": {
+                "value": 0.07174878917634488,
+                "valid": 100,
+                "skipped": 0
+              }
+            },
+            "split": "test"
+          },
+          "seconds": 126.25946025003213,
+          "online": {
+            "loss": 0.18962462246418,
+            "surface_pressure": 0.10698913782835007,
+            "volume_velocity": 0.08263549953699112
+          }
+        }
+      ],
+      "checkpoints": {
+        "last": "/private/tmp/dojo-mps-research-20260909/final-runs/2026-09-09T12-31-02_a4366e/checkpoints/last.pt",
+        "latest": "/private/tmp/dojo-mps-research-20260909/final-runs/2026-09-09T12-31-02_a4366e/checkpoints/latest.pt",
+        "best": "/private/tmp/dojo-mps-research-20260909/final-runs/2026-09-09T12-31-02_a4366e/checkpoints/best.pt"
+      }
+    },
+    "post": {
+      "mode": "post",
+      "checkpoint": "/private/tmp/dojo-mps-research-20260909/final-runs/2026-09-09T12-31-02_a4366e/checkpoints/last.pt",
+      "split": "test",
+      "evaluation": {
+        "loss": 0.16248192064464093,
+        "losses": {
+          "surface_pressure": 0.09282400691881776,
+          "volume_velocity": 0.06965791326016188
+        },
+        "scope": "declared_predictions",
+        "metrics": {
+          "surface_pressure/mse": {
+            "value": 219.93009857177734,
+            "valid": 100,
+            "skipped": 0
+          },
+          "surface_pressure/mae": {
+            "value": 7.787624201774597,
+            "valid": 100,
+            "skipped": 0
+          },
+          "surface_pressure/relative_l2": {
+            "value": 0.2349068408459425,
+            "valid": 100,
+            "skipped": 0
+          },
+          "volume_velocity/mse": {
+            "value": 0.6589976817369461,
+            "valid": 100,
+            "skipped": 0
+          },
+          "volume_velocity/mae": {
+            "value": 0.38668213099241255,
+            "valid": 100,
+            "skipped": 0
+          },
+          "volume_velocity/relative_l2": {
+            "value": 0.07347635485231876,
+            "valid": 100,
+            "skipped": 0
+          }
+        },
+        "split": "test"
+      },
+      "predictions": [
+        {
+          "sample_id": "param0/100715345ee54d7ae38b52b4ee9d36a3",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/100715345ee54d7ae38b52b4ee9d36a3",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0000.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/10247b51a42b41603ffe0e5069bf1eb5",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/10247b51a42b41603ffe0e5069bf1eb5",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0001.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/10555502fa7b3027283ffcfc40c29975",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/10555502fa7b3027283ffcfc40c29975",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0002.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/10716a366de708b8fac96522b26f7fd",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/10716a366de708b8fac96522b26f7fd",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0003.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/107699ca67fcdf3fea999fe4ffdc2504",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/107699ca67fcdf3fea999fe4ffdc2504",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0004.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1089cbe82dc0e72133d7c9e122eec9b6",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1089cbe82dc0e72133d7c9e122eec9b6",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0005.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/109567d7d55b8fe515a520abec2f04dd",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/109567d7d55b8fe515a520abec2f04dd",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0006.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/10e15fd62309a13d1812324a4c0d910",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/10e15fd62309a13d1812324a4c0d910",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0007.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/10e99b1475098c0aaa69dfdc5532bb13",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/10e99b1475098c0aaa69dfdc5532bb13",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0008.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1100f9eac1ca426a3dc399576707b67",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1100f9eac1ca426a3dc399576707b67",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0009.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1104f0924e03f2b6fc5886e868449015",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1104f0924e03f2b6fc5886e868449015",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0010.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1137cd58d6a45c6659a47b1880958de9",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1137cd58d6a45c6659a47b1880958de9",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0011.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1159faf9bf78998493680c5a9a367b4a",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1159faf9bf78998493680c5a9a367b4a",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0012.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1176dff7f0ec879719d740e0f6a9a113",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1176dff7f0ec879719d740e0f6a9a113",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0013.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/119033fe083145e22f31600ac759c763",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/119033fe083145e22f31600ac759c763",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0014.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/11a96098620b2ebac2f9fb5458a091d1",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/11a96098620b2ebac2f9fb5458a091d1",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0015.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/11d1fdaedf3ab83b8fb28f8a689c8ba3",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/11d1fdaedf3ab83b8fb28f8a689c8ba3",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0016.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/11dba0c2ec8127356c2fe9dcfa1ee2f8",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/11dba0c2ec8127356c2fe9dcfa1ee2f8",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0017.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1213742aa7815fd0e23d60a1b706b44f",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1213742aa7815fd0e23d60a1b706b44f",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0018.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1284876ac0e2371aa4dbb766064f8bbf",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1284876ac0e2371aa4dbb766064f8bbf",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0019.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/12a034b6be9afb50ae983613a2e0a741",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/12a034b6be9afb50ae983613a2e0a741",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0020.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/12b5e4f52c22b348d8499d8846cb4c3b",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/12b5e4f52c22b348d8499d8846cb4c3b",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0021.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/12cd99c20b1a5a932e877e82c90c24d",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/12cd99c20b1a5a932e877e82c90c24d",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0022.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/12cf05b9f5f2d2c195c8d3a7db4dbe65",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/12cf05b9f5f2d2c195c8d3a7db4dbe65",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0023.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/12d463649ed6c176ab98a7077c964a60",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/12d463649ed6c176ab98a7077c964a60",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0024.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/12d7c4013415ea147f5b0cb87a91de52",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/12d7c4013415ea147f5b0cb87a91de52",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0025.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1328a95d69cefe32f200a72c9245aee7",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1328a95d69cefe32f200a72c9245aee7",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0026.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1336353d15efdf010f6f717db02df67",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1336353d15efdf010f6f717db02df67",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0027.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/137f67657cdc9da5f985cd98f7d73e9a",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/137f67657cdc9da5f985cd98f7d73e9a",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0028.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/139718b631cbca546a36136419d55d5c",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/139718b631cbca546a36136419d55d5c",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0029.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1399eab8ad7262eb7f3efc94c2d31dc5",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1399eab8ad7262eb7f3efc94c2d31dc5",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0030.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/139df45393b6847838805e546aa28d99",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/139df45393b6847838805e546aa28d99",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0031.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/13d090612aec3d80ca92a4cdad802b45",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/13d090612aec3d80ca92a4cdad802b45",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0032.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/147889b73fa491d82e877e82c90c24d",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/147889b73fa491d82e877e82c90c24d",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0033.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/14ace3e8d05f8d21a413908c0e169330",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/14ace3e8d05f8d21a413908c0e169330",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0034.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/150f2cf6e9c54d08c24a350006d347c",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/150f2cf6e9c54d08c24a350006d347c",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0035.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1523402e11400b75becf71e2e014ff6f",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1523402e11400b75becf71e2e014ff6f",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0036.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/156d4748560997c9a848f24544821b25",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/156d4748560997c9a848f24544821b25",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0037.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/158a95b4da25aa1fa37f3fc191551700",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/158a95b4da25aa1fa37f3fc191551700",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0038.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/15c3b923c85d22796d8b9531f93cc8de",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/15c3b923c85d22796d8b9531f93cc8de",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0039.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/15c785a7505992c3a9be8fd09fb14f4f",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/15c785a7505992c3a9be8fd09fb14f4f",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0040.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/15cc37ac9b3b756acfd826dd468a5497",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/15cc37ac9b3b756acfd826dd468a5497",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0041.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/163786646ae2578749a5fc144a874235",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/163786646ae2578749a5fc144a874235",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0042.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1641efa5c92514d86c4f4dbcda5f2fc0",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1641efa5c92514d86c4f4dbcda5f2fc0",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0043.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/165aec174bb93968a114c8c036e29a08",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/165aec174bb93968a114c8c036e29a08",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0044.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1687b77b048d1aaf635b88185c42637a",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1687b77b048d1aaf635b88185c42637a",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0045.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/16bd0438de54fc91b1bb46d2556ba67d",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/16bd0438de54fc91b1bb46d2556ba67d",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0046.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/171c20ce4de5ee8730f65ce13e7c1910",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/171c20ce4de5ee8730f65ce13e7c1910",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0047.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1724ae84377e0b9ba6c2c95b41a5446d",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1724ae84377e0b9ba6c2c95b41a5446d",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0048.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/173669aeeba92aaec4929b8bd41b8bc6",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/173669aeeba92aaec4929b8bd41b8bc6",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0049.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1736b8494abf38ba4eb766e5a46fceab",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1736b8494abf38ba4eb766e5a46fceab",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0050.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/175a289947f549b0e088606e38104b2",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/175a289947f549b0e088606e38104b2",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0051.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/17600a4881b1ff6a5c14de0cb75f4d3e",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/17600a4881b1ff6a5c14de0cb75f4d3e",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0052.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1768f55a3c29cd483337cb9d908ce86e",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1768f55a3c29cd483337cb9d908ce86e",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0053.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1782558e47730989b96212c8f6cd06e",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1782558e47730989b96212c8f6cd06e",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0054.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/180d1e3463c29355bda72093f9b5aa73",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/180d1e3463c29355bda72093f9b5aa73",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0055.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/18927999d0c5a9687ba2618ede0d52ff",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/18927999d0c5a9687ba2618ede0d52ff",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0056.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/18a9275b78be4b9ec6d3267fc5334296",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/18a9275b78be4b9ec6d3267fc5334296",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0057.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/18aad9d102afbca57ba2273581c30cb",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/18aad9d102afbca57ba2273581c30cb",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0058.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/18d2959d79af059e476502dcb0dc5465",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/18d2959d79af059e476502dcb0dc5465",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0059.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/18e16129375e723e6f8f8c736fcc7940",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/18e16129375e723e6f8f8c736fcc7940",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0060.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/18ff13d7f181e7625fa21635eac9e4ed",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/18ff13d7f181e7625fa21635eac9e4ed",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0061.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/19042f5a90290859441c11ab4641b257",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/19042f5a90290859441c11ab4641b257",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0062.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/19245fb8ee79038fcd059a326bfe20ef",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/19245fb8ee79038fcd059a326bfe20ef",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0063.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/192fdf42f5a2623d673ddeabdcc8c6e",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/192fdf42f5a2623d673ddeabdcc8c6e",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0064.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/193ec1089f0a98a36518e6cd1fbc5fab",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/193ec1089f0a98a36518e6cd1fbc5fab",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0065.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/198d8e274c59511b36a1a31af8f59",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/198d8e274c59511b36a1a31af8f59",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0066.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/198dfa16ba9f5f6617e76f36a4eac3ec",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/198dfa16ba9f5f6617e76f36a4eac3ec",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0067.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/19cd3489f05d203f9ed410a010efa019",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/19cd3489f05d203f9ed410a010efa019",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0068.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/19d0843797b8b2216abce8cb03e7794",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/19d0843797b8b2216abce8cb03e7794",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0069.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/19d49c8015948b742d60c8689a64d7a0",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/19d49c8015948b742d60c8689a64d7a0",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0070.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/19f52dd4592c3fb5531e940de4b7770d",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/19f52dd4592c3fb5531e940de4b7770d",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0071.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1a0bc9ab92c915167ae33d942430658c",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1a0bc9ab92c915167ae33d942430658c",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0072.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1a56d596c77ad5936fa87a658faf1d26",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1a56d596c77ad5936fa87a658faf1d26",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0073.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1ab80bc91a45b7d0a31091d2234b9f68",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1ab80bc91a45b7d0a31091d2234b9f68",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0074.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1abeca7159db7ed9f200a72c9245aee7",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1abeca7159db7ed9f200a72c9245aee7",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0075.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1acfbda4ce0ec524bedced414fad522f",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1acfbda4ce0ec524bedced414fad522f",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0076.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1ae530f49a914595b491214a0cc2380",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1ae530f49a914595b491214a0cc2380",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0077.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1aef0af3cdafb118c6a40bdf315062da",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1aef0af3cdafb118c6a40bdf315062da",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0078.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1b5b5a43e0281030b96212c8f6cd06e",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1b5b5a43e0281030b96212c8f6cd06e",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0079.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1b85c850cb4b93a6e9415adaaf77fdbf",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1b85c850cb4b93a6e9415adaaf77fdbf",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0080.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1b94aad142e6c2b8af9f38a1ee687286",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1b94aad142e6c2b8af9f38a1ee687286",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0081.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1ba30d64da90ea05283ffcfc40c29975",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1ba30d64da90ea05283ffcfc40c29975",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0082.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1bb6b1ff46096f592dfac2620a0cf07b",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1bb6b1ff46096f592dfac2620a0cf07b",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0083.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1be81460e620aea65cde8c99e4b182f9",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1be81460e620aea65cde8c99e4b182f9",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0084.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1c1bd2dcbb13aa5a6b652ed61c4ad126",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1c1bd2dcbb13aa5a6b652ed61c4ad126",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0085.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1c4590ebc214e029816bd8f64e08b2bc",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1c4590ebc214e029816bd8f64e08b2bc",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0086.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1c490bf1c6b32ef6ff213501a803f212",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1c490bf1c6b32ef6ff213501a803f212",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0087.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1c53bc6a3992b0843677ee89898ae463",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1c53bc6a3992b0843677ee89898ae463",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0088.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1c5a350ea0f55f793fbce9ec40e1f047",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1c5a350ea0f55f793fbce9ec40e1f047",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0089.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1c6591c3fc686bf24132f89b3e69f40f",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1c6591c3fc686bf24132f89b3e69f40f",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0090.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1c66dbe15a6be89a7bfe055aeab68431",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1c66dbe15a6be89a7bfe055aeab68431",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0091.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1cd50bde9a3e711637b0898eccd7168",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1cd50bde9a3e711637b0898eccd7168",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0092.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1cde62b063e14777c9152a706245d48",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1cde62b063e14777c9152a706245d48",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0093.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1cf17a1e1841d10c9e6a3356df3f3d9a",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1cf17a1e1841d10c9e6a3356df3f3d9a",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0094.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1cff510c0630c3cc673ddeabdcc8c6e",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1cff510c0630c3cc673ddeabdcc8c6e",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0095.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1d0a46cfc2799eefdeea60824a43a0b",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1d0a46cfc2799eefdeea60824a43a0b",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0096.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1d4066f8ae88a1ebec8ca19d7516cb42",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1d4066f8ae88a1ebec8ca19d7516cb42",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0097.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1d4b2404a00ef4bb627014ff98c41eb1",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1d4b2404a00ef4bb627014ff98c41eb1",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0098.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        },
+        {
+          "sample_id": "param0/1dbb02c20bb93af81c1b3b2ed8d13bf8",
+          "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/param0/1dbb02c20bb93af81c1b3b2ed8d13bf8",
+          "packed": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/sample_0099.pt",
+          "shapes": {
+            "surface_pressure": [
+              128,
+              1
+            ],
+            "volume_velocity": [
+              192,
+              3
+            ],
+            "surface_anchor_position": [
+              128,
+              3
+            ],
+            "volume_anchor_position": [
+              192,
+              3
+            ]
+          }
+        }
+      ],
+      "export_vtk": true,
+      "output": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/mesh_vtk",
+      "indices": [
+        0,
+        7
+      ],
+      "meshes": [
+        {
+          "index": 0,
+          "sample_id": "param0/100715345ee54d7ae38b52b4ee9d36a3",
+          "surface": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/mesh_vtk/sample_0000_surface.vtp",
+          "volume": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/mesh_vtk/sample_0000_volume.vtu",
+          "points": {
+            "surface": 3682,
+            "volume": 29498
+          }
+        },
+        {
+          "index": 7,
+          "sample_id": "param0/10e15fd62309a13d1812324a4c0d910",
+          "surface": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/mesh_vtk/sample_0007_surface.vtp",
+          "volume": "/private/tmp/dojo-mps-research-20260909/final-data/predictions/mesh_vtk/sample_0007_volume.vtu",
+          "points": {
+            "surface": 3682,
+            "volume": 29498
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "final": "/tmp/dojo-audit-20260909/final-runs/2026-09-09T10-09-24_1b3717/checkpoints/last.pt",
+  "resumed": "/tmp/dojo-audit-20260909/recovery-runs/2026-09-09T10-15-02_01929f/checkpoints/last.pt",
+  "checks": {
+    "model": true,
+    "optimizer": true,
+    "epoch": true,
+    "updates": true,
+    "best": true,
+    "python_rng": true,
+    "numpy_rng": true,
+    "torch_rng": true,
+    "cuda_rng": true,
+    "ema": true,
+    "scaler": true,
+    "scheduler": true
+  },
+  "passed": true,
+  "interrupt": {
+    "signal_sent_after_observed_update": 20,
+    "exit_code": 1,
+    "checkpoint": "/tmp/dojo-audit-20260909/recovery-runs/2026-09-09T10-14-53_5cc400/checkpoints/latest.pt"
+  }
+}

@@ -1,0 +1,23 @@
+[
+  "packages/ai4e-core/run/session.py",
+  "packages/ai4e-core/run/training.py",
+  "packages/ai4e-core/base/events.py",
+  "packages/ai4e-core/abilities/training/batch.py",
+  "packages/ai4e-core/abilities/eval/evaluation.py",
+  "packages/ai4e-core/abilities/data/validate/fingerprint.py",
+  "packages/ai4e-core/applications/aero_cfd/post/evaluation.py",
+  "packages/ai4e-core/applications/aero_cfd/post/mesh.py",
+  "packages/ai4e-core/applications/aero_cfd/post/export.py",
+  "packages/ai4e-core/applications/aero_cfd/post/progress.py",
+  "packages/ai4e-core/applications/aero_cfd/post/stage.py",
+  "packages/ai4e-core/applications/aero_cfd/trainprep/dataset.py",
+  "packages/ai4e-core/applications/aero_cfd/model/protocol.py",
+  "packages/ai4e-core/applications/aero_cfd/train/fitting.py",
+  "packages/ai4e-contrib/ability/model/abupt/sampling.py",
+  "packages/ai4e-contrib/ability/model/abupt/network.py",
+  "tools/verification/comparison_protocol.py",
+  "tools/verification/compare_post.py",
+  "tools/verification/compare_training.py",
+  "tests/integration/test_comparison_protocol.py",
+  "tests/integration/test_framework_correctness.py"
+]

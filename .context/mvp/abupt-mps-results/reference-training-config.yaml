@@ -1,0 +1,383 @@
+accelerator: mps
+seed: 17
+dataset_statistics:
+  raw_pos_min:
+  - -4.5
+  raw_pos_max:
+  - 6.0
+  surface_pressure_mean:
+  - -36.4098
+  surface_pressure_std:
+  - 48.6757
+  volume_velocity_mean:
+  - 0.00293915
+  - -0.0230546
+  - 17.546032
+  volume_velocity_std:
+  - 1.361689
+  - 1.267649
+  - 5.850353
+  volume_sdf_mean:
+  - 0.374222
+  volume_sdf_std:
+  - 0.178948
+run_id: reference
+num_workers: 0
+datasets:
+  train:
+    kind: noether.data.datasets.cfd.ShapeNetCarDataset
+    pipeline:
+      num_surface_points: 3586
+      num_volume_points: 4096
+      num_surface_queries: 0
+      num_volume_queries: 0
+      use_physics_features: false
+      dataset_statistics:
+        surface_pressure_mean: !!python/tuple
+        - -36.4098
+        surface_pressure_std: !!python/tuple
+        - 48.6757
+        volume_velocity_mean: !!python/tuple
+        - 0.00293915
+        - -0.0230546
+        - 17.546032
+        volume_velocity_std: !!python/tuple
+        - 1.361689
+        - 1.267649
+        - 5.850353
+        volume_sdf_mean: !!python/tuple
+        - 0.374222
+        volume_sdf_std: !!python/tuple
+        - 0.178948
+        raw_pos_min: !!python/tuple
+        - -4.5
+        raw_pos_max: !!python/tuple
+        - 6.0
+      sample_query_points: false
+      num_geometry_supernodes: 256
+      num_geometry_points: 3586
+      num_volume_anchor_points: 192
+      num_surface_anchor_points: 128
+      data_specs:
+        position_dim: 3
+        domains:
+          surface:
+            output_dims:
+              pressure: 1
+            feature_dim:
+              surface_sdf: 1
+              surface_normals: 3
+          volume:
+            output_dims:
+              velocity: 3
+            feature_dim:
+              volume_sdf: 1
+              volume_normals: 3
+      kind: aero_cfd.pipeline.AeroMultistagePipeline
+    dataset_normalizers:
+      surface_pressure:
+      - strategy: mean_std
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+      volume_velocity:
+      - strategy: mean_std
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+      volume_sdf:
+      - strategy: mean_std
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+      surface_position:
+      - strategy: position
+        stat_keys:
+          min: raw_pos_min
+          max: raw_pos_max
+        scale: 1000.0
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+      volume_position:
+      - strategy: position
+        stat_keys:
+          min: raw_pos_min
+          max: raw_pos_max
+        scale: 1000.0
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+    dataset_wrappers: null
+    excluded_properties: !!set
+      volume_pressure: null
+      surface_area: null
+      volume_vorticity: null
+      surface_friction: null
+    root: /Users/zonghui/work/datasets/shapenet_car_cfd/preprocessed
+    split: train
+  test:
+    kind: noether.data.datasets.cfd.ShapeNetCarDataset
+    pipeline:
+      num_surface_points: 3586
+      num_volume_points: 4096
+      num_surface_queries: 0
+      num_volume_queries: 0
+      use_physics_features: false
+      dataset_statistics:
+        surface_pressure_mean: !!python/tuple
+        - -36.4098
+        surface_pressure_std: !!python/tuple
+        - 48.6757
+        volume_velocity_mean: !!python/tuple
+        - 0.00293915
+        - -0.0230546
+        - 17.546032
+        volume_velocity_std: !!python/tuple
+        - 1.361689
+        - 1.267649
+        - 5.850353
+        volume_sdf_mean: !!python/tuple
+        - 0.374222
+        volume_sdf_std: !!python/tuple
+        - 0.178948
+        raw_pos_min: !!python/tuple
+        - -4.5
+        raw_pos_max: !!python/tuple
+        - 6.0
+      sample_query_points: false
+      num_geometry_supernodes: 256
+      num_geometry_points: 3586
+      num_volume_anchor_points: 192
+      num_surface_anchor_points: 128
+      data_specs:
+        position_dim: 3
+        domains:
+          surface:
+            output_dims:
+              pressure: 1
+            feature_dim:
+              surface_sdf: 1
+              surface_normals: 3
+          volume:
+            output_dims:
+              velocity: 3
+            feature_dim:
+              volume_sdf: 1
+              volume_normals: 3
+      kind: aero_cfd.pipeline.AeroMultistagePipeline
+    dataset_normalizers:
+      surface_pressure:
+      - strategy: mean_std
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+      volume_velocity:
+      - strategy: mean_std
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+      volume_sdf:
+      - strategy: mean_std
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+      surface_position:
+      - strategy: position
+        stat_keys:
+          min: raw_pos_min
+          max: raw_pos_max
+        scale: 1000.0
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+      volume_position:
+      - strategy: position
+        stat_keys:
+          min: raw_pos_min
+          max: raw_pos_max
+        scale: 1000.0
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+    dataset_wrappers: null
+    excluded_properties: !!set
+      volume_pressure: null
+      surface_area: null
+      volume_vorticity: null
+      surface_friction: null
+    root: /Users/zonghui/work/datasets/shapenet_car_cfd/preprocessed
+    split: test
+  test_repeat:
+    kind: noether.data.datasets.cfd.ShapeNetCarDataset
+    pipeline:
+      num_surface_points: 3586
+      num_volume_points: 4096
+      num_surface_queries: 0
+      num_volume_queries: 0
+      use_physics_features: false
+      dataset_statistics:
+        surface_pressure_mean: !!python/tuple
+        - -36.4098
+        surface_pressure_std: !!python/tuple
+        - 48.6757
+        volume_velocity_mean: !!python/tuple
+        - 0.00293915
+        - -0.0230546
+        - 17.546032
+        volume_velocity_std: !!python/tuple
+        - 1.361689
+        - 1.267649
+        - 5.850353
+        volume_sdf_mean: !!python/tuple
+        - 0.374222
+        volume_sdf_std: !!python/tuple
+        - 0.178948
+        raw_pos_min: !!python/tuple
+        - -4.5
+        raw_pos_max: !!python/tuple
+        - 6.0
+      sample_query_points: false
+      num_geometry_supernodes: 256
+      num_geometry_points: 3586
+      num_volume_anchor_points: 192
+      num_surface_anchor_points: 128
+      data_specs:
+        position_dim: 3
+        domains:
+          surface:
+            output_dims:
+              pressure: 1
+            feature_dim:
+              surface_sdf: 1
+              surface_normals: 3
+          volume:
+            output_dims:
+              velocity: 3
+            feature_dim:
+              volume_sdf: 1
+              volume_normals: 3
+      kind: aero_cfd.pipeline.AeroMultistagePipeline
+    dataset_normalizers:
+      surface_pressure:
+      - strategy: mean_std
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+      volume_velocity:
+      - strategy: mean_std
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+      volume_sdf:
+      - strategy: mean_std
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+      surface_position:
+      - strategy: position
+        stat_keys:
+          min: raw_pos_min
+          max: raw_pos_max
+        scale: 1000.0
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+      volume_position:
+      - strategy: position
+        stat_keys:
+          min: raw_pos_min
+          max: raw_pos_max
+        scale: 1000.0
+        kind: noether.data.preprocessors.normalizers.FieldNormalizer
+    dataset_wrappers:
+    - kind: noether.data.base.wrappers.RepeatWrapper
+      repetitions: 10
+    excluded_properties: !!set
+      volume_pressure: null
+      surface_area: null
+      volume_vorticity: null
+      surface_friction: null
+    root: /Users/zonghui/work/datasets/shapenet_car_cfd/preprocessed
+    split: test
+model:
+  kind: noether.modeling.models.aerodynamics.AeroABUPT
+  name: ab_upt
+  optimizer_config:
+    kind: noether.core.optimizer.Lion
+    lr: 8.0e-05
+    weight_decay: 0.02
+    clip_grad_norm: 1.0
+    schedule_config:
+      kind: noether.core.schedules.LinearWarmupCosineDecaySchedule
+      end_value: 1.0e-06
+      max_value: 8.0e-05
+      warmup_percent: 0.05
+  forward_properties:
+  - geometry_position
+  - geometry_supernode_idx
+  - geometry_batch_idx
+  - surface_anchor_position
+  - volume_anchor_position
+  supernode_pooling_config:
+    hidden_dim: 192
+    input_dim: 3
+    radius: 9.0
+  transformer_block_config:
+    hidden_dim: 192
+    num_heads: 3
+    mlp_hidden_dim: 768
+    mlp_expansion_factor: 4
+    use_rope: true
+  geometry_depth: 6
+  hidden_dim: 192
+  physics_blocks:
+  - perceiver
+  - self
+  - cross
+  - self
+  - cross
+  - self
+  - cross
+  - self
+  - cross
+  - self
+  - cross
+  num_domain_decoder_blocks:
+    surface: 12
+    volume: 12
+  data_specs:
+    position_dim: 3
+    domains:
+      surface:
+        output_dims:
+          pressure: 1
+        feature_dim:
+          surface_sdf: 1
+          surface_normals: 3
+      volume:
+        output_dims:
+          velocity: 3
+        feature_dim:
+          volume_sdf: 1
+          volume_normals: 3
+trainer:
+  kind: noether.training.trainers.WeightedLossTrainer
+  max_epochs: 2
+  effective_batch_size: 1
+  callbacks:
+  - kind: noether.core.callbacks.CheckpointCallback
+    every_n_epochs: 10
+    save_weights: true
+    save_latest_weights: true
+  - kind: noether.training.callbacks.OfflineLossCallback
+    every_n_epochs: 1
+    batch_size: 1
+    dataset_key: test
+  - kind: noether.core.callbacks.BestCheckpointCallback
+    every_n_epochs: 1
+    metric_key: loss/test/total
+  - kind: noether.core.callbacks.EmaCallback
+    every_n_epochs: 10
+    target_factors:
+    - 0.9999
+    save_weights: false
+    save_last_weights: false
+    save_latest_weights: true
+  - every_n_epochs: 1
+    batch_size: 1
+    dataset_key: test
+    forward_properties:
+    - geometry_position
+    - geometry_supernode_idx
+    - geometry_batch_idx
+    - surface_anchor_position
+    - volume_anchor_position
+    kind: aero_cfd.callbacks.AeroMetricsCallback
+  log_every_n_epochs: 1
+  forward_properties:
+  - geometry_position
+  - geometry_supernode_idx
+  - geometry_batch_idx
+  - surface_anchor_position
+  - volume_anchor_position
+  target_properties:
+  - surface_pressure_target
+  - volume_velocity_target
+  field_weights:
+    surface_pressure: 1.0
+    volume_velocity: 1.0
+output_path: /tmp/dojo-mps-research-20260909/noether-runs
+config_schema_kind: noether.core.schemas.schema.ConfigSchema

@@ -1,0 +1,88 @@
+{
+  "total": 0,
+  "attempted": 0,
+  "success": 0,
+  "unexecuted": 0,
+  "failed": true,
+  "failed_count": 0,
+  "failures": [],
+  "dry_run": false,
+  "run_dir": "/private/tmp/dojo-regroup-20260909/runs/2026-09-09T22-12-41_26bac8",
+  "reports": {
+    "post": {
+      "mode": "post",
+      "status": "failed",
+      "operations": {
+        "evaluation": {
+          "status": "skipped",
+          "completed": 0,
+          "samples": [],
+          "artifacts": [],
+          "error": null
+        },
+        "predictions": {
+          "status": "skipped",
+          "completed": 0,
+          "samples": [],
+          "artifacts": [],
+          "error": null
+        },
+        "mesh": {
+          "status": "failed",
+          "completed": 0,
+          "samples": [
+            {
+              "samples": [
+                {
+                  "sample_id": "param0/100715345ee54d7ae38b52b4ee9d36a3",
+                  "index": 0
+                }
+              ],
+              "status": "failed",
+              "artifacts": [],
+              "error": {
+                "type": "FileExistsError",
+                "message": "表面网格已存在: /private/tmp/dojo-regroup-20260909/mesh-rerun/mesh_vtk/sample_0000_surface.vtp",
+                "stage": "post",
+                "operation": "mesh.surface.save",
+                "samples": [
+                  {
+                    "sample_id": "param0/100715345ee54d7ae38b52b4ee9d36a3",
+                    "index": 0
+                  }
+                ]
+              }
+            }
+          ],
+          "artifacts": [],
+          "error": {
+            "type": "FileExistsError",
+            "message": "表面网格已存在: /private/tmp/dojo-regroup-20260909/mesh-rerun/mesh_vtk/sample_0000_surface.vtp",
+            "stage": "post",
+            "operation": "mesh.surface.save",
+            "samples": [
+              {
+                "sample_id": "param0/100715345ee54d7ae38b52b4ee9d36a3",
+                "index": 0
+              }
+            ]
+          }
+        }
+      },
+      "checkpoint": "/private/tmp/dojo-regroup-20260909/runs/2026-09-09T18-40-50_fb0006/checkpoints/last.pt",
+      "meshes": [],
+      "error": {
+        "type": "FileExistsError",
+        "message": "表面网格已存在: /private/tmp/dojo-regroup-20260909/mesh-rerun/mesh_vtk/sample_0000_surface.vtp",
+        "stage": "post",
+        "operation": "mesh.surface.save",
+        "samples": [
+          {
+            "sample_id": "param0/100715345ee54d7ae38b52b4ee9d36a3",
+            "index": 0
+          }
+        ]
+      }
+    }
+  }
+}

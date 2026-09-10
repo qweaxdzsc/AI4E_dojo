@@ -1,0 +1,8 @@
+{
+  "device": "mps",
+  "epoch": 2,
+  "updates": 1578,
+  "max_abs": 0.12010980397462845,
+  "exact": false,
+  "note": "Independent training; reference repeat is also non-exact."
+}

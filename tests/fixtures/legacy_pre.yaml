@@ -1,0 +1,118 @@
+dataset:
+  name: shapenet_car
+  root: /Users/zonghui/work/datasets/shapenet_car_cfd/mlcfd_data/training_data
+pipeline:
+  stages:
+  - pre
+source:
+  files:
+  - name: surface_pressure
+    filename: quadpress_smpl.vtk
+    format: vtk
+  - name: volume_velocity
+    filename: hexvelo_smpl.vtk
+    format: vtk
+  - name: press
+    filename: press.npy
+    format: npy
+pre:
+  geometry:
+    enabled:
+    - nearest_vertex
+    - mesh_signed_distance
+    - surface_normals
+    - exterior_mask
+  output:
+    dir: /Users/zonghui/work/datasets/shapenet_car_cfd
+    root_subdir: preprocessed
+    filemap:
+      surface_pressure: surface_pressure.pt
+      surface_position: surface_points.pt
+      surface_normals: surface_normals.pt
+      volume_velocity: volume_velocity.pt
+      volume_position: volume_points.pt
+      volume_sdf: volume_sdf.pt
+      volume_normals: volume_normals.pt
+      cell: cell.pt
+    fields:
+      surface_pressure:
+        domain: surface
+        field: fields.pressure
+      surface_position:
+        domain: surface
+        field: points
+      surface_normals:
+        domain: surface
+        field: normals
+      volume_velocity:
+        domain: volume
+        field: fields.velocity
+      volume_position:
+        domain: volume
+        field: points
+      volume_sdf:
+        domain: volume
+        field: nearest_distance
+      volume_normals:
+        domain: volume
+        field: nearest_direction
+    bundles:
+      cell:
+        domain: volume
+        association: cell
+    optional:
+    - cell
+  discover:
+    param_count: 9
+    exclude:
+    - 854bb96a96a4d1b338acbabdc1252e2f
+    - 85bb9748c3836e566f81b21e2305c824
+    - 9ec13da6190ab1a3dd141480e2c154d3
+    - c5079a5b8d59220bc3fb0d224baae2a
+    expected_total: 889
+  stats:
+    shipped: packages/ai4e-contrib/application/datasets/shapenet_car/statistics.yaml
+    train_params:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    fields:
+    - surface_pressure
+    - surface_position
+    - surface_normals
+    - volume_velocity
+    - volume_position
+    - volume_sdf
+    - volume_normals
+    position_fields:
+    - surface_position
+    - volume_position
+    missing: error
+  surface:
+    source: surface_pressure
+    fields:
+      pressure:
+        array: point_scalars
+        association: point
+        kind: scalar
+    cell_type: quad
+  volume:
+    source: volume_velocity
+    fields:
+      velocity:
+        array: point_vectors
+        association: point
+        kind: vector
+  filters:
+    surface:
+    - mask
+    volume:
+    - exterior_mask
+train:
+  model: ab_upt
+  splits: packages/ai4e-contrib/application/datasets/shapenet_car/partition.yaml

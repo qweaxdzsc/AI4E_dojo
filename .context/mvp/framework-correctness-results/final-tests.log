@@ -1,0 +1,19 @@
+......s........s........................................s...ss.......... [ 65%]
+.................s....................                                   [100%]
+=============================== warnings summary ===============================
+tests/integration/test_framework_correctness.py::test_tensor_diagnostic[value0-\u8f93\u5165\u7c7b\u578b]
+  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+    warnings.warn(
+
+tests/integration/test_framework_correctness.py: 8 warnings
+tests/integration/test_post_inference.py: 1 warning
+tests/integration/test_post_mesh.py: 1 warning
+  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/ai4e_core/applications/aero_cfd/post/stage.py:56: UserWarning: 未检测到 CUDA 或 MPS，自动选择回退到 CPU，将继续运行
+    device = resolve_device(requested)
+
+tests/integration/test_framework_correctness.py::test_training_step_failure_has_real_batch_identity
+  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/ai4e_core/applications/aero_cfd/train/fitting.py:89: UserWarning: 未检测到 CUDA 或 MPS，自动选择回退到 CPU，将继续运行
+    device = resolve_device(settings.get("device", "auto"))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+104 passed, 6 skipped, 12 warnings in 93.56s (0:01:33)

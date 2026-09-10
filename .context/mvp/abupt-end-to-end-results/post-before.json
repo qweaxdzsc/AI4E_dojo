@@ -1,0 +1,10 @@
+{
+  "max_abs": {
+    "surface_pressure": 352.02362060546875,
+    "volume_velocity": 24.68222427368164,
+    "surface_anchor_position": 480.81805419921875,
+    "volume_anchor_position": 806.2009887695312
+  },
+  "samples": 100,
+  "passed": false
+}

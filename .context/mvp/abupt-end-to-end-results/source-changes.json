@@ -1,0 +1,157 @@
+[
+  {
+    "path": "packages/ai4e-core/applications/aero_cfd/train/resolve.py",
+    "before_sha256": "6fd8838211a4c582ff0f36ff1e677540324f2bf1deaefbad33d060e1b36d5658",
+    "after_sha256": "48e17d26e7e812d5aea3e10740bd3e6b07f31c5a2f97b3a2f521d43081578ddf"
+  },
+  {
+    "path": "packages/ai4e-core/applications/aero_cfd/trainprep/dataset.py",
+    "before_sha256": "7ae51c8ce0c9196641f155fc1fe7c0ace316bcb448a0c614af47a13a76595852",
+    "after_sha256": "318371cdb6151ec611e9139ac3c222ae2a3127ad4943916f90924a3c3ca81a84"
+  },
+  {
+    "path": "packages/ai4e-core/applications/aero_cfd/trainprep/normalization.py",
+    "before_sha256": "07fe198e487724f48377b916def2e6d3880a9cf326ad13c2396cdba34a0b4c47",
+    "after_sha256": "30edd4564e89af9313c59ed16063333e4bb29859ae94ad15ac3193d0b3fded80"
+  },
+  {
+    "path": "packages/ai4e-core/applications/aero_cfd/post/mesh.py",
+    "before_sha256": "45e8372af1cec09a0f39b207599ff783061f7b0ca246ebcb1dad3877871926c0",
+    "after_sha256": "d883e7da3f6f7c32907e1794f109a6c2b8b4097b0f515025d03ca7f66735603f"
+  },
+  {
+    "path": "packages/ai4e-core/applications/aero_cfd/post/export.py",
+    "before_sha256": "51b653efae5429282a37f98191d0f89996daf8a59fc705e8c09a5f9fcd2a32d9",
+    "after_sha256": "1a8180bed66bd4436895a179894cd5828529ef57baecb4f6654d15714469352b"
+  },
+  {
+    "path": "packages/ai4e-core/applications/aero_cfd/post/inference.py",
+    "before_sha256": "3a7cff0a2324dc79d688dae110ccd1cc89a54afb4ad5c548b9a47e2c0a3c9dfb",
+    "after_sha256": "5c66d29a6c853796a8c2515d686e2c0744d8813067edfc98783cff98039e3456"
+  },
+  {
+    "path": "packages/ai4e-core/applications/aero_cfd/post/stage.py",
+    "before_sha256": "2be7a1dfa7e73d4e107ee97d093a4c9a6973fbbbc1f79cae8ce91ee7f96e587d",
+    "after_sha256": "c5fe8c0c276ca5f0922de716c6ed621127933f1de195ab389a676d9d484dc74c"
+  },
+  {
+    "path": "packages/ai4e-core/abilities/data/save/store.py",
+    "before_sha256": "7422ae145cb361c0b04a343cf06bfff109410e44bbd39eddb640d1baf23f31ad",
+    "after_sha256": "0293d2b7241d01ac7ca79d0448a7ffb7079f0e3eaae6ea3496033d784cf8f435"
+  },
+  {
+    "path": "packages/ai4e-core/abilities/postproc/export/mesh.py",
+    "before_sha256": "1fc5d5286a9448c668418c5f1039394615f9e4c5de72508dda2b3f70ed72c3fd",
+    "after_sha256": "bc975b279f35f3e89c4514b85e48af89a1e2d1152b247e0a78ec6863310efc41"
+  },
+  {
+    "path": "packages/ai4e-core/abilities/postproc/export/pointcloud.py",
+    "before_sha256": "becfeb0fb342778d6474c51a602310548f1ad71bfdc051981b7d8f2f9605fea0",
+    "after_sha256": "894ebcecf5f42b68fdba3409df7efd7e6b95d5052c79d25a029ae670ae2a960d"
+  },
+  {
+    "path": "recipes/aero_cfd/post.py",
+    "before_sha256": "ec6227c6fa33e57b82d7e5dcf2dc9f3a9c5fab0ff98bc1ae2024cb345faf6043",
+    "after_sha256": "61222c4ae04a05a3de84f1bc125488c55e05dc56a6fc9c878af6d51ce037c38e"
+  },
+  {
+    "path": "recipes/aero_cfd/config.yaml",
+    "before_sha256": "df9169346dd30598c4e4dd4dcddffd8ccc25c38058de11cbfc9f3e431e7c5c4e",
+    "after_sha256": "c16d5b15575679d6fe64e80ee9cc22a3df12689dfce1ee218b197f4f06fe397e"
+  },
+  {
+    "path": "recipes/aero_cfd/README.md",
+    "before_sha256": "d23ba0a6fa41c056c3353ae9cd3dd39885088ce45452cdb9bf0856cfe89bba1c",
+    "after_sha256": "c836da9c7edc0c57c9dcc50558e92ac7b237383bd039ef44a2bf197d80a8138f"
+  },
+  {
+    "path": "tools/README.md",
+    "before_sha256": "5d1a87f164a591bf2e7d793eab673fc839bf5424dd60e767911960521dbaa782",
+    "after_sha256": "5649c8299805582a8e44fc186309fbc328e5a641888fd7fed08b1e31585c198c"
+  },
+  {
+    "path": "tests/integration/test_post_mesh.py",
+    "before_sha256": "212e9dd3e2c15732ba596cea6f1cfa03576eaa23f7f980c682e506e84e8f2fb4",
+    "after_sha256": "87e4887ad6dfaabe9b06b56d67e8d484b7ccd92019a607fe9e5ca85dd4ea09c3"
+  },
+  {
+    "path": "tests/integration/test_post_inference.py",
+    "before_sha256": "1495a0c5e7eabbfb9ed2b65491c6795395ef766878cdb6794b8f1115ea7d9388",
+    "after_sha256": "c5e9edd5d382b5b3216e1e505a5bbe74cec993d15146fc11b0e9083e300145d3"
+  },
+  {
+    "path": "tests/integration/test_abupt_recipe.py",
+    "before_sha256": "452ccab555706a3173544f7a38523cec82dd0b881042338d711782ff4ffc9ea3",
+    "after_sha256": "73a4d931540fbb0087553299d3dc362e67b2270d165cbfa1f78fec0c0e909052"
+  },
+  {
+    "path": ".context/index.md",
+    "before_sha256": "fe09c886990d683b09dec714978d0dbc37c5fb21056f3398e827fb7859033990",
+    "after_sha256": "2d1ac51d424d6ab973a7b9f1a3e4265ca16329effc637018c0da6de953d0223a"
+  },
+  {
+    "path": ".context/modules/recipes.md",
+    "before_sha256": "c8bd57dd0addd71b0e00ac5f1ee744f2ad81b2380f75087a88105f82fc5120ac",
+    "after_sha256": "05df0ad353f3458c821682e14f98e49226508c5d339f577acaed28b5c88dc79a"
+  },
+  {
+    "path": ".context/modules/ai4e-core.md",
+    "before_sha256": "fb0610cefd9a375408be2b7f4ef51c2276be5cc85664b3bfa092e09bcb8e72ff",
+    "after_sha256": "49916601882f6a98312e29c108bd2429a71bd6e60777e21f269ba59e8e7b9681"
+  },
+  {
+    "path": "docs/PRD/recipes/aero_cfd/PRD.md",
+    "before_sha256": "33b22daa1c2b3d4c627ba3c1d6dca47ad671d5980a3a2315d34bbcd395ed4509",
+    "after_sha256": "c39b02cf7500ad90279842ce7851018875850e4689172fedb2b0287e64405e67"
+  },
+  {
+    "path": "docs/PRD/ai4e-core/applications/PRD.md",
+    "before_sha256": "ecfbbd9c583141b882637cf43fba089a4fc862b348eb5565e3a926f085d10226",
+    "after_sha256": "3af44dd5880660f2f421ad2e5e454dc371fd3c0f3e9d580c70c4b2a3efd1185b"
+  },
+  {
+    "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+    "before_sha256": "9410f424d20806f7ab862f8035202da2f8714703325c48c1fba497a71922a21e",
+    "after_sha256": "47a72afcaa082df4cca1cf5cc2ac4f048ea5033eb072d81231c00b92c1a9a4ec"
+  },
+  {
+    "path": "AGENTS.md",
+    "before_sha256": "371a95a31b7563115c61737c4a34d3b243bccbb3d8a3322f6062780bcdc022c7",
+    "after_sha256": "2ac3e565676f0399c75dc5e24ed016f052a30bb4cecb5f2be2fa16ddc9bc86c5"
+  },
+  {
+    "path": "packages/ai4e-core/abilities/inference/query.py",
+    "added": true,
+    "after_sha256": "f346ef854e68f68bae057341fe5af491c4091fa90991805def8e44aae7be538a"
+  },
+  {
+    "path": "packages/ai4e-core/abilities/inference/randomness.py",
+    "added": true,
+    "after_sha256": "dc39f6b3fca0bc4b612046694dabf93b212c2e1f9315746fd72d53a5524df348"
+  },
+  {
+    "path": "packages/ai4e-core/abilities/transform/fields.py",
+    "added": true,
+    "after_sha256": "6d150e5535fd9432453346f720732c9f2892d78dd3706087a053e214ab36509c"
+  },
+  {
+    "path": "packages/ai4e-core/abilities/transform/normalization.py",
+    "added": true,
+    "after_sha256": "92929cf474fe0e3cd88c556a86631ac7f44c7f5157b25ac72a9dd26a444e1a96"
+  },
+  {
+    "path": "tools/verification/run_noether_post.py",
+    "added": true,
+    "after_sha256": "a8f33c7b3cc8a5fbd1d6f56b4a4161985ca06869d10b155f8516ff597bbae68a"
+  },
+  {
+    "path": "tools/verification/compare_post.py",
+    "added": true,
+    "after_sha256": "96b5ae6d256c3f9699a4d71156c63d750742debaa81960e34113e31c0070d744"
+  },
+  {
+    "path": "tests/integration/test_post_reference.py",
+    "added": true,
+    "after_sha256": "30e2e40bb9165b86d9cd55fb07f9748a1cbc1c2b2d2a7889a3f90526ca87b0e0"
+  }
+]

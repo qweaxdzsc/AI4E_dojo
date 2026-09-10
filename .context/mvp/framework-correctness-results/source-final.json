@@ -1,0 +1,23 @@
+{
+  "packages/ai4e-core/run/session.py": "98910fab74591811e14df061e355a74714d62383315690dc88a47708f442b195",
+  "packages/ai4e-core/run/training.py": "427e75266f76b8e4a053a0aea5bd65010efc287ed3245715d83a6a6c643327bb",
+  "packages/ai4e-core/base/events.py": "e07026b1195159a84f93b38d6a26461414141ae6e7208d5a431c1c116c0357bc",
+  "packages/ai4e-core/abilities/training/batch.py": "f90bd67f662ba7f58a8e0d832349be3a3be450a260a6c5868a2dd75f59a9bc82",
+  "packages/ai4e-core/abilities/eval/evaluation.py": "6947c45ab102a229571ecb85a2c167e00a378c7c6869ea27654826e03b2f1ae4",
+  "packages/ai4e-core/abilities/data/validate/fingerprint.py": "b395e752b9dd623df6425aa841e72f6c955e7bcf9540a0b30900bbd0ab07bd0f",
+  "packages/ai4e-core/applications/aero_cfd/post/evaluation.py": "dda2ea5d6ddd2e4f79a530e0105571fa3be6465cf0abeb12793e233b2f675d13",
+  "packages/ai4e-core/applications/aero_cfd/post/mesh.py": "653a48e682c18fbe454d4fa77cff0fda1e38da500a2ddf96d2b8bb81301d66c1",
+  "packages/ai4e-core/applications/aero_cfd/post/export.py": "0e32a3ab5907f411dadfe658bd9928c1195af11ad65701a8c893db5d9f8cf409",
+  "packages/ai4e-core/applications/aero_cfd/post/progress.py": "d83db8f582bedb0b286347766f8dfce79fa1b06939d1275195696a7b5723319f",
+  "packages/ai4e-core/applications/aero_cfd/post/stage.py": "057b34fc18576d6f1136e767922aa8871a06cf99d160f287d6a6cebf757b99bb",
+  "packages/ai4e-core/applications/aero_cfd/trainprep/dataset.py": "09b7dcc92468bdd0ce88846e18df95c8fa9bbd6a706b3cfd7adfa3a8a967358f",
+  "packages/ai4e-core/applications/aero_cfd/model/protocol.py": "d2aa5ad310fe66ff45a2cb01b109cf8d83204d7535be3cee7978d631e95302f7",
+  "packages/ai4e-core/applications/aero_cfd/train/fitting.py": "78fb8c3c46e065a6862dbadcf12097aa4b74e7b5dec37c0b322a36b6e4806a13",
+  "packages/ai4e-contrib/ability/model/abupt/sampling.py": "40125ed450cd818c33a3f11b03bbcc5fc069cd04dc76e25e082fca851c0359a3",
+  "packages/ai4e-contrib/ability/model/abupt/network.py": "7069d5f29df70bf267fb35eb66ae934e05261935616e3ed81d9285eab9468544",
+  "tools/verification/comparison_protocol.py": "8a1e674476c1fc75a72c1ec708f13e452f0173ec14a6bd2db94793cc403d4f3d",
+  "tools/verification/compare_post.py": "378115fd4b7fd35947331a1f26a8ceca3ccdab1466dac24d2037c2d3a7966b57",
+  "tools/verification/compare_training.py": "b35c30c9a8ecf3cff405e4f22200ba08f44cf88852ceedf37017abd13e59e630",
+  "tests/integration/test_comparison_protocol.py": "db78c6421fd5bf7022bca68531dcb33a0b766b2439e097d6546ab708ad3262c1",
+  "tests/integration/test_framework_correctness.py": "09fe047c8c9d832795271b648819f3967b3db3cb01fe96a22dc0436074c5f760"
+}

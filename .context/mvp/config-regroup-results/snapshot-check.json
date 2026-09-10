@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "epoch": 2,
+  "updates": 1578,
+  "snapshot_equals_checkpoint": true,
+  "layout": "rawprep/trainprep/model/train/post",
+  "dynamic_dataset_definition_in_snapshot": false
+}

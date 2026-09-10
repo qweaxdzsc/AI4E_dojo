@@ -1,0 +1,55 @@
+{
+  "source_file_count": 76,
+  "ruff_check": "All checks passed!",
+  "ruff_format_check": "76 files already formatted",
+  "import_boundary_violations": [],
+  "installed_source_mismatches": [],
+  "environment": "/private/tmp/dojo-transolver-env",
+  "six_section_prds": [
+    "docs/PRD/ai4e-spec/components/PRD.md",
+    "docs/PRD/ai4e-core/base/PRD.md",
+    "docs/PRD/ai4e-core/abilities/PRD.md",
+    "docs/PRD/ai4e-core/applications/PRD.md",
+    "docs/PRD/ai4e-core/run/PRD.md",
+    "docs/PRD/ai4e-contrib/application/PRD.md",
+    "docs/PRD/ai4e-contrib/ability/PRD.md",
+    "docs/PRD/recipes/aero_cfd/PRD.md"
+  ],
+  "test_suites": {
+    "workflow-regression.xml": {
+      "tests": 115,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 5
+    },
+    "core-regression.xml": {
+      "tests": 76,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1
+    },
+    "incremental-regression.xml": {
+      "tests": 95,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    "abupt-formal-regression.xml": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "new-suite.xml": {
+      "tests": 37,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "mypy": {
+    "status": "not_run",
+    "reason": "mypy unavailable in offline cache; no type-check pass claimed"
+  },
+  "overall_status": "formal_numerical_passed_legacy_public_config_policy_pending"
+}

@@ -1,0 +1,116 @@
+"""补充运行恢复、共享身份、快照不可变及 CLI 一致性。"""
+
+import json
+import subprocess
+import sys
+
+import ai4e_task as task
+import pytest
+from ai4e_task.storage.files import write_json
+
+from tests.integration.test_task_management import recipe
+
+
+def test_shared_identity_and_tampered_version(tmp_path):
+    project = tmp_path / "p"
+    task.create_project(project)
+    source = recipe(tmp_path)
+    shared = task.register_shared(project, "datasets/demo", tmp_path / "raw", kind="dataset")
+    first = task.new_task(project, "root", source=source)
+    assert first["assets"]["dataset.root"]["id"] == shared["id"]
+    snapshot = project / "tasks" / first["id"] / ".dojo/snapshots/creation/config.yaml"
+    snapshot.write_text("tampered: true")
+    with pytest.raises(ValueError, match="snapshot_changed"):
+        task.fork_task(project, first["id"], source="version")
+
+
+def test_resume_uses_captured_code_and_keeps_version(tmp_path):
+    project = tmp_path / "p"
+    task.create_project(project)
+    source = recipe(tmp_path)
+    script = source / "pipeline.py"
+    script.write_text(
+        script.read_text().replace(
+            'TrainingRun().report({"score": float(cfg.score)})',
+            'TrainingRun().checkpoint("latest", {"score": float(cfg.score)})\n    TrainingRun().report({"score": float(cfg.score)})',
+        )
+    )
+    entry = json.loads((source / "task-entry.json").read_text())
+    entry["resume_key"] = "train.resume"
+    entry["inputs"]["train.resume"] = "checkpoint"
+    (source / "task-entry.json").write_text(json.dumps(entry))
+    first = task.new_task(project, "root", source=source)
+    a = task.submit_run(project, first["id"])
+    a = task.wait_run(project, a["id"])
+    assert a["status"] == "succeeded", a
+    (project / "tasks" / first["id"] / "recipe/pipeline.py").write_text(
+        'raise RuntimeError("edited")'
+    )
+    b = task.resume_run(project, a["id"])
+    b = task.wait_run(project, b["id"])
+    assert b["status"] == "succeeded", b
+    assert b["lineage"]["resumed_from"] == a["id"]
+    assert len(task.get_lineage(project)) == 1
+
+
+def test_cli_and_incompatible_quantity(tmp_path):
+    project = tmp_path / "p"
+    task.create_project(project)
+    source = recipe(tmp_path)
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "ai4e_task",
+            "new",
+            "demo",
+            "--from",
+            str(source),
+            "--project",
+            str(project),
+            "--json",
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    first = json.loads(result.stdout)
+    a = task.submit_run(project, first["id"])
+    a = task.wait_run(project, a["id"])
+    entry_path = project / "tasks" / first["id"] / "recipe/task-entry.json"
+    entry = json.loads(entry_path.read_text())
+    entry["metrics"][0]["quantity"]["unit"] = "Pa"
+    entry_path.write_text(json.dumps(entry))
+    b = task.submit_run(project, first["id"])
+    b = task.wait_run(project, b["id"])
+    assert (
+        task.compare_runs(project, a["id"], b["id"])["metrics"]["score"]["status"] == "incompatible"
+    )
+    assert len(task.get_lineage(project)) == 1
+
+
+def test_explicit_crash_recovery_does_not_remove_registered_task(tmp_path):
+    project = tmp_path / "p"
+    task.create_project(project)
+    first = task.new_task(project, "real")
+    orphan = project / "tasks" / "orphan"
+    orphan.mkdir()
+    write_json(orphan / "task.json", {"id": "orphan"})
+    result = task.recover_project(project)
+    assert result["removed"] == ["tasks/orphan"]
+    assert (project / "tasks" / first["id"]).is_dir()
+
+
+def test_declared_missing_comparison_condition_is_not_available(tmp_path):
+    project = tmp_path / "p"
+    task.create_project(project)
+    source = recipe(tmp_path)
+    entry_path = source / "task-entry.json"
+    entry = json.loads(entry_path.read_text())
+    entry["metrics"][0]["quantity_config"] = {"sampling": ["trainprep", "sampling"]}
+    entry_path.write_text(json.dumps(entry))
+    first = task.new_task(project, "missing-sampling", source=source)
+    a = task.wait_run(project, task.submit_run(project, first["id"])["id"])
+    b = task.wait_run(project, task.submit_run(project, first["id"])["id"])
+    assert a["status"] == b["status"] == "succeeded"
+    assert task.compare_runs(project, a["id"], b["id"])["metrics"]["score"]["status"] == "missing"

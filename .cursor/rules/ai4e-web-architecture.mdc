@@ -1,0 +1,20 @@
+---
+description: AI4E_Dojo Web 包的微领域、稳定接口边界与代码书写规范
+globs: packages/ai4e-web/**/*
+alwaysApply: false
+---
+
+# 前端微领域规范
+
+- 适用包：`ai4e-web`；先读 `AGENTS.md`、`.context/index.md` 和 `.context/modules/ai4e-web.md`。
+- 前端按用户任务形成微领域，不按页面类型或后端目录镜像组织；候选边界包括数据接入、recipe 配置、run、对比和报告。
+- 仅当一个领域已有独立路由、状态、接口和测试时才建立 feature 目录；技术栈与目录模板须经 ADR 确认，不预建空壳。
+- 每个微领域拥有自己的视图、交互状态、API adapter 和测试，并只通过公开入口对外暴露能力。
+- 微领域之间不导入内部文件；跨领域流程由应用壳或显式 orchestration 组合，不形成循环依赖。
+- `shared` 只接收无业务语义或已被至少两个微领域稳定复用的代码，禁止成为公共垃圾桶。
+- Web 只消费稳定的 ai4e-server API 或版本化 Artifact schema，不导入 core、task、模型、Trainer、Dataset 或 Python 文件布局。
+- 业务数据访问集中在领域 API adapter；组件不得直接拼接后端 URL、读取运行目录或感知 transport 细节。
+- 训练、归一化、误差、守恒量和切片等计算归算法层；前端只表达结果和组织交互。
+- 领域状态、服务端缓存和视图临时状态必须分开；不可用、运行中、失败、部分结果等状态显式建模。
+- 导出组件、Hook 和函数使用中文 JSDoc；复杂状态、副作用、可访问性和性能取舍解释业务原因。
+- 确定技术栈后，同步本 rule、AGENTS、模块索引、依赖清单和测试命令。

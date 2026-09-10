@@ -1,0 +1,820 @@
+[
+  {
+    "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/runs/0977b440293742feb63046c34f4e78ac",
+    "summary": {
+      "total": 2,
+      "attempted": 2,
+      "success": 2,
+      "unexecuted": 0,
+      "failed": false,
+      "failed_count": 0,
+      "failures": [],
+      "dry_run": false,
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/runs/0977b440293742feb63046c34f4e78ac",
+      "reports": {
+        "trainprep": {
+          "mode": "trainprep",
+          "preparation": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/runs/0977b440293742feb63046c34f4e78ac/artifacts/preparation.json",
+          "digest": "5c299d4e220fec270a22a9125c7d4211e1d649c95ceaebf763ea8ed7c6e877f8",
+          "split_counts": {
+            "train": 1,
+            "test": 1
+          }
+        },
+        "train": {
+          "epochs": 1,
+          "updates": 1,
+          "best": 3.2922606468200684,
+          "history": [
+            {
+              "epoch": 1,
+              "updates": 1,
+              "loss": 3.4917778968811035,
+              "evaluation": {
+                "loss": 3.2922606468200684,
+                "losses": {
+                  "surface_pressure": 0.40892088413238525,
+                  "volume_velocity": 2.8833396434783936
+                },
+                "scope": "declared_predictions",
+                "metrics": {
+                  "surface_pressure/mse": {
+                    "value": 1002.6675415039062,
+                    "valid": 1,
+                    "skipped": 0
+                  },
+                  "surface_pressure/mae": {
+                    "value": 31.663314819335938,
+                    "valid": 1,
+                    "skipped": 0
+                  },
+                  "surface_pressure/relative_l2": {
+                    "value": 8.956198692321777,
+                    "valid": 1,
+                    "skipped": 0
+                  },
+                  "volume_velocity/mse": {
+                    "value": 93.57384490966797,
+                    "valid": 1,
+                    "skipped": 0
+                  },
+                  "volume_velocity/mae": {
+                    "value": 6.182609558105469,
+                    "valid": 1,
+                    "skipped": 0
+                  },
+                  "volume_velocity/relative_l2": {
+                    "value": 9.673357963562012,
+                    "valid": 1,
+                    "skipped": 0
+                  }
+                },
+                "split": "test"
+              },
+              "seconds": 0.02637612505350262,
+              "online": {
+                "loss": 3.4917778968811035,
+                "surface_pressure": 0.4655297100543976,
+                "volume_velocity": 3.0262482166290283
+              }
+            }
+          ],
+          "checkpoints": {
+            "last": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/runs/0977b440293742feb63046c34f4e78ac/checkpoints/last.pt",
+            "latest": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/runs/0977b440293742feb63046c34f4e78ac/checkpoints/latest.pt",
+            "best": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/runs/0977b440293742feb63046c34f4e78ac/checkpoints/best.pt"
+          }
+        },
+        "post": {
+          "mode": "post",
+          "status": "succeeded",
+          "operations": {
+            "evaluation": {
+              "status": "succeeded",
+              "completed": 1,
+              "samples": [
+                {
+                  "samples": [
+                    {
+                      "sample_id": "b",
+                      "index": 0
+                    }
+                  ],
+                  "status": "succeeded",
+                  "artifacts": []
+                }
+              ],
+              "artifacts": [],
+              "error": null
+            },
+            "predictions": {
+              "status": "succeeded",
+              "completed": 1,
+              "samples": [
+                {
+                  "samples": [
+                    {
+                      "sample_id": "b",
+                      "index": 0
+                    }
+                  ],
+                  "status": "succeeded",
+                  "artifacts": [
+                    "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/b",
+                    "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/sample_0000.pt",
+                    "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/vtk/sample_0000_surface.vtp",
+                    "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/vtk/sample_0000_volume.vtp"
+                  ]
+                }
+              ],
+              "artifacts": [
+                "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/b",
+                "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/sample_0000.pt",
+                "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/vtk/sample_0000_surface.vtp",
+                "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/vtk/sample_0000_volume.vtp"
+              ],
+              "error": null
+            },
+            "mesh": {
+              "status": "succeeded",
+              "completed": 1,
+              "samples": [
+                {
+                  "samples": [
+                    {
+                      "sample_id": "b",
+                      "index": 0
+                    }
+                  ],
+                  "status": "succeeded",
+                  "artifacts": [
+                    "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/mesh_vtk/sample_0000_surface.vtp",
+                    "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/mesh_vtk/sample_0000_volume.vtu"
+                  ]
+                }
+              ],
+              "artifacts": [
+                "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/mesh_vtk/sample_0000_surface.vtp",
+                "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/mesh_vtk/sample_0000_volume.vtu"
+              ],
+              "error": null
+            }
+          },
+          "checkpoint": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/runs/0977b440293742feb63046c34f4e78ac/checkpoints/last.pt",
+          "split": "test",
+          "evaluation": {
+            "loss": 3.142904043197632,
+            "losses": {
+              "surface_pressure": 0.3360946774482727,
+              "volume_velocity": 2.806809425354004
+            },
+            "scope": "declared_predictions",
+            "metrics": {
+              "surface_pressure/mse": {
+                "value": 796.3170166015625,
+                "valid": 1,
+                "skipped": 0
+              },
+              "surface_pressure/mae": {
+                "value": 28.21595573425293,
+                "valid": 1,
+                "skipped": 0
+              },
+              "surface_pressure/relative_l2": {
+                "value": 11.068437576293945,
+                "valid": 1,
+                "skipped": 0
+              },
+              "volume_velocity/mse": {
+                "value": 90.95661163330078,
+                "valid": 1,
+                "skipped": 0
+              },
+              "volume_velocity/mae": {
+                "value": 5.838228702545166,
+                "valid": 1,
+                "skipped": 0
+              },
+              "volume_velocity/relative_l2": {
+                "value": 11.680536270141602,
+                "valid": 1,
+                "skipped": 0
+              }
+            },
+            "split": "test"
+          },
+          "predictions": [
+            {
+              "sample_id": "b",
+              "output": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/b",
+              "packed": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/sample_0000.pt",
+              "shapes": {
+                "surface_pressure": [
+                  2,
+                  1
+                ],
+                "volume_velocity": [
+                  1,
+                  3
+                ],
+                "surface_anchor_position": [
+                  2,
+                  3
+                ],
+                "volume_anchor_position": [
+                  1,
+                  3
+                ]
+              }
+            }
+          ],
+          "export_vtk": true,
+          "meshes": [
+            {
+              "index": 0,
+              "sample_id": "b",
+              "surface": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/mesh_vtk/sample_0000_surface.vtp",
+              "volume": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/mesh_vtk/sample_0000_volume.vtu",
+              "points": {
+                "surface": 4,
+                "volume": 8
+              }
+            }
+          ],
+          "output": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac/predictions/mesh_vtk",
+          "indices": [
+            0
+          ]
+        }
+      }
+    },
+    "lineage": {
+      "project_id": "a80d2618816f4e80a586441145ef71f2",
+      "task_id": "327f12318ca7450b9bb41bb7ec040cc2",
+      "version_id": "2e40601568e348b38abbcbe17073814d",
+      "run_id": "0977b440293742feb63046c34f4e78ac",
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/runs/0977b440293742feb63046c34f4e78ac",
+      "data_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac",
+      "code_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/.dojo/executions/0977b440293742feb63046c34f4e78ac/code",
+      "version": {
+        "id": "2e40601568e348b38abbcbe17073814d",
+        "task_id": "327f12318ca7450b9bb41bb7ec040cc2",
+        "created_at": "2026-09-09T08:44:27.119993+00:00",
+        "parent_version_id": null,
+        "baseline_version_id": null,
+        "snapshot": {
+          "files": {
+            "README.md": "c30799530b2c75b8215582fc3ec101c13f30ab54cd8f2c2134721c1cb5f92609",
+            "config.yaml": "5dfc5142610c2678f448c04469c8b2b860615c5af4d0970abc1e537cb3bbe207",
+            "datapre.py": "aab5e7fe29a94f8be601545ec0192430879280894beed25cc9a27d3a7897b856",
+            "pipeline.py": "e8fbae2524e993f6d082eca6d114ae7d6dbe841974cf67eae8c4ad693fc187cb",
+            "post.py": "61222c4ae04a05a3de84f1bc125488c55e05dc56a6fc9c878af6d51ce037c38e",
+            "task-entry.json": "f946e6d3c85e97b25e92f2b32fb8829fc04c036810d0343282bd184bb4f414e0",
+            "train.py": "665ccdd18b346a2485a9f3c8318cbe9ff009e4aef3c8854f05d39811f46ce122",
+            "trainprep.py": "55143e1cdd695549ec984778d2d8afe007c831db2bdd50b9b35a30ce15480a01"
+          },
+          "digest": "f1adf88dc3f65e6261a183666582dc5199f2aafd3a544430a5d608b9bcea85ff"
+        },
+        "source_snapshot": {
+          "files": {
+            "README.md": "c30799530b2c75b8215582fc3ec101c13f30ab54cd8f2c2134721c1cb5f92609",
+            "config.yaml": "5dfc5142610c2678f448c04469c8b2b860615c5af4d0970abc1e537cb3bbe207",
+            "datapre.py": "aab5e7fe29a94f8be601545ec0192430879280894beed25cc9a27d3a7897b856",
+            "pipeline.py": "e8fbae2524e993f6d082eca6d114ae7d6dbe841974cf67eae8c4ad693fc187cb",
+            "post.py": "61222c4ae04a05a3de84f1bc125488c55e05dc56a6fc9c878af6d51ce037c38e",
+            "task-entry.json": "f946e6d3c85e97b25e92f2b32fb8829fc04c036810d0343282bd184bb4f414e0",
+            "train.py": "665ccdd18b346a2485a9f3c8318cbe9ff009e4aef3c8854f05d39811f46ce122",
+            "trainprep.py": "55143e1cdd695549ec984778d2d8afe007c831db2bdd50b9b35a30ce15480a01"
+          },
+          "digest": "f1adf88dc3f65e6261a183666582dc5199f2aafd3a544430a5d608b9bcea85ff"
+        },
+        "source": {
+          "kind": "template",
+          "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/experiment",
+          "run_id": null
+        },
+        "assets": {
+          "dataset.root": {
+            "id": "1923aa25bf5b4f648226535581005687",
+            "kind": "dataset",
+            "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/raw",
+            "external": true,
+            "digest": "697026933aee41d6d967ba558f1aed4eb0c29884b3cb4aef5c5b71fc17aa0ad7",
+            "source": {},
+            "dependencies": []
+          },
+          "dataset.manifest": {
+            "id": "8487932c10074ddf8b414ed580f79279",
+            "kind": "dataset",
+            "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/source-manifest.yaml",
+            "external": true,
+            "digest": "3467d56e6f81ff576d66091e69716a90b8b96f421d2c2c743932c634524dc904",
+            "source": {},
+            "dependencies": []
+          }
+        },
+        "copied_outputs": {},
+        "changes": [
+          {
+            "path": "README.md",
+            "before": null,
+            "after": "c30799530b2c75b8215582fc3ec101c13f30ab54cd8f2c2134721c1cb5f92609"
+          },
+          {
+            "path": "config.yaml",
+            "before": null,
+            "after": "5dfc5142610c2678f448c04469c8b2b860615c5af4d0970abc1e537cb3bbe207"
+          },
+          {
+            "path": "datapre.py",
+            "before": null,
+            "after": "aab5e7fe29a94f8be601545ec0192430879280894beed25cc9a27d3a7897b856"
+          },
+          {
+            "path": "pipeline.py",
+            "before": null,
+            "after": "e8fbae2524e993f6d082eca6d114ae7d6dbe841974cf67eae8c4ad693fc187cb"
+          },
+          {
+            "path": "post.py",
+            "before": null,
+            "after": "61222c4ae04a05a3de84f1bc125488c55e05dc56a6fc9c878af6d51ce037c38e"
+          },
+          {
+            "path": "task-entry.json",
+            "before": null,
+            "after": "f946e6d3c85e97b25e92f2b32fb8829fc04c036810d0343282bd184bb4f414e0"
+          },
+          {
+            "path": "train.py",
+            "before": null,
+            "after": "665ccdd18b346a2485a9f3c8318cbe9ff009e4aef3c8854f05d39811f46ce122"
+          },
+          {
+            "path": "trainprep.py",
+            "before": null,
+            "after": "55143e1cdd695549ec984778d2d8afe007c831db2bdd50b9b35a30ce15480a01"
+          }
+        ]
+      },
+      "assets": {
+        "dataset.root": {
+          "id": "1923aa25bf5b4f648226535581005687",
+          "kind": "dataset",
+          "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/raw",
+          "external": true,
+          "digest": "697026933aee41d6d967ba558f1aed4eb0c29884b3cb4aef5c5b71fc17aa0ad7",
+          "source": {},
+          "dependencies": []
+        },
+        "dataset.manifest": {
+          "id": "8487932c10074ddf8b414ed580f79279",
+          "kind": "dataset",
+          "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/source-manifest.yaml",
+          "external": true,
+          "digest": "3467d56e6f81ff576d66091e69716a90b8b96f421d2c2c743932c634524dc904",
+          "source": {},
+          "dependencies": []
+        }
+      },
+      "resumed_from": null,
+      "schema_version": 1
+    },
+    "checkpoint_files": [
+      "latest.pt",
+      "last.pt",
+      "best.pt"
+    ]
+  },
+  {
+    "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/runs/e34d52d7602b4b23b79c5c645c72861f",
+    "summary": {
+      "total": 2,
+      "attempted": 2,
+      "success": 2,
+      "unexecuted": 0,
+      "failed": false,
+      "failed_count": 0,
+      "failures": [],
+      "dry_run": false,
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/runs/e34d52d7602b4b23b79c5c645c72861f",
+      "reports": {
+        "trainprep": {
+          "mode": "trainprep",
+          "preparation": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/runs/e34d52d7602b4b23b79c5c645c72861f/artifacts/preparation.json",
+          "digest": "4df54456811c8822039d5093d8e742c493a78f69a715b8bbbb30d8c08bc69314",
+          "split_counts": {
+            "train": 1,
+            "test": 1
+          }
+        },
+        "train": {
+          "epochs": 1,
+          "updates": 1,
+          "best": 3.0279526710510254,
+          "history": [
+            {
+              "epoch": 1,
+              "updates": 1,
+              "loss": 3.4917778968811035,
+              "evaluation": {
+                "loss": 3.0279526710510254,
+                "losses": {
+                  "surface_pressure": 0.32367637753486633,
+                  "volume_velocity": 2.7042763233184814
+                },
+                "scope": "declared_predictions",
+                "metrics": {
+                  "surface_pressure/mse": {
+                    "value": 774.555419921875,
+                    "valid": 1,
+                    "skipped": 0
+                  },
+                  "surface_pressure/mae": {
+                    "value": 27.826749801635742,
+                    "valid": 1,
+                    "skipped": 0
+                  },
+                  "surface_pressure/relative_l2": {
+                    "value": 7.871753692626953,
+                    "valid": 1,
+                    "skipped": 0
+                  },
+                  "volume_velocity/mse": {
+                    "value": 87.29715728759766,
+                    "valid": 1,
+                    "skipped": 0
+                  },
+                  "volume_velocity/mae": {
+                    "value": 5.982093334197998,
+                    "valid": 1,
+                    "skipped": 0
+                  },
+                  "volume_velocity/relative_l2": {
+                    "value": 9.343295097351074,
+                    "valid": 1,
+                    "skipped": 0
+                  }
+                },
+                "split": "test"
+              },
+              "seconds": 0.024184332927688956,
+              "online": {
+                "loss": 3.4917778968811035,
+                "surface_pressure": 0.4655297100543976,
+                "volume_velocity": 3.0262482166290283
+              }
+            }
+          ],
+          "checkpoints": {
+            "last": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/runs/e34d52d7602b4b23b79c5c645c72861f/checkpoints/last.pt",
+            "latest": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/runs/e34d52d7602b4b23b79c5c645c72861f/checkpoints/latest.pt",
+            "best": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/runs/e34d52d7602b4b23b79c5c645c72861f/checkpoints/best.pt"
+          }
+        },
+        "post": {
+          "mode": "post",
+          "status": "succeeded",
+          "operations": {
+            "evaluation": {
+              "status": "succeeded",
+              "completed": 1,
+              "samples": [
+                {
+                  "samples": [
+                    {
+                      "sample_id": "b",
+                      "index": 0
+                    }
+                  ],
+                  "status": "succeeded",
+                  "artifacts": []
+                }
+              ],
+              "artifacts": [],
+              "error": null
+            },
+            "predictions": {
+              "status": "succeeded",
+              "completed": 1,
+              "samples": [
+                {
+                  "samples": [
+                    {
+                      "sample_id": "b",
+                      "index": 0
+                    }
+                  ],
+                  "status": "succeeded",
+                  "artifacts": [
+                    "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/b",
+                    "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/sample_0000.pt",
+                    "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/vtk/sample_0000_surface.vtp",
+                    "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/vtk/sample_0000_volume.vtp"
+                  ]
+                }
+              ],
+              "artifacts": [
+                "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/b",
+                "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/sample_0000.pt",
+                "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/vtk/sample_0000_surface.vtp",
+                "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/vtk/sample_0000_volume.vtp"
+              ],
+              "error": null
+            },
+            "mesh": {
+              "status": "succeeded",
+              "completed": 1,
+              "samples": [
+                {
+                  "samples": [
+                    {
+                      "sample_id": "b",
+                      "index": 0
+                    }
+                  ],
+                  "status": "succeeded",
+                  "artifacts": [
+                    "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/mesh_vtk/sample_0000_surface.vtp",
+                    "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/mesh_vtk/sample_0000_volume.vtu"
+                  ]
+                }
+              ],
+              "artifacts": [
+                "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/mesh_vtk/sample_0000_surface.vtp",
+                "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/mesh_vtk/sample_0000_volume.vtu"
+              ],
+              "error": null
+            }
+          },
+          "checkpoint": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/runs/e34d52d7602b4b23b79c5c645c72861f/checkpoints/last.pt",
+          "split": "test",
+          "evaluation": {
+            "loss": 2.938072919845581,
+            "losses": {
+              "surface_pressure": 0.27398401498794556,
+              "volume_velocity": 2.6640889644622803
+            },
+            "scope": "declared_predictions",
+            "metrics": {
+              "surface_pressure/mse": {
+                "value": 649.1568603515625,
+                "valid": 1,
+                "skipped": 0
+              },
+              "surface_pressure/mae": {
+                "value": 25.474641799926758,
+                "valid": 1,
+                "skipped": 0
+              },
+              "surface_pressure/relative_l2": {
+                "value": 9.993512153625488,
+                "valid": 1,
+                "skipped": 0
+              },
+              "volume_velocity/mse": {
+                "value": 85.84142303466797,
+                "valid": 1,
+                "skipped": 0
+              },
+              "volume_velocity/mae": {
+                "value": 5.695072650909424,
+                "valid": 1,
+                "skipped": 0
+              },
+              "volume_velocity/relative_l2": {
+                "value": 11.347339630126953,
+                "valid": 1,
+                "skipped": 0
+              }
+            },
+            "split": "test"
+          },
+          "predictions": [
+            {
+              "sample_id": "b",
+              "output": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/b",
+              "packed": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/sample_0000.pt",
+              "shapes": {
+                "surface_pressure": [
+                  2,
+                  1
+                ],
+                "volume_velocity": [
+                  1,
+                  3
+                ],
+                "surface_anchor_position": [
+                  2,
+                  3
+                ],
+                "volume_anchor_position": [
+                  1,
+                  3
+                ]
+              }
+            }
+          ],
+          "export_vtk": true,
+          "meshes": [
+            {
+              "index": 0,
+              "sample_id": "b",
+              "surface": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/mesh_vtk/sample_0000_surface.vtp",
+              "volume": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/mesh_vtk/sample_0000_volume.vtu",
+              "points": {
+                "surface": 4,
+                "volume": 8
+              }
+            }
+          ],
+          "output": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f/predictions/mesh_vtk",
+          "indices": [
+            0
+          ]
+        }
+      }
+    },
+    "lineage": {
+      "project_id": "a80d2618816f4e80a586441145ef71f2",
+      "task_id": "fdc0a7ba2b6a4bff8132c8f1f0c4f09b",
+      "version_id": "dc3efed06c4f4de68a17e1af47d776b3",
+      "run_id": "e34d52d7602b4b23b79c5c645c72861f",
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/runs/e34d52d7602b4b23b79c5c645c72861f",
+      "data_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/data/e34d52d7602b4b23b79c5c645c72861f",
+      "code_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/.dojo/executions/e34d52d7602b4b23b79c5c645c72861f/code",
+      "version": {
+        "id": "dc3efed06c4f4de68a17e1af47d776b3",
+        "task_id": "fdc0a7ba2b6a4bff8132c8f1f0c4f09b",
+        "created_at": "2026-09-09T08:44:30.479371+00:00",
+        "parent_version_id": "2e40601568e348b38abbcbe17073814d",
+        "baseline_version_id": "2e40601568e348b38abbcbe17073814d",
+        "snapshot": {
+          "files": {
+            "README.md": "c30799530b2c75b8215582fc3ec101c13f30ab54cd8f2c2134721c1cb5f92609",
+            "config.yaml": "bc09344320c410b4ec0645b84f8490242cf45cce296d0888227e895bb6e0983d",
+            "datapre.py": "aab5e7fe29a94f8be601545ec0192430879280894beed25cc9a27d3a7897b856",
+            "pipeline.py": "e8fbae2524e993f6d082eca6d114ae7d6dbe841974cf67eae8c4ad693fc187cb",
+            "post.py": "61222c4ae04a05a3de84f1bc125488c55e05dc56a6fc9c878af6d51ce037c38e",
+            "task-entry.json": "f946e6d3c85e97b25e92f2b32fb8829fc04c036810d0343282bd184bb4f414e0",
+            "train.py": "665ccdd18b346a2485a9f3c8318cbe9ff009e4aef3c8854f05d39811f46ce122",
+            "trainprep.py": "55143e1cdd695549ec984778d2d8afe007c831db2bdd50b9b35a30ce15480a01"
+          },
+          "digest": "3d2e475987b8bbc92c6393a469c9b12ba77b06f964322fef5ed3614cdb62144c"
+        },
+        "source_snapshot": {
+          "files": {
+            "README.md": "c30799530b2c75b8215582fc3ec101c13f30ab54cd8f2c2134721c1cb5f92609",
+            "config.yaml": "5dfc5142610c2678f448c04469c8b2b860615c5af4d0970abc1e537cb3bbe207",
+            "datapre.py": "aab5e7fe29a94f8be601545ec0192430879280894beed25cc9a27d3a7897b856",
+            "pipeline.py": "e8fbae2524e993f6d082eca6d114ae7d6dbe841974cf67eae8c4ad693fc187cb",
+            "post.py": "61222c4ae04a05a3de84f1bc125488c55e05dc56a6fc9c878af6d51ce037c38e",
+            "task-entry.json": "f946e6d3c85e97b25e92f2b32fb8829fc04c036810d0343282bd184bb4f414e0",
+            "train.py": "665ccdd18b346a2485a9f3c8318cbe9ff009e4aef3c8854f05d39811f46ce122",
+            "trainprep.py": "55143e1cdd695549ec984778d2d8afe007c831db2bdd50b9b35a30ce15480a01"
+          },
+          "digest": "f1adf88dc3f65e6261a183666582dc5199f2aafd3a544430a5d608b9bcea85ff"
+        },
+        "source": {
+          "kind": "worktree",
+          "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/recipe",
+          "run_id": null
+        },
+        "assets": {
+          "dataset.root": {
+            "id": "837473575e0f4f23bb26f1ae01e47684",
+            "kind": "dataset",
+            "path": "tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/assets/dataset.root/content",
+            "external": false,
+            "digest": "697026933aee41d6d967ba558f1aed4eb0c29884b3cb4aef5c5b71fc17aa0ad7",
+            "source": {
+              "asset_id": "1923aa25bf5b4f648226535581005687"
+            },
+            "dependencies": []
+          },
+          "dataset.manifest": {
+            "id": "53ef87e0d6714abe86520b05591ecc69",
+            "kind": "dataset",
+            "path": "tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/assets/dataset.manifest/content/source-manifest.yaml",
+            "external": false,
+            "digest": "3467d56e6f81ff576d66091e69716a90b8b96f421d2c2c743932c634524dc904",
+            "source": {
+              "asset_id": "8487932c10074ddf8b414ed580f79279"
+            },
+            "dependencies": []
+          }
+        },
+        "copied_outputs": {
+          "run-0977b440293742feb63046c34f4e78ac-preparation-preparation.json": {
+            "id": "8b53c15a844b470aa2b5b754914d15c0",
+            "kind": "preparation",
+            "path": "tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/assets/run-0977b440293742feb63046c34f4e78ac-preparation-preparation.json/content/preparation.json",
+            "external": false,
+            "digest": "548b5d3f0d29d8c78114c1646a17fb301aba9df7eb05ecf06848f51cfb2b62f5",
+            "source": {
+              "asset_id": "821caa90bc824f3bb7be973c4b1a46fc",
+              "run_id": "0977b440293742feb63046c34f4e78ac",
+              "task_id": "327f12318ca7450b9bb41bb7ec040cc2",
+              "version_id": "2e40601568e348b38abbcbe17073814d"
+            },
+            "dependencies": [
+              {
+                "id": "0a6f63c1e74a43969835f42a7d65de94",
+                "kind": "dataset",
+                "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-207/test_formal_recipe_new_fork_tr0/study/tasks/327f12318ca7450b9bb41bb7ec040cc2/data/0977b440293742feb63046c34f4e78ac",
+                "external": true,
+                "digest": "028fcab15b7115fdad388d9c7a8395d5e57f04e245187a3ec91b073465b8c092",
+                "source": {
+                  "run_id": "0977b440293742feb63046c34f4e78ac",
+                  "task_id": "327f12318ca7450b9bb41bb7ec040cc2",
+                  "version_id": "2e40601568e348b38abbcbe17073814d"
+                },
+                "dependencies": []
+              }
+            ]
+          },
+          "run-0977b440293742feb63046c34f4e78ac-checkpoint-best.pt": {
+            "id": "55b6ae5b257d4c75823d58d0734a95db",
+            "kind": "checkpoint",
+            "path": "tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/assets/run-0977b440293742feb63046c34f4e78ac-checkpoint-best.pt/content/best.pt",
+            "external": false,
+            "digest": "5c877750cab74e681d0e6dc23fdc0cd94674c5db67ea2be9b08309d9eb48593b",
+            "source": {
+              "asset_id": "36bc85c7653e442c8b4482a993f8863c",
+              "run_id": "0977b440293742feb63046c34f4e78ac",
+              "task_id": "327f12318ca7450b9bb41bb7ec040cc2",
+              "version_id": "2e40601568e348b38abbcbe17073814d"
+            },
+            "dependencies": []
+          },
+          "run-0977b440293742feb63046c34f4e78ac-checkpoint-last.pt": {
+            "id": "9d1e56f18c4c4f7ea89964598761eec1",
+            "kind": "checkpoint",
+            "path": "tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/assets/run-0977b440293742feb63046c34f4e78ac-checkpoint-last.pt/content/last.pt",
+            "external": false,
+            "digest": "f7cd91b4669368bfbd0d8c35e355efa72ebe0f407d41fb5eca7bc2080851bc47",
+            "source": {
+              "asset_id": "ac0fe950bbd64d4491ef3feb61f1c70e",
+              "run_id": "0977b440293742feb63046c34f4e78ac",
+              "task_id": "327f12318ca7450b9bb41bb7ec040cc2",
+              "version_id": "2e40601568e348b38abbcbe17073814d"
+            },
+            "dependencies": []
+          },
+          "run-0977b440293742feb63046c34f4e78ac-checkpoint-latest.pt": {
+            "id": "2d3c35c5c10a486f86bf7f06889d814a",
+            "kind": "checkpoint",
+            "path": "tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/assets/run-0977b440293742feb63046c34f4e78ac-checkpoint-latest.pt/content/latest.pt",
+            "external": false,
+            "digest": "c5571e9d0c24355611565ef2a41b6c9069125c4a24017653a0cb2653f1b07d29",
+            "source": {
+              "asset_id": "5623456bd1134959bb3dff6801f2a2ee",
+              "run_id": "0977b440293742feb63046c34f4e78ac",
+              "task_id": "327f12318ca7450b9bb41bb7ec040cc2",
+              "version_id": "2e40601568e348b38abbcbe17073814d"
+            },
+            "dependencies": []
+          }
+        },
+        "changes": [
+          {
+            "path": "config.yaml",
+            "before": "5dfc5142610c2678f448c04469c8b2b860615c5af4d0970abc1e537cb3bbe207",
+            "after": "bc09344320c410b4ec0645b84f8490242cf45cce296d0888227e895bb6e0983d"
+          }
+        ]
+      },
+      "assets": {
+        "dataset.root": {
+          "id": "837473575e0f4f23bb26f1ae01e47684",
+          "kind": "dataset",
+          "path": "tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/assets/dataset.root/content",
+          "external": false,
+          "digest": "697026933aee41d6d967ba558f1aed4eb0c29884b3cb4aef5c5b71fc17aa0ad7",
+          "source": {
+            "asset_id": "1923aa25bf5b4f648226535581005687"
+          },
+          "dependencies": []
+        },
+        "dataset.manifest": {
+          "id": "53ef87e0d6714abe86520b05591ecc69",
+          "kind": "dataset",
+          "path": "tasks/fdc0a7ba2b6a4bff8132c8f1f0c4f09b/assets/dataset.manifest/content/source-manifest.yaml",
+          "external": false,
+          "digest": "3467d56e6f81ff576d66091e69716a90b8b96f421d2c2c743932c634524dc904",
+          "source": {
+            "asset_id": "8487932c10074ddf8b414ed580f79279"
+          },
+          "dependencies": []
+        }
+      },
+      "resumed_from": null,
+      "schema_version": 1
+    },
+    "checkpoint_files": [
+      "latest.pt",
+      "last.pt",
+      "best.pt"
+    ]
+  }
+]

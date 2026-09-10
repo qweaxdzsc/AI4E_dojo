@@ -1,0 +1,28 @@
+{
+  "data": {
+    "train_h5": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM 2/trainingData_NASA-CRM.h5",
+    "test_h5": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM/testData_NASA-CRM.h5",
+    "connectivity_h5": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM/connectivity_NASA-CRM.h5",
+    "processed_dir": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM processed/transolver3",
+    "predictions_dir": "/private/tmp/dojo-transolver-formal/reference-predictions",
+    "post_dir": "/private/tmp/dojo-transolver-formal/reference-post"
+  },
+  "model": {
+    "n_hidden": 256,
+    "n_layers": 24,
+    "n_head": 8,
+    "mlp_ratio": 2,
+    "slice_num": 64,
+    "space_dim": 12,
+    "fun_dim": 0,
+    "out_dim": 4,
+    "unified_pos": false
+  },
+  "training": {
+    "checkpoint_dir": "/private/tmp/dojo-transolver-formal/reference-resume-final-checkpoints",
+    "epochs": 2,
+    "device": "mps",
+    "seed": 2,
+    "gradient_checkpointing": true
+  }
+}

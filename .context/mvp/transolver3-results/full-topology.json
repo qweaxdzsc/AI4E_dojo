@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "point_count": 454404,
+  "triangles": 1792,
+  "quads": 453512,
+  "edge_count": 909700,
+  "euler_characteristic": 8,
+  "topology_exact": true
+}

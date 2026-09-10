@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "fields_exact": {
+    "model": true,
+    "optimizer": true,
+    "scheduler": true,
+    "ema": true,
+    "epoch": true,
+    "updates": true,
+    "best": true,
+    "scaler": true,
+    "python_rng": true,
+    "numpy_rng": true,
+    "torch_rng": true,
+    "cuda_rng": true
+  },
+  "trigger": "SIGTERM after update100, replay epoch0",
+  "uninterrupted": "/tmp/dojo-three-stage-full/dojo-v4/2026-09-08T23-25-34_6f2600/checkpoints/last.pt",
+  "resumed": "/tmp/dojo-three-stage-full/resumed/2026-09-08T23-33-34_bded2b/checkpoints/last.pt"
+}

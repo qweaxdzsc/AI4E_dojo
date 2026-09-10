@@ -1,0 +1,33 @@
+{
+  "reference_root": "/Users/zonghui/work/new_code_project/Transolver-3",
+  "files": {
+    "user_project/model_utils.py": "1a1cced97382fc64be3dd914a38b0194072184a724d27136c413c7663d4cf1bf",
+    "user_project/post.py": "95aa4e5a6191c21cfb6041d726ce4705ec58e44ef4bd2aa23a1690aecb1a778a",
+    "user_project/config.py": "7a2a25224e086a57ffa0a594f48fbbeed156e314ac689b706b36c2a9d4824d13",
+    "user_project/preprocess.py": "34541beabdf48f27f0a681f0e4b74d0387bfb5922694cc82c9567df03948e6a9",
+    "user_project/constants.py": "032af238f0a5472aab56efeb549a902d619633079d62a6328bf5f3982e797bee",
+    "user_project/__init__.py": "b7bb45d08f5e9d52752ef223079162c27c50058dbbdf488943066c83eb5776b0",
+    "user_project/mesh.py": "bc79bd223f7d45e89e7ab547af37290d614f32f1bfd49cff042ff6c5feb6fefd",
+    "user_project/train.py": "de5ec46046af3e320604fe9a16a72750b86eb253decdeeb7d1d983c1e13f6324",
+    "user_project/io_utils.py": "7000fb188915d74dd18a11466bfc4ccec5eedda0e3aa2f42eeb9c45eacdea50e",
+    "user_project/inference.py": "c61cdb91691a3829d26c254e652c9fd2d0d9c0960524ee51f007a2df68816575",
+    "user_project/data.py": "958aca67b7ed5ab75ce607f80690bd44d3f62a3942e5001cbeeddf3d98e35339",
+    "user_project/configs/nasa_crm.toml": "fa9b4093f37be9de2f2e018d788dda4f5943a2cc8ada1691418ce13c0d1981d3",
+    "user_project/configs/nasa_crm_cpu_smoke.toml": "1ab17eb9f07bad634a3876f911ada0c14dd2486c60719b25b7b4ce40bda2bfc2",
+    "models/Transolver_chunk_opt_matrix_mul_amortize.py": "87d1c2983aed29977c72ad1c4bce510eba97d2c6649592ce3696d28d5b177b04",
+    "models/Transolver_chunk_opt_matrix_mul.py": "2dc6476d64613b66e0da285e676bd87ffd6110b49ff4c2d53ed4e9013309562c"
+  },
+  "tolerance": {
+    "rtol": 1e-05,
+    "atol": 1e-06
+  },
+  "formal": {
+    "epochs": 2,
+    "layers": 24,
+    "hidden": 256,
+    "test_samples": 44
+  },
+  "status": "formal_numerical_passed",
+  "overall_status": "numerical_passed_legacy_public_config_policy_pending",
+  "provenance": "provenance.json"
+}

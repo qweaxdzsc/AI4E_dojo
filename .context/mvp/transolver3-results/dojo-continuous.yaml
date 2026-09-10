@@ -1,0 +1,85 @@
+components:
+  workflow: ai4e_core.applications.aero_cfd.pointfield_workflow
+  dataset: ai4e_contrib.application.datasets.nasa_crm
+  model: ai4e_contrib.ability.model.transolver3.component
+dataset:
+  root: /Users/zonghui/work/datasets/NASA
+  train_h5: /Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM 2/trainingData_NASA-CRM.h5
+  test_h5: /Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM/testData_NASA-CRM.h5
+  connectivity_h5: /Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM/connectivity_NASA-CRM.h5
+  chunk_count: 20
+  validation_fraction: 0.2
+  split_seed: 42
+  resume: false
+pipeline:
+  stages:
+  - trainprep
+  - train
+data_root: /private/tmp/dojo-transolver-formal/dojo-data
+run_root: /private/tmp/dojo-transolver-formal/dojo-runs
+paths:
+  datasets:
+    root: /private/tmp/dojo-transolver-formal/dojo-data
+    train: /private/tmp/dojo-transolver-formal/dojo-data/train
+    validation: /private/tmp/dojo-transolver-formal/dojo-data/validation
+    test: /private/tmp/dojo-transolver-formal/dojo-data/test
+    predictions: /private/tmp/dojo-transolver-formal/dojo-data/predictions
+    post: /private/tmp/dojo-transolver-formal/dojo-data/post
+model:
+  parameters:
+    n_hidden: 256
+    n_layers: 24
+    n_head: 8
+    mlp_ratio: 2
+    slice_num: 64
+    space_dim: 12
+    fun_dim: 0
+    out_dim: 4
+    unified_pos: false
+    gradient_checkpointing: true
+sampling:
+  seed: 2
+  stride: 4
+normalization:
+  execute: true
+train:
+  max_epochs: 2
+  batch_size: 1
+  num_workers: 0
+  device: mps
+  precision: fp32
+  optimizer: adamw
+  learning_rate: 0.001
+  weight_decay: 0.0
+  betas:
+  - 0.9
+  - 0.999
+  scheduler_unit: epoch
+  min_lr_ratio: 0.01
+  gradient_clip: 1.0
+  evaluation_split: validation
+  validation_interval: 1
+  resume: null
+  manifest: /Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM processed/transolver3/manifest.json
+  accumulate: 1
+  best_on_equal: true
+  restore_history: true
+  loss_reduction: elements
+  snapshot: true
+  save_on_interrupt: true
+post:
+  checkpoint: best
+  split: test
+  infer: true
+  evaluate: true
+  export_hdf5: true
+  export_vtk: true
+  all_samples: true
+  samples: null
+  inference_samples: null
+  resume: false
+  overwrite: false
+execution:
+  dry_run: false
+  overwrite: false
+  continue_on_error: false

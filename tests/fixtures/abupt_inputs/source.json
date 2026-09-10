@@ -1,0 +1,13 @@
+{
+  "commit": "313e6c5c2ff31f283a3e5935b4d85888aac6b025",
+  "files": {
+    "src/noether/modeling/models/aerodynamics.py": "a0998075ee9a690b9290a9ffb84ced7dfe9e824a83844c4df3472c7eb39cb26f",
+    "src/noether/modeling/models/ab_upt.py": "0a4236ecd94e8a56b0769494d5d587a6e516ced81d2c3441cb4fcf4c515eeedd",
+    "src/noether/data/pipeline/sample_processors/moment_normalization.py": "0adec5d32f617f4d6ddc31ab3f2627d97f6e47f2158083243952c41d26a358ff",
+    "src/noether/data/pipeline/sample_processors/position_normalization.py": "e75a06d336ed5760e6e6e97b8e29d673d9372ea682c94ea6b68fb28e88db1236",
+    "LICENSE.txt": "745738c45391dd73bb8982359995e2a121124f4349036681de173046d6668181"
+  },
+  "fixture_sha256": "32bd2bacdf9f1ecc9b52db891272b61feb4802ea422893521ed4cced52540d4e",
+  "command": "uv run --no-project --python <noether>/.venv/bin/python python tools/generate_abupt_inputs.py <noether> tests/fixtures/abupt_inputs",
+  "boundary": "Real normalization processors; unchanged AeroABUPT.forward captured at backbone call. This validates input translation, not network outputs."
+}

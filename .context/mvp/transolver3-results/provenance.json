@@ -1,0 +1,55 @@
+{
+  "reference_sources_verified": true,
+  "manifest_fingerprint": "dcb79dea3d570be4c4b48679e34c3884f6cd4bc4ece0229323fc377f74588fe6",
+  "source_files": {
+    "test": {
+      "mtime_ns": 1745361926000000000,
+      "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM/testData_NASA-CRM.h5",
+      "point_count": 454404,
+      "sample_count": 44,
+      "size_bytes": 879958232
+    },
+    "training": {
+      "mtime_ns": 1745361932000000000,
+      "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM 2/trainingData_NASA-CRM.h5",
+      "point_count": 454404,
+      "sample_count": 105,
+      "size_bytes": 2099900656
+    }
+  },
+  "split_counts": {
+    "test": 44,
+    "train": 84,
+    "validation": 21
+  },
+  "configuration_files": {
+    "dojo-continuous.yaml": {
+      "source": "/private/tmp/dojo-transolver-formal/dojo-runs/2026-09-09T18-05-16_a9ed7e/inputs/config.yaml",
+      "sha256": "3decf1832bcb3308086c7a28a9926f3d343f1093f508f56ac28e8d577f9c5adf"
+    },
+    "dojo-resume.yaml": {
+      "source": "/private/tmp/dojo-transolver-formal/dojo-resume-fixed-runs/2026-09-09T18-47-35_33eed7/inputs/config.yaml",
+      "sha256": "d5708a030b32b10e595ec8403be348b2eac76d3d4f8051015b8c72a488026cf1"
+    },
+    "reference-continuous.json": {
+      "source": "/private/tmp/dojo-transolver-formal/reference.json",
+      "sha256": "3290d2b6189e637874abf16f971d5694735f210d5d095d86ba9d227fade82de0"
+    },
+    "reference-resume.json": {
+      "source": "/private/tmp/dojo-transolver-formal/reference-resume-final.json",
+      "sha256": "699343362a55af989d4c6509a49cf48fa79295d5c4ed885af715515b5ec18125"
+    },
+    "reference-post.json": {
+      "source": "/private/tmp/dojo-transolver-formal/reference-post.json",
+      "sha256": "b17eb532699bc774e4fd2a50114ac3ac0ee460d37eab16db3232976fbb772010"
+    }
+  },
+  "actual_artifacts_root": "/private/tmp/dojo-transolver-formal",
+  "historical_source_snapshot": "/private/tmp/dojo-transolver-formal/dojo-runs/2026-09-09T18-05-16_a9ed7e/code.tar.gz",
+  "formal_evidence_scope": "historical locked run snapshots; subsequent module placement and diagnostics validated by scoped regression",
+  "reference_transport_corrections": [
+    "torch_random_state_to_cpu",
+    "carry_existing_best_to_resume_directory"
+  ],
+  "overall_status": "numerical_passed_legacy_public_config_policy_pending"
+}

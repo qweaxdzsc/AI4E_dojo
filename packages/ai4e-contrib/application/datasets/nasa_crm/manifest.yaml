@@ -1,0 +1,12 @@
+name: nasa_crm
+adapter: ai4e_contrib.application.datasets.nasa_crm
+identity: [source, partition, sample]
+point_fields:
+  coordinates: [CoordinateX, CoordinateY, CoordinateZ]
+  normals: [NormalX, NormalY, NormalZ]
+  labels: [PressureCoefficient, cfx, cfy, cfz]
+  area: Surface
+sample_conditions: [Mach, AlphaMean, aileronInboard, aileronOutboard, htp, elevator]
+split_seed: 42
+validation_fraction: 0.2
+chunk_count: 20

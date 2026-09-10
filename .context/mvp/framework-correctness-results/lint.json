@@ -1,0 +1,27 @@
+[
+  {
+    "command": [
+      "ruff",
+      "format"
+    ],
+    "exit_code": 0,
+    "output": "2 files reformatted, 19 files left unchanged\n"
+  },
+  {
+    "command": [
+      "ruff",
+      "check"
+    ],
+    "exit_code": 0,
+    "output": "All checks passed!\n"
+  },
+  {
+    "command": [
+      "ruff",
+      "format",
+      "--check"
+    ],
+    "exit_code": 0,
+    "output": "21 files already formatted\n"
+  }
+]

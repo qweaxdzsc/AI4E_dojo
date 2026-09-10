@@ -1,0 +1,27 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/zonghui/work/new_code_project/AI4E_Dojo
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collected 43 items
+
+tests/integration/test_train_checkpoint.py .........s                    [ 23%]
+tests/integration/test_post_reference.py ...ss                           [ 34%]
+tests/integration/test_post_mesh.py .........s                           [ 58%]
+tests/integration/test_post_inference.py .........                       [ 79%]
+tests/integration/test_model_evaluation.py ...                           [ 86%]
+tests/integration/test_abupt_recipe.py ....                              [ 95%]
+tests/integration/test_reference_arithmetic.py ..                        [100%]
+
+=============================== warnings summary ===============================
+tests/integration/test_post_mesh.py::test_query_geometry_matches_eval_prepare
+tests/integration/test_post_inference.py::test_post_metrics_match_shared_evaluate
+  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/ai4e_core/applications/aero_cfd/post/stage.py:51: UserWarning: 未检测到 CUDA 或 MPS，自动选择回退到 CPU，将继续运行
+    device = resolve_device(requested)
+
+tests/integration/test_post_mesh.py::test_query_geometry_matches_eval_prepare
+  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============= 39 passed, 4 skipped, 3 warnings in 78.11s (0:01:18) =============

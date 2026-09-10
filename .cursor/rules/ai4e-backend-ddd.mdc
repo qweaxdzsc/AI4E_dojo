@@ -1,0 +1,21 @@
+---
+description: AI4E_Dojo server 后端的轻量 DDD、依赖倒置与代码书写规范
+globs: packages/ai4e-server/**/*
+alwaysApply: false
+---
+
+# 后端 DDD 规范
+
+- 适用包：`ai4e-server`；先读 `AGENTS.md`、`.context/index.md` 和对应模块索引。
+- DDD 用于表达 Project、Experiment、Run、Artifact、Job、Execution 等有身份、状态和生命周期的业务，不包装数值算法。
+- 先按限界上下文聚合代码；仅当上下文已有真实规则时，再在其内部区分 `domain`、`application`、`ports/adapters`，不得预建全局空壳目录。
+- Domain 保持纯净：实体、值对象、状态迁移和不变量不依赖 Web 框架、数据库、队列、文件系统或 core 内部实现。
+- Application 只编排用例、事务和权限；不实现物理计算、训练循环、模型逻辑或 artifact schema。
+- 外部系统通过显式 port 接入，数据库、文件索引、调度器和远程执行是 adapter；依赖方向始终指向业务规则。
+- HTTP/CLI handler 只做协议转换、鉴权、输入校验和错误映射，不直接访问训练对象或拼装跨层流程。
+- `ai4e-task` 索引自包含 run artifact；`ai4e-server` 提供协作/API，但两者都不保存 run 的唯一真相。
+- 后端只消费 spec、task/core 已公开门面和稳定 Artifact 引用；不得导入 recipes、模型、Trainer 或 Dataset 内部实现。
+- 跨上下文调用公开 application port 或版本化消息/schema，不穿透对方内部目录。
+- 名称优先使用业务语言，避免含义模糊的 `manager`、`service`、`helper`；一个用例、聚合或 adapter 保持单一职责。
+- 公开 API 必须有类型与文档；Python 使用中文 Docstring。状态迁移、错误路径、权限和 adapter 契约必须测试。
+- Python 验证命令使用 `uv run`；其他技术栈在 ADR 确定后使用其唯一工具链。功能变化同步文档和 `.context`。

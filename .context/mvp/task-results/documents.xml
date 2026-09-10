@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="0.012" timestamp="2026-09-09T16:24:26.721195+08:00" hostname="zonghuideMacBook-Pro.local"><testcase classname="tests.integration.test_task_documents" name="test_task_documents_and_entry_links" time="0.001" /></testsuite></testsuites>

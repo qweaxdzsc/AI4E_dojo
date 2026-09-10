@@ -1,0 +1,118 @@
+{
+  "epochs": 2,
+  "updates": 1578,
+  "best": 0.1431482945382595,
+  "history": [
+    {
+      "epoch": 1,
+      "updates": 789,
+      "loss": 0.6526546718408702,
+      "learning_rate": 2.7474711711212264e-05,
+      "evaluation": {
+        "loss": 0.1991204600036144,
+        "losses": {
+          "surface_pressure": 0.10680586814880372,
+          "volume_velocity": 0.0923145916685462
+        },
+        "scope": "declared_predictions",
+        "metrics": {
+          "surface_pressure/mse": {
+            "value": 254.38316226959228,
+            "valid": 100,
+            "skipped": 0
+          },
+          "surface_pressure/mae": {
+            "value": 8.49486874103546,
+            "valid": 100,
+            "skipped": 0
+          },
+          "surface_pressure/relative_l2": {
+            "value": 0.2596453581750393,
+            "valid": 100,
+            "skipped": 0
+          },
+          "volume_velocity/mse": {
+            "value": 0.8564478498697281,
+            "valid": 100,
+            "skipped": 0
+          },
+          "volume_velocity/mae": {
+            "value": 0.4836169829964638,
+            "valid": 100,
+            "skipped": 0
+          },
+          "volume_velocity/relative_l2": {
+            "value": 0.08512774683535099,
+            "valid": 100,
+            "skipped": 0
+          }
+        },
+        "split": "test"
+      },
+      "seconds": 380.89059533306863,
+      "online": {
+        "loss": 0.6526546478271484,
+        "surface_pressure": 0.29703256487846375,
+        "volume_velocity": 0.3556221127510071
+      }
+    },
+    {
+      "epoch": 2,
+      "updates": 1578,
+      "loss": 0.17081467533443967,
+      "learning_rate": 1e-06,
+      "evaluation": {
+        "loss": 0.1431482945382595,
+        "losses": {
+          "surface_pressure": 0.08036709473468363,
+          "volume_velocity": 0.0627812004648149
+        },
+        "scope": "declared_predictions",
+        "metrics": {
+          "surface_pressure/mse": {
+            "value": 178.60852682113648,
+            "valid": 100,
+            "skipped": 0
+          },
+          "surface_pressure/mae": {
+            "value": 7.165364050865174,
+            "valid": 100,
+            "skipped": 0
+          },
+          "surface_pressure/relative_l2": {
+            "value": 0.21525329910218716,
+            "valid": 100,
+            "skipped": 0
+          },
+          "volume_velocity/mse": {
+            "value": 0.5452214099466801,
+            "valid": 100,
+            "skipped": 0
+          },
+          "volume_velocity/mae": {
+            "value": 0.37183103412389756,
+            "valid": 100,
+            "skipped": 0
+          },
+          "volume_velocity/relative_l2": {
+            "value": 0.06742941111326217,
+            "valid": 100,
+            "skipped": 0
+          }
+        },
+        "split": "test"
+      },
+      "seconds": 411.1892876670463,
+      "online": {
+        "loss": 0.17081467807292938,
+        "surface_pressure": 0.09085313230752945,
+        "volume_velocity": 0.07996154576539993
+      }
+    }
+  ],
+  "checkpoints": {
+    "last": "/private/tmp/dojo-regroup-20260909/runs/2026-09-09T18-40-50_fb0006/checkpoints/last.pt",
+    "latest": "/private/tmp/dojo-regroup-20260909/runs/2026-09-09T18-40-50_fb0006/checkpoints/latest.pt",
+    "best": "/private/tmp/dojo-regroup-20260909/runs/2026-09-09T18-40-50_fb0006/checkpoints/best.pt"
+  }
+}

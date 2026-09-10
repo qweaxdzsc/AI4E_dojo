@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+[project]
+name = "ai4e-task"
+version = "0.1.0"
+description = "AI4E 项目、任务版本、共享资产与本地执行"
+requires-python = ">=3.12"
+dependencies = ["ai4e-spec>=0.1.0", "ai4e-core>=0.1.0", "omegaconf>=2.3"]
+[project.scripts]
+ai4e = "ai4e_task.cli.main:main"
+[tool.uv.sources]
+ai4e-spec = { workspace = true }
+ai4e-core = { workspace = true }
+[tool.hatch.build.targets.wheel]
+bypass-selection = true
+[tool.hatch.build.targets.wheel.force-include]
+"__init__.py" = "ai4e_task/__init__.py"
+"__main__.py" = "ai4e_task/__main__.py"
+"cli" = "ai4e_task/cli"
+"projects" = "ai4e_task/projects"
+"tasks" = "ai4e_task/tasks"
+"versions" = "ai4e_task/versions"
+"templates" = "ai4e_task/templates"
+"storage" = "ai4e_task/storage"

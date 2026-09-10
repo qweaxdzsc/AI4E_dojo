@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "samples": 889,
+  "full_official_split": true,
+  "max_abs": {
+    "geometry_position": 0,
+    "geometry_supernode_idx": 0,
+    "surface_anchor_position": 0,
+    "volume_anchor_position": 0,
+    "surface_pressure_target": 0,
+    "volume_velocity_target": 0
+  },
+  "reference_sha256": "4b0c160ce025a0383924569e7a5838831ddc31250aa50e04483257ad2698793a"
+}

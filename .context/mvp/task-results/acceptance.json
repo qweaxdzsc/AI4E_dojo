@@ -1,0 +1,98 @@
+{
+  "recorded_at": "2026-09-09T08:52:03.599989+00:00",
+  "suites": [
+    {
+      "name": "related",
+      "tests": 62,
+      "failed": 0,
+      "skipped": [
+        "test_mps_checkpoint_replays_random_sequence",
+        "test_mps_train_then_complete_mesh_query"
+      ],
+      "passed": 60
+    },
+    {
+      "name": "installation",
+      "tests": 1,
+      "failed": 0,
+      "skipped": [],
+      "passed": 1
+    },
+    {
+      "name": "documents",
+      "tests": 1,
+      "failed": 0,
+      "skipped": [],
+      "passed": 1
+    }
+  ],
+  "source_sha256": {
+    "packages/ai4e-task/__init__.py": "626214ebfd83d3498cb0268963ce309168880dab5d38d07270d854f40c74d845",
+    "packages/ai4e-task/__main__.py": "dd601bed01995e13d49669b42bc6f14b5a5c86e6b511d7ac582ac1a74f95df71",
+    "packages/ai4e-task/tasks/worker.py": "64d538fc0ab1cab24f893f6f65af395f347b07fc4a222b076cc92e4839473c5a",
+    "packages/ai4e-task/tasks/execution.py": "759894fc328b51ff660daa6ded67211af2b1cf26cf2cf1cb1828bf8857dfa254",
+    "packages/ai4e-task/tasks/models.py": "993a44ea1dc3b478de4d99b66a36d0724f42c11cd32cb4e9cfc6370721439c45",
+    "packages/ai4e-task/tasks/create.py": "83db8ed64088c93452975eb827f1047c1886e8bfe122dc6c14f830a1b76a5cbd",
+    "packages/ai4e-task/tasks/query.py": "f62d5f2185a0bb04fdad4344704f81f449e51f01153b5e98418a2e0f1d59900a",
+    "packages/ai4e-task/tasks/local.py": "11c966861bf140e88581715e035d9abc78e0796b75d6fcf8209a973fbe9bd5c8",
+    "packages/ai4e-task/tasks/__init__.py": "d85da4edb35841b7378fe938cc72154a3447a5a0b801da85007e1dc2bc23d6f8",
+    "packages/ai4e-task/tasks/assets.py": "7be93b707fb123762920af70fff65d9a2c889bfe1d06ef05c237c387c5df64a7",
+    "packages/ai4e-task/projects/models.py": "d2fc06aefa34599002808fb96f0c251dbdb575712ea0f8bcd90761b960b851e4",
+    "packages/ai4e-task/projects/__init__.py": "5c3eb8245c7a48a214e8ace1d218373d4deeb30a61b0a6839b092956c68797ed",
+    "packages/ai4e-task/projects/shared.py": "fb1f2b756b4c78017dcec6a6c6b46973af7d935c215a7ef215b6bb446a7969ee",
+    "packages/ai4e-task/projects/project.py": "1c25dd3f07dae0e8bf187567307e1e0a077054f255bec2ee7e6782b40d215adc",
+    "packages/ai4e-task/versions/tree.py": "7f720052ad48712632b2ac0e96e1b05bb11ef8322a1deaa3d060c426d96306aa",
+    "packages/ai4e-task/versions/models.py": "0bb821f9c1a4e2def70a733c50d0661602f82e37d04b38e6921a935cb72204a8",
+    "packages/ai4e-task/versions/records.py": "055b39fe5f23c9313ab08dee9d5e4829cb982f3d65d284697839665fee28aad0",
+    "packages/ai4e-task/versions/__init__.py": "f258a6fcef1a18f07ca9285f69bff79095e8535dc9778e511308d211f2e247fd",
+    "packages/ai4e-task/versions/compare.py": "df430b62135f6b3559065d9f7dfff761d2d241cdae1d172b88086f38a6a7c415",
+    "packages/ai4e-task/cli/task.py": "a925c9869190d64c78368a26655be353e79b96f1186ef63030292304f644d4df",
+    "packages/ai4e-task/cli/version.py": "8f8f6ea4693de83bfa4b1ab6826f8a50b169be33e3f5b833ecdab6c9fdb77ff3",
+    "packages/ai4e-task/cli/__init__.py": "b916829d60235a3e8478a03219693d46e9189d4d1c969180b42c880f63f8107f",
+    "packages/ai4e-task/cli/template.py": "2ed1f354c43fa5fac29892a687d4a695d363d6390f9b1f8cf0e2d45faa0849e6",
+    "packages/ai4e-task/cli/main.py": "62d11cc3c2df51c17961389e76edcf94130e65bdc45e4037b9adf2154446b40c",
+    "packages/ai4e-task/cli/output.py": "688ccfa1fb437511790eddc5e516677efb3e400c9adb5d4271fd30b831e8860d",
+    "packages/ai4e-task/cli/project.py": "35a537a6ce3e3f7ee079d91f7f947c86698ee2e77d9373799869a34191b44bf3",
+    "packages/ai4e-task/storage/files.py": "ff8b8172c1f4eb1646c59d2d99d4f58862932711491b8aea26f27569378609fb",
+    "packages/ai4e-task/storage/snapshots.py": "9fdb75bd0bffb2aee5366e412df39d09a7ebc26a6f5b1cfdadf948e60597ba3e",
+    "packages/ai4e-task/storage/layout.py": "55993270856713fba6f9c9aa0a1c26b07d6ea78547a51246502799b6e16ae904",
+    "packages/ai4e-task/storage/database.py": "b92709bfdd020be2cf7e930d083f97182d99825b19d9c1026a7a996e80de7549",
+    "packages/ai4e-task/storage/records.py": "2ae5706fa2c8b0f1c59dff4747ac9fb9688b5f86d997fd0186cac1b34c85b96e",
+    "packages/ai4e-task/storage/__init__.py": "ad865a7efa078ecc535dae88d6ac160b6f96eca979d1a3942a401c8ebe3d1a2d",
+    "packages/ai4e-task/storage/artifacts.py": "3bd59fcd7508ada76b4b147faa8a12c5ad11389a78aac51591424ba2b4a5e896",
+    "packages/ai4e-task/templates/catalog.py": "4d2d6caf90f8aaceb2b9ea9538fc1ce88a350334c32b61ec0e2a575b186e19d2",
+    "packages/ai4e-task/templates/models.py": "d329a16d4e868afb82327061781388d13396333b4c888b5ecc89c3a224fce0aa",
+    "packages/ai4e-task/templates/__init__.py": "4564e9cad0dc24cd8b070c21ba6df14cad3abe2542692cee3cb16f3af95cc8a5",
+    "packages/ai4e-task/templates/materialize.py": "260c289c62ad3353355d9f60c1eef8ed243d0b5942d108257b915d1f1fa136f9",
+    "packages/ai4e-spec/artifacts/run.py": "4e5e2b9d89bb6bc6262d35d730d3dcb9d19f274d7ef0dbdefafe223ba839dcdf",
+    "packages/ai4e-spec/artifacts/__init__.py": "2393314eb6d5eedac0f29ea4eb68a0e57ff26e836268aff09980dfb319bec4c8",
+    "packages/ai4e-core/run/provenance.py": "b33f1f79baec637f010ca4fcf59026581d1de3b26c21ecee710dfef9b6c3f9ff",
+    "packages/ai4e-core/run/writer.py": "1c57d3a644b024d942f5bd0d7814f5e63b03b321b419643567816ac50abed751",
+    "recipes/aero_cfd/task-entry.json": "f946e6d3c85e97b25e92f2b32fb8829fc04c036810d0343282bd184bb4f414e0"
+  },
+  "wheel_sha256": {
+    "ai4e_spec-0.1.0-py3-none-any.whl": "e26b3f206d8e06bda58c234033214c0719ba2072b27c16cc0c31a3d81ad88f2a",
+    "ai4e_contrib-0.1.0-py3-none-any.whl": "cd5baa8513c70b8f6b7e486376fe32d4a836a01fdd0fda2c78e5a48b74f6272a",
+    "ai4e_task-0.1.0-py3-none-any.whl": "f674e762781594fefbcfab12fa02488b5efd91b6a4268e6fbb0225778f6b28c9",
+    "ai4e_core-0.1.0-py3-none-any.whl": "3948a34e9433ff6d9b2e4f8190c9fa0593941b01d75bf2e97403d10e4e8656b3"
+  },
+  "boundaries": [
+    "正式贡献 AB-UPT，CPU 合法小配置与生成小网格；非生产规模精度验收",
+    "两个 MPS 用例因硬件不可访问而跳过，不算硬件验收",
+    "安装测试复用已有第三方依赖，四个产品包来自实际 wheel，执行时未使用源码 PYTHONPATH"
+  ],
+  "final_rechecks": [
+    {
+      "name": "entry-refresh",
+      "passed": 3
+    },
+    {
+      "name": "task-final",
+      "passed": 13
+    },
+    {
+      "name": "delivery",
+      "passed": 2
+    }
+  ]
+}

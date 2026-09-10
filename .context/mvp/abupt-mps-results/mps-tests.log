@@ -1,0 +1,12 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.12.14, pytest-9.1.1, pluggy-1.6.0
+rootdir: /Users/zonghui/work/new_code_project/AI4E_Dojo
+configfile: pyproject.toml
+plugins: anyio-4.15.1
+collected 25 items / 21 deselected / 4 selected
+
+tests/integration/test_train_checkpoint.py .                             [ 25%]
+tests/integration/test_post_reference.py ..                              [ 75%]
+tests/integration/test_post_mesh.py .                                    [100%]
+
+====================== 4 passed, 21 deselected in 14.23s =======================

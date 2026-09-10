@@ -1,0 +1,56 @@
+{
+  "commit": "2211068fd58600c52ed38de692f020e2d2b7c987",
+  "files": {
+    "src/model.py": "f90a7598599b2935da7f1aae0eb11204a04b216027b10db49eebb985cf98636d",
+    "src/modules/rope_frequency.py": "9fddaf967c269737e3a8e30d155775df91dc32ec80c85209336c19d0feb2a755",
+    "src/modules/supernode_pooling_posonly.py": "557081d192c16119579d4c6bb7572f041706b81a212b055a8edeff40aa82a2ad",
+    "src/modules/continuous_sincos_embed.py": "719542482f45c51bfa3844b709cd8b7bd598a101533dffaf64a7ed83a22c07a8",
+    "src/modules/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/modules/mlp.py": "c4b053e0fd895482706b8aa211a389d5f216210b8804005a07b55129ac1f2b94",
+    "src/modules/rope.py": "5940225f4303cd8a61ef60bea5180a90b1473fe5655484ed0f31fd4eb5b91c5e",
+    "src/modules/blocks/transformer_block.py": "1296c48b3c7bede04dcabbeaa5a50379f910c7e7448bb79e05a036f94c65c19a",
+    "src/modules/blocks/__init__.py": "f86ebf1f193b2a9bf21facb2b7087502952031c9df9f9f6f6d081db025ae5111",
+    "src/modules/blocks/perceiver_block.py": "5da1b9968fb621df286e3776f22065a1b7a500b219f8982194629f4953f95d2d",
+    "src/modules/attention/anchor_attention.py": "7c0d743e0f65bad89077ecaf59be9cf6e2de69719bfb1ff0b1c8e9f5b0a826a2",
+    "src/modules/attention/perceiver_attention.py": "875facfc72d327c2edfe70c5bacb67f866d60bb1c35749fb585985f1a0cfc2ba",
+    "src/modules/attention/__init__.py": "2e47ab1d2bb26462cb458344b7d5e9c2abafb12c1195bc8ef70b14d4940374f5",
+    "src/modules/attention/sharedweights_splitattn_attention.py": "65139af12927769710c24d01aff7e95cd949dc202823dae4564b5e8fa46d32fd",
+    "src/modules/attention/dot_product_attention.py": "ba41f2f5e6543923be636c94e60aee57766864277f043decc95fae1e42ff430f",
+    "src/modules/attention/sharedweights_crossattn_attention.py": "12c6760f50cd12d6d90dc30458e82d8678b07891c863d5d858d8fa750857cd91"
+  },
+  "structure_version": 2,
+  "noether_reference": {
+    "commit": "313e6c5c2ff31f283a3e5935b4d85888aac6b025",
+    "files": {
+      "src/noether/modeling/models/aerodynamics.py": "a0998075ee9a690b9290a9ffb84ced7dfe9e824a83844c4df3472c7eb39cb26f",
+      "src/noether/modeling/models/ab_upt.py": "0a4236ecd94e8a56b0769494d5d587a6e516ced81d2c3441cb4fcf4c515eeedd",
+      "src/noether/data/pipeline/sample_processors/moment_normalization.py": "0adec5d32f617f4d6ddc31ab3f2627d97f6e47f2158083243952c41d26a358ff",
+      "src/noether/data/pipeline/sample_processors/position_normalization.py": "e75a06d336ed5760e6e6e97b8e29d673d9372ea682c94ea6b68fb28e88db1236",
+      "LICENSE.txt": "745738c45391dd73bb8982359995e2a121124f4349036681de173046d6668181"
+    },
+    "fixture_sha256": "32bd2bacdf9f1ecc9b52db891272b61feb4802ea422893521ed4cced52540d4e",
+    "command": "uv run --no-project --python <noether>/.venv/bin/python python tools/generate_abupt_inputs.py <noether> tests/fixtures/abupt_inputs",
+    "boundary": "Real normalization processors; unchanged AeroABUPT.forward captured at backbone call. This validates input translation, not network outputs."
+  },
+  "local_changes": "Structure 3: named domains and conditions retained; RMSNorm, abspos supernodes, joint attention projection, seeded initialization and parameter registration order aligned with the locked Noether preset; native aggregation and explicit MPS CPU fallbacks.",
+  "local_files_sha256": {
+    "batch.py": "010a45b8bd78a0826417f1f304619f7b8d89de644ee902af5c8a62e2fd008b42",
+    "domains.py": "0a5fb93dfcff536ac05a46defcdeeca1052851749545ec5d7e296ef2c8ee163f",
+    "inference.py": "a106ec42663fa6115afa6cdc0c2759987d1b44882f1f449ee757b72871d66806",
+    "model.py": "29155e98a0abf46b852e2d1ec683ccb6c66db652fbc14f0bf2bc2e4c19de7dcd",
+    "modules/__init__.py": "ab9a5f276a2b0464f55503e6a643187abc5e9ec3e9ce8e8bcbc25771f8492d1b",
+    "modules/blocks/__init__.py": "a3f34cb75222ead715b8e790bdc084d36adad45e590478071311dd2deec19cd9",
+    "modules/blocks/domain.py": "bdddf6e340cab3d87412364aee52c2da6602ac196e45d9b934882fa18903dc72",
+    "modules/rope.py": "b563c0fdb74da66ca8415919db006a9d9bc7017b540af49e7e0478b5475f58e1",
+    "modules/supernode_pooling_posonly.py": "8c4fc505bbda686aa0dd42129641d77dee9dafa7ef54d5d9d2418cdd2c517d67",
+    "network.py": "fcdbd3760223d81c26e66cb583c76c2c4de1c789a9bc116991499bb34cd94627",
+    "sampling.py": "902ebbe7cd0a8de1745371123e6f68b6db3d8524fcf351e5c2f35d18cfcbf247"
+  },
+  "training_reference": {
+    "commit": "313e6c5c2ff31f283a3e5935b4d85888aac6b025",
+    "local_patch": "ShapeNetCarPreset excludes unavailable surface_area as official YAML does",
+    "source_tree_sha256": "94e7b11f354d0a814815a9c5a69a023178ec28caab7ee4aa9466d71f7179e7ae",
+    "evidence": ".context/mvp/abupt-reference-acceptance.md",
+    "scope": "CPU FP32 official ShapeNet-Car preset, 789/100, two epochs, all final weights exact; copied pipeline and interrupted resume verified"
+  }
+}

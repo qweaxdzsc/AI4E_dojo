@@ -1,0 +1,75 @@
+{
+  "total": 0,
+  "attempted": 0,
+  "success": 0,
+  "unexecuted": 0,
+  "failed": false,
+  "failed_count": 0,
+  "failures": [],
+  "dry_run": false,
+  "run_dir": "/private/tmp/dojo-regroup-20260909/runs/2026-09-09T22-11-31_996a37",
+  "reports": {
+    "post": {
+      "mode": "post",
+      "status": "succeeded",
+      "operations": {
+        "evaluation": {
+          "status": "skipped",
+          "completed": 0,
+          "samples": [],
+          "artifacts": [],
+          "error": null
+        },
+        "predictions": {
+          "status": "skipped",
+          "completed": 0,
+          "samples": [],
+          "artifacts": [],
+          "error": null
+        },
+        "mesh": {
+          "status": "succeeded",
+          "completed": 1,
+          "samples": [
+            {
+              "samples": [
+                {
+                  "sample_id": "param0/100715345ee54d7ae38b52b4ee9d36a3",
+                  "index": 0
+                }
+              ],
+              "status": "succeeded",
+              "artifacts": [
+                "/private/tmp/dojo-regroup-20260909/mesh-rerun/mesh_vtk/sample_0000_surface.vtp",
+                "/private/tmp/dojo-regroup-20260909/mesh-rerun/mesh_vtk/sample_0000_volume.vtu"
+              ]
+            }
+          ],
+          "artifacts": [
+            "/private/tmp/dojo-regroup-20260909/mesh-rerun/mesh_vtk/sample_0000_surface.vtp",
+            "/private/tmp/dojo-regroup-20260909/mesh-rerun/mesh_vtk/sample_0000_volume.vtu"
+          ],
+          "error": null
+        }
+      },
+      "checkpoint": "/private/tmp/dojo-regroup-20260909/runs/2026-09-09T18-40-50_fb0006/checkpoints/last.pt",
+      "meshes": [
+        {
+          "index": 0,
+          "sample_id": "param0/100715345ee54d7ae38b52b4ee9d36a3",
+          "surface": "/private/tmp/dojo-regroup-20260909/mesh-rerun/mesh_vtk/sample_0000_surface.vtp",
+          "volume": "/private/tmp/dojo-regroup-20260909/mesh-rerun/mesh_vtk/sample_0000_volume.vtu",
+          "points": {
+            "surface": 3682,
+            "volume": 29498
+          }
+        }
+      ],
+      "output": "/private/tmp/dojo-regroup-20260909/mesh-rerun/mesh_vtk",
+      "split": "test",
+      "indices": [
+        0
+      ]
+    }
+  }
+}

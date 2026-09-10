@@ -1,0 +1,9 @@
+{
+  "reference_a": "/tmp/dojo-audit-20260909/noether-runs/reference/checkpoints/ab_upt_cp=last_model.th",
+  "reference_b": "/tmp/dojo-three-stage-full/noether/reference-a/checkpoints/ab_upt_cp=last_model.th",
+  "reference_repeat_exact": true,
+  "rtol": 1e-05,
+  "atol": 1e-06,
+  "passed": true,
+  "reason": "Predeclared CPU FP32 tolerance; official repeated run must be exact; never relaxed after Dojo comparison."
+}

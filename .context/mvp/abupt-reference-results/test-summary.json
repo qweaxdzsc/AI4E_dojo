@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "scope": "installed training, three-stage, model and recovery",
+      "passed": 55,
+      "log": "/tmp/dojo-three-stage-full/installed-final-tests.log"
+    },
+    {
+      "scope": "normalization, evaluation and assets",
+      "passed": 59,
+      "log": "/tmp/dojo-three-stage-full/final-transform-only-tests.log"
+    },
+    {
+      "scope": "post fixed anchors and mesh regression",
+      "passed": 17,
+      "log": "/tmp/dojo-three-stage-full/final-post-tests.log"
+    }
+  ],
+  "ruff": "affected files passed",
+  "full_repository_tests_run": false,
+  "mypy_sphinx_run": false
+}

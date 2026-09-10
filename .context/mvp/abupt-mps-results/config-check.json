@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "checks": {
+    "explicit_mps": true,
+    "seed": true,
+    "learning_rate": true,
+    "weight_decay": true,
+    "supernodes": true,
+    "surface_anchors": true,
+    "volume_anchors": true,
+    "automatic_checkpoint_handoff": true,
+    "automatic_preparation_handoff": true,
+    "all_four_stages": true
+  }
+}

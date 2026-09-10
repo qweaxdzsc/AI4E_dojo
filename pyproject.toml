@@ -1,0 +1,59 @@
+[project]
+name = "ai4e-dojo"
+version = "0.0.0"
+description = "AI4E_Dojo workspace"
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.uv.workspace]
+members = [
+    "packages/ai4e-spec",
+    "packages/ai4e-core",
+    "packages/ai4e-contrib",
+    "packages/ai4e-task",
+]
+
+[tool.uv.sources]
+ai4e-spec = { workspace = true }
+ai4e-core = { workspace = true }
+ai4e-contrib = { workspace = true }
+ai4e-task = { workspace = true }
+
+[dependency-groups]
+verification = ["pyvista>=0.48"]
+dev = [
+    "pytest>=8.3",
+    "ruff>=0.6",
+    "ai4e-spec",
+    "ai4e-core",
+    "ai4e-contrib",
+    "ai4e-task",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+    "network: 需要出站网络",
+    "local_data: 需要本地 ShapeNet-Car 原始文件",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint.per-file-ignores]
+"packages/ai4e-*/**" = ["N999"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["ai4e_core", "ai4e_spec", "ai4e_contrib"]
+
+[tool.uv]
+# 仅图扩展复用已安装的 Torch；workspace 包继续隔离构建。
+no-build-isolation-package = ["torch-cluster", "torch-scatter"]
+
+# 与本机已验证的 pip 下载源一致，避免官方文件域名的 DNS 故障。
+[[tool.uv.index]]
+name = "aliyun"
+url = "https://mirrors.aliyun.com/pypi/simple/"
+default = true

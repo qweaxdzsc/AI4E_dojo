@@ -1,0 +1,13 @@
+{
+  "reference": "/Users/zonghui/work/new_code_project/Transolver-3",
+  "files": {
+    "Transolver_chunk_opt_matrix_mul.py": "2dc6476d64613b66e0da285e676bd87ffd6110b49ff4c2d53ed4e9013309562c",
+    "Transolver_chunk_opt_matrix_mul_amortize.py": "87d1c2983aed29977c72ad1c4bce510eba97d2c6649592ce3696d28d5b177b04"
+  },
+  "changes": [
+    "relative import",
+    "Chinese module documentation",
+    "formatting and unused import cleanup; arithmetic and parameter registration preserved"
+  ],
+  "license": "Not found in supplied checkout; source provenance retained; no license inferred"
+}

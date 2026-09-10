@@ -1,0 +1,10 @@
+{
+  "scope": "two official runs, full preset, 789 train / 100 test, two epochs, CPU FP32, workers=0",
+  "reference_repeat_max_abs": 0.0,
+  "reference_repeat_exact": true,
+  "frozen_before_dojo_full_comparison": true,
+  "rtol": 1e-05,
+  "atol": 1e-06,
+  "tolerance_reason": "Official repeat is exact; retain predeclared CPU FP32 tolerance, no relaxation",
+  "passed": true
+}

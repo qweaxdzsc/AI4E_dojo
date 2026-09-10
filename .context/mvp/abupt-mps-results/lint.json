@@ -1,0 +1,59 @@
+[
+  {
+    "command": [
+      "uv",
+      "run",
+      "--no-sync",
+      "ruff",
+      "check",
+      "packages/ai4e-core/abilities/inference/randomness.py",
+      "packages/ai4e-core/abilities/training/checkpoint.py",
+      "packages/ai4e-core/abilities/eval/evaluation.py",
+      "packages/ai4e-core/abilities/modeling/modules/position_encoding.py",
+      "packages/ai4e-core/applications/aero_cfd/post/mesh.py",
+      "packages/ai4e-core/applications/aero_cfd/post/stage.py",
+      "packages/ai4e-core/applications/aero_cfd/post/inference.py",
+      "packages/ai4e-contrib/ability/model/abupt/modules/rope.py",
+      "tools/verification/run_noether_reference.py",
+      "tools/verification/run_noether_post.py",
+      "tests/integration/test_train_checkpoint.py",
+      "tests/integration/test_post_reference.py",
+      "tests/integration/test_post_mesh.py",
+      "recipes/aero_cfd/pipeline.py",
+      "tools/verification/compare_datapre.py",
+      "tools/verification/compare_trainprep.py"
+    ],
+    "exit_code": 0,
+    "stdout": "All checks passed!\n",
+    "stderr": ""
+  },
+  {
+    "command": [
+      "uv",
+      "run",
+      "--no-sync",
+      "ruff",
+      "format",
+      "--check",
+      "packages/ai4e-core/abilities/inference/randomness.py",
+      "packages/ai4e-core/abilities/training/checkpoint.py",
+      "packages/ai4e-core/abilities/eval/evaluation.py",
+      "packages/ai4e-core/abilities/modeling/modules/position_encoding.py",
+      "packages/ai4e-core/applications/aero_cfd/post/mesh.py",
+      "packages/ai4e-core/applications/aero_cfd/post/stage.py",
+      "packages/ai4e-core/applications/aero_cfd/post/inference.py",
+      "packages/ai4e-contrib/ability/model/abupt/modules/rope.py",
+      "tools/verification/run_noether_reference.py",
+      "tools/verification/run_noether_post.py",
+      "tests/integration/test_train_checkpoint.py",
+      "tests/integration/test_post_reference.py",
+      "tests/integration/test_post_mesh.py",
+      "recipes/aero_cfd/pipeline.py",
+      "tools/verification/compare_datapre.py",
+      "tools/verification/compare_trainprep.py"
+    ],
+    "exit_code": 0,
+    "stdout": "16 files already formatted\n",
+    "stderr": ""
+  }
+]

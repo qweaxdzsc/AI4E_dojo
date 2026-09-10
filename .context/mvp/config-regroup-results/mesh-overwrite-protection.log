@@ -1,0 +1,8 @@
+INFO [运行/开始] 脚本=/private/tmp/dojo-regroup-20260909/recipe/post.py；运行目录=/private/tmp/dojo-regroup-20260909/runs/2026-09-09T22-12-41_26bac8；生效配置=inputs/config.yaml
+INFO [post/阶段/开始] 
+/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+ERROR [post/mesh.surface.save/失败] 样本=[{'sample_id': 'param0/100715345ee54d7ae38b52b4ee9d36a3', 'index': 0}]；原因=表面网格已存在: /private/tmp/dojo-regroup-20260909/mesh-rerun/mesh_vtk/sample_0000_surface.vtp
+ERROR [post/阶段/失败] 样本=；原因=表面网格已存在: /private/tmp/dojo-regroup-20260909/mesh-rerun/mesh_vtk/sample_0000_surface.vtp；耗时=6.009秒
+ERROR 运行失败：表面网格已存在: /private/tmp/dojo-regroup-20260909/mesh-rerun/mesh_vtk/sample_0000_surface.vtp
+INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=6.012秒

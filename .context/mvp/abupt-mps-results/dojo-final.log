@@ -1,0 +1,70 @@
+INFO [运行/开始] 脚本=/private/tmp/dojo-mps-research-20260909/recipe/pipeline.py；运行目录=/private/tmp/dojo-mps-research-20260909/final-runs/2026-09-09T12-31-02_a4366e；生效配置=inputs/config.yaml
+INFO [datapre/阶段/开始] 
+INFO [datapre/数据集/开始] root=/Users/zonghui/work/datasets/shapenet_car_cfd/mlcfd_data/training_data
+INFO [datapre/数据集/选择结果] 样本总数=889；train=789；test=100
+INFO [datapre/数据集/结束] 耗时=0.044秒
+INFO [datapre/批量前处理/开始] 样本数=889
+INFO [datapre/阶段/运行中] 已耗时=10.01秒；状态=底层计算尚未返回
+INFO [datapre/批量前处理/运行中] 已耗时=10.01秒；状态=底层计算尚未返回
+INFO [datapre/批量前处理/进度] 完成=114；总数=889；失败=0；未执行=775
+INFO [datapre/阶段/运行中] 已耗时=20.01秒；状态=底层计算尚未返回
+INFO [datapre/批量前处理/运行中] 已耗时=20.01秒；状态=底层计算尚未返回
+INFO [datapre/批量前处理/进度] 完成=228；总数=889；失败=0；未执行=661
+INFO [datapre/阶段/运行中] 已耗时=30.01秒；状态=底层计算尚未返回
+INFO [datapre/批量前处理/运行中] 已耗时=30.02秒；状态=底层计算尚未返回
+INFO [datapre/批量前处理/进度] 完成=342；总数=889；失败=0；未执行=547
+INFO [datapre/阶段/运行中] 已耗时=40.02秒；状态=底层计算尚未返回
+INFO [datapre/批量前处理/运行中] 已耗时=40.02秒；状态=底层计算尚未返回
+INFO [datapre/批量前处理/进度] 完成=455；总数=889；失败=0；未执行=434
+INFO [datapre/阶段/运行中] 已耗时=50.02秒；状态=底层计算尚未返回
+INFO [datapre/批量前处理/运行中] 已耗时=50.02秒；状态=底层计算尚未返回
+INFO [datapre/批量前处理/进度] 完成=565；总数=889；失败=0；未执行=324
+INFO [datapre/阶段/运行中] 已耗时=60.03秒；状态=底层计算尚未返回
+INFO [datapre/批量前处理/运行中] 已耗时=60.03秒；状态=底层计算尚未返回
+INFO [datapre/批量前处理/进度] 完成=673；总数=889；失败=0；未执行=216
+INFO [datapre/阶段/运行中] 已耗时=70.03秒；状态=底层计算尚未返回
+INFO [datapre/批量前处理/运行中] 已耗时=70.03秒；状态=底层计算尚未返回
+INFO [datapre/批量前处理/进度] 完成=783；总数=889；失败=0；未执行=106
+INFO [datapre/阶段/运行中] 已耗时=80.03秒；状态=底层计算尚未返回
+INFO [datapre/批量前处理/进度] 完成=889；总数=889；失败=0；未执行=0
+INFO [datapre/批量前处理/结束] 耗时=80.012秒
+INFO [datapre/统计/开始] 方法=reference；参数来源=/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/ai4e_contrib/application/datasets/shapenet_car/statistics.yaml
+INFO [datapre/统计/结束] 耗时=0.001秒
+INFO [datapre/数据清单/开始] 状态=physical；归一化=未执行
+INFO [datapre/数据清单/结束] 耗时=0.031秒
+INFO [datapre/阶段/结束] 耗时=80.246秒
+INFO [trainprep/阶段/开始] 
+INFO [trainprep/阶段/结束] 耗时=5.197秒
+INFO [train/阶段/开始] 
+/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+INFO [train/阶段/运行中] 已耗时=10.01秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=20.01秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=30.02秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=40.02秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=50.02秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=60.03秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=70.03秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=80.04秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=90.04秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=100.05秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=110.05秒；状态=底层计算尚未返回
+INFO [train/训练/进度] 轮次=1；更新=789；损失=0.667443813262708；学习率=4.3683718881342226e-05；耗时=117.09926845808513；峰值内存=2291236864；在线={'surface_pressure': 0.31512394547462463, 'volume_velocity': 0.3523198962211609}
+INFO [train/阶段/运行中] 已耗时=120.05秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=130.06秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=140.06秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=150.07秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=160.07秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=170.08秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=180.08秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=190.08秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=200.09秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=210.09秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=220.09秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=230.10秒；状态=底层计算尚未返回
+INFO [train/阶段/运行中] 已耗时=240.10秒；状态=底层计算尚未返回
+INFO [train/训练/进度] 轮次=2；更新=1578；损失=0.18962463118485323；学习率=1e-06；耗时=126.25946025003213；峰值内存=3026632704；在线={'surface_pressure': 0.10698913782835007, 'volume_velocity': 0.08263549953699112}
+INFO [train/阶段/结束] 耗时=249.193秒
+INFO [post/阶段/开始] 
+INFO [post/阶段/结束] 耗时=9.445秒
+INFO [运行/结束] 状态=成功；成功=889；失败=0；未执行=0；耗时=344.084秒

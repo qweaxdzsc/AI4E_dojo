@@ -1,0 +1,42 @@
+# Local environments and secrets
+.venv/
+venv/
+env/
+.env
+.env.*
+
+# One-off run and generated artifacts
+outputs/
+runs/
+docs/_build/
+docs/build/
+htmlcov/
+
+# Tool and editor caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.benchmarks/
+.coverage
+.coverage.*
+.cache/
+.hypothesis/
+.tox/
+.nox/
+.dmypy.json
+dmypy.json
+.ruff_cache
+.idea/
+.vscode/
+
+# OS and local Cursor machine files
+.DS_Store
+**/.DS_Store
+.cursor/settings.json
+.cursor/mcp.json
+.cursor/agent-schedules.json
+.cursor/skills/use-experience

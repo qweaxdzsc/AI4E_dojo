@@ -1,0 +1,49 @@
+version: 1
+name: shapenet_car
+sample_pattern: param*/*
+partition: partition.yaml
+reference_statistics: statistics.yaml
+sources:
+  surface:
+    filename: quadpress_smpl.vtk
+    cell_type: quad
+  volume:
+    filename: hexvelo_smpl.vtk
+    cell_type: null
+fields:
+  surface:
+    pressure:
+      array: point_scalars
+      association: point
+      kind: scalar
+      components: 1
+      unit: unknown
+  volume:
+    velocity:
+      array: point_vectors
+      association: point
+      kind: vector
+      components: 3
+      unit: unknown
+outputs:
+  surface_pressure:
+    domain: surface
+    field: fields.pressure
+  surface_position:
+    domain: surface
+    field: points
+  surface_normals:
+    domain: surface
+    field: normals
+  volume_velocity:
+    domain: volume
+    field: fields.velocity
+  volume_position:
+    domain: volume
+    field: points
+  volume_sdf:
+    domain: volume
+    field: nearest_distance
+  volume_normals:
+    domain: volume
+    field: nearest_direction

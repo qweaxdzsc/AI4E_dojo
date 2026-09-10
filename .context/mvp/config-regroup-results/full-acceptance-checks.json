@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "run": "/tmp/dojo-regroup-20260909/runs/2026-09-09T18-40-50_fb0006",
+  "mesh_only_run": "/tmp/dojo-regroup-20260909/runs/2026-09-09T22-11-31_996a37",
+  "overwrite_rejection_run": "/tmp/dojo-regroup-20260909/runs/2026-09-09T22-12-41_26bac8",
+  "mesh": {
+    "surface": {
+      "points": 3586,
+      "cells": 3584
+    },
+    "volume": {
+      "points": 29498,
+      "cells": 26112
+    }
+  },
+  "untouched_anchor_files": 900,
+  "mesh_only_started_training": false,
+  "overwrite_rejected": true
+}

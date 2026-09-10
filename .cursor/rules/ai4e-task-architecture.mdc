@@ -1,0 +1,15 @@
+---
+description: AI4E_Task 功能模块化 Python 包规范
+globs: packages/ai4e-task/**/*
+alwaysApply: false
+---
+
+# Task 代码规范
+
+- 按 cli/projects/tasks/versions/templates/storage 六类功能组织，不创建 DDD domain/application/repository 层。
+- CLI 只解析参数、调用公开 Python API、输出结果；管理操作不导入训练栈。
+- 只有 new/fork 新建正式版本，编辑及 run 不增加版本；创建记录与运行快照分开。
+- task 只依赖 spec/core，不导入 recipes 或训练内部对象。core writer 独占 run 写入。
+- 数据、代码和运行都属于任务目录但保持兄弟目录；shared 资产附带来源，默认引用、显式复制。
+- SQLite 事务与文件提交集中在 storage；功能模块持有规则，不预建抽象框架。
+- 新功能同步 PRD、索引、中文 Docstring 和相关测试。Python 工具使用 uv run。

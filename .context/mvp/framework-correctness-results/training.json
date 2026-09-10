@@ -1,0 +1,116 @@
+{
+  "epochs": 2,
+  "updates": 1578,
+  "best": 0.1431175532564521,
+  "history": [
+    {
+      "epoch": 1,
+      "updates": 789,
+      "loss": 0.6523432372414114,
+      "evaluation": {
+        "loss": 0.20172795228660106,
+        "losses": {
+          "surface_pressure": 0.10912066407501697,
+          "volume_velocity": 0.09260728772729636
+        },
+        "scope": "declared_predictions",
+        "metrics": {
+          "surface_pressure/mse": {
+            "value": 260.06012393951414,
+            "valid": 100,
+            "skipped": 0
+          },
+          "surface_pressure/mae": {
+            "value": 8.562605199813843,
+            "valid": 100,
+            "skipped": 0
+          },
+          "surface_pressure/relative_l2": {
+            "value": 0.26259203791618346,
+            "valid": 100,
+            "skipped": 0
+          },
+          "volume_velocity/mse": {
+            "value": 0.8596197527647018,
+            "valid": 100,
+            "skipped": 0
+          },
+          "volume_velocity/mae": {
+            "value": 0.4837862050533295,
+            "valid": 100,
+            "skipped": 0
+          },
+          "volume_velocity/relative_l2": {
+            "value": 0.08530122630298137,
+            "valid": 100,
+            "skipped": 0
+          }
+        },
+        "split": "test"
+      },
+      "seconds": 86.84221766702831,
+      "online": {
+        "loss": 0.6523432731628418,
+        "surface_pressure": 0.296811580657959,
+        "volume_velocity": 0.35553163290023804
+      }
+    },
+    {
+      "epoch": 2,
+      "updates": 1578,
+      "loss": 0.17083421787683803,
+      "evaluation": {
+        "loss": 0.1431175532564521,
+        "losses": {
+          "surface_pressure": 0.08043037131428718,
+          "volume_velocity": 0.06268718212842941
+        },
+        "scope": "declared_predictions",
+        "metrics": {
+          "surface_pressure/mse": {
+            "value": 178.32770641326906,
+            "valid": 100,
+            "skipped": 0
+          },
+          "surface_pressure/mae": {
+            "value": 7.152569034099579,
+            "valid": 100,
+            "skipped": 0
+          },
+          "surface_pressure/relative_l2": {
+            "value": 0.21531787879765033,
+            "valid": 100,
+            "skipped": 0
+          },
+          "volume_velocity/mse": {
+            "value": 0.543149574548006,
+            "valid": 100,
+            "skipped": 0
+          },
+          "volume_velocity/mae": {
+            "value": 0.3709134629368782,
+            "valid": 100,
+            "skipped": 0
+          },
+          "volume_velocity/relative_l2": {
+            "value": 0.06730854950845241,
+            "valid": 100,
+            "skipped": 0
+          }
+        },
+        "split": "test"
+      },
+      "seconds": 84.07529037503991,
+      "online": {
+        "loss": 0.17083421349525452,
+        "surface_pressure": 0.09087121486663818,
+        "volume_velocity": 0.07996300607919693
+      }
+    }
+  ],
+  "checkpoints": {
+    "last": "/private/tmp/dojo-correctness-20260909/runs/2026-09-09T14-44-55_bfe5b9/checkpoints/last.pt",
+    "latest": "/private/tmp/dojo-correctness-20260909/runs/2026-09-09T14-44-55_bfe5b9/checkpoints/latest.pt",
+    "best": "/private/tmp/dojo-correctness-20260909/runs/2026-09-09T14-44-55_bfe5b9/checkpoints/best.pt"
+  }
+}

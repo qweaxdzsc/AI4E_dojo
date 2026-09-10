@@ -1,0 +1,6 @@
+INFO [运行/开始] 脚本=/private/tmp/dojo-regroup-20260909/recipe/post.py；运行目录=/private/tmp/dojo-regroup-20260909/runs/2026-09-09T22-11-31_996a37；生效配置=inputs/config.yaml
+INFO [post/阶段/开始] 
+/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+INFO [post/阶段/结束] 耗时=7.781秒
+INFO [运行/结束] 状态=成功；成功=0；失败=0；未执行=0；耗时=7.781秒
