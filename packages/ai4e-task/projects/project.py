@@ -71,3 +71,25 @@ def recover_project(path: str | Path) -> dict:
                 shutil.rmtree(folder)
                 removed.append(str(folder.relative_to(root)))
     return {"removed": removed}
+
+
+def update_project(
+    path: str | Path,
+    *,
+    name: str | None = None,
+    description: str | None = None,
+    archived: bool | None = None,
+) -> Project:
+    """原子更新项目描述；旧项目缺少新字段时继续兼容。"""
+    from ..storage.database import transaction
+
+    if name is not None and not name.strip():
+        raise ValueError("project_name_required")
+    with transaction(path):
+        value = open_project(path)
+        for key, item in {"name": name, "description": description, "archived": archived}.items():
+            if item is not None:
+                value[key] = item
+        value["updated_at"] = datetime.now(UTC).isoformat()
+        write_json(Path(path) / "project.json", value)
+    return value

@@ -1,0 +1,170 @@
+{
+  "comparison": {
+    "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+    "comparison_id": "48f5b4cb8f004b0a9b251c04910de324",
+    "created_at": "2026-09-10T11:50:57.080526+00:00",
+    "selection": {
+      "mode": "runs",
+      "left": "e2fd710cd44345a7aa5ff55c110725d0",
+      "right": "02b17728b1ef41188f7b1710975e1406"
+    },
+    "result": {
+      "kind": "runs",
+      "left": "e2fd710cd44345a7aa5ff55c110725d0",
+      "right": "02b17728b1ef41188f7b1710975e1406",
+      "metrics": {
+        "surface_pressure/relative_l2": {
+          "status": "missing",
+          "reason": "\u91cf\u3001\u6570\u503c\u6216\u5fc5\u8981\u8bed\u4e49\u7f3a\u5931",
+          "left": {
+            "value": null,
+            "quantity": {
+              "field": "surface_pressure",
+              "domain": "surface",
+              "unit": "1",
+              "split": "test",
+              "statistic": "mean_sample_relative_l2",
+              "dataset_digests": [],
+              "sampling": null,
+              "partition": null
+            },
+            "status": "missing"
+          },
+          "right": {
+            "value": null,
+            "quantity": {
+              "field": "surface_pressure",
+              "domain": "surface",
+              "unit": "1",
+              "split": "validation",
+              "statistic": "mean_sample_relative_l2",
+              "dataset_digests": [],
+              "sampling": null,
+              "partition": null
+            },
+            "status": "missing"
+          }
+        },
+        "volume_velocity/relative_l2": {
+          "status": "missing",
+          "reason": "\u91cf\u3001\u6570\u503c\u6216\u5fc5\u8981\u8bed\u4e49\u7f3a\u5931",
+          "left": {
+            "value": null,
+            "quantity": {
+              "field": "volume_velocity",
+              "domain": "volume",
+              "unit": "1",
+              "split": "test",
+              "statistic": "mean_sample_relative_l2",
+              "dataset_digests": [],
+              "sampling": null,
+              "partition": null
+            },
+            "status": "missing"
+          },
+          "right": {
+            "value": null,
+            "quantity": {
+              "field": "volume_velocity",
+              "domain": "volume",
+              "unit": "1",
+              "split": "validation",
+              "statistic": "mean_sample_relative_l2",
+              "dataset_digests": [],
+              "sampling": null,
+              "partition": null
+            },
+            "status": "missing"
+          }
+        }
+      },
+      "inputs": {
+        "left": {
+          "post.checkpoint": {
+            "id": "b457d392cebb482d9def6006befcbe5d",
+            "kind": "checkpoint",
+            "path": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/b99abe138c9e480ea9670a2ba77ebcb0/checkpoints/latest.pt",
+            "external": true,
+            "digest": "8bec7e0d20b91274a1c8725c263281166671b0e00688fc1ad8df6eff3fbfe093",
+            "source": {},
+            "dependencies": []
+          },
+          "train.preparation": {
+            "id": "4a8259e546c04a46a59a0fb72dd55851",
+            "kind": "preparation",
+            "path": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/b99abe138c9e480ea9670a2ba77ebcb0/artifacts/preparation.json",
+            "external": true,
+            "digest": "a208bb72810a84816feab30128dd542aa81492abe9266dcc4b5d1d4ca95a0c05",
+            "source": {},
+            "dependencies": []
+          }
+        },
+        "right": {
+          "post.checkpoint": {
+            "id": "bd133671406341799f1a651290f0d7e8",
+            "kind": "checkpoint",
+            "path": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/runs/7951249f50134261ac0ff3b0f3fc2b33/checkpoints/latest.pt",
+            "external": true,
+            "digest": "659b64e5b4db50a5d4053464cffeac0fe58b17e2ce6350fbc5ac893a23c9b174",
+            "source": {},
+            "dependencies": []
+          },
+          "train.preparation": {
+            "id": "3420b370316f49c394efcebbdc3927a4",
+            "kind": "preparation",
+            "path": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/runs/7951249f50134261ac0ff3b0f3fc2b33/artifacts/preparation.json",
+            "external": true,
+            "digest": "644efabc15575feea3030dda83e788ce1ca71eb5954d5dc87b00af5052d93a11",
+            "source": {},
+            "dependencies": []
+          }
+        }
+      },
+      "files": [
+        {
+          "path": "config.yaml",
+          "status": "modified",
+          "before": "78fa63391e8c0aa3a98cbf19c25a5a5bb55e67c5c07ab2140fede2cc32e7b843",
+          "after": "5bd43d33dc0847a38847498eac40cfe947cd27911ee3025c967b7416aee06b46",
+          "diff": "--- before/config.yaml\n+++ after/config.yaml\n@@ -24,116 +24,62 @@\n pipeline:\n   stages:\n   - post\n-data_root: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0\n-run_root: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs\n+data_root: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/02b17728b1ef41188f7b1710975e1406\n+run_root: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/runs\n paths:\n   datasets:\n-    root: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0\n-    train: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0/train\n-    eval: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0/eval\n-    test: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0/test\n+    root: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/02b17728b1ef41188f7b1710975e1406\n+    train: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/02b17728b1ef41188f7b1710975e1406/train\n+    eval: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/02b17728b1ef41188f7b1710975e1406/eval\n+    test: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/02b17728b1ef41188f7b1710975e1406/test\n     normalize:\n-      root: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0/normalize\n-      train: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0/normalize/train\n-      eval: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0/normalize/eval\n-      test: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0/normalize/test\n-    predictions: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0/predictions\n+      root: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/02b17728b1ef41188f7b1710975e1406/normalize\n+      train: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/02b17728b1ef41188f7b1710975e1406/normalize/train\n+      eval: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/02b17728b1ef41188f7b1710975e1406/normalize/eval\n+      test: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/02b17728b1ef41188f7b1710975e1406/normalize/test\n+    predictions: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/02b17728b1ef41188f7b1710975e1406/predictions\n train:\n-  mode: fit\n   max_epochs: 1\n   batch_size: 1\n+  num_workers: 0\n   device: mps\n   precision: fp32\n-  num_workers: 0\n-  optimizer: lion\n-  learning_rate: 5.0e-05\n-  weight_decay: 0.05\n+  optimizer: adamw\n+  learning_rate: 0.001\n+  weight_decay: 0.0\n   betas:\n   - 0.9\n-  - 0.99\n-  scheduler: warmup_cosine\n-  warmup_ratio: 0.05\n-  min_lr: 1.0e-06\n-  accumulate: 1\n+  - 0.999\n+  scheduler_unit: epoch\n+  min_lr_ratio: 0.01\n   gradient_clip: 1.0\n+  evaluation_split: validation\n+  validation_interval: 1\n+  resume: null\n+  evaluation_enabled: false\n+  manifest: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/7c8ec2f9d37f480b9a0d368fe0d9889e/manifest.json\n+  parameter_group_policy: all\n   ema_decay: null\n-  ema_save_every: 10\n-  test_repeat: 10\n-  evaluate_repeat: false\n   snapshot: false\n-  save_on_interrupt: true\n-  evaluation_split: test\n-  resume: null\n-  log_every: 1\n-  log_every_updates: null\n-  evaluation_enabled: false\n-  manifest: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/manifest.json\n-  preparation: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/b99abe138c9e480ea9670a2ba77ebcb0/artifacts/preparation.json\n+  preparation: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/runs/7951249f50134261ac0ff3b0f3fc2b33/artifacts/preparation.json\n model:\n   parameters:\n-    dim: 192\n-    geometry_depth: 6\n-    num_heads: 3\n-    blocks: pssssssssss\n-    radius: 9.0\n-    require_features: true\n-    num_domain_decoder_blocks:\n-      surface: 12\n-  initial_weights: null\n-  freeze: []\n-  data_specs:\n-    position_dim: 3\n-    domains:\n-      surface:\n-        output_dims:\n-          cp: 1\n-          cf: 3\n-        feature_dim:\n-          normals: 3\n-    conditioning_dims:\n-      conditions: 6\n-  supervision:\n-  - name: surface_cp\n-    prediction: surface_cp\n-    target: surface_cp_target\n-    normalization: surface_cp\n-    weight: 1.0\n-    loss: mse\n-  - name: surface_cf\n-    prediction: surface_cf\n-    target: surface_cf_target\n-    normalization: surface_cf\n-    weight: 1.0\n-    loss: mse\n+    n_hidden: 256\n+    n_layers: 24\n+    n_head: 8\n+    mlp_ratio: 2\n+    slice_num: 64\n+    space_dim: 12\n+    fun_dim: 0\n+    out_dim: 4\n+    unified_pos: false\n+    gradient_checkpointing: true\n   sampling:\n-    random_stream: global\n-    pipeline_seed: null\n-    seed: 42\n-    train_randomness: per_epoch\n-    evaluation_randomness: fixed\n-    geometry:\n-      method: uniform\n-      max_points: 3586\n-      replacement: false\n-      keep_order_when_all: true\n-    supernodes:\n-      method: uniform\n-      num_points: 512\n-      insufficient: error\n-    domains:\n-      surface:\n-        anchor:\n-          method: uniform\n-          num_points: 256\n-          insufficient: error\n-        query:\n-          method: uniform\n-          num_points: 0\n-          insufficient: error\n+    seed: 2\n+    stride: 4\n+    chunk_count: 20\n+    random_stream: independent\n trainprep:\n-  use_physics_features: true\n-  physical_rules: {}\n-  geometry_field: surface_position\n   domains:\n     surface:\n       position: surface_position\n@@ -146,19 +92,17 @@\n   conditioning:\n     conditions:\n       field: conditions\n-  geometry_conditioning: {}\n   normalization:\n     execute: true\n-    materialize: false\n     fields:\n       surface_position:\n-        method: coordinate\n-      surface_normals:\n         method: identity\n       surface_cp:\n         method: zscore\n       surface_cf:\n         method: zscore\n+      surface_normals:\n+        method: identity\n       conditions:\n         method: zscore\n         scope: condition\n@@ -173,7 +117,7 @@\n   - 0\n   query_chunk_size: 16384\n   overwrite: false\n-  checkpoint: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/b99abe138c9e480ea9670a2ba77ebcb0/checkpoints/latest.pt\n+  checkpoint: /private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/runs/7951249f50134261ac0ff3b0f3fc2b33/checkpoints/latest.pt\n   samples:\n   - Sample001\n snapshot_modules:\n@@ -189,26 +133,42 @@\n       - id: first\n         name: first\n         members:\n-        - source_field: surface/point/surface_position\n+        - source_field:\n+            domain: surface\n+            field: fields.surface_position\n           output_member: surface_position\n-        - source_field: surface/point/surface_cp\n+        - source_field:\n+            domain: surface\n+            field: fields.surface_cp\n           output_member: surface_cp\n-        - source_field: surface/point/surface_area\n+        - source_field:\n+            domain: surface\n+            field: fields.surface_area\n           output_member: surface_area\n-        - source_field: surface/global/conditions\n+        - source_field:\n+            domain: surface\n+            field: fields.conditions\n           output_member: conditions\n       - id: second\n         name: second\n         members:\n-        - source_field: surface/point/surface_normals\n+        - source_field:\n+            domain: surface\n+            field: fields.surface_normals\n           output_member: surface_normals\n-        - source_field: surface/point/surface_cf\n+        - source_field:\n+            domain: surface\n+            field: fields.surface_cf\n           output_member: surface_cf\n-        - source_field: surface/point/surface_ids\n+        - source_field:\n+            domain: surface\n+            field: fields.surface_ids\n           output_member: surface_ids\n-        - source_field: surface/global/global_targets\n+        - source_field:\n+            domain: surface\n+            field: fields.global_targets\n           output_member: global_targets\n components:\n   workflow: ai4e_core.applications.aero_cfd.workflow\n   dataset: ai4e_contrib.application.datasets.nasa_crm\n-  model: ai4e_contrib.ability.model.abupt.component\n+  model: ai4e_contrib.ability.model.transolver3.component"
+        }
+      ]
+    }
+  },
+  "operation": {
+    "operation_id": "2d8828cd4feb4e779b605b2a0b3d092e",
+    "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+    "kind": "compare_fields",
+    "status": "succeeded",
+    "phase": "compare_fields",
+    "progress": null,
+    "result_refs": [
+      {
+        "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+        "asset_id": "2d8828cd4feb4e779b605b2a0b3d092e",
+        "revision": "813ca0292c20ac7bb33a84f4aa7a2cb4df75e5e78b574365738c369e691085da",
+        "task_id": "33149a8f1adf4d95aead6959dccf134a",
+        "member": "difference.pt"
+      }
+    ],
+    "error": null,
+    "event_cursor": 2,
+    "fingerprint": "2fedad5cda56b2b225563178351b8c1111b8ce10d8a776c1e064929d6fb60407",
+    "idempotency_key": null,
+    "result": {
+      "shape": [
+        454404,
+        1
+      ],
+      "operation": "left-right",
+      "member": "difference.pt",
+      "metadata_member": "difference.json",
+      "configuration_revision": "58368d3edd9c7a4a0e49fc6255f3c981b1c5b3a8c0b0401a2eca9a0cb2288450"
+    }
+  },
+  "shape": [
+    454404,
+    1
+  ],
+  "exact_difference": true
+}

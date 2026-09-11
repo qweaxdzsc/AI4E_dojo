@@ -1,0 +1,42 @@
+2026-09-10 19:36:16,787 INFO [运行/开始] 脚本=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/b99abe138c9e480ea9670a2ba77ebcb0/code/pipeline.py；运行目录=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/b99abe138c9e480ea9670a2ba77ebcb0；生效配置=inputs/config.yaml
+2026-09-10 19:36:16,787 INFO [train/阶段/开始] 
+2026-09-10 19:36:17,006 INFO [train/张量读取/开始] 来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample002/first.zarr
+2026-09-10 19:36:17,172 INFO [train/张量读取/结束] 耗时=0.166秒
+2026-09-10 19:36:17,173 INFO [train/张量读取/开始] 来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample002/second.zarr
+2026-09-10 19:36:17,185 INFO [train/张量读取/结束] 耗时=0.012秒
+2026-09-10 19:36:18,417 INFO [train/训练/诊断] 规模={'test': 1, 'train': 8, 'validation': 1}；参数量=19736644；设备=mps:0
+2026-09-10 19:36:18,474 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample011', 'index': 7, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample011/first.zarr
+2026-09-10 19:36:18,485 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample011', 'index': 7, 'partition': 'train'}]；耗时=0.010秒
+2026-09-10 19:36:18,485 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample011', 'index': 7, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample011/second.zarr
+2026-09-10 19:36:18,497 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample011', 'index': 7, 'partition': 'train'}]；耗时=0.012秒
+2026-09-10 19:36:19,268 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample006', 'index': 2, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample006/first.zarr
+2026-09-10 19:36:19,278 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample006', 'index': 2, 'partition': 'train'}]；耗时=0.010秒
+2026-09-10 19:36:19,278 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample006', 'index': 2, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample006/second.zarr
+2026-09-10 19:36:19,291 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample006', 'index': 2, 'partition': 'train'}]；耗时=0.013秒
+2026-09-10 19:36:19,460 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample009', 'index': 5, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample009/first.zarr
+2026-09-10 19:36:19,471 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample009', 'index': 5, 'partition': 'train'}]；耗时=0.011秒
+2026-09-10 19:36:19,471 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample009', 'index': 5, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample009/second.zarr
+2026-09-10 19:36:19,483 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample009', 'index': 5, 'partition': 'train'}]；耗时=0.013秒
+2026-09-10 19:36:19,660 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample007', 'index': 3, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample007/first.zarr
+2026-09-10 19:36:19,670 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample007', 'index': 3, 'partition': 'train'}]；耗时=0.010秒
+2026-09-10 19:36:19,670 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample007', 'index': 3, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample007/second.zarr
+2026-09-10 19:36:19,682 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample007', 'index': 3, 'partition': 'train'}]；耗时=0.012秒
+2026-09-10 19:36:19,893 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample010', 'index': 6, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample010/first.zarr
+2026-09-10 19:36:19,903 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample010', 'index': 6, 'partition': 'train'}]；耗时=0.010秒
+2026-09-10 19:36:19,903 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample010', 'index': 6, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample010/second.zarr
+2026-09-10 19:36:19,916 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample010', 'index': 6, 'partition': 'train'}]；耗时=0.013秒
+2026-09-10 19:36:20,109 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 0, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample002/first.zarr
+2026-09-10 19:36:20,119 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 0, 'partition': 'train'}]；耗时=0.010秒
+2026-09-10 19:36:20,119 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 0, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample002/second.zarr
+2026-09-10 19:36:20,132 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 0, 'partition': 'train'}]；耗时=0.013秒
+2026-09-10 19:36:20,335 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample008', 'index': 4, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample008/first.zarr
+2026-09-10 19:36:20,345 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample008', 'index': 4, 'partition': 'train'}]；耗时=0.010秒
+2026-09-10 19:36:20,346 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample008', 'index': 4, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample008/second.zarr
+2026-09-10 19:36:20,358 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample008', 'index': 4, 'partition': 'train'}]；耗时=0.012秒
+2026-09-10 19:36:20,553 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 1, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample004/first.zarr
+2026-09-10 19:36:20,562 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 1, 'partition': 'train'}]；耗时=0.009秒
+2026-09-10 19:36:20,562 INFO [train/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 1, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample004/second.zarr
+2026-09-10 19:36:20,575 INFO [train/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 1, 'partition': 'train'}]；耗时=0.012秒
+2026-09-10 19:36:20,785 INFO [train/训练/进度] 轮次=1；更新=8；损失=2.4489202946424484；学习率=1e-06；耗时=2.3028151670005172；峰值内存=860618752；在线={'surface_cp': 1.3109006881713867, 'surface_cf': 1.1380195617675781}
+2026-09-10 19:36:22,028 INFO [train/阶段/结束] 耗时=5.241秒
+2026-09-10 19:36:22,029 INFO [运行/结束] 状态=成功；成功=0；失败=0；未执行=0；耗时=5.242秒

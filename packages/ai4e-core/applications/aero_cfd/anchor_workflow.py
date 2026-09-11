@@ -12,6 +12,8 @@ from ai4e_core.applications.aero_cfd.trainprep.dataset import probe
 
 def datapre(cfg, *, dataset_component, model_component, executor, session):
     """配置直接使用 cfg；样本循环和文件布局由 Dataset 与运行器承担。"""
+    if cfg.get("format", "pt") not in {"pt", "zarr"}:
+        raise ValueError("rawprep.format 必须为 pt 或 zarr")
     dataset = dataset_component.open_dataset(
         root=cfg.dataset.root,
         manifest=cfg.dataset.manifest,
@@ -21,11 +23,31 @@ def datapre(cfg, *, dataset_component, model_component, executor, session):
 
     # 只登记步骤，不装载网格；真正读盘在 execute。
     prep = pre.read(dataset, sources=cfg.sources)
-    prep = pre.extract_fields(prep, fields=cfg.fields)
+    extraction_output = None
+    selected_fields = OmegaConf.to_container(cfg.fields, resolve=True)
+    if cfg.get("extraction"):
+        from ai4e_core.applications.aero_cfd.rawprep.extraction import compile_extraction
+
+        extraction_output = compile_extraction(
+            OmegaConf.to_container(cfg.extraction, resolve=True),
+            format=cfg.get("format", "pt"),
+            declarations=dataset.metadata["outputs"],
+            source_catalog=dataset.metadata["fields"],
+        )
+        for domain, fields in extraction_output.pop("source_fields", {}).items():
+            selected_fields.setdefault(domain, {}).update(fields)
+    prep = pre.extract_fields(prep, fields=selected_fields)
     prep = pre.derive_geometry(prep, features=cfg.geometry)
 
     # 选择训练字段并验证行身份；过滤会同步更新同组字段。
-    prep = pre.select_fields(prep, fields=cfg.save_fields)
+    if extraction_output is not None:
+        prep = pre.select_fields(prep, output=extraction_output)
+    else:
+        prep = pre.select_fields(prep, fields=cfg.save_fields)
+        if cfg.get("format", "pt") == "zarr":
+            output = dict(prep.options["output"])
+            output["filemap"] = {key: key + ".zarr" for key in output["filemap"]}
+            prep = pre.select_fields(prep, output=output)
     prep = pre.validate_fields(prep)
     prep = pre.filter_points(prep, filters=cfg.filters)
     prep = pre.validate_fields(prep)

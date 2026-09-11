@@ -106,7 +106,7 @@ docs/PRD/
 
 ## 模块对照
 
-新增设计交付（2026-09-09）：[Dojo WEB 平台产品设计](ai4e-web/src/PRD.md)，状态 DRAFT。用户明确要求的完整产品设计稿先按拟定 Web 一级目录 src 归档，包含项目管理和任务工作台两章；不表示前端源码或功能已经交付。后续功能实现直接更新此正文，避免另建平行产品说明。技术架构见唯一架构文档第 19 节。
+整合平台实施中（2026-09-10）：[Dojo WEB 平台产品设计](ai4e-web/src/PRD.md)，状态实施中。完整产品正文按 Web 一级目录 src 归档，包含项目管理和任务工作台两章；不表示本轮全部功能已经通过验收。后续功能实现直接更新此正文，避免另建平行产品说明。技术架构见唯一架构文档第 19 节。
 
 | 包 | 模块 PRD | 状态 |
 | --- | --- | --- |
@@ -114,9 +114,9 @@ docs/PRD/
 | ai4e-core | [applications](ai4e-core/applications/PRD.md) | 已交付：外流 pre、train 与 post（锚点评估保存、可选点云、完整网格回贴） |
 | ai4e-core | [run](ai4e-core/run/PRD.md) | 已交付：开车、点号覆盖、逐项执行、失败汇总与唯一写入；摘要可抄训练探测字段 |
 | ai4e-core | [base](ai4e-core/base/PRD.md)、tools | base 已交付配置与事件；tools 待编写 |
-| ai4e-spec | [components](ai4e-spec/components/PRD.md)、[artifacts](ai4e-spec/artifacts/PRD.md)、data、check | components 与 artifacts 已交付；data、check 待编写 |
+| ai4e-spec | [components](ai4e-spec/components/PRD.md)、[artifacts](ai4e-spec/artifacts/PRD.md)、data、check | components 与 artifacts 已有契约；data 检查描述见下方导航，check 待编写 |
 | recipes | [aero_cfd](recipes/aero_cfd/PRD.md) | 已交付：字段映射、几何启用、已有数据根、官方分片、前处理与训练准备入口 |
-| ai4e-task / viz / server / web | 按各包一级目录 | 待编写 |
+| ai4e-task / viz / server / web | 见下方模块导航 | 平台扩展实施中，按专项验收限定交付 |
 
 范本：[`ai4e-core/abilities/PRD.md`](ai4e-core/abilities/PRD.md)。
 
@@ -143,3 +143,12 @@ docs/PRD/
 - [运行来源契约](ai4e-spec/artifacts/PRD.md)：轻量跨包身份与来源。
 
 双模型功能更新归入上述 components、core、contrib 与 aero_cfd 模块正文；NASA 正式规模数值对标通过；旧公开 YAML 兼容政策仍待确认。
+
+- [ai4e-viz/render](ai4e-viz/render/PRD.md)：表面、切面及曲线静态表达。
+- [ai4e-viz/compose](ai4e-viz/compose/PRD.md)：独立域比较的离线报告。
+
+## 本机平台文档入口
+
+- `ai4e-server/modules/PRD.md`：研究管理代理、处理配置、文件与报告。
+- `ai4e-spec/data/PRD.md`：跨包文件检查描述。
+- `ai4e-viz/inspect/PRD.md`、`ai4e-viz/preview/PRD.md`、`ai4e-viz/runtime/PRD.md`：真实检查、预览与独立请求执行。

@@ -1,0 +1,33 @@
+2026-09-10 19:38:16,977 INFO [运行/开始] 脚本=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/.dojo/executions/02b17728b1ef41188f7b1710975e1406/code/pipeline.py；运行目录=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/runs/02b17728b1ef41188f7b1710975e1406；生效配置=inputs/config.yaml
+2026-09-10 19:38:16,977 INFO [post/阶段/开始] 
+2026-09-10 19:38:17,198 INFO [post/张量读取/开始] 来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/7c8ec2f9d37f480b9a0d368fe0d9889e/train/Sample002/first.zarr
+2026-09-10 19:38:17,359 INFO [post/张量读取/结束] 耗时=0.161秒
+2026-09-10 19:38:17,360 INFO [post/张量读取/开始] 来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/7c8ec2f9d37f480b9a0d368fe0d9889e/train/Sample002/second.zarr
+2026-09-10 19:38:17,374 INFO [post/张量读取/结束] 耗时=0.014秒
+2026-09-10 19:38:17,789 INFO [post/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/7c8ec2f9d37f480b9a0d368fe0d9889e/test/Sample001/first.zarr
+2026-09-10 19:38:17,799 INFO [post/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.009秒
+2026-09-10 19:38:17,799 INFO [post/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/7c8ec2f9d37f480b9a0d368fe0d9889e/test/Sample001/second.zarr
+2026-09-10 19:38:17,811 INFO [post/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.013秒
+2026-09-10 19:38:26,983 INFO [post/阶段/运行中] 已耗时=10.01秒；状态=底层计算尚未返回
+2026-09-10 19:38:36,991 INFO [post/阶段/运行中] 已耗时=20.01秒；状态=底层计算尚未返回
+2026-09-10 19:38:47,001 INFO [post/阶段/运行中] 已耗时=30.02秒；状态=底层计算尚未返回
+2026-09-10 19:38:57,007 INFO [post/阶段/运行中] 已耗时=40.03秒；状态=底层计算尚未返回
+2026-09-10 19:39:07,012 INFO [post/阶段/运行中] 已耗时=50.03秒；状态=底层计算尚未返回
+2026-09-10 19:39:17,021 INFO [post/阶段/运行中] 已耗时=60.04秒；状态=底层计算尚未返回
+2026-09-10 19:39:27,030 INFO [post/阶段/运行中] 已耗时=70.05秒；状态=底层计算尚未返回
+2026-09-10 19:39:37,034 INFO [post/阶段/运行中] 已耗时=80.06秒；状态=底层计算尚未返回
+2026-09-10 19:39:47,042 INFO [post/阶段/运行中] 已耗时=90.06秒；状态=底层计算尚未返回
+2026-09-10 19:39:57,046 INFO [post/阶段/运行中] 已耗时=100.07秒；状态=底层计算尚未返回
+2026-09-10 19:40:07,048 INFO [post/阶段/运行中] 已耗时=110.07秒；状态=底层计算尚未返回
+2026-09-10 19:40:17,054 INFO [post/阶段/运行中] 已耗时=120.08秒；状态=底层计算尚未返回
+2026-09-10 19:40:27,063 INFO [post/阶段/运行中] 已耗时=130.09秒；状态=底层计算尚未返回
+2026-09-10 19:40:37,073 INFO [post/阶段/运行中] 已耗时=140.10秒；状态=底层计算尚未返回
+2026-09-10 19:40:47,083 INFO [post/阶段/运行中] 已耗时=150.11秒；状态=底层计算尚未返回
+2026-09-10 19:40:57,086 INFO [post/阶段/运行中] 已耗时=160.11秒；状态=底层计算尚未返回
+2026-09-10 19:41:07,089 INFO [post/阶段/运行中] 已耗时=170.11秒；状态=底层计算尚未返回
+2026-09-10 19:41:10,466 INFO [post/张量提交/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/02b17728b1ef41188f7b1710975e1406/predictions/Sample001
+2026-09-10 19:41:10,466 INFO [post/输出规划/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/34536dbd953c42c29721c3d6eabe3685/data/02b17728b1ef41188f7b1710975e1406/predictions/Sample001
+2026-09-10 19:41:10,467 INFO [post/输出规划/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.000秒
+2026-09-10 19:41:10,478 INFO [post/张量提交/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.012秒
+2026-09-10 19:41:10,503 INFO [post/阶段/结束] 耗时=173.526秒
+2026-09-10 19:41:10,504 INFO [运行/结束] 状态=成功；成功=0；失败=0；未执行=0；耗时=173.527秒

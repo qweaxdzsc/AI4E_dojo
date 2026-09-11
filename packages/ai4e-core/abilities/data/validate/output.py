@@ -7,7 +7,7 @@ from ai4e_core.base.events import traced
 
 
 def validate_filemap(filemap: Mapping[str, str]) -> None:
-    """目标仅允许单个 .pt 文件名，且一个文件只对应一个载荷。"""
+    """目标仅允许单个 .pt 文件名或 .zarr 目录名，且一个文件只对应一个载荷。"""
     if not isinstance(filemap, Mapping) or not filemap:
         raise ValueError("输出对照表必须是非空映射")
     seen: set[str] = set()
@@ -20,7 +20,7 @@ def validate_filemap(filemap: Mapping[str, str]) -> None:
             or "\\" in filename
             or "\x00" in filename
             or filename in (".", "..")
-            or not filename.endswith(".pt")
+            or not filename.endswith((".pt", ".zarr"))
         ):
             raise ValueError(f"文件名非法: {filename}")
         if filename.casefold() in seen:

@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+[project]
+name = "ai4e-viz"
+version = "0.1.0"
+description = "稳定科学产物的静态图像和离线报告"
+requires-python = ">=3.12"
+dependencies = ["ai4e-spec", "pyvista>=0.48", "matplotlib>=3.10", "torch>=2.0", "numpy>=2.0", "zarr>=3.1,<4", "h5py>=3.11"]
+[tool.uv.sources]
+ai4e-spec = { workspace = true }
+[tool.hatch.build.targets.wheel]
+bypass-selection = true
+[tool.hatch.build.targets.wheel.force-include]
+"__init__.py" = "ai4e_viz/__init__.py"
+"render" = "ai4e_viz/render"
+"compose" = "ai4e_viz/compose"
+"__main__.py" = "ai4e_viz/__main__.py"
+"inspect" = "ai4e_viz/inspect"
+"preview" = "ai4e_viz/preview"
+"runtime" = "ai4e_viz/runtime"
+"pipeline" = "ai4e_viz/pipeline"
+"serialization" = "ai4e_viz/serialization"

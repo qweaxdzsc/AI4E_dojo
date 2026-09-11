@@ -12,3 +12,37 @@ __all__ = [
     "manifest_digest",
     "reconstruct_surface_topology",
 ]
+
+from .physical import LAYOUT, open_physical, physical_fields
+
+__all__ += ["LAYOUT", "open_physical", "physical_fields"]
+
+
+def prepare_physical(cfg, *, executor, session):
+    """NASA 原始数据按共享物理提交装配。"""
+    import sys
+
+    from omegaconf import OmegaConf
+
+    from ai4e_core.applications.aero_cfd.rawprep.physical import execute
+
+    return execute(
+        OmegaConf.to_container(cfg, resolve=True), sys.modules[__name__], executor, session
+    )
+
+
+from .physical import comparison_mesh
+
+__all__ += ["comparison_mesh", "prepare_physical"]
+
+from .inspection import inspect_dataset
+
+__all__ += ["inspect_dataset"]
+
+from .physical import read_physical_field
+
+__all__ += ["read_physical_field"]
+
+from .physical import comparison_metadata
+
+__all__ += ["comparison_metadata"]

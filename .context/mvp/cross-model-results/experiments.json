@@ -1,0 +1,301 @@
+{
+  "nasa_crm_abupt": {
+    "parameters": 19736644,
+    "epochs": 1,
+    "updates": 84,
+    "train_seconds": 9.843145332997665,
+    "training_loss": 2.039298798356737,
+    "seed": 42,
+    "sampling": {
+      "random_stream": "global",
+      "pipeline_seed": null,
+      "seed": 42,
+      "train_randomness": "per_epoch",
+      "evaluation_randomness": "fixed",
+      "geometry": {
+        "method": "uniform",
+        "max_points": 3586,
+        "replacement": false,
+        "keep_order_when_all": true
+      },
+      "supernodes": {
+        "method": "uniform",
+        "num_points": 512,
+        "insufficient": "error"
+      },
+      "domains": {
+        "surface": {
+          "anchor": {
+            "method": "uniform",
+            "num_points": 256,
+            "insufficient": "error"
+          },
+          "query": {
+            "method": "uniform",
+            "num_points": 0,
+            "insufficient": "error"
+          }
+        }
+      }
+    },
+    "optimizer": "lion",
+    "learning_rate": 5e-05,
+    "model": {
+      "parameters": {
+        "dim": 192,
+        "geometry_depth": 6,
+        "num_heads": 3,
+        "blocks": "pssssssssss",
+        "radius": 9.0,
+        "require_features": true,
+        "num_domain_decoder_blocks": {
+          "surface": 12
+        }
+      },
+      "initial_weights": null,
+      "freeze": [],
+      "data_specs": {
+        "position_dim": 3,
+        "domains": {
+          "surface": {
+            "output_dims": {
+              "cp": 1,
+              "cf": 3
+            },
+            "feature_dim": {
+              "normals": 3
+            }
+          }
+        },
+        "conditioning_dims": {
+          "conditions": 6
+        }
+      },
+      "supervision": [
+        {
+          "name": "surface_cp",
+          "prediction": "surface_cp",
+          "target": "surface_cp_target",
+          "normalization": "surface_cp",
+          "weight": 1.0,
+          "loss": "mse"
+        },
+        {
+          "name": "surface_cf",
+          "prediction": "surface_cf",
+          "target": "surface_cf_target",
+          "normalization": "surface_cf",
+          "weight": 1.0,
+          "loss": "mse"
+        }
+      ]
+    },
+    "run": "/private/tmp/dojo-cross-model/runs/nasa_crm_abupt/2026-09-10T11-46-33_755067"
+  },
+  "nasa_crm_transolver3": {
+    "parameters": 11335876,
+    "epochs": 1,
+    "updates": 84,
+    "train_seconds": 32.079133499995805,
+    "training_loss": 1.0640831572499283,
+    "seed": 2,
+    "sampling": {
+      "seed": 2,
+      "stride": 4,
+      "chunk_count": 20,
+      "random_stream": "independent"
+    },
+    "optimizer": "adamw",
+    "learning_rate": 0.001,
+    "model": {
+      "parameters": {
+        "n_hidden": 256,
+        "n_layers": 24,
+        "n_head": 8,
+        "mlp_ratio": 2,
+        "slice_num": 64,
+        "space_dim": 12,
+        "fun_dim": 0,
+        "out_dim": 4,
+        "unified_pos": false,
+        "gradient_checkpointing": true
+      }
+    },
+    "run": "/private/tmp/dojo-cross-model/runs/nasa_crm_transolver3/2026-09-10T11-46-49_b741b8"
+  },
+  "shapenet_car_abupt": {
+    "parameters": 18634180,
+    "epochs": 1,
+    "updates": 789,
+    "train_seconds": 86.94758887495846,
+    "training_loss": 0.7443418033770433,
+    "seed": 42,
+    "sampling": {
+      "random_stream": "global",
+      "pipeline_seed": null,
+      "seed": 42,
+      "train_randomness": "per_epoch",
+      "evaluation_randomness": "fixed",
+      "geometry": {
+        "method": "uniform",
+        "max_points": 3586,
+        "replacement": false,
+        "keep_order_when_all": true
+      },
+      "supernodes": {
+        "method": "uniform",
+        "num_points": 512,
+        "insufficient": "error"
+      },
+      "domains": {
+        "surface": {
+          "anchor": {
+            "method": "uniform",
+            "num_points": 256,
+            "insufficient": "error"
+          },
+          "query": {
+            "method": "uniform",
+            "num_points": 0,
+            "insufficient": "error"
+          }
+        },
+        "volume": {
+          "anchor": {
+            "method": "uniform",
+            "num_points": 256,
+            "insufficient": "error"
+          },
+          "query": {
+            "method": "uniform",
+            "num_points": 0,
+            "insufficient": "error"
+          }
+        }
+      }
+    },
+    "optimizer": "lion",
+    "learning_rate": 5e-05,
+    "model": {
+      "parameters": {
+        "dim": 192,
+        "geometry_depth": 6,
+        "num_heads": 3,
+        "blocks": "pscscscscsc",
+        "radius": 9.0,
+        "require_features": false,
+        "num_domain_decoder_blocks": {
+          "surface": 12,
+          "volume": 12
+        }
+      },
+      "initial_weights": null,
+      "freeze": [],
+      "data_specs": {
+        "position_dim": 3,
+        "domains": {
+          "surface": {
+            "output_dims": {
+              "pressure": 1
+            },
+            "feature_dim": {
+              "surface_sdf": 1,
+              "surface_normals": 3
+            }
+          },
+          "volume": {
+            "output_dims": {
+              "velocity": 3
+            },
+            "feature_dim": {
+              "volume_sdf": 1,
+              "volume_normals": 3
+            }
+          }
+        },
+        "conditioning_dims": {}
+      },
+      "supervision": [
+        {
+          "name": "surface_pressure",
+          "prediction": "surface_pressure",
+          "target": "surface_pressure_target",
+          "normalization": "surface_pressure",
+          "weight": 1.0,
+          "loss": "mse"
+        },
+        {
+          "name": "volume_velocity",
+          "prediction": "volume_velocity",
+          "target": "volume_velocity_target",
+          "normalization": "volume_velocity",
+          "weight": 1.0,
+          "loss": "mse"
+        }
+      ]
+    },
+    "run": "/private/tmp/dojo-cross-model/runs/shapenet_car_abupt/2026-09-10T11-47-28_dd9653"
+  },
+  "shapenet_car_transolver3_surface": {
+    "parameters": 11332033,
+    "epochs": 1,
+    "updates": 789,
+    "train_seconds": 99.74407037498895,
+    "training_loss": 0.7399965192205596,
+    "seed": 2,
+    "sampling": {
+      "seed": 2,
+      "stride": 4,
+      "chunk_count": 20,
+      "random_stream": "independent"
+    },
+    "optimizer": "adamw",
+    "learning_rate": 0.001,
+    "model": {
+      "parameters": {
+        "n_hidden": 256,
+        "n_layers": 24,
+        "n_head": 8,
+        "mlp_ratio": 2,
+        "slice_num": 64,
+        "space_dim": 6,
+        "fun_dim": 0,
+        "out_dim": 1,
+        "unified_pos": false,
+        "gradient_checkpointing": true
+      }
+    },
+    "run": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_surface/2026-09-10T11-49-01_e7ef5b"
+  },
+  "shapenet_car_transolver3_volume": {
+    "parameters": 7598979,
+    "epochs": 1,
+    "updates": 789,
+    "train_seconds": 66.4246931669768,
+    "training_loss": 0.26015477516880925,
+    "seed": 2,
+    "sampling": {
+      "seed": 2,
+      "stride": 4,
+      "chunk_count": 20,
+      "random_stream": "independent"
+    },
+    "optimizer": "adamw",
+    "learning_rate": 0.001,
+    "model": {
+      "parameters": {
+        "n_hidden": 256,
+        "n_layers": 16,
+        "n_head": 8,
+        "mlp_ratio": 2,
+        "slice_num": 64,
+        "space_dim": 3,
+        "fun_dim": 0,
+        "out_dim": 3,
+        "unified_pos": false,
+        "gradient_checkpointing": true
+      }
+    },
+    "run": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_volume/2026-09-10T11-50-45_6a17e9"
+  }
+}

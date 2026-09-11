@@ -1,0 +1,34 @@
+/* 工作台标题与步骤对照整合 HTML 最终浅蓝主题。 */
+.task-workbench{font:13px/1.6 system-ui,-apple-system,"PingFang SC",sans-serif;color:#13234b}
+.task-workbench .taskheading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:0;height:65px;min-height:65px;flex-wrap:nowrap}
+.task-workbench .taskheading>div:first-child{min-width:0;flex:1}
+.task-workbench .taskheading h1{font-size:24px;margin:0;font-weight:600;color:#13234b;letter-spacing:-.3px}
+.task-workbench .statuspill{display:inline-block;padding:2px 10px;margin-left:10px;border-radius:15px;font-size:11px;font-weight:400;color:#6f7a9b;background:#eef1f7;vertical-align:middle}
+.task-workbench .taskheading p{font-size:12px;margin:5px 0 0;color:#6a7da4}
+.task-workbench .taskheading-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+.task-workbench .switch-task,.task-workbench .return-task{display:inline-flex;align-items:center;justify-content:center;min-height:34px;border:1px solid #d9e6fa;border-radius:6px;background:#fff;color:#2864b9;padding:7px 12px;text-decoration:none;white-space:nowrap}
+.task-workbench .switch-task:hover,.task-workbench .return-task:hover{background:#eef6ff;border-color:#90bbff}
+.workbench-steps.topsteps{display:flex;align-items:center;overflow:auto;height:56px;margin:15px 0 10px;padding:10px 28px;border:1px solid #eaf2fd;border-radius:8px;background:#fff}
+.workbench-steps.topsteps .topstep{flex:1;min-width:105px;display:flex;align-items:center;justify-content:center;gap:9px;padding:9px 5px;position:relative;color:#6c83ad;text-decoration:none;font-size:12px;white-space:nowrap}
+.workbench-steps.topsteps .topstep:after{content:"";position:absolute;width:19px;height:1px;background:#cbdaf4;right:-9px}
+.workbench-steps.topsteps .topstep:last-child:after{display:none}
+.workbench-steps.topsteps .topstep.done:after{background:#0873ff}
+.workbench-steps.topsteps .topstep span{display:grid;place-items:center;width:26px;height:26px;flex-shrink:0;border:1px solid #b7ccec;border-radius:50%;background:#fff;color:#6c83ad;font-size:12px}
+.workbench-steps.topsteps .topstep.active{color:#0873ff}
+.workbench-steps.topsteps .topstep.active span,.workbench-steps.topsteps .topstep.done span{background:#0873ff;color:#fff;border-color:#0873ff}
+.workbench-steps.topsteps .topstep b{font-size:12px;font-weight:500}
+.recipestrip{display:flex;gap:8px;align-items:center;background:#edf6ff;border:1px solid #e0edfc;border-radius:6px;padding:4px 10px;margin:0;font-size:11px;color:#4e6091;max-width:420px;overflow:hidden}
+.recipestrip .badge.blue{display:inline-block;background:#e9f3ff;color:#006dff;border-radius:12px;padding:2px 8px;font-size:11px}
+.recipestrip .recipeflow{color:#7a91b5;display:none}
+.recipestrip .toolbar-spacer{flex:1}
+.recipestrip button{font-size:11px;padding:4px 10px;border:1px solid #d9e6fa;border-radius:6px;background:#fff;color:#2864b9;cursor:pointer}
+.recipestrip button:hover{background:#eef6ff}
+.stage-toolbar{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:16px 0}
+.stageheading h2{margin:0;font-size:18px;color:#172951}
+.stageheading p{margin:5px 0 0;font-size:12px;color:#6a7da4}
+.stage-toolbar.post-stage-toolbar{align-items:flex-start}
+.stage-toolbar.post-stage-toolbar .post-stage-actions{display:flex;gap:8px;flex-shrink:0}
+.stage-foot{display:flex;align-items:center;margin:22px 0 8px;gap:12px}
+.stage-foot .toolbar-spacer{flex:1}
+.stage-foot a{display:inline-flex;align-items:center;min-height:34px;border:1px solid #d9e6fa;border-radius:6px;background:#fff;color:#2864b9;padding:7px 13px;text-decoration:none}
+.stage-foot a.next{background:#0873ff;border-color:#0873ff;color:#fff}

@@ -1,0 +1,27 @@
+{
+  "case": "shapenet_car_transolver3_surface",
+  "prediction": {
+    "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+    "asset_id": "f1fa4d26baf9a675bbb89ab75125dac6419b02b330f49442362130e908b8d9c7",
+    "revision": "0acb8af1431ad006ab54fd6fbc29e48a90014f85d2823924454565af11527789",
+    "task_id": "00c740296d0d42babce701cf2709a692"
+  },
+  "prediction_shape": [
+    3586,
+    1
+  ],
+  "mesh": {
+    "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+    "asset_id": "e449523df0a112b4c6144df98c2a53413c378d422914e4df3cdd05fbb6bb9266",
+    "revision": "56b9919ef2fdf32947fc4fa3e0480412b54c22f3a3373c12ac0b9b6a4e2c6d4f",
+    "task_id": "00c740296d0d42babce701cf2709a692"
+  },
+  "display": {
+    "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+    "asset_id": "3f949ca648d14d30839730e08782644c",
+    "revision": "01df3eb8ca86f228c5b624eac00c58620e0304bab923685a19b67c20bb11426c"
+  },
+  "points": 3586,
+  "tensor_values_equal": true,
+  "mesh_coordinates_equal": true
+}

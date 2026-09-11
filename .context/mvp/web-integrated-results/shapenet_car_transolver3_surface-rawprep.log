@@ -1,0 +1,227 @@
+2026-09-10 19:11:43,085 INFO [运行/开始] 脚本=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/00c740296d0d42babce701cf2709a692/.dojo/executions/a3bc068ecedf48b8b2a77994fcf2bca7/code/pipeline.py；运行目录=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/00c740296d0d42babce701cf2709a692/runs/a3bc068ecedf48b8b2a77994fcf2bca7；生效配置=inputs/config.yaml
+2026-09-10 19:11:43,085 INFO [rawprep/阶段/开始] 
+2026-09-10 19:11:45,009 INFO [rawprep/数据集/开始] root=/Users/zonghui/work/datasets/shapenet_car_cfd/mlcfd_data/training_data
+2026-09-10 19:11:45,027 INFO [rawprep/数据集/选择结果] 样本总数=2；train=1；test=1
+2026-09-10 19:11:45,027 INFO [rawprep/数据集/结束] 耗时=0.018秒
+2026-09-10 19:11:45,028 INFO [rawprep/输出预检/开始] 
+2026-09-10 19:11:45,028 INFO [rawprep/输出规划/开始] overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/00c740296d0d42babce701cf2709a692/data/a3bc068ecedf48b8b2a77994fcf2bca7/train/param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,029 INFO [rawprep/输出规划/结束] 耗时=0.000秒
+2026-09-10 19:11:45,029 INFO [rawprep/输出规划/开始] overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/00c740296d0d42babce701cf2709a692/data/a3bc068ecedf48b8b2a77994fcf2bca7/test/param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,029 INFO [rawprep/输出规划/结束] 耗时=0.000秒
+2026-09-10 19:11:45,029 INFO [rawprep/输出预检/目标] train=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/00c740296d0d42babce701cf2709a692/data/a3bc068ecedf48b8b2a77994fcf2bca7/train；test=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/00c740296d0d42babce701cf2709a692/data/a3bc068ecedf48b8b2a77994fcf2bca7/test
+2026-09-10 19:11:45,029 INFO [rawprep/输出预检/结束] 耗时=0.001秒
+2026-09-10 19:11:45,029 INFO [rawprep/批量前处理/开始] 样本数=2
+2026-09-10 19:11:45,029 INFO [rawprep/样本读取/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,029 INFO [rawprep/读取/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；来源=/Users/zonghui/work/datasets/shapenet_car_cfd/mlcfd_data/training_data/param1/1dc58be25e1b6e5675cad724c63e222e/quadpress_smpl.vtk
+2026-09-10 19:11:45,032 INFO [rawprep/读取/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；点数=3682；单元数=3584
+2026-09-10 19:11:45,032 INFO [rawprep/读取/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.003秒
+2026-09-10 19:11:45,032 INFO [rawprep/读取/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；来源=/Users/zonghui/work/datasets/shapenet_car_cfd/mlcfd_data/training_data/param1/1dc58be25e1b6e5675cad724c63e222e/hexvelo_smpl.vtk
+2026-09-10 19:11:45,066 INFO [rawprep/读取/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；点数=29498；单元数=26112
+2026-09-10 19:11:45,066 INFO [rawprep/读取/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.034秒
+2026-09-10 19:11:45,066 INFO [rawprep/样本读取/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.037秒
+2026-09-10 19:11:45,066 INFO [rawprep/样本字段提取/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,066 INFO [rawprep/坐标提取/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,066 INFO [rawprep/坐标提取/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(3682, 3)；类型=float32
+2026-09-10 19:11:45,066 INFO [rawprep/坐标提取/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,066 INFO [rawprep/字段提取/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；name=point_scalars；association=point；kind=scalar
+2026-09-10 19:11:45,066 INFO [rawprep/字段提取/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(3682,)；类型=float32
+2026-09-10 19:11:45,067 INFO [rawprep/字段提取/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,067 INFO [rawprep/有效点标记/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；cell_type=9
+2026-09-10 19:11:45,068 INFO [rawprep/有效点标记/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(3682,)；类型=bool
+2026-09-10 19:11:45,068 INFO [rawprep/有效点标记/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.002秒
+2026-09-10 19:11:45,068 INFO [rawprep/坐标提取/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,068 INFO [rawprep/坐标提取/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(29498, 3)；类型=float32
+2026-09-10 19:11:45,068 INFO [rawprep/坐标提取/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,069 INFO [rawprep/字段提取/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；name=point_vectors；association=point；kind=vector
+2026-09-10 19:11:45,069 INFO [rawprep/字段提取/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(29498, 3)；类型=float32
+2026-09-10 19:11:45,069 INFO [rawprep/字段提取/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,069 INFO [rawprep/样本字段提取/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.003秒
+2026-09-10 19:11:45,069 INFO [rawprep/样本几何派生/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,069 INFO [rawprep/坐标提取/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,069 INFO [rawprep/坐标提取/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(3682, 3)；类型=float32
+2026-09-10 19:11:45,069 INFO [rawprep/坐标提取/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,069 INFO [rawprep/坐标提取/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,069 INFO [rawprep/坐标提取/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(29498, 3)；类型=float32
+2026-09-10 19:11:45,069 INFO [rawprep/坐标提取/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,069 INFO [rawprep/点到最近顶点/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；输入0形状=(29498, 3)；输入1形状=(3682, 3)
+2026-09-10 19:11:45,088 INFO [rawprep/点到最近顶点/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.019秒
+2026-09-10 19:11:45,089 INFO [rawprep/表面法向/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,096 INFO [rawprep/表面法向/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.008秒
+2026-09-10 19:11:45,097 INFO [rawprep/重合点标记/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；输入0形状=(29498, 3)；输入1形状=(3682, 3)
+2026-09-10 19:11:45,106 INFO [rawprep/重合点标记/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(29498,)；类型=bool
+2026-09-10 19:11:45,107 INFO [rawprep/重合点标记/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.010秒
+2026-09-10 19:11:45,107 INFO [rawprep/样本几何派生/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.038秒
+2026-09-10 19:11:45,107 INFO [rawprep/样本字段选择/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,107 INFO [rawprep/坐标提取/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,107 INFO [rawprep/坐标提取/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(29498, 3)；类型=float32
+2026-09-10 19:11:45,107 INFO [rawprep/坐标提取/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,107 INFO [rawprep/坐标提取/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,107 INFO [rawprep/坐标提取/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(3682, 3)；类型=float32
+2026-09-10 19:11:45,107 INFO [rawprep/坐标提取/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,107 INFO [rawprep/样本字段选择/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,107 INFO [rawprep/样本字段校验/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,107 INFO [rawprep/字段身份校验/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；sample=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,109 INFO [rawprep/字段身份校验/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.002秒
+2026-09-10 19:11:45,109 INFO [rawprep/样本字段校验/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.002秒
+2026-09-10 19:11:45,109 INFO [rawprep/样本筛选/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,109 INFO [rawprep/记录筛选/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,109 INFO [rawprep/字段身份校验/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,111 INFO [rawprep/字段身份校验/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.002秒
+2026-09-10 19:11:45,112 INFO [rawprep/字段身份校验/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,113 INFO [rawprep/字段身份校验/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.002秒
+2026-09-10 19:11:45,113 INFO [rawprep/记录筛选/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.004秒
+2026-09-10 19:11:45,113 INFO [rawprep/字段身份校验/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；sample=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,115 INFO [rawprep/字段身份校验/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.002秒
+2026-09-10 19:11:45,115 INFO [rawprep/筛选/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；组=surface:point；筛选前=3682；保留=3586；删除=96
+2026-09-10 19:11:45,115 INFO [rawprep/筛选/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；组=volume:point；筛选前=29498；保留=28504；删除=994
+2026-09-10 19:11:45,115 INFO [rawprep/样本筛选/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.006秒
+2026-09-10 19:11:45,115 INFO [rawprep/样本字段校验/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,115 INFO [rawprep/字段身份校验/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；sample=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,117 INFO [rawprep/字段身份校验/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.002秒
+2026-09-10 19:11:45,117 INFO [rawprep/样本字段校验/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.002秒
+2026-09-10 19:11:45,117 INFO [rawprep/样本张量编码/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,117 INFO [rawprep/字段身份校验/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；sample=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,119 INFO [rawprep/字段身份校验/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.002秒
+2026-09-10 19:11:45,119 INFO [rawprep/张量编码/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,119 INFO [rawprep/张量编码/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(3586,)；类型=torch.float32
+2026-09-10 19:11:45,119 INFO [rawprep/张量编码/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,119 INFO [rawprep/张量编码/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(3586, 3)；类型=torch.float32
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(28504, 3)；类型=torch.float32
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(28504, 3)；类型=torch.float32
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(3586, 3)；类型=torch.float32
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(28504, 3)；类型=torch.float32
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；形状=(28504,)；类型=torch.float32
+2026-09-10 19:11:45,120 INFO [rawprep/张量编码/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,120 INFO [rawprep/样本张量编码/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.003秒
+2026-09-10 19:11:45,120 INFO [rawprep/样本提交/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；分片=train
+2026-09-10 19:11:45,121 INFO [rawprep/输出规划/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/00c740296d0d42babce701cf2709a692/data/a3bc068ecedf48b8b2a77994fcf2bca7/train/param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,121 INFO [rawprep/输出规划/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,122 INFO [rawprep/张量提交/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/00c740296d0d42babce701cf2709a692/data/a3bc068ecedf48b8b2a77994fcf2bca7/train/param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,122 INFO [rawprep/输出规划/开始] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/00c740296d0d42babce701cf2709a692/data/a3bc068ecedf48b8b2a77994fcf2bca7/train/param1/1dc58be25e1b6e5675cad724c63e222e
+2026-09-10 19:11:45,122 INFO [rawprep/输出规划/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.000秒
+2026-09-10 19:11:45,128 INFO [rawprep/张量提交/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.007秒
+2026-09-10 19:11:45,129 INFO [rawprep/样本提交/结果] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；目标=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/00c740296d0d42babce701cf2709a692/data/a3bc068ecedf48b8b2a77994fcf2bca7/train/param1/1dc58be25e1b6e5675cad724c63e222e；文件数=2；状态=已提交
+2026-09-10 19:11:45,129 INFO [rawprep/样本提交/结束] 样本=param1/1dc58be25e1b6e5675cad724c63e222e；耗时=0.008秒
+2026-09-10 19:11:45,129 INFO [rawprep/样本读取/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,129 INFO [rawprep/读取/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；来源=/Users/zonghui/work/datasets/shapenet_car_cfd/mlcfd_data/training_data/param0/100715345ee54d7ae38b52b4ee9d36a3/quadpress_smpl.vtk
+2026-09-10 19:11:45,132 INFO [rawprep/读取/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；点数=3682；单元数=3584
+2026-09-10 19:11:45,132 INFO [rawprep/读取/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.003秒
+2026-09-10 19:11:45,132 INFO [rawprep/读取/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；来源=/Users/zonghui/work/datasets/shapenet_car_cfd/mlcfd_data/training_data/param0/100715345ee54d7ae38b52b4ee9d36a3/hexvelo_smpl.vtk
+2026-09-10 19:11:45,165 INFO [rawprep/读取/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；点数=29498；单元数=26112
+2026-09-10 19:11:45,165 INFO [rawprep/读取/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.033秒
+2026-09-10 19:11:45,165 INFO [rawprep/样本读取/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.036秒
+2026-09-10 19:11:45,165 INFO [rawprep/样本字段提取/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,165 INFO [rawprep/坐标提取/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,165 INFO [rawprep/坐标提取/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(3682, 3)；类型=float32
+2026-09-10 19:11:45,165 INFO [rawprep/坐标提取/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,166 INFO [rawprep/字段提取/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；name=point_scalars；association=point；kind=scalar
+2026-09-10 19:11:45,166 INFO [rawprep/字段提取/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(3682,)；类型=float32
+2026-09-10 19:11:45,166 INFO [rawprep/字段提取/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,166 INFO [rawprep/有效点标记/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；cell_type=9
+2026-09-10 19:11:45,167 INFO [rawprep/有效点标记/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(3682,)；类型=bool
+2026-09-10 19:11:45,167 INFO [rawprep/有效点标记/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.002秒
+2026-09-10 19:11:45,167 INFO [rawprep/坐标提取/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,168 INFO [rawprep/坐标提取/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(29498, 3)；类型=float32
+2026-09-10 19:11:45,168 INFO [rawprep/坐标提取/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,168 INFO [rawprep/字段提取/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；name=point_vectors；association=point；kind=vector
+2026-09-10 19:11:45,168 INFO [rawprep/字段提取/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(29498, 3)；类型=float32
+2026-09-10 19:11:45,168 INFO [rawprep/字段提取/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,168 INFO [rawprep/样本字段提取/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.002秒
+2026-09-10 19:11:45,168 INFO [rawprep/样本几何派生/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,168 INFO [rawprep/坐标提取/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,168 INFO [rawprep/坐标提取/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(3682, 3)；类型=float32
+2026-09-10 19:11:45,168 INFO [rawprep/坐标提取/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,168 INFO [rawprep/坐标提取/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,168 INFO [rawprep/坐标提取/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(29498, 3)；类型=float32
+2026-09-10 19:11:45,168 INFO [rawprep/坐标提取/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,169 INFO [rawprep/点到最近顶点/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；输入0形状=(29498, 3)；输入1形状=(3682, 3)
+2026-09-10 19:11:45,185 INFO [rawprep/点到最近顶点/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.017秒
+2026-09-10 19:11:45,186 INFO [rawprep/表面法向/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,194 INFO [rawprep/表面法向/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.008秒
+2026-09-10 19:11:45,194 INFO [rawprep/重合点标记/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；输入0形状=(29498, 3)；输入1形状=(3682, 3)
+2026-09-10 19:11:45,204 INFO [rawprep/重合点标记/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(29498,)；类型=bool
+2026-09-10 19:11:45,204 INFO [rawprep/重合点标记/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.010秒
+2026-09-10 19:11:45,204 INFO [rawprep/样本几何派生/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.036秒
+2026-09-10 19:11:45,204 INFO [rawprep/样本字段选择/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,204 INFO [rawprep/坐标提取/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,204 INFO [rawprep/坐标提取/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(29498, 3)；类型=float32
+2026-09-10 19:11:45,204 INFO [rawprep/坐标提取/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,204 INFO [rawprep/坐标提取/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,204 INFO [rawprep/坐标提取/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(3682, 3)；类型=float32
+2026-09-10 19:11:45,204 INFO [rawprep/坐标提取/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,204 INFO [rawprep/样本字段选择/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,205 INFO [rawprep/样本字段校验/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,205 INFO [rawprep/字段身份校验/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；sample=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,206 INFO [rawprep/字段身份校验/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.002秒
+2026-09-10 19:11:45,206 INFO [rawprep/样本字段校验/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.002秒
+2026-09-10 19:11:45,206 INFO [rawprep/样本筛选/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,206 INFO [rawprep/记录筛选/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,206 INFO [rawprep/字段身份校验/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,208 INFO [rawprep/字段身份校验/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.002秒
+2026-09-10 19:11:45,209 INFO [rawprep/字段身份校验/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,211 INFO [rawprep/字段身份校验/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.002秒
+2026-09-10 19:11:45,211 INFO [rawprep/记录筛选/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.004秒
+2026-09-10 19:11:45,211 INFO [rawprep/字段身份校验/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；sample=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,212 INFO [rawprep/字段身份校验/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.002秒
+2026-09-10 19:11:45,212 INFO [rawprep/筛选/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；组=surface:point；筛选前=3682；保留=3586；删除=96
+2026-09-10 19:11:45,212 INFO [rawprep/筛选/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；组=volume:point；筛选前=29498；保留=28504；删除=994
+2026-09-10 19:11:45,213 INFO [rawprep/样本筛选/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.006秒
+2026-09-10 19:11:45,213 INFO [rawprep/样本字段校验/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,213 INFO [rawprep/字段身份校验/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；sample=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,214 INFO [rawprep/字段身份校验/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.002秒
+2026-09-10 19:11:45,214 INFO [rawprep/样本字段校验/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.002秒
+2026-09-10 19:11:45,214 INFO [rawprep/样本张量编码/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,214 INFO [rawprep/字段身份校验/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；sample=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,216 INFO [rawprep/字段身份校验/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.002秒
+2026-09-10 19:11:45,216 INFO [rawprep/张量编码/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,216 INFO [rawprep/张量编码/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(3586,)；类型=torch.float32
+2026-09-10 19:11:45,216 INFO [rawprep/张量编码/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,216 INFO [rawprep/张量编码/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,216 INFO [rawprep/张量编码/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(3586, 3)；类型=torch.float32
+2026-09-10 19:11:45,216 INFO [rawprep/张量编码/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,216 INFO [rawprep/张量编码/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,216 INFO [rawprep/张量编码/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(28504, 3)；类型=torch.float32
+2026-09-10 19:11:45,216 INFO [rawprep/张量编码/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,216 INFO [rawprep/张量编码/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,217 INFO [rawprep/张量编码/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(28504, 3)；类型=torch.float32
+2026-09-10 19:11:45,217 INFO [rawprep/张量编码/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,217 INFO [rawprep/张量编码/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,217 INFO [rawprep/张量编码/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(3586, 3)；类型=torch.float32
+2026-09-10 19:11:45,217 INFO [rawprep/张量编码/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,217 INFO [rawprep/张量编码/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,217 INFO [rawprep/张量编码/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(28504, 3)；类型=torch.float32
+2026-09-10 19:11:45,217 INFO [rawprep/张量编码/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,217 INFO [rawprep/张量编码/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,217 INFO [rawprep/张量编码/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；形状=(28504,)；类型=torch.float32
+2026-09-10 19:11:45,217 INFO [rawprep/张量编码/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,217 INFO [rawprep/样本张量编码/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.003秒
+2026-09-10 19:11:45,217 INFO [rawprep/样本提交/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；分片=test
+2026-09-10 19:11:45,217 INFO [rawprep/输出规划/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/00c740296d0d42babce701cf2709a692/data/a3bc068ecedf48b8b2a77994fcf2bca7/test/param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,217 INFO [rawprep/输出规划/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,218 INFO [rawprep/张量提交/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/00c740296d0d42babce701cf2709a692/data/a3bc068ecedf48b8b2a77994fcf2bca7/test/param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,218 INFO [rawprep/输出规划/开始] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/00c740296d0d42babce701cf2709a692/data/a3bc068ecedf48b8b2a77994fcf2bca7/test/param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:11:45,218 INFO [rawprep/输出规划/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.000秒
+2026-09-10 19:11:45,224 INFO [rawprep/张量提交/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.006秒
+2026-09-10 19:11:45,224 INFO [rawprep/样本提交/结果] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；目标=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/00c740296d0d42babce701cf2709a692/data/a3bc068ecedf48b8b2a77994fcf2bca7/test/param0/100715345ee54d7ae38b52b4ee9d36a3；文件数=2；状态=已提交
+2026-09-10 19:11:45,224 INFO [rawprep/样本提交/结束] 样本=param0/100715345ee54d7ae38b52b4ee9d36a3；耗时=0.007秒
+2026-09-10 19:11:45,225 INFO [rawprep/批量前处理/进度] 完成=2；总数=2；失败=0；未执行=0
+2026-09-10 19:11:45,225 INFO [rawprep/批量前处理/结束] 耗时=0.196秒
+2026-09-10 19:11:45,225 INFO [rawprep/统计/开始] 方法=reference；参数来源=/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/ai4e_contrib/application/datasets/shapenet_car/statistics.yaml
+2026-09-10 19:11:45,225 INFO [rawprep/统计参数读取/开始] 来源=/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/ai4e_contrib/application/datasets/shapenet_car/statistics.yaml
+2026-09-10 19:11:45,226 INFO [rawprep/统计参数读取/结束] 耗时=0.001秒
+2026-09-10 19:11:45,226 INFO [rawprep/统计/结束] 耗时=0.001秒
+2026-09-10 19:11:45,226 INFO [rawprep/数据清单/开始] 状态=physical；归一化=未执行
+2026-09-10 19:11:45,226 INFO [rawprep/数据清单/结束] 耗时=0.001秒
+2026-09-10 19:11:45,227 INFO [rawprep/阶段/结束] 耗时=2.141秒
+2026-09-10 19:11:45,227 INFO [运行/结束] 状态=成功；成功=2；失败=0；未执行=0；耗时=2.142秒

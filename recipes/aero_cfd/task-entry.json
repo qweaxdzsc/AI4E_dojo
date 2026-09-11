@@ -52,7 +52,7 @@
           "evaluation_split"
         ],
         "sampling": [
-          "trainprep",
+          "model",
           "sampling"
         ],
         "partition": [
@@ -86,7 +86,7 @@
           "evaluation_split"
         ],
         "sampling": [
-          "trainprep",
+          "model",
           "sampling"
         ],
         "partition": [
@@ -103,5 +103,10 @@
     "checkpoint": [
       "checkpoints/*.pt"
     ]
+  },
+  "components": {
+    "workflow": "ai4e_core.applications.aero_cfd.anchor_workflow",
+    "dataset": "ai4e_contrib.application.datasets.shapenet_car",
+    "model": "ai4e_contrib.ability.model.abupt.component"
   }
 }

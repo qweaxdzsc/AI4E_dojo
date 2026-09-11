@@ -1,6 +1,6 @@
 """项目便携记录类型。"""
 
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 
 class Project(TypedDict):
@@ -10,3 +10,6 @@ class Project(TypedDict):
     name: str
     schema_version: int
     created_at: str
+    updated_at: NotRequired[str]
+    description: NotRequired[str]
+    archived: NotRequired[bool]

@@ -1,0 +1,78 @@
+components:
+  workflow: ai4e_core.applications.aero_cfd.pointfield_workflow
+  dataset: ai4e_contrib.application.datasets.nasa_crm
+  model: ai4e_contrib.ability.model.transolver3.component
+dataset:
+  root: /shared/raw/nasa_crm
+  train_h5: ${dataset.root}/trainingData_NASA-CRM.h5
+  test_h5: ${dataset.root}/testData_NASA-CRM.h5
+  connectivity_h5: ${dataset.root}/connectivity_NASA-CRM.h5
+  chunk_count: 20
+  validation_fraction: 0.2
+  split_seed: 42
+  resume: false
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - post
+data_root: /shared/datasets/nasa_crm_transolver3
+run_root: /shared/runs/nasa_crm_transolver3
+paths:
+  datasets:
+    root: ${data_root}
+    train: ${data_root}/train
+    validation: ${data_root}/validation
+    test: ${data_root}/test
+    predictions: ${data_root}/predictions
+    post: ${data_root}/post
+model:
+  parameters:
+    n_hidden: 256
+    n_layers: 24
+    n_head: 8
+    mlp_ratio: 2
+    slice_num: 64
+    space_dim: 12
+    fun_dim: 0
+    out_dim: 4
+    unified_pos: false
+    gradient_checkpointing: true
+train:
+  max_epochs: 2
+  batch_size: 1
+  num_workers: 0
+  device: auto
+  precision: fp32
+  optimizer: adamw
+  learning_rate: 0.001
+  weight_decay: 0.0
+  betas:
+  - 0.9
+  - 0.999
+  scheduler_unit: epoch
+  min_lr_ratio: 0.01
+  gradient_clip: 1.0
+  evaluation_split: validation
+  validation_interval: 1
+  resume: null
+post:
+  checkpoint: best
+  split: test
+  infer: true
+  evaluate: true
+  export_hdf5: true
+  export_vtk: true
+  all_samples: false
+  samples: null
+  inference_samples: null
+  resume: false
+  overwrite: false
+rawprep: {}
+trainprep:
+  sampling:
+    seed: 2
+    stride: 4
+  normalization:
+    execute: true

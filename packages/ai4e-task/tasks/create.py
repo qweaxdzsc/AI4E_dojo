@@ -18,7 +18,12 @@ from .assets import asset_path, capture_inputs, collect_run_assets, copy_assets
 
 
 def new_task(
-    project, name: str, *, source: str | Path | None = None, idempotency_key: str | None = None
+    project,
+    name: str,
+    *,
+    source: str | Path | None = None,
+    idempotency_key: str | None = None,
+    configuration: dict | None = None,
 ) -> dict:
     """从模板、目录或空目录创建新的根版本。"""
     if source is not None:
@@ -26,7 +31,7 @@ def new_task(
         if not path.is_dir():
             source = fetch(project, "template", str(source))["source"]
         source = Path(source).resolve()
-    return _create(project, name, source=source, key=idempotency_key)
+    return _create(project, name, source=source, key=idempotency_key, configuration=configuration)
 
 
 def fork_task(
@@ -100,6 +105,7 @@ def _create(
     key=None,
     source_kind="template",
     source_run=None,
+    configuration=None,
 ):
     info = open_project(project)
     project = Path(project).resolve()
@@ -112,6 +118,7 @@ def _create(
             "baseline": baseline,
             "kinds": sorted(kinds or []),
             "source_run": source_run,
+            "configuration": configuration,
         }
     )
     identity, version_id = uuid4().hex, uuid4().hex
@@ -133,12 +140,19 @@ def _create(
                 source_snapshot = {}
             materialize(source, stage / "recipe")
             entry = read_entry(stage / "recipe")
+            if configuration is not None:
+                from omegaconf import OmegaConf
+
+                if not entry:
+                    raise ValueError("entry_required_for_configuration")
+                OmegaConf.save(OmegaConf.create(configuration), stage / "recipe" / entry["config"])
             inputs = capture_inputs(
                 stage / "recipe",
                 entry,
                 project=project,
                 inherited=(parent or {}).get("assets", {}),
                 shared=all_records(db, "asset"),
+                allow_unbound=True,
             )
             assets = copy_assets(project, inputs, stage, final, kinds or set())
             copied_outputs = {}

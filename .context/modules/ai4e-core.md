@@ -21,6 +21,11 @@
 
 ## 原子能力目录
 
+- [Ability 五类简表](../../docs/abilities-summary.md)：20 项业务粒度能力；辅助实现随能力合并，模型内部算子不展开。
+
+- [Ability 源码盘点表](../../docs/abilities-inventory.md)：逐实现模块列出当前 core / contrib 入口与边界；不是新的产品功能正文或拖拽节点定义。
+- [合并后的 Ability 清单](../../docs/abilities-merged.md)：v2 提供五阶段主表，明确展开训练更新、优化、恢复、推理、评价和回贴；辅助与嵌套能力分开，原始条目逐项映射。
+
 - `packages/ai4e-core/abilities/`：跨阶段复用的原子能力总入口，不认识具体案例。
 - `packages/ai4e-core/abilities/data/`：source/extract/validate/filter/save/stats 六个业务阶段。
 - `packages/ai4e-core/abilities/data/source/`：原始数据源访问边界。
@@ -225,3 +230,19 @@ post 默认 `post.random_stream=global`，从独立固定种子开始重建与�
 ## 五段配置与快照职责（2026-09-09）
 
 run/session.py 的 config_loader 为通用加载回调；applications/aero_cfd/configuration.py 保留旧路径解析。run/training.py 只幂等确认快照；run/dataset.py 写来源报告、显式转交保存预检 settings。
+
+## 物理数据跨模型实验
+
+abilities/data/source/physical.py 与 data/stats/physical.py：具名物理视图、按单位冻结统计；applications/aero_cfd/workflow.py 与 trainprep/physical.py：共享组装；post/physical.py 与 post/comparison.py：全点预测与跨运行比较；abilities/eval/physical.py、postproc/comparison.py：指标与切割。
+
+状态与圈定测试见 `.context/mvp/cross-model-acceptance.md`。
+
+- `abilities/data/save/zarr.py`：PT 并列的 Zarr 张量编码，复用目录事务。
+- `abilities/transform/minmax.py`：通用冻结 Min-Max，坐标兼容入口共享算术。
+- `abilities/modeling/inspection.py`：真实 TorchVista HTML 原子发布。
+- `abilities/postproc/difference.py`：同身份同单位差值门禁。
+- `applications/aero_cfd/inspection.py`：task 调用的检查公开门面；模型跟踪缺清单时定位 `train.manifest`。
+- `applications/aero_cfd/rawprep/extraction.py`：提取容器到成员路由编译。
+- `.context/mvp/web-algorithm-acceptance.md`、`web-algorithm-results/`：四组合新提取/准备/正式短训/后处理、四份真实模型跟踪与严格差值证据；不替代 HTTP/浏览器验收。
+- `applications/aero_cfd/post/mesh_export.py`：共享物理后处理的真实来源网格回贴，按原身份写 VTP/VTU 并登记 `manifest.meshes`；`test_physical_mesh_export.py` 验证表面/体拓扑和字段身份。
+- `abilities/postproc/coordinate_space.py`：显式坐标空间 id/unit 校验，供公开配置、post、真实网格和差值继承；`test_coordinate_space.py` 覆盖声明拒绝与传播。

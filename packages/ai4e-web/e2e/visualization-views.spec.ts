@@ -1,0 +1,75 @@
+import {test,expect} from '@playwright/test';
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
+/** 真实服务与真实文件的独立查看器测试，不替代全页面视觉验收。 */
+test('真实 VTK 转换、显示及窗口独立状态',async({page,request},testInfo)=>{
+ const api=process.env.DOJO_API_URL||'http://127.0.0.1:8000';
+ const created=await request.post(`${api}/api/v1/projects`,{data:{name:'真实可视化验收 '+Date.now()}});expect(created.ok()).toBeTruthy();
+ const project=(await created.json()).id,root=process.env.DOJO_VIZ_ROOT||'data0',path=process.env.DOJO_VIZ_FILE;
+ if(!path)throw new Error('Set DOJO_VIZ_FILE to a real registered acceptance dataset');
+ const registered=await request.post(`${api}/api/v1/projects/${project}/assets`,{data:{root,path}});expect(registered.ok()).toBeTruthy();const asset=await registered.json();
+ const submitted=await request.post(`${api}/api/v1/projects/${project}/visualization/operations`,{data:{source:asset,operation:'transform',options:{pipeline:[{type:'surface'}]}}});expect(submitted.ok()).toBeTruthy();const canceledId=(await submitted.json()).operation_id;
+ const canceled=await request.post(`${api}/api/v1/projects/${project}/operations/${canceledId}/cancel`);expect(canceled.ok()).toBeTruthy();
+ await new Promise(r=>setTimeout(r,300));const afterCancel=await (await request.get(`${api}/api/v1/projects/${project}/operations/${canceledId}`)).json();expect(afterCancel.status).toBe('canceled');expect(afterCancel.result_refs).toEqual([]);
+ const errors:string[]=[],contentUrls:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(r.url().includes('/content?'))contentUrls.push(r.url());});
+ await page.goto('/projects');
+ await page.evaluate(async(asset)=>{
+  const React=await import('/node_modules/.vite/deps/react.js' as any);
+  const ReactDOM=await import('/node_modules/.vite/deps/react-dom_client.js' as any);
+  const {VisualizationWorkspace}=await import('/src/modules/visualization/index.ts' as any);
+  (window as any).__mountViz=(scene?:any)=>{(window as any).__vizRoot?.unmount();const host=document.createElement('div');host.id='viz-test';document.body.replaceChildren(host);
+  const root=(ReactDOM.createRoot||ReactDOM.default.createRoot)(host);(window as any).__vizRoot=root;root.render((React.createElement||React.default.createElement)(VisualizationWorkspace,{sources:[asset],scene,onSceneChange:(scene:any)=>{(window as any).__savedScene=scene;}}));};(window as any).__mountViz();
+ },asset);
+ await expect(page.getByRole('status')).toHaveCount(0,{timeout:60000});
+ await expect(page.locator('.viz-canvas canvas')).toHaveCount(1);
+ await expect(page.getByLabel('显示字段').locator('option')).not.toHaveCount(1);
+ await page.getByLabel('显示字段').selectOption({index:1});
+ await page.waitForTimeout(500);
+ const png=await page.locator('.viz-canvas').screenshot({path:testInfo.outputPath('real-vtk-field.png')});expect(png.byteLength).toBeGreaterThan(5000);await testInfo.attach('真实VTK字段渲染',{body:png,contentType:'image/png'});
+ // 真正触发 WebGL 丢失/恢复，确认重建后仍可显示并保留字段。
+ const fieldBeforeLoss=await page.getByLabel('显示字段').inputValue();
+ await page.locator('.viz-canvas canvas').evaluate((canvas:any)=>{const gl=canvas.getContext('webgl2')||canvas.getContext('webgl');const extension=gl?.getExtension('WEBGL_lose_context');if(!extension)throw new Error('浏览器缺少 WEBGL_lose_context');(window as any).__restoreContext=()=>extension.restoreContext();extension.loseContext();});
+ await expect(page.locator('.viz-canvas')).toHaveAttribute('data-context-state','lost');await page.evaluate(()=>(window as any).__restoreContext());await expect(page.locator('.viz-canvas')).toHaveAttribute('data-context-state','ready');await expect(page.locator('.viz-canvas canvas')).toHaveCount(1);await expect(page.getByLabel('显示字段')).toHaveValue(fieldBeforeLoss);
+ // 唯一整合原型的实际 CSS 作为尺寸基准；无脚本 iframe 不执行原型模拟逻辑。
+ const referenceHtml=readFileSync(resolve('../../docs/prototypes/dojo-web-integrated.html'),'utf8');const referenceLine=referenceHtml.split('\n').find(line=>line.startsWith('const stageDocuments='))!;const reference=JSON.parse(referenceLine.slice('const stageDocuments='.length,-1))['6'];
+ const dimensions=await page.evaluate(async html=>{const workspace=document.querySelector('.viz-workspace')!;const actual=getComputedStyle(workspace);const frame=document.createElement('iframe');frame.setAttribute('sandbox','allow-same-origin');frame.style.cssText='position:absolute;left:-10000px;width:'+innerWidth+'px;height:1000px';document.body.append(frame);await new Promise<void>(resolve=>{frame.onload=()=>resolve();frame.srcdoc=html.replace(/<script[\s\S]*?<\/script>/gi,'');});const ref=frame.contentDocument!.querySelector('.post-body') as HTMLElement;ref.style.width=workspace.getBoundingClientRect().width+'px';const expected=frame.contentWindow!.getComputedStyle(ref);const result={actual:{columns:actual.gridTemplateColumns.split(' ').slice(0,2),gap:actual.gap,padding:actual.padding},expected:{columns:expected.gridTemplateColumns.split(' ').slice(0,2),gap:expected.gap,padding:expected.padding}};frame.remove();return result;},reference);expect(dimensions.actual).toEqual(dimensions.expected);
+ await expect(page.getByLabel('相机联动',{exact:true})).not.toBeChecked();
+ await page.getByRole('button',{name:'添加窗口'}).click();
+ await expect(page.locator('.viz-canvas canvas')).toHaveCount(2);
+ await page.getByRole('button',{name:'添加窗口'}).click();await page.getByRole('button',{name:'添加窗口'}).click();await expect(page.locator('.viz-canvas canvas')).toHaveCount(4);await expect(page.getByRole('button',{name:'添加窗口'})).toBeDisabled();
+ await page.locator('.viz-grid section').nth(3).click();await page.getByRole('button',{name:'关闭窗口'}).click();await page.locator('.viz-grid section').nth(2).click();await page.getByRole('button',{name:'关闭窗口'}).click();await expect(page.locator('.viz-canvas canvas')).toHaveCount(2);
+ await page.locator('.viz-grid section').nth(1).click();
+ await page.getByLabel('表示方式').selectOption('wireframe');
+ await page.locator('.viz-grid section').first().click();
+ await expect(page.getByLabel('表示方式')).toHaveValue('surface');
+ await page.getByLabel('相机联动',{exact:true}).check();
+ await page.getByRole('button',{name:'保存场景'}).click();
+ const before=await page.evaluate(()=>(window as any).__savedScene.viewports[0].camera);
+ const box=await page.locator('.viz-canvas').first().boundingBox();if(!box)throw new Error('missing canvas');
+ await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();await page.mouse.move(box.x+box.width/2+45,box.y+box.height/2+20,{steps:5});await page.mouse.up();
+ await page.getByRole('button',{name:'保存场景'}).click();
+ const moved=await page.evaluate(()=>(window as any).__savedScene.viewports);
+ expect(moved[0].camera.position).not.toEqual(before.position);expect(moved[0].camera.position).toEqual(moved[1].camera.position);await expect(page.locator('.viz-canvas').first()).toHaveAttribute('data-camera-position',JSON.stringify(moved[0].camera.position));await expect(page.locator('.viz-canvas').nth(1)).toHaveAttribute('data-camera-position',JSON.stringify(moved[0].camera.position));
+ await page.getByRole('button',{name:'关闭窗口'}).click();
+ await expect(page.locator('.viz-canvas canvas')).toHaveCount(1);
+ await page.getByLabel('显示字段').selectOption({index:1});
+ await page.getByLabel('过滤器类型').selectOption('threshold');
+ await page.getByLabel('值／下限').fill('-1000000');
+ await page.getByLabel('上限',{exact:true}).fill('1000000');
+ await page.getByRole('button',{name:'应用',exact:true}).click();
+ await expect(page.getByRole('status')).toHaveCount(0,{timeout:60000});
+ await expect(page.getByRole('button',{name:'删除分支'})).toHaveCount(1);
+ await page.getByRole('button',{name:'保存场景'}).click();
+ const saved=await page.evaluate(()=>(window as any).__savedScene);expect(saved.pipeline_nodes[0].type).toBe('threshold');expect(saved.pipeline_nodes[0].id).toBeTruthy();expect(saved.selected_node).toBe(saved.pipeline_nodes[0].id);
+ const stored=await request.post(`${api}/api/v1/projects/${project}/scenes`,{data:{scene:saved}});expect(stored.ok(),await stored.text()).toBeTruthy();const identity=(await stored.json()).scene_id;const recovered=await (await request.get(`${api}/api/v1/projects/${project}/scenes/${identity}`)).json();expect(recovered.scene.selected_node).toBe(saved.selected_node);
+ await page.evaluate(scene=>(window as any).__mountViz(scene),recovered.scene);
+ await expect(page.getByRole('status')).toHaveCount(0,{timeout:60000});await expect(page.locator('.viz-canvas canvas')).toHaveCount(1);await expect(page.getByRole('button',{name:'删除分支'})).toHaveCount(1);
+ await page.getByRole('button',{name:'保存场景'}).click();const restored=await page.evaluate(()=>(window as any).__savedScene);expect(restored.selected_node).toBe(saved.selected_node);expect(restored.viewports[0].field).toBe(saved.viewports[0].field);// VTK camera normalization can round the restored floating point pose.
+ saved.viewports[0].camera.position.forEach((v:number,i:number)=>expect(restored.viewports[0].camera.position[i]).toBeCloseTo(v,10));const rendered=JSON.parse((await page.locator('.viz-canvas').getAttribute('data-camera-position'))!);saved.viewports[0].camera.position.forEach((v:number,i:number)=>expect(rendered[i]).toBeCloseTo(v,10));
+ await page.evaluate(()=>(window as any).__vizRoot.unmount());
+ const cache=await page.evaluate(async()=>{const module=await import('/src/infrastructure/assets/binary.ts' as any);return module.bufferCacheStats();});expect(cache.entries).toBe(0);expect(cache.references).toBe(0);
+ expect(contentUrls.length).toBeGreaterThan(0);expect(contentUrls.every(url=>new URL(url).searchParams.get('revision'))).toBeTruthy();
+ const member=await page.evaluate(async()=>{const api=await import('/src/modules/visualization/api.ts' as any);return api.previewOptions({member:'pressure'},{});});expect(member.field).toBe('pressure');
+ const contracts=await page.evaluate(async()=>{const model=await import('/src/modules/visualization/model.ts' as any);const binary=await import('/src/infrastructure/assets/binary.ts' as any);const nodes=[{id:'a',input:null},{id:'b',input:'a'},{id:'c',input:'a'}];const bytes=new ArrayBuffer(8);new DataView(bytes).setFloat64(0,1.5,false);const decoded=await binary.decodeBuffer(bytes,{dtype:'float64',shape:[1],byte_length:8,byte_order:'big'});return {chain:model.pipelineChain(nodes,'c').map((n:any)=>n.id),remaining:model.removePipelineBranch(nodes,'b').map((n:any)=>n.id),value:decoded[0]};});expect(contracts).toEqual({chain:['a','c'],remaining:['a','c'],value:1.5});
+ expect(errors).toEqual([]);
+});

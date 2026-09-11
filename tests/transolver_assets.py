@@ -41,7 +41,7 @@ def write_source(path: Path, sample_count: int, point_count: int, *, offset: flo
 def configuration(tmp_path):
     """生成完整 schema 的小数据和真实网络小配置用于快速契约测试。"""
     root = Path(__file__).resolve().parents[1]
-    cfg = yaml.safe_load((root / "examples/aero_cfd/nasa_crm_transolver3/config.yaml").read_text())
+    cfg = yaml.safe_load((root / "tests/fixtures/transolver3/reference-example.yaml").read_text())
     raw = tmp_path / "raw"
     raw.mkdir(parents=True)
     train, test = raw / "training.h5", raw / "test.h5"

@@ -1,19 +1,41 @@
 # AI4E_Dojo 仓库结构索引
 
+整合平台已通过圈定验收：稳定传输 `packages/ai4e-spec/artifacts/platform.py`，自动 TypeScript 生成入口 `packages/ai4e-web/scripts/generate-platform-contracts.py`；四组合真实短训、最终18项浏览器与范围限制见 `mvp/web-integrated-acceptance.md`。旧首期记录保留，不能当作新功能验收。
+
+首页入口纠正：`ai4e-web` 增加真实 `WorkbenchLandingPage` 和原型装饰封面 `public/project-covers/`，恢复项目卡与进入操作；首页真实点击及双视口对照在 `e2e/home-entry.spec.ts`，修复后21项前端回归及截图见 `mvp/web-integrated-results/homepage-correction/`。原18项阶段验收不能替代首页验收。
+
+任务创建与绑定修正：任务弹窗只填写名称、案例和描述，选项展示数据集与模型；ShapeNet目录/NASA跨根文件在原始处理页绑定。实现索引见Web/Server模块，测试为`test_web_dataset_binding.py`、`test_web_binding_real.py`和`e2e/task-dataset-binding.spec.ts`，证据位于`mvp/web-integrated-results/task-binding-correction/`。
+
+整合交互原型：`docs/prototypes/dojo-web-integrated.html`。沿用旧平台框架，内嵌第 2–7 步独立页面；项目页与第 1、8 步保留。单文件离线可打开，阶段配置按任务保留于当前会话，刷新重置；无真实计算或后端交接。验收：`tests/integration/web_integrated_browser.cjs`。
+
+- `docs/ai4s-framework-comparison.md`：六框架能力、优势、证据边界及案例驱动演进参考；以新增科研案例推动框架改进，不是架构实施计划。`tests/integration/test_framework_comparison_document.py` 检查文档导航与仓内来源链接。
+
+- `docs/prototypes/dojo-post-detail.html`：后处理独立原型，本轮仅结果可视化 Tab；文件树、场景资产、属性与多窗口。汽车云图为用户参考图内嵌裁片，未接入真实渲染；指标／图表等待 UI。测试为 `tests/integration/post_detail_browser.cjs`。
+
+- `docs/prototypes/dojo-run-detail.html`：训练运行独立原型，摘要、合成曲线、指标表、日志与快捷操作。不提供暂停，停止后从检查点继续；全部数据为示例。`tests/integration/run_detail_browser.cjs` 验证对应 UI 交互。
+
+- `docs/prototypes/dojo-training-detail.html`：训练设置独立原型，优化器／训练控制／EMA／诊断／测试评估配置；测试执行阶段待用户确认。`tests/integration/training_detail_browser.cjs` 检查增删、开关、预检和会话保存。
+
+- `docs/prototypes/dojo-model-detail.html`：模型设置独立原型，左侧模型参数、输入输出、学习目标与权重加载，右侧 TorchVista 展示示意；优化器已归训练设置。`tests/integration/model_detail_browser.cjs` 覆盖相关 UI 与图形导出。
+
+- `docs/prototypes/dojo-trainprep-detail.html`：按数据准备 UI 参考图制作的独立布局初稿，保留现有工作台外壳；统计来源与采样生效阶段待用户确认。`tests/integration/trainprep_detail_browser.cjs` 检查字段编辑、资源选择、预览和示意执行。
+
+- `docs/yaml-config-comparison.md`：Noether、PaddleScience、MindScience、PhysicsNeMo、Anemoi 的案例配置比较及 Dojo 讨论建议；静态源码范围与来源链接见文内。
+
 - `docs/prototypes/dojo-rawprep-detail.html`：原始数据处理独立细节原型；已落盘文件统一浏览、字段选择与输出计划、文本／张量／三维弹窗。`tests/integration/rawprep_detail_browser.cjs` 检查对应交互。
 
 ## Web 平台设计入口（DRAFT，2026-09-09）
 
 - 原型 v3 按用户四张 `docs/prototypes/*.png` UI 参考图调整，并映射实际 aero_cfd application/recipe。参考素材与能力来源见 web 模块索引；仅 UI 示意。
 
-- `docs/prototypes/dojo-web-wireframe.html`（左侧仅两个一级入口，项目六 Tab 位于主视区）：独立离线 HTML 交互线框，示意页面布局和跳转；未初始化正式 Web 工程。
+- `docs/prototypes/dojo-web-wireframe.html`（左侧仅两个一级入口，项目六 Tab 位于主视区）：独立离线 HTML 历史线框，示意布局；本轮唯一 UI 基准为整合原型。
 - `tests/integration/web_wireframe_browser.cjs`：本地 Playwright 浏览器交互检查，覆盖版本比较、报告、文件预览、批量派生和工作台；复用外部测试运行时，不新增平台依赖。
 
 - [Dojo WEB 平台产品设计](../docs/PRD/ai4e-web/src/PRD.md)：项目管理六个 Tab、八步工作台、跨版本比较与批量派生的待评审产品正文；不代表源码已实现。
 - [Web / Server 架构 v2](<../docs/AI4E_Dojo_ARCHITECTURE (1).md#19-dojo-web--server-架构草案-v2>)：唯一架构正文第 19 节，定义 task/server/web 职责、版本与运行契约及目标目录。
 - `tests/integration/test_web_design_documents.py`：产品与架构设计稿本地链接、章节和来源引用的相关文档检查。
 
-server/web 模块索引登记设计入口；server/web 仍为 PLANNED，task 本地实施见 task 模块索引，未来模块目录以架构稿为提案，不作为已存在目录树。
+server/web 已有首期代码，本轮整合平台扩展正在实施；当前包内入口见模块索引，规划与已验证能力以专项验收区分。
 
 当前端到端验收（2026-09-09）：默认 recipe 为 rawprep → trainprep → train → post。冻结变换组合、点场整理与分块查询归 abilities；aero_cfd application 负责业务绑定。独立 post 默认从配置种子沿 global 流采样，隔离锚点/网格两路；兼容张量包、点云与表面原始身份已对齐。实跑规模、数值证据及范围见 `.context/mvp/abupt-end-to-end-acceptance.md`。
 
@@ -44,7 +66,7 @@ server/web 模块索引登记设计入口；server/web 仍为 PLANNED，task 本
 ```text
 AI4E_Dojo/
 ├── AGENTS.md                 # LLM 工作入口、依赖边界、索引维护与修改验收纪律
-├── README.md                 # 面向使用者的项目概览与当前状态
+├── README.md                 # 使用者运行说明 + 开发者仓库入口；细则仍在 AGENTS/.context
 ├── pyproject.toml            # uv workspace 与开发依赖
 ├── .context/                 # 面向 LLM 的仓库与模块级检索索引
 │   ├── index.md              # 本文件：全仓目录结构入口
@@ -74,9 +96,9 @@ AI4E_Dojo/
 │   │   ├── applications/aero_cfd/train/     # 训练装配、默认展开、监控、检查点和轮次恢复
 │   │   └── run/                             # 开车、最终生效配置、源码快照、运行日志与唯一写入
 │   ├── ai4e-task/            # 六类功能模块：项目、任务版本、资产、CLI 与本地执行
-│   ├── ai4e-viz/             # 稳定 artifact 的可视表达（PLANNED）
-│   ├── ai4e-server/          # 协作与稳定服务 API 占位
-│   ├── ai4e-web/             # Web 交互层占位
+│   ├── ai4e-viz/             # 稳定 artifact 的静态图像与离线报告
+│   ├── ai4e-server/          # 本机项目/任务/文件/处理/报告 API
+│   ├── ai4e-web/             # 正式 React 微领域 Web 工程
 │   └── ai4e-contrib/         # 可安装的共享数据集适配
 ├── recipes/                  # 可复制的 config/datapre/trainprep/train/post/pipeline/README，无包安装
 ├── docs/                     # 使用文档、权威架构、ADR 和 PRD
@@ -113,13 +135,18 @@ AI4E_Dojo/
 
 ## 正式包导航
 
+- [Ability 五类简表](../docs/abilities-summary.md)：按 rawprep/trainprep/train/model/post 汇总 20 项业务能力，作为优先阅读入口；详细合并与源码表保留对照。检查复用 `tests/integration/test_ability_merged_document.py`。
+
+- [当前 Ability 源码清单](../docs/abilities-inventory.md)：core / contrib 能力表、公开入口与实现边界，供工作流粒度讨论；文档检查为 `tests/integration/test_ability_inventory_document.py`。
+- [合并后的 Ability 清单](../docs/abilities-merged.md)：v2 按 rawprep/trainprep/model/train/post 展开操作、策略与嵌套计算单元，保留原始 89 项及 O/P 大组对照；仅讨论稿，不改变公开 API。文档检查为 `tests/integration/test_ability_merged_document.py`。
+
 - [`ai4e-spec`](modules/ai4e-spec.md)：`packages/ai4e-spec/` 的目录、文档、契约职责与依赖。
 - [`ai4e-core`](modules/ai4e-core.md)：`packages/ai4e-core/` 的 base、abilities、applications、run 和 tools 目录索引。
 - [`recipes`](modules/recipes.md)：`recipes/` 的普通脚本模板与运行入口。
 - [`ai4e-task`](modules/ai4e-task.md)：`packages/ai4e-task/` 的六类代码目录与本地验收入口。
 - [`ai4e-viz`](modules/ai4e-viz.md)：`packages/ai4e-viz/` 的 render 和 compose 位置。
-- [`ai4e-server`](modules/ai4e-server.md)：服务层占位、允许依赖和文档入口。
-- [`ai4e-web`](modules/ai4e-web.md)：Web 层占位、边界和文档入口。
+- [`ai4e-server`](modules/ai4e-server.md)：本机服务模块、配置映射和文档入口。
+- [`ai4e-web`](modules/ai4e-web.md)：正式 Web 工程、边界和文档入口。
 - [`ai4e-contrib`](modules/ai4e-contrib.md)：贡献数据集与完整模型、许可和文档入口。
 
 ## 跨模块入口
@@ -209,7 +236,7 @@ recipes      task        viz
 
 ## aero_cfd 双模型接入
 
-- `examples/aero_cfd/`：汽车与 NASA 两个配置案例，共享 `recipes/aero_cfd` 阶段入口。
+- `examples/aero_cfd/`：汽车与 NASA 五个独立配置案例，共享 `recipes/aero_cfd` 阶段入口。
 - `tools/verification/transolver3/`：只读参考运行、实际批次追踪、训练/缓存/全量输出逐元素比较、正式硬件探测。
 - [Transolver 验收记录](mvp/transolver3-acceptance.md)：功能叶子、100 项映射、正式规模对标及配置兼容未决项。
 - `mvp/transolver3-results/`：baseline/coverage 为来源锁定及 100 项映射；provenance 与冻结 YAML/JSON 保存实际配置定位；formal-* 和 full-* 为数值结果；XML 与 delivery-checks/delivered-source 为圈定验收及当前代码摘要。完整数据和权重在独立运行目录。
@@ -217,3 +244,32 @@ recipes      task        viz
 ## 五段配置与快照职责（2026-09-09）
 
 mvp/config-regroup-acceptance.md 与 mvp/config-regroup-results/ 为五段配置、快照与真实复制案例验收；tools/verification/recipe_config.py 仅供对照入口读取案例参数。
+
+## 物理数据跨模型实验
+
+- `.context/mvp/cross-model-acceptance.md`：五组独立实验、完整点场与图表验收状态。
+- `tools/verification/cross_model/`：顺序训练、固定名单评价及两份比较报告入口。
+- `packages/ai4e-viz/`：静态渲染包，源码及 PRD 见 viz 模块索引。
+- 新增物理视图和共享工作流位置见 core/contrib/spec 模块索引。
+
+- `docs/aero-cfd-server-runbook.md`：五案例服务器50轮操作、数据迁移、报告结构与交付门禁。
+
+- `mvp/cross-model-50-acceptance.md`：五案例50轮本地实验运行状态与显式预算验收入口。
+
+## Web / Server 首期接入
+
+- `.context/mvp/web-rawprep-acceptance.md`：页面到现有案例的真实样本验收、保护范围、已知限制。
+- `docs/adr/0004-web-server-runtime.md`、`docs/adr/0005-preview-worker.md`：本机栈与预览工作进程。
+- `tests/integration/test_web_*.py`、`test_viz_file_preview.py`、`test_task_configuration.py`：平台、配置、文件及任务回归。
+- `packages/ai4e-web/e2e/rawprep.spec.ts`：真实页面到文件结果、报告和预览。
+
+- `mvp/web-rawprep-results/`：browser-handoff.json 为实际浏览器运行和原数据准备数值证据，backend.xml 为 48 项圈定验收，mesh.png/workbench.png 为实际界面截图。
+
+本机训练持久目录约定见 AGENTS.md 与 recipes 模块索引：后续 Dojo 实验及相关缓存写入 `/Users/zonghui/work/project_simulation/dojo_train/`，不再新建到 tmp。
+
+## 整合平台并行验收
+
+- `mvp/web-integrated-acceptance.md`、`mvp/web-integrated-results/`：主 Agent 独立 HTTP 四组合、数值交接和总验收。
+- `mvp/web-algorithm-acceptance.md`、`mvp/web-algorithm-results/`：数据、模型、归一化、采样与真实计算子计划。
+- `mvp/web-visualization-acceptance.md`、`mvp/web-visualization-results/`：VTK、真实浏览器、多窗口、联动与资源子计划。
+- `tests/integration/test_web_integrated_pipeline.py`：HTTP 阶段提交、固定产物、真实预览对照及契约生成。

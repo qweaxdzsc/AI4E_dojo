@@ -89,40 +89,6 @@ trainprep:
       query_targets: false
   conditioning: {}
   geometry_conditioning: {}
-  sampling:
-    random_stream: global
-    pipeline_seed: null
-    seed: 42
-    train_randomness: per_epoch
-    evaluation_randomness: fixed
-    geometry:
-      method: uniform
-      max_points: 3586
-      replacement: false
-      keep_order_when_all: true
-    supernodes:
-      method: uniform
-      num_points: 512
-      insufficient: error
-    domains:
-      surface:
-        anchor:
-          method: uniform
-          num_points: 256
-          insufficient: error
-        query:
-          method: uniform
-          num_points: 0
-          insufficient: error
-      volume:
-        anchor:
-          method: uniform
-          num_points: 256
-          insufficient: error
-        query:
-          method: uniform
-          num_points: 0
-          insufficient: error
   normalization:
     execute: true
     fields:
@@ -183,6 +149,40 @@ model:
     normalization: volume_velocity
     weight: 1.0
     loss: mse
+  sampling:
+    random_stream: global
+    pipeline_seed: null
+    seed: 42
+    train_randomness: per_epoch
+    evaluation_randomness: fixed
+    geometry:
+      method: uniform
+      max_points: 3586
+      replacement: false
+      keep_order_when_all: true
+    supernodes:
+      method: uniform
+      num_points: 512
+      insufficient: error
+    domains:
+      surface:
+        anchor:
+          method: uniform
+          num_points: 256
+          insufficient: error
+        query:
+          method: uniform
+          num_points: 0
+          insufficient: error
+      volume:
+        anchor:
+          method: uniform
+          num_points: 256
+          insufficient: error
+        query:
+          method: uniform
+          num_points: 0
+          insufficient: error
 train:
   mode: fit
   max_epochs: 2
@@ -222,3 +222,7 @@ post:
   - 0
   query_chunk_size: 16384
   overwrite: false
+components:
+  workflow: ai4e_core.applications.aero_cfd.anchor_workflow
+  dataset: ai4e_contrib.application.datasets.shapenet_car
+  model: ai4e_contrib.ability.model.abupt.component

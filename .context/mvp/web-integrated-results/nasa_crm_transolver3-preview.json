@@ -1,0 +1,27 @@
+{
+  "case": "nasa_crm_transolver3",
+  "prediction": {
+    "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+    "asset_id": "927b0fd24d769a7b2f16ce92e69eb4e72c8e48a85e829186bdb8523052a3b3fb",
+    "revision": "661b62dc16eb3109343d7dc43a524168520c18c61247ff181c34bfaf8fbbca54",
+    "task_id": "34536dbd953c42c29721c3d6eabe3685"
+  },
+  "prediction_shape": [
+    454404,
+    3
+  ],
+  "mesh": {
+    "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+    "asset_id": "95631f98f49ce158d65a228ef84e942007a0235a7cea0321457176eb21100ef7",
+    "revision": "c8ad49e2b86be74dd9c546d685f5eccab269464f5592ac1d97e715e6adbb913d",
+    "task_id": "34536dbd953c42c29721c3d6eabe3685"
+  },
+  "display": {
+    "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+    "asset_id": "e18345dad2534f16bc8452c12f48359c",
+    "revision": "7d0efecd247ec8a0f2e27b573ce756ca8b26d2d5b7a04c5cc6e8132b6bab4495"
+  },
+  "points": 454404,
+  "tensor_values_equal": true,
+  "mesh_coordinates_equal": true
+}

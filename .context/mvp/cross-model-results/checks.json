@@ -1,0 +1,24 @@
+{
+  "scoped": {
+    "passed": 163,
+    "skipped": 2,
+    "evidence": "scoped-tests.xml"
+  },
+  "mps_rerun": {
+    "passed": 2,
+    "skipped": 0,
+    "evidence": "mps-regression.xml"
+  },
+  "final_contracts": {
+    "passed": 9,
+    "evidence": "final-contracts.xml"
+  },
+  "final_delivery": {
+    "passed": 11,
+    "evidence": "final-delivery.xml"
+  },
+  "ruff_check": "passed",
+  "ruff_format_check": "41 files passed",
+  "dependency_boundary": "passed",
+  "mypy": "not run: absent from offline cache"
+}

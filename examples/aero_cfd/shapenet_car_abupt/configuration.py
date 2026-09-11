@@ -9,7 +9,17 @@ from ai4e_contrib.application.aero_cfd import load, resolve_config
 from ai4e_core.applications.aero_cfd.configuration import resolve_paths
 from ai4e_core.base.config import load_config
 
-RAW_KEYS = ("sources", "fields", "geometry", "save_fields", "filters", "statistics", "vtkhdf")
+RAW_KEYS = (
+    "sources",
+    "fields",
+    "geometry",
+    "save_fields",
+    "filters",
+    "statistics",
+    "vtkhdf",
+    "extraction",
+    "format",
+)
 SHARED_KEYS = ("sampling", "normalization")
 STAGES = ("rawprep", "trainprep", "train", "post")
 
@@ -42,12 +52,17 @@ def application_parameters(config) -> dict:
     if unknown:
         raise ValueError(f"未知 rawprep 配置: {sorted(unknown)}")
     cfg.update(raw)
+    if "sampling" in cfg["model"] and "sampling" in cfg["trainprep"]:
+        raise ValueError("model.sampling 与旧 trainprep.sampling 不能同时存在")
+    if "sampling" in cfg["model"]:
+        cfg["trainprep"]["sampling"] = cfg["model"].pop("sampling")
     for key in SHARED_KEYS:
         value = cfg["trainprep"].pop(key, None)
-        if key == "normalization" and value is None:
+        if value is None:
             value = {}
         if not isinstance(value, dict):
-            raise TypeError(f"trainprep.{key} 必须为配置映射")
+            target = "model.sampling" if key == "sampling" else "trainprep.normalization"
+            raise TypeError(f"{target} 必须为配置映射")
         cfg[key] = value
     return deepcopy(cfg)
 
@@ -58,7 +73,8 @@ def _public(config: dict) -> dict:
     prep = cfg.setdefault("trainprep", {})
     for key in SHARED_KEYS:
         if key in cfg:
-            prep[key] = cfg.pop(key)
+            target = cfg.setdefault("model", {}) if key == "sampling" else prep
+            target[key] = cfg.pop(key)
     return cfg
 
 

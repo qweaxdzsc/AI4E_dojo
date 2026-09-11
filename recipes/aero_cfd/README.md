@@ -106,3 +106,11 @@ configuration.py 读取五段配置，合并覆盖、展开组件默认值并解
 run.launch 的 config_loader 接收案例加载函数；run 在执行前保存一份五段 inputs/config.yaml。运行中参数副本不回写快照，检查点 effective_config 与快照一致。实际来源与分片保存在 summary.reports.dataset；准备引用、检查点、实际设备与推理随机协议保存在已有报告及产物，不要求用户预填。
 
 仅测试分片时 rawprep.statistics.mode 可选 reference/none。保存预检通过显式 settings 接收案例提取的统计策略，不从五段快照猜字段。补跑继续使用原检查点和覆盖保护，不新增版本门禁。
+
+## 物理 PT 跨模型实验
+
+五个独立配置见 `examples/aero_cfd`。统一工作流由 `components.workflow: ai4e_core.applications.aero_cfd.workflow` 选择；在该工作流中切换 `components.model` 和对应的字段绑定、模型参数即可更换实验。已准备物理数据时配置 `train.manifest`，从 trainprep 开始；原始数据可独立执行 rawprep。NASA 的物理 PT 和参考 NPY 两条路径均保留。
+
+每个 example 一个模型实例。训练准备在 artifacts 中冻结，独立 train 用 `train.preparation`，独立 post 用 `post.checkpoint` 指定最后权重；默认使用相邻运行目录的冻结准备。比较入口在 `tools/verification/cross_model`，报告写独立输出目录，不增加 recipe。
+
+平台配置新增：采样统一放在 `model.sampling`；旧 `trainprep.sampling` 单键仍可读取，但不能同时填写。阶段 `rawprep.format` 选择 `pt` 或 `zarr`，两者直接进入清单读盘；字段输出容器使用 `rawprep.extraction`，成员不要求同形状。

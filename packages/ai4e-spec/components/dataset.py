@@ -19,3 +19,11 @@ class DatasetView(Protocol):
     def content_digest(self) -> str:
         """按稳定次序计算本次消费的数据内容身份。"""
         ...
+
+
+class PhysicalDatasetComponent(Protocol):
+    """物理数据组件的公开入口，不要求依赖具体 PT 文件映射。"""
+
+    def open_physical(self, config: dict) -> DatasetView:
+        """返回具名域、点字段、独立样本条件、身份及拓扑引用的物理视图。"""
+        ...

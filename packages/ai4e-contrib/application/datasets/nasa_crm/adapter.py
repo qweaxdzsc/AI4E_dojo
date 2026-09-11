@@ -92,6 +92,22 @@ class RawDataset:
             "validation": sorted(shuffled[:count]),
             "test": self.sources["test"]["sample_ids"],
         }
+        selected = settings.get("samples", "all")
+        if selected != "all":
+            if not isinstance(selected, dict) or set(selected) - set(self.partitions):
+                raise ValueError("NASA 样本选择须为分片到样本名单映射")
+            partitions = {}
+            for partition, names in selected.items():
+                if (
+                    not isinstance(names, (list, tuple))
+                    or len(names) != len(set(names))
+                    or set(names) - set(self.partitions[partition])
+                ):
+                    raise ValueError(f"NASA 样本选择为空、重复或不属于分片: {partition}")
+                partitions[partition] = list(names)
+            if not any(partitions.values()):
+                raise ValueError("NASA 样本选择为空")
+            self.partitions = partitions
         self.point_count = self.sources["training"]["point_count"]
         self.chunk_count = int(settings.get("chunk_count", 20))
         if self.chunk_count < 1 or self.chunk_count > self.point_count:

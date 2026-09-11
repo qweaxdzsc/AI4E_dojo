@@ -16,6 +16,8 @@ dependencies = [
     "pyyaml>=6.0",
     "torch>=2.4",
     "vtk>=9.3",
+    "zarr>=3.1,<4",
+    "torchvista>=0.2.12,<0.3",
 ]
 
 [tool.uv.sources]

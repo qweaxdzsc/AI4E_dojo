@@ -1,0 +1,114 @@
+[
+  {
+    "case": "shapenet_car_abupt",
+    "runs": [
+      {
+        "stage": "rawprep",
+        "id": "78393ab143ae42e1a07c712210d0e4fc",
+        "status": "succeeded"
+      },
+      {
+        "stage": "trainprep",
+        "id": "570f893b92014d9094942a1b468d9d1d",
+        "status": "succeeded"
+      },
+      {
+        "stage": "train",
+        "id": "0e1423ec6b5f4647b616d14aa786e816",
+        "status": "succeeded"
+      },
+      {
+        "stage": "post",
+        "id": "4d175b5c57874fe09f04469150f62a84",
+        "status": "succeeded"
+      }
+    ],
+    "configuration_revision": "7bdeb0c05064b843cc8164e3ab9e2437b52c52d9adfe82943f67a66869862377",
+    "scenes_restored": 0,
+    "fixed_prediction_and_mesh_downloadable": true
+  },
+  {
+    "case": "shapenet_car_transolver3_surface",
+    "runs": [
+      {
+        "stage": "rawprep",
+        "id": "a3bc068ecedf48b8b2a77994fcf2bca7",
+        "status": "succeeded"
+      },
+      {
+        "stage": "trainprep",
+        "id": "bea7f0d911154e77b85ff5c9866aa16f",
+        "status": "succeeded"
+      },
+      {
+        "stage": "train",
+        "id": "ff9e0ff2a6ad446dae1539a645926600",
+        "status": "succeeded"
+      },
+      {
+        "stage": "post",
+        "id": "5f07fc3030c14832befc4b516a28b8e3",
+        "status": "succeeded"
+      }
+    ],
+    "configuration_revision": "9a9edc9d7b8b35de51c315366a15a8c72d181b8e982013a1703dd032f831cf2b",
+    "scenes_restored": 0,
+    "fixed_prediction_and_mesh_downloadable": true
+  },
+  {
+    "case": "nasa_crm_abupt",
+    "runs": [
+      {
+        "stage": "rawprep",
+        "id": "ce1125fbed5e494db886b176fc940baa",
+        "status": "succeeded"
+      },
+      {
+        "stage": "trainprep",
+        "id": "7eaf4326a53341f79bbbd994ed858d4a",
+        "status": "succeeded"
+      },
+      {
+        "stage": "train",
+        "id": "b99abe138c9e480ea9670a2ba77ebcb0",
+        "status": "succeeded"
+      },
+      {
+        "stage": "post",
+        "id": "f6d77c91b0604df0a4af8bed4ba4eec6",
+        "status": "succeeded"
+      }
+    ],
+    "configuration_revision": "58368d3edd9c7a4a0e49fc6255f3c981b1c5b3a8c0b0401a2eca9a0cb2288450",
+    "scenes_restored": 0,
+    "fixed_prediction_and_mesh_downloadable": true
+  },
+  {
+    "case": "nasa_crm_transolver3",
+    "runs": [
+      {
+        "stage": "rawprep",
+        "id": "7c8ec2f9d37f480b9a0d368fe0d9889e",
+        "status": "succeeded"
+      },
+      {
+        "stage": "trainprep",
+        "id": "db03b4b6a77c4e1899f77cee62ca2dd8",
+        "status": "succeeded"
+      },
+      {
+        "stage": "train",
+        "id": "7951249f50134261ac0ff3b0f3fc2b33",
+        "status": "succeeded"
+      },
+      {
+        "stage": "post",
+        "id": "800b6eab2b9f48d8bacc893e912187d7",
+        "status": "succeeded"
+      }
+    ],
+    "configuration_revision": "dfb895f82867f7d809597605b25735bc49b3ed4d6eb13011e1d341b5b99da459",
+    "scenes_restored": 0,
+    "fixed_prediction_and_mesh_downloadable": true
+  }
+]

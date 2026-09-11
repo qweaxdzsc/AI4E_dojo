@@ -89,6 +89,18 @@ def write_tensors(ctx: dict) -> dict[str, SampleResult]:
                     "entity_ids": record["entity_ids"].tolist(),
                 }
         extras["entity_mapping.json"] = lambda path: path.write_text(json.dumps(mapping))
+    import json
+
+    identity_mapping = {
+        record["name"]: {
+            "source": record["source"],
+            "association": record["association"],
+            "entity_ids": record["entity_ids"].tolist(),
+            "output": list(ctx["routes"][record["name"]]),
+        }
+        for record in ctx["records"]
+    }
+    extras["field-identities.json"] = lambda path: path.write_text(json.dumps(identity_mapping))
     notices = []
     if not ctx.get("dry_run", False):
         with warnings.catch_warnings(record=True) as caught:
@@ -117,4 +129,5 @@ def write_tensors(ctx: dict) -> dict[str, SampleResult]:
     }
     if extras:
         result["assets"] = list(extras)
+        result["identity_assets"] = ["field-identities.json"]
     return {"result": result}

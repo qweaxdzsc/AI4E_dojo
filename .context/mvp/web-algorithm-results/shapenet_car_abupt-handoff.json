@@ -1,0 +1,186 @@
+{
+  "name": "shapenet_car_abupt",
+  "format": "pt",
+  "config": "/private/tmp/dojo-algorithm-handoff-v4/shapenet_car_abupt/case/config.yaml",
+  "run": "/private/tmp/dojo-algorithm-handoff-v4/shapenet_car_abupt/runs/2026-09-10T18-44-36_0099c6",
+  "model_parameters": {
+    "dim": 192,
+    "geometry_depth": 6,
+    "num_heads": 3,
+    "blocks": "pscscscscsc",
+    "radius": 9.0,
+    "require_features": false,
+    "num_domain_decoder_blocks": {
+      "surface": 12,
+      "volume": 12
+    }
+  },
+  "source": {
+    "root": "/Users/zonghui/work/datasets/shapenet_car_cfd/mlcfd_data/training_data",
+    "manifest": null,
+    "samples": "all",
+    "partition": {
+      "train": [
+        "param1/1dc58be25e1b6e5675cad724c63e222e"
+      ],
+      "test": [
+        "param0/100715345ee54d7ae38b52b4ee9d36a3"
+      ]
+    }
+  },
+  "prediction": {
+    "version": 1,
+    "status": "succeeded",
+    "protocol": {
+      "version": 1,
+      "dataset": "210b7b75450044b4338301c2386686f5ddef90a6b8fd233c53f2dc4dbaf1633d",
+      "preparation": "9dcfd167b4e71c876c75336ccbcb890f0517969883e528536fa6f1519dd2e974",
+      "weights": "ccaf99c6a75b1aa17a7093a53fcae8bc89a7caee27ce04dc1be5e4b76f2f5101",
+      "model": "abupt-domain-v3:noether-313e6c5c2ff31f283a3e5935b4d85888aac6b025",
+      "samples": [
+        "param0/100715345ee54d7ae38b52b4ee9d36a3"
+      ],
+      "split": "test",
+      "settings": {
+        "random_stream": "global",
+        "split": "test",
+        "evaluate": true,
+        "save_predictions": true,
+        "export_vtk": true,
+        "query": true,
+        "sample_indices": [
+          0
+        ],
+        "query_chunk_size": 16384,
+        "overwrite": false,
+        "checkpoint": "last",
+        "samples": [
+          "param0/100715345ee54d7ae38b52b4ee9d36a3"
+        ]
+      },
+      "execution": {
+        "device": "mps",
+        "precision": "fp32"
+      },
+      "digest": "31644024da8dd8606cebc79cb956ec3c4fc0b7ffddd117a6b615aac3da6cbf61"
+    },
+    "results": [
+      {
+        "sample": "param0/100715345ee54d7ae38b52b4ee9d36a3",
+        "manifest": "/private/tmp/dojo-algorithm-handoff-v4/shapenet_car_abupt/predictions/param0/100715345ee54d7ae38b52b4ee9d36a3/manifest.json",
+        "metrics": {
+          "surface.pressure": {
+            "count": 3586,
+            "squared_error": 20181354.244303808,
+            "absolute_error": 256233.0388969779,
+            "truth_squared": 12182022.887446135,
+            "mse": 5627.817692220805,
+            "mae": 71.45371971471776,
+            "relative_l2": 1.2871093561979943
+          },
+          "volume.velocity": {
+            "count": 85512,
+            "squared_error": 1594325.5184988612,
+            "absolute_error": 254049.22235411237,
+            "truth_squared": 9825392.871195566,
+            "mse": 18.644465320643434,
+            "mae": 2.9709189628837165,
+            "relative_l2": 0.4028223291956289
+          },
+          "volume.velocity/0": {
+            "count": 28504,
+            "squared_error": 61128.40868963895,
+            "absolute_error": 31066.409737569244,
+            "truth_squared": 54432.56122070078,
+            "mse": 2.1445554550111896,
+            "mae": 1.089896496546774,
+            "relative_l2": 1.0597225120153981
+          },
+          "volume.velocity/1": {
+            "count": 28504,
+            "squared_error": 64448.64566302933,
+            "absolute_error": 32731.572888785435,
+            "truth_squared": 46509.3845262636,
+            "mse": 2.2610386494186545,
+            "mae": 1.1483150746837438,
+            "relative_l2": 1.1771629956809884
+          },
+          "volume.velocity/2": {
+            "count": 28504,
+            "squared_error": 1468748.464146193,
+            "absolute_error": 190251.2397277577,
+            "truth_squared": 9724450.9254486,
+            "mse": 51.52780185750045,
+            "mae": 6.674545317420632,
+            "relative_l2": 0.3886343361721688
+          },
+          "volume.velocity/magnitude": {
+            "count": 28504,
+            "squared_error": 1425118.9540479258,
+            "absolute_error": 189126.40413358202,
+            "truth_squared": 9825392.871195566,
+            "mse": 49.99715668144562,
+            "mae": 6.635082940414749,
+            "relative_l2": 0.3808470498030185
+          }
+        }
+      }
+    ],
+    "metrics": {
+      "surface.pressure": {
+        "count": 3586,
+        "squared_error": 20181354.244303808,
+        "absolute_error": 256233.0388969779,
+        "truth_squared": 12182022.887446135,
+        "mse": 5627.817692220805,
+        "mae": 71.45371971471776,
+        "relative_l2": 1.2871093561979943
+      },
+      "volume.velocity": {
+        "count": 85512,
+        "squared_error": 1594325.5184988612,
+        "absolute_error": 254049.22235411237,
+        "truth_squared": 9825392.871195566,
+        "mse": 18.644465320643434,
+        "mae": 2.9709189628837165,
+        "relative_l2": 0.4028223291956289
+      },
+      "volume.velocity/0": {
+        "count": 28504,
+        "squared_error": 61128.40868963895,
+        "absolute_error": 31066.409737569244,
+        "truth_squared": 54432.56122070078,
+        "mse": 2.1445554550111896,
+        "mae": 1.089896496546774,
+        "relative_l2": 1.0597225120153981
+      },
+      "volume.velocity/1": {
+        "count": 28504,
+        "squared_error": 64448.64566302933,
+        "absolute_error": 32731.572888785435,
+        "truth_squared": 46509.3845262636,
+        "mse": 2.2610386494186545,
+        "mae": 1.1483150746837438,
+        "relative_l2": 1.1771629956809884
+      },
+      "volume.velocity/2": {
+        "count": 28504,
+        "squared_error": 1468748.464146193,
+        "absolute_error": 190251.2397277577,
+        "truth_squared": 9724450.9254486,
+        "mse": 51.52780185750045,
+        "mae": 6.674545317420632,
+        "relative_l2": 0.3886343361721688
+      },
+      "volume.velocity/magnitude": {
+        "count": 28504,
+        "squared_error": 1425118.9540479258,
+        "absolute_error": 189126.40413358202,
+        "truth_squared": 9825392.871195566,
+        "mse": 49.99715668144562,
+        "mae": 6.635082940414749,
+        "relative_l2": 0.3808470498030185
+      }
+    }
+  }
+}

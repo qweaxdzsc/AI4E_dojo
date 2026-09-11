@@ -1,0 +1,2 @@
+/** 展示真实归属，字段身份不能只采用名称。 */
+export function FieldTree({fields,selected=[],onChange}:any){return <div>{fields.map((f:any)=><label key={f.field_id||f.id} style={{display:'block'}}><input type="checkbox" checked={selected.includes(f.field_id||f.id)} onChange={e=>onChange(e.target.checked?[...selected,f.field_id||f.id]:selected.filter((x:string)=>x!==(f.field_id||f.id)))}/>{f.name} · {f.association} · {f.shape?.join(' × ')}</label>)}</div>;}

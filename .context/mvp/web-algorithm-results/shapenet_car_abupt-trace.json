@@ -1,0 +1,17 @@
+{
+  "configuration_revision": "fc9651d36e87d2554bbf1783c9ba24ece490e018a37e79258bb351be1780d469",
+  "input_source": {
+    "identity": {
+      "index": 0,
+      "partition": "train",
+      "sample": "param1/1dc58be25e1b6e5675cad724c63e222e",
+      "source": null
+    },
+    "preparation": "0b5e458ee8f68ee66bbdd3e7e9ae8c3711ed8f7b2a5e3a3da5d6f78c1242fcc1"
+  },
+  "model_type": "ai4e_contrib.ability.model.abupt.network.AnchoredBranchedUPT",
+  "parameter_count": 18634180,
+  "path": "/private/tmp/dojo-platform-traces/shapenet_car_abupt/model.html",
+  "schema_version": 1,
+  "status": "succeeded"
+}

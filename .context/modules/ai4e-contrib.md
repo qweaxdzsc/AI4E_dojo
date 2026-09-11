@@ -1,5 +1,10 @@
 # ai4e-contrib 模块索引
 
+- [Ability 五类简表](../../docs/abilities-summary.md)：简表中的模型构建及专用数据准备/推理包含已有贡献模型路线，不表示任意模型配置均受支持。
+
+- [Ability 源码盘点表](../../docs/abilities-inventory.md)：贡献模型与 core 通用能力分列，包含完整网络、专用准备、推理及内部组件。
+- [合并后的 Ability 清单](../../docs/abilities-merged.md)：v2 明确列出位置编码、池化、条件调制、域/物理切片注意力及输出映射等模型内计算单元，区别于薄包装；保留专用准备/推理与源码对照。
+
 已实现可安装、可 import 的共享数据集适配；不实现平台上传。仅使用 core/spec 的公开接口。
 
 - `packages/ai4e-contrib/pyproject.toml`：workspace 包和资源打包。
@@ -34,3 +39,12 @@ network 输入错误保留 ValueError 并拆分实际/期望约束；sampling �
 验收状态与相关测试见 `.context/mvp/transolver3-acceptance.md`，正式规模数值对标已通过，旧公开配置兼容政策仍待确认。
 
 NASA 的 `SOURCE_PATH_FIELDS` 声明来源路径，复制 recipe 按配置目录解析；contrib transolver3 extra 依赖 core 的 hdf5 extra，HDF5 导出依赖由 core 唯一清单管理。
+
+## 物理数据跨模型实验
+
+datasets/{nasa_crm,shapenet_car}/physical.py：物理字段与原拓扑适配；ability/model/{abupt,transolver3}/preparation.py：模型专用输入及完整推理。
+
+状态与圈定测试见 `.context/mvp/cross-model-acceptance.md`。
+
+- `application/datasets/{shapenet_car,nasa_crm}/inspection.py`：样本依赖和真实字段目录，供平台检查门面调用。
+- `ability/model/{abupt,transolver3}/component.py`：公开损失与训练限制描述；平台依据真实组件约束显示优化器、采样与学习目标。

@@ -1,0 +1,243 @@
+{
+  "nasa_crm_abupt": {
+    "status": "succeeded",
+    "run": "/private/tmp/dojo-cross-model/runs/nasa_crm_abupt/2026-09-10T11-46-33_755067",
+    "returncode": 0,
+    "summary": {
+      "total": 0,
+      "attempted": 0,
+      "success": 0,
+      "unexecuted": 0,
+      "failed": false,
+      "failed_count": 0,
+      "failures": [],
+      "dry_run": false,
+      "run_dir": "/private/tmp/dojo-cross-model/runs/nasa_crm_abupt/2026-09-10T11-46-33_755067",
+      "reports": {
+        "trainprep": {
+          "preparation": "/private/tmp/dojo-cross-model/runs/nasa_crm_abupt/2026-09-10T11-46-33_755067/artifacts/preparation.json",
+          "split_counts": {
+            "test": 44,
+            "train": 84,
+            "validation": 21
+          }
+        },
+        "train": {
+          "epochs": 1,
+          "updates": 84,
+          "best": Infinity,
+          "history": [
+            {
+              "epoch": 1,
+              "updates": 84,
+              "loss": 2.039298798356737,
+              "learning_rate": 1e-06,
+              "evaluation": null,
+              "seconds": 9.843145332997665,
+              "online": {
+                "loss": 1.7314534187316895,
+                "surface_cp": 0.7220626473426819,
+                "surface_cf": 1.009390950202942
+              }
+            }
+          ],
+          "checkpoints": {
+            "latest": "/private/tmp/dojo-cross-model/runs/nasa_crm_abupt/2026-09-10T11-46-33_755067/checkpoints/latest.pt",
+            "last": "/private/tmp/dojo-cross-model/runs/nasa_crm_abupt/2026-09-10T11-46-33_755067/checkpoints/last.pt"
+          }
+        }
+      }
+    }
+  },
+  "nasa_crm_transolver3": {
+    "status": "succeeded",
+    "run": "/private/tmp/dojo-cross-model/runs/nasa_crm_transolver3/2026-09-10T11-46-49_b741b8",
+    "returncode": 0,
+    "summary": {
+      "total": 0,
+      "attempted": 0,
+      "success": 0,
+      "unexecuted": 0,
+      "failed": false,
+      "failed_count": 0,
+      "failures": [],
+      "dry_run": false,
+      "run_dir": "/private/tmp/dojo-cross-model/runs/nasa_crm_transolver3/2026-09-10T11-46-49_b741b8",
+      "reports": {
+        "trainprep": {
+          "preparation": "/private/tmp/dojo-cross-model/runs/nasa_crm_transolver3/2026-09-10T11-46-49_b741b8/artifacts/preparation.json",
+          "split_counts": {
+            "test": 44,
+            "train": 84,
+            "validation": 21
+          }
+        },
+        "train": {
+          "epochs": 1,
+          "updates": 84,
+          "best": Infinity,
+          "history": [
+            {
+              "epoch": 1,
+              "updates": 84,
+              "loss": 1.0640831572499283,
+              "learning_rate": 1e-05,
+              "evaluation": null,
+              "seconds": 32.079133499995805,
+              "online": {
+                "loss": 0.8106819987297058
+              }
+            }
+          ],
+          "checkpoints": {
+            "latest": "/private/tmp/dojo-cross-model/runs/nasa_crm_transolver3/2026-09-10T11-46-49_b741b8/checkpoints/latest.pt",
+            "last": "/private/tmp/dojo-cross-model/runs/nasa_crm_transolver3/2026-09-10T11-46-49_b741b8/checkpoints/last.pt"
+          }
+        }
+      }
+    }
+  },
+  "shapenet_car_abupt": {
+    "status": "succeeded",
+    "run": "/private/tmp/dojo-cross-model/runs/shapenet_car_abupt/2026-09-10T11-47-28_dd9653",
+    "returncode": 0,
+    "summary": {
+      "total": 0,
+      "attempted": 0,
+      "success": 0,
+      "unexecuted": 0,
+      "failed": false,
+      "failed_count": 0,
+      "failures": [],
+      "dry_run": false,
+      "run_dir": "/private/tmp/dojo-cross-model/runs/shapenet_car_abupt/2026-09-10T11-47-28_dd9653",
+      "reports": {
+        "trainprep": {
+          "preparation": "/private/tmp/dojo-cross-model/runs/shapenet_car_abupt/2026-09-10T11-47-28_dd9653/artifacts/preparation.json",
+          "split_counts": {
+            "train": 789,
+            "test": 100
+          }
+        },
+        "train": {
+          "epochs": 1,
+          "updates": 789,
+          "best": Infinity,
+          "history": [
+            {
+              "epoch": 1,
+              "updates": 789,
+              "loss": 0.7443418033770433,
+              "learning_rate": 1e-06,
+              "evaluation": null,
+              "seconds": 86.94758887495846,
+              "online": {
+                "loss": 0.26252424716949463,
+                "surface_pressure": 0.13682855665683746,
+                "volume_velocity": 0.12569567561149597
+              }
+            }
+          ],
+          "checkpoints": {
+            "latest": "/private/tmp/dojo-cross-model/runs/shapenet_car_abupt/2026-09-10T11-47-28_dd9653/checkpoints/latest.pt",
+            "last": "/private/tmp/dojo-cross-model/runs/shapenet_car_abupt/2026-09-10T11-47-28_dd9653/checkpoints/last.pt"
+          }
+        }
+      }
+    }
+  },
+  "shapenet_car_transolver3_surface": {
+    "status": "succeeded",
+    "run": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_surface/2026-09-10T11-49-01_e7ef5b",
+    "returncode": 0,
+    "summary": {
+      "total": 0,
+      "attempted": 0,
+      "success": 0,
+      "unexecuted": 0,
+      "failed": false,
+      "failed_count": 0,
+      "failures": [],
+      "dry_run": false,
+      "run_dir": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_surface/2026-09-10T11-49-01_e7ef5b",
+      "reports": {
+        "trainprep": {
+          "preparation": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_surface/2026-09-10T11-49-01_e7ef5b/artifacts/preparation.json",
+          "split_counts": {
+            "train": 789,
+            "test": 100
+          }
+        },
+        "train": {
+          "epochs": 1,
+          "updates": 789,
+          "best": Infinity,
+          "history": [
+            {
+              "epoch": 1,
+              "updates": 789,
+              "loss": 0.7399965192205596,
+              "learning_rate": 1e-05,
+              "evaluation": null,
+              "seconds": 99.74407037498895,
+              "online": {
+                "loss": 0.2510250210762024
+              }
+            }
+          ],
+          "checkpoints": {
+            "latest": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_surface/2026-09-10T11-49-01_e7ef5b/checkpoints/latest.pt",
+            "last": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_surface/2026-09-10T11-49-01_e7ef5b/checkpoints/last.pt"
+          }
+        }
+      }
+    }
+  },
+  "shapenet_car_transolver3_volume": {
+    "status": "succeeded",
+    "run": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_volume/2026-09-10T11-50-45_6a17e9",
+    "returncode": 0,
+    "summary": {
+      "total": 0,
+      "attempted": 0,
+      "success": 0,
+      "unexecuted": 0,
+      "failed": false,
+      "failed_count": 0,
+      "failures": [],
+      "dry_run": false,
+      "run_dir": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_volume/2026-09-10T11-50-45_6a17e9",
+      "reports": {
+        "trainprep": {
+          "preparation": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_volume/2026-09-10T11-50-45_6a17e9/artifacts/preparation.json",
+          "split_counts": {
+            "train": 789,
+            "test": 100
+          }
+        },
+        "train": {
+          "epochs": 1,
+          "updates": 789,
+          "best": Infinity,
+          "history": [
+            {
+              "epoch": 1,
+              "updates": 789,
+              "loss": 0.26015477516880925,
+              "learning_rate": 1e-05,
+              "evaluation": null,
+              "seconds": 66.4246931669768,
+              "online": {
+                "loss": 0.11852826178073883
+              }
+            }
+          ],
+          "checkpoints": {
+            "latest": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_volume/2026-09-10T11-50-45_6a17e9/checkpoints/latest.pt",
+            "last": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_volume/2026-09-10T11-50-45_6a17e9/checkpoints/last.pt"
+          }
+        }
+      }
+    }
+  }
+}

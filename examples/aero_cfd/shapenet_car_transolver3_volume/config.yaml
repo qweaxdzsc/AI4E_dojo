@@ -1,0 +1,146 @@
+dataset:
+  root: /shared/raw/shapenet_car
+  manifest: null
+  samples: all
+  partition: official
+pipeline:
+  stages:
+  - trainprep
+  - train
+  - post
+data_root: /shared/datasets/car_experiment
+run_root: /shared/runs/shapenet_car_transolver3_volume
+paths:
+  datasets:
+    root: ${data_root}
+    train: ${data_root}/train
+    eval: ${data_root}/eval
+    test: ${data_root}/test
+    normalize:
+      root: ${data_root}/normalize
+      train: ${paths.datasets.normalize.root}/train
+      eval: ${paths.datasets.normalize.root}/eval
+      test: ${paths.datasets.normalize.root}/test
+    predictions: ${data_root}/predictions/shapenet_car_transolver3_volume
+train:
+  max_epochs: 1
+  batch_size: 1
+  num_workers: 0
+  device: auto
+  precision: fp32
+  optimizer: adamw
+  learning_rate: 0.001
+  weight_decay: 0.0
+  betas:
+  - 0.9
+  - 0.999
+  scheduler_unit: epoch
+  min_lr_ratio: 0.01
+  gradient_clip: 1.0
+  evaluation_split: validation
+  validation_interval: 1
+  resume: null
+  evaluation_enabled: false
+  manifest: ${data_root}/manifest.json
+  parameter_group_policy: all
+  ema_decay: null
+model:
+  parameters:
+    n_hidden: 256
+    n_layers: 16
+    n_head: 8
+    mlp_ratio: 2
+    slice_num: 64
+    space_dim: 3
+    fun_dim: 0
+    out_dim: 3
+    unified_pos: false
+    gradient_checkpointing: true
+  sampling:
+    seed: 2
+    stride: 4
+    chunk_count: 20
+    random_stream: independent
+trainprep:
+  domains:
+    volume:
+      position: volume_position
+      features: {}
+      targets:
+        velocity: volume_velocity
+      query_targets: false
+  conditioning: {}
+  normalization:
+    execute: true
+    fields:
+      volume_position:
+        method: identity
+      volume_velocity:
+        method: zscore
+post:
+  random_stream: global
+  split: test
+  evaluate: true
+  save_predictions: true
+  export_vtk: true
+  query: true
+  sample_indices:
+  - 0
+  query_chunk_size: 16384
+  overwrite: false
+  checkpoint: last
+  samples:
+  - param0/1abeca7159db7ed9f200a72c9245aee7
+  - param0/1641efa5c92514d86c4f4dbcda5f2fc0
+  - param0/192fdf42f5a2623d673ddeabdcc8c6e
+  - param0/10e99b1475098c0aaa69dfdc5532bb13
+  - param0/1dbb02c20bb93af81c1b3b2ed8d13bf8
+snapshot_modules:
+- ai4e_spec
+- ai4e_contrib
+rawprep:
+  sources:
+  - surface
+  - volume
+  fields:
+    surface:
+      pressure:
+        components: 1
+    volume:
+      velocity:
+        components: 3
+  geometry:
+  - nearest_vertex
+  - surface_normals
+  - exterior_mask
+  save_fields:
+  - surface_pressure
+  - surface_position
+  - surface_normals
+  - volume_velocity
+  - volume_position
+  - volume_sdf
+  - volume_normals
+  filters:
+    surface:
+    - mask
+    volume:
+    - exterior_mask
+  statistics:
+    mode: reference
+    fields:
+    - surface_pressure
+    - surface_position
+    - surface_normals
+    - volume_velocity
+    - volume_position
+    - volume_sdf
+    - volume_normals
+    position_fields:
+    - surface_position
+    - volume_position
+  vtkhdf: false
+components:
+  workflow: ai4e_core.applications.aero_cfd.workflow
+  dataset: ai4e_contrib.application.datasets.shapenet_car
+  model: ai4e_contrib.ability.model.transolver3.component

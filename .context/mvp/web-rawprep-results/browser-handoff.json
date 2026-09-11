@@ -1,0 +1,48 @@
+{
+  "project_id": "7ef0dbd1c3f94ec886e6f97f6787f309",
+  "task_id": "d05aaa671f884d988bc1c13fb20b9056",
+  "run_id": "6422cf057dec4c0d8fd88e9835af509a",
+  "status": "succeeded",
+  "source": "Playwright real browser form -> server -> original task.submit_run -> existing recipe",
+  "sample": "param1/1dc58be25e1b6e5675cad724c63e222e",
+  "manifest": "/private/tmp/dojo-web-acceptance/platform/projects/713bebba5d534c888d7d8e3e97242b36/tasks/d05aaa671f884d988bc1c13fb20b9056/data/6422cf057dec4c0d8fd88e9835af509a/manifest.json",
+  "output_shapes": {
+    "surface_pressure": [
+      3586,
+      1
+    ],
+    "surface_position": [
+      3586,
+      3
+    ],
+    "surface_normals": [
+      3586,
+      3
+    ],
+    "volume_velocity": [
+      28504,
+      3
+    ],
+    "volume_position": [
+      28504,
+      3
+    ],
+    "volume_sdf": [
+      28504,
+      1
+    ],
+    "volume_normals": [
+      28504,
+      3
+    ],
+    "surface_sdf": [
+      3586,
+      1
+    ]
+  },
+  "max_pressure_error": 0.0,
+  "surface_sdf_nonzero": 0,
+  "protected_files_checked": 210,
+  "protected_changes": [],
+  "code_digest": "51df0e2b538b1cebb7a0fcfabb6549a6d14fc5bea49273a42079d9449436d326"
+}

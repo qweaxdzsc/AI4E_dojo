@@ -68,8 +68,13 @@ def write_named_tensors(
     backed_up = False
     try:
         for name, filename in selected.items():
-            with (temporary / filename).open("wb") as stream:
-                torch.save(payloads[name], stream)
+            if filename.endswith(".zarr"):
+                from .zarr import write_zarr
+
+                write_zarr(temporary / filename, payloads[name])
+            else:
+                with (temporary / filename).open("wb") as stream:
+                    torch.save(payloads[name], stream)
         for filename, write in extra_writers.items():
             write(temporary / filename)
         if target.exists():
@@ -109,6 +114,10 @@ def write_named_tensors(
 @traced("张量读取")
 def load_named_tensor(path: str | Path) -> Any:
     """仅加载张量和具名张量映射。"""
+    if Path(path).suffix == ".zarr":
+        from .zarr import read_zarr
+
+        return read_zarr(path)
     return torch.load(Path(path), weights_only=True)
 
 

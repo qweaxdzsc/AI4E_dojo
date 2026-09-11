@@ -1,0 +1,310 @@
+[
+  {
+    "width": 1440,
+    "expected": {
+      ".projecttabs": {
+        "x": 259,
+        "y": 83,
+        "width": 1157,
+        "height": 55.796875
+      },
+      ".tasktoolbar": {
+        "x": 259,
+        "y": 158.796875,
+        "width": 1157,
+        "height": 40.796875
+      },
+      ".taskpanel": {
+        "x": 259,
+        "y": 217.59375,
+        "width": 1157,
+        "height": 739.3125
+      },
+      ".tasktable": {
+        "x": 272,
+        "y": 223.59375,
+        "width": 1131,
+        "height": 652.125
+      },
+      ".tasktable thead tr": {
+        "x": 272,
+        "y": 223.59375,
+        "width": 1131,
+        "height": 45.6875
+      },
+      ".tasktable tbody tr:first-child": {
+        "x": 272,
+        "y": 269.28125,
+        "width": 1131,
+        "height": 61.6875
+      },
+      ".progresscell": {
+        "x": 272,
+        "y": 330.96875,
+        "width": 1131,
+        "height": 59.5
+      },
+      ".ministeps": {
+        "x": 372,
+        "y": 335.96875,
+        "width": 1019,
+        "height": 36
+      }
+    },
+    "current": {
+      ".projecttabs": {
+        "x": 259,
+        "y": 83,
+        "width": 1157,
+        "height": 55.796875
+      },
+      ".tasktoolbar": {
+        "x": 259,
+        "y": 158.796875,
+        "width": 1157,
+        "height": 40.796875
+      },
+      ".taskpanel": {
+        "x": 259,
+        "y": 217.59375,
+        "width": 1157,
+        "height": 738.890625
+      },
+      ".tasktable": {
+        "x": 272,
+        "y": 223.59375,
+        "width": 1131,
+        "height": 652.203125
+      },
+      ".tasktable thead tr": {
+        "x": 272,
+        "y": 223.59375,
+        "width": 1131,
+        "height": 45.6875
+      },
+      ".tasktable tbody tr:first-child": {
+        "x": 272,
+        "y": 269.28125,
+        "width": 1131,
+        "height": 61.703125
+      },
+      ".progresscell": {
+        "x": 272,
+        "y": 330.984375,
+        "width": 1131,
+        "height": 59.5
+      },
+      ".ministeps": {
+        "x": 284,
+        "y": 335.984375,
+        "width": 1107,
+        "height": 36
+      }
+    },
+    "approved_difference": "进度行左右12px，原型左侧100px；ministeps左移88px且增加88px宽度",
+    "deltas": {
+      ".projecttabs": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      ".tasktoolbar": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      ".taskpanel": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": -0.421875
+      },
+      ".tasktable": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0.078125
+      },
+      ".tasktable thead tr": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      ".tasktable tbody tr:first-child": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0.015625
+      },
+      ".progresscell": {
+        "x": 0,
+        "y": 0.015625,
+        "width": 0,
+        "height": 0
+      },
+      ".ministeps": {
+        "x": 0,
+        "y": 0.015625,
+        "width": 0,
+        "height": 0
+      }
+    }
+  },
+  {
+    "width": 1920,
+    "expected": {
+      ".projecttabs": {
+        "x": 259,
+        "y": 83,
+        "width": 1637,
+        "height": 55.796875
+      },
+      ".tasktoolbar": {
+        "x": 259,
+        "y": 158.796875,
+        "width": 1637,
+        "height": 40.796875
+      },
+      ".taskpanel": {
+        "x": 259,
+        "y": 217.59375,
+        "width": 1637,
+        "height": 739.3125
+      },
+      ".tasktable": {
+        "x": 272,
+        "y": 223.59375,
+        "width": 1611,
+        "height": 652.125
+      },
+      ".tasktable thead tr": {
+        "x": 272,
+        "y": 223.59375,
+        "width": 1611,
+        "height": 45.6875
+      },
+      ".tasktable tbody tr:first-child": {
+        "x": 272,
+        "y": 269.28125,
+        "width": 1611,
+        "height": 61.6875
+      },
+      ".progresscell": {
+        "x": 272,
+        "y": 330.96875,
+        "width": 1611,
+        "height": 59.5
+      },
+      ".ministeps": {
+        "x": 372,
+        "y": 335.96875,
+        "width": 1499,
+        "height": 36
+      }
+    },
+    "current": {
+      ".projecttabs": {
+        "x": 259,
+        "y": 83,
+        "width": 1637,
+        "height": 55.796875
+      },
+      ".tasktoolbar": {
+        "x": 259,
+        "y": 158.796875,
+        "width": 1637,
+        "height": 40.796875
+      },
+      ".taskpanel": {
+        "x": 259,
+        "y": 217.59375,
+        "width": 1637,
+        "height": 738.890625
+      },
+      ".tasktable": {
+        "x": 272,
+        "y": 223.59375,
+        "width": 1611,
+        "height": 652.203125
+      },
+      ".tasktable thead tr": {
+        "x": 272,
+        "y": 223.59375,
+        "width": 1611,
+        "height": 45.6875
+      },
+      ".tasktable tbody tr:first-child": {
+        "x": 272,
+        "y": 269.28125,
+        "width": 1611,
+        "height": 61.703125
+      },
+      ".progresscell": {
+        "x": 272,
+        "y": 330.984375,
+        "width": 1611,
+        "height": 59.5
+      },
+      ".ministeps": {
+        "x": 284,
+        "y": 335.984375,
+        "width": 1587,
+        "height": 36
+      }
+    },
+    "approved_difference": "进度行左右12px，原型左侧100px；ministeps左移88px且增加88px宽度",
+    "deltas": {
+      ".projecttabs": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      ".tasktoolbar": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      ".taskpanel": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": -0.421875
+      },
+      ".tasktable": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0.078125
+      },
+      ".tasktable thead tr": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
+      },
+      ".tasktable tbody tr:first-child": {
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0.015625
+      },
+      ".progresscell": {
+        "x": 0,
+        "y": 0.015625,
+        "width": 0,
+        "height": 0
+      },
+      ".ministeps": {
+        "x": 0,
+        "y": 0.015625,
+        "width": 0,
+        "height": 0
+      }
+    }
+  }
+]

@@ -1,0 +1,96 @@
+{
+  "name": "shapenet_car_transolver3_surface",
+  "format": "pt",
+  "config": "/private/tmp/dojo-algorithm-handoff-v3/shapenet_car_transolver3_surface/case/config.yaml",
+  "run": "/private/tmp/dojo-algorithm-handoff-v3/shapenet_car_transolver3_surface/runs/2026-09-10T18-37-37_848c8c",
+  "model_parameters": {
+    "n_hidden": 256,
+    "n_layers": 24,
+    "n_head": 8,
+    "mlp_ratio": 2,
+    "slice_num": 64,
+    "space_dim": 6,
+    "fun_dim": 0,
+    "out_dim": 1,
+    "unified_pos": false,
+    "gradient_checkpointing": true
+  },
+  "source": {
+    "root": "/Users/zonghui/work/datasets/shapenet_car_cfd/mlcfd_data/training_data",
+    "manifest": null,
+    "samples": "all",
+    "partition": {
+      "train": [
+        "param1/1dc58be25e1b6e5675cad724c63e222e"
+      ],
+      "test": [
+        "param0/100715345ee54d7ae38b52b4ee9d36a3"
+      ]
+    }
+  },
+  "prediction": {
+    "version": 1,
+    "status": "succeeded",
+    "protocol": {
+      "version": 1,
+      "dataset": "26353c977777f22e0f2c4a53cf3920b562a7de043aa2fbef67ee4ea4525c26cf",
+      "preparation": "95c6c0b58ffa1e455498768cc958409cec2e9a2457a096ab987c7d99dfab2cfb",
+      "weights": "0dbfec59c7ea799341f60832503494df8c43792ffa8fe0bb8a46f49f962e104f",
+      "model": "Transolver-3/Transolver_chunk_opt_matrix_mul",
+      "samples": [
+        "param0/100715345ee54d7ae38b52b4ee9d36a3"
+      ],
+      "split": "test",
+      "settings": {
+        "random_stream": "global",
+        "split": "test",
+        "evaluate": true,
+        "save_predictions": true,
+        "export_vtk": true,
+        "query": true,
+        "sample_indices": [
+          0
+        ],
+        "query_chunk_size": 16384,
+        "overwrite": false,
+        "checkpoint": "last",
+        "samples": [
+          "param0/100715345ee54d7ae38b52b4ee9d36a3"
+        ]
+      },
+      "execution": {
+        "device": "mps",
+        "precision": "fp32"
+      },
+      "digest": "c728e352d846f84dcf6fdfa60501f3d0d0e9fbba5b5257288ead2aa3d2658679"
+    },
+    "results": [
+      {
+        "sample": "param0/100715345ee54d7ae38b52b4ee9d36a3",
+        "manifest": "/private/tmp/dojo-algorithm-handoff-v3/shapenet_car_transolver3_surface/predictions/param0/100715345ee54d7ae38b52b4ee9d36a3/manifest.json",
+        "metrics": {
+          "surface.pressure": {
+            "count": 3586,
+            "squared_error": 19976188.69910625,
+            "absolute_error": 223731.91871982813,
+            "truth_squared": 12182022.887446135,
+            "mse": 5570.604768295106,
+            "mae": 62.39038447290243,
+            "relative_l2": 1.2805502059985416
+          }
+        }
+      }
+    ],
+    "metrics": {
+      "surface.pressure": {
+        "count": 3586,
+        "squared_error": 19976188.69910625,
+        "absolute_error": 223731.91871982813,
+        "truth_squared": 12182022.887446135,
+        "mse": 5570.604768295106,
+        "mae": 62.39038447290243,
+        "relative_l2": 1.2805502059985416
+      }
+    }
+  }
+}

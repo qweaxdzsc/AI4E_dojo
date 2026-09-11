@@ -1,0 +1,13 @@
+/* 项目文件页对照整合 HTML 工具条与面板，浏览内容仍是真实目录。 */
+.project-files{font:13px/1.6 system-ui,-apple-system,"PingFang SC",sans-serif;color:#13234b}
+.project-files>h2{margin:0 0 14px;font-size:19px;font-weight:600}
+.project-files .searchbar,.project-files .file-browser.project-chrome{display:flex;align-items:flex-end;flex-wrap:wrap;gap:12px}
+.project-files .searchbar{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #e8effb}
+.project-files .searchbar>label,.project-files .file-browser.project-chrome>label{margin:0;color:#526892;font-size:12px}
+.project-files .searchbar .ant-select,.project-files .file-browser.project-chrome .ant-select,.project-files .file-browser.project-chrome .ant-input-affix-wrapper{min-width:160px;display:block;margin-top:5px}
+.project-files .files-panel{background:#fff;border:1px solid #e4eefb;border-radius:10px;padding:12px 16px;box-shadow:0 3px 12px #4067a206}
+.project-files .file-browser.project-chrome .breadcrumb,.project-files .file-browser.project-chrome .scroll{flex:1 1 100%}
+.project-files .file-browser.project-chrome table{width:100%;border-collapse:collapse}
+.project-files .file-browser.project-chrome th{background:#f5faff;color:#526892;font-weight:500;padding:10px 8px;text-align:left}
+.project-files .file-browser.project-chrome td{padding:10px 8px;border-bottom:1px solid #e8effb}
+.project-files .files-panel .panel-title{border-bottom-color:#e7ecf2}

@@ -5,7 +5,6 @@ dataset:
   partition: official
 pipeline:
   stages:
-  - rawprep
   - trainprep
   - train
   - post
@@ -22,10 +21,10 @@ paths:
       train: ${paths.datasets.normalize.root}/train
       eval: ${paths.datasets.normalize.root}/eval
       test: ${paths.datasets.normalize.root}/test
-    predictions: ${data_root}/predictions
+    predictions: ${data_root}/predictions/shapenet_car_abupt
 train:
   mode: fit
-  max_epochs: 2
+  max_epochs: 1
   batch_size: 1
   device: auto
   precision: fp32
@@ -41,7 +40,7 @@ train:
   min_lr: 1.0e-06
   accumulate: 1
   gradient_clip: 1.0
-  ema_decay: 0.9999
+  ema_decay: null
   ema_save_every: 10
   test_repeat: 10
   evaluate_repeat: false
@@ -51,6 +50,8 @@ train:
   resume: null
   log_every: 1
   log_every_updates: null
+  evaluation_enabled: false
+  manifest: ${data_root}/manifest.json
 model:
   parameters:
     dim: 192
@@ -93,27 +94,6 @@ model:
     normalization: volume_velocity
     weight: 1.0
     loss: mse
-trainprep:
-  use_physics_features: false
-  physical_rules:
-    zero_fields:
-      surface_sdf: surface_position
-  geometry_field: surface_position
-  domains:
-    surface:
-      position: surface_position
-      features: {}
-      targets:
-        pressure: surface_pressure
-      query_targets: false
-    volume:
-      position: volume_position
-      features: {}
-      targets:
-        velocity: volume_velocity
-      query_targets: false
-  conditioning: {}
-  geometry_conditioning: {}
   sampling:
     random_stream: global
     pipeline_seed: null
@@ -148,6 +128,25 @@ trainprep:
           method: uniform
           num_points: 0
           insufficient: error
+trainprep:
+  use_physics_features: false
+  physical_rules: {}
+  geometry_field: surface_position
+  domains:
+    surface:
+      position: surface_position
+      features: {}
+      targets:
+        pressure: surface_pressure
+      query_targets: false
+    volume:
+      position: volume_position
+      features: {}
+      targets:
+        velocity: volume_velocity
+      query_targets: false
+  conditioning: {}
+  geometry_conditioning: {}
   normalization:
     execute: true
     fields:
@@ -161,8 +160,6 @@ trainprep:
         method: coordinate
       volume_position:
         method: coordinate
-      surface_sdf:
-        method: identity
       surface_normals:
         method: identity
     materialize: false
@@ -177,6 +174,13 @@ post:
   - 0
   query_chunk_size: 16384
   overwrite: false
+  checkpoint: last
+  samples:
+  - param0/1abeca7159db7ed9f200a72c9245aee7
+  - param0/1641efa5c92514d86c4f4dbcda5f2fc0
+  - param0/192fdf42f5a2623d673ddeabdcc8c6e
+  - param0/10e99b1475098c0aaa69dfdc5532bb13
+  - param0/1dbb02c20bb93af81c1b3b2ed8d13bf8
 snapshot_modules:
 - ai4e_spec
 - ai4e_contrib
@@ -222,3 +226,7 @@ rawprep:
     - surface_position
     - volume_position
   vtkhdf: false
+components:
+  workflow: ai4e_core.applications.aero_cfd.workflow
+  dataset: ai4e_contrib.application.datasets.shapenet_car
+  model: ai4e_contrib.ability.model.abupt.component

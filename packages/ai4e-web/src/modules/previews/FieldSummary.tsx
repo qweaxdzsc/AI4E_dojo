@@ -1,0 +1,4 @@
+import {useEffect,useState} from 'react';
+import {inspectAsset} from '../visualization';
+/** 显示统计来自文件，仅用于查看，不写入训练配置。 */
+export function FieldSummary({asset,field}:any){const [data,setData]=useState<any>(null),[error,setError]=useState('');useEffect(()=>{const c=new AbortController();inspectAsset(asset,'summarize',{field},c.signal).then(setData).catch(e=>{if(!c.signal.aborted)setError(e.message);});return()=>c.abort();},[asset.asset_id,asset.revision,field]);return error?<div role="alert">{error}</div>:<div><p>完整字段 · 有效 {data?.valid??'…'} / {data?.count??'…'}</p><p>范围 {data?.range?.join(' ～ ')||'暂无有效值'}</p>{data?.histogram&&<div style={{display:'flex',height:100,alignItems:'end',gap:1}} aria-label="字段直方图">{data.histogram.counts.map((n:number,i:number)=><div key={i} title={String(n)} style={{flex:1,height:(100*n/Math.max(1,...data.histogram.counts))+'%',background:'#4285d4'}}/>)}</div>}</div>;}

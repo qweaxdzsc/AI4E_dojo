@@ -1,0 +1,18 @@
+/* 版本比较外壳对照整合 HTML；表格内容仍是真实比较，不填示意指标。 */
+.comparison-workspace{display:grid;grid-template-columns:170px minmax(0,1fr);gap:16px;font:13px/1.6 system-ui,-apple-system,"PingFang SC",sans-serif;color:#13234b}
+.comparison-workspace .viewrail .hint{font-size:11px;letter-spacing:1px;color:#8095bb;text-transform:uppercase;margin-bottom:8px}
+.comparison-workspace .viewrail button{display:flex;flex-direction:column;width:100%;min-height:126px;text-align:left;gap:7px;padding:18px;margin-bottom:12px;border:1px solid #deebfb;background:#edf6ff;border-radius:9px;color:#4e6091;cursor:pointer}
+.comparison-workspace .viewrail button.active{border:2px solid #0873ff;background:#fff}
+.comparison-workspace .viewrail button.active b{color:#0873ff}
+.comparison-workspace .viewrail strong{font-size:12px;color:#8795b3}
+.comparison-workspace .viewrail b{font-size:18px}
+.comparison-workspace .viewrail small{font-size:11px;color:#6a7da4}
+.comparison-workspace .comparemain{background:#fff;border:1px solid #e4eefb;border-radius:10px;padding:20px;min-width:0;box-shadow:0 3px 12px #4067a206}
+.comparison-workspace .comparemain>h2{margin:0 0 14px;font-size:19px;color:#13234b}
+.comparison-workspace .comparetools{background:#f4f9ff;border:1px solid #deebfb;border-radius:8px;padding:15px;margin-bottom:20px}
+.comparison-workspace .comparetools h3{margin:0 0 8px;font-size:15px}
+.comparison-workspace .parameterchips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.comparison-workspace .parameterchips .badge{background:#e9f3ff;color:#006dff;border-radius:12px;padding:2px 8px}
+.comparison-workspace .compare-note{margin:16px 0 0;padding:12px;background:#eef7ff;border-radius:6px;color:#6b84af;font-size:12px}
+.comparison-workspace .compare-placeholder{min-height:140px;display:flex;align-items:center;justify-content:center;text-align:center;color:#6a7da4;background:#f7faff;border:1px dashed #d5e3f9;border-radius:8px;padding:24px}
+@media (max-width:1000px){.comparison-workspace{grid-template-columns:125px minmax(0,1fr)}}

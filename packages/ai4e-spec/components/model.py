@@ -43,3 +43,33 @@ def describe_model(factory: Any, model: Any) -> dict[str, Any]:
     if not callable(callback):
         raise TypeError("模型构造器必须通过 describe 回调提供结构契约")
     return callback(model)
+
+
+class PreparedModelComponent(ModelComponent, Protocol):
+    """物理数据接入模型的调用约定；字段语义由组件验证，数值类型保持不透明。"""
+
+    def training_parameters(self, config: dict) -> dict:
+        """从声明提取完整构造参数，框架不解释专属域布局。"""
+        ...
+
+    def prepare_sample(
+        self,
+        sample: dict,
+        config: dict,
+        normalization: Any,
+        *,
+        evaluation: bool = False,
+        epoch: int = 0,
+    ) -> dict:
+        """将具名物理样本转成输入、目标和带身份的计算批次。"""
+        ...
+
+    def loss(self, model: Any, batch: dict, config: dict) -> dict:
+        """返回可微 loss 与所声明归约所需累计量。"""
+        ...
+
+    def predict_sample(
+        self, model: Any, sample: dict, config: dict, normalization: Any, *, preparation_id: str
+    ) -> dict:
+        """完整原点顺序的具名物理预测；不返回抽样训练点冒充全场。"""
+        ...

@@ -1,0 +1,37 @@
+2026-09-10 19:53:40,033 INFO [运行/开始] 脚本=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/f6d77c91b0604df0a4af8bed4ba4eec6/code/pipeline.py；运行目录=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/f6d77c91b0604df0a4af8bed4ba4eec6；生效配置=inputs/config.yaml
+2026-09-10 19:53:40,033 INFO [post/阶段/开始] 
+2026-09-10 19:53:40,382 INFO [post/张量读取/开始] 来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample002/first.zarr
+2026-09-10 19:53:40,585 INFO [post/张量读取/结束] 耗时=0.203秒
+2026-09-10 19:53:40,585 INFO [post/张量读取/开始] 来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample002/second.zarr
+2026-09-10 19:53:40,598 INFO [post/张量读取/结束] 耗时=0.013秒
+2026-09-10 19:53:42,333 INFO [post/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/test/Sample001/first.zarr
+2026-09-10 19:53:42,349 INFO [post/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.016秒
+2026-09-10 19:53:42,349 INFO [post/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/test/Sample001/second.zarr
+2026-09-10 19:53:42,374 INFO [post/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.025秒
+2026-09-10 19:53:50,038 INFO [post/阶段/运行中] 已耗时=10.01秒；状态=底层计算尚未返回
+2026-09-10 19:53:52,939 INFO [post/张量提交/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/f6d77c91b0604df0a4af8bed4ba4eec6/predictions/Sample001
+2026-09-10 19:53:52,939 INFO [post/输出规划/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/f6d77c91b0604df0a4af8bed4ba4eec6/predictions/Sample001
+2026-09-10 19:53:52,939 INFO [post/输出规划/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.000秒
+2026-09-10 19:53:52,949 INFO [post/张量提交/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.010秒
+2026-09-10 19:53:54,127 INFO [post/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/f6d77c91b0604df0a4af8bed4ba4eec6/predictions/Sample001/surface.position.pt
+2026-09-10 19:53:54,128 INFO [post/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；形状=(454404, 3)；类型=torch.float32
+2026-09-10 19:53:54,128 INFO [post/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.001秒
+2026-09-10 19:53:54,128 INFO [post/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/f6d77c91b0604df0a4af8bed4ba4eec6/predictions/Sample001/surface.ids.pt
+2026-09-10 19:53:54,129 INFO [post/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；形状=(454404,)；类型=torch.int64
+2026-09-10 19:53:54,129 INFO [post/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.001秒
+2026-09-10 19:53:54,129 INFO [post/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/f6d77c91b0604df0a4af8bed4ba4eec6/predictions/Sample001/surface.cf.prediction.pt
+2026-09-10 19:53:54,130 INFO [post/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；形状=(454404, 3)；类型=torch.float32
+2026-09-10 19:53:54,130 INFO [post/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.001秒
+2026-09-10 19:53:54,130 INFO [post/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/f6d77c91b0604df0a4af8bed4ba4eec6/predictions/Sample001/surface.cf.truth.pt
+2026-09-10 19:53:54,131 INFO [post/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；形状=(454404, 3)；类型=torch.float32
+2026-09-10 19:53:54,132 INFO [post/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.002秒
+2026-09-10 19:53:54,132 INFO [post/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/f6d77c91b0604df0a4af8bed4ba4eec6/predictions/Sample001/surface.cp.prediction.pt
+2026-09-10 19:53:54,132 INFO [post/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；形状=(454404, 1)；类型=torch.float32
+2026-09-10 19:53:54,132 INFO [post/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.001秒
+2026-09-10 19:53:54,132 INFO [post/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/f6d77c91b0604df0a4af8bed4ba4eec6/predictions/Sample001/surface.cp.truth.pt
+2026-09-10 19:53:54,133 INFO [post/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；形状=(454404, 1)；类型=torch.float32
+2026-09-10 19:53:54,133 INFO [post/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.001秒
+2026-09-10 19:54:00,044 INFO [post/阶段/运行中] 已耗时=20.01秒；状态=底层计算尚未返回
+2026-09-10 19:54:10,049 INFO [post/阶段/运行中] 已耗时=30.02秒；状态=底层计算尚未返回
+2026-09-10 19:54:10,109 INFO [post/阶段/结束] 耗时=30.076秒
+2026-09-10 19:54:10,110 INFO [运行/结束] 状态=成功；成功=0；失败=0；未执行=0；耗时=30.077秒

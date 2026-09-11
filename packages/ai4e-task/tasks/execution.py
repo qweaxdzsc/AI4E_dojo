@@ -25,10 +25,15 @@ def submit_run(
     idempotency_key: str | None = None,
     resumed_from: str | None = None,
     _code: Path | None = None,
+    expected_revision: str | None = None,
+    operation_mode: str = "execute",
+    input_keys: list[str] | None = None,
 ) -> dict:
     """捕获当前工作目录并提交；返回运行记录，不创建正式版本。"""
     from omegaconf import OmegaConf
 
+    if operation_mode not in {"execute", "trial"}:
+        raise ValueError("invalid_operation_mode")
     info = open_project(project)
     project = Path(project).resolve()
     identity = uuid4().hex
@@ -36,7 +41,14 @@ def submit_run(
     execution = folder / ".dojo/executions" / identity
     stage = execution.with_name(identity + ".tmp")
     fingerprint = digest(
-        {"task_id": task_id, "overrides": overrides or [], "resumed_from": resumed_from}
+        {
+            "task_id": task_id,
+            "overrides": overrides or [],
+            "resumed_from": resumed_from,
+            "operation_mode": operation_mode,
+            "expected_revision": expected_revision,
+            "input_keys": input_keys,
+        }
     )
     published = False
     try:
@@ -53,6 +65,14 @@ def submit_run(
             for field in ("script", "config"):
                 if not inside(source, entry[field]).is_file():
                     raise FileNotFoundError(entry[field])
+            if expected_revision is not None:
+                import hashlib
+
+                if (
+                    hashlib.sha256(inside(source, entry["config"]).read_bytes()).hexdigest()
+                    != expected_revision
+                ):
+                    raise ValueError("configuration_revision_conflict")
             stage.mkdir(parents=True)
             captured = snapshot(source, stage / "code")
             cfgpath = stage / "code" / entry["config"]
@@ -85,9 +105,17 @@ def submit_run(
                         candidate = validate_asset(project, old)
                     OmegaConf.update(cfg, key, str(candidate.resolve()))
             OmegaConf.save(cfg, cfgpath)
+            capture_entry = entry
+            if input_keys is not None:
+                if set(input_keys) - set(entry.get("inputs", {})):
+                    raise ValueError("unknown_stage_input_binding")
+                capture_entry = {
+                    **entry,
+                    "inputs": {key: entry["inputs"][key] for key in input_keys},
+                }
             inputs = capture_inputs(
                 stage / "code",
-                entry,
+                capture_entry,
                 project=project,
                 inherited=task.get("assets", {}),
                 shared=all_records(db, "asset"),
@@ -118,6 +146,8 @@ def submit_run(
                 "request_path": str((execution / "request.json").relative_to(project)),
                 "pid": None,
                 "resumed_from": resumed_from,
+                "operation_mode": operation_mode,
+                "stages": list(OmegaConf.select(cfg, "pipeline.stages", default=[])),
                 "source_snapshot": captured,
                 "code_digest": digest(inventory(stage / "code")),
             }

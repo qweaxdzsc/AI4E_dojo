@@ -1,0 +1,19 @@
+{
+  "seed": 42,
+  "samples": {
+    "nasa": [
+      "Sample032",
+      "Sample019",
+      "Sample028",
+      "Sample004",
+      "Sample020"
+    ],
+    "shapenet": [
+      "param0/1abeca7159db7ed9f200a72c9245aee7",
+      "param0/1641efa5c92514d86c4f4dbcda5f2fc0",
+      "param0/192fdf42f5a2623d673ddeabdcc8c6e",
+      "param0/10e99b1475098c0aaa69dfdc5532bb13",
+      "param0/1dbb02c20bb93af81c1b3b2ed8d13bf8"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "configuration_revision": "e85a751e9bf3670f9ffe5d4b888b03f82911b79aa6fd2d2ba1336e473357f945",
+  "input_source": {
+    "identity": {
+      "index": 0,
+      "partition": "train",
+      "sample": "param1/1dc58be25e1b6e5675cad724c63e222e",
+      "source": null
+    },
+    "preparation": "e03df3680110de7b1df117382d84c85c89b086b0eeba612ae422e0b2fda21beb"
+  },
+  "model_type": "ai4e_contrib.ability.model.transolver3.network.Model",
+  "parameter_count": 11332033,
+  "path": "/private/tmp/dojo-platform-traces/shapenet_car_transolver3_surface/model.html",
+  "schema_version": 1,
+  "status": "succeeded"
+}

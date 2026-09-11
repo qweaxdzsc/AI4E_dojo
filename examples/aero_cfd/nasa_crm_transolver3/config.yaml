@@ -1,7 +1,3 @@
-components:
-  workflow: ai4e_core.applications.aero_cfd.pointfield_workflow
-  dataset: ai4e_contrib.application.datasets.nasa_crm
-  model: ai4e_contrib.ability.model.transolver3.component
 dataset:
   root: /shared/raw/nasa_crm
   train_h5: ${dataset.root}/trainingData_NASA-CRM.h5
@@ -13,34 +9,25 @@ dataset:
   resume: false
 pipeline:
   stages:
-  - rawprep
   - trainprep
   - train
   - post
-data_root: /shared/datasets/nasa_crm_transolver3
+data_root: /shared/datasets/nasa_physical
 run_root: /shared/runs/nasa_crm_transolver3
 paths:
   datasets:
     root: ${data_root}
     train: ${data_root}/train
-    validation: ${data_root}/validation
+    eval: ${data_root}/eval
     test: ${data_root}/test
-    predictions: ${data_root}/predictions
-    post: ${data_root}/post
-model:
-  parameters:
-    n_hidden: 256
-    n_layers: 24
-    n_head: 8
-    mlp_ratio: 2
-    slice_num: 64
-    space_dim: 12
-    fun_dim: 0
-    out_dim: 4
-    unified_pos: false
-    gradient_checkpointing: true
+    normalize:
+      root: ${data_root}/normalize
+      train: ${paths.datasets.normalize.root}/train
+      eval: ${paths.datasets.normalize.root}/eval
+      test: ${paths.datasets.normalize.root}/test
+    predictions: ${data_root}/predictions/nasa_crm_transolver3
 train:
-  max_epochs: 2
+  max_epochs: 1
   batch_size: 1
   num_workers: 0
   device: auto
@@ -57,22 +44,77 @@ train:
   evaluation_split: validation
   validation_interval: 1
   resume: null
-post:
-  checkpoint: best
-  split: test
-  infer: true
-  evaluate: true
-  export_hdf5: true
-  export_vtk: true
-  all_samples: false
-  samples: null
-  inference_samples: null
-  resume: false
-  overwrite: false
-rawprep: {}
-trainprep:
+  evaluation_enabled: false
+  manifest: ${data_root}/manifest.json
+  parameter_group_policy: all
+  ema_decay: null
+model:
+  parameters:
+    n_hidden: 256
+    n_layers: 24
+    n_head: 8
+    mlp_ratio: 2
+    slice_num: 64
+    space_dim: 12
+    fun_dim: 0
+    out_dim: 4
+    unified_pos: false
+    gradient_checkpointing: true
   sampling:
     seed: 2
     stride: 4
+    chunk_count: 20
+    random_stream: independent
+trainprep:
+  domains:
+    surface:
+      position: surface_position
+      features:
+        normals: surface_normals
+      targets:
+        cp: surface_cp
+        cf: surface_cf
+      query_targets: false
+  conditioning:
+    conditions:
+      field: conditions
   normalization:
     execute: true
+    fields:
+      surface_position:
+        method: identity
+      surface_cp:
+        method: zscore
+      surface_cf:
+        method: zscore
+      surface_normals:
+        method: identity
+      conditions:
+        method: zscore
+        scope: condition
+post:
+  random_stream: global
+  split: test
+  evaluate: true
+  save_predictions: true
+  export_vtk: true
+  query: true
+  sample_indices:
+  - 0
+  query_chunk_size: 16384
+  overwrite: false
+  checkpoint: last
+  samples:
+  - Sample032
+  - Sample019
+  - Sample028
+  - Sample004
+  - Sample020
+snapshot_modules:
+- ai4e_spec
+- ai4e_contrib
+rawprep: {}
+components:
+  workflow: ai4e_core.applications.aero_cfd.workflow
+  dataset: ai4e_contrib.application.datasets.nasa_crm
+  model: ai4e_contrib.ability.model.transolver3.component

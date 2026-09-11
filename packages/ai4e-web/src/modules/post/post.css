@@ -1,0 +1,450 @@
+/* 后处理对照整合 HTML 嵌入的浅蓝页签与三栏，不改其他阶段皮肤。 */
+.post-workspace {
+  font: 13px/1.6 system-ui, -apple-system, "PingFang SC", sans-serif;
+  color: #13234b;
+}
+
+.post-shell {
+  border: 1px solid #dceaff;
+  border-radius: 6px;
+  background: #fff;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.post-config {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 12px 14px 8px;
+}
+
+.post-config > label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  font-size: 11px;
+  color: #3b5484;
+}
+
+.post-config .ant-select,
+.post-config .ant-input-number,
+.post-config .ant-input {
+  min-width: 132px;
+}
+
+.post-config .input-bindings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.post-config .input-bindings > div {
+  min-width: 180px;
+  flex: 1;
+}
+
+.post-config .input-bindings label {
+  display: block;
+  margin: 0 0 4px;
+  font-size: 11px;
+  color: #3b5484;
+}
+
+.post-config .input-bindings .ant-select {
+  width: 100%;
+  margin-bottom: 0 !important;
+}
+
+.post-config-flags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  font-size: 11px;
+  color: #324d7d;
+}
+
+.post-note {
+  margin: 0 14px 10px;
+  padding: 12px;
+  background: #eef7ff;
+  border-radius: 6px;
+  color: #6b84af;
+  font-size: 12px;
+}
+
+.post-tabs {
+  height: 47px;
+  border-bottom: 1px solid #e5edf9;
+  display: flex;
+  gap: 7px;
+  padding: 0 16px;
+  background: #fff;
+}
+
+.post-tabs [role="tab"] {
+  border: 0;
+  background: transparent;
+  border-radius: 0;
+  font-size: 14px;
+  color: #425d8f;
+  padding: 0 20px;
+  height: 47px;
+  cursor: pointer;
+}
+
+.post-tabs [role="tab"].active,
+.post-tabs [role="tab"][aria-selected="true"] {
+  color: #0875ff;
+  font-weight: 600;
+  border-bottom: 2px solid #0875ff;
+}
+
+.post-data-tab,
+.post-charts-tab {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.post-data-tab {
+  margin: 10px 0 0;
+  border: 1px solid #dceaff;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}
+
+.post-shell.data-active {
+  background: transparent;
+  border-color: transparent;
+}
+
+.post-shell.data-active .post-tabs {
+  background: #fff;
+  border: 1px solid #dceaff;
+  border-radius: 5px;
+}
+
+.metric-filterbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 15px 13px;
+  border-bottom: 1px solid #e1ebfc;
+}
+
+.metric-filterbar input {
+  flex: 1;
+  min-width: 120px;
+  height: 35px;
+  border: 1px solid #d8e7ff;
+  border-radius: 5px;
+  padding: 0 10px;
+  color: #324d7d;
+}
+
+.metric-filterbar small {
+  color: #9aa9bd;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.metric-table-scroll {
+  overflow: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.metric-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.metric-data-table th {
+  background: linear-gradient(#f2f7ff, #edf5ff);
+  height: 46px;
+  padding: 10px 12px;
+  color: #415b8b;
+  border-right: 1px solid #e1eafb;
+  font-weight: 500;
+}
+
+.metric-data-table td {
+  height: 41px;
+  padding: 8px 12px;
+  border-right: 1px solid #edf2fb;
+  border-bottom: 1px solid #e8effa;
+  color: #45608e;
+}
+
+.metric-data-table td:first-child {
+  color: #172d59;
+}
+
+.metric-data-table tbody tr:nth-child(even) {
+  background: #f9fbfe;
+}
+
+.metric-empty {
+  text-align: center;
+  color: #8a9db8 !important;
+  height: 180px !important;
+}
+
+.metric-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 14px;
+  font-size: 11px;
+  color: #6680ab;
+  border-top: 1px solid #e7eef9;
+}
+
+.post-charts-tab {
+  padding: 9px 12px 12px;
+}
+
+.post-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.post-kpi {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 11px;
+  border: 1px solid #dceaff;
+  border-radius: 6px;
+  background: #fff;
+  min-width: 0;
+  height: 79px;
+}
+
+.kpi-main span {
+  font-size: 11px;
+  color: #4b6594;
+}
+
+.kpi-main strong {
+  display: block;
+  font-size: 20px;
+  color: #101e4c;
+  margin-top: 5px;
+}
+
+.post-chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px 13px;
+}
+
+.post-chart-grid > .ant-card {
+  border: 1px solid #dceaff;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.post-chart-grid > .ant-card:nth-child(-n + 2) {
+  height: 210px;
+}
+
+.post-chart-grid > .ant-card:nth-child(n + 3) {
+  height: 158px;
+}
+
+.post-chart-grid .ant-card-head {
+  min-height: 37px;
+  height: 37px;
+  padding: 0 13px;
+  border-bottom: 1px solid #edf2fc;
+  font-size: 14px;
+  color: #10234f;
+}
+
+.post-chart-grid .ant-card-body {
+  padding: 8px;
+}
+
+.post-chart-grid svg {
+  width: 100%;
+  height: 130px;
+}
+
+.post-chart-grid small {
+  font-size: 10px;
+  color: #7994bd;
+}
+
+.post-chart-unavailable {
+  height: 94px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8198bc;
+  text-align: center;
+  padding: 12px;
+  background: #f8fbff;
+}
+
+.post-workspace .model-performance {
+  margin-top: 9px;
+  padding: 0 8px 6px;
+  border: 1px solid #dceaff;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.chart-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 0;
+  height: 32px;
+}
+
+.chart-card-head h3 {
+  font-size: 14px;
+  margin: 0;
+  color: #10234f;
+}
+
+.post-chart-note {
+  font-size: 9px;
+  color: #8b9ab3;
+  padding: 3px 8px;
+}
+
+.post-viz-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+}
+
+.post-visualization-layout {
+  display: grid;
+  grid-template-columns: 0.98fr 0.9fr 3fr;
+  gap: 9px;
+  padding: 9px 5px 12px;
+  min-height: 650px;
+}
+
+.post-visualization-layout .post-pane {
+  border: 1px solid #dceaff;
+  border-radius: 5px;
+  background: #fff;
+  min-width: 0;
+  overflow: auto;
+}
+
+.post-pane-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 11px 8px;
+  margin: 0 5px;
+  border-bottom: 1px solid #e6effa;
+  font-size: 15px;
+  font-weight: 600;
+  color: #13234b;
+}
+
+.post-visualization-layout .file-browser {
+  padding: 6px 8px 10px;
+}
+
+.post-visualization-layout .file-browser.compact .ant-select,
+.post-visualization-layout .file-browser.compact .ant-input-search {
+  margin-top: 6px;
+}
+
+.post-visualization-layout .viz-workspace {
+  display: contents;
+}
+
+.post-visualization-layout .viz-sources {
+  display: none;
+}
+
+.post-visualization-layout .viz-tree,
+.post-visualization-layout .viz-workspace > main {
+  border: 1px solid #dceaff;
+  border-radius: 5px;
+  background: #fff;
+  min-width: 0;
+  overflow: auto;
+}
+
+.post-visualization-layout .viz-workspace > main {
+  padding: 0 7px 7px;
+}
+
+.post-source-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+}
+
+.post-source-list button {
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-size: 11px;
+  color: #426398;
+  padding: 7px 5px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.post-source-list button.active {
+  background: #e8f3ff;
+  color: #0875ff;
+}
+
+.post-workspace ~ .execution-log {
+  background: #f5f9ff;
+  border-color: #e0ebfb;
+  color: #6c81a6;
+}
+
+.post-workspace ~ .execution-log pre {
+  background: #fff;
+  color: #6c81a6;
+}
+
+.stage-toolbar.post-stage-toolbar {
+  align-items: flex-start;
+}
+
+.stage-toolbar.post-stage-toolbar .post-stage-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1100px) {
+  .post-kpis {
+    grid-template-columns: 1fr 1fr;
+  }
+  .post-visualization-layout {
+    grid-template-columns: 190px 200px minmax(440px, 1fr);
+    overflow: auto;
+  }
+}

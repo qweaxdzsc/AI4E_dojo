@@ -1,0 +1,229 @@
+[
+  {
+    "name": "shapenet_car_transolver3_surface",
+    "format": "pt",
+    "run": "/private/tmp/dojo-algorithm-handoff-v3/shapenet_car_transolver3_surface/runs/2026-09-10T18-37-37_848c8c",
+    "configuration": "/private/tmp/dojo-algorithm-handoff-v3/shapenet_car_transolver3_surface/case/config.yaml",
+    "parameter_count": 11332033,
+    "trace": "/private/tmp/dojo-platform-traces/shapenet_car_transolver3_surface/model.html",
+    "training_samples": 1,
+    "test_samples": 1,
+    "epochs": 1,
+    "sample_identity_checked": true,
+    "prediction_metrics": {
+      "surface.pressure": {
+        "count": 3586,
+        "squared_error": 19976188.69910625,
+        "absolute_error": 223731.91871982813,
+        "truth_squared": 12182022.887446135,
+        "mse": 5570.604768295106,
+        "mae": 62.39038447290243,
+        "relative_l2": 1.2805502059985416
+      }
+    }
+  },
+  {
+    "name": "shapenet_car_abupt",
+    "format": "pt",
+    "run": "/private/tmp/dojo-algorithm-handoff-v4/shapenet_car_abupt/runs/2026-09-10T18-44-36_0099c6",
+    "configuration": "/private/tmp/dojo-algorithm-handoff-v4/shapenet_car_abupt/case/config.yaml",
+    "parameter_count": 18634180,
+    "trace": "/private/tmp/dojo-platform-traces/shapenet_car_abupt/model.html",
+    "training_samples": 1,
+    "test_samples": 1,
+    "epochs": 1,
+    "sample_identity_checked": true,
+    "prediction_metrics": {
+      "surface.pressure": {
+        "count": 3586,
+        "squared_error": 20181354.244303808,
+        "absolute_error": 256233.0388969779,
+        "truth_squared": 12182022.887446135,
+        "mse": 5627.817692220805,
+        "mae": 71.45371971471776,
+        "relative_l2": 1.2871093561979943
+      },
+      "volume.velocity": {
+        "count": 85512,
+        "squared_error": 1594325.5184988612,
+        "absolute_error": 254049.22235411237,
+        "truth_squared": 9825392.871195566,
+        "mse": 18.644465320643434,
+        "mae": 2.9709189628837165,
+        "relative_l2": 0.4028223291956289
+      },
+      "volume.velocity/0": {
+        "count": 28504,
+        "squared_error": 61128.40868963895,
+        "absolute_error": 31066.409737569244,
+        "truth_squared": 54432.56122070078,
+        "mse": 2.1445554550111896,
+        "mae": 1.089896496546774,
+        "relative_l2": 1.0597225120153981
+      },
+      "volume.velocity/1": {
+        "count": 28504,
+        "squared_error": 64448.64566302933,
+        "absolute_error": 32731.572888785435,
+        "truth_squared": 46509.3845262636,
+        "mse": 2.2610386494186545,
+        "mae": 1.1483150746837438,
+        "relative_l2": 1.1771629956809884
+      },
+      "volume.velocity/2": {
+        "count": 28504,
+        "squared_error": 1468748.464146193,
+        "absolute_error": 190251.2397277577,
+        "truth_squared": 9724450.9254486,
+        "mse": 51.52780185750045,
+        "mae": 6.674545317420632,
+        "relative_l2": 0.3886343361721688
+      },
+      "volume.velocity/magnitude": {
+        "count": 28504,
+        "squared_error": 1425118.9540479258,
+        "absolute_error": 189126.40413358202,
+        "truth_squared": 9825392.871195566,
+        "mse": 49.99715668144562,
+        "mae": 6.635082940414749,
+        "relative_l2": 0.3808470498030185
+      }
+    }
+  },
+  {
+    "name": "nasa_crm_abupt",
+    "format": "zarr",
+    "run": "/private/tmp/dojo-algorithm-handoff-v5/nasa_crm_abupt/runs/2026-09-10T19-00-55_2b736c",
+    "configuration": "/private/tmp/dojo-algorithm-handoff-v5/nasa_crm_abupt/case/config.yaml",
+    "parameter_count": 19736644,
+    "trace": "/private/tmp/dojo-platform-traces/nasa_crm_abupt/model.html",
+    "training_samples": 8,
+    "test_samples": 1,
+    "epochs": 1,
+    "sample_identity_checked": true,
+    "prediction_metrics": {
+      "surface.cp": {
+        "count": 454404,
+        "squared_error": 57914.650316119616,
+        "absolute_error": 110675.67973395587,
+        "truth_squared": 58533.37789368666,
+        "mse": 0.12745189372479032,
+        "mae": 0.2435622919999733,
+        "relative_l2": 0.994700704406156
+      },
+      "surface.cf": {
+        "count": 1363212,
+        "squared_error": 0.7951990801799458,
+        "absolute_error": 650.3744904425578,
+        "truth_squared": 1.7744739686444113,
+        "mse": 5.833275236573224e-07,
+        "mae": 0.00047708976332555596,
+        "relative_l2": 0.6694268356934289
+      },
+      "surface.cf/0": {
+        "count": 454404,
+        "squared_error": 0.4118427732990584,
+        "absolute_error": 346.6279141475104,
+        "truth_squared": 1.3940030988106176,
+        "mse": 9.063361530687635e-07,
+        "mae": 0.0007628188003351872,
+        "relative_l2": 0.5435429351710043
+      },
+      "surface.cf/1": {
+        "count": 454404,
+        "squared_error": 0.12879945166438758,
+        "absolute_error": 142.77270559045647,
+        "truth_squared": 0.12894080704884872,
+        "mse": 2.834470023687898e-07,
+        "mae": 0.00031419773063277715,
+        "relative_l2": 0.9994517090816295
+      },
+      "surface.cf/2": {
+        "count": 454404,
+        "squared_error": 0.25455685521649984,
+        "absolute_error": 160.97387070459095,
+        "truth_squared": 0.2515300627849452,
+        "mse": 5.60199415534414e-07,
+        "mae": 0.0003542527590087036,
+        "relative_l2": 1.0059987681663547
+      },
+      "surface.cf/magnitude": {
+        "count": 454404,
+        "squared_error": 0.5379606576965654,
+        "absolute_error": 364.7974199252493,
+        "truth_squared": 1.7744739686444113,
+        "mse": 1.1838818709706901e-06,
+        "mae": 0.0008028041564890478,
+        "relative_l2": 0.5506053685917001
+      }
+    }
+  },
+  {
+    "name": "nasa_crm_transolver3",
+    "format": "zarr",
+    "run": "/private/tmp/dojo-algorithm-handoff-v5/nasa_crm_transolver3/runs/2026-09-10T18-55-18_ba718c",
+    "configuration": "/private/tmp/dojo-algorithm-handoff-v5/nasa_crm_transolver3/case/config.yaml",
+    "parameter_count": 11335876,
+    "trace": "/private/tmp/dojo-platform-traces/nasa_crm_transolver3/model.html",
+    "training_samples": 8,
+    "test_samples": 1,
+    "epochs": 1,
+    "sample_identity_checked": true,
+    "prediction_metrics": {
+      "surface.cp": {
+        "count": 454404,
+        "squared_error": 59436.73929971302,
+        "absolute_error": 109187.23333120941,
+        "truth_squared": 58533.37789368666,
+        "mse": 0.13080153189609472,
+        "mae": 0.24028669054675886,
+        "relative_l2": 1.0076870891676024
+      },
+      "surface.cf": {
+        "count": 1363212,
+        "squared_error": 0.8286623021093307,
+        "absolute_error": 741.2007382703559,
+        "truth_squared": 1.7744739686444113,
+        "mse": 6.078748588695893e-07,
+        "mae": 0.0005437164126125328,
+        "relative_l2": 0.683366955925625
+      },
+      "surface.cf/0": {
+        "count": 454404,
+        "squared_error": 0.4111162412887117,
+        "absolute_error": 345.2820799999761,
+        "truth_squared": 1.3940030988106176,
+        "mse": 9.047372850782821e-07,
+        "mae": 0.0007598570435118883,
+        "relative_l2": 0.5430632913819081
+      },
+      "surface.cf/1": {
+        "count": 454404,
+        "squared_error": 0.16774507366864122,
+        "absolute_error": 196.94183542264628,
+        "truth_squared": 0.12894080704884872,
+        "mse": 3.6915404280913287e-07,
+        "mae": 0.00043340691416150887,
+        "relative_l2": 1.1405903561943456
+      },
+      "surface.cf/2": {
+        "count": 454404,
+        "squared_error": 0.24980098715197774,
+        "absolute_error": 198.9768228477336,
+        "truth_squared": 0.2515300627849452,
+        "mse": 5.497332487213531e-07,
+        "mae": 0.000437885280164201,
+        "relative_l2": 0.9965569574717107
+      },
+      "surface.cf/magnitude": {
+        "count": 454404,
+        "squared_error": 0.537854983810242,
+        "absolute_error": 365.9067479685662,
+        "truth_squared": 1.7744739686444113,
+        "mse": 1.1836493160496871e-06,
+        "mae": 0.0008052454379111236,
+        "relative_l2": 0.5505512870655327
+      }
+    }
+  }
+]

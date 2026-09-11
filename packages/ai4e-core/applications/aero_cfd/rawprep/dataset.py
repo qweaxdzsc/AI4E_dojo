@@ -50,9 +50,11 @@ def extract_fields(data, *, fields=None):
             raise ValueError(f"提取域未读取: {role}")
         for name, overrides in requested.items():
             available = data.metadata["fields"].get(role, {})
-            if name not in available:
+            if name not in available and not {"array", "association", "components"} <= set(
+                overrides
+            ):
                 raise ValueError(f"未知字段 {role}.{name}；可用字段={list(available)}")
-            spec = {**available[name], **dict(overrides)}
+            spec = {**available.get(name, {}), **dict(overrides)}
             if isinstance(spec["components"], bool) or spec["components"] not in (1, 3):
                 raise ValueError(f"字段 {role}.{name} 当前仅支持 1 或 3 分量")
             spec["kind"] = "scalar" if spec["components"] == 1 else "vector"
@@ -80,6 +82,8 @@ def select_fields(data, *, fields=None, output=None):
     """按 manifest 的输出契约选场，文件名由逻辑字段生成。"""
     if not isinstance(data, Dataset):
         return select_one(data, output=output)
+    if output is not None:
+        return data.then("字段选择", lambda ctx: select_one(ctx, output=output), output=output)
     if len(fields) != len(set(fields)):
         raise ValueError("保存字段重复")
     unknown = set(fields) - set(data.metadata["outputs"])
@@ -131,12 +135,20 @@ def save_sample(ctx: dict, *, output: dict) -> dict:
     ctx = dict(ctx)
     ctx["config"] = deepcopy(ctx["config"])
     ctx["config"]["pre"]["output"] = {"dir": output[ctx["partition"]], "root_subdir": "."}
-    shapes = {
-        name: {"shape": list(value.shape), "dtype": str(value.dtype), "state": "physical"}
-        for name, value in ctx["payloads"].items()
-    }
+
+    def descriptor(value):
+        if isinstance(value, dict):
+            return {
+                "state": "physical",
+                "members": {key: descriptor(item) for key, item in value.items()},
+            }
+        return {"shape": list(value.shape), "dtype": str(value.dtype), "state": "physical"}
+
+    shapes = {name: descriptor(value) for name, value in ctx["payloads"].items()}
     result = write_tensors(ctx)["result"]
     result.update(partition=ctx["partition"], fields=shapes)
+    if ctx["output"].get("field_aliases"):
+        result["field_aliases"] = dict(ctx["output"]["field_aliases"])
     for notice in result["warnings"]:
         LOGGER.warning("[样本提交/警告] 样本=%s；%s", ctx["sample"], notice)
     event(

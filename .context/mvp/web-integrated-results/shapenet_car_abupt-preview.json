@@ -1,0 +1,27 @@
+{
+  "case": "shapenet_car_abupt",
+  "prediction": {
+    "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+    "asset_id": "651ecb421647ba9a836fd34cda2faeb1d27b975dba501805d8e0da4f5e3bff08",
+    "revision": "859e06c5bc43418e569f7ed9c95e933fb9aa8b234708fc75e45f65da00488ad6",
+    "task_id": "7b20f38045a74e10a397ffa7f1d1ebbe"
+  },
+  "prediction_shape": [
+    3586,
+    1
+  ],
+  "mesh": {
+    "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+    "asset_id": "ede03d189a5e3aa9329f141e761822c179bce28a1207a36be8d807768e5845db",
+    "revision": "3f357b46434ea8029ea4ef2ceb3b5e4b1eb6ae92bd6fea1beba0d0e64fd1671c",
+    "task_id": "7b20f38045a74e10a397ffa7f1d1ebbe"
+  },
+  "display": {
+    "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+    "asset_id": "741de583ac344852a237b3e77f066fa3",
+    "revision": "c39d3eed06fc4c2857a8555cb22c70da18a0b0e9ccb6cbbc8807241b4f295eea"
+  },
+  "points": 3586,
+  "tensor_values_equal": true,
+  "mesh_coordinates_equal": true
+}

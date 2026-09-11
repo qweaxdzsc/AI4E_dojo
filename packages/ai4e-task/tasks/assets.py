@@ -48,6 +48,7 @@ def capture_inputs(
     project,
     inherited: dict | None = None,
     shared: list[dict] | None = None,
+    allow_unbound: bool = False,
 ) -> dict:
     """只登记入口声明且有实际文件的输入；官方分片等非路径值不作为资产。"""
     if not entry:
@@ -73,6 +74,9 @@ def capture_inputs(
             validate_asset(project, old)
             result[key] = old
         else:
+            # 创建时允许模板保留待绑定路径；执行捕获仍要求实际文件。
+            if allow_unbound and not path.exists():
+                continue
             result[key] = describe_asset(path, kind=kind)
     return result
 

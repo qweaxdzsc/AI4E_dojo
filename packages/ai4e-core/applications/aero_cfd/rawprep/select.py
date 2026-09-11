@@ -17,7 +17,10 @@ def select_fields(ctx: dict, *, output: dict) -> dict:
     optional = set(output.get("optional", []))
     if set(specifications) & set(bundles):
         raise ValueError("普通场和打包输出逻辑名重复")
-    if set(filemap) != set(specifications) | set(bundles):
+    explicit = output.get("members", {})
+    if set(explicit) & (set(specifications) | set(bundles)):
+        raise ValueError("成员输出逻辑名重复")
+    if set(filemap) != set(specifications) | set(bundles) | set(explicit):
         raise ValueError("filemap 必须与 fields/bundles 的输出逻辑名完全对应")
     if optional - set(filemap):
         raise ValueError("optional 含未声明输出")
@@ -89,6 +92,11 @@ def select_fields(ctx: dict, *, output: dict) -> dict:
             record_name = f"{logical}/{name}"
             records.append(collect(record_name, domain, f"fields.{name}"))
             routes[record_name] = (logical, name)
+    for logical, members in explicit.items():
+        for member, spec in members.items():
+            record_name = f"{logical}/{member}"
+            records.append(collect(record_name, spec["domain"], spec["field"]))
+            routes[record_name] = (logical, member)
     if not records:
         raise ValueError("输出为空，不能报告写入成功")
     return {

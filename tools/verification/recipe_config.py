@@ -9,15 +9,19 @@ import yaml
 def experiment_sampling(user: dict) -> dict:
     """读取显式实验的种子和锚点预算；缺声明时拒绝回退默认实验。"""
     if "sampling" in user:
-        raise ValueError("旧实验 sampling 已移除，请使用 trainprep.sampling")
-    sampling = user.get("trainprep", {}).get("sampling")
+        raise ValueError("旧实验 sampling 已移除，请使用 model.sampling")
+    modern = user.get("model", {}).get("sampling")
+    legacy = user.get("trainprep", {}).get("sampling")
+    if modern is not None and legacy is not None:
+        raise ValueError("model.sampling 与 trainprep.sampling 不能同时存在")
+    sampling = modern if modern is not None else legacy
     try:
         sampling["seed"]
         sampling["supernodes"]["num_points"]
         sampling["domains"]["surface"]["anchor"]["num_points"]
         sampling["domains"]["volume"]["anchor"]["num_points"]
     except (KeyError, TypeError) as exc:
-        raise ValueError("显式实验缺少 trainprep.sampling 种子或采样预算") from exc
+        raise ValueError("显式实验缺少 model.sampling 种子或采样预算") from exc
     return sampling
 
 

@@ -156,11 +156,17 @@ def fit(
                 raise ValueError("训练分片为空")
             if scheduler is not None and scheduler_unit == "epoch":
                 scheduler.step()
-            should_evaluate = epoch % validation_interval == 0 or epoch + 1 == epochs
+            should_evaluate = config.get("evaluation_enabled", True) and (
+                epoch % validation_interval == 0 or epoch + 1 == epochs
+            )
             evaluation = evaluate() if should_evaluate else None
             if evaluation is not None and not math.isfinite(evaluation["loss"]):
                 raise ValueError("评估损失非有限")
-            repeat = evaluate_repeat() if evaluate_repeat is not None else None
+            repeat = (
+                evaluate_repeat()
+                if evaluate_repeat is not None and config.get("evaluation_enabled", True)
+                else None
+            )
             improved = evaluation is not None and (
                 evaluation["loss"] <= best
                 if config.get("best_on_equal", False)

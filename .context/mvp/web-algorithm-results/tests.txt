@@ -1,0 +1,25 @@
+2026-09-10
+UV_CACHE_DIR=/private/tmp/dojo-uv-cache OMP_NUM_THREADS=1 uv run pytest tests/integration/test_algorithm_platform_contract.py tests/integration/test_cross_model_recipe.py tests/integration/test_model_preparation_contract.py tests/integration/test_cross_model_training.py tests/integration/test_normalized_dataset.py tests/integration/test_train_normalize_sample.py tests/integration/test_dataset_recipe.py tests/integration/test_recipe_configuration.py tests/integration/test_aero_cfd_examples.py -q
+67 passed, 1 warning in 30.72s
+Warning: PyTorch torch.jit.script deprecation in AB-UPT; not skipped.
+Four formal model real TorchVista traces succeeded.
+Four raw-source -> grouped PT/Zarr -> preparation -> full-size network one epoch -> complete selected test sample post runs succeeded. See summary.json and acceptance scope.
+
+Final targeted boundary review:
+UV_CACHE_DIR=/private/tmp/dojo-uv-cache OMP_NUM_THREADS=1 uv run pytest tests/integration/test_algorithm_platform_contract.py tests/integration/test_model_preparation_contract.py -q
+21 passed (includes old tests; do not add to 67 as disjoint tests).
+Additional assertions: exact coordinate arithmetic float32/float64 divide/shift_scale; interrupted Zarr preserves previous directory; identity sidecar changes digest and rejects duplicate IDs; manual Min-Max statistics rejected; foreign same-name field cannot borrow manifest identity; conflicting selected manifest/preparation rejected.
+Targeted ruff check of changed algorithm sources passed.
+
+Final configuration consumer review:
+uv run pytest tests/integration/test_recipe_configuration.py -q
+13 passed in 2.95s, including actual old/new task runs with independently frozen quantity_config sampling selectors.
+uv run pytest tests/integration/test_algorithm_platform_contract.py -q
+21 passed in 3.67s, including trusted legacy component provider and actual Transolver/shared workflow training constraints.
+ModelPanel/TrainingPanel read-only review findings were sent to platform: disable unsupported shared evaluation settings; expose actual TS scheduler_unit/min_lr_ratio; disclose fixed TS MSE. Algorithms now publish capabilities for these controls.
+
+2026-09-10 mesh export: uv run pytest tests/integration/test_physical_mesh_export.py tests/integration/test_cross_model_recipe.py tests/integration/test_cross_model_comparison.py tests/integration/test_comparison_visualization.py -q
+12 passed in 14.95s
+
+Coordinate declaration: uv run pytest tests/integration/test_coordinate_space.py tests/integration/test_physical_mesh_export.py tests/integration/test_algorithm_platform_contract.py -q
+29 passed in 3.68s; affected Ruff checks passed.

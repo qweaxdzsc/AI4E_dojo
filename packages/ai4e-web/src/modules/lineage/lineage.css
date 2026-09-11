@@ -1,0 +1,50 @@
+/* 版本树对照整合 HTML 最终浅蓝主题；节点来自真实父版本关系。 */
+.lineage-view{font:13px/1.6 system-ui,-apple-system,"PingFang SC",sans-serif;color:#13234b}
+.lineage-view .treeactions{display:flex;align-items:center;margin:0 0 14px}
+.lineage-view .toolbar-spacer{flex:1}
+.lineage-view .treeactions .ant-btn-primary,
+.lineage-view .treeinspector .ant-btn-primary{background:#0873ff;border-color:#0873ff}
+.lineage-view .cols.treecols{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;align-items:start}
+.lineage-view .panel{background:#fff;border:1px solid #e4eefb;border-radius:10px;padding:20px;box-shadow:0 3px 12px #4067a206}
+.lineage-view .panel.tree{min-height:560px}
+.lineage-view .tree .toolbar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.lineage-view .tree h2{margin:0;font-size:19px;font-weight:600;color:#13234b}
+.lineage-view .tree .toolbar .ant-btn{border:1px solid #d9e6fa;border-radius:6px;color:#2864b9;background:#fff}
+.lineage-view .treecanvas{overflow:auto;min-height:430px}
+.lineage-view .tree-zoom{position:relative;transform-origin:center top;margin:0 auto}
+.lineage-view .treecanvas svg{position:absolute;inset:0;width:100%;height:100%;min-width:650px}
+.lineage-view .tree-node{position:absolute;display:flex;flex-direction:column;justify-content:center;gap:2px;padding:0 14px 0 46px;border:1.2px solid #adc5ed;border-radius:8px;background:#fff;color:#1b3058;text-align:left;cursor:pointer;font:inherit}
+.lineage-view .tree-node.selected{background:#f4faff;border:2px solid #0873ff}
+.lineage-view .tree-node b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lineage-view .tree-node small{color:#7d92b8;font-size:12px;font-weight:400}
+.lineage-view .tree-node .dot{position:absolute;left:16px;width:16px;height:16px;border-radius:50%;background:#8aafea}
+.lineage-view .tree-node.selected .dot{background:#0875ff}
+.lineage-view .tree path{fill:none;stroke:#829aca;stroke-width:1.5}
+.lineage-view .note{background:#eef7ff;border:0;border-radius:6px;color:#6b84af;padding:12px;margin:16px 0;font-size:12px}
+.lineage-view .badge.blue{display:inline-block;background:#e9f3ff;color:#006dff;border:0;border-radius:12px;padding:2px 8px;font-size:12px}
+.lineage-view .treeinspector h2{margin:12px 0 8px;font-size:19px;color:#13234b}
+.lineage-view .treeinspector>p{margin:0 0 8px;color:#4e6091}
+.lineage-view .treeinspector label{display:block;margin:12px 0 5px}
+.lineage-view .treeinspector select{width:100%;height:36px;border:1px solid #d9e6fa;border-radius:5px;color:#324d7d;background:#fff;padding:0 10px}
+.lineage-view .tabs.compact{display:flex;gap:6px;margin:12px 0 0;border-bottom:1px solid #e1ebfb}
+.lineage-view .tabs.compact button{border:0;background:transparent;padding:10px 16px;color:#536589;border-bottom:3px solid transparent}
+.lineage-view .tabs.compact button.active{color:#0873ff;border-bottom-color:#0873ff;font-weight:650}
+.lineage-view .parameterlist{overflow:auto;margin:10px 0 16px}
+.lineage-view .parameterlist table{width:100%;border-collapse:collapse;font-size:12px}
+.lineage-view .parameterlist th{background:#f5faff;color:#526892;font-weight:500;padding:10px 8px;text-align:left}
+.lineage-view .parameterlist td{padding:10px 8px;border-bottom:1px solid #e8effb;vertical-align:top}
+.lineage-view .treeinspector .stack{display:flex;flex-direction:column;gap:10px;margin-bottom:15px}
+.lineage-view .treeinspector .stack .ant-btn{height:36px;border:1px solid #d9e6fa;border-radius:6px;color:#2864b9}
+.lineage-view .origin-pills{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.lineage-view .origin-pills span{border:1px solid #e5effd;background:#f5f9ff;color:#5d7fab;border-radius:12px;padding:2px 8px;font-size:11px}
+.lineage-view .origin-pills .current{opacity:.55}
+@media (max-width:1350px){.lineage-view .cols.treecols{grid-template-columns:minmax(0,1fr) 360px}}
+.task-form-dialog .ant-modal{width:520px;max-width:calc(100vw - 48px);font:13px/1.6 system-ui,-apple-system,"PingFang SC",sans-serif;color:#13234b}
+.task-form-dialog .ant-modal-content{border:1px solid #d9e6fa;border-radius:6px}
+.task-form-dialog .ant-modal-footer .ant-btn{height:36px;border:1px solid #d9e6fa;border-radius:6px;color:#2864b9;padding:7px 13px}
+.task-form-dialog .ant-modal-footer .ant-btn-primary{background:#0873ff;border-color:#0873ff;color:#fff}
+.task-form-dialog .task-form{display:flex;flex-direction:column;gap:16px}
+.task-form-dialog .task-form-item label{display:block;margin:0 0 6px}
+.task-form-dialog .task-form .ant-input{height:36px;border-color:#d9e6fa;border-radius:5px;color:#324d7d}
+.task-form-dialog .task-form p{margin:6px 0 0;color:#6a7da4;font-size:12px}
+@media (max-width:1000px){.lineage-view .cols.treecols{grid-template-columns:1fr}.lineage-view .treecanvas svg{min-width:600px}}

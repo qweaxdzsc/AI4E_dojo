@@ -33,3 +33,18 @@
 ## 五段配置与快照职责（2026-09-09）
 
 versions/compare.py 对全部已声明 quantity_config 条件检查缺失；新模板使用五段配置选择器。
+
+## 本机平台接入（2026-09-10）
+
+- `packages/ai4e-task/tasks/configuration.py`：稳定检查或管理配置公开操作。
+- `packages/ai4e-task/tasks/management.py`：稳定检查或管理配置公开操作。
+- `.context/mvp/web-rawprep-acceptance.md`：平台接入验收记录。
+- `tasks/create.py`、`tasks/assets.py`：创建时允许待绑定输入的最小缺陷修复；执行捕获仍严格。管理字段保持旧 JSON schema 兼容。
+
+## 平台阶段交接
+
+- `tasks/inspections.py`、`tasks/inspection_worker.py`：固定配置的公开检查及独立算法进程。
+- `tasks/artifacts.py`：成功正式运行的物理清单、准备记录和检查点候选；排除试跑。
+- `tasks/execution.py`：事务内核对预期配置修订，管理记录保存正式或试跑模式。
+
+`versions/details.py`：校验创建快照的固定分阶段参数与明确运行身份摘要，公开门面 `read_version_details`；当前编辑不替代创建参数。

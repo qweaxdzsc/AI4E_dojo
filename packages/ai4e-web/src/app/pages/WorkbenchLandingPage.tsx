@@ -1,0 +1,14 @@
+import { Alert, Empty, Select, Spin } from 'antd';
+import { useEffect, useState } from 'react';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
+import { listProjects } from '../../modules/projects';
+import { listTasks, TaskManagement, taskDetail } from '../../modules/tasks';
+import { listRuns } from '../../modules/executions';
+/** 工作台入口选择真实项目和任务；最近记录只在对象仍存在时提供继续入口。 */
+export function WorkbenchLandingPage(){
+ const [params]=useSearchParams(),nav=useNavigate(),[selected,setSelected]=useState(params.get('project')||''),[projects,setProjects]=useState<any[]>([]),[tasks,setTasks]=useState<any[]>([]),[runs,setRuns]=useState<any[]>([]),[recent,setRecent]=useState<any>(),[loading,setLoading]=useState(true),[error,setError]=useState('');const p=selected,query=params.get('q')||'';
+ useEffect(()=>{listProjects().then(async rows=>{setProjects(rows);let last:any;try{last=JSON.parse(localStorage.getItem('dojo.last-workbench')||'null')}catch{}if(last&&rows.some((r:any)=>r.id===last.project&&!r.archived)){try{const t=await taskDetail(last.project,last.task);if(t.archived)throw new Error('archived_recent_task');setRecent({...last,name:t.name});if(params.get('choose')!=='1'&&!params.get('q')){nav(`/projects/${last.project}/tasks/${last.task}/${last.step}`,{replace:true});return}}catch{}}if(!params.get('project')&&rows.length)setSelected(rows.find((r:any)=>query&&r.name.includes(query))?.id||rows.find((r:any)=>r.id===last?.project&&!r.archived)?.id||rows.find((r:any)=>!r.archived)?.id||rows[0].id);setLoading(false)}).catch(e=>{setError(e.message);setLoading(false)})},[]);
+ function reload(){if(!p)return;setLoading(true);setError('');Promise.all([listTasks(p),listRuns(p)]).then(([t,r])=>{setTasks(t);setRuns(r)}).catch(e=>setError(e.message)).finally(()=>setLoading(false))}
+ useEffect(reload,[p]);
+ return <section className="workbench-landing"><div className="page-heading"><div><h1>任务工作台</h1><p>选择研究项目与任务，配置并继续真实研究流程</p></div>{recent&&<Link className="enter-project" to={`/projects/${recent.project}/tasks/${recent.task}/${recent.step}`}>继续上次任务：{recent.name} →</Link>}</div>{error&&<Alert type="error" message={error}/>}<div className="workbench-project-picker"><label>研究项目</label><Select showSearch optionFilterProp="label" aria-label="选择工作台项目" placeholder="选择项目" value={p||undefined} options={projects.map(r=>({value:r.id,label:r.name+(r.archived?'（已归档）':'')}))} onChange={setSelected}/><Link to="/projects">管理项目</Link></div>{loading?<Spin/>:p?<TaskManagement key={p} project={p} rows={tasks} runs={runs} reload={reload} initialQuery={projects.find(r=>r.id===p)?.name.includes(query)?'':query}/>:<Empty description="还没有研究项目"><Link className="enter-project" to="/projects">创建第一个项目 →</Link></Empty>}</section>
+}

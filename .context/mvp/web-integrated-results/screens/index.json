@@ -1,0 +1,42 @@
+[
+  {
+    "source": "/private/tmp/dojo-root-browser-complete/visualization-export-真实-HTTP-NASA-导出网格字段及原始身份/nasa-export.png",
+    "copy": ".context/mvp/web-integrated-results/screens/nasa-export.png"
+  },
+  {
+    "source": "/private/tmp/dojo-root-browser-complete/platform-integrated-真实汽车案例页面配置与正式产物交接/stage-2.png",
+    "copy": ".context/mvp/web-integrated-results/screens/stage-2.png"
+  },
+  {
+    "source": "/private/tmp/dojo-root-browser-complete/platform-integrated-真实汽车案例页面配置与正式产物交接/stage-3.png",
+    "copy": ".context/mvp/web-integrated-results/screens/stage-3.png"
+  },
+  {
+    "source": "/private/tmp/dojo-root-browser-complete/platform-integrated-真实汽车案例页面配置与正式产物交接/stage-6.png",
+    "copy": ".context/mvp/web-integrated-results/screens/stage-6.png"
+  },
+  {
+    "source": "/private/tmp/dojo-root-browser-complete/platform-integrated-真实汽车案例页面配置与正式产物交接/stage-4.png",
+    "copy": ".context/mvp/web-integrated-results/screens/stage-4.png"
+  },
+  {
+    "source": "/private/tmp/dojo-root-browser-complete/platform-integrated-真实汽车案例页面配置与正式产物交接/stage-5.png",
+    "copy": ".context/mvp/web-integrated-results/screens/stage-5.png"
+  },
+  {
+    "source": "/private/tmp/dojo-root-browser-complete/model-inspection-正式模型检查操作到沙箱图形渲染/real-torchvista.png",
+    "copy": ".context/mvp/web-integrated-results/screens/real-torchvista.png"
+  },
+  {
+    "source": "/private/tmp/dojo-root-browser-complete/rawprep-页面多输出配置到真实处理和产物预览/real-multi-output.png",
+    "copy": ".context/mvp/web-integrated-results/screens/real-multi-output.png"
+  },
+  {
+    "source": "/private/tmp/dojo-root-browser-complete/visualization-views-真实-VTK-转换、显示及窗口独立状态/real-vtk-field.png",
+    "copy": ".context/mvp/web-integrated-results/screens/real-vtk-field.png"
+  },
+  {
+    "source": "/private/tmp/dojo-root-browser-complete/visualization-difference-真实同身份-NASA-差值显示/nasa-difference.png",
+    "copy": ".context/mvp/web-integrated-results/screens/nasa-difference.png"
+  }
+]

@@ -11,12 +11,10 @@ def construct(**parameters):
     """按原参数顺序实例化模型，不额外消耗随机数。"""
     parameters = dict(parameters)
     checkpointing = parameters.pop("gradient_checkpointing", True)
-    if (
-        parameters.get("space_dim") != 12
-        or parameters.get("fun_dim") != 0
-        or parameters.get("out_dim") != 4
-    ):
-        raise ValueError("当前点场组件要求 12 维输入、无附加函数和 4 维输出")
+    if parameters.get("space_dim", 0) < 1 or parameters.get("out_dim", 0) < 1:
+        raise ValueError("输入和输出维度必须为正")
+    if parameters.get("fun_dim", 0) != 0:
+        raise ValueError("具名点场入口将全部特征拼入 space_dim，fun_dim 必须为零")
     model = Model(**parameters)
     model.dojo_parameters = parameters
     model.dojo_checkpointing = bool(checkpointing)
@@ -37,8 +35,9 @@ def describe(model):
 def predict(model, inputs):
     """前向保持参考算子；仅训练时启用激活检查点。"""
     features = inputs["features"]
-    if not isinstance(features, torch.Tensor) or features.ndim != 3 or features.shape[-1] != 12:
-        raise ValueError("features 必须为 [批次, 点, 12] 张量")
+    width = model.dojo_parameters["space_dim"]
+    if not isinstance(features, torch.Tensor) or features.ndim != 3 or features.shape[-1] != width:
+        raise ValueError(f"features 必须为 [批次, 点, {width}] 张量")
     if not torch.isfinite(features).all():
         raise ValueError("模型输入含非有限值")
     return {

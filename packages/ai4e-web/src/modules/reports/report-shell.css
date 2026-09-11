@@ -1,0 +1,10 @@
+/* 报告与批量只对照 HTML 两栏外壳，不提供示意编辑或假排队。 */
+.report-shell,.batch-shell{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:18px;font:13px/1.6 system-ui,-apple-system,"PingFang SC",sans-serif;color:#13234b}
+.report-shell .panel,.batch-shell .panel{background:#fff;border:1px solid #e4eefb;border-radius:10px;padding:18px;box-shadow:0 3px 12px #4067a206}
+.report-shell .hint{font-size:11px;letter-spacing:1px;color:#8095bb;text-transform:uppercase;margin-bottom:8px}
+.report-shell h2,.batch-shell h2{margin:0 0 14px;font-size:19px}
+.report-shell h3,.batch-shell h3{margin:0 0 10px;font-size:15px}
+.report-shell .history{margin-top:16px;padding:12px;background:#f7faff;border-radius:6px}
+.report-shell .history pre{white-space:pre-wrap;font-size:12px;color:#4e6091}
+.batch-shell .muted,.report-shell .muted{color:#6a7da4}
+@media (max-width:1000px){.report-shell,.batch-shell{grid-template-columns:1fr}}

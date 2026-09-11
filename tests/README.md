@@ -57,3 +57,16 @@ uv run pytest tests/integration/test_extract_clean.py tests/integration/test_geo
 `test_task_management/assets/execution/contracts/recipe/installation/documents.py` 覆盖任务切片；精确用例、运行命令、安装副本注意事项和实际结果见 `.context/mvp/task-acceptance.md`。两个 MPS 相关回归 skip 不算硬件验收。
 
 - `integration/rawprep_detail_browser.cjs`：独立原始处理 HTML 的文件浏览、字段选择、唯一输出名称、取消语义及弹窗检查。通过 `PLAYWRIGHT_MODULE` 指定已有 Playwright 运行时。
+
+## Web / Server
+
+平台专项命令见 AGENTS.md 最后一节；当前四组合实跑、浏览器环境和边界见 `.context/mvp/web-integrated-acceptance.md`；`.context/mvp/web-rawprep-acceptance.md` 保留历史首期记录。前端需先启动本机 API 与 Vite；测试建立独立项目，原始数据只读。
+
+- `integration/test_web_integrated_pipeline.py`：真实 HTTP/viz 二进制对照、生成类型及显式四阶段实跑 CLI。
+- `integration/test_web_platform_operations.py`：修订、固定资产、真实共享进程、订阅取消、恢复及版本创建快照。
+- `packages/ai4e-web/e2e/`：真实平台自动交互、原型主面板几何、TorchVista、NASA 网格和多窗口；订阅夹具测试与真实服务证据分开记录。
+- `packages/ai4e-web/e2e/home-entry.spec.ts`：从首页真实点击、空项目创建与任务恢复、归档失效、1440/1920首页布局与原型封面摘要。首页入口不能只通过深链接测试验收；本次修复后21项回归记录在整合验收的 `homepage-correction/` 子目录。
+
+- `integration/web_integrated_browser.cjs`：整合原型六阶段嵌入、单层外壳、步骤切换保留编辑及回项目导航；使用本地 Playwright。
+
+任务绑定修正：`test_web_dataset_binding.py`覆盖四案例、修订、受控目录与失效拒绝；`test_web_binding_real.py`以真实ShapeNet/NASA完成绑定、原始处理和逐值预览。真实测试必须显式设置`DOJO_BINDING_REAL_ROOT`，输出使用dojo_train实验目录。证据见`.context/mvp/web-integrated-results/task-binding-correction/`。

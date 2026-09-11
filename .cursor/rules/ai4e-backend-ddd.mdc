@@ -14,8 +14,10 @@ alwaysApply: false
 - 外部系统通过显式 port 接入，数据库、文件索引、调度器和远程执行是 adapter；依赖方向始终指向业务规则。
 - HTTP/CLI handler 只做协议转换、鉴权、输入校验和错误映射，不直接访问训练对象或拼装跨层流程。
 - `ai4e-task` 索引自包含 run artifact；`ai4e-server` 提供协作/API，但两者都不保存 run 的唯一真相。
-- 后端只消费 spec、task/core 已公开门面和稳定 Artifact 引用；不得导入 recipes、模型、Trainer 或 Dataset 内部实现。
+- server 只消费 spec、task 已公开门面和稳定 Artifact 引用；不得导入 recipes、模型、Trainer 或 Dataset 内部实现。
 - 跨上下文调用公开 application port 或版本化消息/schema，不穿透对方内部目录。
 - 名称优先使用业务语言，避免含义模糊的 `manager`、`service`、`helper`；一个用例、聚合或 adapter 保持单一职责。
 - 公开 API 必须有类型与文档；Python 使用中文 Docstring。状态迁移、错误路径、权限和 adapter 契约必须测试。
 - Python 验证命令使用 `uv run`；其他技术栈在 ADR 确定后使用其唯一工具链。功能变化同步文档和 `.context`。
+
+- 服务仅代理 task 公共能力。rawprep 映射已有任务配置，不维护第二份执行方案，也不导入案例或算法。场景、比较和辅助操作的服务自有记录与任务事实分开。研究运行不建立第二套状态源；模型检查经 task，VTK 转换经独立 viz 协议。输入固定内容修订，取消与迟到结果必须保持终态。

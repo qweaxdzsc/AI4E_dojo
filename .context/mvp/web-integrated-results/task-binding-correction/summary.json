@@ -1,0 +1,62 @@
+{
+  "date": "2026-09-11",
+  "scope": "新建任务三字段创建、工作台受控绑定、任务表对照整合 HTML 最终浅蓝主题；不改 recipe/模型，不宣称阶段深链接或首页尺寸为本切片验收。",
+  "passed": {
+    "test_web_dataset_binding.py": "included in 35 passed with project/task/configuration/platform",
+    "test_web_project_task.py": "included in 35 passed",
+    "test_task_configuration.py": "included in 35 passed",
+    "test_web_platform_operations.py": "included in 35 passed",
+    "backend_bundle": {
+      "command": "uv run --no-sync pytest tests/integration/test_web_dataset_binding.py tests/integration/test_web_project_task.py tests/integration/test_task_configuration.py tests/integration/test_web_platform_operations.py",
+      "result": "35 passed"
+    },
+    "test_web_rawprep.py_and_handoff": {
+      "command": "uv run --no-sync pytest tests/integration/test_web_rawprep.py tests/integration/test_web_rawprep_handoff.py",
+      "result": "2 passed"
+    },
+    "test_web_binding_real.py": {
+      "command": "DOJO_BINDING_REAL_ROOT=/Users/zonghui/work/project_simulation/dojo_train/binding-real DOJO_BINDING_SHAPENET=/private/tmp/dojo-web-acceptance/raw DOJO_BINDING_NASA=/Users/zonghui/work/datasets/NASA uv run --no-sync pytest tests/integration/test_web_binding_real.py",
+      "result": "2 passed",
+      "seconds": 34.52,
+      "cases": ["shapenet_car_abupt", "nasa_crm_transolver3"]
+    },
+    "e2e": {
+      "command": "DOJO_API_URL=http://127.0.0.1:8002 DOJO_WEB_URL=http://127.0.0.1:5174 npm run --prefix packages/ai4e-web test:e2e -- e2e/task-dataset-binding.spec.ts e2e/home-entry.spec.ts e2e/project-task.spec.ts e2e/navigation.spec.ts",
+      "result": "8 passed",
+      "seconds": 27.4,
+      "tests": [
+        "首页进入项目、进入任务及侧栏整行导航",
+        "首页在两种桌面宽度下对照整合原型",
+        "空项目新建任务后进入工作台，归档后不恢复失效任务",
+        "六个项目页签和八个工作台阶段",
+        "项目查询、编辑、归档恢复和任务派生",
+        "四案例简洁创建、工作台绑定与派生继承",
+        "新建弹窗校验、案例重试与约定尺寸",
+        "任务表在1440和1920下与原型关键尺寸相差不超过1px"
+      ]
+    }
+  },
+  "dialog_contract": {
+    "file": "dialog-visual.json",
+    "screens": ["create-dialog-1440.png", "create-dialog-narrow.png"],
+    "measured": {
+      "width": 520,
+      "control_height": 36,
+      "label_gap": 6,
+      "item_gap": 16,
+      "narrow_insets": [24.88568115234375, 23.4569091796875]
+    }
+  },
+  "task_table": {
+    "file": "tasktable-geometry.json",
+    "screens": ["tasktable-1440.png", "tasktable-1920.png", "prototype-tasktable-1440.png", "prototype-tasktable-1920.png"],
+    "approved_difference": "进度行左右12px，原型左侧100px；ministeps左移88px且增加88px宽度",
+    "max_abs_delta_px": 0.421875
+  },
+  "not_claimed": [
+    "阶段深链接验收",
+    "首页尺寸作为本切片主证据",
+    "生产规模训练精度",
+    "与原型不存在的三字段表单逐像素对应"
+  ]
+}

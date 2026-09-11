@@ -36,3 +36,25 @@ __all__ = [
     "submit_run",
     "wait_run",
 ]
+
+from .projects.project import update_project
+from .tasks.configuration import read_configuration, save_configuration
+from .tasks.management import update_task
+
+__all__ += ["read_configuration", "save_configuration", "update_project", "update_task"]
+
+from .tasks.inspections import inspect_task
+
+__all__ += ['inspect_task']
+
+from .tasks.artifacts import list_stage_artifacts
+
+__all__ += ['list_stage_artifacts']
+
+from .tasks.artifacts import read_run_metrics
+
+__all__ += ['read_run_metrics']
+
+from .versions.details import read_version_details
+
+__all__ += ["read_version_details"]

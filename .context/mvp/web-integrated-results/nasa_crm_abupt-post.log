@@ -1,0 +1,17 @@
+2026-09-10 19:36:23,777 INFO [运行/开始] 脚本=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/e2fd710cd44345a7aa5ff55c110725d0/code/pipeline.py；运行目录=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/e2fd710cd44345a7aa5ff55c110725d0；生效配置=inputs/config.yaml
+2026-09-10 19:36:23,777 INFO [post/阶段/开始] 
+2026-09-10 19:36:23,999 INFO [post/张量读取/开始] 来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample002/first.zarr
+2026-09-10 19:36:24,157 INFO [post/张量读取/结束] 耗时=0.158秒
+2026-09-10 19:36:24,157 INFO [post/张量读取/开始] 来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/train/Sample002/second.zarr
+2026-09-10 19:36:24,171 INFO [post/张量读取/结束] 耗时=0.013秒
+2026-09-10 19:36:25,508 INFO [post/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/test/Sample001/first.zarr
+2026-09-10 19:36:25,518 INFO [post/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.010秒
+2026-09-10 19:36:25,518 INFO [post/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/test/Sample001/second.zarr
+2026-09-10 19:36:25,529 INFO [post/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.012秒
+2026-09-10 19:36:33,780 INFO [post/阶段/运行中] 已耗时=10.00秒；状态=底层计算尚未返回
+2026-09-10 19:36:36,946 INFO [post/张量提交/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0/predictions/Sample001
+2026-09-10 19:36:36,946 INFO [post/输出规划/开始] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0/predictions/Sample001
+2026-09-10 19:36:36,946 INFO [post/输出规划/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.000秒
+2026-09-10 19:36:36,961 INFO [post/张量提交/结束] 样本=[{'sample_id': 'Sample001', 'index': None, 'partition': 'test'}]；耗时=0.015秒
+2026-09-10 19:36:36,985 INFO [post/阶段/结束] 耗时=13.208秒
+2026-09-10 19:36:36,986 INFO [运行/结束] 状态=成功；成功=0；失败=0；未执行=0；耗时=13.209秒

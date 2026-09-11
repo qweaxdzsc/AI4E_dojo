@@ -1,0 +1,20 @@
+{
+  "configuration_revision": "ae3a832293b1569be6346958f6160924244caa1ae4d7feeb5a81a88f48a07bd6",
+  "input_source": {
+    "identity": {
+      "index": 0,
+      "partition": "train",
+      "sample": "Sample002",
+      "source": {
+        "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM 2/trainingData_NASA-CRM.h5",
+        "sample": "Sample002"
+      }
+    },
+    "preparation": "3d8d0a7cb020a6cde08244921f436e764aa30440bab6eebf3f36bf660463cb16"
+  },
+  "model_type": "ai4e_contrib.ability.model.transolver3.network.Model",
+  "parameter_count": 11335876,
+  "path": "/private/tmp/dojo-platform-traces/nasa_crm_transolver3/model.html",
+  "schema_version": 1,
+  "status": "succeeded"
+}

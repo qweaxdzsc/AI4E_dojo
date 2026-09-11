@@ -78,18 +78,23 @@ def resolve_statistics(ctx: dict, *, stats: dict) -> dict:
     # 先验证完整选择，避免部分字段已累计后才发现配置遗漏。
     sources = {}
     for field in fields:
-        logical, separator, member = field.partition("/")
         refs = []
         for result in usable:
-            filename = result["filemap"].get(logical)
-            if filename is None or field not in result["available_fields"]:
+            actual = result.get("field_aliases", {}).get(field, field)
+            actual_logical, actual_separator, actual_member = actual.partition("/")
+            filename = result["filemap"].get(actual_logical)
+            if filename is None or actual not in result["available_fields"]:
                 reason = f"样本 {result['sample']} 缺少统计字段 {field}"
                 if missing == "error":
                     raise ValueError(reason)
                 excluded.append({"sample": result["sample"], "field": field, "reason": reason})
                 continue
             refs.append(
-                (result["sample"], Path(result["path"]) / filename, member if separator else None)
+                (
+                    result["sample"],
+                    Path(result["path"]) / filename,
+                    actual_member if actual_separator else None,
+                )
             )
         if not refs:
             raise ValueError(f"统计字段无可用样本: {field}")

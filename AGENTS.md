@@ -1,4 +1,18 @@
+历史 Web / Server 首期切片（被后续并行扩展范围取代）：React/TypeScript/Vite/Ant Design 与 FastAPI 已按 ADR 0004 初始化。仅原始处理开放真实执行，服务通过 task 原 submit_run 使用既有 recipe；该历史切片未改 recipe/core/contrib；当前批准范围以以下并行实施段为准。task 增加配置与管理公开操作；创建模板允许未绑定输入，执行仍严格检查。viz 增加独立文件预览进程，与原有静态比较共存。实际验收与未交付边界见 `.context/mvp/web-rawprep-acceptance.md`，不能用工程构建替代端到端验收。
+
+整合交互原型：`docs/prototypes/dojo-web-integrated.html`。沿用旧平台框架，内嵌第 2–7 步独立页面；项目页与第 1、8 步保留。单文件离线可打开，阶段配置按任务保留于当前会话，刷新重置；无真实计算或后端交接。验收：`tests/integration/web_integrated_browser.cjs`。
+
+交叉模型实施（2026-09-10）：唯一 aero_cfd recipe 的五个独立 example 使用共享物理工作流；物理 PT、模型准备和完整预测分开交接。NASA 无体场，单表面 AB-UPT 配置不能含跨域块。本期五组正式单轮实跑、固定五样本全点评价及报告已交付；范围与工具限制见 `.context/mvp/cross-model-acceptance.md`。圈定新增用例：test_physical_dataset_contract.py、test_model_preparation_contract.py、test_cross_model_recipe.py、test_cross_model_training.py、test_cross_model_comparison.py、test_comparison_visualization.py、test_cross_model_acceptance.py；同时覆盖原数据、模型、训练与 post 相关回归。viz 只依赖 spec，比较数据独立于运行目录。
+
 # AI4E_Dojo 开发入口
+
+当前整合平台验收（2026-09-10）：整合 HTML 为唯一布局基准。已接入项目管理与第 2–7 步、双表面数据集/双模型、PT/Zarr、统一 Min-Max、模型采样迁移、真实 TorchVista、有限 VTK 管线。四组合完整目标网络短训及真实产物交接通过；最终浏览器18项通过，主面板尺寸对照通过，不承诺全部状态逐像素一致或生产精度。报告和批量未开放。三组分别负责算法、可视化、平台，主 Agent 维护公共契约及集成验收；实际规模、失败修复与证据见 `.context/mvp/web-integrated-acceptance.md`。
+
+可视化入口：浏览器 visualization 微领域统一复用于文件、后处理与比较；server 通过独立 viz 进程读文件/转换，viz 不导入模型或 core。检查与预览支持 VTK 家族、HDF5/H5、PT、NPY 与 Zarr。模型跟踪走 task 独立检查与 core 公开门面。相机联动默认关闭，不做跨网格自动插值。统计参数不可手填，色标显示范围与归一化统计分开。
+
+首页入口验收纠正：阶段深链接和主面板尺寸测试不能证明首页可用。项目管理按整合原型提供卡片与进入项目，任务表明确进入工作台，侧栏整行可点且按路由高亮。新增 `packages/ai4e-web/e2e/home-entry.spec.ts` 从首页真实点击、创建任务、刷新/继续及归档失效验证；首页单独对照 1440/1920 两个视口。
+
+案例驱动演进（2026-09-10）：优先接入新模型、数据集和科研案例，在真实研究中发现需求并打磨框架；不将框架比较中的优化建议自动视为实施任务或案例接入前置条件。能力比较与按案例触发的升级参考见 `docs/ai4s-framework-comparison.md`，文档验收入口为 `tests/integration/test_framework_comparison_document.py`。
 
 五段配置切片：recipe 的 configuration.py 负责分组、默认展开和参数提取；rawprep.py 调用库原 datapre 方法。run 接收 config_loader 并冻结用户配置，业务参数不得覆盖快照，数据来源写 reports.dataset。相关新增测试为 test_recipe_configuration.py、test_run_config_snapshot.py、test_verification_config.py；范围与结果见 `.context/mvp/config-regroup-acceptance.md`。
 
@@ -19,7 +33,7 @@ MPS 个人实验验收（2026-09-09）：复制 recipe 修改种子、学习率�
 
 可点击线框原型：`docs/prototypes/dojo-web-wireframe.html`（左侧仅两个一级入口，项目六 Tab 位于主视区），仅示意项目六 Tab、八步工作台及比较／报告跳转；使用内存样例数据，无后端、无真实计算，刷新重置，不代表前端技术栈已选定。
 
-Web 平台设计草案（2026-09-09）：产品入口为项目管理与八步任务工作台；项目内含任务管理、版本树、版本比较、项目报告、文件管理和批量运行。产品稿见 `docs/PRD/ai4e-web/src/PRD.md`，Web / Server 架构 v2 见唯一架构文档第 19 节。一个任务对应一个版本，分别展示版本、来源、基线版本；运行尝试可多次，只有 new/fork 创建正式版本；工作目录可编辑，运行保留快照但不增加版本。task 保留研究管理与执行职责。上述为待评审设计，本轮未实现平台或确定技术栈 ADR；不得据此宣称 DOE、三维查看器、报告或版本平台已交付。
+Web 平台设计草案（2026-09-09）：产品入口为项目管理与八步任务工作台；项目内含任务管理、版本树、版本比较、项目报告、文件管理和批量运行。产品稿见 `docs/PRD/ai4e-web/src/PRD.md`，Web / Server 架构 v2 见唯一架构文档第 19 节。一个任务对应一个版本，分别展示版本、来源、基线版本；运行尝试可多次，只有 new/fork 创建正式版本；工作目录可编辑，运行保留快照但不增加版本。task 保留研究管理与执行职责。上述为历史设计定位；当前栈与实现状态见 ADR 0004、0005 及整合平台验收。DOE、报告与批量仍不可据设计声明交付。
 
 当前端到端验收（2026-09-09）：默认 recipe 为 rawprep → trainprep → train → post。冻结变换组合、点场整理与分块查询归 abilities；aero_cfd application 负责业务绑定。独立 post 默认从配置种子沿 global 流采样，隔离锚点/网格两路；兼容张量包、点云与表面原始身份已对齐。实跑规模、数值证据及范围见 `.context/mvp/abupt-end-to-end-acceptance.md`。
 
@@ -83,7 +97,7 @@ uv run pytest tests/integration/test_train_formal_two_epoch.py
 - Python 基线为 3.12；根 `pyproject.toml` 管理 uv workspace，成员为 `ai4e-spec`、`ai4e-core`、`ai4e-contrib`、`ai4e-task`。
 - `packages/` 下每个包只保留一层物理目录；根 `pyproject.toml` 必须把连字符目录显式映射为下划线 Python 导入名（如 `packages/ai4e-core/` → `ai4e_core`），不得重新创建内部同名目录。
 - 所有 Python、pytest、ruff、mypy 和 Sphinx 命令必须使用 `uv run`。
-- `ai4e-web` 技术栈尚未决定；在 ADR 明确前不得创建或替换前端框架。
+- `ai4e-web` 使用 ADR 0004 已确定的 React/TypeScript/Vite/Ant Design；依赖只进入 package.json 与 package-lock.json。
 - 依赖只允许进入各生态的唯一清单；本阶段不得创建临时依赖文件。
 
 ## 包依赖边界
@@ -165,3 +179,29 @@ uv run sphinx-build -b html docs/source docs/_build/html
 ## Task 本地切片验收
 
 相关用例：`uv run pytest tests/integration/test_task_management.py tests/integration/test_task_assets.py tests/integration/test_task_execution.py tests/integration/test_task_contracts.py tests/integration/test_task_recipe.py tests/integration/test_task_documents.py tests/integration/test_task_installation.py`。安装用例构建实际 wheel；运行和既有 core 的相关回归范围见 `.context/mvp/task-acceptance.md`。不可用全仓测试代替这些接口、资产和真实案例验收。
+
+服务器操作手册：`docs/aero-cfd-server-runbook.md` 记录五案例 CUDA/50 epoch 配置、物理清单迁移、独立阶段与报告格式；这是待执行操作说明，不代表服务器验收。报告不再写死单轮，预算以源运行产物为准；相关验证为 `test_comparison_visualization.py`。
+
+五例50轮实跑进度见 `.context/mvp/cross-model-50-acceptance.md`；测试 `test_cross_model_acceptance.py` 支持 `DOJO_CROSS_MODEL_EPOCHS` 与 `DOJO_CROSS_MODEL_DEVICE` 显式预算，默认仍为历史1轮MPS。执行中不得宣称报告完成。
+
+## Web / Server 圈定验收
+
+```bash
+uv run pytest tests/integration/test_web_project_task.py tests/integration/test_web_rawprep.py tests/integration/test_web_rawprep_handoff.py tests/integration/test_web_research_records.py tests/integration/test_web_runtime.py tests/integration/test_web_architecture.py tests/integration/test_viz_file_preview.py tests/integration/test_task_configuration.py tests/integration/test_task_management.py tests/integration/test_task_execution.py tests/integration/test_web_design_documents.py
+npm run --prefix packages/ai4e-web build
+npm run --prefix packages/ai4e-web check:architecture
+npm run --prefix packages/ai4e-web test:e2e
+```
+
+真实样本缺失导致 skip 时不得声称真实链路完成。当前安装采用单层 wheel 映射，源码变更后核对安装副本或重装受影响包。
+
+本机平台已完成一份真实 ShapeNet-Car 样本的页面执行、PT/VTKHDF 文件预览和原数据准备读取；48 项圈定后端用例与三条浏览器流程通过。仅声明上述范围，尚未开放批量及其他工作台执行。详见 web-rawprep-acceptance.md。
+
+## 本机训练与缓存存放约定（2026-09-10）
+
+用户指定后续训练相关文件统一放在 `/Users/zonghui/work/project_simulation/`；Dojo 使用其下 `dojo_train/`。新建实验时显式将运行、检查点、预测、比较报告及本次产生的数据/准备产物写入 `dojo_train/<实验名>/`，相关工具缓存也放在 dojo_train 下，不再新建到 `/private/tmp`。使用明确的 run_root、数据输出与缓存路径实现，不将本机绝对路径硬编码进可移植框架默认值。已有输入数据与历史冻结记录不批量改写；旧 tmp 位置的兼容符号链接仅用于历史引用，新配置直接使用真实目录。
+
+
+整合平台圈定验证：主 Agent 使用 `uv run pytest tests/integration/test_web_integrated_pipeline.py tests/integration/test_web_platform_operations.py tests/integration/test_web_project_task.py tests/integration/test_web_research_records.py tests/integration/test_web_runtime.py tests/integration/test_web_architecture.py tests/integration/test_web_design_documents.py tests/integration/test_task_configuration.py tests/integration/test_task_execution.py tests/integration/test_task_contracts.py`。文件交接另圈 `test_web_rawprep.py`、`test_web_recipe_compatibility.py`、`test_web_rawprep_handoff.py`、`test_viz_file_preview.py`、`test_viz_pipeline.py`、`test_viz_extended.py`。真实四组合、模型大小、样本预算与浏览器证据统一见整合验收记录；不以少样本正式网络短训声明生产规模精度。
+
+任务创建与数据绑定修正：新建明确选择案例，数据源在原始处理工作台绑定；配置编辑不新增版本，未绑定或失效来源不可执行。历史缺 `components.dataset` 的外流任务按 NASA 文件键或模板默认目录识别，绑定接口不再因缺声明返回 400。相关验收使用 `uv run --no-sync pytest tests/integration/test_web_dataset_binding.py tests/integration/test_web_binding_real.py tests/integration/test_web_project_task.py tests/integration/test_task_configuration.py tests/integration/test_web_rawprep.py tests/integration/test_web_rawprep_handoff.py`（真实绑定显式指定 `DOJO_BINDING_REAL_ROOT`），以及 `packages/ai4e-web/e2e/task-dataset-binding.spec.ts`、`home-entry.spec.ts`、`project-task.spec.ts`、`navigation.spec.ts`。单层force-include包修改后刷新可编辑安装，再核验安装源码；不要让普通同步复用旧构建替代当前源码。

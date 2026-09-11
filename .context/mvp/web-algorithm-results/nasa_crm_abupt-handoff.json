@@ -1,0 +1,200 @@
+{
+  "name": "nasa_crm_abupt",
+  "format": "zarr",
+  "config": "/private/tmp/dojo-algorithm-handoff-v5/nasa_crm_abupt/case/config.yaml",
+  "run": "/private/tmp/dojo-algorithm-handoff-v5/nasa_crm_abupt/runs/2026-09-10T19-00-55_2b736c",
+  "model_parameters": {
+    "dim": 192,
+    "geometry_depth": 6,
+    "num_heads": 3,
+    "blocks": "pssssssssss",
+    "radius": 9.0,
+    "require_features": true,
+    "num_domain_decoder_blocks": {
+      "surface": 12
+    }
+  },
+  "source": {
+    "root": "/Users/zonghui/work/datasets/NASA",
+    "train_h5": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM 2/trainingData_NASA-CRM.h5",
+    "test_h5": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM/testData_NASA-CRM.h5",
+    "connectivity_h5": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM/connectivity_NASA-CRM.h5",
+    "chunk_count": 20,
+    "validation_fraction": 0.2,
+    "split_seed": 42,
+    "resume": false,
+    "samples": {
+      "train": [
+        "Sample002",
+        "Sample004",
+        "Sample006",
+        "Sample007",
+        "Sample008",
+        "Sample009",
+        "Sample010",
+        "Sample011"
+      ],
+      "validation": [
+        "Sample001"
+      ],
+      "test": [
+        "Sample001"
+      ]
+    }
+  },
+  "prediction": {
+    "version": 1,
+    "status": "succeeded",
+    "protocol": {
+      "version": 1,
+      "dataset": "db71666945b42a7afc5bfa1db9c81c10394e39fea1722f37e66681e254285c96",
+      "preparation": "1f3e5c52651f08188c0efab1f8c9e7a76a9539cfa21f0b36d85734612dc94c3b",
+      "weights": "178c009e3ef0c234cb645a8932be7d751e43e9c493a1fb1c19d4b2078cdf1254",
+      "model": "abupt-domain-v3:noether-313e6c5c2ff31f283a3e5935b4d85888aac6b025",
+      "samples": [
+        "Sample001"
+      ],
+      "split": "test",
+      "settings": {
+        "random_stream": "global",
+        "split": "test",
+        "evaluate": true,
+        "save_predictions": true,
+        "export_vtk": true,
+        "query": true,
+        "sample_indices": [
+          0
+        ],
+        "query_chunk_size": 16384,
+        "overwrite": false,
+        "checkpoint": "last",
+        "samples": [
+          "Sample001"
+        ]
+      },
+      "execution": {
+        "device": "mps",
+        "precision": "fp32"
+      },
+      "digest": "86e04e1a87680fc42c430afb537a2137df610e789dde991b3e2567c445278941"
+    },
+    "results": [
+      {
+        "sample": "Sample001",
+        "manifest": "/private/tmp/dojo-algorithm-handoff-v5/nasa_crm_abupt/predictions/Sample001/manifest.json",
+        "metrics": {
+          "surface.cp": {
+            "count": 454404,
+            "squared_error": 57914.650316119616,
+            "absolute_error": 110675.67973395587,
+            "truth_squared": 58533.37789368666,
+            "mse": 0.12745189372479032,
+            "mae": 0.2435622919999733,
+            "relative_l2": 0.994700704406156
+          },
+          "surface.cf": {
+            "count": 1363212,
+            "squared_error": 0.7951990801799458,
+            "absolute_error": 650.3744904425578,
+            "truth_squared": 1.7744739686444113,
+            "mse": 5.833275236573224e-07,
+            "mae": 0.00047708976332555596,
+            "relative_l2": 0.6694268356934289
+          },
+          "surface.cf/0": {
+            "count": 454404,
+            "squared_error": 0.4118427732990584,
+            "absolute_error": 346.6279141475104,
+            "truth_squared": 1.3940030988106176,
+            "mse": 9.063361530687635e-07,
+            "mae": 0.0007628188003351872,
+            "relative_l2": 0.5435429351710043
+          },
+          "surface.cf/1": {
+            "count": 454404,
+            "squared_error": 0.12879945166438758,
+            "absolute_error": 142.77270559045647,
+            "truth_squared": 0.12894080704884872,
+            "mse": 2.834470023687898e-07,
+            "mae": 0.00031419773063277715,
+            "relative_l2": 0.9994517090816295
+          },
+          "surface.cf/2": {
+            "count": 454404,
+            "squared_error": 0.25455685521649984,
+            "absolute_error": 160.97387070459095,
+            "truth_squared": 0.2515300627849452,
+            "mse": 5.60199415534414e-07,
+            "mae": 0.0003542527590087036,
+            "relative_l2": 1.0059987681663547
+          },
+          "surface.cf/magnitude": {
+            "count": 454404,
+            "squared_error": 0.5379606576965654,
+            "absolute_error": 364.7974199252493,
+            "truth_squared": 1.7744739686444113,
+            "mse": 1.1838818709706901e-06,
+            "mae": 0.0008028041564890478,
+            "relative_l2": 0.5506053685917001
+          }
+        }
+      }
+    ],
+    "metrics": {
+      "surface.cp": {
+        "count": 454404,
+        "squared_error": 57914.650316119616,
+        "absolute_error": 110675.67973395587,
+        "truth_squared": 58533.37789368666,
+        "mse": 0.12745189372479032,
+        "mae": 0.2435622919999733,
+        "relative_l2": 0.994700704406156
+      },
+      "surface.cf": {
+        "count": 1363212,
+        "squared_error": 0.7951990801799458,
+        "absolute_error": 650.3744904425578,
+        "truth_squared": 1.7744739686444113,
+        "mse": 5.833275236573224e-07,
+        "mae": 0.00047708976332555596,
+        "relative_l2": 0.6694268356934289
+      },
+      "surface.cf/0": {
+        "count": 454404,
+        "squared_error": 0.4118427732990584,
+        "absolute_error": 346.6279141475104,
+        "truth_squared": 1.3940030988106176,
+        "mse": 9.063361530687635e-07,
+        "mae": 0.0007628188003351872,
+        "relative_l2": 0.5435429351710043
+      },
+      "surface.cf/1": {
+        "count": 454404,
+        "squared_error": 0.12879945166438758,
+        "absolute_error": 142.77270559045647,
+        "truth_squared": 0.12894080704884872,
+        "mse": 2.834470023687898e-07,
+        "mae": 0.00031419773063277715,
+        "relative_l2": 0.9994517090816295
+      },
+      "surface.cf/2": {
+        "count": 454404,
+        "squared_error": 0.25455685521649984,
+        "absolute_error": 160.97387070459095,
+        "truth_squared": 0.2515300627849452,
+        "mse": 5.60199415534414e-07,
+        "mae": 0.0003542527590087036,
+        "relative_l2": 1.0059987681663547
+      },
+      "surface.cf/magnitude": {
+        "count": 454404,
+        "squared_error": 0.5379606576965654,
+        "absolute_error": 364.7974199252493,
+        "truth_squared": 1.7744739686444113,
+        "mse": 1.1838818709706901e-06,
+        "mae": 0.0008028041564890478,
+        "relative_l2": 0.5506053685917001
+      }
+    }
+  }
+}

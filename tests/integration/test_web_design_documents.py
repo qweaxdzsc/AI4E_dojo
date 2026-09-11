@@ -1,7 +1,7 @@
 """检查 Web 设计交付的导航与 PRD 结构，不将文档检查视为平台功能验收。"""
 
-import re
 import json
+import re
 import shutil
 import subprocess
 from html.parser import HTMLParser
@@ -42,14 +42,14 @@ def test_design_links_resolve(path: Path):
 def test_product_chapters_follow_prd_contract():
     """两章均遵守六节约定，功能清单与详解编号一一对应。"""
     text = PRODUCT.read_text()
-    for number, chapter in enumerate(re.split(r"^## [一二]、.*$", text, flags=re.M)[1:], 1):
-        sections = re.findall(r"^### (\d\.\d) ", chapter, flags=re.M)
+    for number, chapter in enumerate(re.split(r"^## [一二]、.*$", text, flags=re.MULTILINE)[1:], 1):
+        sections = re.findall(r"^### (\d\.\d) ", chapter, flags=re.MULTILINE)
         assert sections == [f"{number}.{index}" for index in range(1, 7)]
         inventory = chapter.split(f"### {number}.5 ", 1)[1].split(f"### {number}.6 ", 1)[0]
-        entries = re.findall(r"^(\d+)\. ", inventory, flags=re.M)
-        details = re.findall(r"^#### (\d+)\. ", chapter, flags=re.M)
+        entries = re.findall(r"^(\d+)\. ", inventory, flags=re.MULTILINE)
+        details = re.findall(r"^#### (\d+)\. ", chapter, flags=re.MULTILINE)
         assert entries and entries == details
-    assert len(re.findall(r"^## [一二]、", text, flags=re.M)) == 2
+    assert len(re.findall(r"^## [一二]、", text, flags=re.MULTILINE)) == 2
 
 
 def test_v2_is_in_single_authoritative_document():
@@ -57,13 +57,27 @@ def test_v2_is_in_single_authoritative_document():
     text = ARCHITECTURE.read_text()
     assert text.count("## 19. Dojo Web / Server 架构草案 v2\n") == 1
     assert "PRD/ai4e-web/src/PRD.md" in text
-    assert "状态：DRAFT" in text
-    assert "状态：产品设计草案" in PRODUCT.read_text()
+    assert "并行实施修订" in text
+    assert "状态：圈定真实链路" in PRODUCT.read_text()
+    assert "不承诺所有状态逐像素一致或生产训练精度" in PRODUCT.read_text()
 
 
-@pytest.mark.parametrize("filename", ["dojo-web-wireframe.html", "dojo-rawprep-detail.html"])
+@pytest.mark.parametrize(
+    "filename",
+    [
+        "dojo-web-wireframe.html",
+        "dojo-web-integrated.html",
+        "dojo-rawprep-detail.html",
+        "dojo-trainprep-detail.html",
+        "dojo-model-detail.html",
+        "dojo-training-detail.html",
+        "dojo-run-detail.html",
+        "dojo-post-detail.html",
+    ],
+)
 def test_wireframe_is_offline_and_scripts_parse(filename):
     """线框不加载外部资源；脚本和初始事件属性具备有效语法。"""
+
     class Markup(HTMLParser):
         """收集资源和事件，不通过字符串猜测 HTML 属性边界。"""
 
@@ -86,6 +100,13 @@ def test_wireframe_is_offline_and_scripts_parse(filename):
     node = shutil.which("node")
     assert node, "线框脚本语法检查需要 Node.js"
     subprocess.run(
-        [node, "-e", "JSON.parse(require('fs').readFileSync(0,'utf8')).forEach(s=>new Function(s))"],
-        input=json.dumps(scripts + parser.handlers), text=True, check=True, capture_output=True,
+        [
+            node,
+            "-e",
+            "JSON.parse(require('fs').readFileSync(0,'utf8')).forEach(s=>new Function(s))",
+        ],
+        input=json.dumps(scripts + parser.handlers),
+        text=True,
+        check=True,
+        capture_output=True,
     )

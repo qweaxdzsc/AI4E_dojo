@@ -1,0 +1,27 @@
+{
+  "nasa_crm_abupt": {
+    "status": "succeeded",
+    "run": "/private/tmp/dojo-cross-model/runs/nasa_crm_abupt/2026-09-10T11-53-20_2319eb",
+    "manifest": "/private/tmp/dojo-cross-model/runs/nasa_crm_abupt/2026-09-10T11-53-20_2319eb/artifacts/physical-predictions.json"
+  },
+  "nasa_crm_transolver3": {
+    "status": "succeeded",
+    "run": "/private/tmp/dojo-cross-model/runs/nasa_crm_transolver3/2026-09-10T11-53-47_bd55a1",
+    "manifest": "/private/tmp/dojo-cross-model/runs/nasa_crm_transolver3/2026-09-10T11-53-47_bd55a1/artifacts/physical-predictions.json"
+  },
+  "shapenet_car_abupt": {
+    "status": "succeeded",
+    "run": "/private/tmp/dojo-cross-model/runs/shapenet_car_abupt/2026-09-10T11-58-49_4fd158",
+    "manifest": "/private/tmp/dojo-cross-model/runs/shapenet_car_abupt/2026-09-10T11-58-49_4fd158/artifacts/physical-predictions.json"
+  },
+  "shapenet_car_transolver3_surface": {
+    "status": "succeeded",
+    "run": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_surface/2026-09-10T11-58-55_0adc03",
+    "manifest": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_surface/2026-09-10T11-58-55_0adc03/artifacts/physical-predictions.json"
+  },
+  "shapenet_car_transolver3_volume": {
+    "status": "succeeded",
+    "run": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_volume/2026-09-10T11-59-12_f4e749",
+    "manifest": "/private/tmp/dojo-cross-model/runs/shapenet_car_transolver3_volume/2026-09-10T11-59-12_f4e749/artifacts/physical-predictions.json"
+  }
+}

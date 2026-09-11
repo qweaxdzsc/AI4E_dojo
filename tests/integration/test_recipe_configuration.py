@@ -49,12 +49,12 @@ def test_relative_statistics_and_defaults(tmp_path, monkeypatch):
         folder / "config.yaml",
         {
             "trainprep.normalization.statistics": "../statistics.yaml",
-            "trainprep.sampling.seed": 137,
+            "model.sampling.seed": 137,
             "train.learning_rate": 0.003,
         },
     )
     assert cfg.trainprep.normalization.statistics == str(tmp_path / "statistics.yaml")
-    assert cfg.trainprep.sampling.seed == 137
+    assert cfg.model.sampling.seed == 137
     assert cfg.train.learning_rate == 0.003
     assert "sampling" not in cfg and "normalization" not in cfg
 
@@ -85,3 +85,55 @@ def test_reference_statistics_preflight_without_training_partition(tmp_path):
     cfg.statistics.mode = "reference"
     assert execute_case(folder, cfg) == 0
     assert not (Path(cfg.data_root) / "train/statistics.yaml").exists()
+
+
+def test_current_template_sampling_selector():
+    """新模板选择规范模型采样；现有 example 若有 entry 也必须使用新树。"""
+    import json
+
+    root = RECIPE.parents[1]
+    entries = [RECIPE / "task-entry.json", *root.glob("examples/aero_cfd/*/task-entry.json")]
+    for path in entries:
+        entry = json.loads(path.read_text())
+        for metric in entry.get("metrics", []):
+            selector = metric.get("quantity_config", {}).get("sampling")
+            if selector is not None:
+                assert selector == ["model", "sampling"], path
+
+
+def test_frozen_task_entry_retains_legacy_sampling_selector(tmp_path):
+    """真实 task 两次运行分别冻结旧/新选择器；编辑工作目录不迁写旧运行。"""
+    import json
+
+    import ai4e_task as task
+
+    from tests.integration.test_task_management import recipe
+
+    project = tmp_path / "project"
+    task.create_project(project)
+    source = recipe(tmp_path)
+    config_path = source / "config.yaml"
+    config = yaml.safe_load(config_path.read_text())
+    config["trainprep"] = {"sampling": {"seed": 42, "stride": 4}}
+    config_path.write_text(yaml.safe_dump(config))
+    entry_path = source / "task-entry.json"
+    entry = json.loads(entry_path.read_text())
+    entry["metrics"][0]["quantity_config"] = {"sampling": ["trainprep", "sampling"]}
+    entry_path.write_text(json.dumps(entry))
+    item = task.new_task(project, "legacy", source=source)
+    first = task.wait_run(project, task.submit_run(project, item["id"])["id"])
+    assert first["status"] == "succeeded", first
+    working = project / "tasks" / item["id"] / "recipe"
+    cfg = yaml.safe_load((working / "config.yaml").read_text())
+    cfg["model"] = {"sampling": cfg["trainprep"].pop("sampling")}
+    (working / "config.yaml").write_text(yaml.safe_dump(cfg))
+    entry["metrics"][0]["quantity_config"]["sampling"] = ["model", "sampling"]
+    (working / "task-entry.json").write_text(json.dumps(entry))
+    second = task.wait_run(project, task.submit_run(project, item["id"])["id"])
+    assert second["status"] == "succeeded", second
+    frozen = json.loads((project / first["code_path"] / "task-entry.json").read_text())
+    assert frozen["metrics"][0]["quantity_config"]["sampling"] == ["trainprep", "sampling"]
+    entry["metrics"][0]["quantity_config"]["sampling"] = ["missing"]
+    (working / "task-entry.json").write_text(json.dumps(entry))
+    comparison = task.compare_runs(project, first["id"], second["id"])
+    assert comparison["metrics"]["score"]["status"] == "available", comparison

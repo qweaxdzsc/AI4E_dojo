@@ -1,0 +1,65 @@
+{
+  "test": "tests/integration/test_web_binding_real.py",
+  "result": "2 passed",
+  "seconds": 26.88,
+  "command": "UV_CACHE_DIR=/Users/zonghui/work/project_simulation/dojo_train/.cache/uv uv run --offline --no-sync pytest tests/integration/test_web_binding_real.py -q --junitxml=/Users/zonghui/work/project_simulation/dojo_train/binding-real-results.xml",
+  "junit": "/Users/zonghui/work/project_simulation/dojo_train/binding-real-results.xml",
+  "scope": "Existing real inputs; unbound task -> controlled dataset binding -> catalog -> reject incomplete selection -> preflight -> one sample rawprep -> HTTP run poll -> real tensor preview; no mocked dataset or model",
+  "cases": [
+    {
+      "case": "shapenet_car_abupt",
+      "evidence": "/Users/zonghui/work/project_simulation/dojo_train/binding-real/b729fc049a1d4266a956b59c6f83e199/binding-result.json",
+      "sources": {
+        "root": {
+          "root": "data0",
+          "path": ""
+        }
+      },
+      "samples": [
+        "param1/1dc58be25e1b6e5675cad724c63e222e"
+      ],
+      "file_count": 2,
+      "sample_count": 1,
+      "run_id": "5130873a8fbd4c398d0b02f4bf208d90",
+      "status": "succeeded",
+      "preview_shape": [
+        3586
+      ],
+      "preview_rows": 100,
+      "preview_matches_tensor": true
+    },
+    {
+      "case": "nasa_crm_transolver3",
+      "evidence": "/Users/zonghui/work/project_simulation/dojo_train/binding-real/dd6237386a46477a97fab3e74500b9dd/binding-result.json",
+      "sources": {
+        "train_h5": {
+          "root": "data1",
+          "path": "trainingData_NASA-CRM.h5"
+        },
+        "test_h5": {
+          "root": "data2",
+          "path": "testData_NASA-CRM.h5"
+        },
+        "connectivity_h5": {
+          "root": "data2",
+          "path": "connectivity_NASA-CRM.h5"
+        }
+      },
+      "samples": [
+        "Sample002"
+      ],
+      "file_count": 2,
+      "sample_count": 1,
+      "run_id": "242c82fc5e9b47ee8cd1589e9c60b1ba",
+      "status": "succeeded",
+      "preview_shape": [
+        454404,
+        1
+      ],
+      "preview_rows": 100,
+      "preview_matches_tensor": true
+    }
+  ],
+  "reproduction_command": "DOJO_BINDING_REAL_ROOT=/Users/zonghui/work/project_simulation/dojo_train/binding-real UV_CACHE_DIR=/Users/zonghui/work/project_simulation/dojo_train/.cache/uv uv run --offline --no-sync pytest tests/integration/test_web_binding_real.py -q --junitxml=/Users/zonghui/work/project_simulation/dojo_train/binding-real-results.xml",
+  "output_root_note": "After the successful run, the fixture was changed to require explicit DOJO_BINDING_REAL_ROOT. The former default was the exact same directory used by the reproduction command; no repeated algorithm execution was requested."
+}

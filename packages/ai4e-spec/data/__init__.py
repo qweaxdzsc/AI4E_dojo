@@ -1,1 +1,5 @@
-"""数据语义契约。FieldSpec 等尚未交付。"""
+"""稳定的文件检查数据描述。"""
+
+from .inspection import FileField, FileInspection
+
+__all__ = ["FileField", "FileInspection"]

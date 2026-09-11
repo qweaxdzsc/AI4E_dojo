@@ -1,0 +1,14 @@
+2026-09-10 19:29:29,923 INFO [运行/开始] 脚本=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/.dojo/executions/0e1423ec6b5f4647b616d14aa786e816/code/pipeline.py；运行目录=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/runs/0e1423ec6b5f4647b616d14aa786e816；生效配置=inputs/config.yaml
+2026-09-10 19:29:29,923 INFO [train/阶段/开始] 
+2026-09-10 19:29:29,967 INFO [train/张量读取/开始] 来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/data/78393ab143ae42e1a07c712210d0e4fc/train/param1/1dc58be25e1b6e5675cad724c63e222e/first.pt
+2026-09-10 19:29:29,969 INFO [train/张量读取/结束] 耗时=0.002秒
+2026-09-10 19:29:29,969 INFO [train/张量读取/开始] 来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/data/78393ab143ae42e1a07c712210d0e4fc/train/param1/1dc58be25e1b6e5675cad724c63e222e/second.pt
+2026-09-10 19:29:29,969 INFO [train/张量读取/结束] 耗时=0.000秒
+2026-09-10 19:29:31,464 INFO [train/训练/诊断] 规模={'train': 1, 'test': 1}；参数量=18634180；设备=mps:0
+2026-09-10 19:29:31,522 INFO [train/张量读取/开始] 样本=[{'sample_id': 'param1/1dc58be25e1b6e5675cad724c63e222e', 'index': 0, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/data/78393ab143ae42e1a07c712210d0e4fc/train/param1/1dc58be25e1b6e5675cad724c63e222e/first.pt
+2026-09-10 19:29:31,523 INFO [train/张量读取/结束] 样本=[{'sample_id': 'param1/1dc58be25e1b6e5675cad724c63e222e', 'index': 0, 'partition': 'train'}]；耗时=0.001秒
+2026-09-10 19:29:31,523 INFO [train/张量读取/开始] 样本=[{'sample_id': 'param1/1dc58be25e1b6e5675cad724c63e222e', 'index': 0, 'partition': 'train'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/data/78393ab143ae42e1a07c712210d0e4fc/train/param1/1dc58be25e1b6e5675cad724c63e222e/second.pt
+2026-09-10 19:29:31,524 INFO [train/张量读取/结束] 样本=[{'sample_id': 'param1/1dc58be25e1b6e5675cad724c63e222e', 'index': 0, 'partition': 'train'}]；耗时=0.000秒
+2026-09-10 19:29:32,201 INFO [train/训练/进度] 轮次=1；更新=1；损失=2.4673924446105957；学习率=1e-06；耗时=0.6736355000175536；峰值内存=668172288；在线={'surface_pressure': 1.3208650350570679, 'volume_velocity': 1.1465275287628174}
+2026-09-10 19:29:33,487 INFO [train/阶段/结束] 耗时=3.564秒
+2026-09-10 19:29:33,488 INFO [运行/结束] 状态=成功；成功=0；失败=0；未执行=0；耗时=3.565秒

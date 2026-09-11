@@ -174,9 +174,14 @@ def prepare_inputs(
         values = {}
         for name, width in dims:
             declaration = declarations[name]
-            if ("constant" in declaration) == ("path" in declaration):
+            if sum(key in declaration for key in ("constant", "path", "field")) != 1:
                 raise ValueError("条件必须且只能选择一种来源")
             raw = declaration.get("constant")
+            if "field" in declaration:
+                source = declaration["field"]
+                if source not in fields:
+                    raise ValueError(f"条件缺样本字段: {sample}/{source}")
+                raw = fields[source]
             if "path" in declaration:
                 records = json.loads(Path(declaration["path"]).read_text())
                 if sample not in records:
@@ -185,7 +190,7 @@ def prepare_inputs(
             tensor = torch.as_tensor(raw, dtype=torch.float32).reshape(1, -1)
             if tensor.shape != (1, width) or not torch.isfinite(tensor).all():
                 raise ValueError("条件宽度或数值错误")
-            key = declaration.get("normalization", name)
+            key = declaration.get("normalization", declaration.get("field", name))
             if normalization is None or key not in normalization.transforms:
                 raise ValueError("条件必须声明冻结变换或恒等变换")
             values[name] = normalization.transforms[key].apply(tensor).squeeze(0)

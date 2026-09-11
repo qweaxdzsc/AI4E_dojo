@@ -1,0 +1,27 @@
+import type {Source} from './model';
+/** 调用平台辅助操作，不创建独立服务或训练任务。 */
+async function operation(source:Source,kind:string,options:any,signal:AbortSignal){
+ if(signal.aborted)throw new DOMException('Canceled','AbortError');
+ const base=`/api/v1/projects/${source.project_id}`;
+ // 提交必须收取回执：中断传输会丢掉已创建的订阅身份，收到后再释放本订阅。
+ const response=await fetch(`${base}/${kind==='transform'?'visualization':'previews'}/operations`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({source,operation:kind,options})});
+ if(!response.ok)throw new Error(await response.text());let record=await response.json();
+ const id=record.operation_id,subscriptionId=record.subscription_id;
+ // 捕获本次 POST 的订阅，不能从共享 GET 快照猜测其他消费者身份。
+ let released=false;const cancel=()=>{if(released)return;released=true;void fetch(`${base}/operations/${id}/cancel`,{method:'POST',...(subscriptionId?{headers:{'Content-Type':'application/json'},body:JSON.stringify({subscription_id:subscriptionId})}:{})}).catch(()=>{});};
+ signal.addEventListener('abort',cancel,{once:true});
+ try{
+  if(signal.aborted){cancel();throw new DOMException('Canceled','AbortError');}
+  while(['queued','running'].includes(record.status)){
+   await new Promise<void>((resolve,reject)=>{const timer=setTimeout(done,250);function done(){signal.removeEventListener('abort',abort);resolve();}function abort(){clearTimeout(timer);signal.removeEventListener('abort',abort);reject(new DOMException('Canceled','AbortError'));}signal.addEventListener('abort',abort,{once:true});if(signal.aborted)abort();});
+   const response=await fetch(`${base}/operations/${id}`,{signal});if(!response.ok)throw new Error(await response.text());record=await response.json();
+  }
+  if(record.status!=='succeeded')throw new Error(record.error?.message||record.status);
+  return record;
+ }finally{signal.removeEventListener('abort',cancel);}
+}
+export async function transform(source:Source,pipeline:any[],signal:AbortSignal){const record=await operation(source,'transform',{pipeline,block:source.block},signal);const display_ref=record.result_refs?.[0];if(!display_ref?.revision)throw new Error('显示资产缺少固定内容修订');return {...record.result,asset_id:display_ref.asset_id,display_ref};}
+export function bufferUrl(source:Source,asset:Source,path:string){if(!asset?.revision)throw new Error('显示资产缺少固定内容修订');return `/api/v1/projects/${source.project_id}/assets/${asset.asset_id}/content?member=${encodeURIComponent(path)}&revision=${encodeURIComponent(asset.revision)}`;}
+export function previewOptions(source:Source,options:any){return {...options,field:options.field??source.member};}
+/** 读取有限预览数据，不在组件中拼接服务路径。 */
+export async function inspectAsset(source:Source,kind:string,options:any,signal:AbortSignal){return (await operation(source,kind,previewOptions(source,options),signal)).result;}

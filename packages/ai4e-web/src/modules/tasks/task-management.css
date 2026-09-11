@@ -1,0 +1,58 @@
+/* 任务表对照整合 HTML 最终浅蓝主题；进度行左右 12px，不保留原型 100px 左缩进。 */
+.task-management{font:13px/1.6 system-ui,-apple-system,"PingFang SC",sans-serif;color:#13234b}
+.projecttabs .ant-tabs-tab{height:53.796875px;font:13px/20.8px system-ui,-apple-system,"PingFang SC",sans-serif;box-sizing:border-box}
+.task-management .tasktoolbar{display:flex;align-items:center;flex-wrap:wrap;gap:10px;height:40.796875px;margin:4px 0 18px}
+.task-management .toolbar-spacer{flex:1}
+.task-management .tasktoolbar>.ant-input-group-wrapper{width:380px}
+.task-management .tasktoolbar>.ant-select{min-width:150px;height:36px}
+.task-management .tasktoolbar>.ant-btn{height:40.796875px;padding:10px 20px;line-height:20.8px;border:0}
+.task-management .tasktoolbar .ant-input,.task-management .tasktoolbar .ant-input-search-button{height:38.796875px}
+.task-management .taskpanel{background:#fff;border:1px solid #e4eefb;border-radius:10px;padding:5px 12px;box-shadow:0 3px 12px #4067a206}
+.task-management .tasktable-scroll{overflow:auto}
+.task-management .tasktable{width:100%;border-collapse:collapse;text-align:left;min-width:1100px;table-layout:fixed}
+.task-management .tasktable th{background:#f5faff;color:#526892;font-size:12px;font-weight:500;padding:13px 12px;white-space:nowrap}
+.task-management .tasktable th:first-child{width:23%}
+.task-management .tasktable th:nth-child(2),.task-management .tasktable th:nth-child(3),.task-management .tasktable th:nth-child(4),.task-management .tasktable th:nth-child(5){width:8%}
+.task-management .tasktable th:nth-child(6){width:20%}
+.task-management .tasktable th:last-child{width:25%}
+.task-management .tasktable td{vertical-align:top;padding:18px 12px 8px;overflow:hidden;text-overflow:ellipsis;border-bottom:0;font-size:12px;white-space:nowrap}
+.task-management .task-name{display:inline;vertical-align:baseline;font-size:14px;font-weight:600;color:#13234b;text-decoration:none}
+.task-management .statuspill{display:inline-block;padding:2px 10px;margin:0 0 0 10px;line-height:17.6px;border-radius:15px;font-size:11px;font-weight:400;color:#6f7a9b;background:#eef1f7}
+.task-management .statuspill.success{background:#dffbed;color:#079c64}
+.task-management .statuspill.running{background:#e5f3ff;color:#0873ff}
+.task-management .statuspill.failed{background:#ffecec;color:#c43c3c}
+.task-management .tasktable .progresscell{padding:5px 12px 18px;border-bottom:1px solid #e8effb;background:#fff}
+.task-management .ministeps{display:flex;align-items:center;min-width:900px;gap:0}
+.task-management .ministeps a{position:relative;flex:1;display:flex;align-items:center;justify-content:center;padding:8px 4px;gap:6px;color:#8096b7;font-size:11px;white-space:nowrap}
+.task-management .ministeps a:after{content:"";position:absolute;right:-5px;width:10px;height:1px;background:#cbdaf4}
+.task-management .ministeps a:last-child:after{display:none}
+.task-management .ministeps span{display:grid;place-items:center;width:20px;height:20px;flex-shrink:0;border:1px solid #b1c4e3;border-radius:50%}
+.task-management .ministeps .done{color:#5478ab}
+.task-management .ministeps .done span{background:#0873ff;border-color:#0873ff;color:#fff}
+.task-management .ministeps .done:after{background:#1680ff}
+.task-management .ministeps .current{color:#0873ff}
+.task-management .ministeps .current span{border:2px solid #0873ff}
+.task-management .task-row-actions{display:flex;align-items:center;gap:8px;line-height:19.2px}
+.task-management .task-more{height:34px;padding:4px 8px}
+.task-management .enter-workbench{display:inline-flex;align-items:center;justify-content:center;min-height:34px;border:1px solid #d9e6fa;border-radius:6px;color:#2864b9;background:#fff;font-size:12px;padding:7px 10px;white-space:nowrap}
+.task-management .enter-workbench:hover{background:#eef6ff;border-color:#90bbff}
+.task-management .tasktable-foot{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:16px 0}
+.task-management .tasktable-foot p{background:#eef7ff;border-radius:6px;padding:12px;flex:1;font-size:11px;margin:0;color:#6b84af}
+@media (max-width:1100px){.task-management .tasktable-foot{flex-wrap:wrap}}
+
+/* 新建/编辑/派生弹窗：约定单列尺寸，字号边框对齐整合 HTML 最终主题。 */
+.task-form-dialog .ant-modal{width:520px;max-width:calc(100vw - 48px);font:13px/1.6 system-ui,-apple-system,"PingFang SC",sans-serif;color:#13234b}
+.task-form-dialog .ant-modal-content{border:1px solid #d9e6fa;border-radius:6px}
+.task-form-dialog .ant-modal-body{max-height:min(70vh,480px);overflow:auto;padding:12px 24px 20px}
+.task-form-dialog .ant-modal-footer .ant-btn{height:36px;border:1px solid #d9e6fa;border-radius:6px;color:#2864b9;padding:7px 13px}
+.task-form-dialog .ant-modal-footer .ant-btn-primary{background:#0873ff;border-color:#0873ff;color:#fff}
+.task-form{display:flex;flex-direction:column;gap:16px}
+.task-form-item label{display:block;margin:0 0 6px}
+.task-form-dialog .task-form .ant-input,
+.task-form-dialog .task-form .ant-select-selector{height:36px;border-color:#d9e6fa;border-radius:5px;color:#324d7d}
+.task-form-dialog .task-form textarea.ant-input{height:auto;min-height:72px;padding:8px 10px}
+.task-form-dialog .task-form .ant-select{width:100%}
+.task-form-dialog .task-form .ant-select-selector{display:flex;align-items:center}
+.task-form-dialog .task-form p{margin:6px 0 0;color:#6a7da4;font-size:12px}
+.task-form-dialog .ant-modal-body>.ant-input{margin:0}
+@media (max-width:568px){.task-form-dialog .ant-modal{width:calc(100vw - 48px);margin:0 24px}}

@@ -8,7 +8,7 @@ from ai4e_core.abilities.data.stats.load import load_statistics
 from ai4e_core.abilities.transform.normalization import Normalization
 
 
-def bind_normalization(config: dict, manifest: dict) -> Normalization:
+def bind_normalization(config: dict, manifest: dict, index=None) -> Normalization:
     """显式统计来源优先，随后使用清单统计；缺失或配置冲突立即失败。"""
     declaration = config["normalization"]
     if not declaration.get("execute"):
@@ -21,6 +21,23 @@ def bind_normalization(config: dict, manifest: dict) -> Normalization:
         supplied = dict(item.get("parameters", {}))
         if method == "identity":
             parameters = {}
+        elif method == "minmax":
+            if supplied or index is None:
+                raise ValueError("Min-Max 必须从训练分片计算，不能手填参数")
+            low = high = None
+            for row in range(len(index.partitions.get("train", []))):
+                values = index.read("train", row, fields=[name])[name]
+                values = values.reshape(len(values), -1)
+                lo, hi = values.amin(0), values.amax(0)
+                low = lo if low is None else low.minimum(lo)
+                high = hi if high is None else high.maximum(hi)
+            if low is None:
+                raise ValueError("Min-Max 需要非空训练分片")
+            parameters = {
+                "minimum": low.tolist(),
+                "maximum": high.tolist(),
+                "scale": item.get("scale", 1.0),
+            }
         elif method == "coordinate":
             keys = item.get("statistics_keys", {"minimum": "raw_pos_min", "maximum": "raw_pos_max"})
             parameters = {k: stats[v] for k, v in keys.items() if k not in supplied}

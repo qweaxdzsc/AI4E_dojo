@@ -94,7 +94,7 @@ def freeze_normalization(data: Preparation) -> Preparation:
         if data.normalization.digest != manifest["normalization_digest"]:
             raise ValueError("归一化数据摘要冲突")
     else:
-        data.normalization = bind_normalization(data.config, manifest)
+        data.normalization = bind_normalization(data.config, manifest, data.index)
     validate_frozen(data.config, data.normalization)
     return data
 

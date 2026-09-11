@@ -45,3 +45,9 @@ fork 默认当前代码，`source="version"` 选择创建记录，`source="run",
 new/fork 先暂存后发布并支持幂等键；相同键不同请求报冲突。运行完成需 core 摘要与 worker 收据一致。无法核对进程时保留 unknown，不自动重启。`recover_project` 显式清理未登记任务及 task 暂存目录；数据库仍须备份。
 
 复制拒绝符号链接；大数据摘要会产生读取开销。准备文件内部的依赖仍保留显式引用，单独复制准备文件不代表依赖已搬迁。项目路径作为配置的一部分保存，移动项目后外部绝对引用需要重新配置。首期本地进程适用于 macOS/Linux，不包含 Windows 进程适配、远程调度、Web/Server 或 PyPI 发布。
+
+## Web 复用公开管理能力
+
+`read_configuration` 返回未展开配置与内容修订；`save_configuration(..., revision=...)` 原子合并任务副本，旧修订拒绝。`update_project`、`update_task` 提供名称、描述、归档和恢复，归档不删除文件。编辑不增加正式版本。
+
+从默认模板创建时允许尚未绑定数据路径；已有继承资产继续验证，实际执行仍严格捕获输入。服务仅调用原 submit_run 的阶段与样本覆盖，不新增调度器。相关测试：test_task_configuration.py、test_web_project_task.py、test_web_runtime.py。

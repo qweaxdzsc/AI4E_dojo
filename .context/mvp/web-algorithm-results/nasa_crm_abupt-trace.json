@@ -1,0 +1,20 @@
+{
+  "configuration_revision": "5ef187226a14630f378cd709f45df75ec9e5bdf00b67387d6be84421362a6352",
+  "input_source": {
+    "identity": {
+      "index": 0,
+      "partition": "train",
+      "sample": "Sample002",
+      "source": {
+        "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM 2/trainingData_NASA-CRM.h5",
+        "sample": "Sample002"
+      }
+    },
+    "preparation": "a693600c855f092887a22831dd4d514290625d27b52e866453b934c4a4dabd70"
+  },
+  "model_type": "ai4e_contrib.ability.model.abupt.network.AnchoredBranchedUPT",
+  "parameter_count": 19736644,
+  "path": "/private/tmp/dojo-platform-traces/nasa_crm_abupt/model.html",
+  "schema_version": 1,
+  "status": "succeeded"
+}

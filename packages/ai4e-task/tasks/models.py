@@ -1,6 +1,6 @@
 """任务与运行的管理记录类型。"""
 
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 
 class Task(TypedDict):
@@ -11,6 +11,9 @@ class Task(TypedDict):
     version_id: str
     name: str
     created_at: str
+    updated_at: NotRequired[str]
+    description: NotRequired[str]
+    archived: NotRequired[bool]
 
 
 class Run(TypedDict):

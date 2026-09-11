@@ -226,3 +226,28 @@ def test_log_frequency_preserves_history_and_final_event(tmp_path, monkeypatch):
     assert [event["轮次"] for event in events] == [2, 3]
     assert len(report["history"]) == 3
     assert all(not isinstance(value, torch.Tensor) for event in events for value in event.values())
+
+
+def test_disabled_evaluation_keeps_last_without_best(tmp_path):
+    """关闭训练期评价同时关闭重复评价，不虚构 best 权重。"""
+    model = torch.nn.Linear(1, 1)
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+    run = Run(tmp_path)
+
+    def forbidden():
+        raise AssertionError("训练期间禁止消费测试集")
+
+    report = fit(
+        model,
+        optimizer,
+        lambda _: iter([torch.ones(1, 1)]),
+        lambda network, batch: {"loss": network(batch).square().mean()},
+        forbidden,
+        run,
+        config={"max_epochs": 1, "evaluation_enabled": False},
+        contract={},
+        evaluate_repeat=forbidden,
+    )
+    assert report["history"][0]["evaluation"] is None
+    assert (run.writer.run_dir / "checkpoints/last.pt").exists()
+    assert not (run.writer.run_dir / "checkpoints/best.pt").exists()

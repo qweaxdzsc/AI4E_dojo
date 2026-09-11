@@ -8,6 +8,7 @@ import json
 import torch
 
 from .coordinate_normalization import CoordinateNormalization
+from .minmax import MinMax
 from .standardization import Standardization
 
 
@@ -39,6 +40,8 @@ class Normalization:
                 transform = Standardization(
                     tuple(parameters["mean"]), tuple(parameters["std"]), arithmetic=arithmetic
                 )
+            elif declaration["method"] == "minmax":
+                transform = MinMax(**parameters, arithmetic=arithmetic)
             elif declaration["method"] == "coordinate":
                 transform = CoordinateNormalization(**parameters, arithmetic=arithmetic)
             else:

@@ -1,0 +1,1104 @@
+{
+  "case": "nasa_crm_abupt",
+  "project": "b26f3b16719e4629bed7b749d73db6f6",
+  "task": "33149a8f1adf4d95aead6959dccf134a",
+  "stages": {
+    "rawprep": {
+      "id": "ce1125fbed5e494db886b176fc940baa",
+      "task_id": "33149a8f1adf4d95aead6959dccf134a",
+      "version_id": "42c52887908846fc9f26fd430035375d",
+      "status": "succeeded",
+      "created_at": "2026-09-10T11:36:09.875862+00:00",
+      "run_path": "tasks/33149a8f1adf4d95aead6959dccf134a/runs/ce1125fbed5e494db886b176fc940baa",
+      "data_path": "tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa",
+      "code_path": "tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/ce1125fbed5e494db886b176fc940baa/code",
+      "request_path": "tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/ce1125fbed5e494db886b176fc940baa/request.json",
+      "pid": 56877,
+      "resumed_from": null,
+      "operation_mode": "execute",
+      "source_snapshot": {
+        "files": {
+          "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+          "config.yaml": "58368d3edd9c7a4a0e49fc6255f3c981b1c5b3a8c0b0401a2eca9a0cb2288450",
+          "configuration.py": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64",
+          "pipeline.py": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed",
+          "post.py": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623",
+          "rawprep.py": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43",
+          "task-entry.json": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79",
+          "train.py": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2",
+          "trainprep.py": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+        },
+        "digest": "469d762f2b65f78121ea580b3c2f2fb9f3ffb087bdb487150a2dd162d13a21fc"
+      },
+      "code_digest": "a20f9fb8c0443500ce94e9929e7c031e86e677977c864b131c96bc7df78da3a6",
+      "error": null,
+      "run_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/ce1125fbed5e494db886b176fc940baa",
+      "data_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa",
+      "summary": {
+        "total": 10,
+        "attempted": 10,
+        "success": 10,
+        "unexecuted": 0,
+        "failed": false,
+        "failed_count": 0,
+        "failures": [],
+        "dry_run": false,
+        "run_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/ce1125fbed5e494db886b176fc940baa",
+        "reports": {
+          "dataset": {
+            "manifest": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM",
+            "definition": {
+              "manifest_path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM",
+              "description": {
+                "schema_version": 1,
+                "fields": {
+                  "coordinates": [
+                    "CoordinateX",
+                    "CoordinateY",
+                    "CoordinateZ"
+                  ],
+                  "normals": [
+                    "NormalX",
+                    "NormalY",
+                    "NormalZ"
+                  ],
+                  "conditions": [
+                    "Mach",
+                    "AlphaMean",
+                    "aileronInboard",
+                    "aileronOutboard",
+                    "htp",
+                    "elevator"
+                  ],
+                  "labels": [
+                    "PressureCoefficient",
+                    "cfx",
+                    "cfy",
+                    "cfz"
+                  ],
+                  "area": "Surface"
+                },
+                "input_fields": [
+                  "CoordinateX",
+                  "CoordinateY",
+                  "CoordinateZ",
+                  "NormalX",
+                  "NormalY",
+                  "NormalZ",
+                  "Mach",
+                  "AlphaMean",
+                  "aileronInboard",
+                  "aileronOutboard",
+                  "htp",
+                  "elevator"
+                ],
+                "input_dim": 12,
+                "out_dim": 4,
+                "chunk_count": 20,
+                "point_count": 454404,
+                "split_seed": 42,
+                "validation_fraction": 0.2,
+                "splits": {
+                  "train": [
+                    "Sample002",
+                    "Sample004",
+                    "Sample006",
+                    "Sample007",
+                    "Sample008",
+                    "Sample009",
+                    "Sample010",
+                    "Sample011"
+                  ],
+                  "validation": [
+                    "Sample001"
+                  ],
+                  "test": [
+                    "Sample001"
+                  ]
+                },
+                "sources": {
+                  "training": {
+                    "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM 2/trainingData_NASA-CRM.h5",
+                    "size_bytes": 2099900656,
+                    "mtime_ns": 1745361932000000000,
+                    "sample_count": 105,
+                    "point_count": 454404
+                  },
+                  "test": {
+                    "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM/testData_NASA-CRM.h5",
+                    "size_bytes": 879958232,
+                    "mtime_ns": 1745361926000000000,
+                    "sample_count": 44,
+                    "point_count": 454404
+                  }
+                }
+              }
+            },
+            "partitions": {
+              "train": [
+                "train/Sample002",
+                "train/Sample004",
+                "train/Sample006",
+                "train/Sample007",
+                "train/Sample008",
+                "train/Sample009",
+                "train/Sample010",
+                "train/Sample011"
+              ],
+              "validation": [
+                "validation/Sample001"
+              ],
+              "test": [
+                "test/Sample001"
+              ]
+            }
+          },
+          "rawprep": {
+            "manifest": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/manifest.json",
+            "split_counts": {
+              "train": 8,
+              "validation": 1,
+              "test": 1
+            }
+          }
+        }
+      },
+      "lineage": {
+        "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+        "task_id": "33149a8f1adf4d95aead6959dccf134a",
+        "version_id": "42c52887908846fc9f26fd430035375d",
+        "run_id": "ce1125fbed5e494db886b176fc940baa",
+        "run_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/ce1125fbed5e494db886b176fc940baa",
+        "data_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa",
+        "code_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/ce1125fbed5e494db886b176fc940baa/code",
+        "version": {
+          "id": "42c52887908846fc9f26fd430035375d",
+          "task_id": "33149a8f1adf4d95aead6959dccf134a",
+          "created_at": "2026-09-10T10:52:31.835479+00:00",
+          "parent_version_id": null,
+          "baseline_version_id": null,
+          "snapshot": {
+            "files": {
+              "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+              "config.yaml": "f43fea0487b413f5bb4bdf00a670f27e01c460e4a499630d2791679c427e17b7",
+              "configuration.py": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64",
+              "pipeline.py": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed",
+              "post.py": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623",
+              "rawprep.py": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43",
+              "task-entry.json": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79",
+              "train.py": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2",
+              "trainprep.py": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+            },
+            "digest": "3e848783b70b7ec7623095c498e22b99275088c4ed4e83be98853741f67b1543"
+          },
+          "source_snapshot": {
+            "files": {
+              "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+              "config.yaml": "5589312a4ffb755cc1b211e16de32436c4d85f3df95a4fc5e033db50c884ab60",
+              "configuration.py": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64",
+              "pipeline.py": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed",
+              "post.py": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623",
+              "rawprep.py": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43",
+              "task-entry.json": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79",
+              "train.py": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2",
+              "trainprep.py": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+            },
+            "digest": "5ac36735cc1ef82c14f762c9883d283959f55db31a7205313040899ee5a4f48e"
+          },
+          "source": {
+            "kind": "template",
+            "path": "/Users/zonghui/work/new_code_project/AI4E_Dojo/recipes/aero_cfd",
+            "run_id": null
+          },
+          "assets": {
+            "dataset.root": {
+              "id": "af9273ad25c04337850a10b7c43a1ad5",
+              "kind": "dataset",
+              "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM",
+              "external": true,
+              "digest": "b9be373c8278c1fd8c5bcd5f4a24c5c4221fba590c4f21917834aab127628be4",
+              "source": {},
+              "dependencies": []
+            }
+          },
+          "copied_outputs": {},
+          "changes": [
+            {
+              "path": "README.md",
+              "before": null,
+              "after": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a"
+            },
+            {
+              "path": "config.yaml",
+              "before": null,
+              "after": "f43fea0487b413f5bb4bdf00a670f27e01c460e4a499630d2791679c427e17b7"
+            },
+            {
+              "path": "configuration.py",
+              "before": null,
+              "after": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64"
+            },
+            {
+              "path": "pipeline.py",
+              "before": null,
+              "after": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed"
+            },
+            {
+              "path": "post.py",
+              "before": null,
+              "after": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623"
+            },
+            {
+              "path": "rawprep.py",
+              "before": null,
+              "after": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43"
+            },
+            {
+              "path": "task-entry.json",
+              "before": null,
+              "after": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79"
+            },
+            {
+              "path": "train.py",
+              "before": null,
+              "after": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2"
+            },
+            {
+              "path": "trainprep.py",
+              "before": null,
+              "after": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+            }
+          ]
+        },
+        "assets": {
+          "dataset.root": {
+            "id": "af9273ad25c04337850a10b7c43a1ad5",
+            "kind": "dataset",
+            "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM",
+            "external": true,
+            "digest": "b9be373c8278c1fd8c5bcd5f4a24c5c4221fba590c4f21917834aab127628be4",
+            "source": {},
+            "dependencies": []
+          }
+        },
+        "resumed_from": null,
+        "schema_version": 1
+      }
+    },
+    "trainprep": {
+      "id": "7eaf4326a53341f79bbbd994ed858d4a",
+      "task_id": "33149a8f1adf4d95aead6959dccf134a",
+      "version_id": "42c52887908846fc9f26fd430035375d",
+      "status": "succeeded",
+      "created_at": "2026-09-10T11:36:13.434479+00:00",
+      "run_path": "tasks/33149a8f1adf4d95aead6959dccf134a/runs/7eaf4326a53341f79bbbd994ed858d4a",
+      "data_path": "tasks/33149a8f1adf4d95aead6959dccf134a/data/7eaf4326a53341f79bbbd994ed858d4a",
+      "code_path": "tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/7eaf4326a53341f79bbbd994ed858d4a/code",
+      "request_path": "tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/7eaf4326a53341f79bbbd994ed858d4a/request.json",
+      "pid": 56927,
+      "resumed_from": null,
+      "operation_mode": "execute",
+      "source_snapshot": {
+        "files": {
+          "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+          "config.yaml": "58368d3edd9c7a4a0e49fc6255f3c981b1c5b3a8c0b0401a2eca9a0cb2288450",
+          "configuration.py": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64",
+          "pipeline.py": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed",
+          "post.py": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623",
+          "rawprep.py": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43",
+          "task-entry.json": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79",
+          "train.py": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2",
+          "trainprep.py": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+        },
+        "digest": "469d762f2b65f78121ea580b3c2f2fb9f3ffb087bdb487150a2dd162d13a21fc"
+      },
+      "code_digest": "f90d90d86da010ca27c495daa81caadedb7d6005f95ac845844ffc0da6fd4d31",
+      "error": null,
+      "run_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/7eaf4326a53341f79bbbd994ed858d4a",
+      "data_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/7eaf4326a53341f79bbbd994ed858d4a",
+      "summary": {
+        "total": 0,
+        "attempted": 0,
+        "success": 0,
+        "unexecuted": 0,
+        "failed": false,
+        "failed_count": 0,
+        "failures": [],
+        "dry_run": false,
+        "run_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/7eaf4326a53341f79bbbd994ed858d4a",
+        "reports": {
+          "trainprep": {
+            "preparation": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/7eaf4326a53341f79bbbd994ed858d4a/artifacts/preparation.json",
+            "split_counts": {
+              "test": 1,
+              "train": 8,
+              "validation": 1
+            }
+          }
+        }
+      },
+      "lineage": {
+        "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+        "task_id": "33149a8f1adf4d95aead6959dccf134a",
+        "version_id": "42c52887908846fc9f26fd430035375d",
+        "run_id": "7eaf4326a53341f79bbbd994ed858d4a",
+        "run_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/7eaf4326a53341f79bbbd994ed858d4a",
+        "data_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/7eaf4326a53341f79bbbd994ed858d4a",
+        "code_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/7eaf4326a53341f79bbbd994ed858d4a/code",
+        "version": {
+          "id": "42c52887908846fc9f26fd430035375d",
+          "task_id": "33149a8f1adf4d95aead6959dccf134a",
+          "created_at": "2026-09-10T10:52:31.835479+00:00",
+          "parent_version_id": null,
+          "baseline_version_id": null,
+          "snapshot": {
+            "files": {
+              "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+              "config.yaml": "f43fea0487b413f5bb4bdf00a670f27e01c460e4a499630d2791679c427e17b7",
+              "configuration.py": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64",
+              "pipeline.py": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed",
+              "post.py": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623",
+              "rawprep.py": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43",
+              "task-entry.json": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79",
+              "train.py": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2",
+              "trainprep.py": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+            },
+            "digest": "3e848783b70b7ec7623095c498e22b99275088c4ed4e83be98853741f67b1543"
+          },
+          "source_snapshot": {
+            "files": {
+              "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+              "config.yaml": "5589312a4ffb755cc1b211e16de32436c4d85f3df95a4fc5e033db50c884ab60",
+              "configuration.py": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64",
+              "pipeline.py": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed",
+              "post.py": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623",
+              "rawprep.py": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43",
+              "task-entry.json": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79",
+              "train.py": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2",
+              "trainprep.py": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+            },
+            "digest": "5ac36735cc1ef82c14f762c9883d283959f55db31a7205313040899ee5a4f48e"
+          },
+          "source": {
+            "kind": "template",
+            "path": "/Users/zonghui/work/new_code_project/AI4E_Dojo/recipes/aero_cfd",
+            "run_id": null
+          },
+          "assets": {
+            "dataset.root": {
+              "id": "af9273ad25c04337850a10b7c43a1ad5",
+              "kind": "dataset",
+              "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM",
+              "external": true,
+              "digest": "b9be373c8278c1fd8c5bcd5f4a24c5c4221fba590c4f21917834aab127628be4",
+              "source": {},
+              "dependencies": []
+            }
+          },
+          "copied_outputs": {},
+          "changes": [
+            {
+              "path": "README.md",
+              "before": null,
+              "after": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a"
+            },
+            {
+              "path": "config.yaml",
+              "before": null,
+              "after": "f43fea0487b413f5bb4bdf00a670f27e01c460e4a499630d2791679c427e17b7"
+            },
+            {
+              "path": "configuration.py",
+              "before": null,
+              "after": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64"
+            },
+            {
+              "path": "pipeline.py",
+              "before": null,
+              "after": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed"
+            },
+            {
+              "path": "post.py",
+              "before": null,
+              "after": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623"
+            },
+            {
+              "path": "rawprep.py",
+              "before": null,
+              "after": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43"
+            },
+            {
+              "path": "task-entry.json",
+              "before": null,
+              "after": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79"
+            },
+            {
+              "path": "train.py",
+              "before": null,
+              "after": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2"
+            },
+            {
+              "path": "trainprep.py",
+              "before": null,
+              "after": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+            }
+          ]
+        },
+        "assets": {
+          "train.manifest": {
+            "id": "b466bc8781fa43eab41d3d4c85fd2272",
+            "kind": "dataset",
+            "path": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/ce1125fbed5e494db886b176fc940baa/manifest.json",
+            "external": true,
+            "digest": "e38ac80ca2ecc58d3a1b18ff472c1723fad60cdb9c8868d6d0707a71a89ea3c6",
+            "source": {},
+            "dependencies": []
+          }
+        },
+        "resumed_from": null,
+        "schema_version": 1
+      }
+    },
+    "train": {
+      "id": "b99abe138c9e480ea9670a2ba77ebcb0",
+      "task_id": "33149a8f1adf4d95aead6959dccf134a",
+      "version_id": "42c52887908846fc9f26fd430035375d",
+      "status": "succeeded",
+      "created_at": "2026-09-10T11:36:16.001228+00:00",
+      "run_path": "tasks/33149a8f1adf4d95aead6959dccf134a/runs/b99abe138c9e480ea9670a2ba77ebcb0",
+      "data_path": "tasks/33149a8f1adf4d95aead6959dccf134a/data/b99abe138c9e480ea9670a2ba77ebcb0",
+      "code_path": "tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/b99abe138c9e480ea9670a2ba77ebcb0/code",
+      "request_path": "tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/b99abe138c9e480ea9670a2ba77ebcb0/request.json",
+      "pid": 56977,
+      "resumed_from": null,
+      "operation_mode": "execute",
+      "source_snapshot": {
+        "files": {
+          "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+          "config.yaml": "58368d3edd9c7a4a0e49fc6255f3c981b1c5b3a8c0b0401a2eca9a0cb2288450",
+          "configuration.py": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64",
+          "pipeline.py": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed",
+          "post.py": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623",
+          "rawprep.py": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43",
+          "task-entry.json": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79",
+          "train.py": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2",
+          "trainprep.py": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+        },
+        "digest": "469d762f2b65f78121ea580b3c2f2fb9f3ffb087bdb487150a2dd162d13a21fc"
+      },
+      "code_digest": "09b4474fada1aa310a008d9c12f0f6f47c37ad3656087d294978286cca918d42",
+      "error": null,
+      "run_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/b99abe138c9e480ea9670a2ba77ebcb0",
+      "data_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/b99abe138c9e480ea9670a2ba77ebcb0",
+      "summary": {
+        "total": 0,
+        "attempted": 0,
+        "success": 0,
+        "unexecuted": 0,
+        "failed": false,
+        "failed_count": 0,
+        "failures": [],
+        "dry_run": false,
+        "run_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/b99abe138c9e480ea9670a2ba77ebcb0",
+        "reports": {
+          "train": {
+            "epochs": 1,
+            "updates": 8,
+            "best": null,
+            "history": [
+              {
+                "epoch": 1,
+                "updates": 8,
+                "loss": 2.4489202946424484,
+                "learning_rate": 1e-06,
+                "evaluation": null,
+                "seconds": 2.3028151670005172,
+                "online": {
+                  "loss": 2.448920488357544,
+                  "surface_cp": 1.3109006881713867,
+                  "surface_cf": 1.1380195617675781
+                }
+              }
+            ],
+            "checkpoints": {
+              "latest": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/b99abe138c9e480ea9670a2ba77ebcb0/checkpoints/latest.pt",
+              "last": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/b99abe138c9e480ea9670a2ba77ebcb0/checkpoints/last.pt"
+            }
+          }
+        }
+      },
+      "lineage": {
+        "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+        "task_id": "33149a8f1adf4d95aead6959dccf134a",
+        "version_id": "42c52887908846fc9f26fd430035375d",
+        "run_id": "b99abe138c9e480ea9670a2ba77ebcb0",
+        "run_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/b99abe138c9e480ea9670a2ba77ebcb0",
+        "data_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/b99abe138c9e480ea9670a2ba77ebcb0",
+        "code_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/b99abe138c9e480ea9670a2ba77ebcb0/code",
+        "version": {
+          "id": "42c52887908846fc9f26fd430035375d",
+          "task_id": "33149a8f1adf4d95aead6959dccf134a",
+          "created_at": "2026-09-10T10:52:31.835479+00:00",
+          "parent_version_id": null,
+          "baseline_version_id": null,
+          "snapshot": {
+            "files": {
+              "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+              "config.yaml": "f43fea0487b413f5bb4bdf00a670f27e01c460e4a499630d2791679c427e17b7",
+              "configuration.py": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64",
+              "pipeline.py": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed",
+              "post.py": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623",
+              "rawprep.py": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43",
+              "task-entry.json": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79",
+              "train.py": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2",
+              "trainprep.py": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+            },
+            "digest": "3e848783b70b7ec7623095c498e22b99275088c4ed4e83be98853741f67b1543"
+          },
+          "source_snapshot": {
+            "files": {
+              "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+              "config.yaml": "5589312a4ffb755cc1b211e16de32436c4d85f3df95a4fc5e033db50c884ab60",
+              "configuration.py": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64",
+              "pipeline.py": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed",
+              "post.py": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623",
+              "rawprep.py": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43",
+              "task-entry.json": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79",
+              "train.py": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2",
+              "trainprep.py": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+            },
+            "digest": "5ac36735cc1ef82c14f762c9883d283959f55db31a7205313040899ee5a4f48e"
+          },
+          "source": {
+            "kind": "template",
+            "path": "/Users/zonghui/work/new_code_project/AI4E_Dojo/recipes/aero_cfd",
+            "run_id": null
+          },
+          "assets": {
+            "dataset.root": {
+              "id": "af9273ad25c04337850a10b7c43a1ad5",
+              "kind": "dataset",
+              "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM",
+              "external": true,
+              "digest": "b9be373c8278c1fd8c5bcd5f4a24c5c4221fba590c4f21917834aab127628be4",
+              "source": {},
+              "dependencies": []
+            }
+          },
+          "copied_outputs": {},
+          "changes": [
+            {
+              "path": "README.md",
+              "before": null,
+              "after": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a"
+            },
+            {
+              "path": "config.yaml",
+              "before": null,
+              "after": "f43fea0487b413f5bb4bdf00a670f27e01c460e4a499630d2791679c427e17b7"
+            },
+            {
+              "path": "configuration.py",
+              "before": null,
+              "after": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64"
+            },
+            {
+              "path": "pipeline.py",
+              "before": null,
+              "after": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed"
+            },
+            {
+              "path": "post.py",
+              "before": null,
+              "after": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623"
+            },
+            {
+              "path": "rawprep.py",
+              "before": null,
+              "after": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43"
+            },
+            {
+              "path": "task-entry.json",
+              "before": null,
+              "after": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79"
+            },
+            {
+              "path": "train.py",
+              "before": null,
+              "after": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2"
+            },
+            {
+              "path": "trainprep.py",
+              "before": null,
+              "after": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+            }
+          ]
+        },
+        "assets": {
+          "train.preparation": {
+            "id": "dea82f7d9c944ea39a37561914d9892f",
+            "kind": "preparation",
+            "path": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/7eaf4326a53341f79bbbd994ed858d4a/artifacts/preparation.json",
+            "external": true,
+            "digest": "a208bb72810a84816feab30128dd542aa81492abe9266dcc4b5d1d4ca95a0c05",
+            "source": {},
+            "dependencies": []
+          }
+        },
+        "resumed_from": null,
+        "schema_version": 1
+      }
+    },
+    "post": {
+      "id": "f6d77c91b0604df0a4af8bed4ba4eec6",
+      "task_id": "33149a8f1adf4d95aead6959dccf134a",
+      "version_id": "42c52887908846fc9f26fd430035375d",
+      "status": "succeeded",
+      "created_at": "2026-09-10T11:53:39.123656+00:00",
+      "run_path": "tasks/33149a8f1adf4d95aead6959dccf134a/runs/f6d77c91b0604df0a4af8bed4ba4eec6",
+      "data_path": "tasks/33149a8f1adf4d95aead6959dccf134a/data/f6d77c91b0604df0a4af8bed4ba4eec6",
+      "code_path": "tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/f6d77c91b0604df0a4af8bed4ba4eec6/code",
+      "request_path": "tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/f6d77c91b0604df0a4af8bed4ba4eec6/request.json",
+      "pid": 74833,
+      "resumed_from": null,
+      "operation_mode": "execute",
+      "stages": [
+        "post"
+      ],
+      "source_snapshot": {
+        "files": {
+          "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+          "config.yaml": "58368d3edd9c7a4a0e49fc6255f3c981b1c5b3a8c0b0401a2eca9a0cb2288450",
+          "configuration.py": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64",
+          "pipeline.py": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed",
+          "post.py": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623",
+          "rawprep.py": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43",
+          "task-entry.json": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79",
+          "train.py": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2",
+          "trainprep.py": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+        },
+        "digest": "469d762f2b65f78121ea580b3c2f2fb9f3ffb087bdb487150a2dd162d13a21fc"
+      },
+      "code_digest": "34fcd5e01b54cb14cd2e736b3f9ee4b10c13ba4937e83664bd37b47441849137",
+      "error": null,
+      "run_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/f6d77c91b0604df0a4af8bed4ba4eec6",
+      "data_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/f6d77c91b0604df0a4af8bed4ba4eec6",
+      "summary": {
+        "total": 0,
+        "attempted": 0,
+        "success": 0,
+        "unexecuted": 0,
+        "failed": false,
+        "failed_count": 0,
+        "failures": [],
+        "dry_run": false,
+        "run_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/f6d77c91b0604df0a4af8bed4ba4eec6",
+        "reports": {
+          "post": {
+            "mode": "post",
+            "status": "succeeded",
+            "operations": {
+              "prediction": {
+                "status": "succeeded",
+                "completed": 1,
+                "samples": [
+                  {
+                    "samples": [
+                      {
+                        "sample": "Sample001",
+                        "partition": "test"
+                      }
+                    ],
+                    "status": "succeeded",
+                    "artifacts": [
+                      "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/f6d77c91b0604df0a4af8bed4ba4eec6/predictions/Sample001/manifest.json"
+                    ]
+                  }
+                ],
+                "artifacts": [
+                  "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/f6d77c91b0604df0a4af8bed4ba4eec6/predictions/Sample001/manifest.json"
+                ],
+                "error": null
+              },
+              "evaluation": {
+                "status": "succeeded",
+                "completed": 0,
+                "samples": [],
+                "artifacts": [
+                  "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/f6d77c91b0604df0a4af8bed4ba4eec6/artifacts/physical-predictions.json"
+                ],
+                "error": null
+              },
+              "mesh": {
+                "status": "succeeded",
+                "completed": 1,
+                "samples": [
+                  {
+                    "samples": [
+                      {
+                        "sample": "Sample001",
+                        "partition": "test"
+                      }
+                    ],
+                    "status": "succeeded",
+                    "artifacts": [
+                      "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/f6d77c91b0604df0a4af8bed4ba4eec6/predictions/Sample001/surface.vtp"
+                    ]
+                  }
+                ],
+                "artifacts": [
+                  "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/f6d77c91b0604df0a4af8bed4ba4eec6/predictions/Sample001/surface.vtp"
+                ],
+                "error": null
+              }
+            }
+          }
+        }
+      },
+      "lineage": {
+        "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+        "task_id": "33149a8f1adf4d95aead6959dccf134a",
+        "version_id": "42c52887908846fc9f26fd430035375d",
+        "run_id": "f6d77c91b0604df0a4af8bed4ba4eec6",
+        "run_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/f6d77c91b0604df0a4af8bed4ba4eec6",
+        "data_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/f6d77c91b0604df0a4af8bed4ba4eec6",
+        "code_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/f6d77c91b0604df0a4af8bed4ba4eec6/code",
+        "version": {
+          "id": "42c52887908846fc9f26fd430035375d",
+          "task_id": "33149a8f1adf4d95aead6959dccf134a",
+          "created_at": "2026-09-10T10:52:31.835479+00:00",
+          "parent_version_id": null,
+          "baseline_version_id": null,
+          "snapshot": {
+            "files": {
+              "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+              "config.yaml": "f43fea0487b413f5bb4bdf00a670f27e01c460e4a499630d2791679c427e17b7",
+              "configuration.py": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64",
+              "pipeline.py": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed",
+              "post.py": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623",
+              "rawprep.py": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43",
+              "task-entry.json": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79",
+              "train.py": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2",
+              "trainprep.py": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+            },
+            "digest": "3e848783b70b7ec7623095c498e22b99275088c4ed4e83be98853741f67b1543"
+          },
+          "source_snapshot": {
+            "files": {
+              "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+              "config.yaml": "5589312a4ffb755cc1b211e16de32436c4d85f3df95a4fc5e033db50c884ab60",
+              "configuration.py": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64",
+              "pipeline.py": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed",
+              "post.py": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623",
+              "rawprep.py": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43",
+              "task-entry.json": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79",
+              "train.py": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2",
+              "trainprep.py": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+            },
+            "digest": "5ac36735cc1ef82c14f762c9883d283959f55db31a7205313040899ee5a4f48e"
+          },
+          "source": {
+            "kind": "template",
+            "path": "/Users/zonghui/work/new_code_project/AI4E_Dojo/recipes/aero_cfd",
+            "run_id": null
+          },
+          "assets": {
+            "dataset.root": {
+              "id": "af9273ad25c04337850a10b7c43a1ad5",
+              "kind": "dataset",
+              "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM",
+              "external": true,
+              "digest": "b9be373c8278c1fd8c5bcd5f4a24c5c4221fba590c4f21917834aab127628be4",
+              "source": {},
+              "dependencies": []
+            }
+          },
+          "copied_outputs": {},
+          "changes": [
+            {
+              "path": "README.md",
+              "before": null,
+              "after": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a"
+            },
+            {
+              "path": "config.yaml",
+              "before": null,
+              "after": "f43fea0487b413f5bb4bdf00a670f27e01c460e4a499630d2791679c427e17b7"
+            },
+            {
+              "path": "configuration.py",
+              "before": null,
+              "after": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64"
+            },
+            {
+              "path": "pipeline.py",
+              "before": null,
+              "after": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed"
+            },
+            {
+              "path": "post.py",
+              "before": null,
+              "after": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623"
+            },
+            {
+              "path": "rawprep.py",
+              "before": null,
+              "after": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43"
+            },
+            {
+              "path": "task-entry.json",
+              "before": null,
+              "after": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79"
+            },
+            {
+              "path": "train.py",
+              "before": null,
+              "after": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2"
+            },
+            {
+              "path": "trainprep.py",
+              "before": null,
+              "after": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+            }
+          ]
+        },
+        "assets": {
+          "post.checkpoint": {
+            "id": "0e9d7a42992b4fbab2433e4a80018185",
+            "kind": "checkpoint",
+            "path": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/b99abe138c9e480ea9670a2ba77ebcb0/checkpoints/latest.pt",
+            "external": true,
+            "digest": "8bec7e0d20b91274a1c8725c263281166671b0e00688fc1ad8df6eff3fbfe093",
+            "source": {},
+            "dependencies": []
+          },
+          "train.preparation": {
+            "id": "a57757ae4266444687d4ca6bce303fa3",
+            "kind": "preparation",
+            "path": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/7eaf4326a53341f79bbbd994ed858d4a/artifacts/preparation.json",
+            "external": true,
+            "digest": "a208bb72810a84816feab30128dd542aa81492abe9266dcc4b5d1d4ca95a0c05",
+            "source": {},
+            "dependencies": []
+          }
+        },
+        "resumed_from": null,
+        "schema_version": 1
+      }
+    }
+  },
+  "previous_post_runs": [
+    {
+      "id": "e2fd710cd44345a7aa5ff55c110725d0",
+      "task_id": "33149a8f1adf4d95aead6959dccf134a",
+      "version_id": "42c52887908846fc9f26fd430035375d",
+      "status": "succeeded",
+      "created_at": "2026-09-10T11:36:22.986673+00:00",
+      "run_path": "tasks/33149a8f1adf4d95aead6959dccf134a/runs/e2fd710cd44345a7aa5ff55c110725d0",
+      "data_path": "tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0",
+      "code_path": "tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/e2fd710cd44345a7aa5ff55c110725d0/code",
+      "request_path": "tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/e2fd710cd44345a7aa5ff55c110725d0/request.json",
+      "pid": 57100,
+      "resumed_from": null,
+      "operation_mode": "execute",
+      "source_snapshot": {
+        "files": {
+          "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+          "config.yaml": "58368d3edd9c7a4a0e49fc6255f3c981b1c5b3a8c0b0401a2eca9a0cb2288450",
+          "configuration.py": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64",
+          "pipeline.py": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed",
+          "post.py": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623",
+          "rawprep.py": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43",
+          "task-entry.json": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79",
+          "train.py": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2",
+          "trainprep.py": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+        },
+        "digest": "469d762f2b65f78121ea580b3c2f2fb9f3ffb087bdb487150a2dd162d13a21fc"
+      },
+      "code_digest": "323e1ad2ac21006ebed21338740cafc9a4e0012d155b4cc7584bd203624dc363",
+      "error": null,
+      "run_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/e2fd710cd44345a7aa5ff55c110725d0",
+      "data_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0",
+      "summary": {
+        "total": 0,
+        "attempted": 0,
+        "success": 0,
+        "unexecuted": 0,
+        "failed": false,
+        "failed_count": 0,
+        "failures": [],
+        "dry_run": false,
+        "run_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/e2fd710cd44345a7aa5ff55c110725d0",
+        "reports": {
+          "post": {
+            "mode": "post",
+            "status": "succeeded",
+            "operations": {
+              "prediction": {
+                "status": "succeeded",
+                "completed": 1,
+                "samples": [
+                  {
+                    "samples": [
+                      {
+                        "sample": "Sample001",
+                        "partition": "test"
+                      }
+                    ],
+                    "status": "succeeded",
+                    "artifacts": [
+                      "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0/predictions/Sample001/manifest.json"
+                    ]
+                  }
+                ],
+                "artifacts": [
+                  "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0/predictions/Sample001/manifest.json"
+                ],
+                "error": null
+              },
+              "evaluation": {
+                "status": "succeeded",
+                "completed": 0,
+                "samples": [],
+                "artifacts": [
+                  "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/e2fd710cd44345a7aa5ff55c110725d0/artifacts/physical-predictions.json"
+                ],
+                "error": null
+              }
+            }
+          }
+        }
+      },
+      "lineage": {
+        "project_id": "b26f3b16719e4629bed7b749d73db6f6",
+        "task_id": "33149a8f1adf4d95aead6959dccf134a",
+        "version_id": "42c52887908846fc9f26fd430035375d",
+        "run_id": "e2fd710cd44345a7aa5ff55c110725d0",
+        "run_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/e2fd710cd44345a7aa5ff55c110725d0",
+        "data_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/data/e2fd710cd44345a7aa5ff55c110725d0",
+        "code_dir": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/.dojo/executions/e2fd710cd44345a7aa5ff55c110725d0/code",
+        "version": {
+          "id": "42c52887908846fc9f26fd430035375d",
+          "task_id": "33149a8f1adf4d95aead6959dccf134a",
+          "created_at": "2026-09-10T10:52:31.835479+00:00",
+          "parent_version_id": null,
+          "baseline_version_id": null,
+          "snapshot": {
+            "files": {
+              "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+              "config.yaml": "f43fea0487b413f5bb4bdf00a670f27e01c460e4a499630d2791679c427e17b7",
+              "configuration.py": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64",
+              "pipeline.py": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed",
+              "post.py": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623",
+              "rawprep.py": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43",
+              "task-entry.json": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79",
+              "train.py": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2",
+              "trainprep.py": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+            },
+            "digest": "3e848783b70b7ec7623095c498e22b99275088c4ed4e83be98853741f67b1543"
+          },
+          "source_snapshot": {
+            "files": {
+              "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+              "config.yaml": "5589312a4ffb755cc1b211e16de32436c4d85f3df95a4fc5e033db50c884ab60",
+              "configuration.py": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64",
+              "pipeline.py": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed",
+              "post.py": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623",
+              "rawprep.py": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43",
+              "task-entry.json": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79",
+              "train.py": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2",
+              "trainprep.py": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+            },
+            "digest": "5ac36735cc1ef82c14f762c9883d283959f55db31a7205313040899ee5a4f48e"
+          },
+          "source": {
+            "kind": "template",
+            "path": "/Users/zonghui/work/new_code_project/AI4E_Dojo/recipes/aero_cfd",
+            "run_id": null
+          },
+          "assets": {
+            "dataset.root": {
+              "id": "af9273ad25c04337850a10b7c43a1ad5",
+              "kind": "dataset",
+              "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM",
+              "external": true,
+              "digest": "b9be373c8278c1fd8c5bcd5f4a24c5c4221fba590c4f21917834aab127628be4",
+              "source": {},
+              "dependencies": []
+            }
+          },
+          "copied_outputs": {},
+          "changes": [
+            {
+              "path": "README.md",
+              "before": null,
+              "after": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a"
+            },
+            {
+              "path": "config.yaml",
+              "before": null,
+              "after": "f43fea0487b413f5bb4bdf00a670f27e01c460e4a499630d2791679c427e17b7"
+            },
+            {
+              "path": "configuration.py",
+              "before": null,
+              "after": "c1cb5e1cf218127044733869041c2617b268d65cb4cfee35a62d5bc1599fdc64"
+            },
+            {
+              "path": "pipeline.py",
+              "before": null,
+              "after": "caf53d13ee15712246a697c2ae8f420ff4cca3e5acef598932d9e08518411fed"
+            },
+            {
+              "path": "post.py",
+              "before": null,
+              "after": "df8ab6b51c3bde8badfbdf7f535da2479e8ce33a08e5bfa62453b6ece181d623"
+            },
+            {
+              "path": "rawprep.py",
+              "before": null,
+              "after": "941aaa8749499bd7b43cf9016bb519800c9974d084fbea8da9fa769a401dfa43"
+            },
+            {
+              "path": "task-entry.json",
+              "before": null,
+              "after": "c768dcc111a30575ece40c3ec530b455ff17e1bce4733e6cede39251c9b7cb79"
+            },
+            {
+              "path": "train.py",
+              "before": null,
+              "after": "2ecce4102570e77a416570f9f66082acffd8eb268a6d781d5303a8f5105c9ef2"
+            },
+            {
+              "path": "trainprep.py",
+              "before": null,
+              "after": "fa7410ece63587d8631476d2dd1519194eb65a02ddcebd285e51ee18a78ab431"
+            }
+          ]
+        },
+        "assets": {
+          "post.checkpoint": {
+            "id": "b457d392cebb482d9def6006befcbe5d",
+            "kind": "checkpoint",
+            "path": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/b99abe138c9e480ea9670a2ba77ebcb0/checkpoints/latest.pt",
+            "external": true,
+            "digest": "8bec7e0d20b91274a1c8725c263281166671b0e00688fc1ad8df6eff3fbfe093",
+            "source": {},
+            "dependencies": []
+          },
+          "train.preparation": {
+            "id": "4a8259e546c04a46a59a0fb72dd55851",
+            "kind": "preparation",
+            "path": "/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/33149a8f1adf4d95aead6959dccf134a/runs/b99abe138c9e480ea9670a2ba77ebcb0/artifacts/preparation.json",
+            "external": true,
+            "digest": "a208bb72810a84816feab30128dd542aa81492abe9266dcc4b5d1d4ca95a0c05",
+            "source": {},
+            "dependencies": []
+          }
+        },
+        "resumed_from": null,
+        "schema_version": 1
+      }
+    }
+  ]
+}

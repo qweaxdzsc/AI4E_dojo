@@ -1,0 +1,362 @@
+/* 原始处理三栏对照 rawprep 细节原型：页签文件区、设置卡、执行盒。 */
+.workbench-grid > section.data-panel,
+.workbench-grid > section.execution-panel {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.workbench-grid > section.settings-panel {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.workbench-grid > section.settings-panel .panel-title {
+  gap: 8px;
+  margin: 0 12px;
+  padding: 8px 0 5px;
+  border-bottom: 1px solid #e4edfc;
+}
+.workbench-grid > section.settings-panel .settings-body {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 8px 12px 8px;
+}
+.workbench-grid > section.settings-panel .setting,
+.workbench-grid > section.settings-panel .processing-group {
+  padding: 6px 13px;
+  background: #fafcff;
+  border: 1px solid #e0eafd;
+  border-radius: 5px;
+}
+.workbench-grid > section.settings-panel .setting h3,
+.workbench-grid > section.settings-panel .processing-group h3 {
+  margin: 0 0 4px;
+  padding: 0;
+  border: 0;
+}
+.workbench-grid > section.settings-panel .setting p,
+.workbench-grid > section.settings-panel .setting .ant-checkbox-wrapper {
+  margin: 3px 0;
+}
+.workbench-grid > section.settings-panel .setting small {
+  display: block;
+  margin-top: 4px;
+  color: #7787aa;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.workbench-grid > section.settings-panel .settings-badge {
+  margin-left: auto;
+  font-size: 12px;
+  padding: 3px 11px;
+  border-radius: 20px;
+  background: #e8f2ff;
+  color: #3977c9;
+}
+.workbench-grid > section.settings-panel .settings-badge.done {
+  background: #ddfff0;
+  color: #009c58;
+}
+.data-panel .bound-dataset-files {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+.data-panel-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 9px 13px 7px;
+}
+.data-panel-head-main {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 100%;
+  margin-right: auto;
+}
+.data-panel-head-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 6px;
+}
+.dataset-tabs {
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  background: #eef5ff;
+  border-radius: 7px;
+}
+.dataset-tabs button {
+  border: 0;
+  background: transparent;
+  color: #6476a6;
+  padding: 7px 9px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.dataset-tabs button[aria-selected="true"] {
+  background: #fff;
+  color: #0874ff;
+  box-shadow: 0 1px 4px #cfdcf3;
+}
+.selection-label {
+  font-size: 13px;
+  color: #4e61ad;
+  white-space: nowrap;
+}
+.selection-label b {
+  color: #0877ff;
+}
+.refreshfiles,
+.addfile {
+  height: 30px;
+  padding: 4px 9px;
+  font-size: 12px;
+  border: 1px solid #bcd5ff;
+  border-radius: 6px;
+  background: #fff;
+  color: #0874ff;
+  white-space: nowrap;
+}
+.addfile.ant-btn {
+  height: 30px;
+  padding: 4px 9px;
+  font-size: 12px;
+  border-color: #3887ff;
+  color: #0674ff;
+}
+.data-panel-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+  padding: 0 0 10px;
+}
+.data-panel-body .directory-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 0 13px 7px;
+  color: #5776ac;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.data-panel-body .directory-info small,
+.data-panel-body .binding-status {
+  font-size: 10px;
+  line-height: 1.5;
+}
+.data-panel-body .file-search,
+.data-panel-body .ant-input-search {
+  display: block;
+  margin: 0 13px 8px;
+  width: calc(100% - 26px);
+}
+.data-panel-body .breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 13px 8px;
+  font-size: 12px;
+  color: #5776ac;
+}
+.data-panel-body .crumb-up {
+  border: 1px solid #d4e1f6;
+  border-radius: 6px;
+  background: #fff;
+  color: #172655;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+.data-panel-body .crumb-up:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.data-panel-body .tree {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 12px;
+}
+.data-panel-body .filetable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.data-panel-body .filetable th {
+  padding: 7px 5px;
+  color: #7e8bb7;
+  background: #f4f9fd;
+  font-weight: 500;
+  border: 0;
+  text-align: left;
+}
+.data-panel-body .filetable th:first-child,
+.data-panel-body .filetable td:first-child {
+  padding-left: 12px;
+}
+.data-panel-body .filetable td {
+  padding: 3px 5px;
+  height: 27px;
+  border-bottom: 1px solid #edf2fa;
+  color: #7183bb;
+}
+.data-panel-body .filetable td:first-child {
+  color: #172258;
+}
+.data-panel-body .filetable .ant-checkbox-wrapper {
+  margin-right: 6px;
+}
+.data-panel-body .filetable .link,
+.data-panel-body .filetable .preview-link {
+  border: 0;
+  background: transparent;
+  color: #0874ff;
+  padding: 2px 0;
+  cursor: pointer;
+  font-size: 12px;
+}
+.data-panel-body .filetable .link {
+  color: #172258;
+}
+.data-panel-body .foldericon,
+.data-panel-body .docicon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 7px;
+}
+.data-panel-body .foldericon {
+  width: 17px;
+  height: 12px;
+  background: linear-gradient(#8bb8ff, #7796ed);
+  border-radius: 1px;
+  position: relative;
+}
+.data-panel-body .foldericon:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -3px;
+  width: 8px;
+  height: 3px;
+  background: #abcaff;
+  border-radius: 2px 2px 0 0;
+}
+.data-panel-body .docicon {
+  width: 11px;
+  height: 14px;
+  border: 1px solid #79b6ff;
+  background: #eef6ff;
+  border-radius: 1px;
+}
+.data-panel-body .empty-files {
+  text-align: center;
+  color: #8ba1c6;
+  padding: 18px 8px !important;
+}
+.data-panel-body.artifact-body {
+  padding: 0 12px 10px;
+}
+.data-panel-body .file-browser.compact {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  max-height: none;
+}
+.data-panel-body .compact-file-tools {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+.execution-panel .execution-head {
+  padding: 9px 15px 4px;
+}
+.execution-panel .execution-head h2 {
+  margin: 0;
+  font-size: 17px;
+  line-height: 24px;
+  color: #152653;
+}
+.execution-panel .execution-head small {
+  display: block;
+  font-size: 13px;
+  color: #7a8cbd;
+}
+.execution-panel .executionbox {
+  margin: 0 10px 12px;
+  padding: 8px 12px 12px;
+  background: #fff;
+  border: 1px solid #e0eafd;
+  border-radius: 5px;
+}
+.execution-panel .executionbox .execution-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 6px;
+}
+.execution-panel .executionbox h3 {
+  margin: 0;
+  font-size: 14px;
+  border: 0;
+  padding: 0;
+}
+.execution-panel .execution-check {
+  display: flex;
+  align-items: center;
+  margin: 4px 0 8px;
+}
+.execution-panel .runrow {
+  display: grid;
+  grid-template-columns: 122px minmax(0, 1fr) 52px;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0;
+  font-size: 13px;
+  color: #152653;
+}
+.execution-panel .runrow .ant-input-number {
+  width: 100%;
+}
+.execution-panel .runbutton.ant-btn {
+  width: 100%;
+  margin-top: 8px;
+  height: 40px;
+  font-size: 18px;
+}
+.execution-panel .execution-note {
+  font-size: 12px;
+  color: #8192c1;
+  line-height: 19px;
+  margin: 9px 0 8px;
+}
+.execution-panel .execution-secondary {
+  display: grid;
+  gap: 6px;
+  margin-top: 4px;
+}
+.execution-panel .execution-secondary .ant-btn {
+  height: 30px;
+  font-size: 12px;
+  color: #677aaf;
+}
+@media (max-width: 1200px) {
+  .execution-panel .runrow {
+    grid-template-columns: 90px minmax(0, 1fr);
+  }
+  .execution-panel .runrow span:last-child {
+    display: none;
+  }
+}

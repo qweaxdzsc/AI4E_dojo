@@ -47,14 +47,30 @@ class ManifestIndex:
             directory = self.path.parent / directory
         requested = fields
         fields = load_named_tensors(directory, record["filemap"])
+        flattened = {}
+
+        def check(name, value, spec):
+            if isinstance(value, dict):
+                if set(value) != set(spec.get("members", {})):
+                    raise ValueError(f"字段成员与清单不一致: {sample}/{name}")
+                for member, tensor in value.items():
+                    check(name + "/" + member, tensor, spec["members"][member])
+            else:
+                if (
+                    spec["state"] != self.manifest["state"]
+                    or list(value.shape) != spec["shape"]
+                    or str(value.dtype) != spec["dtype"]
+                ):
+                    raise ValueError(f"字段与清单不一致: {sample}/{name}")
+                flattened[name] = value
+
         for name, value in fields.items():
-            spec = record["fields"][name]
-            if (
-                spec["state"] != self.manifest["state"]
-                or list(value.shape) != spec["shape"]
-                or str(value.dtype) != spec["dtype"]
-            ):
-                raise ValueError(f"字段与清单不一致: {sample}/{name}")
+            check(name, value, record["fields"][name])
+        fields = flattened
+        for alias, reference in record.get("field_aliases", {}).items():
+            if alias in fields or reference not in fields:
+                raise ValueError(f"字段别名冲突或来源缺失: {alias}")
+            fields[alias] = fields[reference]
         selected = fields if requested is None else {key: fields[key] for key in requested}
         return (
             selected
@@ -78,6 +94,22 @@ class ManifestIndex:
                 root = self.path.parent / root
             for name, filename in sorted(record["filemap"].items()):
                 hasher.update(name.encode())
+                target = root / filename
+                files = (
+                    sorted(p for p in target.rglob("*") if p.is_file())
+                    if target.is_dir()
+                    else [target]
+                )
+                for path in files:
+                    if target.is_dir():
+                        hasher.update(path.relative_to(target).as_posix().encode())
+                    with path.open("rb") as stream:
+                        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+                            hasher.update(chunk)
+            for filename in sorted(record.get("identity_assets", [])):
+                if Path(filename).name != filename:
+                    raise ValueError("实体身份文件路径非法")
+                hasher.update(filename.encode())
                 with (root / filename).open("rb") as stream:
                     for chunk in iter(lambda: stream.read(1024 * 1024), b""):
                         hasher.update(chunk)

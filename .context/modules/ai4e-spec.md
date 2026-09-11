@@ -50,3 +50,24 @@
 - `components/model.py`：模型组件及构造器描述回调。
 
 验收状态与相关测试见 `.context/mvp/transolver3-acceptance.md`，正式规模数值对标已通过，旧公开配置兼容政策仍待确认。
+
+## 物理数据跨模型实验
+
+components/dataset.py 与 model.py：物理数据视图及模型准备/预测协议，无数值库依赖。
+
+状态与圈定测试见 `.context/mvp/cross-model-acceptance.md`。
+
+- `artifacts/physical.py`：物理预测与图形引用 TypedDict，无数值库依赖。
+
+## 本机平台接入（2026-09-10）
+
+- `packages/ai4e-spec/data/inspection.py`：稳定检查或管理配置公开操作。
+- `packages/ai4e-spec/artifacts/preview.py`：稳定检查或管理配置公开操作。
+- `.context/mvp/web-rawprep-acceptance.md`：平台接入验收记录。
+
+## 平台显示与辅助操作契约
+
+- `packages/ai4e-spec/artifacts/platform.py`：AssetRef、字段、数据集、提取成员、阶段配置、操作状态、二进制显示资产和可序列化场景。只依赖标准库。
+- `packages/ai4e-web/scripts/generate-platform-contracts.py`：从该契约生成浏览器类型。
+- `tests/integration/test_web_integrated_pipeline.py`：跨语言生成一致性及真实服务到显示数组交接。
+- 产品语义：`docs/PRD/ai4e-spec/artifacts/PRD.md`。

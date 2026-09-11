@@ -1,0 +1,49 @@
+{
+  "width_1440": {
+    "modal": {
+      "x": 460,
+      "y": 100,
+      "width": 520,
+      "height": 455.390625
+    },
+    "name_label": {
+      "x": 509,
+      "y": 163,
+      "width": 422,
+      "height": 21
+    },
+    "name_input": {
+      "x": 509,
+      "y": 190,
+      "width": 422,
+      "height": 36
+    },
+    "case_label": {
+      "x": 509,
+      "y": 242,
+      "width": 422,
+      "height": 21
+    },
+    "label_gap": 6,
+    "item_gap": 16,
+    "input_height": 36,
+    "modal_width": 520
+  },
+  "width_400": {
+    "modal": {
+      "x": 24.88568115234375,
+      "y": 100.07688903808594,
+      "width": 351.65740966796875,
+      "height": 475.3181915283203
+    },
+    "left_inset": 24.88568115234375,
+    "right_inset": 23.4569091796875
+  },
+  "contract": {
+    "width": 520,
+    "control_height": 36,
+    "label_gap": 6,
+    "item_gap": 16,
+    "narrow_inset": 24
+  }
+}

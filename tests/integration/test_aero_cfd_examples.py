@@ -64,7 +64,7 @@ def test_relative_hdf_paths_follow_copied_configuration(tmp_path):
     assert Path(actual.dataset.test_h5) == tmp_path / "raw/test.h5"
 
 
-def test_partial_sampling_defaults_stay_in_public_trainprep(tmp_path):
+def test_partial_sampling_defaults_stay_in_public_model(tmp_path):
     """A1：缺少采样子项时补齐自身默认值，公共配置不注入旧顶层字段。"""
     import yaml
 
@@ -72,10 +72,12 @@ def test_partial_sampling_defaults_stay_in_public_trainprep(tmp_path):
 
     _, path = configuration(tmp_path)
     public = yaml.safe_load(path.read_text())
-    public["trainprep"]["sampling"] = {"seed": 17}
+    public["trainprep"].pop("sampling", None)
+    public["trainprep"].pop("sampling", None)
+    public["model"]["sampling"] = {"seed": 17}
     path.write_text(yaml.safe_dump(public, sort_keys=False))
     actual = load_configuration(path)
-    assert actual.trainprep.sampling.seed == 17 and actual.trainprep.sampling.stride == 4
+    assert actual.model.sampling.seed == 17 and actual.model.sampling.stride == 4
     assert "sampling" not in actual and "normalization" not in actual
 
 

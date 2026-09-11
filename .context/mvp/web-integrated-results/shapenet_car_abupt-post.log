@@ -1,0 +1,16 @@
+2026-09-10 19:29:38,322 INFO [运行/开始] 脚本=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/.dojo/executions/59676ca9362d4033bb9efdd5df5552bf/code/pipeline.py；运行目录=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/runs/59676ca9362d4033bb9efdd5df5552bf；生效配置=inputs/config.yaml
+2026-09-10 19:29:38,322 INFO [post/阶段/开始] 
+2026-09-10 19:29:38,370 INFO [post/张量读取/开始] 来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/data/78393ab143ae42e1a07c712210d0e4fc/train/param1/1dc58be25e1b6e5675cad724c63e222e/first.pt
+2026-09-10 19:29:38,371 INFO [post/张量读取/结束] 耗时=0.001秒
+2026-09-10 19:29:38,371 INFO [post/张量读取/开始] 来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/data/78393ab143ae42e1a07c712210d0e4fc/train/param1/1dc58be25e1b6e5675cad724c63e222e/second.pt
+2026-09-10 19:29:38,372 INFO [post/张量读取/结束] 耗时=0.000秒
+2026-09-10 19:29:39,715 INFO [post/张量读取/开始] 样本=[{'sample_id': 'param0/100715345ee54d7ae38b52b4ee9d36a3', 'index': None, 'partition': 'test'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/data/78393ab143ae42e1a07c712210d0e4fc/test/param0/100715345ee54d7ae38b52b4ee9d36a3/first.pt
+2026-09-10 19:29:39,715 INFO [post/张量读取/结束] 样本=[{'sample_id': 'param0/100715345ee54d7ae38b52b4ee9d36a3', 'index': None, 'partition': 'test'}]；耗时=0.001秒
+2026-09-10 19:29:39,715 INFO [post/张量读取/开始] 样本=[{'sample_id': 'param0/100715345ee54d7ae38b52b4ee9d36a3', 'index': None, 'partition': 'test'}]；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/data/78393ab143ae42e1a07c712210d0e4fc/test/param0/100715345ee54d7ae38b52b4ee9d36a3/second.pt
+2026-09-10 19:29:39,716 INFO [post/张量读取/结束] 样本=[{'sample_id': 'param0/100715345ee54d7ae38b52b4ee9d36a3', 'index': None, 'partition': 'test'}]；耗时=0.000秒
+2026-09-10 19:29:40,374 INFO [post/张量提交/开始] 样本=[{'sample_id': 'param0/100715345ee54d7ae38b52b4ee9d36a3', 'index': None, 'partition': 'test'}]；overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/data/59676ca9362d4033bb9efdd5df5552bf/predictions/param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:29:40,375 INFO [post/输出规划/开始] 样本=[{'sample_id': 'param0/100715345ee54d7ae38b52b4ee9d36a3', 'index': None, 'partition': 'test'}]；overwrite=False；来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/data/59676ca9362d4033bb9efdd5df5552bf/predictions/param0/100715345ee54d7ae38b52b4ee9d36a3
+2026-09-10 19:29:40,375 INFO [post/输出规划/结束] 样本=[{'sample_id': 'param0/100715345ee54d7ae38b52b4ee9d36a3', 'index': None, 'partition': 'test'}]；耗时=0.000秒
+2026-09-10 19:29:40,379 INFO [post/张量提交/结束] 样本=[{'sample_id': 'param0/100715345ee54d7ae38b52b4ee9d36a3', 'index': None, 'partition': 'test'}]；耗时=0.004秒
+2026-09-10 19:29:40,404 INFO [post/阶段/结束] 耗时=2.083秒
+2026-09-10 19:29:40,405 INFO [运行/结束] 状态=成功；成功=0；失败=0；未执行=0；耗时=2.083秒

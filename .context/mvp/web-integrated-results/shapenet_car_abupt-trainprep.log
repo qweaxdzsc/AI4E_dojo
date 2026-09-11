@@ -1,0 +1,10 @@
+2026-09-10 19:29:25,931 INFO [运行/开始] 脚本=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/.dojo/executions/570f893b92014d9094942a1b468d9d1d/code/pipeline.py；运行目录=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/runs/570f893b92014d9094942a1b468d9d1d；生效配置=inputs/config.yaml
+2026-09-10 19:29:25,931 INFO [trainprep/阶段/开始] 
+2026-09-10 19:29:25,944 INFO [trainprep/统计参数读取/开始] 来源=/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/ai4e_contrib/application/datasets/shapenet_car/statistics.yaml
+2026-09-10 19:29:25,944 INFO [trainprep/统计参数读取/结束] 耗时=0.001秒
+2026-09-10 19:29:25,978 INFO [trainprep/张量读取/开始] 来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/data/78393ab143ae42e1a07c712210d0e4fc/train/param1/1dc58be25e1b6e5675cad724c63e222e/first.pt
+2026-09-10 19:29:25,979 INFO [trainprep/张量读取/结束] 耗时=0.002秒
+2026-09-10 19:29:25,980 INFO [trainprep/张量读取/开始] 来源=/private/tmp/dojo-integrated-acceptance/platform/projects/812a943bb9f44a9aaaed8174460f1e01/tasks/7b20f38045a74e10a397ffa7f1d1ebbe/data/78393ab143ae42e1a07c712210d0e4fc/train/param1/1dc58be25e1b6e5675cad724c63e222e/second.pt
+2026-09-10 19:29:25,980 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+2026-09-10 19:29:25,989 INFO [trainprep/阶段/结束] 耗时=0.057秒
+2026-09-10 19:29:25,989 INFO [运行/结束] 状态=成功；成功=0；失败=0；未执行=0；耗时=0.058秒
