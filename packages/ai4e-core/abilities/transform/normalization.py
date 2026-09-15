@@ -7,6 +7,8 @@ import json
 
 import torch
 
+from ai4e_core.base.config import operation_record, resolve_operation
+
 from .coordinate_normalization import CoordinateNormalization
 from .minmax import MinMax
 from .standardization import Standardization
@@ -22,6 +24,31 @@ class Identity:
         return value.clone()
 
 
+class CheckedTransform:
+    """自定义变换不能改变字段形状、实体数量或返回非有限结果。"""
+
+    def __init__(self, transform):
+        self.transform = transform
+
+    def _call(self, method, value):
+        result = getattr(self.transform, method)(value)
+        if (
+            not isinstance(result, torch.Tensor)
+            or result.shape != value.shape
+            or not torch.isfinite(result).all()
+        ):
+            raise ValueError(f"自定义变换 {method} 返回形状或数值非法")
+        return result
+
+    def apply(self, value):
+        """保序变换同一字段。"""
+        return self._call("apply", value)
+
+    def inverse(self, value):
+        """恢复同形状物理字段。"""
+        return self._call("inverse", value)
+
+
 class Normalization:
     """由可序列化记录重建变换，不在反变换时访问原统计文件。"""
 
@@ -34,7 +61,21 @@ class Normalization:
         self.transforms = {}
         for name, declaration in self.record["fields"].items():
             parameters = declaration["parameters"]
-            if declaration["method"] == "identity":
+            if declaration["method"] == "custom":
+                factory = resolve_operation(
+                    {"target": declaration["target"], "parameters": parameters}
+                )
+                implementation = operation_record(factory)
+                if declaration.get("implementation", implementation) != implementation:
+                    raise ValueError(f"冻结变换实现已变化: {name}")
+                transform = factory()
+                if not callable(getattr(transform, "apply", None)) or not callable(
+                    getattr(transform, "inverse", None)
+                ):
+                    raise TypeError("自定义变换必须实现 apply 和 inverse")
+                transform = CheckedTransform(transform)
+                self._record["fields"][name]["implementation"] = implementation
+            elif declaration["method"] == "identity":
                 transform = Identity()
             elif declaration["method"] == "zscore":
                 transform = Standardization(

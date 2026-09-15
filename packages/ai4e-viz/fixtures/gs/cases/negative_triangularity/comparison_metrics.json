@@ -1,0 +1,19 @@
+{
+  "psi_l1_relative": 1.8646245946889364,
+  "psi_l2_relative": 3.693669353194075,
+  "pde_l1_residual": 4.869962215423584,
+  "Ip_pino": 2999005.503719414,
+  "Ip_traditional": -3000004.544740113,
+  "Ip_relative_error": 1.9996669868309198,
+  "traditional_iterations": 24,
+  "traditional_converged": true,
+  "geometry_params": {
+    "R0": 1.2,
+    "a": 0.4,
+    "kappa": 1.8,
+    "delta": -0.3
+  },
+  "name": "negative_triangularity",
+  "description": "\u8d1f\u4e09\u89d2\u5f62\u5ea6\uff08\u53cdD\u5f62\uff09",
+  "checkpoint": "outputs/checkpoints/pino_gs/20260724_024214_pino_tkno_high_precision_cnn_mlp/best.pt"
+}

@@ -1,0 +1,3 @@
+/* 物理场统一视口布局；颜色和间距继承应用级设计Token。 */
+.viewport { min-height: 480px; border: 1px solid var(--seed-border, #d9d9d9); border-radius: var(--seed-radius, 8px); overflow: hidden; }
+.canvas { width: 100%; min-height: inherit; background: #101820; }

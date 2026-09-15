@@ -47,3 +47,225 @@ outputs:
   volume_normals:
     domain: volume
     field: nearest_direction
+  volume_surface_distance:
+    domain: volume
+    field: signed_distance
+  volume_closest_surface:
+    domain: volume
+    field: closest_on_surface
+  volume_surface_direction:
+    domain: volume
+    field: surface_direction
+rawprep:
+  defaults:
+    sources:
+    - surface
+    - volume
+    fields:
+      surface:
+        pressure:
+          components: 1
+      volume:
+        velocity:
+          components: 3
+    geometry:
+    - nearest_vertex
+    - volume_normals
+    - surface_normals
+    - exterior_mask
+    save_fields:
+    - surface_pressure
+    - surface_position
+    - surface_normals
+    - volume_velocity
+    - volume_position
+    - volume_sdf
+    - volume_normals
+    filters:
+      surface:
+      - mask
+      volume:
+      - exterior_mask
+    statistics:
+      mode: reference
+      fields:
+      - surface_pressure
+      - surface_position
+      - surface_normals
+      - volume_velocity
+      - volume_position
+      - volume_sdf
+      - volume_normals
+      position_fields:
+      - surface_position
+      - volume_position
+    vtkhdf: true
+    format: pt
+  binding:
+    mode: directory
+    root_key: root
+    slots:
+    - key: root
+      label: ShapeNet 数据目录
+      kind: directory
+    description: 按 ShapeNet-Car 声明读取样本目录、表面/体积 VTK 并派生几何场。
+    locate:
+      mode: directory
+      marker: quadpress_smpl.vtk
+      sample_parent: param*
+  domains:
+    surface: 表面
+    volume: 体积
+  formats:
+  - pt
+  - zarr
+  vtkhdf: true
+  statistics_modes:
+  - reference
+  - fit
+  - none
+  outputs:
+  - name: surface_pressure
+    label: 表面压力
+    domain: surface
+    association: point
+    components: 1
+    source_field: surface_pressure
+    required: false
+    requires: []
+    raw_field: surface/point/point_scalars
+  - name: surface_position
+    label: 表面坐标
+    domain: surface
+    association: geometry
+    components: 3
+    source_field: surface_position
+    required: true
+    requires: []
+  - name: surface_normals
+    label: 表面法向
+    domain: surface
+    association: point
+    components: 3
+    source_field: surface_normals
+    required: false
+    requires:
+    - surface_normals
+  - name: volume_velocity
+    label: 体积速度
+    domain: volume
+    association: point
+    components: 3
+    source_field: volume_velocity
+    required: false
+    requires: []
+    raw_field: volume/point/point_vectors
+  - name: volume_position
+    label: 体积坐标
+    domain: volume
+    association: geometry
+    components: 3
+    source_field: volume_position
+    required: true
+    requires: []
+  - name: volume_sdf
+    label: 最近距离
+    domain: volume
+    association: point
+    components: 1
+    source_field: volume_sdf
+    required: false
+    requires:
+    - nearest_vertex
+  - name: volume_normals
+    label: 体积法向
+    domain: volume
+    association: point
+    components: 3
+    source_field: volume_normals
+    required: false
+    requires:
+    - volume_normals
+  - name: volume_surface_distance
+    label: 点到表面有符号距离
+    domain: volume
+    association: point
+    components: 1
+    source_field: volume_surface_distance
+    required: false
+    requires:
+    - mesh_signed_distance
+  - name: volume_closest_surface
+    label: 表面最近点
+    domain: volume
+    association: point
+    components: 3
+    source_field: volume_closest_surface
+    required: false
+    requires:
+    - mesh_signed_distance
+  - name: volume_surface_direction
+    label: 表面最近方向
+    domain: volume
+    association: point
+    components: 3
+    source_field: volume_surface_direction
+    required: false
+    requires:
+    - mesh_signed_distance
+  geometry:
+  - id: nearest_vertex
+    label: 最近顶点距离
+    output: volume_sdf
+    parameters:
+      epsilon: {label: 数值稳定阈值, default: 1.0e-8}
+    domains:
+    - surface
+    - volume
+    conflicts:
+    - mesh_signed_distance
+  - id: volume_normals
+    label: 体积法向
+    output: volume_normals
+    parameters:
+      epsilon: {label: 数值稳定阈值, default: 1.0e-8}
+    domains:
+    - surface
+    - volume
+    conflicts:
+    - mesh_signed_distance
+  - id: mesh_signed_distance
+    label: 点到网格表面距离
+    output:
+    - volume_surface_distance
+    - volume_closest_surface
+    - volume_surface_direction
+    parameters:
+      epsilon: {label: 数值稳定阈值, default: 1.0e-8}
+    domains:
+    - surface
+    - volume
+    conflicts:
+    - nearest_vertex
+    - volume_normals
+  - id: surface_normals
+    label: 表面法向
+    output: surface_normals
+    parameters:
+      epsilon: {label: 数值稳定阈值, default: 1.0e-8}
+    domains:
+    - surface
+  - id: exterior_mask
+    label: 体积点重合标记
+    domains:
+    - surface
+    - volume
+  filters:
+  - domain: surface
+    id: mask
+    label: 清洗未参与网格的表面节点
+  - domain: volume
+    id: exterior_mask
+    label: 清洗体积域中的表面点
+    requires:
+    - exterior_mask

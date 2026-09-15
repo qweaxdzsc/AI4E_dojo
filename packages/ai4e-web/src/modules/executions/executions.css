@@ -1,0 +1,29 @@
+/* 执行领域只展示真实记录，日志采用整合原型浅色紧凑面板。 */
+.training-monitor .run-summary{margin-top:8px;background:#fff;border:1px solid #dceaff;border-radius:6px;padding:9px 12px;margin-bottom:9px}
+.training-monitor .run-summary-header{display:flex;align-items:center;gap:16px;padding-bottom:8px;border-bottom:1px solid #e8f0fc;margin-bottom:8px}
+.training-monitor .run-summary-header h2{font-size:16px;margin:0}
+.training-monitor .run-badge{font-size:11px;background:#e9f3ff;padding:4px 7px;border-radius:5px}
+.training-monitor .run-numbers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:center;gap:0;margin-top:0;padding:14px 0 8px}
+.training-monitor .run-number{border:0;border-right:1px solid #e1ebf9;border-radius:0;background:transparent;padding:0 12px;font-size:11px;color:#6178a4;min-width:0}
+.training-monitor .run-number:last-child{border-right:0}
+.training-monitor .run-number strong{display:block;font-size:14px;color:#172d57;margin-top:6px;overflow-wrap:anywhere}
+.training-monitor .run-number small{display:block}
+.training-monitor .monitor-grid{display:grid;grid-template-columns:1.21fr 1fr;gap:9px;min-height:608px}
+.training-monitor .run-left,.training-monitor .run-right{display:flex;flex-direction:column;gap:9px;min-width:0}
+.training-monitor .ant-card{border:1px solid #dceaff;border-radius:6px}
+.training-monitor .ant-card-head{min-height:37px;font-size:16px;padding:0 11px}
+.training-monitor .ant-card-body{padding:9px 11px}
+.training-monitor .ant-table-cell{padding:5px!important;font-size:11px}
+.execution-log{background:#fff;border:1px solid #dceaff;border-radius:6px;padding:9px 11px;margin-top:8px;min-width:0}
+.execution-log .panel-title{font-size:12px;padding-bottom:6px;margin-bottom:6px;flex-wrap:wrap;gap:8px}
+.execution-log .panel-title>span:not(.ant-tag){font-size:10px;color:#7990b5}
+.execution-log .log-tools{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:7px}
+.execution-log .log-tools .ant-input{width:140px}
+.execution-log .log-tools .ant-select{width:90px}
+.execution-log .ant-btn,.execution-log .ant-input,.execution-log .ant-select{height:27px;font-size:11px}
+.execution-log .ant-checkbox-wrapper{font-size:11px}
+.execution-log .log-window-hint{margin:0 0 6px;font-size:10px;color:#7990b5}
+.execution-log pre{background:#f8fbff;color:#607aab;padding:8px;margin:0;max-height:340px;min-height:90px;overflow:auto;overflow-anchor:none;overscroll-behavior:contain;font:11px/1.8 ui-monospace,monospace}
+.training-monitor .execution-log{margin-top:0;flex:1;display:flex;flex-direction:column}
+.training-monitor .execution-log pre{flex:1;min-height:200px}
+@container(max-width:1200px){.training-monitor .monitor-grid{min-height:655px}}

@@ -125,10 +125,15 @@ def fit(
                     optimizer,
                     step,
                     batch,
-                    clip=float(config.get("gradient_clip", 1)),
+                    clip=(
+                        None
+                        if config.get("gradient_clip", 1) is None
+                        else float(config.get("gradient_clip", 1))
+                    ),
                     scaler=scaler,
                     scheduler=scheduler if scheduler_unit == "update" else None,
                     accumulate=accumulate,
+                    accumulation_reduction=config.get("accumulation_reduction", "mean"),
                     accum_index=index,
                     stability=bool(config.get("stability")),
                 )

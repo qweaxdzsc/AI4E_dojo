@@ -7,7 +7,7 @@ from ..storage.files import copy_content, write_json
 from ..storage.layout import inside
 from ..storage.snapshots import digest, inventory
 
-KINDS = {"dataset", "preparation", "checkpoint", "other"}
+KINDS = {"dataset", "preparation", "checkpoint", "model_preset", "other"}
 
 
 def asset_path(project: str | Path, record: dict) -> Path:

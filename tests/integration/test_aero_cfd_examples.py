@@ -24,10 +24,14 @@ def test_components_have_distinct_defaults(tmp_path):
 
 
 def test_copied_four_stage_pipeline(tmp_path):
-    """A2：复制脚本完整运行前处理、准备、训练与数值后处理。"""
+    """A2：历史复制脚本仍完整运行 NPY 参考前处理、训练与数值后处理。"""
     cfg, path = configuration(tmp_path)
     folder = tmp_path / "recipe"
-    shutil.copytree(ROOT / "recipes/aero_cfd", folder, ignore=shutil.ignore_patterns("__pycache__"))
+    shutil.copytree(
+        ROOT / "tests/fixtures/recipe_before_explicit",
+        folder,
+        ignore=shutil.ignore_patterns("__pycache__"),
+    )
     result = subprocess.run(
         [sys.executable, "-B", str(folder / "pipeline.py"), "--config", str(path)],
         check=False,
@@ -104,7 +108,7 @@ def test_independent_stages_match_pipeline_weights_and_predictions(tmp_path):
             [
                 sys.executable,
                 "-B",
-                str(ROOT / "recipes/aero_cfd" / f"{stage}.py"),
+                str(ROOT / "tests/fixtures/recipe_before_explicit" / f"{stage}.py"),
                 "--config",
                 str(path),
             ],
@@ -124,7 +128,7 @@ def test_independent_stages_match_pipeline_weights_and_predictions(tmp_path):
         [
             sys.executable,
             "-B",
-            str(ROOT / "recipes/aero_cfd/pipeline.py"),
+            str(ROOT / "tests/fixtures/recipe_before_explicit/pipeline.py"),
             "--config",
             str(other_path),
         ],
@@ -155,7 +159,7 @@ def test_rawprep_dry_run_and_overwrite_gate(tmp_path):
     command = [
         sys.executable,
         "-B",
-        str(ROOT / "recipes/aero_cfd/rawprep.py"),
+        str(ROOT / "tests/fixtures/recipe_before_explicit/rawprep.py"),
         "--config",
         str(path),
     ]

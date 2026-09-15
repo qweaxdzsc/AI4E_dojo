@@ -1,0 +1,15 @@
+---
+description: AI4E_Vis 仓库入口、上下文索引与 Experience 使用边界
+alwaysApply: true
+---
+
+# AI4E_Vis 项目入口
+
+1. 先读根 `AGENTS.md`，再读 `.context/index.md`。
+2. 按任务只打开一个相关 `.context/modules/*.md` 及其中列出的源码和测试，避免全库盲搜。
+3. API 路由与归属查 `.context/api-registry.md`；产品范围以 `docs/PRD/` 和用户当前指令为准。
+4. 后端改动加载 `ai4e-vis-backend.mdc`；前端改动加载 `ai4e-vis-frontend.mdc`。
+5. `.context` 只做导航和已验证架构事实，不覆盖 `AGENTS.md`、用户指令或文件专项 rules。
+6. 每次修改都同步对应 `.context` 文件、相关 PRD/变更记录与测试；错误同步根 `error.log`。
+
+需要查询或归档正式经验时，使用 canonical Experience Skill 和 `experience` MCP；不得直接读写其数据库或资产目录。归档仍须遵守预览、即时明确确认和真实可见证据要求。

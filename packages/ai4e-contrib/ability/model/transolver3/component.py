@@ -94,3 +94,16 @@ PLATFORM_LOSSES = {
     "fixed": "mse",
     "reason": "参考点场等权标准化逐元素均方误差",
 }
+PLATFORM_SAMPLING = {
+    "configurable": True,
+    "constraints": {
+        "stride": {
+            "allowed": [4],
+            "readOnly": True,
+            "reason": "参考训练抽稀步长为 4",
+        }
+    },
+}
+
+# 仅描述推理执行能力；不会改变模型或训练契约。
+INFERENCE_CAPABILITIES = {"query_chunk_size": True, "physical_fields": True}

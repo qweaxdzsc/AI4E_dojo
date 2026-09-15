@@ -18,4 +18,5 @@ def load(cfg):
 
 def resolve_config(config, *, validate=True):
     """由选定模型解析自身默认值，不向另一模型注入参数。"""
-    return load(config).model.resolve(config, validate=validate)
+    model = config.get("components", {}).get("model", DEFAULTS["model"])
+    return import_module(model).resolve(config, validate=validate)

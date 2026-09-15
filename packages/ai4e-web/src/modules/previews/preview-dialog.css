@@ -1,0 +1,102 @@
+.file-preview-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-right: 28px;
+}
+
+.file-preview-title-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-preview-dialog.mesh {
+  overflow: auto;
+}
+
+.file-preview-dialog.mesh .ant-modal {
+  max-width: 96vw;
+  max-height: calc(100vh - 24px);
+}
+
+.file-preview-dialog.mesh:not(.fullscreen) .ant-modal-content {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 24px);
+}
+
+.file-preview-dialog.mesh:not(.fullscreen) .ant-modal-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.file-preview-mesh {
+  flex: 1;
+  height: min(82vh, calc(100vh - 120px));
+  min-height: min(760px, calc(100vh - 120px));
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.file-preview-mesh .phys-host,
+.file-preview-mesh .phys-host.preview,
+.file-preview-mesh .phys-host-frame,
+.file-preview-mesh .phys-host.preview .phys-host-frame {
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+}
+
+.file-preview-mesh .phys-host-context {
+  display: none;
+}
+
+.file-preview-dialog.fullscreen {
+  inset: 0;
+  overflow: hidden;
+}
+
+.file-preview-dialog.fullscreen .ant-modal {
+  max-width: 100vw;
+  width: 100vw !important;
+  margin: 0;
+  top: 0 !important;
+  padding-bottom: 0;
+}
+
+.file-preview-dialog.fullscreen .ant-modal-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  border-radius: 0;
+}
+
+.file-preview-dialog.fullscreen .ant-modal-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 8px 12px 12px;
+}
+
+.file-preview-dialog.fullscreen .ant-modal-body > .ant-spin-nested-loading,
+.file-preview-dialog.fullscreen .ant-modal-body .ant-spin-container,
+.file-preview-dialog.fullscreen .file-preview-mesh,
+.file-preview-dialog.fullscreen .phys-host,
+.file-preview-dialog.fullscreen .phys-host.preview,
+.file-preview-dialog.fullscreen .phys-host-frame,
+.file-preview-dialog.fullscreen .file-preview-mesh .phys-host.preview .phys-host-frame {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}

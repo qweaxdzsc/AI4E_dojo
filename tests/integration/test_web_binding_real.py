@@ -54,8 +54,48 @@ def real_binding_platform():
         yield client, f"/api/v1/projects/{project}", root
 
 
+def test_real_public_catalog_identifies_complete_copies(real_binding_platform):
+    """真实数据根按 contrib 声明识别 ShapeNet 目录与 NASA 三文件，一次保存为 valid。"""
+    client, base, _ = real_binding_platform
+    task = checked(client.post(base + "/tasks", json={"name": "catalog", "case_id": "shapenet_car_abupt"}))
+    url = base + "/tasks/" + task["id"]
+    catalog = checked(client.get(url + "/datasets"))
+    names = {item["dataset_id"]: item for item in catalog["datasets"]}
+    assert set(names) == {"shapenet_car", "nasa_crm"}
+    assert names["shapenet_car"]["instances"] and names["nasa_crm"]["instances"]
+    shapenet = names["shapenet_car"]["instances"][0]
+    nasa = names["nasa_crm"]["instances"][0]
+    before = checked(client.get(url + "/dataset"))
+    bound = checked(
+        client.put(
+            url + "/dataset",
+            json={
+                "expected_revision": before["revision"],
+                "dataset_id": "nasa_crm",
+                "instance_id": nasa["id"],
+            },
+        )
+    )
+    assert bound["status"] == "valid" and bound["dataset_id"] == "nasa_crm", bound
+    assert set(bound["sources"]) == {"train_h5", "test_h5", "connectivity_h5"}
+    restored = checked(
+        client.put(
+            url + "/dataset",
+            json={
+                "expected_revision": bound["revision"],
+                "dataset_id": "shapenet_car",
+                "instance_id": shapenet["id"],
+            },
+        )
+    )
+    assert restored["status"] == "valid" and restored["dataset_id"] == "shapenet_car", restored
+    assert set(restored["sources"]) == {"root"}
+    assert checked(client.get(url))["version_id"] == task["version_id"]
+
+
+@pytest.mark.parametrize("storage_format", ["pt", "zarr"])
 @pytest.mark.parametrize("case", ["shapenet_car_abupt", "nasa_crm_transolver3"])
-def test_real_binding_catalog_execute_and_preview(real_binding_platform, case):
+def test_real_binding_catalog_execute_and_preview(real_binding_platform, case, storage_format):
     """新建未绑定案例，经受控绑定、明确样本选择，真实处理一个样本并预览。"""
     client, base, evidence_root = real_binding_platform
     task = checked(client.post(base + "/tasks", json={"name": case, "case_id": case}))
@@ -80,13 +120,16 @@ def test_real_binding_catalog_execute_and_preview(real_binding_platform, case):
     assert bound["status"] == "valid" and bound["sources"] == sources, bound
     assert bound["revision"] != initial["revision"]
     assert checked(client.get(url + "/dataset")) == bound
+    config = checked(client.get(url + "/rawprep"))
+    config["rawprep"]["format"] = storage_format
+    saved = checked(client.put(url + "/rawprep", json=config))
     selected_files = (
         [ref["root"] + "::" + ref["path"] for ref in sources.values()]
         if is_nasa
         else [SAMPLE + "/quadpress_smpl.vtk", SAMPLE + "/hexvelo_smpl.vtk"]
     )
     selection = {
-        "revision": bound["revision"],
+        "revision": saved["revision"],
         "root": "data0",
         "files": selected_files,
         "all_selected": True,
@@ -136,10 +179,17 @@ def test_real_binding_catalog_execute_and_preview(real_binding_platform, case):
     assert len(manifest["samples"]) == 1, manifest
     frozen = yaml.safe_load((Path(run["run_dir"]) / "inputs/config.yaml").read_text())
     assert frozen["pipeline"]["stages"] == ["rawprep"], frozen["pipeline"]
-    tensors = sorted(data.rglob("surface_cp.pt" if is_nasa else "surface_pressure.pt"))
+    tensors = sorted(data.rglob(("surface_cp." if is_nasa else "surface_pressure.") + storage_format))
     assert len(tensors) == 1, list(data.rglob("*.pt"))
-    tensor = torch.load(tensors[0], weights_only=True, map_location="cpu")
+    from ai4e_core.abilities.data.save.store import load_named_tensor
+
+    tensor = load_named_tensor(tensors[0])
     assert isinstance(tensor, torch.Tensor) and tensor.shape[0] > 1000
+    from ai4e_core.applications.aero_cfd.trainprep.dataset import open_manifest_sample
+
+    prepared = open_manifest_sample(data / "manifest.json", partition="train")
+    field = "surface_cp" if is_nasa else "surface_pressure"
+    torch.testing.assert_close(prepared[field].flatten(), tensor.flatten())
     task_root = Path(run["run_dir"]).parent.parent
     preview = checked(
         client.get(
@@ -162,6 +212,8 @@ def test_real_binding_catalog_execute_and_preview(real_binding_platform, case):
         json.dumps(
             {
                 "case": case,
+                "storage_format": storage_format,
+                "preparation_readback": field,
                 "binding": bound,
                 "selection": selection,
                 "preflight": preflight,

@@ -78,7 +78,7 @@ def predict_sample(
         context_factory=InferenceContext,
         features=to_device(features, device) or None,
         preparation_id=preparation_id,
-        chunk_size=int(config["post"].get("query_chunk_size", 10000)),
+        chunk_size=int((config.get("infer") or config["post"]).get("query_chunk_size", 10000)),
     )
     return {
         source: normalization.inverse(source, result[f"query_{domain}_{name}"][0]).cpu()

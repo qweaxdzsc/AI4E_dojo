@@ -30,6 +30,24 @@ export interface DatasetDescriptor {
   fields: Array<FieldDescriptor>;
   dependencies: Array<Record<string, unknown>>;
   capabilities: Record<string, unknown>;
+  profile?: Record<string, unknown>;
+  inspection?: Record<string, unknown>;
+  errors?: Array<Record<string, unknown>>;
+  selection?: Array<string> | Record<string, Array<string>>;
+}
+
+export interface RawprepDescriptor {
+  schema_version: number;
+  dataset_id: string;
+  defaults: Record<string, unknown>;
+  binding: Record<string, unknown>;
+  domains: Record<string, string>;
+  outputs: Array<Record<string, unknown>>;
+  geometry: Array<Record<string, unknown>>;
+  filters: Array<Record<string, unknown>>;
+  formats: Array<string>;
+  vtkhdf: boolean;
+  statistics_modes: Array<string>;
 }
 
 export interface ExtractionMember {
@@ -136,4 +154,93 @@ export interface SceneDocument {
   link_groups: Array<Record<string, unknown>>;
   active_view: string | null;
   selected_node: string | null;
+}
+
+export interface VisualizationRef {
+  visualization_id: string;
+  project_id: string;
+  task_id: string;
+  revision: number;
+  content_hash: string;
+  kind: string;
+}
+
+export interface VisualizationSession {
+  session_id: string;
+  status: string;
+  embed_url: string;
+  scope_id: string | null;
+  error?: string | null;
+}
+
+export interface VisualizationSourceRef {
+  asset_id: string;
+  revision: string;
+  project_id?: string;
+  task_id?: string | null;
+  member?: string;
+  block?: number;
+}
+
+export interface VisualizationExportRef {
+  export_id: string;
+  visualization_id: string;
+  revision: number;
+  content_hash: string;
+  status: string;
+  format: string;
+}
+
+export interface InferenceSampleSelection {
+  split: string;
+  sample: string;
+}
+
+export interface InferenceFieldDescription {
+  id: string;
+  domain: string;
+  field: string;
+  component: string;
+  label: string;
+  category: string;
+  unit: string | null;
+  available: boolean;
+  evaluable: boolean;
+  default: boolean;
+  reason?: string;
+}
+
+export interface InferenceMetricDescription {
+  id: string;
+  label: string;
+  category: string;
+  formula: string;
+  unit_rule: string;
+  scope: string;
+  default: boolean;
+}
+
+export interface InferenceStatistic {
+  checkpoint_id: string;
+  checkpoint: string;
+  split: string;
+  field_id: string;
+  field: string;
+  metric: string;
+  unit: string | null;
+  mean: number | null;
+  median: number | null;
+  p90: number | null;
+  max: number | null;
+  valid: number;
+  expected: number;
+  undefined: number;
+  complete: boolean;
+  prediction_seconds: number | null;
+  throughput: number | null;
+  algorithm?: string;
+  checkpoint_revision?: string | null;
+  source_runs?: Array<string>;
+  source_protocols?: Array<string>;
+  undefined_reasons?: Array<string>;
 }

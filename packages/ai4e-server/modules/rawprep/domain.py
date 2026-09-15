@@ -13,6 +13,7 @@ ALLOWED = {
     "statistics",
     "vtkhdf",
     "format",
+    "formats",
     "extraction",
 }
 
@@ -43,8 +44,13 @@ def validate(raw):
         "rawprep.fields",
         "当前案例仅支持 point_scalars 压力与 point_vectors 速度；不支持重命名和单元场",
     )
-    if raw.get("format", "pt") not in {"pt", "zarr"}:
-        raise ValueError("rawprep.format: unsupported_format")
+    formats = raw.get("formats")
+    single = raw.get("format", "pt" if formats is None else None)
+    if formats is not None and single is not None and formats != [single]:
+        raise ValueError("rawprep.format: 不能同时声明不一致的 format 与 formats")
+    selected = list(formats) if formats is not None else [single or "pt"]
+    if not selected or any(item not in {"pt", "zarr"} for item in selected):
+        raise ValueError("rawprep.formats: unsupported_format")
     if "extraction" in raw:
         entries = raw["extraction"].get("entries", [])
         require(isinstance(entries, list), "rawprep.extraction.entries", "需要列表")
@@ -79,13 +85,22 @@ def validate(raw):
     )
     require(
         not set(geometry)
-        - {"nearest_vertex", "nearest_surface", "surface_normals", "exterior_mask"}
+        - {
+            "nearest_vertex",
+            "volume_normals",
+            "nearest_surface",
+            "mesh_signed_distance",
+            "surface_normals",
+            "exterior_mask",
+        }
         and len(geometry) == len(set(geometry)),
         "rawprep.geometry",
         "未知或重复能力",
     )
     require(
-        not {"nearest_vertex", "nearest_surface"} <= set(geometry),
+        not {"nearest_vertex", "nearest_surface"} <= set(geometry)
+        and not {"nearest_vertex", "mesh_signed_distance"} <= set(geometry)
+        and not {"volume_normals", "mesh_signed_distance"} <= set(geometry),
         "rawprep.geometry",
         "两种距离算法需要择一",
     )
@@ -93,11 +108,17 @@ def validate(raw):
         require(
             "surface_normals" in geometry, "rawprep.save_fields.surface_normals", "需要启用表面法向"
         )
-    if {"volume_sdf", "volume_normals"} & set(outputs):
+    if "volume_sdf" in outputs:
         require(
             bool({"nearest_vertex", "nearest_surface"} & set(geometry)),
             "rawprep.save_fields",
-            "距离或方向输出需要启用距离算法",
+            "最近距离输出需要启用最近顶点距离",
+        )
+    if "volume_normals" in outputs:
+        require(
+            "volume_normals" in geometry or "nearest_vertex" in geometry,
+            "rawprep.save_fields",
+            "体积法向输出需要启用体积法向",
         )
     filters = raw.get("filters", {})
     require(

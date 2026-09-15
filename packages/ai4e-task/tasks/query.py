@@ -25,6 +25,7 @@ def get_run(project: str | Path, run_id: str) -> dict:
     """核对持久化收据与 core 产物；未知状态不会自动重新启动。"""
     root = Path(project).resolve()
     value = fetch(root, "run", run_id)
+    observed_status = value["status"]
     directory = Path(value.get("external_dir") or root / value["run_path"])
     artifacts = read_run(directory)
     if value.get("request_path"):
@@ -47,7 +48,7 @@ def get_run(project: str | Path, run_id: str) -> dict:
                 or artifacts.get("lineage", {}).get("run_id") != run_id
             ):
                 value.update(status="failed", error="missing_or_invalid_completion")
-        elif value["status"] != "failed":
+        elif value["status"] not in {"failed", "queued"} and not value.get("canceled_before_start"):
             if alive(value.get("pid"), request):
                 value["status"] = (
                     "stopping" if (request.parent / "stop.json").exists() else "running"
@@ -58,6 +59,9 @@ def get_run(project: str | Path, run_id: str) -> dict:
             value["status"] = "stopping"
         with transaction(root) as db:
             latest = get(db, "run", run_id)
+            if latest["status"] != observed_status and not finished.exists():
+                # 读取收据期间发生了启动或排队取消，旧查询不得覆盖新意图。
+                value = latest
             if value.get("pid") is None and latest.get("pid") is not None:
                 value["pid"] = latest["pid"]
             put(db, "run", value, replace=True)
@@ -135,3 +139,38 @@ def import_run(project: str | Path, directory, *, task_id: str | None = None) ->
         }
         put(db, "run", value)
     return value
+
+
+def get_stage_summary(project: str | Path, task_id: str) -> dict:
+    """按正式运行事实汇总阶段；多阶段失败不推测每一步均成功。"""
+    get_task(project, task_id)
+    result = {
+        stage: {"status": "not_run", "run_id": None}
+        for stage in ("rawprep", "trainprep", "train", "infer", "post")
+    }
+    for run in list_runs(project, task_id):
+        if run.get("operation_mode", "execute") != "execute":
+            continue
+        stages = run.get("stages", [])
+        if run.get("metadata", {}).get("purpose") == "inference":
+            stages = ["infer"]
+        for stage in stages:
+            if stage not in result:
+                continue
+            status = run["status"]
+            # 多阶段失败的历史摘要不含逐阶段终态；不能由报告存在推测成功。
+            if status != "succeeded" and len(stages) > 1:
+                status = "unknown"
+            result[stage] = {"status": status, "run_id": run["id"], "mode": "execute"}
+    # 批次是推理完成的权威事实；一个成功分片不能掩盖其他分片失败。
+    from .inference import list_inference_batches
+
+    batches = list_inference_batches(project, task_id)
+    if batches:
+        batch = batches[0]
+        children = batch.get("children", [])
+        result["infer"] = {"status": batch["status"], "batch_id": batch["id"],
+                           "run_id": children[-1].get("run_id") if children else None,
+                           "mode": "execute", "completed": batch.get("completed", 0),
+                           "total": batch.get("total", 0)}
+    return result

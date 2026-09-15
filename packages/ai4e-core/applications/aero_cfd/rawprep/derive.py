@@ -20,7 +20,11 @@ from ai4e_core.abilities.geometry import (
 from ai4e_core.applications.aero_cfd.rawprep.read import FieldConfig
 
 GeometryAbility = Literal[
-    "nearest_vertex", "mesh_signed_distance", "surface_normals", "exterior_mask"
+    "nearest_vertex",
+    "volume_normals",
+    "mesh_signed_distance",
+    "surface_normals",
+    "exterior_mask",
 ]
 
 
@@ -48,7 +52,8 @@ class GeometryDomainResult(GeometryDomainInput, total=False):
 
 
 _OUTPUTS: dict[GeometryAbility, tuple[str, tuple[str, ...]]] = {
-    "nearest_vertex": ("volume", ("nearest_distance", "nearest_direction")),
+    "nearest_vertex": ("volume", ("nearest_distance",)),
+    "volume_normals": ("volume", ("nearest_direction",)),
     "mesh_signed_distance": (
         "volume",
         ("signed_distance", "closest_on_surface", "surface_direction"),
@@ -97,7 +102,7 @@ def derive_configured_geometry(
 ) -> dict[str, GeometryDomainResult]:
     """仅从域内 VTK 获取坐标/拓扑，执行显式选择的能力并保留已有内容。
 
-    只算法向仅需 surface；其他能力需要 surface/volume。空 enabled 透传，
+    表面法向仅需 surface；最近顶点距离、体积法向及其他能力需要 surface/volume。空 enabled 透传，
     不访问 vtk。全体所选能力先做输入门禁和输出冲突检查，失败不执行算法。
     输入字段及额外域保持引用；不套 mask、不改输入、不落盘。不验证物理场。
     返回原域映射副本与所选派生量；缺域、非法能力或同名输出冲突抛 ValueError。
@@ -138,13 +143,18 @@ def derive_configured_geometry(
             if key in output[role]:
                 raise ValueError(f"派生输出冲突: {role}.{key}")
 
+    nearest = None
     for name in selected:
         role, keys = _OUTPUTS[name]
         match name:
-            case "nearest_vertex":
-                values = nearest_vertex_distance_and_direction(
-                    points["volume"], points["surface"], **parameters.get(name, {})
-                )
+            case "nearest_vertex" | "volume_normals":
+                if nearest is None:
+                    nearest = nearest_vertex_distance_and_direction(
+                        points["volume"],
+                        points["surface"],
+                        **(parameters.get("nearest_vertex") or parameters.get("volume_normals") or {}),
+                    )
+                values = (nearest[0],) if name == "nearest_vertex" else (nearest[1],)
             case "mesh_signed_distance":
                 values = mesh_signed_distance(
                     points["volume"], extracted["surface"]["vtk"], **parameters.get(name, {})

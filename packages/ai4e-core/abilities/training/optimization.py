@@ -114,21 +114,24 @@ def update(
     step,
     batch,
     *,
-    clip: float = 1.0,
+    clip: float | None = 1.0,
     scaler=None,
     scheduler=None,
     accumulate: int = 1,
+    accumulation_reduction: str = "mean",
     accum_index: int = 0,
     stability: bool = False,
 ) -> tuple:
     """循环独占清梯度、反向、解除缩放、裁剪与更新，返回有效更新标记。
 
-    累积未满不 step；跳步不推进调度。损失按累积步均分后再反向。
+    累积未满不 step；跳步不推进调度。mean 按累积步均分，sum 保留梯度和。
     """
-    if not math.isfinite(clip) or clip <= 0:
+    if clip is not None and (not math.isfinite(clip) or clip <= 0):
         raise ValueError("梯度裁剪阈值必须有限且为正")
     if accumulate < 1:
         raise ValueError("梯度累积步必须为正")
+    if accumulation_reduction not in {"sum", "mean"}:
+        raise ValueError("梯度累积归约必须为 sum 或 mean")
     first = accum_index % accumulate == 0
     last = (accum_index % accumulate) == accumulate - 1
     if first:
@@ -138,12 +141,12 @@ def update(
         loss = result["loss"]
     if not torch.isfinite(loss):
         raise ValueError("训练损失非有限")
-    scaled = loss / accumulate
+    scaled = loss / accumulate if accumulation_reduction == "mean" else loss
     advanced = False
     if scaler is None:
         scaled.backward()
         if last:
-            norm = torch.nn.utils.clip_grad_norm_(model.parameters(), clip, error_if_nonfinite=True)
+            norm = _gradient_norm(model, clip, error_if_nonfinite=True)
             if stability:
                 result["diagnostics"] = _stability(model, norm, None)
             optimizer.step()
@@ -155,7 +158,7 @@ def update(
     scaler.scale(scaled).backward()
     if last:
         scaler.unscale_(optimizer)
-        norm = torch.nn.utils.clip_grad_norm_(model.parameters(), clip)
+        norm = _gradient_norm(model, clip, error_if_nonfinite=False)
         if stability:
             result["diagnostics"] = _stability(model, norm, scaler)
         scaler.step(optimizer)
@@ -164,6 +167,21 @@ def update(
         if advanced and scheduler is not None:
             scheduler.step()
     return result, advanced
+
+
+def _gradient_norm(model, clip, *, error_if_nonfinite):
+    """关闭裁剪时只检查范数，不对梯度做乘法以保留原生更新算术。"""
+    if clip is not None:
+        return torch.nn.utils.clip_grad_norm_(
+            model.parameters(), clip, error_if_nonfinite=error_if_nonfinite
+        )
+    gradients = [p.grad.detach() for p in model.parameters() if p.grad is not None]
+    if not gradients:
+        raise ValueError("训练没有任何参数梯度")
+    norm = torch.linalg.vector_norm(torch.stack([g.norm() for g in gradients]))
+    if error_if_nonfinite and not torch.isfinite(norm):
+        raise ValueError("梯度非有限")
+    return norm
 
 
 def _stability(model, gradient_norm, scaler):

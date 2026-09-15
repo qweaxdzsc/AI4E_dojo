@@ -36,6 +36,7 @@ def _run_script(folder, cfg, *, entry="train.py", extra=(), timeout=180):
 
 
 def _fit_then_post_config(cfg):
+    cfg.post.legacy_predict = True  # 显式选择历史post数值对照入口。
     _fit_config(cfg)
     cfg.train.max_epochs = 1
     cfg.post.query = False

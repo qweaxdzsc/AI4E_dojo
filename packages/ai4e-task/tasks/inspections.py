@@ -17,12 +17,17 @@ def inspect_task(
     revision: str,
     output_dir: str,
     selection: dict | None = None,
+    configuration: dict | None = None,
     on_process_started=None,
 ) -> dict:
-    """使用任务配置快照检查；只调用受信任的领域公开入口。"""
+    """检查固定修订；describe_case 可描述调用者提供的候选配置而不保存任务。"""
     captured = read_configuration(project, task_id)
     if captured["revision"] != revision:
         raise ValueError("configuration_revision_conflict")
+    if configuration is not None:
+        if operation not in {"describe_case", "describe_rawprep"}:
+            raise ValueError("candidate_configuration_requires_description")
+        captured["config"] = configuration
     recipe = Path(get_task(project, task_id)["directory"]) / "recipe"
     if selection and selection.get("bindings"):
         from omegaconf import OmegaConf
@@ -68,10 +73,16 @@ def inspect_task(
         error_root = Path(output_dir)
         error_root.mkdir(parents=True, exist_ok=True)
         (error_root / "inspection-error.log").write_text(stderr, encoding="utf-8")
-        lines = [line.strip() for line in stderr.splitlines() if line.strip()]
-        message = lines[-1] if lines else "案例检查进程失败"
-        for prefix in ["ValueError: ", "RuntimeError: ", "FileNotFoundError: ", "KeyError: "]:
-            if message.startswith(prefix):
-                message = message[len(prefix) :]
-        raise ValueError(message[:600])
+        raise ValueError(inspection_failure_message(stderr))
     return json.loads(stdout)
+
+
+def inspection_failure_message(stderr: str) -> str:
+    """整理检查子进程最后一行；键错误保留字段名，不把单独的引号键抛给页面。"""
+    lines = [line.strip() for line in stderr.splitlines() if line.strip()]
+    message = lines[-1] if lines else "案例检查进程失败"
+    if message.startswith("KeyError: "):
+        return ("检查缺少必要字段 " + message.removeprefix("KeyError: ").strip())[:600]
+    for prefix in ["ValueError: ", "RuntimeError: ", "FileNotFoundError: "]:
+        message = message.removeprefix(prefix)
+    return message[:600]

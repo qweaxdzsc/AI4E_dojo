@@ -40,6 +40,9 @@ def query_meshes(
     dest = Path(config["paths"]["datasets"]["predictions"]) / MESH_FOLDER
     if run.dry_run:
         return {"output": str(dest), "split": split, "indices": indices}
+    selected_domains = None
+    if config.get("infer", {}).get("fields"):
+        selected_domains = {f.split(":", 1)[0] for f in config["infer"]["fields"]}
     written = []
     if progress:
         progress.report["meshes"] = written
@@ -47,8 +50,8 @@ def query_meshes(
         if index < 0 or index >= len(samples):
             raise IndexError(f"sample_indices 超出测试名单: {index}")
         sample_id = samples[index]
-        samples = [{"sample_id": sample_id, "index": index}]
-        with progress.unit(samples) if progress else sample_context("mesh", samples):
+        unit_samples = [{"sample_id": sample_id, "index": index}]
+        with progress.unit(unit_samples) if progress else sample_context("mesh", unit_samples):
             surface_path, volume_path = raw_mesh_paths(config, sample_id)
             if not surface_path.is_file():
                 raise FileNotFoundError(f"缺少原始表面网格: {surface_path}")
@@ -75,15 +78,18 @@ def query_meshes(
                 )[None],
             }
             if protocol is not None:
-                record_inputs(protocol, "mesh", samples, inputs, positions)
-            predicted = query_model(
-                restored["model"],
-                inputs,
-                to_device(positions, next(restored["model"].parameters()).device),
-                context_factory=context_factory,
-                preparation_id=f"{restored['normalization'].digest}:{sample_id}:mesh",
-                chunk_size=int(settings.get("query_chunk_size", 1024)),
-            )
+                record_inputs(protocol, "mesh", unit_samples, inputs, positions)
+            from ai4e_core.abilities.inference.timing import measure
+
+            with measure(restored["device"]) as prediction_time:
+                predicted = query_model(
+                    restored["model"],
+                    inputs,
+                    to_device(positions, next(restored["model"].parameters()).device),
+                    context_factory=context_factory,
+                    preparation_id=f"{restored['normalization'].digest}:{sample_id}:mesh",
+                    chunk_size=int(settings.get("query_chunk_size", 1024)),
+                )
             pred_pressure = _physical_field(
                 restored["normalization"], predicted, settings, "query_surface_pressure"
             )
@@ -95,40 +101,61 @@ def query_meshes(
             stem = f"sample_{index:04d}"
             surface_out = dest / f"{stem}_surface.vtp"
             volume_out = dest / f"{stem}_volume.vtu"
+            if selected_domains is not None:
+                # 原生结果交接在样本目录，锚点数组与完整网格显式分开命名。
+                sample_root = Path(config["paths"]["datasets"]["predictions"]) / sample_id
+                surface_out, volume_out = (
+                    sample_root / "full_surface.vtp",
+                    sample_root / "full_volume.vtu",
+                )
             overwrite = bool(settings.get("overwrite", False))
-            with sample_context("mesh.surface.save", samples):
-                write_surface_mesh(
-                    surface_data,
-                    pred_pressure,
+            outputs = {}
+            if selected_domains is None or "surface" in selected_domains:
+                with sample_context("mesh.surface.save", unit_samples):
+                    write_surface_mesh(
+                        surface_data,
+                        pred_pressure,
+                        surface_out,
+                        gt=extract_point_field(surface_data, kind="scalar", names=("pressure",)),
+                        overwrite=overwrite,
+                    )
+                outputs["surface"] = str(surface_out)
+                if progress:
+                    progress.committed(surface_out)
+            if selected_domains is None or "volume" in selected_domains:
+                with sample_context("mesh.volume.save", unit_samples):
+                    write_volume_mesh(
+                        volume_data,
+                        pred_velocity,
+                        volume_out,
+                        gt=extract_point_field(volume_data, kind="vector", names=("velocity",)),
+                        overwrite=overwrite,
+                    )
+                outputs["volume"] = str(volume_out)
+                if progress:
+                    progress.committed(volume_out)
+            if set(outputs) == {"surface", "volume"}:
+                verify_mesh_outputs(
                     surface_out,
-                    gt=extract_point_field(surface_data, kind="scalar", names=("pressure",)),
-                    overwrite=overwrite,
-                )
-            if progress:
-                progress.committed(surface_out)
-            with sample_context("mesh.volume.save", samples):
-                write_volume_mesh(
-                    volume_data,
-                    pred_velocity,
                     volume_out,
-                    gt=extract_point_field(volume_data, kind="vector", names=("velocity",)),
-                    overwrite=overwrite,
+                    n_surface=surface_mesh_point_count(surface_data),
+                    n_volume=n_volume,
+                    min_points=settings.get("mesh_min_points"),
                 )
-            if progress:
-                progress.committed(volume_out)
-            verify_mesh_outputs(
-                surface_out,
-                volume_out,
-                n_surface=surface_mesh_point_count(surface_data),
-                n_volume=n_volume,
-                min_points=settings.get("mesh_min_points"),
-            )
+            else:
+                for domain, output in outputs.items():
+                    saved = read_file(output)
+                    expected = (
+                        surface_mesh_point_count(surface_data) if domain == "surface" else n_volume
+                    )
+                    if saved.GetNumberOfPoints() != expected or saved.GetNumberOfCells() <= 0:
+                        raise ValueError("所选域完整网格交付不完整")
             written.append(
                 {
                     "index": index,
                     "sample_id": sample_id,
-                    "surface": str(surface_out),
-                    "volume": str(volume_out),
+                    "prediction_seconds": prediction_time["seconds"],
+                    **outputs,
                     "points": {"surface": n_surface, "volume": n_volume},
                 }
             )

@@ -1,3 +1,5 @@
+参数化PDE独立post新增 `mean_time_relative_l2`，与整体时空指标并列；时间为契约首轴，不改变旧指标。验证见 `test_pibsnet_trapezoid_alignment.py` 的独立post节点；正文归 applications PRD。
+
 # ai4e-core 模块索引
 
 
@@ -36,7 +38,7 @@
 - `packages/ai4e-core/abilities/data/filter/`：按约定单元类型核对 VTK 单元并生成有效点 mask；`coincident.py` 标与表面坐标精确重合的体积点（`exterior_mask`）；`select.py` 筛普通数组；`records.py` 对字段记录与身份统一筛选，前后校验。不删原数组。
 - `packages/ai4e-core/abilities/data/validate/`：`aligned.py` 校验首维；`fields.py` 校验组来源、归属、数量、身份与分量，返回结构化报告；`output.py` 共用输出预检。
 - `packages/ai4e-core/abilities/data/save/`：`encode.py` 编码单场；`store.py` 按映射读写张量或打包载荷，临时目录/备份/提升/恢复，不认识 cell 名字；必需项缺失失败，可选性由调用方声明。
-- `packages/ai4e-core/abilities/data/source/split.py`：按传入名单列分片并校验人数，不扫盘冒充官方顺序。
+- `packages/ai4e-core/abilities/data/source/split.py`：按传入名单列分片并校验人数，不扫盘冒充官方顺序；准备阶段可按 `trainprep.split` 先限定执行样本再重划 train/test/eval，不改张量。
 - `packages/ai4e-core/abilities/data/stats/`：`load.py` 读写 YAML/JSON；`moments.py` 保留尾维流式累计；`fit.py` 对具名数组流累计，不解释目录或训练分片。不做训练期 apply/inverse。
 - `packages/ai4e-core/abilities/transform/`：字段变换和可追踪逆变换。
 - `packages/ai4e-core/abilities/geometry/`：本切片已交付。`surface.py` 为全二维面门禁、私有表面转换及原 point ID；`nearest.py` 为点到最近表面顶点（只吃坐标）；`mesh_sdf.py` 先校验全部单元为支持的二维面再算有符号距离、面上最近点与方向；`surface_normals.py` 按原点身份回贴法向及有效性 mask，参与面法向非有限/零长度拒绝。不加 sklearn / trimesh / meshio。
@@ -53,7 +55,7 @@
 
 - `packages/ai4e-core/applications/`：标准业务装配；只能协调公开能力，不能实现原子算法。
 - `packages/ai4e-core/applications/base/`：已交付最小 `Stage` / `Pipeline`（顺序 `ctx = step(ctx)`，按 `pipeline.stages` 选阶段）。DAG、内容缓存和 profile 仍为规划。
-- `packages/ai4e-core/applications/aero_cfd/rawprep/`：五模块公开业务步骤：`read.py` 样本发现/读取/提取及域类型；`derive.py` 可选几何装配；`select.py` 选场/组契约校验/筛选；`save.py` 实际路径/编码/提交和轻量结果；`stats.py` 训练样本/字段/缺失策略与统计量。无批量循环，不导入 run。
+- `packages/ai4e-core/applications/aero_cfd/rawprep/`：五模块公开业务步骤：`read.py` 样本发现/读取/提取及域类型；`derive.py` 可选几何装配；`select.py` 选场/组契约校验/筛选；`save.py` 实际路径/编码/提交和轻量结果，`formats` 可同时写 PT/Zarr；`stats.py` 训练样本/字段/缺失策略与统计量。无批量循环，不导入 run。
 - `packages/ai4e-core/applications/aero_cfd/model/`：贡献模型引用、初始权重、冻结和学习目标装配。
 - `packages/ai4e-core/applications/aero_cfd/train/`：`fitting.py` 装配训练、评估、监控与恢复；`resolve.py` 展开默认（设备默认自动选择）并联合校验；`__init__.py` 保留旧只读调用的兼容导出，读盘实现位于 trainprep/dataset.py。
 - `packages/ai4e-core/applications/aero_cfd/post/`：`stage.py` 按配置串锚点评估/保存/点云与完整网格回贴；`evaluation.py` 复用共享评估；`export.py` 提交具名张量；`mesh.py` 装配下标、原始网格与分块回贴；`inference.py` 保留分块查询，不再作为案例默认产物。
@@ -110,7 +112,7 @@
 
 ## 几何可选装配使用定位
 
-- 配置入口：先调用 `configured_geometry_enabled(config)`，再把返回清单传给 `derive_configured_geometry(extracted, enabled=...)`；无清单时关闭全部。原子函数仍可直接调用。
+- 配置入口：先调用 `configured_geometry_enabled(config)`，再把返回清单传给 `derive_configured_geometry(extracted, enabled=...)`；无清单时关闭全部。原子函数仍可直接调用。`volume_normals` 是独立能力，只写最近方向；`nearest_vertex` 只写最近距离。
 - 几何输入最低仅含 vtk；公开类型在 rawprep/derive.py，提取允许显式 fields: {}。法向仅需 surface，其余几何需 surface/volume。
 - tests/integration/test_geometry_domain.py 覆盖门禁、身份回贴、孤立点、可选执行、冲突、配置迁移与本地 ShapeNet；test_extract_clean.py 覆盖无标签提取。
 
@@ -121,7 +123,7 @@
 - `applications/base/dataset.py`：只持有样本引用与顺序步骤的 Dataset，不持有批量网格。
 - `applications/aero_cfd/rawprep/dataset.py`：按需装配、输出预检、安全保存、清单和训练统计；保留旧单样本调用。
 - `base/events.py`：阶段上下文、能力开始/结束/失败与真实耗时；后台心跳继承阶段和样本，无文件 handler。
-- `run/dataset.py`：逐样本消费步骤和通用保存策略，不解释物理字段。
+- `run/dataset.py`：逐样本消费步骤和通用保存策略，不解释物理字段；`rawprep.workers` 大于 1 时按线程并行，首错仍停止。
 - `run/session.py`：脚本 launch、配置路径插值解析、单次运行会话与阶段上下文设置/恢复。
 - `run/writer.py`：单份生效配置、带阶段前缀的能力日志、按事件元信息筛选的控制台摘要、延迟创建的错误日志。
 - `applications/aero_cfd/trainprep/dataset.py::open_manifest_sample`：按产物清单的实际路径、形状和 physical 状态读回；标准训练准备可传 train.manifest。
@@ -173,7 +175,7 @@
 
 ## 三阶段交接与训练行为对齐
 
-- `applications/aero_cfd/trainprep/preparation.py`：公开准备步骤、持久化引用与数据内容校验。
+- `applications/aero_cfd/trainprep/preparation.py`：公开准备步骤、持久化引用与数据内容校验；可套用准备分片并写入 `preparation.json` 的 `partitions`/`split`。
 - `applications/aero_cfd/train/fitting.py`：open_training/build_model/configure_objectives/configure_optimization/configure_evaluation/execute_training。
 - `abilities/training/callbacks.py`：普通可调用组件的 update/epoch 周期包装。
 - `run/session.py::stage`：单会话内显式执行阶段并返回交付物；配置 resolver 由 recipe 注入。
@@ -241,8 +243,77 @@ abilities/data/source/physical.py 与 data/stats/physical.py：具名物理视�
 - `abilities/transform/minmax.py`：通用冻结 Min-Max，坐标兼容入口共享算术。
 - `abilities/modeling/inspection.py`：真实 TorchVista HTML 原子发布。
 - `abilities/postproc/difference.py`：同身份同单位差值门禁。
-- `applications/aero_cfd/inspection.py`：task 调用的检查公开门面；模型跟踪缺清单时定位 `train.manifest`。
+- `applications/aero_cfd/inspection.py`：task 调用的检查公开门面；原始处理描述只回已保存的 `dataset.processed_name`；模型跟踪缺清单时定位 `train.manifest`；现行 version=2 准备走 `trainprep.preparation`，旧物理准备仍走 `trainprep.physical`；案例能力含损失与采样声明。
 - `applications/aero_cfd/rawprep/extraction.py`：提取容器到成员路由编译。
 - `.context/mvp/web-algorithm-acceptance.md`、`web-algorithm-results/`：四组合新提取/准备/正式短训/后处理、四份真实模型跟踪与严格差值证据；不替代 HTTP/浏览器验收。
 - `applications/aero_cfd/post/mesh_export.py`：共享物理后处理的真实来源网格回贴，按原身份写 VTP/VTU 并登记 `manifest.meshes`；`test_physical_mesh_export.py` 验证表面/体拓扑和字段身份。
 - `abilities/postproc/coordinate_space.py`：显式坐标空间 id/unit 校验，供公开配置、post、真实网格和差值继承；`test_coordinate_space.py` 覆盖声明拒绝与传播。
+
+## Recipe 公开业务步骤（2026-09-11）
+
+- `base/config/steps.py`：通用参数声明校验、target/parameters 解析、能力来源与重建。
+- `applications/aero_cfd/rawprep/mapping.py`：FieldMapParameters 与 map_fields；只读数组到继承身份的具名字段。
+- `applications/aero_cfd/rawprep/dataset.py`、`rawprep/physical.py`：登记步骤、事务保存、统计与发布分离。
+- `applications/aero_cfd/trainprep/preparation.py`、`trainprep/physical.py`：字段绑定、冻结变换、采样和拼批声明、准备分片、准备校验与发布。
+- `applications/aero_cfd/train/fitting.py`、`train/physical.py`：显式模型、目标、优化、评价、恢复和执行。
+- `applications/aero_cfd/post/stage.py`、`post/physical.py`：按登记顺序执行后处理，物理路线逐样本交接预测与保存。
+- `abilities/transform/normalization.py`：可重建自定义正反变换及来源校验。
+- 相关 PRD：`docs/PRD/ai4e-core/{base,applications,abilities,run}/PRD.md`。
+- 验收：`tests/integration/test_recipe_extensions.py`、`test_recipe_documents.py` 和 `.context/mvp/recipe-explicit-acceptance.md`。
+
+
+## 参数化 PDE
+
+- `packages/ai4e-core/abilities/geometry/parametric.py`：解析域、物理坐标和法向。
+- `packages/ai4e-core/abilities/sampling/physical.py`：监督点、域内点、初值及周期配对。
+- `packages/ai4e-core/abilities/transform/trapezoid.py`：完整物理导数变换。
+- `packages/ai4e-core/abilities/constraint/physical.py`：标准条件残差与归约。
+- `packages/ai4e-core/abilities/data/save/bundle.py`：张量包和内容摘要。
+- `packages/ai4e-core/applications/parametric_pde/`：contracts/rawprep/trainprep/model/train/post 公开装配。
+- `packages/ai4e-core/run/training.py`：execute_samples 复用逐样本执行和记录。
+- `docs/PRD/ai4e-core/abilities/PRD.md`、`docs/PRD/ai4e-core/applications/PRD.md`、`docs/PRD/ai4e-core/run/PRD.md`：长期功能正文。
+- `.context/mvp/pibsnet-acceptance.md`：圈定测试及实际验收。
+
+- `run/writer.py::write_operation_sources`：写入已加载能力源码；`run/dataset.py` 交接字段扩展来源。
+- `train/physical.py::configure_resume`：旧检查点独立 DataLoader 流按已完成轮次重建，不改完整训练顺序。
+
+## 声明驱动原始处理
+
+applications/aero_cfd/rawprep/descriptor.py 解析默认和校验选择，并把 manifest 来源文件名写入 source_files/输出 filename；catalog.py 负责稳定样本身份与范围，页面只提交全部或指定样本，分片模式仅兼容旧请求；extraction.py 支持 fields 逐场布局；physical.py/dataset.py 发布实际布局，source/physical.py 优先消费清单布局。
+
+圈定验收入口：`.context/mvp/manifest-rawprep-acceptance.md`。
+
+## 原案例迁移
+
+applications/parametric_pde/train.py的epoch_sum先顺序汇总损失图再一次反传；通用训练loop不变，实例用户step契约不变。
+
+## 独立推理切片
+
+- `abilities/inference/{__init__,prediction,execution}.py`：公开单次无梯度预测和模式/RNG保护；既有 rebuild/query/stream 保留。
+- `applications/aero_cfd/infer/stage.py`：唯一完整物理步骤实现，旧 post/physical 委托；通过 run.execute_many 执行有序样本。
+- `infer/configuration.py`：独立参数与旧模型内部交接。
+- `infer/inspection.py`：inspect_checkpoint、inspect_inputs、available_devices，供独立检查进程使用。
+- `infer/fields.py`：具名派生点场的实体、单位及分量校验。
+- `infer/results.py`：固定结果读取、数组读回及严格 compare_results。
+- `infer/anchor.py`：旧锚点模板独立 infer 兼容，不改变原计算路径。
+- `post/progress.py`：按阶段写 post-progress 或 inference-progress；`post/mesh_export.py`：将派生字段交付网格。
+- `tests/integration/test_infer_{abilities,stage,extensions,compatibility}.py`：原子、五例数值、真实网格扩展及配置/比较验收。
+- 长期功能正文：`docs/PRD/ai4e-core/{abilities,applications,run}/PRD.md`。
+
+## 后处理三页签与固定结果评价
+
+- `abilities/eval/result_metrics.py`：物理空间九项指标（旧默认五项保留）、分量/模长、有效性及不可定义原因。
+- `applications/aero_cfd/post/__init__.py`、`result_evaluation.py`：固定结果公开评价、逐样本运行与CSV/XLSX/JSON显式输出；不加载模型。
+- 长期行为归 abilities、applications PRD；圈定 `test_post_result_metrics.py`、`test_task_post_metrics.py`、`test_post_installation.py`。
+
+验收导航：`.context/mvp/post-workspace-acceptance.md`。
+
+后处理目录的历史张量分量通过 `describe_result_fields` 在隔离进程中只读头部获取；使用 FakeTensorMode 保留形状而不加载场数组。不能根据缺失的旧指标记录猜成标量。缺真值或形状不符保留文件浏览并禁用该结果重新评价。
+
+## 推理工作台选择与统计
+
+`abilities/eval/{catalog,aggregation,result_metrics}.py`、`abilities/inference/timing.py`、`abilities/report/{__init__,tabular}.py`：指标目录、等权统计、同步计时、CSV/XLSX。`applications/aero_cfd/infer/{catalog,selection,evaluation,exports,stage,results,anchor}.py`：真实字段、分量选择、轻量结果及固定导出。
+
+专项状态与证据见 `.context/mvp/inference-ui-acceptance.md`，不沿用旧验收结论。
+
+- `applications/aero_cfd/post/mesh.py`：历史完整网格查询；原生锚点infer只保存所选域，在各样本目录交付full_surface/full_volume；`infer/anchor.py`登记到固定清单，锚点指标和完整网格实体口径明确区分。

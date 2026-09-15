@@ -1,4 +1,4 @@
-"""真实小网格、正式 AB-UPT 经 task new/fork 执行四阶段闭环。"""
+"""真实小网格、正式 AB-UPT 经 task new/fork 执行含独立infer的五阶段闭环。"""
 
 from pathlib import Path
 
@@ -20,8 +20,9 @@ def test_formal_recipe_new_fork_train_post(tmp_path):
     cfg.sampling.supernodes.num_points = 2
     cfg.sampling.domains.surface.anchor.num_points = 2
     cfg.sampling.domains.volume.anchor.num_points = 1
-    cfg.pipeline.stages = ["datapre", "trainprep", "train", "post"]
+    cfg.pipeline.stages = ["datapre", "trainprep", "train", "infer", "post"]
     cfg.post.sample_indices = [0]
+    cfg.infer = {"samples": ["b"], "split": "test", "device": "cpu"}
     OmegaConf.save(public_config(cfg), source / "config.yaml")
     project = tmp_path / "study"
     task.create_project(project)
@@ -31,6 +32,7 @@ def test_formal_recipe_new_fork_train_post(tmp_path):
     assert a["status"] == "succeeded", a
     assert (Path(a["run_dir"]) / "checkpoints/last.pt").is_file()
     assert "post" in a["summary"]["reports"]
+    assert "infer" in a["summary"]["reports"]
     child = task.fork_task(
         project, first["id"], copy_datasets=True, copy_preparation=True, copy_checkpoints=True
     )

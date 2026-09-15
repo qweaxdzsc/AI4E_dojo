@@ -1,5 +1,6 @@
 """案例公开检查门面；task 捕获配置后调用，不读取服务数据库或 recipe。"""
 
+import json
 from copy import deepcopy
 from importlib import import_module
 from pathlib import Path
@@ -59,8 +60,76 @@ def _components(cfg):
     return import_module(names["dataset"]), import_module(names["model"])
 
 
+def _preparation_path(reference):
+    """准备引用可以是路径或含 preparation 的记录。"""
+    if isinstance(reference, dict):
+        return reference.get("preparation")
+    return reference
+
+
+def _preparation_version(reference) -> int:
+    """识别现行 version=2 与旧物理 version=1 准备，未知记录拒绝。"""
+    path = _preparation_path(reference)
+    if not path:
+        raise ValueError("train.preparation: 缺少准备记录路径")
+    try:
+        record = json.loads(Path(path).read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError(f"train.preparation: 无法读取准备记录: {exc}") from exc
+    if record.get("version") == 2:
+        return 2
+    if record.get("version") == 1 or "dataset" in record:
+        return 1
+    raise ValueError("train.preparation: 不支持的准备记录版本")
+
+
+def _consume_current_preparation(config, model, reference):
+    """按训练同一条现行准备链恢复，不走旧物理 version=1 接口。"""
+    from .trainprep import preparation as prep
+
+    return prep.consume(
+        config,
+        reference,
+        prepare=getattr(model, "prepare_inputs", None) or model.prepare_sample,
+        collate=getattr(model, "collate", None) or (lambda items: items[0]),
+    )
+
+
+def _trace_batch(config, dataset, model, reference):
+    """用与训练相同的准备版本组织一个真实样本批次，供 TorchVista 跟踪。"""
+    if reference and _preparation_version(reference) == 2:
+        from .trainprep.dataset import prepare_partition_sample
+
+        data = _consume_current_preparation(config, model, reference)
+        item = prepare_partition_sample(
+            data.index,
+            "train",
+            0,
+            prepare=data.prepare,
+            normalization=data.normalization,
+            physical_prepare=data.physical_prepare,
+            normalized_input=data.index.manifest["state"] == "normalized",
+            sampling=config["sampling"],
+            config=config,
+            evaluation=True,
+        )
+        batch = data.collate([item])
+        return batch, {
+            "identity": {"sample": data.index.partitions["train"][0], "index": 0},
+            "preparation": data.record["digest"],
+        }
+    from .trainprep.physical import open_preparation
+
+    view, normalization, record = open_preparation(config, dataset, model, reference)
+    sample = view.read("train", 0)
+    return model.prepare_sample(sample, config, normalization, evaluation=True), {
+        "identity": sample["identity"],
+        "preparation": record["digest"],
+    }
+
+
 def parameter_capabilities(config, model):
-    """由实际工作流和模型提供者导出可编辑范围，不让前端重写算法限制。"""
+    """由实际工作流和模型提供者导出可编辑范围，含损失与采样能力，不让前端重写算法限制。"""
     constraints = deepcopy(getattr(model, "TRAINING_CONSTRAINTS", {}))
     if config.get("components", {}).get("workflow") == "ai4e_core.applications.aero_cfd.workflow":
         for key, value in {
@@ -95,10 +164,26 @@ def parameter_capabilities(config, model):
         }
         item.update(constraints.get(key, {}))
         descriptors[key] = item
+    losses = deepcopy(getattr(model, "PLATFORM_LOSSES", {"configurable": False}))
+    if not losses.get("configurable") and not (config.get("model") or {}).get("supervision"):
+        terms = []
+        for domain, binding in ((config.get("trainprep") or {}).get("domains") or {}).items():
+            for name, field in (binding.get("targets") or {}).items():
+                terms.append(
+                    {
+                        "name": f"{domain}/{name}",
+                        "target": field,
+                        "loss": losses.get("fixed", "mse"),
+                        "weight": 1.0,
+                    }
+                )
+        if terms:
+            losses["terms"] = terms
     return {
         "training_constraints": constraints,
         "parameter_descriptors": descriptors,
-        "losses": getattr(model, "PLATFORM_LOSSES", {"configurable": False}),
+        "losses": losses,
+        "sampling": getattr(model, "PLATFORM_SAMPLING", {"configurable": False}),
     }
 
 
@@ -116,6 +201,33 @@ def execute(request: dict) -> dict:
     from ai4e_core.applications.aero_cfd.configuration import resolve_paths
 
     source = OmegaConf.to_container(OmegaConf.create(request.get("config", {})), resolve=True)
+    from .rawprep.descriptor import dataset_component, resolve_rawprep, validate_rawprep
+
+    manifest = source.get("dataset", {}).get("manifest")
+    if manifest and request.get("config_dir") and not Path(manifest).is_absolute():
+        source["dataset"]["manifest"] = str((Path(request["config_dir"]) / manifest).resolve())
+    component = dataset_component(source)
+    if operation == "describe_rawprep":
+        if not hasattr(component, "describe_rawprep"):
+            return {"profile": None, "rawprep": source.get("rawprep", {})}
+        profile = component.describe_rawprep(source)
+        initial = request.get("selection", {}).get("case_rawprep")
+        if initial is not None:
+            from .rawprep.descriptor import merge_defaults
+
+            profile["defaults"] = merge_defaults(profile["defaults"], initial)
+        resolved = resolve_rawprep(source)["rawprep"]
+        if request.get("selection", {}).get("preserve_expressions"):
+            from .rawprep.descriptor import merge_defaults
+
+            resolved = merge_defaults(profile["defaults"], request["config"].get("rawprep", {}))
+        name = (source.get("dataset") or {}).get("processed_name")
+        return {"profile": profile, "rawprep": resolved, "processed_name": name or ""}
+    if operation == "validate_rawprep":
+        candidate = request.get("selection", {}).get("rawprep", source.get("rawprep", {}))
+        validate_rawprep(candidate, component.describe_rawprep(source))
+        return {"valid": True}
+    source = resolve_rawprep(source)
     config = normalize_config(source)
     if request.get("config_dir"):
         config = resolve_paths(config, Path(request["config_dir"]) / "config.yaml")
@@ -126,7 +238,7 @@ def execute(request: dict) -> dict:
     selection = request.get("selection", {})
     if selection.get("root"):
         config.setdefault("dataset", {})["root"] = selection["root"]
-    if selection.get("samples"):
+    if "samples" in selection:
         config.setdefault("dataset", {})["samples"] = selection["samples"]
     if request.get("component_provider") and not all(
         config.get("components", {}).get(key) for key in ("model", "dataset", "workflow")
@@ -136,6 +248,10 @@ def execute(request: dict) -> dict:
         config["components"] = {
             name: getattr(selected, name).__name__ for name in ("dataset", "model", "workflow")
         }
+    if operation == "inspect_dataset":
+        config["inspection_scope"] = selection.get("inspection_scope", "representatives")
+        config["sample_scope"] = selection.get("sample_scope")
+        return component.inspect_dataset(config)
     dataset, model = _components(config)
     config = model.resolve(config, validate=False)
     if operation == "describe_case":
@@ -178,24 +294,28 @@ def execute(request: dict) -> dict:
             return result
         reference = resolved.get("train", {}).get("preparation")
         if reference or resolved.get("train", {}).get("manifest"):
-            from .trainprep.physical import open_preparation
+            if reference and _preparation_version(reference) == 2:
+                data = _consume_current_preparation(resolved, model, reference)
+                result["readiness"] = {
+                    "preparation_compatible": True,
+                    "digest": data.record["digest"],
+                }
+            else:
+                from .trainprep.physical import open_preparation
 
-            _, _, record = open_preparation(resolved, dataset, model, reference)
-            result["readiness"] = {"preparation_compatible": True, "digest": record["digest"]}
+                _, _, record = open_preparation(resolved, dataset, model, reference)
+                result["readiness"] = {
+                    "preparation_compatible": True,
+                    "digest": record["digest"],
+                }
         return result
     if operation == "trace_model":
         from ai4e_core.abilities.modeling.inspection import trace
 
-        from .trainprep.physical import open_preparation
-
         train = config.get("train") or {}
         if not train.get("preparation") and not train.get("manifest"):
             raise ValueError("train.manifest: 模型跟踪需要已有物理数据清单或准备记录")
-        view, normalization, record = open_preparation(
-            config, dataset, model, train.get("preparation")
-        )
-        sample = view.read("train", 0)
-        batch = model.prepare_sample(sample, config, normalization, evaluation=True)
+        batch, source = _trace_batch(config, dataset, model, train.get("preparation"))
         network = model.construct(**model.training_parameters(config)).cpu().eval()
         return trace(
             network,
@@ -203,7 +323,7 @@ def execute(request: dict) -> dict:
             Path(request["output_dir"]),
             revision=fingerprint(config),
             predict=model.predict,
-            input_source={"identity": sample["identity"], "preparation": record["digest"]},
+            input_source=source,
         )
     raise ValueError(f"未知检查操作: {operation}")
 

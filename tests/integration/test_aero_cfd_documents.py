@@ -1,7 +1,9 @@
-"""F：新增目录与100项验收映射有真实导航，示例保持共享脚本。"""
+"""F：新增目录与100项验收映射有真实导航，案例显式复用业务步骤。"""
 
 import json
 from pathlib import Path
+
+import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -18,20 +20,38 @@ def test_all_items_have_real_implementation_paths():
     assert (ROOT / ".context/mvp/transolver3-acceptance.md").is_file()
 
 
-def test_examples_share_all_stage_scripts():
-    """复制案例只在配置和说明上不同，阶段脚本保持同一实现。"""
+def test_examples_share_configuration_and_explicit_domain_steps():
+    """配置与阶段交接共享；来源与模型步骤允许可见的局部差异。"""
     for example in ("shapenet_car_abupt", "nasa_crm_transolver3"):
-        for script in (
-            "configuration.py",
-            "rawprep.py",
-            "trainprep.py",
-            "train.py",
-            "post.py",
-            "pipeline.py",
-        ):
+        for script in ("configuration.py", "pipeline.py"):
             assert (ROOT / "recipes/aero_cfd" / script).read_bytes() == (
                 ROOT / "examples/aero_cfd" / example / script
             ).read_bytes()
+        for script in ("rawprep.py", "trainprep.py", "train.py", "post.py"):
+            source = (ROOT / "examples/aero_cfd" / example / script).read_text()
+            assert ".workflow" not in source
+            assert "load_components" in source
+        assert (
+            "configure_objectives"
+            in (ROOT / "examples/aero_cfd" / example / "train.py").read_text()
+        )
+
+
+def test_shapenet_examples_enable_vtkhdf_nasa_does_not():
+    """ShapeNet 官方案例默认打开 VTKHDF；NASA 案例不写或关闭。"""
+    root = ROOT / "examples/aero_cfd"
+    for name in (
+        "shapenet_car_abupt",
+        "shapenet_car_transolver3_surface",
+        "shapenet_car_transolver3_volume",
+    ):
+        cfg = yaml.safe_load((root / name / "config.yaml").read_text())
+        assert cfg["rawprep"]["vtkhdf"] is True
+    for name in ("nasa_crm_abupt", "nasa_crm_transolver3"):
+        cfg = yaml.safe_load((root / name / "config.yaml").read_text())
+        assert (cfg.get("rawprep") or {}).get("vtkhdf") in {None, False}
+    template = yaml.safe_load((ROOT / "recipes/aero_cfd/config.yaml").read_text())
+    assert template["rawprep"]["vtkhdf"] is True
 
 
 def test_module_navigation_and_no_reference_runtime_dependency():

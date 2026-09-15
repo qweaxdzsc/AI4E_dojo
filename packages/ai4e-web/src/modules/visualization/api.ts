@@ -1,4 +1,5 @@
 import type {Source} from './model';
+import {request} from '../../infrastructure/http/client';
 /** 调用平台辅助操作，不创建独立服务或训练任务。 */
 async function operation(source:Source,kind:string,options:any,signal:AbortSignal){
  if(signal.aborted)throw new DOMException('Canceled','AbortError');
@@ -25,3 +26,19 @@ export function bufferUrl(source:Source,asset:Source,path:string){if(!asset?.rev
 export function previewOptions(source:Source,options:any){return {...options,field:options.field??source.member};}
 /** 读取有限预览数据，不在组件中拼接服务路径。 */
 export async function inspectAsset(source:Source,kind:string,options:any,signal:AbortSignal){return (await operation(source,kind,previewOptions(source,options),signal)).result;}
+
+/** 宿主只传固定来源和项目任务身份，不提供任意输出路径。 */
+const physicalRequest = (path:string, body?:unknown, method?:string) => request(path,body,method);
+/** 查询当前项目可用任务作为明确保存目标。 */
+export const physicalTargets=(project:string)=>physicalRequest(`/projects/${project}/tasks`);
+/** 按目标任务列出配置资产。 */
+export const savedVisualizations=(project:string,task:string)=>physicalRequest(`/projects/${project}/tasks/${task}/visualizations`);
+/** 创建或重新打开独立工作区。 */
+export const openPhysicalWorkspace=(project:string,task:string,body:unknown)=>physicalRequest(`/projects/${project}/tasks/${task}/visualizations/sessions`,body);
+/** 有界释放页面所属会话。 */
+export const closePhysicalWorkspace=(project:string,task:string,session:string)=>physicalRequest(`/projects/${project}/tasks/${task}/visualizations/sessions/${session}`,undefined,'DELETE').catch(()=>{});
+
+/** 当前项目受控结果列表。 */
+export const physicalSources=(project:string)=>physicalRequest(`/projects/${project}/assets`);
+/** 现有工作区追加结果，不创建任务版本。 */
+export const appendPhysicalSources=(project:string,task:string,session:string,sources:unknown[])=>physicalRequest(`/projects/${project}/tasks/${task}/visualizations/sessions/${session}/sources`,{sources});

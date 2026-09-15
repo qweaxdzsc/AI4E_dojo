@@ -40,16 +40,16 @@ def test_design_links_resolve(path: Path):
 
 
 def test_product_chapters_follow_prd_contract():
-    """两章均遵守六节约定，功能清单与详解编号一一对应。"""
+    """各章均遵守六节约定，功能清单与详解编号一一对应。"""
     text = PRODUCT.read_text()
-    for number, chapter in enumerate(re.split(r"^## [一二]、.*$", text, flags=re.MULTILINE)[1:], 1):
+    for number, chapter in enumerate(re.split(r"^## [一二三]、.*$", text, flags=re.MULTILINE)[1:], 1):
         sections = re.findall(r"^### (\d\.\d) ", chapter, flags=re.MULTILINE)
         assert sections == [f"{number}.{index}" for index in range(1, 7)]
         inventory = chapter.split(f"### {number}.5 ", 1)[1].split(f"### {number}.6 ", 1)[0]
         entries = re.findall(r"^(\d+)\. ", inventory, flags=re.MULTILINE)
         details = re.findall(r"^#### (\d+)\. ", chapter, flags=re.MULTILINE)
         assert entries and entries == details
-    assert len(re.findall(r"^## [一二]、", text, flags=re.MULTILINE)) == 2
+    assert len(re.findall(r"^## [一二三]、", text, flags=re.MULTILINE)) == 3
 
 
 def test_v2_is_in_single_authoritative_document():

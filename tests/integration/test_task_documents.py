@@ -12,13 +12,19 @@ def test_task_documents_and_entry_links():
     for module in ("cli", "projects", "tasks", "versions", "templates", "storage"):
         assert (ROOT / "packages/ai4e-task" / module).is_dir()
         text = (ROOT / f"docs/PRD/ai4e-task/{module}/PRD.md").read_text()
-        assert re.findall(r"^### (1\.[1-6]) ", text, re.MULTILINE) == [
-            f"1.{i}" for i in range(1, 7)
+        chapters = [
+            chapter
+            for chapter in re.split(r"^## ", text, flags=re.MULTILINE)
+            if re.search(r"^### \d+\.1 ", chapter, re.MULTILINE)
         ]
-        inventory = text.split("### 1.5 ", 1)[1].split("### 1.6 ", 1)[0]
-        assert re.findall(r"^(\d+)\. ", inventory, re.MULTILINE) == re.findall(
-            r"^#### (\d+)\. ", text, re.MULTILINE
-        )
+        for number, chapter in enumerate(chapters, 1):
+            assert re.findall(r"^### (\d+\.[1-6]) ", chapter, re.MULTILINE) == [
+                f"{number}.{i}" for i in range(1, 7)
+            ]
+            inventory = chapter.split(f"### {number}.5 ", 1)[1].split(f"### {number}.6 ", 1)[0]
+            assert re.findall(r"^(\d+)\. ", inventory, re.MULTILINE) == re.findall(
+                r"^#### (\d+)\. ", chapter, re.MULTILINE
+            )
     entry = json.loads((ROOT / "recipes/aero_cfd/task-entry.json").read_text())
     assert (ROOT / "recipes/aero_cfd" / entry["script"]).is_file()
     assert (ROOT / "recipes/aero_cfd" / entry["config"]).is_file()

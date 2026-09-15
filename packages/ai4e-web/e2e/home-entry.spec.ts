@@ -3,7 +3,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
 
-const api = (process.env.DOJO_API_URL || 'http://127.0.0.1:8002') + '/api/v1';
+const api = (process.env.DOJO_API_URL || process.env.DOJO_WEB_URL || 'http://127.0.0.1:5173') + '/api/v1';
 /** 从首页真实点击进入项目和任务，不用深链接跳过用户入口。 */
 test('首页进入项目、进入任务及侧栏整行导航', async ({ page, request }, info) => {
   const name = `首页导航回归 ${Date.now()}`;
@@ -33,14 +33,14 @@ test('首页进入项目、进入任务及侧栏整行导航', async ({ page, re
     await expect(page).toHaveURL(new RegExp(`/projects/${project.id}/tasks$`));
     await expect(page.getByRole('tab')).toHaveCount(6);
     await page.getByRole('link', { name: '进入工作台', exact: true }).click();
-    await expect(page).toHaveURL(new RegExp(`/projects/${project.id}/tasks/${task.id}/1$`));
-    await expect(page.locator('.workbench-steps .topstep')).toHaveCount(8);
+    await expect(page).toHaveURL(new RegExp(`/projects/${project.id}/tasks/${task.id}/rawprep$`));
+    await expect(page.locator('.workbench-steps .topstep')).toHaveCount(9);
     await expect(workbenchMenu).toHaveAttribute('aria-current', 'page');
     await page.reload();
     await expect(page.getByRole('heading', { name: new RegExp('^' + task.name) })).toBeVisible();
     await projectsMenu.click({ position: { x: 8, y: 20 } });
     await workbenchMenu.click({ position: { x: 8, y: 20 } });
-    await expect(page).toHaveURL(new RegExp(`/projects/${project.id}/tasks/${task.id}/1$`));
+    await expect(page).toHaveURL(new RegExp(`/projects/${project.id}/tasks/${task.id}/rawprep$`));
     await page.screenshot({ path: info.outputPath('home-to-workbench.png'), fullPage: true });
   } finally {
     await request.patch(`${api}/projects/${project.id}`, { data: { archived: true } });
@@ -111,7 +111,7 @@ test('空项目新建任务后进入工作台，归档后不恢复失效任务',
     await page.getByLabel('任务名称', { exact: true }).fill('从首页创建的任务');
     await page.getByRole('combobox',{name:'科研案例',exact:true}).click();await page.getByRole('option').first().click();
     await page.getByRole('dialog').getByRole('button', { name: '创建并进入原始处理',exact:true }).click();
-    await expect(page.locator('.workbench-steps .topstep')).toHaveCount(8);
+    await expect(page.locator('.workbench-steps .topstep')).toHaveCount(9);
     await expect(page.getByRole('heading', { name: /^从首页创建的任务/ })).toBeVisible();
     await page.getByRole('link', { name: '切换任务', exact: true }).click();
     await expect(page).toHaveURL(/\/workbench\?choose=1$/);

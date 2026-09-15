@@ -1,0 +1,25 @@
+---
+description: AI4E_Vis 当前 Python/FastAPI/SQLite/Trame 后端实现规范
+globs: backend/**/*.py
+alwaysApply: false
+---
+
+# 后端规范
+
+- 先读 `AGENTS.md`、`.context/index.md`、目标模块索引和相关 `docs/PRD/`；从 Router 沿 Application、Domain、Repository、数据库、调用方和测试读完整链路后再改。
+- 使用 Python 3.12、FastAPI、SQLite、Trame、VTK；依赖只写包 `pyproject.toml` 与 Dojo 根 `uv.lock`，`backend/requirements.txt` 仅保留历史基线。
+- 总体采用 DDD（领域驱动设计）和端口适配思想：十三级 `backend/modules/<一级模块>` 是限界上下文，目录先按业务模块切分，再在模块内按实际复杂度进行技术分层；一级模块应高内聚、低耦合并可整体拆分。
+- `api.py` 是入站适配层，只转换协议、请求响应和错误；`application.py` 是应用层，编排用例、事务、补偿和跨对象协作；`domain.py` 是领域层，保存实体、值对象、不变量和不依赖IO的纯规则；`repository.py` 是持久化端口及适配，独占本模块表、SQL和映射。小模块可以合并简单规则，但不得制造空壳层或越过职责边界。
+- 进程装配归 `server`，无业务技术基座归 `infrastructure`；依赖方向固定为 `server → module.api → application → domain/repository/adapters → infrastructure`，Domain 不反向依赖 FastAPI、SQLite 或 Server。
+- 跨模块只能导入目标模块 `__init__.py`；禁止访问其他模块 Repository、SQL、内部 Domain。小模块按需分层，不制造空壳。
+- `dataAssets`独占资产登记、上传、原始文件、`artifacts`与分类历史；`visDatasets`只做解析、画像、体检、统计和内容查看，不得重建资产Repository。
+- 聚合边界与事务边界由 Application 明确；所有持久化写操作经过所属模块 Repository，并复用 `infrastructure.persistence` 的连接、WAL、外键和事务原语。Router 不执行 SQL，Domain 不提交事务，Server 不迁移业务表。
+- `visPhysField/modules/*` 共享一级 Router、Application、Repository、SQLite 与 Trame 会话；禁止二级 Router、Repository、Server、端口。
+- `visEngine` 只允许 VTK/数值内核、缓存和性能原语，禁止 FastAPI、Trame Server、URL、SQLite、任务、资产和报告语义。
+- 新配置与显式导出只写注入的项目—任务 `visualizations/`；临时缓存使用明确运行根，禁止源码或安装目录写入；数据库只存相对 `storage_key`；测试必须使用临时 SQLite 或副本。
+- 每个 Python 文件有中文模块 Docstring；公开类/函数/方法有中文 Docstring；复杂流程、异常补偿、SQL、坐标/单位和性能取舍写原因型中文注释。
+- 每次修改同步目标 `.context` 文件、相关 PRD 或 `docs/PRD/CHANGELOG.md`、对应测试；新增/删除/移动文件必须同步文件索引。
+- 错误必须记入根 `error.log`，包含现象、链路、根因、修复和验证，不写密钥、用户数据或大段堆栈。
+- 先跑 `PYTHONPATH=packages/ai4e-viz/backend uv run pytest --import-mode=importlib packages/ai4e-viz/backend/tests/modules/test_<module>.py -q`；再按影响跑 `tests/test_contract.py`、`tests/test_architecture.py`、集成与全量测试。
+
+详细文件位置见 `.context/index.md` 和 `.context/modules/<module>.md`。

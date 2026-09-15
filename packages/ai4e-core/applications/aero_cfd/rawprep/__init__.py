@@ -45,8 +45,10 @@ __all__ = [
 from .dataset import (
     compute_statistics,
     derive_geometry,
+    encode,
     extract_fields,
     filter_points,
+    open_source,
     publish_dataset,
     read,
     save_sample,
@@ -54,5 +56,7 @@ from .dataset import (
     to_tensors,
     validate_fields,
 )
+from .mapping import FieldMapParameters, map_fields
 
 __all__ += ["compute_statistics", "publish_dataset", "read", "save_sample", "to_tensors"]
+__all__ += ["FieldMapParameters", "encode", "map_fields", "open_source"]

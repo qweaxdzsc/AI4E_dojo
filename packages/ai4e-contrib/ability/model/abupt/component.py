@@ -33,3 +33,7 @@ def training_parameters(config):
 from ai4e_core.abilities.constraint.compare import METHODS
 
 PLATFORM_LOSSES = {"configurable": True, "allowed": sorted(METHODS)}
+PLATFORM_SAMPLING = {"configurable": True}
+
+# 仅描述推理执行能力；不会改变模型或训练契约。
+INFERENCE_CAPABILITIES = {"query_chunk_size": True, "physical_fields": True}

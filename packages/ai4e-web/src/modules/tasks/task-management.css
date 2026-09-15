@@ -27,11 +27,12 @@
 .task-management .ministeps a:after{content:"";position:absolute;right:-5px;width:10px;height:1px;background:#cbdaf4}
 .task-management .ministeps a:last-child:after{display:none}
 .task-management .ministeps span{display:grid;place-items:center;width:20px;height:20px;flex-shrink:0;border:1px solid #b1c4e3;border-radius:50%}
-.task-management .ministeps .done{color:#5478ab}
-.task-management .ministeps .done span{background:#0873ff;border-color:#0873ff;color:#fff}
-.task-management .ministeps .done:after{background:#1680ff}
+.task-management .ministeps .done{color:#079c64}
+.task-management .ministeps .done span{background:#079c64;border-color:#079c64;color:#fff}
+.task-management .ministeps .done:after{background:#079c64}
 .task-management .ministeps .current{color:#0873ff}
-.task-management .ministeps .current span{border:2px solid #0873ff}
+.task-management .ministeps .current span{border:2px solid #0873ff;background:#fff;color:#0873ff}
+.task-management .ministeps .current.done span{background:#0873ff;border-color:#0873ff;color:#fff}
 .task-management .task-row-actions{display:flex;align-items:center;gap:8px;line-height:19.2px}
 .task-management .task-more{height:34px;padding:4px 8px}
 .task-management .enter-workbench{display:inline-flex;align-items:center;justify-content:center;min-height:34px;border:1px solid #d9e6fa;border-radius:6px;color:#2864b9;background:#fff;font-size:12px;padding:7px 10px;white-space:nowrap}

@@ -146,6 +146,10 @@ def _create(
                 if not entry:
                     raise ValueError("entry_required_for_configuration")
                 OmegaConf.save(OmegaConf.create(configuration), stage / "recipe" / entry["config"])
+            if not parent:
+                from .rawprep import expand_rawprep_defaults
+
+                expand_rawprep_defaults(stage / "recipe")
             inputs = capture_inputs(
                 stage / "recipe",
                 entry,

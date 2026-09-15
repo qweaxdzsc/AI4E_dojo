@@ -20,6 +20,7 @@ bypass-selection = true
 "Notice" = "ai4e_contrib/Notice"
 
 [project.optional-dependencies]
+pibsnet = ["scipy>=1.14"]
 abupt = ["einops>=0.8", "torch-geometric==2.6.1", "torch-scatter==2.1.2", "torch-cluster==1.6.3"]
 
 transolver3 = ["einops>=0.8", "ai4e-core[hdf5]"]

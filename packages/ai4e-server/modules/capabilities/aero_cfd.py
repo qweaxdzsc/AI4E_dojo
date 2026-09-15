@@ -46,23 +46,56 @@ def partition_for(config):
 
 
 def require_profile(service, project, identity):
-    """只映射已登记模板的原样脚本；研究人员改脚本后不猜测其新语义。"""
-    import hashlib
+    """校验已登记脚本的处理语义，兼容格式整理和已审定的旧默认加载入口。"""
     from pathlib import Path
 
     import ai4e_task as task
 
-    folder = Path(task.get_task(service.project(project), identity)["directory"]) / "recipe"
-    source = service.settings.template
-    for original in source.rglob("*"):
-        if original.suffix != ".py" and original.name != "task-entry.json":
-            continue
-        if "__pycache__" in original.parts:
-            continue
-        target = folder / original.relative_to(source)
-        if (
-            not target.is_file()
-            or hashlib.sha256(original.read_bytes()).digest()
-            != hashlib.sha256(target.read_bytes()).digest()
-        ):
-            raise ValueError("recipe_profile_changed: 任务脚本或入口已改变，需要先核对页面配置映射")
+    from .recipe_profile import compatible_file
+
+    record = task.get_task(service.project(project), identity)
+    folder = Path(record["directory"]) / "recipe"
+    if record.get("entry", {}).get("platform_case"):
+        from ..tasks.templates import case_files
+
+        files = case_files(service, record["entry"]["platform_case"])
+    else:
+        source = service.settings.template
+        files = {
+            str(path.relative_to(source)): path.read_bytes()
+            for path in source.rglob("*")
+            if path.is_file() and "__pycache__" not in path.parts
+        }
+    expected = {name for name in files if Path(name).suffix == ".py" or name == "task-entry.json"}
+    actual = {
+        str(path.relative_to(folder))
+        for path in folder.rglob("*")
+        if path.is_file()
+        and "__pycache__" not in path.parts
+        and (path.suffix == ".py" or path.name == "task-entry.json")
+    }
+    import json
+
+    from .recipe_profile import compatible_legacy, compatible_native
+
+    if compatible_legacy(
+        folder,
+        actual,
+        service.settings.template / "legacy-profile.json",
+        record.get("entry", {}).get("platform_case"),
+        json.loads(files["task-entry.json"]).get("components"),
+    ):
+        return
+    if compatible_native(folder, actual, service.settings.template / "inference-profile.json",
+                         record.get("entry", {}).get("platform_case"), json.loads(files["task-entry.json"]).get("components")):
+        return
+    changed = sorted(expected ^ actual)
+    for name in sorted(expected & actual):
+        target = folder / name
+        if not compatible_file(name, files[name], target.read_bytes()):
+            changed.append(name)
+    if changed:
+        raise ValueError(
+            "recipe_profile_changed: 以下文件的处理逻辑或入口与已支持版本不同，需要核对页面配置映射："
+            + ", ".join(sorted(changed))
+        )

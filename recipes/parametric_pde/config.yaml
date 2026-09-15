@@ -1,0 +1,13 @@
+# 复制模板后绑定自己的独立数据集；默认选择 Neumann 扩散。
+case: neumann_diffusion
+dataset:
+  manifest: ../datasets/manifest.json
+run_root: ../runs
+trainprep:
+  execute: true
+  output: ../prepared
+train:
+  execute: true
+  device: auto
+post:
+  output: ../predictions

@@ -1,0 +1,20 @@
+{
+  "Ip_pred": 2999001.0,
+  "boundary_loss": 4.901879947283305e-06,
+  "checkpoint": "outputs/checkpoints/pino_gs/20260724_024214_pino_tkno_high_precision_cnn_mlp/best.pt",
+  "current_loss": 1.1088900464528706e-07,
+  "device": "cuda",
+  "geometry": {
+    "R0": 1.2,
+    "a": 0.4,
+    "delta": -0.3,
+    "kappa": 1.8
+  },
+  "inference_seconds": 0.003691416233778,
+  "output_path": "outputs/multi_geometry_baseline/cnn_mlp/negative_triangularity/pino_inference.npz",
+  "pde_loss": 20.06007194519043,
+  "psi_axis": 0.2902493476867676,
+  "psi_max": 0.2902493476867676,
+  "psi_min": -0.3315625488758087,
+  "total_loss": 0.002055580262094736
+}

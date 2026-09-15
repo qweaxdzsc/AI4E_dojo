@@ -1,0 +1,10 @@
+/* 嵌入工作台贴合父 iframe；同时拉高 Ant Design App 包装层，不用 100dvh。 */
+#root:has(.phys-workspace-shell),
+#root:has(.phys-workspace-shell) > .ant-app,
+.v2-embed-content:has(.phys-workspace-shell){padding:0!important;height:100%!important;min-height:0;max-height:100%;overflow:hidden;display:flex;flex-direction:column}
+.phys-workspace-shell{flex:1;width:100%;height:100%;min-height:0;display:flex;flex-direction:column;position:relative;background:#f7faff}
+.phys-workspace-shell>iframe{position:relative;z-index:1}
+/* 关闭后残留的对话框蒙层不得挡住内层 Trame 点击。 */
+.ant-modal-wrap:not(:has(.ant-modal)),.ant-modal-wrap:has(.ant-modal-hidden){pointer-events:none!important}
+.phys-output-toast{position:absolute;right:18px;bottom:18px;z-index:30;border:1px solid #c8daf1;border-radius:7px;box-shadow:0 4px 22px #143d7420;background:#f9fcff;color:#17345d;padding:12px 37px 12px 15px;font-size:13px;max-width:450px}
+.phys-output-toast[hidden]{display:none}.phys-output-dismiss{position:absolute;top:5px;right:5px;border:0;background:none;font-size:20px;line-height:20px;color:#617a9b;cursor:pointer}

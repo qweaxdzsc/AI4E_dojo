@@ -1,0 +1,9 @@
+---
+description: Dojo 中独立 Vis 的backend规则入口
+globs: packages/ai4e-viz/backend/**/*.py
+alwaysApply: false
+---
+
+先读 `packages/ai4e-viz/AGENTS.md`、`packages/ai4e-viz/.context/index.md`，再加载并遵循 `packages/ai4e-viz/.cursor/rules/ai4e-vis-backend.mdc` 的规则正文。源应用规则只在 Vis 包内生效；用户授权迁移要求优先。
+
+全局交接见 Dojo 唯一架构文档；Vis 内部架构与 PRD 保留在包内。代码与索引、PRD、相关测试同步；保存只写任务上下文，禁止安装树写入。

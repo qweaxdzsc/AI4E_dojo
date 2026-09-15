@@ -59,3 +59,8 @@ def comparison_metadata(config, sample, domain):
         ),
         "units": units,
     }
+
+
+def inference_fields() -> dict:
+    """返回本数据集真实物理量的显示和分量说明。"""
+    return {'surface_pressure': {'label': 'Pressure', 'components': 1, 'category': '流体'}, 'volume_velocity': {'label': 'Velocity', 'components': 3, 'component_labels': ['U', 'V', 'W'], 'category': '流体'}}

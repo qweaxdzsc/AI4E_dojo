@@ -45,6 +45,12 @@ def inspect(path):
             attrs = REQUIRED_ATTRIBUTES - set(group.attrs)
             if missing or attrs:
                 raise ValueError(f"{path}/{name}: 缺字段 {sorted(missing)}，工况 {sorted(attrs)}")
+            for key in REQUIRED_DATASETS:
+                if not (
+                    np.issubdtype(group[key].dtype, np.integer)
+                    or np.issubdtype(group[key].dtype, np.floating)
+                ):
+                    raise ValueError(f"{path}/{name}/{key}: 字段必须为实数类型")
             shapes = {tuple(group[key].shape) for key in REQUIRED_DATASETS}
             if len(shapes) != 1:
                 raise ValueError(f"{name}: 字段形状不一致")

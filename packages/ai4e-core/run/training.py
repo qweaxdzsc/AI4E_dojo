@@ -56,3 +56,16 @@ class TrainingRun:
             raise ValueError(
                 "运行配置已冻结；业务调用参数不得覆盖输入快照，请通过 report/artifact 记录运行事实"
             )
+
+    def execute_samples(self, samples, process, *, stage: str):
+        """复用 run 批量执行；业务提供单样本函数，首错保留已提交摘要。"""
+        from ai4e_core.applications.base import Stage
+
+        from .execute import execute_many
+
+        def execute_one(context):
+            context["result"] = process(context["sample"])
+            return context
+
+        summary = execute_many(samples, Stage(stage, [execute_one]), context=self._state)
+        return summary["results"]

@@ -5,6 +5,7 @@ from fastapi import APIRouter, Request
 from pydantic import BaseModel, ConfigDict
 
 from ...bootstrap.dependencies import services
+from ..stages import stage_summary
 
 router = APIRouter(prefix="/projects/{project}/tasks")
 
@@ -28,11 +29,13 @@ class TaskCreate(TaskEdit):
 
 
 class DatasetEdit(BaseModel):
-    """修订保护的数据来源文件绑定。"""
+    """修订保护的数据来源；可按公开数据集副本一次接入处理方式。"""
 
     model_config = ConfigDict(extra="forbid")
     expected_revision: str
-    sources: dict[str, dict]
+    sources: dict[str, dict] | None = None
+    dataset_id: str | None = None
+    instance_id: str | None = None
 
 
 def _source_files(service, project, sources):
@@ -60,7 +63,15 @@ def update_dataset(project: str, identity: str, body: DatasetEdit, request: Requ
     """解析受控文件后通过 task 保存 dataset，不接受任意绝对路径。"""
     from .dataset import save_binding
 
-    return save_binding(services(request), project, identity, body.sources, body.expected_revision)
+    return save_binding(
+        services(request),
+        project,
+        identity,
+        body.sources,
+        body.expected_revision,
+        body.dataset_id,
+        body.instance_id,
+    )
 
 
 @router.get("/{identity}/dataset")
@@ -71,32 +82,15 @@ def dataset(project: str, identity: str, request: Request):
     return read_binding(services(request), project, identity)
 
 
-CASES = {
-    "shapenet_car_abupt": {
-        "name": "ShapeNet-Car · AB-UPT",
-        "dataset_id": "shapenet_car",
-        "model_id": "abupt",
-        "binding_mode": "directory",
-    },
-    "shapenet_car_transolver3_surface": {
-        "name": "ShapeNet-Car 表面 · Transolver-3",
-        "dataset_id": "shapenet_car",
-        "model_id": "transolver3",
-        "binding_mode": "directory",
-    },
-    "nasa_crm_abupt": {
-        "name": "NASA CRM · AB-UPT",
-        "dataset_id": "nasa_crm",
-        "model_id": "abupt",
-        "binding_mode": "files",
-    },
-    "nasa_crm_transolver3": {
-        "name": "NASA CRM · Transolver-3",
-        "dataset_id": "nasa_crm",
-        "model_id": "transolver3",
-        "binding_mode": "files",
-    },
-}
+@router.get("/{identity}/datasets")
+def public_datasets(project: str, identity: str, request: Request):
+    """列出 contrib 公开数据集、处理说明和本机完整副本。"""
+    from .dataset import list_public_datasets
+
+    return list_public_datasets(services(request), project, identity)
+
+
+from ..capabilities import CASES
 
 
 @router.get("/cases")
@@ -106,16 +100,18 @@ def cases(project: str, request: Request):
     s.project(project)
     root = s.settings.template.parent.parent / "examples/aero_cfd"
     return [
-        {"id": key, **item}
-        for key, item in CASES.items()
-        if (root / key / "config.yaml").is_file()
+        {"id": key, **item} for key, item in CASES.items() if (root / key / "config.yaml").is_file()
     ]
 
 
 @router.get("")
 def listing(project: str, request: Request):
     """查询当前范围内的真实管理记录。"""
-    return task.list_tasks(services(request).project(project))
+    base = services(request).project(project)
+    return [
+        {**value, "stage_summary": stage_summary(project, value["id"], services(request))["stages"]}
+        for value in task.list_tasks(base)
+    ]
 
 
 @router.post("")
@@ -174,14 +170,18 @@ def create(project: str, body: TaskCreate, request: Request):
     if body.case_id and not body.data_root and not body.data_sources:
         # 新建任务只选择案例；模板开发路径不能成为用户的默认数据来源。
         configuration.setdefault("dataset", {})["root"] = None
+        configuration["train"] = {**(configuration.get("train") or {}), "manifest": None}
         if declared and declared["binding_mode"] == "files":
             from .dataset import NASA_KEYS
 
             for key in NASA_KEYS:
                 configuration["dataset"][key] = None
-    value = task.new_task(
-        s.project(project), body.name, source=s.settings.template, configuration=configuration
-    )
+    source = s.settings.template
+    if body.case_id:
+        from .templates import register_case_template
+
+        source = register_case_template(s, project, body.case_id)
+    value = task.new_task(s.project(project), body.name, source=source, configuration=configuration)
     if body.description:
         value = task.update_task(s.project(project), value["id"], description=body.description)
     return value
@@ -191,6 +191,7 @@ def create(project: str, body: TaskCreate, request: Request):
 def detail(project: str, identity: str, request: Request):
     """读取已有对象详情，不创建新运行。"""
     value = task.get_task(services(request).project(project), identity)
+    value["stage_summary"] = stage_summary(project, identity, services(request))["stages"]
     value.pop("directory", None)
     return value
 

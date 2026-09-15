@@ -1,0 +1,2041 @@
+{
+  "created_at": "2026-08-29T14:13:56.617312+00:00",
+  "root": "AI4E_Vis",
+  "files": [
+    {
+      "path": "error.log",
+      "bytes": 5584,
+      "sha256": "c16bfc948ca538bfefc81d82b07871523d494b2bdf8ee752b8d550b20ae2a412"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2811,
+      "sha256": "d4a9c6de72d90b3a041939a1cd940ec9bfeb09e1bdbda5f442d38eccfe2a8af4"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 578,
+      "sha256": "d6efd0cc38477583a34b51e13e99c2920856a7a3de2e94dd2c5adc994063b2f1"
+    },
+    {
+      "path": "PORTABLE_STARTUP_GUIDE.zh-CN.md",
+      "bytes": 14294,
+      "sha256": "2b7217eb49ab2682988093e196e3521f5d4df1c0b2d26204702be77b46910152"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 3662,
+      "sha256": "ca96a7b57baa351f2673c8f22544eb4d64631859b90402d98ae5dfb2a50f3f45"
+    },
+    {
+      "path": "run_project.py",
+      "bytes": 9555,
+      "sha256": "3c7be5508a5bf65b791c6296cd4a7af451093858d474b1fe9a15f40cb0c13723"
+    },
+    {
+      "path": ".context/index.md",
+      "bytes": 5748,
+      "sha256": "9e6c40e41f2203cfcbf10224b7683f265ee3df9a24220eb223132a2c90417cb3"
+    },
+    {
+      "path": ".context/api-registry.md",
+      "bytes": 3028,
+      "sha256": "0ad8e7daebbff1452b431267112cb5dd6f0b900e168d5bbdc393e7c106045558"
+    },
+    {
+      "path": ".cursor/settings.json",
+      "bytes": 113,
+      "sha256": "8971a261ce37a8f786111b8d7fe90775e9b1fa203379447cc0b12ae74cafbb60"
+    },
+    {
+      "path": ".cursor/agent-schedules.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": ".cursor/mcp.json",
+      "bytes": 93,
+      "sha256": "174b8e52beb9649e46cbc1ef9c5e54af07d9f33b97810dac37af9174c34712e4"
+    },
+    {
+      "path": "frontend/canvas-design.html",
+      "bytes": 2264,
+      "sha256": "e28780c26787d4ee06de4e088f91165f2ed9ac611255ada15074015f1e02163b"
+    },
+    {
+      "path": "frontend/index.html",
+      "bytes": 2179,
+      "sha256": "54ca70f1ad9901753b04db84c3266c072affb551ad2a35cb7cf44dda0ee72294"
+    },
+    {
+      "path": "frontend/playwright.config.js",
+      "bytes": 1815,
+      "sha256": "29c0956a30faa59f718f7b4cf4ad4c0bb4efff4a26cfe960b35226ef2620cdf9"
+    },
+    {
+      "path": "frontend/vite.config.js",
+      "bytes": 587,
+      "sha256": "7627ac2d793178c38d8adabb022080c3c5295d2fd53ce166fd0a48fd9c63b3f7"
+    },
+    {
+      "path": "frontend/package-lock.json",
+      "bytes": 290974,
+      "sha256": "63581f4ac8c786d7d480146b0e0fae79ceb4a42e906c23addd6363d8ab5edf06"
+    },
+    {
+      "path": "frontend/package.json",
+      "bytes": 1265,
+      "sha256": "d7cdad5e7d2287e894c03fc102710b7f55454a9ab4cd8de729311a2336284805"
+    },
+    {
+      "path": "frontend/AGENTS.md",
+      "bytes": 2619,
+      "sha256": "ac016d941137ba56d8d4b6b294b07d7ddcf0a166d27b53074c660f7383848d99"
+    },
+    {
+      "path": "frontend/canvas-selection-bridge.js",
+      "bytes": 52829,
+      "sha256": "516d83042d086aa99bf6961deccc38bf47b7035b85ab168381658be65b0de9f8"
+    },
+    {
+      "path": "resources/README.md",
+      "bytes": 218,
+      "sha256": "c70ee03f8cbdea8db3e7959e0b685081c65e0b31dde7c4debb05f1d81faaabbc"
+    },
+    {
+      "path": "backend/run.py",
+      "bytes": 4764,
+      "sha256": "50ecaef535463f4a0dc9fec72ecf0d6841855b07c5c55621411daa9ae1b7f1aa"
+    },
+    {
+      "path": "backend/requirements.txt",
+      "bytes": 457,
+      "sha256": "71a455e006e2579f77ec308c61c0282b51adbb71012966d57675e420df1991ce"
+    },
+    {
+      "path": "docs/data-provenance-and-storage.md",
+      "bytes": 4504,
+      "sha256": "9c1dfa2bbf81aadc1d5b5d40107e991d0e2197098ce3b19389cff887290be875"
+    },
+    {
+      "path": "fixtures/README.md",
+      "bytes": 230,
+      "sha256": "32370230b28bd336e282ea381e68adfb641a97b12857f9f61e1d9fea7dffa15b"
+    },
+    {
+      "path": ".circleci/config.yml",
+      "bytes": 6841,
+      "sha256": "b84d0c3c07b0add8f494d91c77d3b0c386b995f4e614c37832a536c70bfae223"
+    },
+    {
+      "path": "fixtures/gs/manifest.json",
+      "bytes": 24686,
+      "sha256": "862251806ce68a33cfd170dc20d5b40edb58703c8b8a5a537f9090d18aa37737"
+    },
+    {
+      "path": "fixtures/gs/sources/PROJECT_DOCUMENTATION_2.html",
+      "bytes": 2909525,
+      "sha256": "a4ae8861adef46396604d778a829deb168868a2b75fc0abd434fc5e56d6bb28c"
+    },
+    {
+      "path": "fixtures/gs/models/transformer_mlp/comparison_summary.json",
+      "bytes": 5076,
+      "sha256": "f5733661ba37c44b7588fe58f9592508d83081a354e11267718239a4b953df35"
+    },
+    {
+      "path": "fixtures/gs/models/transformer_mlp/metrics.csv",
+      "bytes": 799471,
+      "sha256": "45b705156e1f6eb175a157127a6cb4529556d1c62d547a36aade64ccaed3c0b7"
+    },
+    {
+      "path": "fixtures/gs/models/mlp_mlp/comparison_summary.json",
+      "bytes": 5006,
+      "sha256": "a0a3308a7d884981fb2adeb813e71ce1158e091aecf8c0dd11a8e6899b778d69"
+    },
+    {
+      "path": "fixtures/gs/models/mlp_mlp/metrics.csv",
+      "bytes": 795548,
+      "sha256": "5e2707d01224be750174c6504f6f12567a251e6e83f23ec2070777a499e120e1"
+    },
+    {
+      "path": "fixtures/gs/models/transformer_kan/comparison_summary.json",
+      "bytes": 5075,
+      "sha256": "cafe1b2fbeb7bdbb39c383e14b9bdfe27874a49150b283d6fd54bdd312e73598"
+    },
+    {
+      "path": "fixtures/gs/models/transformer_kan/metrics.csv",
+      "bytes": 800420,
+      "sha256": "bbdeb40d2031b384310034e72463014010ad5370185cbd112366f11cd334df48"
+    },
+    {
+      "path": "fixtures/gs/models/fno_mlp/comparison_summary.json",
+      "bytes": 5006,
+      "sha256": "59739ceb93be33bfc6c7de198083a17ff5b6417483e2208772aa4346f8dbcc63"
+    },
+    {
+      "path": "fixtures/gs/models/fno_mlp/metrics.csv",
+      "bytes": 796636,
+      "sha256": "c82fc7fbfdb355455478cb7102e9d2f952ffd15d309955f6a92f52aa8f41c48b"
+    },
+    {
+      "path": "fixtures/gs/models/cnn_kan/comparison_summary.json",
+      "bytes": 5013,
+      "sha256": "68500965a4402933f1a500809287b534d0286250ff9ea2da734c9783d6705429"
+    },
+    {
+      "path": "fixtures/gs/models/cnn_kan/metrics.csv",
+      "bytes": 796894,
+      "sha256": "0a9cde5ab6aba27a979fdce2f3e4f8c9d1328ebbe2436c8f4f7411202c247b98"
+    },
+    {
+      "path": "fixtures/gs/models/kan_kan/comparison_summary.json",
+      "bytes": 5007,
+      "sha256": "dd5cce9874e8c40b8895a5fa33ef436ba47ecd3adfb7caf3ea1f2649867cb705"
+    },
+    {
+      "path": "fixtures/gs/models/kan_kan/metrics.csv",
+      "bytes": 796498,
+      "sha256": "1b4f471dac926f50a811e0d5d85cd6a5567a9576ad8a57b7c8165f774de94e92"
+    },
+    {
+      "path": "fixtures/gs/models/cnn_mlp/comparison_summary.json",
+      "bytes": 5016,
+      "sha256": "53a8972f5d58ea255c218c3e2dd4f0b45af2a28ba5c72d2fdbc261ae0aacc388"
+    },
+    {
+      "path": "fixtures/gs/models/cnn_mlp/metrics.csv",
+      "bytes": 796826,
+      "sha256": "235a604beb9ee2f811f7d6806023067dfe1c779ff66aeac1cec110e300322902"
+    },
+    {
+      "path": "fixtures/gs/models/fno_kan/comparison_summary.json",
+      "bytes": 5013,
+      "sha256": "21286337e905f7d8dba48f2527fe62a0bf3f5bbbfa8720b78fc964a942836c91"
+    },
+    {
+      "path": "fixtures/gs/models/fno_kan/metrics.csv",
+      "bytes": 796690,
+      "sha256": "04fd082122d9e33681bdbea395c78569803bce198269fdaa1147abf3f981d8ac"
+    },
+    {
+      "path": "fixtures/gs/cases/low_elongation/traditional_inference.npz",
+      "bytes": 1021219,
+      "sha256": "c5b186223a6a2fda7b6d0b1985245e296125800421875611888261656d15cbad"
+    },
+    {
+      "path": "fixtures/gs/cases/low_elongation/pino_metrics.json",
+      "bytes": 636,
+      "sha256": "b248bdfa9c62b86bba2eaf127a77965470d1645a61270d10efd2a1f0dc55e0d8"
+    },
+    {
+      "path": "fixtures/gs/cases/low_elongation/comparison_metrics.json",
+      "bytes": 574,
+      "sha256": "b70b96ccd3761dd5118c3562c095ee8390af712ee2b63f80169a733be0300948"
+    },
+    {
+      "path": "fixtures/gs/cases/low_elongation/pino_vs_traditional_comparison.png",
+      "bytes": 438456,
+      "sha256": "505ba2274c8fe8e3bbb36b6a8fead5b35afc6558079186dc07cb652d2f79baa1"
+    },
+    {
+      "path": "fixtures/gs/cases/low_elongation/pino_inference.npz",
+      "bytes": 875144,
+      "sha256": "40f619faabe1ae43dce50776d896d85db4c9b5781f1e2238beadb02d6724e6f7"
+    },
+    {
+      "path": "fixtures/gs/cases/small_plasma/traditional_inference.npz",
+      "bytes": 1021219,
+      "sha256": "4f67f14dd2a82c7dae965ccc03f6d9e9c767d9f6212b2eb6b40adb8486461763"
+    },
+    {
+      "path": "fixtures/gs/cases/small_plasma/pino_metrics.json",
+      "bytes": 630,
+      "sha256": "0a0c3e12d56e2febeaf1c6891a7ba8382e27df630cb200350b5af84550a5e839"
+    },
+    {
+      "path": "fixtures/gs/cases/small_plasma/comparison_metrics.json",
+      "bytes": 590,
+      "sha256": "f3ec1cb52e4ae588ea8ffc50a81e02c06c4343392e4cee78aba3a420cf5a08f9"
+    },
+    {
+      "path": "fixtures/gs/cases/small_plasma/pino_vs_traditional_comparison.png",
+      "bytes": 416937,
+      "sha256": "6a5b2cd0ef7d3ff051492aa636366e09cae67fb3aa22196b38165786d08a0da2"
+    },
+    {
+      "path": "fixtures/gs/cases/small_plasma/pino_inference.npz",
+      "bytes": 875144,
+      "sha256": "741208c32e36551d06e1a48c9ff56718abe85b19607387bef6f08151559be4c3"
+    },
+    {
+      "path": "fixtures/gs/cases/large_plasma/traditional_inference.npz",
+      "bytes": 1021219,
+      "sha256": "cf5c3b399239752bff14e817069ab6de089997518d9fc4746df310c6481aaa42"
+    },
+    {
+      "path": "fixtures/gs/cases/large_plasma/pino_metrics.json",
+      "bytes": 630,
+      "sha256": "9be71a75a3b29f9091866cc1ac13dc3af2e697162978c3258d2e9f63e6bbf31d"
+    },
+    {
+      "path": "fixtures/gs/cases/large_plasma/comparison_metrics.json",
+      "bytes": 591,
+      "sha256": "ccff28a8a7cd5e521e569749c24df89fa4c3e4eed23087d0e2126ec2acc51a74"
+    },
+    {
+      "path": "fixtures/gs/cases/large_plasma/pino_vs_traditional_comparison.png",
+      "bytes": 343302,
+      "sha256": "c3a295deec34494ce2795f431f38177ec0aaa52892451f27bbe83e81fe373d46"
+    },
+    {
+      "path": "fixtures/gs/cases/large_plasma/pino_inference.npz",
+      "bytes": 875144,
+      "sha256": "2f838f578da2a458385b9d329d2ea2f876ffb72027840002eb9e8cead2111dd3"
+    },
+    {
+      "path": "fixtures/gs/cases/medium_elongation/traditional_inference.npz",
+      "bytes": 1021219,
+      "sha256": "b8b4738366808d79c8694fe16f35100b39275534f24bcd549386ecebfca3d400"
+    },
+    {
+      "path": "fixtures/gs/cases/medium_elongation/pino_metrics.json",
+      "bytes": 634,
+      "sha256": "1a2ee4698e62e62d0e279dcfb18131879049241fe13c89e58d9e93f6e5c3b97f"
+    },
+    {
+      "path": "fixtures/gs/cases/medium_elongation/comparison_metrics.json",
+      "bytes": 582,
+      "sha256": "7a524f84cdbf5694ba4b4abfb0c127fb480b1b4cf65fb4dfb4c5cdfec57fe089"
+    },
+    {
+      "path": "fixtures/gs/cases/medium_elongation/pino_vs_traditional_comparison.png",
+      "bytes": 368724,
+      "sha256": "d6c7a10935365258ff95195b29596c46325d319298831f5ce7104b5ef565b923"
+    },
+    {
+      "path": "fixtures/gs/cases/medium_elongation/pino_inference.npz",
+      "bytes": 875144,
+      "sha256": "5085dff277a1e1e1e4c3d374f810c0bc94b28589f7449b0b53ac54d0fe949ddc"
+    },
+    {
+      "path": "fixtures/gs/cases/extreme_elongation/traditional_inference.npz",
+      "bytes": 1021219,
+      "sha256": "8452bbba239f15181fadbd51d415b2217794e7963453cd4320bea732d81b313f"
+    },
+    {
+      "path": "fixtures/gs/cases/extreme_elongation/pino_metrics.json",
+      "bytes": 633,
+      "sha256": "80e391688f638b8ae27996726d5825b46c233e7713bc4ecf0a1ee6ca49d3319b"
+    },
+    {
+      "path": "fixtures/gs/cases/extreme_elongation/comparison_metrics.json",
+      "bytes": 579,
+      "sha256": "9f5a8655fd6d72e5d62fbedbf9d27b8a876169b9bf74e021c280ff8f8c44251a"
+    },
+    {
+      "path": "fixtures/gs/cases/extreme_elongation/pino_vs_traditional_comparison.png",
+      "bytes": 299391,
+      "sha256": "e51bf880ca186903c370ba60a47a1ba4ef96a6fbd3bdc0785bfe76fd243ef8b5"
+    },
+    {
+      "path": "fixtures/gs/cases/extreme_elongation/pino_inference.npz",
+      "bytes": 875144,
+      "sha256": "ea1d00c775e622be72d0db015c8a6625e851ed101f25deb43bc8695af6d01f22"
+    },
+    {
+      "path": "fixtures/gs/cases/circular/traditional_inference.npz",
+      "bytes": 1021219,
+      "sha256": "e4473efc0c8b27a1ebd7f672608749ab49eee8b1821e84c356434d1dd6054d75"
+    },
+    {
+      "path": "fixtures/gs/cases/circular/pino_metrics.json",
+      "bytes": 626,
+      "sha256": "f88520435509ae19ffea0f6123fe5ad712f1a5c6db5c51c023c4fe26965cb581"
+    },
+    {
+      "path": "fixtures/gs/cases/circular/comparison_metrics.json",
+      "bytes": 588,
+      "sha256": "e576b8799954ab512a329d397e5bddc6817b038ecf2ed02a8fa8ed9efd31463c"
+    },
+    {
+      "path": "fixtures/gs/cases/circular/pino_vs_traditional_comparison.png",
+      "bytes": 536131,
+      "sha256": "0f0eebd034793f955547863939e738bfa411d102dd6e1480f3e69e0f2fd3caba"
+    },
+    {
+      "path": "fixtures/gs/cases/circular/pino_inference.npz",
+      "bytes": 875144,
+      "sha256": "f11d428ba0987dadc6e3e65d319469adfa8e7a82703ec75d7c40dbe9b80edc93"
+    },
+    {
+      "path": "fixtures/gs/cases/negative_triangularity/traditional_inference.npz",
+      "bytes": 1021219,
+      "sha256": "c1349a7e694a279f7bcbf08cd0ab50263c08b852223683632172362a4934fab0"
+    },
+    {
+      "path": "fixtures/gs/cases/negative_triangularity/pino_metrics.json",
+      "bytes": 637,
+      "sha256": "8233251aea99d371a7a7f83878a12b53a3bfee406d959ffdf464989a6c8f386c"
+    },
+    {
+      "path": "fixtures/gs/cases/negative_triangularity/comparison_metrics.json",
+      "bytes": 612,
+      "sha256": "c9f0cce88ee03c5c88a2c8a3bf9a8765cf498493a5aa8abd32b3e0285b195234"
+    },
+    {
+      "path": "fixtures/gs/cases/negative_triangularity/pino_vs_traditional_comparison.png",
+      "bytes": 369771,
+      "sha256": "06a6c56f5a4cdb45173bc96aa31e8ae7e41bb2b9d20a2a66c79d14bcfa32dfee"
+    },
+    {
+      "path": "fixtures/gs/cases/negative_triangularity/pino_inference.npz",
+      "bytes": 875144,
+      "sha256": "6a8b79f97fe71fd57e77b0e6ee6dca9885b62be4cef1e5c8d49a8093fb5c27b3"
+    },
+    {
+      "path": "fixtures/gs/cases/high_elongation/traditional_inference.npz",
+      "bytes": 1021219,
+      "sha256": "363aada8fcfa44161186fe11025da6768824f01ede768d27476e2374530fc97d"
+    },
+    {
+      "path": "fixtures/gs/cases/high_elongation/pino_metrics.json",
+      "bytes": 635,
+      "sha256": "a9dc87141e144837bd42d1497aaadebdec99239e0c62a76af28381e8d111ce31"
+    },
+    {
+      "path": "fixtures/gs/cases/high_elongation/comparison_metrics.json",
+      "bytes": 578,
+      "sha256": "1e9fe7dececf1da06b4f6696049e3c9afbf1a7a6640b96757927a5c010dde938"
+    },
+    {
+      "path": "fixtures/gs/cases/high_elongation/pino_vs_traditional_comparison.png",
+      "bytes": 315389,
+      "sha256": "a821d7c3f39e1b42f07a4488d3c0fa52063372f91e16a34fd42ade8f5d0fd20c"
+    },
+    {
+      "path": "fixtures/gs/cases/high_elongation/pino_inference.npz",
+      "bytes": 875144,
+      "sha256": "53bd5845780a02218916915b983ef4d4a969b01202ac7b26a04e38aaf1d07956"
+    },
+    {
+      "path": "docs/testing/EXCEL_FEATURE_TEST_MATRIX.md",
+      "bytes": 14545,
+      "sha256": "6879cdd09b117e213f57fd02f8a2a073ce3a5b16d3ac076ed5702111f5fa3bb6"
+    },
+    {
+      "path": "docs/testing/BASELINE.md",
+      "bytes": 2071,
+      "sha256": "8d331ec7252c3ed993e6a66b3a52185a60cbcc3c4f8e50e30d2c4ba77f466259"
+    },
+    {
+      "path": "docs/architecture/README.md",
+      "bytes": 1033,
+      "sha256": "39961d6024fb160c0abff2ac633cbcce5c3c252138a740612c1c813d18ecd67e"
+    },
+    {
+      "path": "docs/PRD/visConvertor.md",
+      "bytes": 353,
+      "sha256": "4e6593d5bc51ecde37e0298f32ec1aa1197be9fa7d8a0e44ed617eee9db09838"
+    },
+    {
+      "path": "docs/PRD/visEngine.md",
+      "bytes": 335,
+      "sha256": "7eba542306ffd6f8d38063b29b7f0870b1ac7caebe051398b7255006adfc3922"
+    },
+    {
+      "path": "docs/PRD/MCP.md",
+      "bytes": 313,
+      "sha256": "b5871fbbe30688f6ca6d3b1dc9f5695d59a8d2b2647410869eeba1c3cf1d5bc9"
+    },
+    {
+      "path": "docs/PRD/CHANGELOG.md",
+      "bytes": 2922,
+      "sha256": "94470a408f0d00ca362563f6c8abe2e2ce5792c4abd0dc3a0d79a5885e7ecd34"
+    },
+    {
+      "path": "docs/PRD/visGeometry.md",
+      "bytes": 344,
+      "sha256": "1f24bc21fdc9b76a9bcdee044829b04d656ab378fb4ac94dbc9d7a9a217c3ec9"
+    },
+    {
+      "path": "docs/PRD/visPhysField.md",
+      "bytes": 447,
+      "sha256": "7489f36dc56fa4724fcd95d6bc207da9e3085731f2980aa2b7f66d9fe63be2e0"
+    },
+    {
+      "path": "docs/PRD/dataAssets.md",
+      "bytes": 827,
+      "sha256": "b4fa4d9d02710a86e445ae95216c4f5a89edb7531d8663d04604f4bdd67a0fda"
+    },
+    {
+      "path": "docs/PRD/visIO.md",
+      "bytes": 316,
+      "sha256": "e74ad570df2c01f8ccf1ed82b38d2c3891eeac97aab8f016ff3c73c9a3e09374"
+    },
+    {
+      "path": "docs/PRD/visDatasets.md",
+      "bytes": 554,
+      "sha256": "1d3cf622dca06e8dffeef982b1aba4ea202432aea8d7df2fcfc6d0ebd782a36b"
+    },
+    {
+      "path": "docs/PRD/README.md",
+      "bytes": 1374,
+      "sha256": "a20ee46ef88b4bdb338496c39dbd521a80e2eed163916683b646e6eb74c95d7b"
+    },
+    {
+      "path": "docs/PRD/reportDesigner.md",
+      "bytes": 477,
+      "sha256": "a2b2c03e0fad94154c66a74bf5a411f8b62ba2bd818933b9038a402e2cb9c277"
+    },
+    {
+      "path": "docs/PRD/visTaskManage.md",
+      "bytes": 408,
+      "sha256": "7e29fcbd3696aaff422977c90ed50348602e46042d23311865f34985acd30a31"
+    },
+    {
+      "path": "docs/PRD/reportManage.md",
+      "bytes": 607,
+      "sha256": "bc7f428c32153ea3fe84e4b8ad50eaed667d501bc93ac4c55d9d91b29e148cf9"
+    },
+    {
+      "path": "docs/PRD/visFigure.md",
+      "bytes": 304,
+      "sha256": "77c9111981fa7524f9e77cf83caa988d219191adf4e90f08837924079d415671"
+    },
+    {
+      "path": "docs/PRD/automation.md",
+      "bytes": 297,
+      "sha256": "a65f81c7d87a354202193a8d22bc89a7a58e0c6b56f108387f07170b32227698"
+    },
+    {
+      "path": "docs/api/README.md",
+      "bytes": 380,
+      "sha256": "be90b752aeb395d7f0311c7dced98ea89d82e46f3969d5437a741116f6cb76dd"
+    },
+    {
+      "path": "docs/migration/MODULAR_REFACTOR_PLAN.md",
+      "bytes": 9056,
+      "sha256": "1a571afcc636b1288234a703378f7ba97cb0f8d134095a18116d5ff1c6a461fc"
+    },
+    {
+      "path": "docs/migration/README.md",
+      "bytes": 689,
+      "sha256": "636305e2223c81932071707516ce0a6cc8160a05c67e57e84b487b8babbda0db"
+    },
+    {
+      "path": "backend/tests/test_portability.py",
+      "bytes": 3094,
+      "sha256": "6af787a47a237d65d847aa0b475d01b13e72f51bfed06adfbeab8ac6ac2d3649"
+    },
+    {
+      "path": "backend/tests/conftest.py",
+      "bytes": 707,
+      "sha256": "7c7b050b081c0b5d1d2fe84a4cf247271e1f3b769044f5bc7d042f83d8cdc7d4"
+    },
+    {
+      "path": "backend/tests/test_quarto_project.py",
+      "bytes": 7585,
+      "sha256": "26a5667f34f17340c295b5fc162807644e91f59f7e9983606f91bef2df312dd3"
+    },
+    {
+      "path": "backend/tests/test_install_quarto.py",
+      "bytes": 1726,
+      "sha256": "be30708a8de91cd79ebc551502de42ad5c20aa523c42dbee172a8c690e7db5d8"
+    },
+    {
+      "path": "backend/tests/test_architecture.py",
+      "bytes": 9421,
+      "sha256": "6a3fa078ef268c243c50712ec3fe42d4aadcfceb6fe0af73aa1edbfdf048977c"
+    },
+    {
+      "path": "backend/tests/test_miller_animation.py",
+      "bytes": 1021,
+      "sha256": "bcb23bc5aed5ec29db5a4109f4c68a9df576d09e65ce9692e3063df64a3a9163"
+    },
+    {
+      "path": "backend/tests/test_contract.py",
+      "bytes": 26734,
+      "sha256": "ecab8daeac15519a527855e09ce1f1b967f97d159c11bc9d3bcdb2f79dfa27f1"
+    },
+    {
+      "path": "backend/tests/test_excel_implemented_features.py",
+      "bytes": 6201,
+      "sha256": "9a20a0aee6b16f17da352d0fe3746ec8e5b46928651c2b2292fd59fd906b45b7"
+    },
+    {
+      "path": "backend/tests/test_quarto_export.py",
+      "bytes": 891,
+      "sha256": "64c7623715592adb0c04f5fc81dbd9deb85f9cd38b8b1be840c4b0c0b70d01b3"
+    },
+    {
+      "path": "backend/server/__init__.py",
+      "bytes": 67,
+      "sha256": "01c99dd805da7cd78c70ad6c1009f840b5123e81f6b3d9d833061c07b0ed9339"
+    },
+    {
+      "path": "backend/server/api.py",
+      "bytes": 3163,
+      "sha256": "4100029035cc4a9e942d9e25b9ec4b6095c91cf725442dd6c8c6a816aa590895"
+    },
+    {
+      "path": "backend/server/moduleRegistry.py",
+      "bytes": 1017,
+      "sha256": "7b3e38fd12ddd19118901011261a36f48cbb8eee92c7c249531f1e8b10f0203a"
+    },
+    {
+      "path": "backend/server/trame.py",
+      "bytes": 317,
+      "sha256": "b3aacfad65fc002c6024da3efc81920b8b92a46de102159c6476921ae7a2f5c6"
+    },
+    {
+      "path": "backend/state/ai4e_vis.sqlite3",
+      "bytes": 102400,
+      "sha256": "927f49bd4fc97522c110313e8fce4381f2b6e4509aeb0f635f0b46c17e34057f"
+    },
+    {
+      "path": "backend/scripts/migrate_runtime_database.py",
+      "bytes": 2879,
+      "sha256": "3f39c139dbe9ccfe70adbb94e6654be5838f2d488eb636ca20fefa19cf8b40a8"
+    },
+    {
+      "path": "backend/scripts/create_portable_bundle.py",
+      "bytes": 4692,
+      "sha256": "d1f77c24317b5b762e2dce9ab2ae043021137c1f8dab025c639b6874c16d0a5c"
+    },
+    {
+      "path": "backend/scripts/quarto_smoke.py",
+      "bytes": 9398,
+      "sha256": "494deae1462f06368141d5179dd4705ab7fba0805d5b9fea3450f5d5a85fd7a9"
+    },
+    {
+      "path": "backend/scripts/maintenance.py",
+      "bytes": 4823,
+      "sha256": "915c2deaa3e707962b0a522a45026c40872f201db99eaa60bcd9d07c69f5209c"
+    },
+    {
+      "path": "backend/scripts/import_grad_shafranov_fixture.py",
+      "bytes": 7492,
+      "sha256": "480175e3bfb0672ddf5938a25dd9b2f9b2e8b0f0133f2ac6642f66ce9efd0247"
+    },
+    {
+      "path": "backend/scripts/generate_example_data.py",
+      "bytes": 25888,
+      "sha256": "7ae603e5af7fb246903feecedbd72c4fd9bf693c45b71a32bdd07da09cee0243"
+    },
+    {
+      "path": "backend/scripts/run_isolated_api.py",
+      "bytes": 1073,
+      "sha256": "296133537560274b9a37edc52a75f9a67bf6a066ed9a99e94ed7303d45a7b558"
+    },
+    {
+      "path": "backend/scripts/prune_runtime_storage.py",
+      "bytes": 7382,
+      "sha256": "d34aa0f7337af99c0bdec8a86e511329c8e1c65d304c6f4dae05a54df4234140"
+    },
+    {
+      "path": "backend/scripts/install_quarto.py",
+      "bytes": 9335,
+      "sha256": "0736ef02be5f7ba66f19f240c70e46b7107d2742fead08664b00765b19a5d8c3"
+    },
+    {
+      "path": "backend/infrastructure/config.py",
+      "bytes": 2682,
+      "sha256": "3998a3c46019ee7a294010988dfb947b964ec659c3c2de64d3caaa89826b5f60"
+    },
+    {
+      "path": "backend/infrastructure/__init__.py",
+      "bytes": 91,
+      "sha256": "960edf94433aebabc18001dbf591d92aa7dcc882f797e4c2d15763d1c3b7390f"
+    },
+    {
+      "path": "backend/infrastructure/errors.py",
+      "bytes": 214,
+      "sha256": "ceb310c30e178a0c590fef3d81910426d6582898fc7ce45a4af79b45a65b1a8d"
+    },
+    {
+      "path": "backend/modules/__init__.py",
+      "bytes": 461,
+      "sha256": "e00181168c095116cd91ba3367d51ea9ba1c75c7c478a9fc38872337c32d81b7"
+    },
+    {
+      "path": "backend/modules/visConvertor/domain.py",
+      "bytes": 278,
+      "sha256": "b5cd2e5c728fddb7a1c13dae5547ab3335110ef9dc895030d4e76a43d22be8b9"
+    },
+    {
+      "path": "backend/modules/visConvertor/converter.py",
+      "bytes": 3313,
+      "sha256": "c283f16ea14fafeaf5a3c0c58e26afa452115850f337ae6cee92d42d3cb6f794"
+    },
+    {
+      "path": "backend/modules/visConvertor/__init__.py",
+      "bytes": 126,
+      "sha256": "dfea70fb10cadad2ae9c38b751b2614316ef096393d6926fe6cd1f53e6da13ea"
+    },
+    {
+      "path": "backend/modules/visConvertor/application.py",
+      "bytes": 499,
+      "sha256": "e29c3e3e1b73f586b92b06003e398f3ce892ead587ccd3a323dcc113da4b2880"
+    },
+    {
+      "path": "backend/modules/visConvertor/api.py",
+      "bytes": 145,
+      "sha256": "f2f9bb4bb8e9394a89f6b352b2b9e81070ff315d7e93d10f275944a72183df63"
+    },
+    {
+      "path": "backend/modules/visPhysField/domain.py",
+      "bytes": 634,
+      "sha256": "c4f6ea8390b025ec446ff28cf5316b095b1a258ebd5b6557a2e79f3697ce8624"
+    },
+    {
+      "path": "backend/modules/visPhysField/__init__.py",
+      "bytes": 234,
+      "sha256": "518a35ebe7d03913c544c516ee6f6b3c6c88951a8a0fcf5026e29e6ef466b5d3"
+    },
+    {
+      "path": "backend/modules/visPhysField/trameServer.py",
+      "bytes": 35008,
+      "sha256": "75fcaa0a83b2a13f2512478c476f6d64d4fde0adae2f584e68188006b689fdd4"
+    },
+    {
+      "path": "backend/modules/visPhysField/application.py",
+      "bytes": 709,
+      "sha256": "125b81265d57a1f7e75ba2958e5228f31136db5c9ba1dc55f71997efc0ac69fb"
+    },
+    {
+      "path": "backend/modules/visPhysField/api.py",
+      "bytes": 230,
+      "sha256": "ce42d3fef3f0ff18f61554a8e3b4ca9d387c038f81b88244b64124f68115745d"
+    },
+    {
+      "path": "backend/modules/visPhysField/AGENTS.md",
+      "bytes": 1033,
+      "sha256": "58f0e7b130605a022c53e0c00e84bf3478f5248391fbe863da93430b0561a565"
+    },
+    {
+      "path": "backend/modules/visPhysField/repository.py",
+      "bytes": 493,
+      "sha256": "9c6658703cbb140b078a37a3522baa8151ee1631d57503332182b177bad09146"
+    },
+    {
+      "path": "backend/modules/visPhysField/trame.py",
+      "bytes": 1114,
+      "sha256": "1e5f27c0aba06ef489c7555ed33384558e9529860be71c04d2332131c33a0f42"
+    },
+    {
+      "path": "backend/modules/visTaskManage/catalog.py",
+      "bytes": 13689,
+      "sha256": "a014f054aed208c91da77fc09a995729562c83c61e2ea4f789dde5d55f56ddbf"
+    },
+    {
+      "path": "backend/modules/visTaskManage/domain.py",
+      "bytes": 361,
+      "sha256": "dd4936a1d288fae566d18f82cf05305f168f71eedb567f638383d2df0e2a1133"
+    },
+    {
+      "path": "backend/modules/visTaskManage/__init__.py",
+      "bytes": 402,
+      "sha256": "60b76b7b2159850079a8d7870cb21fd54da6344113b70ca04d8e9cf613bdd20f"
+    },
+    {
+      "path": "backend/modules/visTaskManage/specRepository.py",
+      "bytes": 8099,
+      "sha256": "88d4961830ef40abbe08e830e7a501f7b67cc816740234664da3e915ad84d6b5"
+    },
+    {
+      "path": "backend/modules/visTaskManage/application.py",
+      "bytes": 2094,
+      "sha256": "2840f86adcfcc91d1d96bccebedd523df42a29d380b40f1c0c08a1550d484381"
+    },
+    {
+      "path": "backend/modules/visTaskManage/api.py",
+      "bytes": 7448,
+      "sha256": "69f0dd54702af53b48d1e95c9fec1ab47b9305f703d7d02de77fb707de4c3d25"
+    },
+    {
+      "path": "backend/modules/visTaskManage/parameterRegistry.py",
+      "bytes": 21939,
+      "sha256": "519195a9a600f734ecca2cca7fbc2d139680d102d431aada607fbba85c7207f4"
+    },
+    {
+      "path": "backend/modules/visTaskManage/examples.py",
+      "bytes": 25986,
+      "sha256": "9d28d399db5fe4d2a6314a07c75fa53190df9f1d13d0c41ce41d343d9492f872"
+    },
+    {
+      "path": "backend/modules/visTaskManage/repository.py",
+      "bytes": 386,
+      "sha256": "3c428a5f8dbb83461deb2c514f55cfbd0beb7705f1cc9260d76b08738ee39121"
+    },
+    {
+      "path": "backend/modules/visFigure/domain.py",
+      "bytes": 408,
+      "sha256": "47120355e02688f024907f94ebd6a54467f114842944b20dde09eaf5b799fe63"
+    },
+    {
+      "path": "backend/modules/visFigure/__init__.py",
+      "bytes": 119,
+      "sha256": "7b282d468bf4e9784be9daa134511e36f53a1db6b948b56dc547303878e95120"
+    },
+    {
+      "path": "backend/modules/visFigure/application.py",
+      "bytes": 541,
+      "sha256": "cf8a43b3413e2c5ae11ef63cf4e05ef723f7380dd6c46f690ecf1d944ba09eb1"
+    },
+    {
+      "path": "backend/modules/visFigure/api.py",
+      "bytes": 1463,
+      "sha256": "3bf142986b972734836bca7667400dc8a873010ad29ee28904bc3be8858de26a"
+    },
+    {
+      "path": "backend/modules/MCP/domain.py",
+      "bytes": 256,
+      "sha256": "439c068b551b40a14f89551d1c6876d22486ce467c150ca1cc8439580fe3cfe2"
+    },
+    {
+      "path": "backend/modules/MCP/__init__.py",
+      "bytes": 110,
+      "sha256": "a8494cd124b51d86cb52f58bc19bc22d316c296ae0094cda12f58ae8d5b979f3"
+    },
+    {
+      "path": "backend/modules/MCP/application.py",
+      "bytes": 465,
+      "sha256": "9f9d2c3e631bc04fa9cea217d6e14ddfcd94e9566ece42edd7c8749388ab7966"
+    },
+    {
+      "path": "backend/modules/MCP/api.py",
+      "bytes": 205,
+      "sha256": "520b563e84ebb14a8c25f5a5992420b1997eb7cb3b7926bfd2f9a5b2308f7ff3"
+    },
+    {
+      "path": "backend/modules/visDatasets/domain.py",
+      "bytes": 470,
+      "sha256": "80606234e2749119c016f0bf10b2f6dcb50f150a1a031b14925f2b7941d355cc"
+    },
+    {
+      "path": "backend/modules/visDatasets/__init__.py",
+      "bytes": 518,
+      "sha256": "93bb39f03536b5a8eb26eeb0cdb2c83df8cd9dd4babeacb55cbbaabea4874620"
+    },
+    {
+      "path": "backend/modules/visDatasets/inspection.py",
+      "bytes": 909,
+      "sha256": "045ae3c9a4a4dae91141b485dd40c4556f52330916d257564c13d4c09b149eaa"
+    },
+    {
+      "path": "backend/modules/visDatasets/application.py",
+      "bytes": 136,
+      "sha256": "b652c9d1eaba5a81363049484fb931432afc1c4131b43ae0dab3817d31de288a"
+    },
+    {
+      "path": "backend/modules/visDatasets/api.py",
+      "bytes": 1855,
+      "sha256": "261ca610db45800c2fae9a7e970cf09f524ac1014bd7de72cbb91e187aa7c458"
+    },
+    {
+      "path": "backend/modules/visDatasets/pipeline.py",
+      "bytes": 69124,
+      "sha256": "b05086b6ae6f44bd5f22e3538908d6dc23ac60cf6a45a684969fe460a35afe83"
+    },
+    {
+      "path": "backend/modules/visIO/domain.py",
+      "bytes": 411,
+      "sha256": "35b298325d2f344a0c0f18caecd0d197b8f65b340e2b8af54089de599abeb229"
+    },
+    {
+      "path": "backend/modules/visIO/__init__.py",
+      "bytes": 348,
+      "sha256": "86389721b824e711050c2a5a6e4b9fe51d6c53070485a6ed9cb49f86e59542c5"
+    },
+    {
+      "path": "backend/modules/visIO/application.py",
+      "bytes": 227,
+      "sha256": "73b5b804b982ec25c6b0296ae93b77966682a47ca7993f214dd67fa23b844f88"
+    },
+    {
+      "path": "backend/modules/visIO/api.py",
+      "bytes": 9571,
+      "sha256": "1501737a0e613e4031fa7852aab8c53436054ceebe6e98ef3b161342f0f289c5"
+    },
+    {
+      "path": "backend/modules/visIO/repository.py",
+      "bytes": 6608,
+      "sha256": "f65987817b48a2f70f5f6e37fc7263657083faf4896f0de981646ff06e6bbe94"
+    },
+    {
+      "path": "backend/modules/dataAssets/__init__.py",
+      "bytes": 689,
+      "sha256": "5213f1596b1fe7204c85ec31937fc121e10d924ed527e946c2a1bd0fff910808"
+    },
+    {
+      "path": "backend/modules/dataAssets/application.py",
+      "bytes": 5184,
+      "sha256": "7874c91697fa9427f59f235cbf3e364fb15507333cde4e9a45f5ab9faad043c7"
+    },
+    {
+      "path": "backend/modules/dataAssets/api.py",
+      "bytes": 4628,
+      "sha256": "8504078f538c20cc5726e3aac455a9965d53f31f0aa21ee3c10a875b49aac758"
+    },
+    {
+      "path": "backend/modules/dataAssets/repository.py",
+      "bytes": 10109,
+      "sha256": "c2da91e4086206bb91d90a551e565f62400a2eb396f7d2ae239ea1cfe7dac3f4"
+    },
+    {
+      "path": "backend/modules/automation/domain.py",
+      "bytes": 229,
+      "sha256": "ebd765f909bd13b3ebb7a39f3c754a9a1f60b54882e64e297eab383b3ec91c27"
+    },
+    {
+      "path": "backend/modules/automation/__init__.py",
+      "bytes": 116,
+      "sha256": "27b3afc8c7ee9c6d6429012ba377f42d1776c0e118ce418c8a38a3f03cf22570"
+    },
+    {
+      "path": "backend/modules/automation/application.py",
+      "bytes": 436,
+      "sha256": "a53d80ac9469eb3377e370c2a7b47247ab143647cb4c4d7c2a1a969fe3f2f4ec"
+    },
+    {
+      "path": "backend/modules/automation/api.py",
+      "bytes": 119,
+      "sha256": "a2ea3bdb994f76d8f10162470a5c2f9dc5f2283154ce2a962bc80783fec3b97f"
+    },
+    {
+      "path": "backend/modules/automation/repository.py",
+      "bytes": 351,
+      "sha256": "3ce4d7dd84343d61b8e8afd93cdc743750a30b9d2efc6cef0b4181caf035b00c"
+    },
+    {
+      "path": "backend/modules/reportManage/quarto.py",
+      "bytes": 40009,
+      "sha256": "cf6ee55ad539b46da9baa3921f9e44b01e9aa92ab3c8b266e7fbd31ff532ec9e"
+    },
+    {
+      "path": "backend/modules/reportManage/__init__.py",
+      "bytes": 428,
+      "sha256": "466eda73b8ae5c44151f6e9136dd8778370655b6b3929457e82227c4a7063c1a"
+    },
+    {
+      "path": "backend/modules/reportManage/millerReport.py",
+      "bytes": 9699,
+      "sha256": "a378e792aba6d4420054674da328b143f2445f76333ead90383ad63032b47810"
+    },
+    {
+      "path": "backend/modules/reportManage/reportRepository.py",
+      "bytes": 16465,
+      "sha256": "8fac3d25bdec882883a2fb074efb572398d2613fa1425a0f71d96bc577917c90"
+    },
+    {
+      "path": "backend/modules/reportManage/application.py",
+      "bytes": 344,
+      "sha256": "6d2ce7ad9e9340a5fc80067a2d6073b7fcb1b8fd9c5f6b203f96a6f8ceb11e50"
+    },
+    {
+      "path": "backend/modules/reportManage/api.py",
+      "bytes": 13800,
+      "sha256": "8543630900ac003432ab6908c308fc78631eb504013a55ff739c870d13ae2c1d"
+    },
+    {
+      "path": "backend/modules/reportManage/builtinReports.py",
+      "bytes": 11122,
+      "sha256": "ba8633af901f92394d93fed25a957210713c140430d064bb6cb7c1f4b1d66890"
+    },
+    {
+      "path": "backend/modules/reportManage/gradShafranovReport.py",
+      "bytes": 7616,
+      "sha256": "4323fc31e8a1f6fadd4cd00bfb2c1af2c88e27f0a7370fb7de7774bcff4786ee"
+    },
+    {
+      "path": "backend/modules/reportManage/repository.py",
+      "bytes": 497,
+      "sha256": "4b13a1a6b1a417499ee73476bc33c193450e530d24ba23f1f1ad930d8424300d"
+    },
+    {
+      "path": "backend/modules/visGeometry/domain.py",
+      "bytes": 948,
+      "sha256": "d1ff9ce5fe61908e75d06df67d5312de559ab178b945a340bdeed6ed1f1889f6"
+    },
+    {
+      "path": "backend/modules/visGeometry/__init__.py",
+      "bytes": 181,
+      "sha256": "078a17bb3fbecb07f058c9aa79ba8e654cee45279302a47732e187e9038cac78"
+    },
+    {
+      "path": "backend/modules/visGeometry/application.py",
+      "bytes": 203,
+      "sha256": "af46054687e83d3dc009052e65e1507c2dbddcff2999f52ce380e2b4628d781c"
+    },
+    {
+      "path": "backend/modules/visGeometry/o3dv.py",
+      "bytes": 371,
+      "sha256": "92606f15ac50af15ed5f83fa1aca6e54abcd6de1cfedf07010cd321c10a63039"
+    },
+    {
+      "path": "backend/modules/visGeometry/api.py",
+      "bytes": 2630,
+      "sha256": "f3314c4e1f4153103342332f4a341640ec32e832b1cadd47cfe9c575f0ececdb"
+    },
+    {
+      "path": "backend/modules/visEngine/physicalField.py",
+      "bytes": 491,
+      "sha256": "4e677858fcbf42426d79f3d3be06dbba00681d10418076b2b1bcf2c4e66e23de"
+    },
+    {
+      "path": "backend/modules/visEngine/cache.py",
+      "bytes": 1218,
+      "sha256": "7e8c9b442fed6f2d5b0eb8718ff90c9de003506b2dcacef75d5ac63cee2804ee"
+    },
+    {
+      "path": "backend/modules/visEngine/__init__.py",
+      "bytes": 297,
+      "sha256": "989cfc277b81fdaae7963fd6caf054c757a5cda1a8cd480edd18025ce57ca68f"
+    },
+    {
+      "path": "backend/modules/visEngine/performance.py",
+      "bytes": 517,
+      "sha256": "a6b8901fab2bc1a4076305a78d5444bde71d12c170de45c17af05203eb7461a5"
+    },
+    {
+      "path": "backend/modules/reportDesigner/domain.py",
+      "bytes": 7406,
+      "sha256": "26f55bc8eb1e7452bb0a688879f64ba8cdd9c8d9299a7cf8425db1ee9c45da13"
+    },
+    {
+      "path": "backend/modules/reportDesigner/__init__.py",
+      "bytes": 352,
+      "sha256": "dc72a3df2a1912436b5f41c428dbf2b6ede2a8ef68fa8b013a3047a76211b806"
+    },
+    {
+      "path": "backend/modules/reportDesigner/application.py",
+      "bytes": 162,
+      "sha256": "ad11614cc60eed4977fa46c2cad5ae728a538511536e666175d3f77f47f77cd8"
+    },
+    {
+      "path": "backend/modules/reportDesigner/api.py",
+      "bytes": 1741,
+      "sha256": "ec928703ebe51782e969ed584fcf347a867c24660d04ae9e97d5e5f8f74b0a8a"
+    },
+    {
+      "path": "backend/modules/reportDesigner/repository.py",
+      "bytes": 4703,
+      "sha256": "2a176d059f4cd6c16193887d0bf20f8802b94fa16dd8f233d5ddca8eb1f9ffa6"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/__init__.py",
+      "bytes": 163,
+      "sha256": "f75ef41ae3730202a3ea2e372e51f22355570d562d9154c3c9d98f4104b468dd"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/dataOverview/multiDimensionalCloud.py",
+      "bytes": 547,
+      "sha256": "db78b16780938b2373f87b5d75f8dba2aa55f72adc0ae39016fd63ce8f928020"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/dataOverview/__init__.py",
+      "bytes": 138,
+      "sha256": "f5c6e454251a75caff1a0fbbedfefce9eaea5b1abc8deda015d6780491d7d254"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/dataOverview/basicCharts.py",
+      "bytes": 538,
+      "sha256": "27f4a3152c69fb4a93c7512080ccac3dfbe02ce89ee2ba3abee1e0e768dc250f"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/dataOverview/table.py",
+      "bytes": 532,
+      "sha256": "125ede81ad511d69269ea5febe89b3f8682afd5f6f80885f9c6ca9c7cfba4160"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/fieldVisualization/cutAnalysis.py",
+      "bytes": 572,
+      "sha256": "ad026b61a2b33dcb1702735e831d8e8fee9f1806d4d5ccdafe183da4b750551b"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/fieldVisualization/multiResult.py",
+      "bytes": 425,
+      "sha256": "4767196515a39276d402b59285ea91967ae66bc34c6ebbf5244a6c3effd15a13"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/fieldVisualization/timeline.py",
+      "bytes": 406,
+      "sha256": "b30663c1b0b5b27ec722fa4215ea52ebd43ec9d4a8c13821e239315940fe9827"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/fieldVisualization/displayStyle.py",
+      "bytes": 674,
+      "sha256": "a62879506a184fc69eb255d0e01c68f8354256a77cf6d4e8b346b2a589035f57"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/fieldVisualization/vectorField.py",
+      "bytes": 644,
+      "sha256": "a2365b652d321d8afc9a9945d4a442297ecfb30c7e1774afdc5d58d801cc4644"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/fieldVisualization/__init__.py",
+      "bytes": 222,
+      "sha256": "f978d7659242a3a28e6fae64f649e5bce3f7327f11fc4c603e4cb0038f35f9e4"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/fieldVisualization/scalarCloud.py",
+      "bytes": 815,
+      "sha256": "d996846d238bf52cdf0253c141935c31026f4006a083f47d4523b78671037f75"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/fieldVisualization/animation.py",
+      "bytes": 624,
+      "sha256": "43d0d8d01c837e8f5a7dfebf61340afbac4ee1ff004fd7fde93e6ef5797c0170"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/fieldVisualization/view.py",
+      "bytes": 578,
+      "sha256": "b90c255f3fcc8c1218d8aa1ad0be050e71f35ab81a626f09a0cc03e6edc2b4f3"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/fieldVisualization/timelineAnimation.py",
+      "bytes": 4801,
+      "sha256": "1bc5ec2625e8fb4634591501048adcb240b0fe3fcc519b16d106ea0cc69023f5"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/fieldVisualization/probe.py",
+      "bytes": 244,
+      "sha256": "978183ba47b263d4011395319f03a19f92d81b593a23e4731cf49c32ea3d2d9c"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/fieldVisualization/colorMapping.py",
+      "bytes": 446,
+      "sha256": "be1dc21c72d14bbf91d28b25322f237eec431511f86c8325fd2942a352f15c9c"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/dataExtraction/aggregate.py",
+      "bytes": 348,
+      "sha256": "e03bd451f8918dc957c336f1ce668c2aabd8427267f8b3732e8aec4e91665ffa"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/dataExtraction/temporal.py",
+      "bytes": 375,
+      "sha256": "34d7ab86d3cecbfb05742f898868391b4f8e792d87356f4c808a701be946a1d6"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/dataExtraction/__init__.py",
+      "bytes": 140,
+      "sha256": "3fc205bf089d7233f9dbd5c073e37e39df1954d3669223759900b5eb3c4e1996"
+    },
+    {
+      "path": "backend/modules/visPhysField/modules/dataExtraction/spatial.py",
+      "bytes": 733,
+      "sha256": "d6a81f882150335966c905c266b7d0131a51cdea8019490c4796df0939f34df9"
+    },
+    {
+      "path": "backend/infrastructure/observability/logging.py",
+      "bytes": 1765,
+      "sha256": "b4a00d9aeca9be545de3b1828becf598ee465e2c753478611a7a4c03fa880aba"
+    },
+    {
+      "path": "backend/infrastructure/observability/metrics.py",
+      "bytes": 515,
+      "sha256": "fe24b4968f6241987a5879b9bc63dac9faf52c8ac3a03782de7c193d83cd50f7"
+    },
+    {
+      "path": "backend/infrastructure/observability/health.py",
+      "bytes": 2084,
+      "sha256": "039ae97bbf2a652ac0557afcd00832be54303e1a93dc5869dd9a8162a59ae3a1"
+    },
+    {
+      "path": "backend/infrastructure/observability/__init__.py",
+      "bytes": 64,
+      "sha256": "31a3342b0769ab1c5ac387e68aab9a7279d7aa6924c23c71d38ea3cae95ad892"
+    },
+    {
+      "path": "backend/infrastructure/observability/telemetry.py",
+      "bytes": 900,
+      "sha256": "70c6c85d35dd3290e2051586a9f37d0ab9ec63db1d292f5e6722b6c0e2d32e17"
+    },
+    {
+      "path": "backend/infrastructure/storage/__init__.py",
+      "bytes": 196,
+      "sha256": "ffc94a3cec3fe9d7ed45f1b87d12056379c7c3e61bce59f7a8592bf80e6ca40e"
+    },
+    {
+      "path": "backend/infrastructure/storage/cleanup.py",
+      "bytes": 486,
+      "sha256": "32e767d64ccbad777b06e53e6a6059503e8f05f01ce5ec9613ca18531781abd6"
+    },
+    {
+      "path": "backend/infrastructure/storage/blobStore.py",
+      "bytes": 1124,
+      "sha256": "d006c14d653c89f722be36251952d4b5823fcb82cb706fb121a0beb01c88f064"
+    },
+    {
+      "path": "backend/infrastructure/storage/pathResolver.py",
+      "bytes": 1386,
+      "sha256": "1c2722f18e4111d4dec5ab0d2108e15d0222e2cb872aeeeac633c593b821be4f"
+    },
+    {
+      "path": "backend/infrastructure/persistence/__init__.py",
+      "bytes": 153,
+      "sha256": "3ea23154065aa1ee914420d500cdbe66cd22b3a4083aa5bf287ed2d205e46f8b"
+    },
+    {
+      "path": "backend/infrastructure/persistence/sqlite.py",
+      "bytes": 1520,
+      "sha256": "f9af3c4155cc124e7ef1a8e6168b167fada0638689f0097e7092e6cfdad45c6a"
+    },
+    {
+      "path": "backend/infrastructure/persistence/migration.py",
+      "bytes": 1313,
+      "sha256": "180b740b874c425d829784703247f28d27cbabe98ae94fef5eb2bc395588f6c9"
+    },
+    {
+      "path": "backend/tests/modules/test_data_assets.py",
+      "bytes": 2621,
+      "sha256": "1e6d879bb6f5e148439c12a1d1db10805c4dccccbc7ef48057a589cc7b5c8443"
+    },
+    {
+      "path": "backend/tests/modules/test_vis_convertor.py",
+      "bytes": 957,
+      "sha256": "5b2364641a811dc3b9b11ffdf44aeaef3fec0df80e21b285b1b930555f25a52a"
+    },
+    {
+      "path": "backend/tests/modules/test_vis_phys_field.py",
+      "bytes": 1339,
+      "sha256": "73e4cf28586e4fd8cb28b11a5e78ba722a7e32969411aa8cf439e1b6df846350"
+    },
+    {
+      "path": "backend/tests/modules/test_vis_geometry.py",
+      "bytes": 972,
+      "sha256": "044453843c89c03eb68655555abda4896c46657a8a28b215a9c8c07c98998715"
+    },
+    {
+      "path": "backend/tests/modules/test_vis_figure.py",
+      "bytes": 836,
+      "sha256": "19a0e98f273429d30e4b3cd24e0ff119607280076dc80021a7bb562d634c5164"
+    },
+    {
+      "path": "backend/tests/modules/test_vis_engine.py",
+      "bytes": 927,
+      "sha256": "1100cc83c08aaeb1976243adeeccb201d0a346e8dcbe38d37bfb820554725961"
+    },
+    {
+      "path": "backend/tests/modules/test_automation.py",
+      "bytes": 667,
+      "sha256": "e44d49984898ee389d72218a9e16bfcdd1eb8a9a60d9914dc7702110d760f51a"
+    },
+    {
+      "path": "backend/tests/modules/test_vis_datasets.py",
+      "bytes": 790,
+      "sha256": "557e83430fe57e5759709ec89e9597e0d02798f9b4dfd3f971247f0ef6c6ac43"
+    },
+    {
+      "path": "backend/tests/modules/test_report_manage.py",
+      "bytes": 2208,
+      "sha256": "87407fcafde1bfa61b26eb97aaab580c490ffcf7fdaa30b2f832c0080325f77c"
+    },
+    {
+      "path": "backend/tests/modules/test_report_designer.py",
+      "bytes": 1279,
+      "sha256": "bdc30e7bb48150ff17ccda449fd99e954de3bedfcc5aae7450a5292a86ef0181"
+    },
+    {
+      "path": "backend/tests/modules/test_vis_io.py",
+      "bytes": 1594,
+      "sha256": "1d5d13a212c95f84f273c8aaf0619f45d60d123e70a74e9a9ce06e169e805f93"
+    },
+    {
+      "path": "backend/tests/modules/test_mcp.py",
+      "bytes": 650,
+      "sha256": "443b82927a86fbdc4239c703a06bb681b3f51f194330a4e3758267f6a3fa85f7"
+    },
+    {
+      "path": "backend/tests/modules/test_vis_task_manage.py",
+      "bytes": 2298,
+      "sha256": "dbdf3c1719bbbe30f272409e28ee5db9e0dea456ad89b81ddf40901e6b878692"
+    },
+    {
+      "path": "var/objects/datasets/ca810d0314f0fbdb94fc41964bf2e24337b752a86490daad79d80d8a7b851d88/pino_metrics.json",
+      "bytes": 620,
+      "sha256": "ca810d0314f0fbdb94fc41964bf2e24337b752a86490daad79d80d8a7b851d88"
+    },
+    {
+      "path": "var/objects/datasets/276e5bb0d6453f0e97f7720ebb43ac3bcf7f5f324463de4e70e0c495e4e6bc3d/U-842C1344_e2e_ts.csv",
+      "bytes": 3607,
+      "sha256": "276e5bb0d6453f0e97f7720ebb43ac3bcf7f5f324463de4e70e0c495e4e6bc3d"
+    },
+    {
+      "path": "var/objects/datasets/bafe7524066a74e7c8b3416ea88a13739cae6ead3bcf6c68c7fc8fa961361b23/miller_tokamak_timeseries_240frames.npz",
+      "bytes": 46830695,
+      "sha256": "bafe7524066a74e7c8b3416ea88a13739cae6ead3bcf6c68c7fc8fa961361b23"
+    },
+    {
+      "path": "var/objects/datasets/bbdeb40d2031b384310034e72463014010ad5370185cbd112366f11cd334df48/metrics.csv",
+      "bytes": 800420,
+      "sha256": "bbdeb40d2031b384310034e72463014010ad5370185cbd112366f11cd334df48"
+    },
+    {
+      "path": "var/objects/datasets/235a604beb9ee2f811f7d6806023067dfe1c779ff66aeac1cec110e300322902/metrics.csv",
+      "bytes": 796826,
+      "sha256": "235a604beb9ee2f811f7d6806023067dfe1c779ff66aeac1cec110e300322902"
+    },
+    {
+      "path": "var/objects/datasets/dd5cce9874e8c40b8895a5fa33ef436ba47ecd3adfb7caf3ea1f2649867cb705/comparison_summary.json",
+      "bytes": 5007,
+      "sha256": "dd5cce9874e8c40b8895a5fa33ef436ba47ecd3adfb7caf3ea1f2649867cb705"
+    },
+    {
+      "path": "var/objects/datasets/1b4f471dac926f50a811e0d5d85cd6a5567a9576ad8a57b7c8165f774de94e92/metrics.csv",
+      "bytes": 796498,
+      "sha256": "1b4f471dac926f50a811e0d5d85cd6a5567a9576ad8a57b7c8165f774de94e92"
+    },
+    {
+      "path": "var/objects/datasets/e4473efc0c8b27a1ebd7f672608749ab49eee8b1821e84c356434d1dd6054d75/U-E69F8EFE_traditional_inference.npz",
+      "bytes": 1021219,
+      "sha256": "e4473efc0c8b27a1ebd7f672608749ab49eee8b1821e84c356434d1dd6054d75"
+    },
+    {
+      "path": "var/objects/datasets/b8b4738366808d79c8694fe16f35100b39275534f24bcd549386ecebfca3d400/U-DD955299_traditional_inference.npz",
+      "bytes": 1021219,
+      "sha256": "b8b4738366808d79c8694fe16f35100b39275534f24bcd549386ecebfca3d400"
+    },
+    {
+      "path": "var/objects/datasets/b8b4738366808d79c8694fe16f35100b39275534f24bcd549386ecebfca3d400/U-EDC7FFFB_traditional_inference.npz",
+      "bytes": 1021219,
+      "sha256": "b8b4738366808d79c8694fe16f35100b39275534f24bcd549386ecebfca3d400"
+    },
+    {
+      "path": "var/objects/datasets/b8b4738366808d79c8694fe16f35100b39275534f24bcd549386ecebfca3d400/U-7172B625_traditional_inference.npz",
+      "bytes": 1021219,
+      "sha256": "b8b4738366808d79c8694fe16f35100b39275534f24bcd549386ecebfca3d400"
+    },
+    {
+      "path": "resources/examples/simulation_log_raw.csv",
+      "bytes": 7046801,
+      "sha256": "ba6757a150b3501d494282c36217ed434bb0c23a3e353b52770c117e2182cfd1"
+    },
+    {
+      "path": "resources/examples/particle_traj_plume.parquet",
+      "bytes": 3337403,
+      "sha256": "b2a9c96ca5242b263ef985658e043b9412f6c8434d0d19244fa0d1b42c380032"
+    },
+    {
+      "path": "resources/examples/fusion_station_geometry.glb",
+      "bytes": 78035600,
+      "sha256": "6ca462f26bc455e580947c947d0f7bf0029ce46ce940bfcf241ba7c4ce843bee"
+    },
+    {
+      "path": "resources/examples/wing_surface_geometry.ply",
+      "bytes": 167413,
+      "sha256": "b15eb18f720079c47db715f957cc21a46473cb2fa9ade8673cb8705853b69552"
+    },
+    {
+      "path": "resources/examples/wind_tunnel_ts_pitot.csv",
+      "bytes": 469748,
+      "sha256": "4b0a83db44bbeb9583cad2eac821fce39ad14c0b4fa25e81112ed03664e39e35"
+    },
+    {
+      "path": "resources/examples/miller_tokamak_timeseries_240frames.npz",
+      "bytes": 46830695,
+      "sha256": "bafe7524066a74e7c8b3416ea88a13739cae6ead3bcf6c68c7fc8fa961361b23"
+    },
+    {
+      "path": "resources/examples/heater_plate_field.stl",
+      "bytes": 4284,
+      "sha256": "e9654dd96428c964d50492126aa35042f26e5c52a7c139a0d6aaa47dbbc93e8a"
+    },
+    {
+      "path": "resources/examples/turbine_blade_mesh.vtu",
+      "bytes": 1037493,
+      "sha256": "55899ef9f48804aea2c8a4d91624b1838891cdd720b51d5bb83b2e7d4dc6ab86"
+    },
+    {
+      "path": "resources/examples/nozzle_geometry.obj",
+      "bytes": 96079,
+      "sha256": "124a516e14aa396f4eba4fdfe802dfd57df5083a462ded32e01c80e5a01c9f7b"
+    },
+    {
+      "path": "resources/examples/combustor_temp_volume.vti",
+      "bytes": 7178838,
+      "sha256": "0284f4f8a9130b5244a6c9b387686b3ff166f00b561bef39d8946bad2d2b1d22"
+    },
+    {
+      "path": "resources/examples/cfd_wing_pressure_surface.csv",
+      "bytes": 13882208,
+      "sha256": "0a559a6d286da0f0b63a395970ffed74a1a25625b0402077081f90886dccc202"
+    },
+    {
+      "path": "resources/examples/stress_tensor_cycle118.npz",
+      "bytes": 2720264,
+      "sha256": "9407ad446e03f5a51c2c2fce5c7a5b74c09b39332c36d5f979e0d4d7161a2869"
+    },
+    {
+      "path": "resources/examples/wind_tunnel_cp_survey.csv",
+      "bytes": 617428,
+      "sha256": "762c87fcb2f3871a5e0c44dfd0b604fc4921cf76b6244960b103ab991e44de6e"
+    },
+    {
+      "path": "resources/examples/sources/export_miller_tokamak_timeseries.py",
+      "bytes": 8633,
+      "sha256": "7c0f85dd6d34c7534090b4d47d3f1f48a5d3852943fae4e21d1106d966987c72"
+    },
+    {
+      "path": "resources/examples/assets/trame_A-1108_fixed_camera.png",
+      "bytes": 143304,
+      "sha256": "5896e6b961518951aeaffb4899952d0fb2536d7446e341ad48d3803794133181"
+    },
+    {
+      "path": "resources/examples/assets/trame_A-1028_fixed_camera.png",
+      "bytes": 252203,
+      "sha256": "778c8424be3973789146dd6176d63135a72daa84fb662ef51d012709ddb198d1"
+    },
+    {
+      "path": "resources/examples/assets/o3dv_A-1027_fixed_camera.png",
+      "bytes": 84594,
+      "sha256": "5079ed2cd18051f70bc0050cc38266d54bfbb9478bf709cba83f9636fb4e95ce"
+    },
+    {
+      "path": "resources/examples/assets/trame_A-1029_fixed_camera.png",
+      "bytes": 418757,
+      "sha256": "262fd20b5ba4c1c72052cf7df9af5b124922f8bfb8196eb431d01b00a0d56ea9"
+    },
+    {
+      "path": "resources/examples/assets/temperature_fixed_camera.png",
+      "bytes": 88713,
+      "sha256": "d1e08affe918f0ac1fef0d5cb1bf5ecf2250026cb7481ef68378d28fcc6126c8"
+    },
+    {
+      "path": "resources/examples/assets/plume_evolution_silent.mp4",
+      "bytes": 37528,
+      "sha256": "ce35a55be5fc4d3e859da10cc3aea0003f23a35599eab31aa8e22457eec92e94"
+    },
+    {
+      "path": "frontend/public/canvas-selection-bridge.js",
+      "bytes": 52829,
+      "sha256": "516d83042d086aa99bf6961deccc38bf47b7035b85ab168381658be65b0de9f8"
+    },
+    {
+      "path": "frontend/scripts/check-architecture.mjs",
+      "bytes": 2051,
+      "sha256": "13d852016a2ed0c1ed13bc7a062e33550ff4830e94916e6545a9263944c91892"
+    },
+    {
+      "path": "frontend/scripts/capture-visualization.mjs",
+      "bytes": 2071,
+      "sha256": "b4b95310ba143b3c0e49644f9ff5fc912ed9076e67b8be71503b61300ce97a4b"
+    },
+    {
+      "path": "frontend/scripts/capture-report.mjs",
+      "bytes": 6187,
+      "sha256": "ce1658a2b98cbacd68dd8526dc69bef467532e9d39f3bac53b82b03485839403"
+    },
+    {
+      "path": "frontend/e2e/upload-recommend-draw.spec.js",
+      "bytes": 15507,
+      "sha256": "a4460b2d4a426088de89943890b3d1602aad4765169ac6f6c4bbc1224430cf23"
+    },
+    {
+      "path": "frontend/e2e/excel-implemented-features.spec.js",
+      "bytes": 6683,
+      "sha256": "d3d0deb0e00ab79059595946f1ca181ebfd592e940694264886c6f24885579e4"
+    },
+    {
+      "path": "frontend/src/qoder-design-runtime.jsx",
+      "bytes": 3554,
+      "sha256": "f257f4371a8ac78dbc7aafcf0e558fb328f1bed0c4bb939dee4008fc5b6be127"
+    },
+    {
+      "path": "frontend/src/styles.css",
+      "bytes": 60036,
+      "sha256": "c958f999f58bcbbc48a587eeae66f2b05227822447af813a1681372ed1a61664"
+    },
+    {
+      "path": "frontend/src/main.jsx",
+      "bytes": 882,
+      "sha256": "db7d5357c99deb11ba6b0f204f422b05ee55313699c1d7087e09cedaa66b80d3"
+    },
+    {
+      "path": "frontend/src/App.jsx",
+      "bytes": 9462,
+      "sha256": "0c562e67826cc3c354de695127bf1c776ec21d9ba86e2d363b6661a9036f2189"
+    },
+    {
+      "path": "frontend/src/app/workspace.js",
+      "bytes": 580,
+      "sha256": "e6f24d81d06cf61150023c14a888af3b4124d6a8d5bc7df35e016c928f792a91"
+    },
+    {
+      "path": "frontend/src/app/moduleRegistry.js",
+      "bytes": 748,
+      "sha256": "6e50c744e34226b222bd413058d15c9ebe3f26a26e523ea2bcf6d0c3823f683a"
+    },
+    {
+      "path": "frontend/src/test/contracts.test.jsx",
+      "bytes": 8674,
+      "sha256": "621b858bfa9240da2bd6259dab20ea104cff40f1c4435080d968e6fb41b56575"
+    },
+    {
+      "path": "frontend/src/test/setup.js",
+      "bytes": 573,
+      "sha256": "23dacd2fc2af16f7a6df16a29aba5c1141dcdf18b5b46cf6504a7d0d487252fb"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/index.js",
+      "bytes": 344,
+      "sha256": "9276b482a16d80815e751754b231f5045c32251d9f96e67cc5ee14cfff9fcdb9"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/module.js",
+      "bytes": 174,
+      "sha256": "fa61c867822ece95ff8e397157268b6505d6f129ef3507078cac8d5155301037"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/AGENTS.md",
+      "bytes": 547,
+      "sha256": "7ef4326631481ba3f4ee4e35daddad28fa84841dc410077d8f959d142679b61c"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/api.js",
+      "bytes": 323,
+      "sha256": "52f5f4eceaf72805c282740238edb7225f3ca7575037f2957b1d1b5c9b7d4d81"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/model.js",
+      "bytes": 470,
+      "sha256": "ffe688c01cb7c36792a2c27170762f22b307e99cd510e2bff52b2c3868bb7fcf"
+    },
+    {
+      "path": "frontend/src/modules/visTaskManage/index.js",
+      "bytes": 552,
+      "sha256": "259b1da8d771a7561ab22c8f65180c4c47b49ec829e1ef8e82767c9040b2176f"
+    },
+    {
+      "path": "frontend/src/modules/visTaskManage/terminology.js",
+      "bytes": 625,
+      "sha256": "be7f89a223cf068ec4581efeccfc25f9619398140b66fb1742eab485949e05a6"
+    },
+    {
+      "path": "frontend/src/modules/visTaskManage/module.js",
+      "bytes": 497,
+      "sha256": "6739293efab8ad9f13db6a420c586504cd14388dad314d45709700a9bac95ccc"
+    },
+    {
+      "path": "frontend/src/modules/visTaskManage/fallback.js",
+      "bytes": 12032,
+      "sha256": "dc5722b9cdacc8edafeca8d411f181f4f57ff91d00b265720e7d0ababa803935"
+    },
+    {
+      "path": "frontend/src/modules/visTaskManage/api.js",
+      "bytes": 2127,
+      "sha256": "2ab0a72a18b1b284479237c81c5d84375b608582f870bcc470cd15c8b6858e9f"
+    },
+    {
+      "path": "frontend/src/modules/visTaskManage/model.js",
+      "bytes": 192,
+      "sha256": "44282b801179e2c2cc09b7e6931437a3ae98ce8b8e420981e58374f241a8d5ca"
+    },
+    {
+      "path": "frontend/src/modules/visDatasets/index.js",
+      "bytes": 164,
+      "sha256": "ccb21f7f2245dfe3b413a9379a31e49d698265f1eabc7b12f8b217d885d082d0"
+    },
+    {
+      "path": "frontend/src/modules/visDatasets/module.js",
+      "bytes": 202,
+      "sha256": "f2669d01b4782aa3760edc1bf7e481fad59da5754123fa6d867303eb2ded1b54"
+    },
+    {
+      "path": "frontend/src/modules/visDatasets/api.js",
+      "bytes": 504,
+      "sha256": "0a7707906af655d2d4465bd07c5c3e35598e12c5928ce5322002246ce78ae887"
+    },
+    {
+      "path": "frontend/src/modules/visIO/index.js",
+      "bytes": 213,
+      "sha256": "99e768d53d128d8ce543d95f698199e1b71b67103604ec2c77904dc654769d90"
+    },
+    {
+      "path": "frontend/src/modules/visIO/module.js",
+      "bytes": 150,
+      "sha256": "d1979db7ad554f17aa73d5c98dcd07ad7c65f56bc3768dd220d939673bb70a29"
+    },
+    {
+      "path": "frontend/src/modules/visIO/api.js",
+      "bytes": 1194,
+      "sha256": "e3f1ded2632d29ea3d61ad2351b68ab7ca83d51531bcdda7f964408451530eae"
+    },
+    {
+      "path": "frontend/src/modules/visIO/model.js",
+      "bytes": 161,
+      "sha256": "68f17d3c6806a607a6dddbd939461a5da915dc62ac766a415dda1fa9a54cd643"
+    },
+    {
+      "path": "frontend/src/modules/dataAssets/index.js",
+      "bytes": 288,
+      "sha256": "e7dcf1b2bfb158611e8c9ee9885a4d270b9f9fd16263de34665c58cf8637c8de"
+    },
+    {
+      "path": "frontend/src/modules/dataAssets/module.js",
+      "bytes": 249,
+      "sha256": "af96b9af0dffaa0e059b4ea7aa4d70d3b6f05b9a66d2dd6836272c63f4666679"
+    },
+    {
+      "path": "frontend/src/modules/dataAssets/api.js",
+      "bytes": 1367,
+      "sha256": "ced9b440a7de50f196ca231e011051be1a92aa25e5a3ea098eaeffa962726bd1"
+    },
+    {
+      "path": "frontend/src/modules/dataAssets/model.js",
+      "bytes": 242,
+      "sha256": "5e0428642922047e75d832549a5aae88b831da107378f1d532c102b8bd57c4e3"
+    },
+    {
+      "path": "frontend/src/modules/reportManage/index.js",
+      "bytes": 320,
+      "sha256": "d633ab902d3f4df11eac156532f2a20ade4904d922ec56df9bc9198ae17d23e9"
+    },
+    {
+      "path": "frontend/src/modules/reportManage/module.js",
+      "bytes": 267,
+      "sha256": "8f76a0be4118f3932143faeb854d9c589b1917da851a248d4aad09d8349d4927"
+    },
+    {
+      "path": "frontend/src/modules/reportManage/fallback.js",
+      "bytes": 1078,
+      "sha256": "ec4c430afe296f156f54e9194375416f6a6b132653554b5c4999cd696c337356"
+    },
+    {
+      "path": "frontend/src/modules/reportManage/api.js",
+      "bytes": 1490,
+      "sha256": "60d65db62989aacb8077e7616c627e2cbb6493f518327bc7cc572ef7c31112af"
+    },
+    {
+      "path": "frontend/src/modules/reportManage/model.js",
+      "bytes": 192,
+      "sha256": "e7117290221e63e988ae224ceb649767fbdfd9ac4ac6c8f3c9e553f0f387e5ae"
+    },
+    {
+      "path": "frontend/src/modules/visGeometry/index.js",
+      "bytes": 273,
+      "sha256": "0d6927fa2def5a5892022016b9e4693f6999460e2b4718bbb94e82ca01d6ce8b"
+    },
+    {
+      "path": "frontend/src/modules/visGeometry/module.js",
+      "bytes": 198,
+      "sha256": "e9119d8dde1a72894272345695e0f3f0eab731e928d06b7cc12576acaed5ae96"
+    },
+    {
+      "path": "frontend/src/modules/visGeometry/api.js",
+      "bytes": 950,
+      "sha256": "20c7ecabedd0e6f0d632171fa42931e6f0b029be8de34a9aaa1fc38062c5ddbd"
+    },
+    {
+      "path": "frontend/src/modules/visGeometry/model.js",
+      "bytes": 259,
+      "sha256": "b33d3c628987ad85e044c60a432a3d25bd04d845b5e663807054b0ff8a98b974"
+    },
+    {
+      "path": "frontend/src/modules/reportDesigner/index.js",
+      "bytes": 180,
+      "sha256": "cb6a97de127768d65c3e60e3cbbf34355ad6db97f4dd26fd45eba61f26c6cc90"
+    },
+    {
+      "path": "frontend/src/modules/reportDesigner/module.js",
+      "bytes": 206,
+      "sha256": "8d587c8ff40bc18a68dda91d425a22f35e9f5326d9efe6db1bc1b7ba6a254e2a"
+    },
+    {
+      "path": "frontend/src/modules/reportDesigner/api.js",
+      "bytes": 756,
+      "sha256": "4d4e92b5d9a40e3b5cff0b2a4702c21230af36973e384460a94f6c78e8e3fa81"
+    },
+    {
+      "path": "frontend/src/modules/reportDesigner/model.js",
+      "bytes": 143,
+      "sha256": "3854cd51665b2ee615769a1f76526b13f7be589f6464935986413344710b6df1"
+    },
+    {
+      "path": "frontend/src/modules/reportDesigner/pages/ReportComposerPage.jsx",
+      "bytes": 22596,
+      "sha256": "e85b02ca75769ccedc7fad6c5d14123ae74bd92e982641e861ceab42f9f1af5a"
+    },
+    {
+      "path": "frontend/src/modules/reportDesigner/domain/reportDocument.js",
+      "bytes": 7312,
+      "sha256": "859488120d1592a669e6b7a4b48c02f896ddfa95fef82ba503e9852e3ab845a6"
+    },
+    {
+      "path": "frontend/src/modules/visGeometry/components/GeometryViewer.jsx",
+      "bytes": 13764,
+      "sha256": "3619b0f82404071b83383545873d58bfeb3da39c24e1953c6f988a5e41276c22"
+    },
+    {
+      "path": "frontend/src/modules/reportManage/pages/ReportPage.jsx",
+      "bytes": 19650,
+      "sha256": "086dde2b3a546f87a0bb27b38954e187eb9bec99b449643bdb2d5fa6c61d5f9f"
+    },
+    {
+      "path": "frontend/src/modules/reportManage/pages/ReportsPage.jsx",
+      "bytes": 7451,
+      "sha256": "1bd3fd98ecea74cfbd3f58227f8b6aa8d07905c4327ff1c036b6aa1d6937e374"
+    },
+    {
+      "path": "frontend/src/modules/dataAssets/pages/DataAssetsPage.jsx",
+      "bytes": 255,
+      "sha256": "4d1ada962e9d54309721160b20acf862e785dbf13065f2c36da634bed386def0"
+    },
+    {
+      "path": "frontend/src/modules/dataAssets/pages/DataAssets.jsx",
+      "bytes": 11037,
+      "sha256": "cb49e2fc428b7ae72bd74efbc735c417a8d36d74f28f6e98930ac06b2df7fdbc"
+    },
+    {
+      "path": "frontend/src/modules/dataAssets/pages/ArtifactDetail.jsx",
+      "bytes": 12884,
+      "sha256": "73071f45117436400d7094612f5f2af005eeef5bd466e5f0a705481ac928db1c"
+    },
+    {
+      "path": "frontend/src/modules/dataAssets/pages/ArtifactDetailPage.jsx",
+      "bytes": 280,
+      "sha256": "31af5b6c1f545db4f5a54f167644da80699341f223510eb6ae5678bb6d2d4b91"
+    },
+    {
+      "path": "frontend/src/modules/visTaskManage/components/ExamplePreview.jsx",
+      "bytes": 12687,
+      "sha256": "55f0416ba1e59f914b06a4f4d542071c491d8c51ba7ec3fa91b25cfaff27d50a"
+    },
+    {
+      "path": "frontend/src/modules/visTaskManage/pages/VisualizationConfiguratorPage.jsx",
+      "bytes": 15923,
+      "sha256": "be5ed4eb5a9a05b674744c27ca6683d03992aeed7a0b4fe8448a162dd3788007"
+    },
+    {
+      "path": "frontend/src/modules/visTaskManage/pages/SpecsPage.jsx",
+      "bytes": 10440,
+      "sha256": "33f2605b6ba244fbc30188814b6ecbd643acac4ea2ddb821f8e43c4876ac339c"
+    },
+    {
+      "path": "frontend/src/modules/visTaskManage/pages/RecommendationsPage.jsx",
+      "bytes": 7240,
+      "sha256": "82444ed6ce8867f5f2631b07a98c2378356a260e97a3a36c7db07ee8f48c53dd"
+    },
+    {
+      "path": "frontend/src/modules/visTaskManage/pages/ExamplePage.jsx",
+      "bytes": 798,
+      "sha256": "30669ced3acfa9a1b6f7267b36ecbf38b02f98fd66d528547dcf603deb81cef4"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/components/PhysFieldProvider.jsx",
+      "bytes": 780,
+      "sha256": "36e52bf1fb084f884edd84a58a4d17d34231eeeb6f15815ee64d364acc98927f"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/components/PhysFieldViewport.module.css",
+      "bytes": 286,
+      "sha256": "37390a787c9c26f71398bd294453d37ef04dd35c811dcaf14b8b7d695434655d"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/components/PhysFieldViewport.jsx",
+      "bytes": 419,
+      "sha256": "35669bd68e221d1026b2e7cbed15451544117a982d17e9f466bd2f9f55431b19"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/hooks/usePhysField.js",
+      "bytes": 703,
+      "sha256": "1222815857042c17933ff154119b2c0950ffff3f8e3d6a228f90650960c02e2c"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/pages/PhysFieldWorkspacePage.jsx",
+      "bytes": 443,
+      "sha256": "bd0f6d5fa164a24f96ee7be564d9923153951a9f3e54e93ff06a1867cb75560d"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/modules/dataOverview/model.js",
+      "bytes": 219,
+      "sha256": "5ef6bff03a923767ec5948d2dd8453326051cdcf8cb6e71b04a2efa1e7d27b0d"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/modules/fieldVisualization/model.js",
+      "bytes": 236,
+      "sha256": "656d361ba100477e184d7494fd36d26c9ea92aca61abf8fc7d38a8a1f93a54ce"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/modules/dataExtraction/model.js",
+      "bytes": 183,
+      "sha256": "bf2869d55b54c21c2f727fefc817f9fd154ca8a4c7078a698407bcdcb2f61127"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/modules/dataExtraction/components/DataExtractionPanel.jsx",
+      "bytes": 253,
+      "sha256": "2ad45703ddb65e2862a2777b8c86e4d387b74c34bf7086d850919646d42e6c1c"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/modules/dataExtraction/hooks/useDataExtraction.js",
+      "bytes": 484,
+      "sha256": "2e6b958bedbf353a8e921669970d260df36a72d6da49d99b262e15364f6d2b9e"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/modules/fieldVisualization/components/ViewControls.jsx",
+      "bytes": 492,
+      "sha256": "af0748e01d623aefebc9e32b9c692804e10f1be6cd11ab123f633863f898fc3f"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/modules/fieldVisualization/hooks/useFieldView.js",
+      "bytes": 501,
+      "sha256": "720a87773bf174c27075262bc70450573f3258b9c940f9039a1def73e2050a7f"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/modules/dataOverview/components/DataOverviewTable.jsx",
+      "bytes": 329,
+      "sha256": "3627c20f3e803564c5c79e69eb03f3a48842651e3cb6d5156de946ba55b64039"
+    },
+    {
+      "path": "frontend/src/modules/visPhysField/modules/dataOverview/hooks/useDataOverview.js",
+      "bytes": 476,
+      "sha256": "30579da69e7f37ac76b82bf24b50a3adea356351aa489b871eb95e39c29671fd"
+    },
+    {
+      "path": "frontend/src/infrastructure/components/ConnectionStatus.jsx",
+      "bytes": 944,
+      "sha256": "5fcbbddc3b9822b3601ecfdb4c50f622b272c09368724d8fc610b95881ec02e8"
+    },
+    {
+      "path": "frontend/src/infrastructure/components/PageTitle.jsx",
+      "bytes": 396,
+      "sha256": "50d7bc2fc87c9937940d5efe9a7254fed1a04042c958c75c9cd4059a0b454a42"
+    },
+    {
+      "path": "frontend/src/infrastructure/http/client.js",
+      "bytes": 1323,
+      "sha256": "e002738323dc53cc8012d160d9c75d3e3f2dc6135d1ef61c180ebb764fb7e861"
+    },
+    {
+      "path": "frontend/src/infrastructure/hooks/useRemoteSnapshot.js",
+      "bytes": 1691,
+      "sha256": "e7f6f0cb2287784fc1307f2678c0e58c8e1dda4b3e0c084095ef927fbce41e0f"
+    },
+    {
+      "path": "frontend/src/infrastructure/rendering/renderers/ReactFlowRenderer.jsx",
+      "bytes": 1223,
+      "sha256": "ec7ee67a6d037c9220fd51cbc71774abb477c3697f9284059a419a2792fb3de6"
+    },
+    {
+      "path": "frontend/src/infrastructure/rendering/renderers/EChartsRenderer.jsx",
+      "bytes": 9770,
+      "sha256": "aab07b85f163c8001f98af9b9bf6697c11abe37f9b7d7a713f476807b1e28603"
+    },
+    {
+      "path": "frontend/src/infrastructure/rendering/renderers/VegaRenderer.jsx",
+      "bytes": 1769,
+      "sha256": "8efabd60396cf250fed0dc662c2a08092ef67287963d056aae8fce26ac6fad34"
+    },
+    {
+      "path": "frontend/src/infrastructure/rendering/renderers/PlotlyRenderer.jsx",
+      "bytes": 3337,
+      "sha256": "e70eb0e70c3739f82db412d097b3411fec5c63ee10807f3c9f45597b04a0ab04"
+    },
+    {
+      "path": "frontend/public/3dviewer/o3dv.license.md",
+      "bytes": 1091,
+      "sha256": "1927cc1a53b4ee5a4fb8213b21c4ed5b2a412f5aa314fb8777edccc1f3e5749e"
+    },
+    {
+      "path": "frontend/public/3dviewer/o3dv.min.js",
+      "bytes": 1058042,
+      "sha256": "3b3bf3ad87a6bb697c001db40c0640674849b20e27c7e58abf29a64691c00b08"
+    },
+    {
+      "path": "frontend/public/3dviewer/embed.html",
+      "bytes": 11286,
+      "sha256": "a5b8142963caab66858787c786023aa31cc7259efd12c87c0e97c963eacfec40"
+    },
+    {
+      "path": ".cursor/rules/error-log.mdc",
+      "bytes": 1532,
+      "sha256": "78185a4dcfa8183e6dd45e133f8e056db75467c9716667f4ded4bc200e4d4088"
+    },
+    {
+      "path": ".cursor/rules/clarify-before-execute.mdc",
+      "bytes": 3223,
+      "sha256": "8ef673aacb4ddac667e7c26a7910465c5f9493538d545df67fe187386fa7bb9c"
+    },
+    {
+      "path": ".cursor/rules/plan-business-alignment.mdc",
+      "bytes": 1285,
+      "sha256": "86e9fe6a44a3592502e6e2bdb8cae3f4be9375c69ab401e08ec83b95da79cd3b"
+    },
+    {
+      "path": ".cursor/rules/ai4e-vis-frontend.mdc",
+      "bytes": 2177,
+      "sha256": "181b35db818dcbeb85ea4d589b4c874e54417f98ef228a93554fea33337154a0"
+    },
+    {
+      "path": ".cursor/rules/lessons.mdc",
+      "bytes": 1029,
+      "sha256": "b3179020bad682d7d9c983811283f5752748284b3301f3cd2c6c3113ecb3dffc"
+    },
+    {
+      "path": ".cursor/rules/ai4e-vis-backend.mdc",
+      "bytes": 2301,
+      "sha256": "13ea7a360a2bf2e96b70412cf586b197a75a1bec1da31d021301ef449451c0d4"
+    },
+    {
+      "path": ".cursor/rules/project-context-entry.mdc",
+      "bytes": 964,
+      "sha256": "3259733c8d54455a49ad46cfd2aaf21b71d29291650f0e7b759f4e44eb71b6de"
+    },
+    {
+      "path": ".cursor/skills/frontend-ui/SKILL.md",
+      "bytes": 4062,
+      "sha256": "91a714ef02fc28ff042f8175f58e0dab2da42c7319025d7f21a6f0386961f4c9"
+    },
+    {
+      "path": ".cursor/skills/distill/SKILL.md",
+      "bytes": 6724,
+      "sha256": "35591fbf2057b87e99c2c49a21a711ccbf0384c99b2085af91820774536362f2"
+    },
+    {
+      "path": ".cursor/skills/web-design-engineer/SKILL.md",
+      "bytes": 22623,
+      "sha256": "3371b871682edd16699e07cd8b7778dc6d7ffbdd4523605486a9b7e17a3b0998"
+    },
+    {
+      "path": ".cursor/skills/html-to-react/SKILL.md",
+      "bytes": 2195,
+      "sha256": "1e9cde75badb6445a0258fd25061c4f5bdcf0aff9a94301c61e017f4f471f6fb"
+    },
+    {
+      "path": ".cursor/skills/web-design-engineer/references/advanced-patterns.md",
+      "bytes": 14722,
+      "sha256": "e25a37f18e9c578ce24c90ba7b95025eb28c2c75bb03df91b365af9fb8f304d8"
+    },
+    {
+      "path": ".context/modules/visConvertor.md",
+      "bytes": 1075,
+      "sha256": "7bcb841cb0e364bd8390163841fa71f6159395d10d38ef5137683c3b7c4bba9c"
+    },
+    {
+      "path": ".context/modules/visEngine.md",
+      "bytes": 1002,
+      "sha256": "79916e16f16787ad0759740cfcf2efb14c7c8dc8208b3cfc230396662f01e69e"
+    },
+    {
+      "path": ".context/modules/storage-observability.md",
+      "bytes": 2422,
+      "sha256": "729c3d5c03a7c180aedea94b9a31705154fc87c82b9cebc9dc9ea6f3c94bc57e"
+    },
+    {
+      "path": ".context/modules/automation-mcp.md",
+      "bytes": 1175,
+      "sha256": "a50011a55a22fd1d21617546c767c301118132f0b5ab88d7a6f52aa59a592c12"
+    },
+    {
+      "path": ".context/modules/MCP.md",
+      "bytes": 898,
+      "sha256": "339f5097a039d2a87246bd66ddade2464d6e812d4f9ab73baed4e1e2923ed12f"
+    },
+    {
+      "path": ".context/modules/visGeometry.md",
+      "bytes": 1561,
+      "sha256": "a4dbd5bb85fd0a3695999679fd31759d4a8770887b43c7faa57c228f7a53dd7b"
+    },
+    {
+      "path": ".context/modules/reporting.md",
+      "bytes": 1393,
+      "sha256": "3ab7f187437f10e62c338a44e9d7a90f83f4cd17037729cfadee7e8987aad716"
+    },
+    {
+      "path": ".context/modules/visPhysField.md",
+      "bytes": 2936,
+      "sha256": "2841ac0ab431922250c897833037b3dcdf3448732e2216f1b83b5fcc2e081806"
+    },
+    {
+      "path": ".context/modules/dataAssets.md",
+      "bytes": 2153,
+      "sha256": "13450a0d56b5029cfb06e8552f8f6c9b5fd20c6c902881b0b09b5b246f14167e"
+    },
+    {
+      "path": ".context/modules/visIO.md",
+      "bytes": 1386,
+      "sha256": "19c6fdb095e3cbde734634ae0092327066012597f23bbec181fa26e521edef6c"
+    },
+    {
+      "path": ".context/modules/visDatasets.md",
+      "bytes": 1599,
+      "sha256": "9732462d4071bcb5ba6d780c363e2474afadaed46dda9fc79f2d100e18a28fbe"
+    },
+    {
+      "path": ".context/modules/reportDesigner.md",
+      "bytes": 1648,
+      "sha256": "3a107bfcf57ccc3478389b8d36e2d616a90360c2c80a4b3420b638c8ae886698"
+    },
+    {
+      "path": ".context/modules/visTaskManage.md",
+      "bytes": 3036,
+      "sha256": "3ef8308db37c148c7df99301eb1e278cb5618222c55302831c88177baf7eefb1"
+    },
+    {
+      "path": ".context/modules/reportManage.md",
+      "bytes": 2402,
+      "sha256": "81187656ae5caae27885cdc826e69c1bc75fac229b64943e56373cc145d5e1f8"
+    },
+    {
+      "path": ".context/modules/frontend-architecture.md",
+      "bytes": 3058,
+      "sha256": "6227c5ad3fe5e937c36105e2d2d3616b1403587296d613df93f689738bf468fe"
+    },
+    {
+      "path": ".context/modules/backend-architecture.md",
+      "bytes": 3360,
+      "sha256": "3ad4b2d407e891f04544d2bfc182fbd384fd8248fc242b1654a75e74ade00c60"
+    },
+    {
+      "path": ".context/modules/task-data-io.md",
+      "bytes": 1979,
+      "sha256": "a4f0f1f397b92602ac469cec9898dcd802226e8c5fadcea2d6d1dc385a10b4be"
+    },
+    {
+      "path": ".context/modules/visFigure.md",
+      "bytes": 1009,
+      "sha256": "1c7f8f599ee004c5c0fcf5d62c565fabdb21204e6d45aa1025844b35a8e8509c"
+    },
+    {
+      "path": ".context/modules/physical-field-engine.md",
+      "bytes": 1639,
+      "sha256": "e4e81636ed59758d1027a4cb3e3d64b605691487232d05e1ddfe1fcdcf9752dd"
+    },
+    {
+      "path": ".context/modules/geometry-figure-convertor.md",
+      "bytes": 1435,
+      "sha256": "37bf6a006613c2e4108bcabe8638c95fc1838d98308f3533d7db38d35c0f7b3f"
+    },
+    {
+      "path": ".context/modules/automation.md",
+      "bytes": 1066,
+      "sha256": "3ea69d5127c8d080d9b5480eef406057e8b295d0a0e8e1ffa1f93e5d5a355e0f"
+    },
+    {
+      "path": ".context/modules/visPhysField/fieldVisualization.md",
+      "bytes": 2627,
+      "sha256": "93f226c5b4dda2c756e26908b51ee7f8777c68f8b26cd28c7bdd8c8663bab1eb"
+    },
+    {
+      "path": ".context/modules/visPhysField/dataOverview.md",
+      "bytes": 1341,
+      "sha256": "c8311173762f35b24bc72139bf5da2a2a6497f41145d4d858e90e0f982974d4d"
+    },
+    {
+      "path": ".context/modules/visPhysField/dataExtraction.md",
+      "bytes": 1341,
+      "sha256": "6cbeb98fea3c25953cc4b0807c15d6f34c864db0bdd3fc4545ef8617efc9ccb4"
+    },
+    {
+      "path": ".context/modules/visPhysField/index.md",
+      "bytes": 1370,
+      "sha256": "87dc2792c2a7385c093b881f4ea294e453aee13bdd8583f9f3145eafa29ec57d"
+    },
+    {
+      "path": "var/db/ai4e_vis.sqlite3",
+      "bytes": 2723840,
+      "sha256": "cbe9de73d05b78c2a77757c5c89f5245e2b73feb12a108f0c2214ab3eab1ec86"
+    }
+  ]
+}

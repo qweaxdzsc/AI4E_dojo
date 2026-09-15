@@ -77,6 +77,7 @@ class RunWriter:
         """原子发布可序列化的阶段交付，不允许逃出运行目录。"""
         if not name or Path(name).name != name or not name.endswith(".json"):
             raise ValueError("阶段交付必须为单一 JSON 文件名")
+        self.write_operation_sources(value)
         folder = self.run_dir / "artifacts"
         folder.mkdir(exist_ok=True)
         target = folder / name
@@ -87,6 +88,35 @@ class RunWriter:
         finally:
             temporary.unlink(missing_ok=True)
         return target
+
+    def write_operation_sources(self, value) -> None:
+        """保存已加载能力的源码；不导入或执行记录中的模块，不混入用户配置。"""
+        import hashlib
+        import inspect
+        import sys
+
+        if isinstance(value, dict):
+            if isinstance(value.get("name"), str) and isinstance(value.get("sha256"), str):
+                module, _, member = value["name"].rpartition(".")
+                loaded = sys.modules.get(module)
+                target = getattr(loaded, member, None) if loaded else None
+                if target is not None:
+                    source = inspect.getsourcefile(target)
+                    if source:
+                        content = Path(source).read_bytes()
+                        digest = hashlib.sha256(content).hexdigest()
+                        if digest != value["sha256"]:
+                            raise ValueError(f"能力来源在运行期间发生变化: {value['name']}")
+                        directory = self.run_dir / "sources"
+                        directory.mkdir(exist_ok=True)
+                        path = directory / (digest + ".py")
+                        if not path.exists():
+                            path.write_bytes(content)
+            for child in value.values():
+                self.write_operation_sources(child)
+        elif isinstance(value, (list, tuple)):
+            for child in value:
+                self.write_operation_sources(child)
 
     def write_summary(self, summary: dict[str, Any]) -> None:
         """写入作业摘要，不得包含张量文件。

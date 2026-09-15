@@ -17,6 +17,11 @@ class ConfigurationEdit(BaseModel):
     expected_revision: str
     values: dict
     stage: str
+    bindings: dict[str, dict | None] = {}
+    target_case_id: str | None = None
+    target_model: str | None = None
+    target_variant: str | None = None
+    target_preset: str | None = None
 
 
 class StageOperation(BaseModel):
@@ -40,7 +45,43 @@ def configuration(project: str, identity: str, request: Request, stage: str | No
 def save(project: str, identity: str, body: ConfigurationEdit, request: Request):
     """传递带修订的配置保存命令。"""
     return application.save(
-        project, identity, body.stage, body.values, body.expected_revision, services(request)
+        project,
+        identity,
+        body.stage,
+        body.values,
+        body.expected_revision,
+        services(request),
+        body.bindings,
+        body.target_case_id,
+        body.target_model,
+        body.target_variant,
+        body.target_preset,
+    )
+
+
+class ModelPresetCreate(BaseModel):
+    """导出当前已保存模型配置。"""
+
+    model_config = ConfigDict(extra="forbid")
+    expected_revision: str
+    name: str
+
+
+@router.get("/model-options")
+def model_options(project: str, identity: str, request: Request):
+    """读取官方模型与同数据集用户预设。"""
+    from ..capabilities import model_options as describe
+
+    return describe(services(request), project, identity)
+
+
+@router.post("/model-presets")
+def create_model_preset(project: str, identity: str, body: ModelPresetCreate, request: Request):
+    """导出当前模型配置为项目共享预设。"""
+    from ..capabilities.model_presets import export_preset
+
+    return export_preset(
+        services(request), project, identity, body.name, body.expected_revision
     )
 
 
@@ -70,3 +111,27 @@ def operation(project: str, identity: str, stage: str, body: StageOperation, req
 def stage_inputs(project: str, identity: str, request: Request):
     """读取正式交接产物。"""
     return application.stage_inputs(project, identity, services(request))
+
+
+@router.get("/stage-summary")
+def stage_summary(project: str, identity: str, request: Request):
+    """读取研究进度和当前配置对应的检查状态。"""
+    return application.stage_summary(project, identity, services(request))
+
+
+@router.get("/stage-files")
+def stage_files(
+    project: str,
+    identity: str,
+    request: Request,
+    role: str,
+    run_id: str | None = None,
+    asset_id: str | None = None,
+    revision: str | None = None,
+    path: str = "",
+    query: str = "",
+):
+    """读取明确运行或当前草稿选定清单的当前层阶段文件，未选择时返回空列表。"""
+    return application.stage_files(
+        project, identity, services(request), role, run_id, asset_id, revision, path, query
+    )

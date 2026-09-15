@@ -33,6 +33,7 @@ def export_prediction_meshes(config, dataset_component, manifest_path, *, commit
             for key in declaration["targets"].values()
             for suffix in (".prediction", ".truth")
         }
+        fields.update({d["field"]: read(d["field"]) for d in declaration.get("derived_fields", {}).values()})
         original = dataset_component.comparison_mesh(
             config, metadata["identity"]["sample"], domain, points
         )
@@ -73,7 +74,7 @@ def export_prediction_meshes(config, dataset_component, manifest_path, *, commit
             "coordinate_space": space,
             "entity_set": declaration.get("entity_set"),
             "topology": declaration.get("topology"),
-            "units": declaration.get("units", {}),
+            "units": {**declaration.get("units", {}), **{name: d["unit"] for name, d in declaration.get("derived_fields", {}).items()}},
         }
         save_json(manifest_path, metadata)
         if committed:

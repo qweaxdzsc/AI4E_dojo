@@ -11,7 +11,7 @@ from pydantic import BaseModel, ConfigDict
 
 from ...bootstrap.dependencies import services
 from ...infrastructure.transport import finite_values
-from .application import TERMINAL, asset, cancel, get_operation, register, submit
+from .application import TERMINAL, archive_asset, asset, cancel, get_operation, register, submit
 from .scenes import validate_scene
 
 router = APIRouter(prefix="/projects/{project}")
@@ -58,12 +58,16 @@ def content(
     request: Request,
     member: str | None = None,
     revision: str | None = None,
+    download: bool = False,
 ):
     """下载受控文件或显示二进制成员。"""
     ref = {"asset_id": identity}
     if revision:
         ref["revision"] = revision
     root = asset(services(request), project, ref)
+    if download and member is None and root.is_dir():
+        path, filename = archive_asset(services(request), project, ref)
+        return FileResponse(path, filename=filename, media_type="application/zip")
     path = root if member is None else (root / member).resolve()
     if member is not None and (
         not root.is_dir()
@@ -73,7 +77,7 @@ def content(
         raise ValueError("asset_member_outside_root")
     if not path.is_file():
         raise ValueError("file_required")
-    return FileResponse(path)
+    return FileResponse(path, filename=path.name if download else None)
 
 
 @router.post("/visualization/operations")
@@ -161,3 +165,45 @@ def _save_scene(project, identity, body, request, update):
             "scene", identity, value, expected_revision=body.get("expected_revision")
         )
     return service.store.put("scene", identity, value)
+
+
+@router.get('/tasks/{task_id}/visualizations')
+def task_visualizations(project: str, task_id: str, request: Request):
+    """列出任务保存的可视化配置资产。"""
+    from .bindings import list_saved
+    return list_saved(services(request), project, task_id)
+
+
+@router.get('/tasks/{task_id}/visualizations/{identity}')
+def task_visualization(project: str, task_id: str, identity: str, request: Request, revision: int | None = None):
+    """读取固定配置修订。"""
+    from .bindings import read_saved
+    return read_saved(services(request), project, task_id, identity, revision)
+
+
+@router.post('/tasks/{task_id}/visualizations')
+def save_task_visualization(project: str, task_id: str, request: Request, body: dict):
+    """保存到 task 授权区域，不创建研究版本。"""
+    from .bindings import save
+    return save(services(request), project, task_id, body)
+
+
+@router.post('/tasks/{task_id}/visualizations/sessions')
+def open_physical_session(project: str, task_id: str, request: Request, body: dict):
+    """文件、后处理、比较共用独立物理场工作区。"""
+    from .bindings import open_session
+    return open_session(services(request), project, task_id, body)
+
+
+@router.delete('/tasks/{task_id}/visualizations/sessions/{identity}')
+def close_physical_session(project: str, task_id: str, identity: str, request: Request):
+    """页面关闭后释放所属工作区。"""
+    from .bindings import close_session
+    return close_session(services(request), project, task_id, identity)
+
+
+@router.post('/tasks/{task_id}/visualizations/sessions/{identity}/sources')
+def append_physical_sources(project: str, task_id: str, identity: str, request: Request, body: dict):
+    """浏览器仅提供已登记来源引用，不提供实际文件位置。"""
+    from .bindings import append_session_sources
+    return append_session_sources(services(request),project,task_id,identity,body['sources'])

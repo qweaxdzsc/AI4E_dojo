@@ -2,13 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { Alert, Button, Input, Modal } from "antd";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ActionButton } from "../../infrastructure/components/ActionButton";
-import { forkTask, WORKBENCH_STAGES } from "../tasks";
+import { forkTask, WORKBENCH_STAGES, STAGE_SLUGS } from "../tasks";
 import { details, list } from "./api";
 import { displayValue, flattenEntries, valueType } from "./flatten";
 import { connectorPath, layoutTree, NODE_H, NODE_W } from "./layout";
 import "./lineage.css";
 
-const STAGE_API: Record<number, string> = { 1: "rawprep", 2: "trainprep", 3: "model", 4: "train", 5: "train", 6: "post" };
+const STAGE_API: Record<number, string> = { 1: "rawprep", 2: "trainprep", 3: "model", 4: "train", 5: "train", 6: "infer", 7: "post" };
 const GROUPS = ["输入", "输出", "参数"] as const;
 const ORIGIN: Record<string, string> = { template: "模板创建", fork: "派生创建", run: "运行产物创建" };
 
@@ -107,7 +107,7 @@ export function LineageView({
     try {
       const result = await forkTask(project, forking.task_id, forking.name.trim());
       setForking(undefined);
-      nav(`/projects/${project}/tasks/${result.id}/1`);
+      nav(`/projects/${project}/tasks/${result.id}/rawprep`);
     } catch (e: any) {
       setFormError(e.message);
     } finally {
@@ -276,7 +276,7 @@ export function LineageView({
                 <Button onClick={() => selected && onCompare?.(selected.id)}>
                   前往版本比较 →
                 </Button>
-                <Link to={"/projects/" + project + "/tasks/" + selected.task_id + "/" + step}>
+                <Link to={"/projects/" + project + "/tasks/" + selected.task_id + "/" + STAGE_SLUGS[step]}>
                   <Button>进入此任务当前阶段</Button>
                 </Link>
               </div>

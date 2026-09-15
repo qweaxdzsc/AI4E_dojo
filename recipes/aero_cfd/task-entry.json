@@ -11,7 +11,11 @@
     "train.resume": "checkpoint",
     "model.initial_weights": "checkpoint",
     "post.checkpoint": "checkpoint",
-    "trainprep.normalization.statistics": "other"
+    "trainprep.normalization.statistics": "other",
+    "infer.checkpoint": "checkpoint",
+    "infer.preparation": "preparation",
+    "infer.results": "other",
+    "post.results": "other"
   },
   "outputs": {
     "run_root": "{run_root}",
@@ -102,10 +106,13 @@
     ],
     "checkpoint": [
       "checkpoints/*.pt"
+    ],
+    "other": [
+      "artifacts/physical-predictions.json",
+      "artifacts/inference-results.json"
     ]
   },
   "components": {
-    "workflow": "ai4e_core.applications.aero_cfd.anchor_workflow",
     "dataset": "ai4e_contrib.application.datasets.shapenet_car",
     "model": "ai4e_contrib.ability.model.abupt.component"
   }

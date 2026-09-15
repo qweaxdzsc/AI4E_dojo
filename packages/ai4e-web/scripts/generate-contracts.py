@@ -7,12 +7,16 @@ from ai4e_server.bootstrap.settings import Settings
 
 def typename(schema):
     """将本期 JSON schema 子集映射成 TypeScript 类型。"""
+    if not isinstance(schema, dict):return 'unknown'
     if '$ref' in schema:return schema['$ref'].split('/')[-1]
     if 'anyOf' in schema:return ' | '.join(typename(v) for v in schema['anyOf'])
     if 'enum' in schema:return ' | '.join(__import__('json').dumps(v) for v in schema['enum'])
     t=schema.get('type')
     if t=='array':return '('+typename(schema.get('items',{}))+')[]'
-    if t=='object':return 'Record<string, unknown>'
+    if t=='object':
+        if schema.get('properties'):
+            return '{ ' + '; '.join(k + ('' if k in schema.get('required',[]) else '?') + ': ' + typename(v) for k,v in schema['properties'].items()) + ' }'
+        return 'Record<string, '+typename(schema.get('additionalProperties',{}))+'>'
     return {'string':'string','number':'number','integer':'number','boolean':'boolean','null':'null'}.get(t,'unknown')
 
 

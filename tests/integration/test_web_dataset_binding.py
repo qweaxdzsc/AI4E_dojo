@@ -1,6 +1,7 @@
 """数据源绑定 HTTP 契约；空目录/假 H5 仅作范围和类型夹具，不作算法验收。"""
 
 from pathlib import Path
+from shutil import rmtree
 
 import pytest
 from ai4e_server.bootstrap.app import create_app
@@ -11,6 +12,7 @@ RECIPE = Path(__file__).resolve().parents[2] / "recipes/aero_cfd"
 CASES = (
     "shapenet_car_abupt",
     "shapenet_car_transolver3_surface",
+    "shapenet_car_transolver3_volume",
     "nasa_crm_abupt",
     "nasa_crm_transolver3",
 )
@@ -20,7 +22,9 @@ CASES = (
 def binding_platform(tmp_path):
     raw = tmp_path / "raw"
     raw.mkdir()
-    (raw / "cars").mkdir()
+    sample = raw / "cars" / "param0" / "1"
+    sample.mkdir(parents=True)
+    (sample / "quadpress_smpl.vtk").write_text("interface fixture, not scientific data")
     for name in ("train_h5", "test_h5", "connectivity_h5"):
         (raw / (name + ".h5")).write_text("interface fixture, not scientific data")
     settings = Settings(tmp_path / "platform", RECIPE, [raw])
@@ -122,7 +126,7 @@ def test_controlled_directory_rejects_escape_and_files(binding_platform, bad):
 
 def test_nasa_requires_all_files_and_refresh_reports_missing(binding_platform):
     client, base, raw, _ = binding_platform
-    case = CASES[2]
+    case = "nasa_crm_abupt"
     task = create(client, base, case)
     url = base + "/tasks/" + task["id"] + "/dataset"
     before = client.get(url).json()
@@ -195,7 +199,7 @@ def test_binding_gate_prevents_preflight_and_execution(binding_platform, state):
             json={"expected_revision": binding["revision"], "sources": sources(CASES[0])},
         )
         assert response.status_code == 200, response.text
-        (raw / "cars").rmdir()
+        rmtree(raw / "cars")
         binding = client.get(url + "/dataset").json()
     assert binding["status"] == state
     payload = {
@@ -221,12 +225,22 @@ def test_selection_inside_allowed_root_but_outside_binding_rejected(binding_plat
         json={"expected_revision": before["revision"], "sources": sources(CASES[0])},
     )
     assert saved.status_code == 200, saved.text
+    cfg = client.get(url + "/rawprep").json()
+    named = client.put(
+        url + "/rawprep",
+        json={
+            "revision": cfg["revision"],
+            "rawprep": cfg["rawprep"],
+            "processed_name": "shapenet_car",
+        },
+    )
+    assert named.status_code == 200, named.text
     # 普通文件存在且位于授权根内；绑定范围必须先于算法格式检查拒绝。
     outside = raw / "other-car"
     outside.mkdir()
     (outside / "quadpress_smpl.vtk").write_text("binding-only fixture")
     payload = {
-        "revision": saved.json()["revision"],
+        "revision": named.json()["revision"],
         "root": "data0",
         "files": ["other-car/quadpress_smpl.vtk"],
         "all_selected": True,
@@ -248,7 +262,136 @@ def test_legacy_bound_path_disappears_is_invalid(binding_platform):
     url = base + "/tasks/" + response.json()["id"] + "/dataset"
     before = client.get(url).json()
     assert before["status"] == "valid"
-    (raw / "cars").rmdir()
+    rmtree(raw / "cars")
     after = client.get(url).json()
     assert after["status"] == "invalid" and after["errors"]
     assert after["revision"] == before["revision"]
+
+
+@pytest.mark.parametrize("case", ["shapenet_car_abupt", "nasa_crm_abupt"])
+def test_model_switch_preserves_controlled_dataset_binding(binding_platform, case):
+    """换模型后受控来源仍可读回；NASA 三文件与目录绑定使用同一版本。"""
+    client, base, _, _ = binding_platform
+    item = create(client, base, case)
+    url = base + "/tasks/" + item["id"]
+    before = client.get(url + "/dataset").json()
+    bound = client.put(
+        url + "/dataset", json={"expected_revision": before["revision"], "sources": sources(case)}
+    )
+    assert bound.status_code == 200, bound.text
+    options = client.get(url + "/model-options").json()
+    chosen = next(o for o in options["options"] if o["id"] != options["current_model_id"])
+    response = client.put(
+        url + "/configuration",
+        json={
+            "stage": "model",
+            "expected_revision": bound.json()["revision"],
+            "target_model": chosen["id"],
+            "values": chosen["model"],
+        },
+    )
+    assert response.status_code == 200, response.text
+    current = client.get(url + "/dataset").json()
+    for key in ("status", "dataset_id", "binding_mode", "sources", "errors"):
+        assert current[key] == bound.json()[key]
+    assert client.get(url).json()["version_id"] == item["version_id"]
+    assert len(client.get(base + "/lineage").json()) == 1
+
+
+def test_public_catalog_lists_complete_copies_and_binds_nasa(binding_platform):
+    client, base, _, _ = binding_platform
+    task = create(client, base, CASES[0])
+    url = base + "/tasks/" + task["id"]
+    catalog = client.get(url + "/datasets").json()
+    names = {item["dataset_id"]: item for item in catalog["datasets"]}
+    assert set(names) == {"shapenet_car", "nasa_crm"}
+    assert names["shapenet_car"]["compatible"] and names["nasa_crm"]["compatible"]
+    assert names["shapenet_car"]["instances"]
+    assert names["nasa_crm"]["instances"]
+    assert names["shapenet_car"]["description"]
+    nasa = names["nasa_crm"]["instances"][0]
+    before = client.get(url + "/dataset").json()
+    saved = client.put(
+        url + "/dataset",
+        json={
+            "expected_revision": before["revision"],
+            "dataset_id": "nasa_crm",
+            "instance_id": nasa["id"],
+        },
+    )
+    assert saved.status_code == 200, saved.text
+    value = saved.json()
+    assert value["status"] == "valid" and value["dataset_id"] == "nasa_crm"
+    assert set(value["sources"]) == {"train_h5", "test_h5", "connectivity_h5"}
+    assert value["location"]
+    config = client.get(url + "/rawprep").json()
+    assert "volume_velocity" not in (config["rawprep"].get("save_fields") or [])
+    assert client.get(url).json()["version_id"] == task["version_id"]
+
+
+def test_incomplete_nasa_copy_is_not_selectable(binding_platform):
+    client, base, raw, _ = binding_platform
+    (raw / "connectivity_h5.h5").unlink()
+    task = create(client, base, CASES[0])
+    catalog = client.get(base + "/tasks/" + task["id"] + "/datasets").json()
+    nasa = next(item for item in catalog["datasets"] if item["dataset_id"] == "nasa_crm")
+    assert nasa["instances"] == []
+
+
+def test_incompatible_public_dataset_rejected(binding_platform, monkeypatch):
+    from ai4e_server.modules.tasks import dataset as module
+
+    monkeypatch.setattr(
+        module,
+        "_compatible_case",
+        lambda dataset, model, variant=None: "keep" if dataset == "shapenet_car" else None,
+    )
+    client, base, _, _ = binding_platform
+    task = create(client, base, CASES[0])
+    url = base + "/tasks/" + task["id"]
+    catalog = client.get(url + "/datasets").json()
+    nasa = next(item for item in catalog["datasets"] if item["dataset_id"] == "nasa_crm")
+    assert nasa["compatible"] is False
+    before = client.get(url + "/dataset").json()
+    rejected = client.put(
+        url + "/dataset",
+        json={
+            "expected_revision": before["revision"],
+            "dataset_id": "nasa_crm",
+            "instance_id": (nasa["instances"] or [{"id": "missing"}])[0]["id"],
+        },
+    )
+    assert 400 <= rejected.status_code < 500, rejected.text
+    assert client.get(url + "/dataset").json() == before
+
+
+def test_nasa_task_rejects_shapenet_model_preset(binding_platform):
+    """预设与当前数据集不一致时拒绝选用。"""
+    from copy import deepcopy
+
+    client, base, _, _ = binding_platform
+    shapenet = create(client, base, "shapenet_car_abupt")
+    nasa = create(client, base, "nasa_crm_abupt")
+    source = base + "/tasks/" + shapenet["id"]
+    cfg = client.get(source + "/configuration?stage=model").json()
+    exported = client.post(
+        source + "/model-presets",
+        json={"expected_revision": cfg["revision"], "name": "汽车表面预设"},
+    )
+    assert exported.status_code == 200, exported.text
+    options = client.get(source + "/model-options").json()
+    preset = next(item for item in options["presets"] if item["name"] == "汽车表面预设")
+    target = base + "/tasks/" + nasa["id"]
+    revision = client.get(target + "/configuration").json()["revision"]
+    rejected = client.put(
+        target + "/configuration",
+        json={
+            "stage": "model",
+            "expected_revision": revision,
+            "target_preset": preset["id"],
+            "values": deepcopy(preset["model"]),
+        },
+    )
+    assert rejected.status_code == 400
+    assert "model_preset_dataset_mismatch" in rejected.text
+    assert client.get(target + "/configuration").json()["revision"] == revision

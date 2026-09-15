@@ -35,6 +35,16 @@ def assess(actual, reference, mode):
             result["reasons"].append(f"缺少证据: {key}")
         elif actual[key] != reference[key]:
             result["reasons"].append(f"对照条件不一致: {key}")
+    roles = (
+        ("sampling", "objective", "metric")
+        if mode == "training"
+        else ("sampling", "prediction", "physical_output", "metric")
+    )
+    for role in roles:
+        left = actual.get("extensions", {}).get(role)
+        right = reference.get("extensions", {}).get(role)
+        if left != right:
+            result["reasons"].append(f"扩展能力条件不一致: {role}")
     if mode == "inference" and not any((actual.get("inputs") or {}).values()):
         result["reasons"].append("缺少实际几何、锚点与查询输入证据")
     for key in ("execution", "source"):

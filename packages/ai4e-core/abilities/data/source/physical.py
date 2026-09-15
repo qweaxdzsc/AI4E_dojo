@@ -19,9 +19,14 @@ class PhysicalView:
         description = self._index.describe()
         if description["state"] != "physical":
             raise ValueError("公共物理视图拒绝已归一化张量，请先恢复物理数据")
-        self._layout = deepcopy(layout or description.get("physical_layout"))
+        self._layout = deepcopy(description.get("physical_layout") or layout)
         if not self._layout or not self._layout.get("domains"):
             raise ValueError("物理视图缺少域和字段声明")
+        self.partitions = deepcopy(self._index.partitions)
+
+    def remap_partitions(self, partitions) -> None:
+        """套用准备阶段的新划分，同步公开分片名单与内部索引。"""
+        self._index.remap_partitions(partitions)
         self.partitions = deepcopy(self._index.partitions)
 
     def describe(self) -> dict:

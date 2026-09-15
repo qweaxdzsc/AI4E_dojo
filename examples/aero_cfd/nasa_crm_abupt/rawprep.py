@@ -1,28 +1,30 @@
-"""rawprep 阶段：选择组件并调用外流标准装配。"""
+"""NASA 原始处理：来源读取、物理字段、校验、容器与事务发布。"""
 
 import sys
-from functools import partial
 
 sys.dont_write_bytecode = True
-from configuration import application_parameters, load_configuration
-from omegaconf import OmegaConf
+from configuration import application_parameters, load_components, load_configuration
 
-from ai4e_contrib.application.aero_cfd import load
 from ai4e_core import run
+from ai4e_core.applications.aero_cfd.rawprep import physical as pre
 from ai4e_core.run.training import TrainingRun
 
 
 def rawprep(cfg):
-    """同一入口消费案例配置，业务装配保留在 application。"""
-    cfg = OmegaConf.create(application_parameters(cfg))
-    selected = load(cfg)
-    return selected.workflow.datapre(
-        cfg,
-        dataset_component=selected.dataset,
-        model_component=selected.model,
-        session=TrainingRun(),
-        executor=partial(run.execute, settings=OmegaConf.to_container(cfg, resolve=True)),
+    """NASA 无体场，保留来源的完整表面字段与实体身份。"""
+    component = load_components(cfg).dataset
+    source = pre.open_source(application_parameters(cfg), component=component)
+    data = pre.read(source)
+    data = pre.extract_fields(data, component=component)
+    data = pre.validate_fields(data)
+    data = pre.select_fields(
+        data,
+        source=source,
+        extraction=cfg.rawprep.get("extraction"),
+        format=cfg.rawprep.get("format", "pt"),
     )
+    results = run.execute(data, save=pre.save_strategy(source), output=cfg.paths.datasets)
+    return pre.publish_dataset(results, source=source, session=TrainingRun())
 
 
 if __name__ == "__main__":

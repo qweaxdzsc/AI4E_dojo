@@ -11,7 +11,7 @@
 - `scripts/check-boundaries.mjs`：微领域公开门面导入检查。
 - `scripts/generate-contracts.py`：从服务 OpenAPI 生成 `src/infrastructure/contracts/api.generated.ts`。
 - `scripts/generate-platform-contracts.py`：从 spec 生成 `src/infrastructure/contracts/platform.generated.ts`。
-- `src/infrastructure/http/client.ts`：统一请求和错误。
+- `src/infrastructure/http/client.ts`：统一请求与错误，区分网络断开、HTTP失败、非JSON/空正文及204成功；优先 `error.message`，否则用业务 detail。
 - `src/infrastructure/components/`：异常边界、未开放提示、无业务语义配置输入组件；ActionButton 提供稳定可访问名称和真实忙碌禁用状态。
 - `src/infrastructure/theme/global.css`：平台布局；`visualization.css`：查看器内部布局。
 - `src/infrastructure/assets/binary.ts`：带修订二进制读取、引用计数与 CPU 缓存。
@@ -19,27 +19,27 @@
 
 ## 应用壳与微领域
 
-`src/app/App.tsx` 装配路由；`layouts/PlatformLayout.tsx` 提供整合外壳；`pages/ProjectDetailPage.tsx` 组合六页签，`TaskWorkbenchPage.tsx` 组合任务与八步导航。下列领域通过各自 `index.ts` 导出：
+`src/app/App.tsx` 装配路由；`layouts/PlatformLayout.tsx` 提供整合外壳；`pages/ProjectDetailPage.tsx` 组合六页签，`TaskWorkbenchPage.tsx` 组合任务与九步导航。下列领域通过各自 `index.ts` 导出：
 
-`pages/WorkbenchLandingPage.tsx` 是真实工作台选择入口，读取项目/任务和有效最近任务，`?choose=1` 强制切换；已归档或不存在的最近对象不自动恢复。全局侧栏由路由决定高亮与面包屑，整行链接和装饰图标的可访问名称分开。`pages/TaskWorkbenchPage.tsx` 与 `task-workbench.css` 用整合 HTML 最终主题的标题、`topsteps` 八步和 Recipe 条（真实案例名与输入输出交接），不再使用 Ant Design Steps。
+`pages/WorkbenchLandingPage.tsx` 是真实工作台选择入口，读取项目/任务和有效最近任务，`?choose=1` 强制切换；已归档或不存在的最近对象不自动恢复。全局侧栏由路由决定高亮与面包屑，整行链接和装饰图标的可访问名称分开。`pages/TaskWorkbenchPage.tsx` 与 `task-workbench.css` 用整合 HTML 最终主题的标题、`topsteps` 九步和 Recipe 条（真实案例名与输入输出交接），不再使用 Ant Design Steps。已完成且非当前步为成功绿，当前步保持蓝；任务表进度行同一套颜色。
 
 - `src/modules/projects/`：ProjectNavigation 项目创建、列表与管理，api 代理真实服务。
 - `public/project-covers/`：从整合原型提取的四张原字节装饰封面及来源 README；不作为科研结果。
-- `src/modules/tasks/`：TaskManagement 简洁创建时必选四组案例并按接口字段展示数据集与模型，成功进入原始处理；编辑仅元信息，派生继承配置与绑定。案例加载失败可在弹窗内重试。`stages.ts` 提供任务表与工作台共用的八步名称。api 读取登记案例，`task-management.css` 管任务表、更多菜单和创建弹窗密度，不写进全局样式。行内进入工作台与血缘使用同一按钮样式。
+- `src/modules/tasks/`：TaskManagement 简洁创建时必选四组案例并按接口字段展示数据集与模型，成功进入原始处理；编辑仅元信息，派生继承配置与绑定。案例加载失败可在弹窗内重试。`stages.ts` 提供任务表与工作台共用的九步名称及真实阶段状态映射。api 读取登记案例，`task-management.css` 管任务表、更多菜单和创建弹窗密度，不写进全局样式。行内进入工作台与血缘使用同一按钮样式。
 - `src/modules/files/`：FileBrowser 文件树、选择、查询和刷新；ProjectFiles 对照整合 HTML 的任务版本 / 搜索 / 类型 / 排序工具条和表列，浏览内容仍是真实目录，api 管访问。
-- `src/modules/rawprep/`：RawprepWorkbench 三栏；第 04 段对照细节原型勾选 PT/VTKHDF/Zarr，第 05 段为分片统计策略；执行门禁只看绑定有效与已选文件，未保存修订在提交前写入，不因 dirty 禁用主按钮；FieldExtractionEditor 自由字段容器；ExtractionDialog 旧兼容编辑组件；api 管配置与完整样本操作。
-- `src/modules/rawprep/DatasetBindingPanel.tsx`：带修订读取/保存目录或 NASA 三文件绑定，内置受控来源选择弹窗。`BoundDatasetFiles.tsx` 用原始数据处理/处理结果页签限制输入选择并浏览运行产物，表头对照细节原型第一行页签、第二行左刷新右绑定；`dataset-binding.css` 与 `rawprep-workbench.css` 对照细节原型三栏。NASA 文件选择使用根与路径组合的稳定键，FieldExtractionEditor 分别解析根和相对路径。
-- `src/modules/stages/`：StageWorkbench 只协调阶段配置修订、固定输入和操作；api 为共享阶段传输。
-- `src/modules/trainprep/PreparationPanel.tsx` 与 `trainprep.css`：对照细节原型三栏（9px 间距、等高 640），左栏真实文件表，字段与归一化可编辑，统计与采样不手填。
+- `src/modules/rawprep/`：RawprepWorkbench 三栏；第 04 段 PT/Zarr 复选可同时写出，VTKHDF 独立附加且仅已接入时显示；ShapeNet 新任务按官方案例默认勾选，NASA 不显示，已保存关闭保持原值；执行区填写平台数据集名称；执行范围只提供全部或指定样本，不按 train/test 分片；执行配置可改并行线程并写入 `rawprep.workers`；执行门禁还要求名称与至少一种格式，未保存修订在提交前写入，不因 dirty 禁用主按钮；FieldExtractionEditor 读文件后只勾选一个场或坐标；ExtractionDialog 旧兼容编辑组件；api 管配置与完整样本操作。
+- `src/modules/rawprep/DatasetBindingPanel.tsx`：修改绑定只选 contrib 公开数据集及其本机完整副本，一次保存处理方式与受控地址；左栏页签右侧刷新与修改绑定并排，其下直接是搜索框，不展示处理方式与本机地址说明。`BoundDatasetFiles.tsx` 用原始数据处理/处理结果页签限制输入选择；处理结果按路径建树，预览复用文件预览弹窗，下载走资产地址。`RawprepWorkbench.tsx` 按每个 `.pt` 一张提取卡片，对话框只勾选一个场或坐标；平台数据集名称可预填来源标识，检查/试跑/执行前写入 `dataset.processed_name`；执行配置四个按钮立刻带动进度条、日志状态与说明，再执行立刻清完成态，日志同页叠加。`dataset-binding.css` 与 `rawprep-workbench.css` 对照细节原型三栏。NASA 文件选择使用根与路径组合的稳定键，FieldExtractionEditor 分别解析根和相对路径。
+- `src/modules/stages/`：StageWorkbench 只协调阶段配置修订、固定输入和操作；失效绑定用人话说明，不写内部键名；平台数据集同一清单只列一条且名称优先，选项值不复用 asset_id，下拉按登记时间倒序且不自动勾最新；api 为共享阶段传输。
+- `src/modules/trainprep/PreparationPanel.tsx` 与 `trainprep.css`：对照细节原型三栏（9px 间距、等高 640），左栏按平台数据集选择并用产物树浏览，字段按模型角色与物理场下拉匹配并对照张量形状，中栏可改 train/test/eval 数量与抽取方法，右栏执行区展示已选平台数据集名称与全部/指定样本范围，不再放无效执行数量。归一化拆成方法与统一空间，保存副本默认勾选，统计与采样不手填。已有平台数据集但未选择时提示先选且主执行不可用，不自动勾最新。执行进度与叠加日志与原始处理同一套。
 - `src/modules/models/ModelPanel.tsx`：模型参数、采样、输入和真实结构宿主；无物理清单或准备记录时不能生成结构。
 - `src/modules/training/TrainingPanel.tsx`：按案例参数组织优化与训练控制。
-- `src/modules/executions/`：ExecutionLog 日志恢复；TrainingMonitor 对照运行细节页的摘要、左右栏和真实指标，api 管运行事实。
+- `src/modules/executions/`：ExecutionLog 日志恢复，原始处理可叠加多次运行正文；操作说明只在发生时写入一行，随正文滚动，不钉在底部。默认只渲染最近 500 行，其余留在内存，向上滚动展开；自动滚动取消后不抢滚动位置。`logWindow.ts` 计算窗口起点。可选回传运行快照给进度条；TrainingMonitor 对照运行细节页的摘要、左右栏和真实指标，api 管运行事实。
 - `src/modules/post/`：PostWorkspace 对照整合 HTML 后处理步（横向配置、指标/图表/三维页签、默认三栏可视化），PostMetricCharts 只绘制真实指标，`post.css` 管本页皮肤，api 管固定场景。不复刻示意徽章或假结果。
 - `src/modules/lineage/`：对照整合 HTML 的左图右检版本树；`layout.ts` 按真实父版本排布节点，不使用原型固定示意树。`LineageView` 区分创建快照、当前目录与固定运行，Fork 走任务公开派生门面。
 - `src/modules/comparisons/`：配置及固定来源比较；DifferencePanel 协调严格差值与查看器。`comparison.css` 只画表格/趋势/三维导轨外壳。
 - `src/modules/reports/`：新整合入口未开放；`ProjectReport` 只读历史正文，`report-shell.css` 同时给批量两栏外壳。
 - `src/app/pages/BatchShell.tsx`：批量页未开放外壳，不生成计划。
-- `src/modules/previews/`：FilePreviewDialog 宿主；FilePreviewContent、FieldTree、FieldSummary 由可视化领域提供真实内容，api 保留兼容。
+- `src/modules/previews/`：FilePreviewDialog 宿主；`preview-dialog.css` 管网格预览弹窗按视口封顶加高、可滚动、视口全屏和嵌入高度链。后处理三维页由 `task-workbench.css` / `post.css` 保持 820px 独立滚动窗口，iframe 保底 600px。FilePreviewContent、FieldTree、FieldSummary 由可视化领域提供真实内容，api 保留兼容。
 - `src/modules/visualization/`：VisualizationWorkspace 为唯一工作区公开组件；model 定义源、管线、窗口与场景，api 调用平台辅助操作。
 
 宿主不访问 vtk.js 对象；查看器不访问 task、训练配置或 Python 文件路径。显示对象与科学计算分开。
@@ -57,9 +57,78 @@
 
 - `e2e/platform-integrated.spec.ts`：复用真实运行检查阶段配置、固定交接、提取草稿与六页原型矩形对照。
 - `e2e/model-inspection.spec.ts`：真实 TorchVista 图形加载。
-- `e2e/task-dataset-binding.spec.ts`：从项目页点击完成四案例简洁创建与受控绑定、弹窗校验/重试/约定尺寸，以及 1440/1920 任务表对照整合 HTML。证据见 `.context/mvp/web-integrated-results/task-binding-correction/`。
+- `e2e/task-dataset-binding.spec.ts`：从项目页点击完成五案例简洁创建（模型在前，含体场），绑定改为选择公开数据集与本机副本；弹窗校验/重试/约定尺寸，以及 1440/1920 任务表对照整合 HTML。证据见 `.context/mvp/web-integrated-results/task-binding-correction/`。
 - `e2e/visualization-difference.spec.ts`、`visualization-export.spec.ts`：真实 NASA 差值及完整导出网格。
 - `e2e/visualization-safety.spec.ts`、`visualization-subscriptions.spec.ts`：资源/上下文恢复及明确标注的订阅协议夹具。
 - `e2e/visualization-camera.spec.ts`：完整固定引用、显式坐标空间及恢复场景重新校验；实际 NASA 缺声明时拒绝跨源联动。
 - `e2e/research-records.spec.ts`：版本固定阶段参数加入比较、保存恢复及真实迟到请求隔离。
 - `e2e/home-entry.spec.ts`：从首页逐项点击、空项目新建任务、最近任务恢复与归档失效，以及 1440/1920 首页原型几何和封面摘要对照；测试生成记录按确切身份归档。
+
+一致性切片新增：`src/modules/files/StageFiles.tsx` 固定清单/运行文件与资产预览；`model.css`、`training.css`、`executions.css` 分属模型、训练、监控领域。`e2e/stage-consistency.spec.ts` 验证状态与保存协调、平台数据集同清单去重及登记时间倒序，`prototype-consistency.spec.ts` 验证整合原型控件几何，`execution-monitor.spec.ts` 验证真实坐标语义与日志交互（契约夹具明确标记）。当前证据入口为 `mvp/web-integrated-results/ui-consistency/`，不沿用历史通过数。
+
+补充测试：`e2e/stage-files.spec.ts` 固定来源空态、范围切换与刷新；`e2e/rawprep-consistency.spec.ts` 公开数据集绑定取消、结果树预览下载与正式执行进度；`e2e/rawprep-real-consistency.spec.ts` 两数据集真实页面执行与结果预览；`e2e/execution-log.spec.ts` 长日志 500 行窗口、自动滚动开关与向上展开。整体证据与未覆盖状态见上述ui-consistency/README。
+
+## 独立可视化任务交接
+
+- `packages/ai4e-web/src/modules/visualization/PhysFieldEmbed.tsx`：任务目标、独立应用嵌入；显式重开先关闭再创建，满员可重试。内层 Trame 菜单挂到页面根节点；嵌入页关闭后的对话框蒙层不得挡住点击。已可见时重复可见性消息由 Trame 忽略，避免工作进程连读网格。
+- `packages/ai4e-web/src/modules/visualization/api.ts`：可视化任务资产与会话请求。
+
+## 声明驱动原始处理
+
+rawprep 页面展示声明默认值、真实字段、能力依赖及样本范围；字段提取添加按钮在列表上方，配置固定高度单行滚动，编辑/删除为图标；法向/SDF 等几何产物不进提取列表，与左侧能力同一行命名且不带 `.pt`；最近顶点距离只对应 `volume_sdf`，体积法向独立对应 `volume_normals`，点到网格表面距离三个名称纵向列出；阈值按默认写入不展示；对话框列出声明源文件和样本目录场文件，编辑回填默认 VTK 与字段，来源表与处理结果树固定列宽、样式图标与「预览 文件名」标签，保存提示与进度在执行栏内。新增 e2e/manifest-rawprep-real.spec.ts 从首页操作真实任务到 PT 预览。
+
+圈定验收入口：`.context/mvp/manifest-rawprep-acceptance.md`。
+
+三维对象工作台：visualization 原公开门面增加会话内追加结果；宿主来源选择经项目身份校验后进入独立 Vis，保留既有会话和任务版本。浏览器验收 `tests/integration/viz_objects_browser.cjs`，交接测试 `tests/integration/test_viz_host_bindings.py`。
+
+## 同数据集模型选择
+
+- `src/modules/models/ModelPanel.tsx` 与 `model.css`：两个官方模型、可选表面/体场、项目预设与导出；结构区不再展示清单或准备下拉。采样、固定损失行与切片数量跟随当前模型字段，不沿用上一模型。模型设置不展示权重加载。
+- `src/modules/stages/StageWorkbench.tsx` 与 `api.ts`：读取官方模型与预设、按 `target_model`/`target_preset` 整段替换；跟踪不传用户勾选的清单或准备。
+- `src/modules/tasks/TaskManagement.tsx`：新建案例名为「模型 · 数据集」，含体场起步项。
+- `e2e/model-picker.spec.ts`：双数据集、变体、导出、切换/编辑/保存/刷新/冲突与选项失败；换到 Transolver-3 后展示其步长/分块/切片与固定损失，不残留 AB-UPT 超节点，也不出现权重加载。`model-inspection.spec.ts` 直接生成真实结构。
+- `src/infrastructure/contracts/api.generated.ts`：阶段保存含官方模型、变体与预设字段。
+- 验收状态见 `mvp/model-picker-acceptance.md`；长期说明归 Web PRD 模型设置章节。
+
+`e2e/http-errors.spec.ts`：项目页的空/HTML代理错误、业务错误、截断成功正文、断连后恢复，以及204与有效JSON契约。
+
+默认 Trame 入口修正：`visualization/VisualizationWorkspace.tsx` 默认装配 `PhysFieldEmbed.tsx`，旧场景保留显式兼容；`physical-workspace.css` 提供宿主尺寸。`previews/FilePreviewDialog.tsx`、`FilePreviewContent.tsx`、`files/StageFiles.tsx` 交付来源与任务，网格不走旧分页预览；阶段文件与原始处理共用同一预览弹窗。网格弹窗默认加高可视区，标题提供放大到视口全屏；全屏后工作台贴满，预览不显示「保存到任务」条。`post/PostWorkspace.tsx` 在未选择来源时也显示工作台。`visualization/api.ts` 的物理会话请求复用 HTTP 错误门面。`files/index.ts` 与 `executions/index.ts` 公开原始处理需要的文件及运行读取操作，调用方不穿透微领域。
+
+`e2e/preview-dialog.spec.ts`：网格预览弹窗默认高度与放大/退出全屏。
+
+`e2e/trame-entry.spec.ts`：真实原始处理及后处理路由、网格着色、会话内导入、页面退出回收，以及迟到建会话响应回收。真实用例需 `DOJO_TRAME_PROJECT`、`DOJO_TRAME_TASK` 指向已有 ShapeNet 任务；缺少环境跳过不能算验收。证据及范围见 `mvp/phys-workbench-acceptance.md`。
+
+2026-09-14 HTTP恢复验收：7项浏览器回归、构建与微领域检查通过；原平台项目abc实际浏览器读取正常。证据目录 `/Users/zonghui/work/project_simulation/dojo_train/http-recovery/`，包含测试日志、恢复截图和本机服务启动记录。
+
+
+## 独立推理 Web 切片
+
+- `src/modules/inference/index.ts`：公开 InferenceWorkspace、InferenceResults、listInferenceBatches、inferenceResults、inferenceSource 及轻量显示类型。其他领域只通过该入口调用。
+- `api.ts`：检查点、样本、检查、提交、批次查询/取消/重试/恢复及结果接口适配；过渡响应解析集中在此，兼容缺失不放行。
+- `model.ts`：已确认批次状态和服务显示契约；`useInference.ts`：选择草稿、持久请求身份、轮询及迟到响应隔离；终态通过既有 `dojo:task-updated` 通道通知壳重读任务摘要。
+- `CheckpointPicker.tsx`、`SamplePicker.tsx`、`BatchProgress.tsx`、`InferenceResults.tsx`：候选、样本、真实进度、文件和服务指标；`InferenceWorkspace.tsx` 与 `inference.css` 组合工作区，不实现物理计算。
+- `src/modules/tasks/stages.ts`：九步和稳定 slug；`resolveStage` 保留旧数字 6→post、7→report。任务表、血缘页、最近任务与工作台共用映射，访问不改变完成事实。
+- `src/modules/post/PostResultsWorkspace.tsx`：固定推理结果消费；跳转为 `post?batch=<批次>&run=<运行>&sample=<样本>&split=<分片>`，不提交模型计算。`PostWorkspace.tsx` 保留历史调用签名并适配统一三个Tab；旧图表组件不进入后处理导航。
+- `e2e/inference.spec.ts`：契约夹具覆盖真实页面请求、批量选择、幂等重试、状态恢复、导航兼容和结果交接；不代表物理计算验收。
+- `e2e/inference-real.spec.ts`：使用 `DOJO_INFER_PROJECT`、`DOJO_INFER_TASK`、逗号分隔的 `DOJO_INFER_CHECKPOINTS` 与 `DOJO_INFER_SAMPLES`，在隔离真实任务验证至少2×2结果、下载和Trame；核验终态刷新，分别滚入批次/结果/指标区域截图。无环境跳过不算通过。
+
+## 后处理三页签与固定结果评价
+
+- `modules/post/PostResultsWorkspace.tsx`：三个Tab与任务级常驻Trame；不再使用全局批次选择器。
+- `PostMetricsPanel.tsx`、`usePostMetrics.ts`：字段/指标选择、后台评价、详情、历史和导出。
+- `PostResultFilesPanel.tsx`、`PostFilePreviewPanel.tsx`、`usePostResults.ts`：结果树、内联预览、分隔条和批量加入。
+- `post/model.ts`、`api.ts`、`post.css`：协议、领域状态和参考图皮肤。
+- `files/ArtifactFileTree.tsx`、`artifactTree.ts`、`artifact-file-tree.css`：原始数据、数据准备与后处理共用树，默认收起，点开再取一层；`rawprep/BoundDatasetFiles.tsx`输入和处理结果都走这棵树。
+- `visualization/PhysicalFilePreview.tsx`：Vis转换后的单文件紧凑视口；`PhysFieldEmbed.tsx`公开追加句柄和可见性通知，创建与追加分离。
+- `previews/FilePreviewContent.tsx`支持内联模式及来源切换重置；`TaskWorkbenchPage.tsx`按稳定任务身份挂载，兼容深链接。
+- `e2e/post-{workspace,files,session,real}.spec.ts`、`post-fixture.ts`：布局、文件、会话、三维页剩余视口与真实CFD分开验收。
+
+验收导航：`.context/mvp/post-workspace-acceptance.md`。
+
+后处理参考图精修：`post.css` 按内容容器调整横向配置、紧凑指标网格和文件预览比例；共享 `ArtifactFileTree` 提供独立勾选列、展开箭头和文件类型图标。`FilePreviewContent` 的compact网格包装保持伸展，`PhysicalFilePreview` 统一Ant Design控件。`e2e/post-ui.spec.ts` 圈定1440/1920行高、树表溢出、勾选列对齐、浮层关闭及预览放大。证据继续归 `mvp/post-workspace-acceptance.md`。
+
+## 推理工作台选择与统计
+
+`src/modules/inference/{FieldPicker,MetricPicker,InferenceSettings,InferenceMetricTable,InferenceCharts,ResultViewSettings}.tsx` 与 `src/modules/inference/useInferenceResults.ts`：四栏、配置条与固定结果视图；`e2e/inference-{layout,selection,results,usability}.spec.ts`：原图尺寸、2000样本和真实CFD流程。
+
+专项状态与证据见 `.context/mvp/inference-ui-acceptance.md`，不沿用旧验收结论。

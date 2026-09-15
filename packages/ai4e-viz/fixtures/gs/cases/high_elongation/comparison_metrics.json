@@ -1,0 +1,19 @@
+{
+  "psi_l1_relative": 1.2700968634816499,
+  "psi_l2_relative": 1.7232067892330802,
+  "pde_l1_residual": 3.6362557411193848,
+  "Ip_pino": 2994699.9772880506,
+  "Ip_traditional": -2999999.4265435636,
+  "Ip_relative_error": 1.9982335165771619,
+  "traditional_iterations": 24,
+  "traditional_converged": true,
+  "geometry_params": {
+    "R0": 1.2,
+    "a": 0.4,
+    "kappa": 2.3,
+    "delta": 0.4
+  },
+  "name": "high_elongation",
+  "description": "\u9ad8\u62c9\u4f38D\u5f62",
+  "checkpoint": "outputs/checkpoints/pino_gs/20260724_024214_pino_tkno_high_precision_cnn_mlp/best.pt"
+}

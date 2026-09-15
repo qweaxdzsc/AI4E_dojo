@@ -12,7 +12,7 @@ from ai4e_core.base.events import event, operation
 MANIFEST_PATH = Path(__file__).with_name("manifest.yaml")
 
 
-def open_dataset(*, root, manifest=None, samples="all", partition="official") -> Dataset:
+def open_dataset(*, root, manifest=None, samples="all", partition="official", check_exists=True) -> Dataset:
     """按 manifest 打开按需数据集；显式样本必须存在且恰好归属一个分片。"""
     samples = (
         OmegaConf.to_container(samples, resolve=True) if OmegaConf.is_config(samples) else samples
@@ -67,7 +67,7 @@ def open_dataset(*, root, manifest=None, samples="all", partition="official") ->
             raise ValueError("样本选择为空、重复或未出现在分片名单中")
         for value in selected:
             target = (root / value).resolve()
-            if not target.is_relative_to(root) or not target.is_dir():
+            if not target.is_relative_to(root) or (check_exists and not target.is_dir()):
                 raise FileNotFoundError(f"样本不存在或越出数据根: {target}")
         chosen = {k: tuple(v for v in values if v in selected) for k, values in groups.items()}
         chosen = {k: v for k, v in chosen.items() if v}

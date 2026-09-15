@@ -64,13 +64,20 @@ def write_tensors(ctx: dict) -> dict[str, SampleResult]:
     """dry-run 和提交共用预检；只返回轻量结果，不把整批数组带回 run。"""
     output = ctx["output"]
     dest = sample_destination(ctx["config"], ctx.get("sample"))
-    selected = plan_output(
-        dest,
-        list(ctx["payloads"]),
-        output["filemap"],
-        optional=output.get("optional", []),
-        overwrite=ctx.get("overwrite", False),
-    )
+    filemaps = output.get("format_filemaps") or {None: output["filemap"]}
+    selected = {}
+    format_filemaps = {}
+    for index, (fmt, fmap) in enumerate(filemaps.items()):
+        planned = plan_output(
+            dest,
+            list(ctx["payloads"]),
+            fmap,
+            optional=output.get("optional", []),
+            overwrite=ctx.get("overwrite", False) or index > 0,
+        )
+        format_filemaps[fmt or "pt"] = planned
+        if not selected:
+            selected = planned
     extras = {}
     if ctx.get("vtkhdf"):
         import json
@@ -101,6 +108,21 @@ def write_tensors(ctx: dict) -> dict[str, SampleResult]:
         for record in ctx["records"]
     }
     extras["field-identities.json"] = lambda path: path.write_text(json.dumps(identity_mapping))
+    from functools import partial
+
+    from ai4e_core.abilities.data.save.store import write_tensor_file
+    from ai4e_core.abilities.data.save.zarr import write_zarr
+
+    for fmt, fmap in format_filemaps.items():
+        if fmap == selected:
+            continue
+        for name, filename in fmap.items():
+            payload = ctx["payloads"][name]
+            extras[filename] = (
+                partial(write_zarr, payload=payload)
+                if fmt == "zarr"
+                else partial(write_tensor_file, payload=payload, overwrite=True)
+            )
     notices = []
     if not ctx.get("dry_run", False):
         with warnings.catch_warnings(record=True) as caught:
@@ -119,6 +141,8 @@ def write_tensors(ctx: dict) -> dict[str, SampleResult]:
         "path": str(dest),
         "names": list(selected),
         "filemap": selected,
+        "formats": output.get("formats") or list(format_filemaps),
+        "format_filemaps": format_filemaps,
         "available_fields": [a if b is None else f"{a}/{b}" for a, b in ctx["routes"].values()],
         "validation": ctx["validation"],
         "filtered_validation": ctx["filtered_validation"],

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 
 from ai4e_core.abilities.data.save.store import load_named_tensors
@@ -34,6 +35,30 @@ class ManifestIndex:
                 record = self.records.get((partition, sample))
                 if record is None or not record.get("written"):
                     raise ValueError(f"清单没有唯一已提交样本: {sample}")
+
+    def remap_partitions(self, partitions: Mapping[str, Sequence[str]]) -> None:
+        """按样本名重挂分片；张量路径不变，空分片不进入索引。"""
+        by_name: dict[str, dict] = {}
+        for (_partition, sample), record in self.records.items():
+            existing = by_name.get(sample)
+            if existing is not None and existing is not record and existing != record:
+                raise ValueError(f"同一样本在多个原分片中且记录不一致: {sample}")
+            by_name[sample] = record
+        rebuilt: dict[tuple[str, str], dict] = {}
+        remapped: dict[str, list[str]] = {}
+        for name, samples in partitions.items():
+            kept: list[str] = []
+            for sample in samples:
+                identity = str(sample)
+                record = by_name.get(identity)
+                if record is None:
+                    raise ValueError(f"重划分片找不到样本 {identity}")
+                rebuilt[(str(name), identity)] = record
+                kept.append(identity)
+            if kept:
+                remapped[str(name)] = kept
+        self.records = rebuilt
+        self.partitions = remapped
 
     def read(self, partition: str, index: int = 0, *, fields=None, selection=None):
         """读取指定样本，校验每个字段的空间状态、形状与类型。"""

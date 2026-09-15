@@ -31,8 +31,15 @@ def read_configuration(project: str | Path, task_id: str) -> dict:
     return {"revision": hashlib.sha256(data).hexdigest(), "config": config}
 
 
-def save_configuration(project: str | Path, task_id: str, patch: dict, *, revision: str) -> dict:
-    """在项目锁内核对修订并保存配置；未编辑的配置段保持。"""
+def save_configuration(
+    project: str | Path,
+    task_id: str,
+    patch: dict,
+    *,
+    revision: str,
+    replace_sections: tuple[str, ...] = (),
+) -> dict:
+    """在项目锁内核对修订；普通编辑合并，受控 replace_sections 先移除旧段再保存。"""
     with transaction(project) as db:
         task = get(db, "task", task_id)
         if task.get("archived", False):
@@ -42,6 +49,11 @@ def save_configuration(project: str | Path, task_id: str, patch: dict, *, revisi
         if hashlib.sha256(data).hexdigest() != revision:
             raise ValueError("configuration_revision_conflict")
         original = OmegaConf.create(data.decode())
+        for section in replace_sections:
+            if section not in {"rawprep", "model", "train", "trainprep"} or section not in patch:
+                raise ValueError("unsupported_configuration_replacement")
+            # 被替换的旧树不得参与递归合并，连类型不兼容的旧节点也应移除。
+            original.pop(section, None)
         if "sampling" in patch.get("model", {}):
             if "sampling" in patch.get("trainprep", {}):
                 raise ValueError("model.sampling: 新旧采样声明不能同时存在")

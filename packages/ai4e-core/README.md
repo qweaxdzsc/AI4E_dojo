@@ -16,7 +16,7 @@
 - `abilities/data/filter/`：有效点 mask、与表面坐标精确重合的体积点标记，以及落盘前套对齐 mask；不删原数组。
 - `abilities/data/validate/`：同组来源、归属、数量和行身份校验，以及共用输出预检。
 - `abilities/data/save/`：具名场记录、编码为 float32 张量、按对照表写/读 `.pt`。覆盖使用临时目录与备份恢复，cell 打包由业务配置决定。
-- `abilities/data/source/split.py`：按传入名单列分片并校验人数。
+- `abilities/data/source/split.py`：按传入名单列分片并校验人数；准备阶段可按 `trainprep.split` 先限定执行样本再重划 train/test/eval，不改张量。
 - `applications/aero_cfd/trainprep/dataset.py`：规范化预处理根、打开样本并派生表面距离全零场。
 - `abilities/data/stats/`：读入 YAML/JSON 统计量、按数组流累计矩；训练样本与字段选择在 rawprep/stats。
 - `abilities/geometry/`：点到最近表面顶点（只吃坐标）、点到网格表面（先校验全部单元为支持的二维面）、表面点法向。两套距离字段名分开；点到面失败不降级为点到点。

@@ -1,0 +1,62 @@
+{
+  "reference_commit": "40ffb6239d865b6b7a16538559939a990e6d9cd5",
+  "reference_files": {
+    "src/advection.ipynb": "7585383df10448933fcc32cedb290b0dbaa6c2ce73b4dfe1ea04ac5c096ae317",
+    "src/burgers.ipynb": "ec2726746c9577875b5eadec5ad8a38150ba730b1a6103957bddbfc65a24a693",
+    "src/convection_diffusion.py": "01f241e83d71b378a827a08833b1b5831676bda31404df633c2ed3186c0894d1",
+    "src/derivatives_ablation.ipynb": "0a1715c763d17aa6c34dd0c689907fe48feebe337e8278313c6bcbb7bed2a412",
+    "src/diffusion_trapezoid.ipynb": "ec6726708d5aada0ecee06a20e4856c41b0d887b517ca2d8fd02d69d237dc405",
+    "src/generalization_error.ipynb": "c9d866ec5de614d78446a43b529fd271f13201abd292380c44e3215cbc2079fe",
+    "src/neumann_bc.py": "3535db4768af5dbf669ed3f48d6d7a709f779025acfe83ed81dc0bea2856c7da"
+  },
+  "implementation": "one active implementation per case; Neumann/Advection selected source numerical behavior; selected trapezoid10; CD/Burgers pending scope confirmation",
+  "license_note": "No LICENSE file found in the locked reference checkout. Dojo does not assert an upstream license.",
+  "corrections": [
+    "physical spline derivatives remain only in CD/Burgers pending alignment",
+    "non-duplicated periodic FFT grid and correct Burgers sign",
+    "CD right-boundary-only free coefficient head (not source-equivalent)"
+  ],
+  "paper": {
+    "url": "https://arxiv.org/html/2503.16777v3",
+    "html_sha256": "b460a863c63a19bbb93c832f13d6210748a3dc7242ec54708cee1db14ed0f6b9",
+    "trapezoid": {
+      "control_points_t_eta_xi": [
+        100,
+        20,
+        20
+      ],
+      "pde_weight": 0.001,
+      "physics_loss_equation": "84 (intentional cross-term-free approximation)",
+      "truth_equation": "paper Eq76/81 full mapped PDE; selected source generator remains approximate",
+      "train_samples_main_text": 10,
+      "train_samples_appendix": 50
+    },
+    "neumann_control_points": "Paper HTML omits numerical value; 40x40 taken from locked code",
+    "generalization_metric": "global maximum absolute error over all test samples and points"
+  },
+  "selected_trapezoid": {
+    "training_instances": 10,
+    "testing_instances": 10,
+    "control_points_t_eta_xi": [
+      100,
+      20,
+      20
+    ],
+    "epochs": 3000,
+    "updates": 30000,
+    "pde_weight": 0.001,
+    "generator": "Euler row-spacing approximation; FP32 state with NumPy1 scalar promotion preserved",
+    "spline": "source parameter derivatives and FP32 accumulation, not physical derivatives",
+    "coefficients": "full output t/xi/eta; initial interior zero then four sides one",
+    "rng": "MT19937 seed42; ten train, one demo draw, ten test",
+    "decision": "User selected main-text10 trial; unresolved paper/source differences retained",
+    "replacement": "old trapezoid data and checkpoints require regeneration/retraining"
+  },
+  "selected_neumann_advection": {
+    "decision": "user selected original-code accuracy path after six independent full-budget trials",
+    "neumann": "source basis/derivatives/endpoints; seed42 original initialization consumption; full epoch loss sum then one backward/Adam",
+    "advection": "source parameter derivatives; full output head; np.interp initial control row; original fused MSELoss; per-instance Adam",
+    "data": "FP32 original arithmetic; continuous MT19937 train then test",
+    "replacement": "old physical-derivative data/preparations/checkpoints rejected; regenerate and retrain"
+  }
+}

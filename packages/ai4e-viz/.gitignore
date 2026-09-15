@@ -1,0 +1,29 @@
+# Python运行环境与缓存
+backend/.venv/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# 前端依赖、构建和测试产物
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/test-results/
+frontend/playwright-report/
+
+# 运行数据不进入源码版本库
+var/
+backend/state/
+backend/uploads/
+
+# 本机工具与系统文件
+.DS_Store
+.tools/
+# 项目规则和技能属于源码，本机配置不迁移。
+.cursor/settings.json
+.cursor/mcp.json
+.cursor/agent-schedules.json
+.cursor/skills/use-experience
+tmp/
+*.log
+!error.log

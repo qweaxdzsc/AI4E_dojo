@@ -4,6 +4,7 @@ import hashlib
 import json
 import math
 import random
+from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -33,6 +34,7 @@ from ai4e_core.applications.aero_cfd.trainprep.dataset import (
     prepare_partition_sample,
     repeated_samples,
 )
+from ai4e_core.base.config import operation_record, plain, resolve_operation
 from ai4e_core.base.events import sample_context
 from ai4e_spec.components.model import describe_model
 
@@ -56,6 +58,8 @@ class TrainingJob:
     device: object = None
     execution: dict | None = None
     protocol: dict | None = None
+    objective: object = None
+    extensions: dict | None = None
 
 
 def open_training(config, run, *, factory, predict, prepare, collate, source, reference=None):
@@ -83,8 +87,13 @@ def open_training(config, run, *, factory, predict, prepare, collate, source, re
     return TrainingJob(effective, run, data, factory, predict, source)
 
 
-def build_model(job):
+def build_model(job, *, settings=None):
     """在选定设备构建正式模型，并应用初始权重与冻结设置。"""
+    if settings is not None:
+        requested = plain(settings)
+        requested.pop("sampling", None)
+        if requested != job.config["model"]:
+            raise ValueError("模型设置与准备声明不一致")
     config, settings, factory = job.config, job.config["train"], job.factory
     device = resolve_device(settings.get("device", "auto"))
     precision = settings.get("precision", "fp32")
@@ -121,18 +130,34 @@ def build_model(job):
         initial=initial,
         entrypoint=getattr(job.run, "entrypoint", None),
     )
+    if config["sampling"].get("target") or not job.data.prepare.__module__.startswith(
+        "ai4e_contrib."
+    ):
+        job.extensions = {**(job.extensions or {}), "sampling": operation_record(job.data.prepare)}
     job.run.artifact("training-protocol.json", job.protocol)
     return job
 
 
-def configure_objectives(job):
+def configure_objectives(job, *, settings=None, operation=None):
     """按公开监督声明构造比较目标。"""
+    if settings is not None:
+        job.config["model"]["supervision"] = plain(settings)
     job.terms = objectives(job.config.get("model", {}))
+    selection = job.config.get("model", {}).get("objective", {})
+    if operation is not None or selection.get("target"):
+        job.objective = resolve_operation(selection, operation=operation)
+        job.extensions = {**(job.extensions or {}), "objective": operation_record(job.objective)}
     return job
 
 
-def configure_optimization(job):
+def configure_optimization(job, *, settings=None):
     """配置优化器、有效更新调度、EMA 和精度状态。"""
+    if settings is not None:
+        supplied = plain(settings)
+        for key in ("batch_size", "device", "precision"):
+            if supplied.get(key, job.config["train"][key]) != job.config["train"][key]:
+                raise ValueError(f"优化阶段不能改变已准备的 {key}")
+        job.config["train"].update(supplied)
     settings, model, index = job.config["train"], job.model, job.data.index
     precision = settings.get("precision", "fp32")
     optimizer = build_optimizer(
@@ -161,8 +186,13 @@ def configure_optimization(job):
     return job
 
 
-def configure_evaluation(job, *, step=None, callbacks=()):
+def configure_evaluation(job, *, step=None, callbacks=(), settings=None, operation=None):
     """装配共享数据迭代、评估与恢复契约，训练尚未启动。"""
+    if settings is not None:
+        supplied = plain(settings)
+        for key in ("evaluation_split", "test_repeat", "evaluate_repeat", "metric"):
+            if key in supplied:
+                job.config["train"][key] = supplied[key]
     config = job.config
     settings = config["train"]
     index, normalization = job.data.index, job.data.normalization
@@ -205,6 +235,8 @@ def configure_evaluation(job, *, step=None, callbacks=()):
             return (step or default_step)(network, batch)
 
     def default_step(network, batch):
+        if job.objective is not None:
+            return job.objective(network, batch, config)
         predictions = route(
             predict(network, batch["inputs"]),
             [item["prediction"] for item in terms],
@@ -218,6 +250,8 @@ def configure_evaluation(job, *, step=None, callbacks=()):
         return supervised(predictions, targets, terms)
 
     def evaluate_test():
+        if not index.partitions.get(selection):
+            return {"split": selection, "skipped": True, "metrics": {}, "length": 0}
         preserve = config["sampling"].get("random_stream") != "global"
         result = evaluate(
             model,
@@ -246,7 +280,9 @@ def configure_evaluation(job, *, step=None, callbacks=()):
     repeats = int(settings.get("test_repeat", 10))
 
     def evaluate_repeat():
-        samples = list(index.partitions[selection])
+        samples = list(index.partitions.get(selection) or [])
+        if not samples:
+            return {"split": "test_repeat", "skipped": True, "repeats": repeats, "length": 0}
 
         def repeated():
             for item, _sample, repeat in repeated_samples(samples, repeats):
@@ -314,7 +350,67 @@ def configure_evaluation(job, *, step=None, callbacks=()):
         "contract": contract,
         "callbacks": tuple(callbacks),
     }
+    metric_selection = (
+        settings.get("metric", {}) if settings is not None else config["train"].get("metric", {})
+    )
+    if operation is not None or metric_selection.get("target"):
+        metric = resolve_operation(metric_selection, operation=operation)
+
+        def evaluate_custom():
+            if not index.partitions.get(selection):
+                return {"split": selection, "skipped": True, "metrics": {}, "length": 0}
+            return metric(model, batches(selection, evaluation=True), config, normalization)
+
+        job.execution["evaluate"] = evaluate_custom
+        job.extensions = {**(job.extensions or {}), "metric": operation_record(metric)}
+    if job.extensions:
+        job.execution["contract"]["extensions"] = job.extensions
+        job.protocol["extensions"] = job.extensions
     return job
+
+
+def configure_resume(job, *, checkpoint=None):
+    """登记完整状态恢复；实际恢复仍在既有 fit 生命周期中完成。"""
+    job.config["train"]["resume"] = checkpoint
+    if job.execution is not None:
+        job.execution["settings"]["resume"] = checkpoint
+    return job
+
+
+def check_or_prepare(
+    config, *, reference, model_component, prepare_stage, session, public_config=None
+):
+    """兼容探测与检查模式；准备模式调用 recipe 显式准备阶段。"""
+    from ai4e_core.applications.aero_cfd.trainprep.dataset import probe
+
+    if session.dry_run and reference:
+        if isinstance(reference, dict) and reference.get("mode", "").endswith("_check"):
+            result = {"mode": "train_check", "deferred": True, "reason": "准备检查没有发布产物"}
+        else:
+            data = preparation.consume(
+                config,
+                reference,
+                prepare=model_component.prepare_inputs,
+                collate=model_component.collate,
+            )
+            result = {"mode": "train_check", "split_counts": data.record["split_counts"]}
+        session.report(result)
+        return result
+    if config["train"].get("mode") == "prepare" and not session.dry_run:
+        return prepare_stage(public_config if public_config is not None else config)
+    probe_config = deepcopy(config)
+    if probe_config["train"].get("mode") == "fit":
+        probe_config["train"]["mode"] = "prepare"
+    result = probe(probe_config, prepare=model_component.prepare_inputs, dry_run=session.dry_run)
+    session.report(
+        {
+            "mode": config["train"].get("mode", "probe"),
+            "sample_id": result["sample_id"],
+            "split_counts": result["split_counts"],
+            "names": list(result["physical"]),
+        }
+    )
+    return result
 
 
 def execute_training(job):

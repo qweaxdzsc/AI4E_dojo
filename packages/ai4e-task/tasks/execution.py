@@ -28,6 +28,8 @@ def submit_run(
     expected_revision: str | None = None,
     operation_mode: str = "execute",
     input_keys: list[str] | None = None,
+    start: bool = True,
+    metadata: dict | None = None,
 ) -> dict:
     """捕获当前工作目录并提交；返回运行记录，不创建正式版本。"""
     from omegaconf import OmegaConf
@@ -48,6 +50,7 @@ def submit_run(
             "operation_mode": operation_mode,
             "expected_revision": expected_revision,
             "input_keys": input_keys,
+            **({"start": start, "metadata": metadata} if not start or metadata is not None else {}),
         }
     )
     published = False
@@ -150,7 +153,10 @@ def submit_run(
                 "stages": list(OmegaConf.select(cfg, "pipeline.stages", default=[])),
                 "source_snapshot": captured,
                 "code_digest": digest(inventory(stage / "code")),
+                "metadata": metadata or {},
             }
+            if not start:
+                value["status"] = "queued"
             stage.rename(execution)
             published = True
             put(db, "run", value)
@@ -161,6 +167,8 @@ def submit_run(
         raise
     finally:
         shutil.rmtree(stage, ignore_errors=True)
+    if not start:
+        return value
     # 意图已持久化再启动。此处崩溃留下 pending，查询标待核对，不自动重复提交。
     try:
         pid = local.start(execution / "request.json")
@@ -169,6 +177,30 @@ def submit_run(
     else:
         value.update(pid=pid, status="running")
     with transaction(project) as db:
+        put(db, "run", value, replace=True)
+    return value
+
+
+def start_captured_run(project: str | Path, run_id: str) -> dict:
+    """启动已冻结的排队运行；事务内改变启动意图，重复调用不重启进程。"""
+    project = Path(project).resolve()
+    with transaction(project) as db:
+        value = get(db, "run", run_id)
+        if value["status"] != "queued":
+            return value
+        if get(db, "task", value["task_id"]).get("archived"):
+            raise ValueError("task_archived")
+        code = project / value["code_path"]
+        if digest(inventory(code)) != value["code_digest"]:
+            raise ValueError("run_snapshot_changed")
+        # 启动与登记 PID 共用事务，取消请求不能落入无 PID 的启动缝隙。
+        request = project / value["request_path"]
+        try:
+            pid = local.start(request)
+        except Exception as exc:  # noqa: BLE001 - 保存启动失败事实
+            value.update(status="failed", error=f"launch_failed: {exc}")
+        else:
+            value.update(pid=pid, status="running")
         put(db, "run", value, replace=True)
     return value
 
@@ -197,6 +229,15 @@ def stop_run(project: str | Path, run_id: str, *, timeout: float = 10) -> dict:
     value = get_run(project, run_id)
     if value["status"] in {"succeeded", "failed", "stopped"}:
         return value
+    if value["status"] == "queued":
+        with transaction(project) as db:
+            current = get(db, "run", run_id)
+            if current["status"] == "queued":
+                current["status"] = "stopped"
+                current["canceled_before_start"] = True
+                put(db, "run", current, replace=True)
+                return current
+        return stop_run(project, run_id, timeout=timeout)
     request = Path(project).resolve() / value["request_path"]
     if not local.alive(value.get("pid"), request):
         raise RuntimeError("process_identity_unconfirmed")

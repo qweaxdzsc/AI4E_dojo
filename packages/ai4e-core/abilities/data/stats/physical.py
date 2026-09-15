@@ -23,7 +23,7 @@ def freeze(view, config: dict) -> Normalization:
     need = {
         name: spec
         for name, spec in specs.items()
-        if spec["method"] != "identity" and not spec.get("parameters") and not stats
+        if spec["method"] not in {"identity", "custom"} and not spec.get("parameters") and not stats
     }
     if need:
         for index in range(len(view.partitions["train"])):
@@ -91,6 +91,8 @@ def freeze(view, config: dict) -> Normalization:
             "parameters": parameters,
             "scope": spec.get("scope", "point"),
         }
+        if method == "custom":
+            fields[name]["target"] = spec["target"]
     return Normalization(
         {"version": 2, "fields": fields, "training_samples": view.partitions["train"]}
     )

@@ -1,4 +1,4 @@
-"""消费明确登记的训练运行，独立执行五样本全点后处理。"""
+"""消费明确登记的训练运行，独立执行全点推理，保留既有后处理登记。"""
 
 import argparse
 import json
@@ -23,20 +23,27 @@ def main():
         previous = Path(record["run"])
         output = args.root / "runs" / name
         before = set(output.iterdir())
+        example = args.root / "examples" / name
+        native = (example / "infer.py").is_file()
+        stage = "infer" if native else "post"
         command = [
             sys.executable,
-            str(args.root / "examples" / name / "post.py"),
+            str(example / (stage + ".py")),
             "--set",
-            "post.checkpoint=" + str(previous / "checkpoints/last.pt"),
+            stage + ".checkpoint=" + str(previous / "checkpoints/last.pt"),
             "--set",
             "train.preparation=" + str(previous / "artifacts/preparation.json"),
         ]
+        if native:
+            command += ["--set", "infer.preparation=" + str(previous / "artifacts/preparation.json")]
         result = subprocess.run(command, check=False)
         created = set(output.iterdir()) - before
         if len(created) != 1:
             raise ValueError("后处理运行身份不唯一")
         run = created.pop()
-        manifest = run / "artifacts/physical-predictions.json"
+        manifest = run / "artifacts/inference-results.json"
+        if not manifest.is_file():
+            manifest = run / "artifacts/physical-predictions.json"
         complete = result.returncode == 0 and manifest.exists()
         results[name] = {
             "status": "succeeded" if complete else "failed",

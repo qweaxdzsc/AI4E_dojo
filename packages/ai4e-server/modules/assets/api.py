@@ -24,9 +24,10 @@ def files(
     root: str = "project",
     path: str = "",
     task_id: str | None = None,
+    query: str = "",
 ):
-    """查询受控目录下的实际文件。"""
-    return listing(services(request), project, root, path, task_id)
+    """查询受控目录下的实际文件；空关键字只列一层。"""
+    return listing(services(request), project, root, path, task_id, query)
 
 
 @router.get("/download")

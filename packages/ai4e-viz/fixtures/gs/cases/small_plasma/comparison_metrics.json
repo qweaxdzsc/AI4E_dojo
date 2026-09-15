@@ -1,0 +1,19 @@
+{
+  "psi_l1_relative": 5.206225373598744,
+  "psi_l2_relative": 27.838531588499777,
+  "pde_l1_residual": 9.285161018371582,
+  "Ip_pino": 2989473.472731962,
+  "Ip_traditional": -3000003.4769321075,
+  "Ip_relative_error": 1.9964900026679588,
+  "traditional_iterations": 25,
+  "traditional_converged": true,
+  "geometry_params": {
+    "R0": 1.1,
+    "a": 0.3,
+    "kappa": 1.5,
+    "delta": 0.25
+  },
+  "name": "small_plasma",
+  "description": "\u5c0f\u5c3a\u5bf8\u7b49\u79bb\u5b50\u4f53",
+  "checkpoint": "outputs/checkpoints/pino_gs/20260724_024214_pino_tkno_high_precision_cnn_mlp/best.pt"
+}

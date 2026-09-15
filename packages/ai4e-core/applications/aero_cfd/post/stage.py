@@ -103,94 +103,24 @@ def restore_model(config, run, *, construct):
 
 
 def run(config, run, *, construct, predict, prepare_inputs, collate, context_factory):
-    """按开关依次做锚点评估、保存、点云和完整网格回贴。"""
-    with seeded_randomness(int(config["sampling"]["seed"])):
-        return _execute(
-            config,
-            run,
-            construct=construct,
-            predict=predict,
-            prepare_inputs=prepare_inputs,
-            collate=collate,
-            context_factory=context_factory,
-        )
+    """历史入口使用与新 recipe 相同的公开步骤。"""
+    from types import SimpleNamespace
 
-
-def _execute(config, run, *, construct, predict, prepare_inputs, collate, context_factory):
-    """在独立随机上下文中装配后处理，两个输出分支不相互推进采样流。"""
-    settings = config.get("post") or {}
-    evaluate = bool(settings.get("evaluate", True))
-    save_predictions = bool(settings.get("save_predictions", True))
-    export_vtk = bool(settings.get("export_vtk", True))
-    query = bool(settings.get("query", True))
-    if not (evaluate or save_predictions or query):
-        raise ValueError("post 需要打开评估、保存或查询中的至少一路")
-    progress = PostProgress(
-        run, {"evaluation": evaluate, "predictions": save_predictions, "mesh": query}
+    component = SimpleNamespace(
+        construct=construct,
+        predict=predict,
+        prepare_inputs=prepare_inputs,
+        collate=collate,
+        InferenceContext=context_factory,
     )
-    report = progress.report
-    try:
-        if not run.dry_run:
-            progress.publish()
-        restored = restore_model(config, run, construct=construct)
-        if run.dry_run:
-            run.report(
-                {"mode": "post_check", "checkpoint": str(restored["checkpoint"])}, stage="post"
-            )
-            return None
-        report["checkpoint"] = str(restored["checkpoint"])
-        training_protocol = (
-            restored["checkpoint"].parent.parent / "artifacts/training-protocol.json"
-        )
-        original = json.loads(training_protocol.read_text()) if training_protocol.is_file() else {}
-        protocol = describe(
-            config,
-            restored["index"],
-            restored["normalization"],
-            restored["model"],
-            construct,
-            initial=original.get("initialization"),
-            entrypoint=getattr(run, "entrypoint", None),
-        )
-        progress.protocol = protocol
-        run.artifact("comparison-protocol.json", protocol)
-        if evaluate or save_predictions:
-            with preserve_randomness():
-                report.update(
-                    _run_anchor_path(
-                        config,
-                        restored,
-                        predict=predict,
-                        prepare=prepare_inputs,
-                        collate=collate,
-                        evaluate=evaluate,
-                        save_predictions=save_predictions,
-                        export_vtk=export_vtk,
-                        progress=progress,
-                        protocol=protocol,
-                    )
-                )
-        if query:
-            with progress.operation("mesh"):
-                report.update(
-                    query_meshes(
-                        config,
-                        run,
-                        restored,
-                        prepare_inputs=prepare_inputs,
-                        collate=collate,
-                        context_factory=context_factory,
-                        progress=progress,
-                        protocol=protocol,
-                    )
-                )
-        run.artifact("comparison-protocol.json", protocol)
-        progress.finish()
-        return report
-    except Exception as exc:
-        if not run.dry_run:
-            progress.finish(exc)
-        raise
+    job = open_post(config, model_component=component, session=run)
+    job = configure_restore(job)
+    job = configure_prediction(job)
+    job = configure_physical_output(job)
+    job = configure_evaluation(job)
+    job = configure_save(job, output=config["paths"]["datasets"]["predictions"])
+    job = configure_mesh_export(job)
+    return execute(job)
 
 
 def _run_anchor_path(
@@ -205,6 +135,7 @@ def _run_anchor_path(
     export_vtk,
     progress=None,
     protocol=None,
+    evaluator=None,
 ):
     settings = config.get("train") or {}
     post = config.get("post") or {}
@@ -246,9 +177,22 @@ def _run_anchor_path(
                 record_inputs(protocol, "evaluation", samples, batch["inputs"])
             yield
 
+    if config.get("infer", {}).get("fields") or config.get("infer", {}).get("metrics"):
+        from ai4e_core.applications.aero_cfd.infer.anchor import run_selected_batches
+
+        with progress.operation("predictions" if save_predictions else "evaluation"):
+            return run_selected_batches(
+                config,
+                restored,
+                batches(),
+                predict=predict,
+                progress=progress,
+                protocol=report["inference_protocol"],
+            )
+
     if evaluate:
         with progress.operation("evaluation") if progress else nullcontext():
-            result = evaluate_model(
+            result = (evaluator or evaluate_model)(
                 restored["model"],
                 batches(),
                 predict=predict,
@@ -356,3 +300,269 @@ def _save_batch(
                 }
             )
     return written
+
+
+# 以下为新 recipe 的公开装配；兼容 run 也使用相同执行路径。
+from copy import deepcopy
+from dataclasses import dataclass, field
+
+from ai4e_core.base.config import operation_record, plain, resolve_operation
+
+
+@dataclass
+class AnchorPost:
+    """锚点后处理装配，保持评价/保存随机流与完整网格流隔离。"""
+
+    config: dict
+    component: object
+    session: object
+    steps: list = field(default_factory=list)
+    predict: object = None
+    metric: object = None
+    extensions: dict = field(default_factory=dict)
+    restored: dict | None = None
+    physical: bool = False
+    restore: bool = False
+
+
+def open_post(config, *, model_component, session, dataset_component=None, trained=None):
+    """打开后处理配置与训练交付，不执行模型恢复。"""
+    config = deepcopy(config)
+    if not getattr(session, "native_inference", False):
+        config.pop("infer", None)
+    if trained is not None:
+        if "checkpoints" not in trained:
+            raise ValueError("训练检查报告不是检查点产物")
+        value = config["post"].get("checkpoint")
+        if value in (None, "last", "latest", "best"):
+            config["post"]["checkpoint"] = trained["checkpoints"][value or "last"]
+    return AnchorPost(config, model_component, session)
+
+
+def configure_restore(job, *, settings=None):
+    """登记权重与冻结变换恢复。"""
+    if job.restore:
+        raise ValueError("恢复步骤重复")
+    job.restore = True
+    return job
+
+
+def configure_prediction(job, *, settings=None, operation=None):
+    """配置 model/inputs → 归一化预测映射，供评价和保存共同使用。"""
+    if not job.restore or job.physical:
+        raise ValueError("预测必须在恢复之后、物理输出之前登记")
+    spec = plain(settings or job.config["post"]).get("prediction", {})
+    job.predict = resolve_operation(spec, default=job.component.predict, operation=operation)
+    if operation is not None or spec.get("target"):
+        job.extensions["prediction"] = operation_record(job.predict)
+    return job
+
+
+def configure_physical_output(job):
+    """声明按冻结变换恢复物理输出；具体数组变换在逐批保存中执行。"""
+    if not job.restore or job.predict is None or job.physical:
+        raise ValueError("物理输出必须在预测之后且只登记一次")
+    job.physical = True
+    return job
+
+
+def configure_evaluation(job, *, settings=None, operation=None):
+    """登记评价分支；与保存分支共用预测函数但保留原两次遍历。"""
+    if not job.physical:
+        raise ValueError("评价需要物理输出声明")
+    settings = plain(settings or job.config["post"])
+    if settings.get("evaluate", True):
+        spec = settings.get("metric", {})
+        job.metric = resolve_operation(spec, default=evaluate_model, operation=operation)
+        if operation is not None or spec.get("target"):
+            job.extensions["metric"] = operation_record(job.metric)
+        job.steps.append("evaluation")
+    return job
+
+
+def configure_save(job, *, output, settings=None):
+    """登记锚点张量和可选点云保存。"""
+    if not job.physical:
+        raise ValueError("保存需要物理输出声明")
+    settings = plain(settings or job.config["post"])
+    job.config["paths"]["datasets"]["predictions"] = str(output)
+    if settings.get("save_predictions", True):
+        job.steps.append("predictions")
+    return job
+
+
+def configure_mesh_export(job, *, settings=None):
+    """登记独立完整网格查询，保留模型专用缓存策略。"""
+    settings = plain(settings or job.config["post"])
+    if settings.get("query", True):
+        job.steps.append("mesh")
+    return job
+
+
+def check_report(job):
+    """检查引用和声明，不构建网络或发布成功产物。"""
+    if not job.restore or not job.physical or not job.steps:
+        raise ValueError("后处理必须配置恢复、物理输出和至少一种交付")
+    checkpoint = resolve_checkpoint(job.config["post"].get("checkpoint"), job.session.run_dir)
+    state = torch.load(checkpoint, map_location="cpu", weights_only=False)
+    for key in ("model", "trainprep"):
+        if state["contract"].get(key) != job.config[key]:
+            raise ValueError(f"检查点 {key} 声明冲突")
+    result = {"mode": "post_check", "checkpoint": str(checkpoint)}
+    job.session.report(result, stage="post")
+    return result
+
+
+def execute(job):
+    """严格按已登记分支顺序执行，未登记分支不执行。"""
+    if job.session.dry_run:
+        return check_report(job)
+    if (
+        not job.restore
+        or not job.physical
+        or not job.steps
+        or len(set(job.steps)) != len(job.steps)
+    ):
+        raise ValueError("后处理步骤缺失或重复")
+    config, session, component = job.config, job.session, job.component
+    progress = PostProgress(
+        session, {name: name in job.steps for name in ("evaluation", "predictions", "mesh")}
+    )
+    report = progress.report
+    try:
+        with seeded_randomness(int(config["sampling"]["seed"])):
+            progress.publish()
+            from time import perf_counter
+
+            restore_started = perf_counter()
+            restored = restore_model(config, session, construct=component.construct)
+            if config.get("infer"):
+                from ai4e_core.abilities.inference.timing import synchronize
+
+                synchronize(restored["device"])
+                report["timings"] = {"restore": perf_counter() - restore_started}
+            job.restored = restored
+            if config.get("infer"):
+                split = config["infer"]["split"]
+                selected = config["infer"]["samples"]
+                available = restored["index"].partitions.get(split, [])
+                if not selected or not set(selected) <= set(available):
+                    raise ValueError("infer.samples 不属于指定分片")
+                # 索引实例归本次推理所有，旧调用不进入此分支。
+                restored["index"].partitions[split] = list(selected)
+                config["post"]["sample_indices"] = list(range(len(selected)))
+            prepare = resolve_operation(config["sampling"], default=component.prepare_inputs)
+            collate = component.collate
+            preparation_path = Path(
+                config["train"].get("preparation")
+                or restored["checkpoint"].parent.parent / "artifacts/preparation.json"
+            )
+            if preparation_path.is_file():
+                from ai4e_core.applications.aero_cfd.trainprep.preparation import component_record
+                from ai4e_core.base.config.steps import restore_operation
+
+                prepared_record = json.loads(preparation_path.read_text())
+                components = prepared_record.get("components", {})
+                frozen = components.get("prepare")
+                if (
+                    frozen
+                    and not config["sampling"].get("target")
+                    and frozen["name"] != component_record(prepare)["name"]
+                ):
+                    prepare = restore_operation(frozen)
+                if frozen and frozen != component_record(prepare):
+                    raise ValueError("后处理采样实现与冻结准备不一致")
+                if components.get("collate"):
+                    collate = restore_operation(components["collate"])
+            if prepare is not component.prepare_inputs:
+                job.extensions["sampling"] = operation_record(prepare)
+            report["checkpoint"] = str(restored["checkpoint"])
+            training_protocol = (
+                restored["checkpoint"].parent.parent / "artifacts/training-protocol.json"
+            )
+            original = (
+                json.loads(training_protocol.read_text()) if training_protocol.is_file() else {}
+            )
+            protocol = describe(
+                config,
+                restored["index"],
+                restored["normalization"],
+                restored["model"],
+                component.construct,
+                initial=original.get("initialization"),
+                entrypoint=getattr(session, "entrypoint", None),
+            )
+            if job.extensions:
+                protocol["extensions"] = job.extensions
+            progress.protocol = protocol
+            modern = bool(
+                config.get("infer", {}).get("fields") or config.get("infer", {}).get("metrics")
+            )
+            if modern:
+                from ai4e_core.abilities.data.validate.fingerprint import (
+                    fingerprint,
+                    file_fingerprint,
+                )
+
+                inference_protocol = {
+                    "version": 2,
+                    "weights": file_fingerprint(restored["checkpoint"]),
+                    "dataset": file_fingerprint(restored["index"].path)
+                    if hasattr(restored["index"], "path")
+                    else fingerprint(restored["index"].manifest),
+                    "preparation": file_fingerprint(preparation_path),
+                    "model": config["model"],
+                    "settings": config["infer"],
+                    "samples": config["infer"]["samples"],
+                    "split": config["infer"]["split"],
+                    "execution": {"device": str(restored["device"]), "precision": "fp32"},
+                }
+                inference_protocol["digest"] = fingerprint(inference_protocol)
+                report["inference_protocol"] = inference_protocol
+            # 锚点评价/保存共用一个隔离流；完整网格使用恢复后的主流。
+            anchor_rng = None
+            from ai4e_core.abilities.inference.randomness import capture_rng, restore_rng
+
+            for step in job.steps:
+                if modern and step == "evaluation" and "predictions" in job.steps:
+                    continue
+                if step == "mesh":
+                    with progress.operation("mesh"):
+                        report.update(
+                            query_meshes(
+                                config,
+                                session,
+                                restored,
+                                prepare_inputs=prepare,
+                                collate=collate,
+                                context_factory=component.InferenceContext,
+                                progress=progress,
+                                protocol=protocol,
+                            )
+                        )
+                else:
+                    with preserve_randomness():
+                        if anchor_rng is not None:
+                            restore_rng(anchor_rng)
+                        report.update(
+                            _run_anchor_path(
+                                config,
+                                restored,
+                                predict=job.predict,
+                                prepare=prepare,
+                                collate=collate,
+                                evaluate=step == "evaluation",
+                                save_predictions=step == "predictions",
+                                export_vtk=config["post"].get("export_vtk", True),
+                                progress=progress,
+                                protocol=protocol,
+                                evaluator=job.metric or evaluate_model,
+                            )
+                        )
+                        anchor_rng = capture_rng()
+            session.artifact("comparison-protocol.json", protocol)
+            progress.finish()
+            return report
+    except BaseException as exc:
+        progress.finish(exc)
+        raise

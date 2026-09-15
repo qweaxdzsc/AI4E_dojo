@@ -1,4 +1,4 @@
-"""五个独立 example 使用唯一共享脚本及工作流。"""
+"""五个独立 example 显式使用共享物理步骤，允许来源局部差异。"""
 
 from pathlib import Path
 
@@ -18,12 +18,19 @@ def test_five_independent_examples():
     for name in NAMES:
         folder = ROOT / "examples/aero_cfd" / name
         config = yaml.safe_load((folder / "config.yaml").read_text())
-        assert config["components"]["workflow"] == "ai4e_core.applications.aero_cfd.workflow"
+        assert "workflow" not in config["components"]
         assert config["train"]["max_epochs"] == 1 and not config["train"]["evaluation_enabled"]
         assert len(config["post"]["samples"]) == 5 and config["post"]["checkpoint"] == "last"
         assert "instances" not in config["model"]
-        for script in (ROOT / "recipes/aero_cfd").glob("*.py"):
-            assert script.read_bytes() == (folder / script.name).read_bytes()
+        for filename in ("rawprep.py", "trainprep.py", "train.py", "post.py"):
+            source = (folder / filename).read_text()
+            assert "selected.workflow" not in source
+            assert "load_components" in source
+        # 共享交接与配置保持一致；领域步骤允许明确的来源/模型差异。
+        for filename in ("configuration.py", "pipeline.py"):
+            assert (ROOT / "recipes/aero_cfd" / filename).read_bytes() == (
+                folder / filename
+            ).read_bytes()
     nasa = yaml.safe_load((ROOT / "examples/aero_cfd/nasa_crm_abupt/config.yaml").read_text())
     assert "c" not in nasa["model"]["parameters"]["blocks"]
 

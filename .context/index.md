@@ -1,4 +1,34 @@
+PI-BSNet 原案例迁移（2026-09-14，Neumann/Advection完整验收通过）：保留原参数导数、初始化与损失算术；实际Dojo分别5000轮/5000更新、2000轮/200000更新，平均相对L2为1.881%和10.427%。与同环境原函数全部权重、每轮损失和40个测试场逐值一致。75项圈定测试通过，含完整产物、恢复和真实wheel安装；梯形保留十实例，另外两例原算法切换范围待用户确认。入口tools/verification/pibsnet/source_dojo.py，报告工具source_migration_report.py，证据见.context/mvp/pibsnet-acceptance.md。
+
+## 独立推理实施入口（2026-09-14，进行中）
+
+- `.context/mvp/inference-acceptance.md`：各层验收状态、Web 13 项结果、真实 CPU 2×2 流程证据及待补安装范围，不代替架构正文。
+- `packages/ai4e-core/abilities/inference/`：原子恢复、预测、查询和状态保护；`packages/ai4e-core/applications/aero_cfd/infer/`：外流推理步骤、配置、检查及固定结果读取；各文件导航见 [core 索引](modules/ai4e-core.md)。
+- `recipes/aero_cfd/infer.py` 与五个外流 example：独立脚本和显式流水线；新 post 消费结果，旧调用入口兼容。导航见 [recipe 索引](modules/recipes.md)。
+- [spec 索引](modules/ai4e-spec.md)：固定检查点、推理请求和结果身份；[task 索引](modules/ai4e-task.md)：检查、权重固定、批次协调和结果读取。
+- [server 索引](modules/ai4e-server.md)：任务下 inference API、来源登记及受控文件；[Web 索引](modules/ai4e-web.md)：九步 slug 导航、批次页面及 Trame 交接，旧数字 6/7 保留后处理/报告语义。
+- `tools/verification/inference_acceptance.py`：隔离真实 CFD 准备、2 份权重与 2 个样本，输出身份供浏览器及原生 Task 验收使用。
+- `tests/integration/test_task_infer_checkpoints.py`、`test_task_infer_batches.py`、`test_web_inference.py`、`test_infer_results.py`、`test_infer_devices.py`、`test_infer_installation.py`：固定输入、串行批次、HTTP 结果、设备和安装圈定测试；实际结果统一登记验收记录。
+- 唯一架构正文：`docs/AI4E_Dojo_ARCHITECTURE (1).md` 第 5、9、19.11 节。原子/业务/脚本、管理记录和输出所有权在该文档维护；已知旧 profile 按固定 36 份脚本核验，回归已通过；正式 8000/5173 入口已核验，当前阶段回归剩余失败与最终文档测试见验收记录。
+
+
+PI-BSNet Neumann/Advection 独立六组测试（2026-09-14，完整预算完成）：用户批准同时测试源码与物理导数解释，Neumann交叉整轮/逐实例更新；完整预算后再决定迁移，本轮不改Dojo算法。入口 `tools/verification/pibsnet/neumann_advection_trials.py`；圈定 `test_pibsnet_neumann_advection_trials.py`，进度与未决项见 `.context/mvp/pibsnet-acceptance.md`。
+
+梯形十实例 Dojo 迁移（2026-09-14）：唯一梯形生成与模型已按用户选中实验接入；3000轮/30000更新与同环境原函数的权重、全部损失、十个场逐值一致。当前相对L2=0.00540455，未复刻旧环境0.00305350。Neumann/Advection 本轮只核查，见 `docs/pibsnet/Neumann与Advection输入核查.md`；实际运行以 `mvp/pibsnet-acceptance.md` 为准。
+
+平台数据集与数据准备页对齐（2026-09-15）：工作区 `datasets/` 按名称登记正式原始处理产物；数据准备按名称选用并复用产物树与执行面板；候选项按登记时间倒序，不自动勾最新；同一清单只列平台名。执行区展示已选名称与全部/指定样本范围。准备可重划 train/test/eval，官方名单不改，划分写入准备记录。实现见 task `storage/processed_datasets.py`、server `modules/datasets/`、web rawprep/trainprep/stages，core `abilities/data/source/split.py`，圈定 `tests/integration/test_web_processed_datasets.py`、`test_trainprep_split.py` 与 `e2e/stage-consistency.spec.ts`。
+
 # AI4E_Dojo 仓库结构索引
+
+PI-BSNet 论文参数验证（2026-09-14，三组完整预算完成）：用户确认 Burgers 正对流/MSE、梯形10与50实例两组及论文控制网格/权重；入口 `tools/verification/pibsnet/paper_parameters.py`，只改变获批参数，保留样条/数据/初边界未决差异。误差分别为0.10458919、0.00305350、0.00237572；报告与边界见 `mvp/pibsnet-acceptance.md`。
+
+PI-BSNet 原仓库基线（2026-09-14）：五例原数据/原设置/完整预算独立运行及报告已完成，未修改Dojo算法；报告入口、数值与论文比较边界见 `mvp/pibsnet-acceptance.md` 首节。
+
+平台一致性切片（2026-09-14，圈定验收通过）：真实阶段摘要、保存后操作、固定阶段文件、领域表单及日志曲线；路径见 Web/Server/Task 模块索引，当前证据在 `mvp/web-integrated-results/ui-consistency/`。不沿用历史验收数。
+
+PI-BSNet 设置与算法核查（2026-09-14）：`docs/pibsnet/设置与算法一致性核查.md` 对照用户PDF与锁定仓库，列出结构/数据算法差距、论文与代码冲突及逐步等价门禁；只核查，未修改训练实现。
+
+参数化 PDE / PI-BSNet：`mvp/pibsnet-acceptance.md` 记录五案例数据、完整训练、五例最终对比报告及未通过的精度门槛；`modules/ai4e-core.md`、`modules/ai4e-contrib.md`、`modules/recipes.md` 索引物理能力、模型、方程与独立生成/阶段脚本。
 
 整合平台已通过圈定验收：稳定传输 `packages/ai4e-spec/artifacts/platform.py`，自动 TypeScript 生成入口 `packages/ai4e-web/scripts/generate-platform-contracts.py`；四组合真实短训、最终18项浏览器与范围限制见 `mvp/web-integrated-acceptance.md`。旧首期记录保留，不能当作新功能验收。
 
@@ -96,7 +126,7 @@ AI4E_Dojo/
 │   │   ├── applications/aero_cfd/train/     # 训练装配、默认展开、监控、检查点和轮次恢复
 │   │   └── run/                             # 开车、最终生效配置、源码快照、运行日志与唯一写入
 │   ├── ai4e-task/            # 六类功能模块：项目、任务版本、资产、CLI 与本地执行
-│   ├── ai4e-viz/             # 稳定 artifact 的静态图像与离线报告
+│   ├── ai4e-viz/             # 独立可视化应用 + 原静态/预览库
 │   ├── ai4e-server/          # 本机项目/任务/文件/处理/报告 API
 │   ├── ai4e-web/             # 正式 React 微领域 Web 工程
 │   └── ai4e-contrib/         # 可安装的共享数据集适配
@@ -127,7 +157,7 @@ AI4E_Dojo/
 
 ## Package 结构原则
 
-- **算法原则** — `ai4e-spec`、`ai4e-core`、`ai4e-contrib`、`ai4e-viz`、`ai4e-contrib`：按权威架构文档中的 base、abilities、applications、Stage 和 Artifact 分层，保持高内聚、低耦合，不套 DDD 目录。
+- **算法原则** — `ai4e-spec`、`ai4e-core`、`ai4e-contrib` 与 viz 现有库目录：按权威架构文档中的 base、abilities、applications、Stage 和 Artifact 分层，保持高内聚、低耦合，不套 DDD 目录。
 - **后端原则** — `ai4e-server`：围绕业务生命周期采用轻量 DDD，先按限界上下文组织，再在上下文内部按需分层。
 - **前端原则** — `ai4e-web`：按用户任务组织微领域，每个领域自治，只消费稳定 API 或 Artifact schema。
 
@@ -173,6 +203,7 @@ AI4E_Dojo/
 - `examples/README.md`：示例目录状态与收录标准。
 - `tests/README.md`：测试层次和本切片相关用例。
 - `tools/README.md`：仓库维护工具边界。
+- `tools/ssh-git-remote.conf`：远程 Git SSH 连接与 `git push server` 用法；不含私钥。
 
 ## 依赖方向
 
@@ -236,7 +267,7 @@ recipes      task        viz
 
 ## aero_cfd 双模型接入
 
-- `examples/aero_cfd/`：汽车与 NASA 五个独立配置案例，共享 `recipes/aero_cfd` 阶段入口。
+- `examples/aero_cfd/`：汽车与 NASA 五个独立配置案例，共享 `recipes/aero_cfd` 阶段入口；三个 ShapeNet 案例默认打开 VTKHDF，NASA 不写该键。
 - `tools/verification/transolver3/`：只读参考运行、实际批次追踪、训练/缓存/全量输出逐元素比较、正式硬件探测。
 - [Transolver 验收记录](mvp/transolver3-acceptance.md)：功能叶子、100 项映射、正式规模对标及配置兼容未决项。
 - `mvp/transolver3-results/`：baseline/coverage 为来源锁定及 100 项映射；provenance 与冻结 YAML/JSON 保存实际配置定位；formal-* 和 full-* 为数值结果；XML 与 delivery-checks/delivered-source 为圈定验收及当前代码摘要。完整数据和权重在独立运行目录。
@@ -273,3 +304,59 @@ mvp/config-regroup-acceptance.md 与 mvp/config-regroup-results/ 为五段配置
 - `mvp/web-algorithm-acceptance.md`、`mvp/web-algorithm-results/`：数据、模型、归一化、采样与真实计算子计划。
 - `mvp/web-visualization-acceptance.md`、`mvp/web-visualization-results/`：VTK、真实浏览器、多窗口、联动与资源子计划。
 - `tests/integration/test_web_integrated_pipeline.py`：HTTP 阶段提交、固定产物、真实预览对照及契约生成。
+
+## Recipe 显式流程与用户扩展
+
+- 规则：`.cursor/rules/ai4e-recipe-authoring.mdc`；计划规则：`.cursor/rules/plan-business-alignment.mdc`。
+- 目录：`recipes/aero_cfd/`、`examples/aero_cfd/` 与 `examples/recipe_extensions/{field_mapping,sampling}/`，逐文件用途见 `.context/modules/recipes.md`。
+- 公开步骤与组件索引：`.context/modules/ai4e-core.md`、`.context/modules/ai4e-contrib.md`。
+- 圈定验收完成（五例 CPU 小规模逐值对照、真实扩展、wheel 外部复制与相关回归）；规模与迁移：`.context/mvp/recipe-explicit-acceptance.md`；批准计划：`.cursor/plans/显式_recipe_步骤_9ea01c80.plan.md`。
+
+PI-BSNet 功能核对资产：`docs/pibsnet/` 保留原122项 MD/XLSX 及独立实施映射；`tools/verification/pibsnet/` 执行来源锁定、比较和实验。状态以 `mvp/pibsnet-acceptance.md` 为准。
+
+## 独立 Vis 迁移入口
+
+`packages/ai4e-viz/{backend,frontend,.context,.cursor,docs,resources,fixtures}` 保留源应用结构；详见 [viz 索引](modules/ai4e-viz.md)。包内架构维护内部实现，根架构仅维护 task/spec/server/web 的交接。
+
+迁移验收分三类记录在 [vis-migration-acceptance.md](mvp/vis-migration-acceptance.md)；完整文件目录与变更处置在包内 docs/migration/。
+
+## 数据集声明驱动原始处理
+
+历史任务映射修正：server capabilities/recipe_profile.py 区分格式差异、已审定旧加载入口和真实逻辑变更；`tests/fixtures/rawprep_legacy/configuration.py` 固定已核验历史入口。回归与真实旧任务执行见 `tests/integration/test_web_recipe_compatibility.py`。
+
+ShapeNet-Car/NASA 默认配置、真实字段目录和样本范围接入；模块入口见 contrib/core/task/server/web/spec/recipes 索引。验收范围及证据见 [专项验收](mvp/manifest-rawprep-acceptance.md)。
+
+三维对象工作台实施：见 `.context/modules/ai4e-viz.md` 与 `.context/mvp/phys-workbench-acceptance.md`，真实图形交互与时序导出单独验收。
+
+三维真实 CFD 验收入口：`tests/integration/viz_real_results_browser.cjs`；源数据不迁入仓库，执行证据与范围见 `mvp/phys-workbench-acceptance.md`。
+
+参考图样式校正入口：`tests/integration/viz_visual_browser.cjs`；四种宽度实际截图与功能回归见 `.context/mvp/phys-workbench-acceptance.md`，视觉验收与计算验收分别记录。
+
+## 同数据集模型选择
+
+模型设置选项、官方起步预设、项目导出预设与结构跟踪来源见 Web/Server/Task 模块索引；`packages/ai4e-server/modules/capabilities/model_cases.py` 按两个官方模型和五个 example 解析默认值，`model_presets.py` 写入项目共享资产，`trace_source.py` 在当次检查解析最近可用物理来源；现行 version=2 准备由检查门面按训练同一条消费链跟踪。现行模型页不展示权重加载；采样跟随当前模型字段，Transolver-3 展示步长/分块/切片与固定损失行。独立 HTML 原型仍保留历史权重加载示意，不代表现行页面。真实交接与圈定验收见 [模型选择验收](mvp/model-picker-acceptance.md)。
+
+- `docs/pibsnet/五案例精度对照报告.md`：2026-09-14五例Dojo实跑与论文精度汇总，标明当前迁移版、历史结果、统计口径和证据；不代表五例全部重新迁移。
+
+- `docs/pibsnet/figures/accuracy-2026-09-14/`：五案例报告配图与重算metrics.json；固定首个测试实例，预测/参考共用色标，保留源数组摘要。
+
+Web请求失败定位：`modules/ai4e-web.md` 中的HTTP门面及 `e2e/http-errors.spec.ts`，覆盖后端未启动导致的空代理响应与刷新恢复。
+
+平台默认 Trame 入口：`modules/ai4e-web.md` 索引网格预览、后处理空场景与宿主尺寸；`packages/ai4e-web/e2e/trame-entry.spec.ts` 从实际研究页面验证打开、导入和关闭回收；`e2e/preview-dialog.spec.ts` 验证网格预览弹窗加高与视口全屏。证据见 `mvp/phys-workbench-acceptance.md`。
+
+## 后处理工作台（2026-09-15）
+
+- core `abilities/eval` 与 `applications/aero_cfd/post`：固定结果指标计算。
+- task `tasks/post_results.py`、`post_metrics.py`、`post_metrics_worker.py`：目录和后台评价。
+- server `modules/post`：任务范围API；web `modules/post`：指标/文件/三维三个Tab。
+- web `modules/files`：共用产物树；`modules/visualization`：紧凑预览与常驻Trame。
+- Vis `visPhysField`：可见性消息、草稿保留与来源追加。
+- 各包文件和文档见对应模块索引；验收与未覆盖项见 [后处理验收](mvp/post-workspace-acceptance.md)。
+
+后处理参考图UI精修与浏览器验收：见 [Web模块索引](modules/ai4e-web.md) 和 [后处理验收](mvp/post-workspace-acceptance.md)。
+
+## 推理工作台四栏与跨分片统计
+
+- `docs/prototypes/dojo-inference-reference.png`：用户原图1672×941。
+- `.context/mvp/inference-ui-acceptance.md`：完整文件交接、UI与真实功能两道验收及未完成项。
+- 新能力、Task批次、Server协议、Web组件与六套模板分别见对应模块索引。

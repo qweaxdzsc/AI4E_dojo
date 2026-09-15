@@ -1,6 +1,6 @@
 ---
 description: AI4E_Dojo 算法包的能力分层、高内聚低耦合与代码书写规范
-globs: packages/{ai4e-spec,ai4e-core,ai4e-viz,ai4e-contrib}/**/*.py
+globs: packages/{ai4e-spec,ai4e-core,ai4e-contrib}/**/*.py, packages/ai4e-viz/{inspect,preview,pipeline,serialization,render,compose,runtime}/**/*.py
 alwaysApply: false
 ---
 
@@ -11,7 +11,7 @@ alwaysApply: false
 - 跳出 DDD 的目录表象：不得为算法包套用 `api/domain/application/infrastructure`；按科学概念、base、abilities、applications、Stage 和 Artifact 组织。
 - 高内聚：一个模块只表达一个稳定能力；数据语义、几何、采样、模型、Constraint、训练、评估、后处理和可视表达各归其位。
 - 低耦合：只依赖公开契约；不得跨层导入内部实现，不得用万能 `utils.py`、巨型 Trainer/Solver 或共享可变状态绕过边界。
-- 原子能力不认识具体案例；`applications/base` 提供 Stage 编排机制，领域 application 按 rawprep/trainprep/model/train/post 提供标准业务装配；recipe 只选择、配置或轻量覆盖标准装配，不写算法、循环或新模型类。
+- 原子能力不认识具体案例；`applications/base` 提供通用编排机制。领域 application 提供可组合的业务步骤，并承担领域数据绑定和契约校验。Recipe 显式声明步骤顺序、参数与交接；ability 实现算法，通用执行器承担循环。不得将完整领域职责全部推给 recipe，也不得用整段 workflow 隐藏研究者需要修改的流程。
 - `ai4e-spec` 只定义轻量稳定契约；core 只依赖 spec；viz 不依赖 core；contrib 不取得内部 API 特权。
 - Constraint 显式描述作用域、字段、表达式、目标、loss、权重调度和计算空间，不把领域语义塞进训练循环。
 - Stage 通过 Artifact/Manifest 交接；`run/writer` 是 run 目录唯一写入方，运行记录与数据产物目录独立配置，禁止写入包源码。
@@ -20,4 +20,17 @@ alwaysApply: false
 - 公开 API 使用类型标注与中文 Docstring；非平凡逻辑必须有单元或契约测试，功能变化同步文档和 `.context`。
 - 建立 workspace 后使用 `uv run pytest <affected>`、`uv run ruff check .`、`uv run ruff format --check .`，必要时运行 mypy。
 
-- AB-UPT 域/字段/条件声明与推理缓存归 contrib；trainprep 绑定来源，post 注入上下文。模型结构版本 3；运行检查点容器仍为版本 2；真实多样本、输入参考夹具及逐层缓存等价按 `.context/mvp/abupt-multidomain-acceptance.md` 验收。
+- AB-UPT 域/字段/条件声明与推理缓存归 contrib；trainprep 绑定来源，infer 注入预测上下文，post 只读固定结果，旧 post 入口兼容。模型结构版本 3；运行检查点容器仍为版本 2；真实多样本、输入参考夹具及逐层缓存等价按 `.context/mvp/abupt-multidomain-acceptance.md` 验收。
+
+迁入的 `ai4e-viz/backend` 使用包内轻量 DDD 规则；`frontend` 使用包内 JSX 微领域规则。不得把算法库目录原则套入独立可视化应用。
+
+- 原始处理默认值和能力描述来自数据组件声明；页面、脚本和检查共用配置解释，显式空选择不回填。新入口按样本名单解析依赖，逐场输出与历史容器分开，清单必须反映实际交付。
+
+- 推理按两层组织：`abilities/inference` 负责恢复权重、无梯度预测、查询与状态保护；`applications/aero_cfd/infer` 绑定准备、模型、字段、样本及输出，不建立重复的 `abilities/infer`。
+- 反归一化、评价与网格交付分别复用 transform、eval、postproc/data/save。模型专用缓存和解码归 contrib；不得为独立阶段改写原随机流、字段身份或模型算术。
+- 新 infer 交付固定结果清单，新 post 仅消费结果；旧 post 公开入口保留兼容。已保存产物与用户配置的兼容分别判断，不能自动重写历史摘要。
+- 通用样本循环由运行器执行，writer 独占运行记录；业务只交付轻量报告与数据产物引用。计算、扩展字段保存读回和安装验收分别核对，当前进度见 `.context/mvp/inference-acceptance.md`。
+
+- 固定结果评价使用 abilities/eval 的独立数值原语，applications/aero_cfd/post 绑定物理量、分量与实体。只读固定预测和真值，不构建模型、不修改推理旧指标算术；零范数和恒定真值的指标不可定义，缺失不能填零。
+
+- 新版评价基于物理空间float64；样本等权统计与历史全元素累计单独命名，只评价亦保存轻量证据。查询块仅影响Transolver缓存后解码。

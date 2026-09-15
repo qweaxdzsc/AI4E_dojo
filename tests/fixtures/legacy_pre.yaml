@@ -19,6 +19,7 @@ pre:
   geometry:
     enabled:
     - nearest_vertex
+    - volume_normals
     - mesh_signed_distance
     - surface_normals
     - exterior_mask

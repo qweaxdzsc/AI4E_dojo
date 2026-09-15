@@ -22,3 +22,24 @@ class FiniteJSONResponse(JSONResponse):
     def render(self, content):
         """将响应映射为标准 JSON。"""
         return super().render(finite_values(content))
+
+
+def error_payload(detail: str, request_id: str) -> dict:
+    """兼容 detail 字段，并提供供页面定位的稳定错误描述。"""
+    code, _, location = detail.partition(": ")
+    messages = {
+        "configuration_revision_conflict": "配置已被修改，请刷新后重试，当前草稿尚未提交。",
+        "stage_input_required": "请先选择此阶段需要的输入。",
+        "idempotency_conflict": "重复提交的内容不同，请核对当前操作。",
+        "path_outside_root": "所选文件不在可访问范围内。",
+        "processed_dataset_name_conflict": "该平台数据集名称已被不同处理声明占用，请换一个名称。并行线程不改变数据身份。",
+    }
+    return {
+        "detail": detail,
+        "error": {
+            "code": code,
+            "location": location or None,
+            "message": messages.get(code, detail),
+            "request_id": request_id,
+        },
+    }

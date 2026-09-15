@@ -11,7 +11,7 @@ from ..tasks import read_binding
 from .domain import validate
 
 
-def preflight(service, project, identity, body):
+def preflight(service, project, identity, body, *, mode="execute"):
     """在执行前固定样本和内容摘要；不自动补齐选择。"""
     require_profile(service, project, identity)
     binding = read_binding(service, project, identity)
@@ -25,19 +25,30 @@ def preflight(service, project, identity, body):
         raise ValueError("task_archived")
     if task.open_project(base).get("archived"):
         raise ValueError("project_archived")
-    if binding["dataset_id"] == "shapenet_car" and cfg["config"]["rawprep"].get("sources") != [
-        "surface"
-    ]:
-        validate(cfg["config"]["rawprep"])
+    resolved = task.describe_rawprep(base, identity)
+    task.validate_rawprep_configuration(base, identity, resolved["rawprep"], revision=body.revision)
+    name = (cfg["config"].get("dataset") or {}).get("processed_name")
+    if mode == "execute":
+        from ..datasets.application import check_name
+
+        check_name(service, name, {**cfg["config"], "rawprep": resolved["rawprep"]})
+    if body.sample_scope is not None:
+        return _sample_preflight(service, project, identity, body)
+
     return _generic_preflight(service, project, identity, body)
 
 
 def submit(service, project, identity, body, *, mode="execute"):
     """原样执行 pipeline.py，只覆盖原数据处理阶段和选择。"""
-    info = preflight(service, project, identity, body)
+    info = preflight(service, project, identity, body, mode=mode)
     fixed = task.read_configuration(service.project(project), identity)
     if fixed["revision"] != info["revision"]:
         raise ValueError("configuration_revision_conflict")
+    # 已审定旧加载入口没有 manifest 默认展开；提交同一修订下页面已展示的有效参数。
+    resolved = task.describe_rawprep(service.project(project), identity)
+    if resolved["revision"] != info["revision"]:
+        raise ValueError("configuration_revision_conflict")
+    fixed["config"]["rawprep"] = resolved["rawprep"]
     overrides = [
         "pipeline.stages=[rawprep]",
         "dataset.root=" + json.dumps(info["root"]),
@@ -85,7 +96,9 @@ def dataset_catalog(service, project, identity, body, *, public=False):
     config = task.read_configuration(service.project(project), identity)
     if body.revision != config["revision"]:
         raise ValueError("configuration_revision_conflict")
-    is_nasa = binding["dataset_id"] == "nasa_crm"
+    if body.sample_scope is not None:
+        return _sample_catalog(service, project, identity, body, public=public)
+    is_nasa = binding["binding_mode"] == "files"
     reference = binding["sources"]["train_h5" if is_nasa else "root"]
     root = resolve(service, project, reference["root"], reference["path"])
     if is_nasa:
@@ -193,7 +206,66 @@ def _selected_path(service, project, identity, default_root, name):
 
 def _bound_root(service, project, identity):
     binding = read_binding(service, project, identity)
-    key = "train_h5" if binding["dataset_id"] == "nasa_crm" else "root"
+    key = binding["binding_schema"]["root_key"]
     ref = binding["sources"][key]
     path = resolve(service, project, ref["root"], ref["path"])
-    return path.parent if key == "train_h5" else path
+    return path.parent if binding["binding_mode"] == "files" else path
+
+
+def _sample_catalog(service, project, identity, body, *, public=False, full=False):
+    """新样本入口只传范围；组件交付完整依赖，服务限定受控访问。"""
+    from uuid import uuid4
+    from ..tasks import controlled_reference
+    from ..visualization.application import register
+
+    result = task.inspect_task(
+        service.project(project),
+        identity,
+        "inspect_dataset",
+        revision=body.revision,
+        output_dir=str(service.settings.root / "inspections" / uuid4().hex),
+        selection={
+            "sample_scope": body.sample_scope,
+            "inspection_scope": "all" if full else "representatives",
+        },
+    )
+    for source in result["sources"]:
+        path = Path(source["path"]).resolve()
+        if source.get("exists", True):
+            ref = controlled_reference(service, project, path)
+            source["relative_path"] = ref["root"] + "::" + ref["path"]
+            source["asset_ref"] = register(service, project, ref["root"], ref["path"], identity)
+        if public:
+            source.pop("path", None)
+    return result
+
+
+def _sample_preflight(service, project, identity, body):
+    """执行前逐样本核字段并固定来源修订；缺件不补造也不缩小范围。"""
+    result = _sample_catalog(service, project, identity, body, full=True)
+    if body.catalog_revision and result["revision"] != body.catalog_revision:
+        raise ValueError("dataset_catalog_stale: 来源已改变，请重新检查")
+    if result.get("errors"):
+        raise ValueError(
+            "原始数据检查失败: " + json.dumps(result["errors"][:10], ensure_ascii=False)
+        )
+    if not result["samples"]:
+        raise ValueError("dataset.samples: 请选择真实样本")
+    required = {key for sample in result["samples"] for key in sample["dependencies"]}
+    files = sorted(
+        {source["relative_path"] for source in result["sources"] if source["source_id"] in required}
+    )
+    return {
+        "samples": [sample["sample_id"] for sample in result["samples"]],
+        "sample_selection": result["selection"],
+        "sample_count": len(result["samples"]),
+        "files": files,
+        "file_count": len(files),
+        "root": str(_bound_root(service, project, identity)),
+        "revision": body.revision,
+        "catalog_revision": result["revision"],
+        "digests": {
+            name: revision(_selected_path(service, project, identity, body.root, name))
+            for name in files
+        },
+    }

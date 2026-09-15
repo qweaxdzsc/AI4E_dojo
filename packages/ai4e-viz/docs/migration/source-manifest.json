@@ -1,0 +1,3167 @@
+{
+  "source_revision": "879e3a5d333e91ceae10da16d5228cad8661a7fd",
+  "tracked_count": 385,
+  "extra_count": 8,
+  "files": [
+    {
+      "source_path": ".circleci/config.yml",
+      "target_path": "packages/ai4e-viz/.circleci/config.yml",
+      "source_sha256": "b84d0c3c07b0add8f494d91c77d3b0c386b995f4e614c37832a536c70bfae223",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "c5c80dc66e8b35515f34ebdf7afe878b02ba87a5abf635420de55545d502a38b"
+    },
+    {
+      "source_path": ".context/api-registry.md",
+      "target_path": "packages/ai4e-viz/.context/api-registry.md",
+      "source_sha256": "0ad8e7daebbff1452b431267112cb5dd6f0b900e168d5bbdc393e7c106045558",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "1afd155749598e787b7ce05e7212b31a5982a1e2976b6c154e86a8365efb9f3e"
+    },
+    {
+      "source_path": ".context/index.md",
+      "target_path": "packages/ai4e-viz/.context/index.md",
+      "source_sha256": "ce8bc14571003f5b6361cf645aa5977a73e7431fa8e3392924796e4ff963aaad",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "9bf4ef455d2f389d0bcde09118682227313b5e2e2289ed570016c6bb4bc5837d"
+    },
+    {
+      "source_path": ".context/modules/MCP.md",
+      "target_path": "packages/ai4e-viz/.context/modules/MCP.md",
+      "source_sha256": "8fbc7e7e84e48c63f0c8d9c4c4a0850db78bdb15381639839b7d083c8c186270",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "ddc89713d72b0c481c878dcca90e7a93b15729d28f95178b97d3b0a1fec6519d"
+    },
+    {
+      "source_path": ".context/modules/automation-mcp.md",
+      "target_path": "packages/ai4e-viz/.context/modules/automation-mcp.md",
+      "source_sha256": "a50011a55a22fd1d21617546c767c301118132f0b5ab88d7a6f52aa59a592c12",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a50011a55a22fd1d21617546c767c301118132f0b5ab88d7a6f52aa59a592c12"
+    },
+    {
+      "source_path": ".context/modules/automation.md",
+      "target_path": "packages/ai4e-viz/.context/modules/automation.md",
+      "source_sha256": "a83942cd04f17346a0ddec66a9b10e7093d8813963f0dcfd96c921c42f328d9f",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "cd8a3b52a279bf373b13adad9326834c2e6fdfd1dd633153b030a811c46371eb"
+    },
+    {
+      "source_path": ".context/modules/backend-architecture.md",
+      "target_path": "packages/ai4e-viz/.context/modules/backend-architecture.md",
+      "source_sha256": "3ad4b2d407e891f04544d2bfc182fbd384fd8248fc242b1654a75e74ade00c60",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "5d29a7b41589f2694e49c73e914f708202d44ca062dd06023522fd6596fb0af9"
+    },
+    {
+      "source_path": ".context/modules/dataAssets.md",
+      "target_path": "packages/ai4e-viz/.context/modules/dataAssets.md",
+      "source_sha256": "dd7ab08f9016e3244828cd23b8f50c42514876b319422b58b22e8f2696366041",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "8d6ee50b3f8c4ef1bd315a81fc708cac64b5fbb5a5aa5dbe2b2cebf3adb4801a"
+    },
+    {
+      "source_path": ".context/modules/frontend-architecture.md",
+      "target_path": "packages/ai4e-viz/.context/modules/frontend-architecture.md",
+      "source_sha256": "6227c5ad3fe5e937c36105e2d2d3616b1403587296d613df93f689738bf468fe",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "eabfce1c8b4ea189ac9af5956974588e1f0a08f18a03556f72981e9a321881e8"
+    },
+    {
+      "source_path": ".context/modules/geometry-figure-convertor.md",
+      "target_path": "packages/ai4e-viz/.context/modules/geometry-figure-convertor.md",
+      "source_sha256": "37bf6a006613c2e4108bcabe8638c95fc1838d98308f3533d7db38d35c0f7b3f",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "37bf6a006613c2e4108bcabe8638c95fc1838d98308f3533d7db38d35c0f7b3f"
+    },
+    {
+      "source_path": ".context/modules/physical-field-engine.md",
+      "target_path": "packages/ai4e-viz/.context/modules/physical-field-engine.md",
+      "source_sha256": "e4e81636ed59758d1027a4cb3e3d64b605691487232d05e1ddfe1fcdcf9752dd",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e4e81636ed59758d1027a4cb3e3d64b605691487232d05e1ddfe1fcdcf9752dd"
+    },
+    {
+      "source_path": ".context/modules/reportDesigner.md",
+      "target_path": "packages/ai4e-viz/.context/modules/reportDesigner.md",
+      "source_sha256": "8dfed8c9e6944dd53404a4d1bb16142c7856806582646a0d9e21cb04915bc14f",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "249650ce73cd4a80581d84379cf6de57855ddf3ba7c898f8113102c307c117ad"
+    },
+    {
+      "source_path": ".context/modules/reportManage.md",
+      "target_path": "packages/ai4e-viz/.context/modules/reportManage.md",
+      "source_sha256": "e2928936efc87b024bea2ad8a34a29333d6598074ec1153c3aea660e443264e6",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "a2d12d9343a44a07da13a1188f8f4da140bd2303d615bbd5be54ee5aafbed276"
+    },
+    {
+      "source_path": ".context/modules/reporting.md",
+      "target_path": "packages/ai4e-viz/.context/modules/reporting.md",
+      "source_sha256": "3ab7f187437f10e62c338a44e9d7a90f83f4cd17037729cfadee7e8987aad716",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "3ab7f187437f10e62c338a44e9d7a90f83f4cd17037729cfadee7e8987aad716"
+    },
+    {
+      "source_path": ".context/modules/storage-observability.md",
+      "target_path": "packages/ai4e-viz/.context/modules/storage-observability.md",
+      "source_sha256": "729c3d5c03a7c180aedea94b9a31705154fc87c82b9cebc9dc9ea6f3c94bc57e",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "3dbf332abdc8503df6aef8b14458c1bc298f44d08ea42ffdc64e8b76ba8fbcba"
+    },
+    {
+      "source_path": ".context/modules/task-data-io.md",
+      "target_path": "packages/ai4e-viz/.context/modules/task-data-io.md",
+      "source_sha256": "a4f0f1f397b92602ac469cec9898dcd802226e8c5fadcea2d6d1dc385a10b4be",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a4f0f1f397b92602ac469cec9898dcd802226e8c5fadcea2d6d1dc385a10b4be"
+    },
+    {
+      "source_path": ".context/modules/visConvertor.md",
+      "target_path": "packages/ai4e-viz/.context/modules/visConvertor.md",
+      "source_sha256": "d81d2678641812303d519383a8db5ba3c63b9b20c3c650061ab574d6c5ad58aa",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "60980eb47cb16adab89169e6c0b4cfb529be1106ab229bdf31f98b80c89c76e8"
+    },
+    {
+      "source_path": ".context/modules/visDatasets.md",
+      "target_path": "packages/ai4e-viz/.context/modules/visDatasets.md",
+      "source_sha256": "ecb1a02675fd3008e7ac6ea07e6dc909f956538c4a003a7d48a8542716dab1c5",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "f6aa778c2ac98efaed7d83cf8d8e62a08939eeb226352ecc9e6f009eb86207a9"
+    },
+    {
+      "source_path": ".context/modules/visEngine.md",
+      "target_path": "packages/ai4e-viz/.context/modules/visEngine.md",
+      "source_sha256": "9cc7f3f8bf418f7f757b8ecd3c6347288a2ad62072bd46856fe5996385aa6667",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "a31a66b56260cbb334ca6e00cbe07976e6b9ca955c6c625c185d1e8948e85384"
+    },
+    {
+      "source_path": ".context/modules/visFigure.md",
+      "target_path": "packages/ai4e-viz/.context/modules/visFigure.md",
+      "source_sha256": "ad2706b1f619da408c44578016df1c1fb9fc1778261d68978cc0cb07f8e45413",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "be4119dc0a20f680332b8b0b8c5ac47fd4f2a3631dc132d89d80e4e9008dd4a9"
+    },
+    {
+      "source_path": ".context/modules/visGeometry.md",
+      "target_path": "packages/ai4e-viz/.context/modules/visGeometry.md",
+      "source_sha256": "34d931de2b221c76d2eca345a75f4f967c51839b9c17f6c805b5d552bbb4b059",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "fa92bb98ae9d93d153205ad12237b2c36c9db6ac5f7ffeb005695763bbfef48e"
+    },
+    {
+      "source_path": ".context/modules/visIO.md",
+      "target_path": "packages/ai4e-viz/.context/modules/visIO.md",
+      "source_sha256": "24f2bb7e467eb21462eea66cc03dc88ce6221a48b9e340cb9b5c65c29ea4b6e6",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "1c03c94fe7f4994d370d366d5e1b63d2ccb934a9a61bd7ae19792499daa8a48b"
+    },
+    {
+      "source_path": ".context/modules/visPhysField.md",
+      "target_path": "packages/ai4e-viz/.context/modules/visPhysField.md",
+      "source_sha256": "08234e3ede212ac61e545df68fa5cd96e20ca0979aad6ca74f7bc76091ef48e6",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "1be093eb547aeed94b01e89e20d250e6a79c9070c8483ca2259d7fef3f1ddec2"
+    },
+    {
+      "source_path": ".context/modules/visPhysField/dataExtraction.md",
+      "target_path": "packages/ai4e-viz/.context/modules/visPhysField/dataExtraction.md",
+      "source_sha256": "8c7caff5b09db45877415bddfa17a6fdfb123855d97698abedb0bb345a642938",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "8c7caff5b09db45877415bddfa17a6fdfb123855d97698abedb0bb345a642938"
+    },
+    {
+      "source_path": ".context/modules/visPhysField/dataOverview.md",
+      "target_path": "packages/ai4e-viz/.context/modules/visPhysField/dataOverview.md",
+      "source_sha256": "a0ab95740595620a17b7dbc665a2d4fafca0d9346cf261d59b1ecb09c2359a27",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a0ab95740595620a17b7dbc665a2d4fafca0d9346cf261d59b1ecb09c2359a27"
+    },
+    {
+      "source_path": ".context/modules/visPhysField/fieldVisualization.md",
+      "target_path": "packages/ai4e-viz/.context/modules/visPhysField/fieldVisualization.md",
+      "source_sha256": "e8e80a84ba60d2bdc367551b99f4dd396ff0ce630ea12baf4e8c7803a29165f1",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e8e80a84ba60d2bdc367551b99f4dd396ff0ce630ea12baf4e8c7803a29165f1"
+    },
+    {
+      "source_path": ".context/modules/visPhysField/index.md",
+      "target_path": "packages/ai4e-viz/.context/modules/visPhysField/index.md",
+      "source_sha256": "87dc2792c2a7385c093b881f4ea294e453aee13bdd8583f9f3145eafa29ec57d",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "87dc2792c2a7385c093b881f4ea294e453aee13bdd8583f9f3145eafa29ec57d"
+    },
+    {
+      "source_path": ".context/modules/visTaskManage.md",
+      "target_path": "packages/ai4e-viz/.context/modules/visTaskManage.md",
+      "source_sha256": "cac88b9be69d323a8c0e88a3d1a3cf7838de1b914eee2c03f796035df8b1cf11",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "eae354e60b26777213f8fd5a748ce9728ddcbbb5c50aabae1f9c950770ed1957"
+    },
+    {
+      "source_path": ".cursor/rules/ai4e-vis-backend.mdc",
+      "target_path": "packages/ai4e-viz/.cursor/rules/ai4e-vis-backend.mdc",
+      "source_sha256": "0b58368fbe53b8e9c6432e90dbb0cefe7bf05dc4e6765b3ebbf0de870f05a565",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "a70442c3e9bf139264ea7114ad47abf63271ae61e8eaf75ce5100141f5266d4e"
+    },
+    {
+      "source_path": ".cursor/rules/ai4e-vis-frontend.mdc",
+      "target_path": "packages/ai4e-viz/.cursor/rules/ai4e-vis-frontend.mdc",
+      "source_sha256": "fe1e4634d12c644420ee2802e113f36708aa79a61a0b17aa57ca886582abe845",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "fe1e4634d12c644420ee2802e113f36708aa79a61a0b17aa57ca886582abe845"
+    },
+    {
+      "source_path": ".cursor/rules/plan-business-alignment.mdc",
+      "target_path": "packages/ai4e-viz/.cursor/rules/plan-business-alignment.mdc",
+      "source_sha256": "86e9fe6a44a3592502e6e2bdb8cae3f4be9375c69ab401e08ec83b95da79cd3b",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "86e9fe6a44a3592502e6e2bdb8cae3f4be9375c69ab401e08ec83b95da79cd3b"
+    },
+    {
+      "source_path": ".cursor/rules/project-context-entry.mdc",
+      "target_path": "packages/ai4e-viz/.cursor/rules/project-context-entry.mdc",
+      "source_sha256": "3259733c8d54455a49ad46cfd2aaf21b71d29291650f0e7b759f4e44eb71b6de",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "3259733c8d54455a49ad46cfd2aaf21b71d29291650f0e7b759f4e44eb71b6de"
+    },
+    {
+      "source_path": ".gitignore",
+      "target_path": "packages/ai4e-viz/.gitignore",
+      "source_sha256": "d6efd0cc38477583a34b51e13e99c2920856a7a3de2e94dd2c5adc994063b2f1",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "1e805792c677e2b0e5489074eafc0f26c840d8044ba342cd35d40b6c155eac87"
+    },
+    {
+      "source_path": "AGENTS.md",
+      "target_path": "packages/ai4e-viz/AGENTS.md",
+      "source_sha256": "02aed4ea50dced36392fdb173a3d330b2c4a9d31a7296ed4edd319a617bd07d7",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "8c3f6dc4bfc44a97ffed76e96af09ca7ba35fb8bc8614efb3ea13e0c48c74949"
+    },
+    {
+      "source_path": "PORTABLE_STARTUP_GUIDE.zh-CN.md",
+      "target_path": "packages/ai4e-viz/PORTABLE_STARTUP_GUIDE.zh-CN.md",
+      "source_sha256": "2b7217eb49ab2682988093e196e3521f5d4df1c0b2d26204702be77b46910152",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "acd45064b36b8f0d2cf38c008eb62ab14d98cd7e989c0ebde21242e9e7c54df0"
+    },
+    {
+      "source_path": "README.md",
+      "target_path": "packages/ai4e-viz/README.md",
+      "source_sha256": "2b06138eda52382db5ca477df77c72a52ab703b32636bc7966357ec133fe5823",
+      "action": "adapt",
+      "reason": "合并原Dojo库说明，改用当前安装与任务配置保存入口",
+      "target_sha256": "29343af14b21f71b0cdefef55b70d06a12e50de5bd694133ad658e8c676012b3"
+    },
+    {
+      "source_path": "backend/infrastructure/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/infrastructure/__init__.py",
+      "source_sha256": "960edf94433aebabc18001dbf591d92aa7dcc882f797e4c2d15763d1c3b7390f",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "960edf94433aebabc18001dbf591d92aa7dcc882f797e4c2d15763d1c3b7390f"
+    },
+    {
+      "source_path": "backend/infrastructure/config.py",
+      "target_path": "packages/ai4e-viz/backend/infrastructure/config.py",
+      "source_sha256": "3998a3c46019ee7a294010988dfb947b964ec659c3c2de64d3caaa89826b5f60",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "b208c4db2b15f04f807bcd857da76bccc0aa0ad86aa0fca34cf5a93fdc2d2f37"
+    },
+    {
+      "source_path": "backend/infrastructure/errors.py",
+      "target_path": "packages/ai4e-viz/backend/infrastructure/errors.py",
+      "source_sha256": "ceb310c30e178a0c590fef3d81910426d6582898fc7ce45a4af79b45a65b1a8d",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ceb310c30e178a0c590fef3d81910426d6582898fc7ce45a4af79b45a65b1a8d"
+    },
+    {
+      "source_path": "backend/infrastructure/observability/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/infrastructure/observability/__init__.py",
+      "source_sha256": "31a3342b0769ab1c5ac387e68aab9a7279d7aa6924c23c71d38ea3cae95ad892",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "31a3342b0769ab1c5ac387e68aab9a7279d7aa6924c23c71d38ea3cae95ad892"
+    },
+    {
+      "source_path": "backend/infrastructure/observability/health.py",
+      "target_path": "packages/ai4e-viz/backend/infrastructure/observability/health.py",
+      "source_sha256": "039ae97bbf2a652ac0557afcd00832be54303e1a93dc5869dd9a8162a59ae3a1",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "039ae97bbf2a652ac0557afcd00832be54303e1a93dc5869dd9a8162a59ae3a1"
+    },
+    {
+      "source_path": "backend/infrastructure/observability/logging.py",
+      "target_path": "packages/ai4e-viz/backend/infrastructure/observability/logging.py",
+      "source_sha256": "b4a00d9aeca9be545de3b1828becf598ee465e2c753478611a7a4c03fa880aba",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "b4a00d9aeca9be545de3b1828becf598ee465e2c753478611a7a4c03fa880aba"
+    },
+    {
+      "source_path": "backend/infrastructure/observability/metrics.py",
+      "target_path": "packages/ai4e-viz/backend/infrastructure/observability/metrics.py",
+      "source_sha256": "fe24b4968f6241987a5879b9bc63dac9faf52c8ac3a03782de7c193d83cd50f7",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "fe24b4968f6241987a5879b9bc63dac9faf52c8ac3a03782de7c193d83cd50f7"
+    },
+    {
+      "source_path": "backend/infrastructure/observability/telemetry.py",
+      "target_path": "packages/ai4e-viz/backend/infrastructure/observability/telemetry.py",
+      "source_sha256": "70c6c85d35dd3290e2051586a9f37d0ab9ec63db1d292f5e6722b6c0e2d32e17",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "70c6c85d35dd3290e2051586a9f37d0ab9ec63db1d292f5e6722b6c0e2d32e17"
+    },
+    {
+      "source_path": "backend/infrastructure/persistence/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/infrastructure/persistence/__init__.py",
+      "source_sha256": "3ea23154065aa1ee914420d500cdbe66cd22b3a4083aa5bf287ed2d205e46f8b",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "3ea23154065aa1ee914420d500cdbe66cd22b3a4083aa5bf287ed2d205e46f8b"
+    },
+    {
+      "source_path": "backend/infrastructure/persistence/migration.py",
+      "target_path": "packages/ai4e-viz/backend/infrastructure/persistence/migration.py",
+      "source_sha256": "180b740b874c425d829784703247f28d27cbabe98ae94fef5eb2bc395588f6c9",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "180b740b874c425d829784703247f28d27cbabe98ae94fef5eb2bc395588f6c9"
+    },
+    {
+      "source_path": "backend/infrastructure/persistence/sqlite.py",
+      "target_path": "packages/ai4e-viz/backend/infrastructure/persistence/sqlite.py",
+      "source_sha256": "f9af3c4155cc124e7ef1a8e6168b167fada0638689f0097e7092e6cfdad45c6a",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "f9af3c4155cc124e7ef1a8e6168b167fada0638689f0097e7092e6cfdad45c6a"
+    },
+    {
+      "source_path": "backend/infrastructure/storage/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/infrastructure/storage/__init__.py",
+      "source_sha256": "ffc94a3cec3fe9d7ed45f1b87d12056379c7c3e61bce59f7a8592bf80e6ca40e",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ffc94a3cec3fe9d7ed45f1b87d12056379c7c3e61bce59f7a8592bf80e6ca40e"
+    },
+    {
+      "source_path": "backend/infrastructure/storage/blobStore.py",
+      "target_path": "packages/ai4e-viz/backend/infrastructure/storage/blobStore.py",
+      "source_sha256": "d006c14d653c89f722be36251952d4b5823fcb82cb706fb121a0beb01c88f064",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "d006c14d653c89f722be36251952d4b5823fcb82cb706fb121a0beb01c88f064"
+    },
+    {
+      "source_path": "backend/infrastructure/storage/cleanup.py",
+      "target_path": "packages/ai4e-viz/backend/infrastructure/storage/cleanup.py",
+      "source_sha256": "32e767d64ccbad777b06e53e6a6059503e8f05f01ce5ec9613ca18531781abd6",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "32e767d64ccbad777b06e53e6a6059503e8f05f01ce5ec9613ca18531781abd6"
+    },
+    {
+      "source_path": "backend/infrastructure/storage/pathResolver.py",
+      "target_path": "packages/ai4e-viz/backend/infrastructure/storage/pathResolver.py",
+      "source_sha256": "1c2722f18e4111d4dec5ab0d2108e15d0222e2cb872aeeeac633c593b821be4f",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "1c2722f18e4111d4dec5ab0d2108e15d0222e2cb872aeeeac633c593b821be4f"
+    },
+    {
+      "source_path": "backend/modules/MCP/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/MCP/__init__.py",
+      "source_sha256": "a8494cd124b51d86cb52f58bc19bc22d316c296ae0094cda12f58ae8d5b979f3",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a8494cd124b51d86cb52f58bc19bc22d316c296ae0094cda12f58ae8d5b979f3"
+    },
+    {
+      "source_path": "backend/modules/MCP/api.py",
+      "target_path": "packages/ai4e-viz/backend/modules/MCP/api.py",
+      "source_sha256": "520b563e84ebb14a8c25f5a5992420b1997eb7cb3b7926bfd2f9a5b2308f7ff3",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "520b563e84ebb14a8c25f5a5992420b1997eb7cb3b7926bfd2f9a5b2308f7ff3"
+    },
+    {
+      "source_path": "backend/modules/MCP/application.py",
+      "target_path": "packages/ai4e-viz/backend/modules/MCP/application.py",
+      "source_sha256": "9f9d2c3e631bc04fa9cea217d6e14ddfcd94e9566ece42edd7c8749388ab7966",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "9f9d2c3e631bc04fa9cea217d6e14ddfcd94e9566ece42edd7c8749388ab7966"
+    },
+    {
+      "source_path": "backend/modules/MCP/domain.py",
+      "target_path": "packages/ai4e-viz/backend/modules/MCP/domain.py",
+      "source_sha256": "439c068b551b40a14f89551d1c6876d22486ce467c150ca1cc8439580fe3cfe2",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "439c068b551b40a14f89551d1c6876d22486ce467c150ca1cc8439580fe3cfe2"
+    },
+    {
+      "source_path": "backend/modules/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/__init__.py",
+      "source_sha256": "e00181168c095116cd91ba3367d51ea9ba1c75c7c478a9fc38872337c32d81b7",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e00181168c095116cd91ba3367d51ea9ba1c75c7c478a9fc38872337c32d81b7"
+    },
+    {
+      "source_path": "backend/modules/automation/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/automation/__init__.py",
+      "source_sha256": "27b3afc8c7ee9c6d6429012ba377f42d1776c0e118ce418c8a38a3f03cf22570",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "27b3afc8c7ee9c6d6429012ba377f42d1776c0e118ce418c8a38a3f03cf22570"
+    },
+    {
+      "source_path": "backend/modules/automation/api.py",
+      "target_path": "packages/ai4e-viz/backend/modules/automation/api.py",
+      "source_sha256": "a2ea3bdb994f76d8f10162470a5c2f9dc5f2283154ce2a962bc80783fec3b97f",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a2ea3bdb994f76d8f10162470a5c2f9dc5f2283154ce2a962bc80783fec3b97f"
+    },
+    {
+      "source_path": "backend/modules/automation/application.py",
+      "target_path": "packages/ai4e-viz/backend/modules/automation/application.py",
+      "source_sha256": "a53d80ac9469eb3377e370c2a7b47247ab143647cb4c4d7c2a1a969fe3f2f4ec",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a53d80ac9469eb3377e370c2a7b47247ab143647cb4c4d7c2a1a969fe3f2f4ec"
+    },
+    {
+      "source_path": "backend/modules/automation/domain.py",
+      "target_path": "packages/ai4e-viz/backend/modules/automation/domain.py",
+      "source_sha256": "ebd765f909bd13b3ebb7a39f3c754a9a1f60b54882e64e297eab383b3ec91c27",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ebd765f909bd13b3ebb7a39f3c754a9a1f60b54882e64e297eab383b3ec91c27"
+    },
+    {
+      "source_path": "backend/modules/automation/repository.py",
+      "target_path": "packages/ai4e-viz/backend/modules/automation/repository.py",
+      "source_sha256": "3ce4d7dd84343d61b8e8afd93cdc743750a30b9d2efc6cef0b4181caf035b00c",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "3ce4d7dd84343d61b8e8afd93cdc743750a30b9d2efc6cef0b4181caf035b00c"
+    },
+    {
+      "source_path": "backend/modules/dataAssets/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/dataAssets/__init__.py",
+      "source_sha256": "5213f1596b1fe7204c85ec31937fc121e10d924ed527e946c2a1bd0fff910808",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "53f6d4e5ddd13daf06e7484b8395049ad417a8231d3080afd1daf3cf4eea4a8c"
+    },
+    {
+      "source_path": "backend/modules/dataAssets/api.py",
+      "target_path": "packages/ai4e-viz/backend/modules/dataAssets/api.py",
+      "source_sha256": "8504078f538c20cc5726e3aac455a9965d53f31f0aa21ee3c10a875b49aac758",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "8504078f538c20cc5726e3aac455a9965d53f31f0aa21ee3c10a875b49aac758"
+    },
+    {
+      "source_path": "backend/modules/dataAssets/application.py",
+      "target_path": "packages/ai4e-viz/backend/modules/dataAssets/application.py",
+      "source_sha256": "7874c91697fa9427f59f235cbf3e364fb15507333cde4e9a45f5ab9faad043c7",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "7874c91697fa9427f59f235cbf3e364fb15507333cde4e9a45f5ab9faad043c7"
+    },
+    {
+      "source_path": "backend/modules/dataAssets/repository.py",
+      "target_path": "packages/ai4e-viz/backend/modules/dataAssets/repository.py",
+      "source_sha256": "c2da91e4086206bb91d90a551e565f62400a2eb396f7d2ae239ea1cfe7dac3f4",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "c2da91e4086206bb91d90a551e565f62400a2eb396f7d2ae239ea1cfe7dac3f4"
+    },
+    {
+      "source_path": "backend/modules/reportDesigner/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/reportDesigner/__init__.py",
+      "source_sha256": "dc72a3df2a1912436b5f41c428dbf2b6ede2a8ef68fa8b013a3047a76211b806",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "dc72a3df2a1912436b5f41c428dbf2b6ede2a8ef68fa8b013a3047a76211b806"
+    },
+    {
+      "source_path": "backend/modules/reportDesigner/api.py",
+      "target_path": "packages/ai4e-viz/backend/modules/reportDesigner/api.py",
+      "source_sha256": "ec928703ebe51782e969ed584fcf347a867c24660d04ae9e97d5e5f8f74b0a8a",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ec928703ebe51782e969ed584fcf347a867c24660d04ae9e97d5e5f8f74b0a8a"
+    },
+    {
+      "source_path": "backend/modules/reportDesigner/application.py",
+      "target_path": "packages/ai4e-viz/backend/modules/reportDesigner/application.py",
+      "source_sha256": "ad11614cc60eed4977fa46c2cad5ae728a538511536e666175d3f77f47f77cd8",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ad11614cc60eed4977fa46c2cad5ae728a538511536e666175d3f77f47f77cd8"
+    },
+    {
+      "source_path": "backend/modules/reportDesigner/domain.py",
+      "target_path": "packages/ai4e-viz/backend/modules/reportDesigner/domain.py",
+      "source_sha256": "26f55bc8eb1e7452bb0a688879f64ba8cdd9c8d9299a7cf8425db1ee9c45da13",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "0f1b0cec38153de62bda11badbaaf25289a56f8f9624983142af16cea465bd32"
+    },
+    {
+      "source_path": "backend/modules/reportDesigner/repository.py",
+      "target_path": "packages/ai4e-viz/backend/modules/reportDesigner/repository.py",
+      "source_sha256": "2a176d059f4cd6c16193887d0bf20f8802b94fa16dd8f233d5ddca8eb1f9ffa6",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "2a176d059f4cd6c16193887d0bf20f8802b94fa16dd8f233d5ddca8eb1f9ffa6"
+    },
+    {
+      "source_path": "backend/modules/reportManage/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/reportManage/__init__.py",
+      "source_sha256": "466eda73b8ae5c44151f6e9136dd8778370655b6b3929457e82227c4a7063c1a",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "466eda73b8ae5c44151f6e9136dd8778370655b6b3929457e82227c4a7063c1a"
+    },
+    {
+      "source_path": "backend/modules/reportManage/api.py",
+      "target_path": "packages/ai4e-viz/backend/modules/reportManage/api.py",
+      "source_sha256": "8543630900ac003432ab6908c308fc78631eb504013a55ff739c870d13ae2c1d",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "f8c02205455055fa083087b60e82ae952c7e3ef604d6e439fb4abff0757e5d8f"
+    },
+    {
+      "source_path": "backend/modules/reportManage/application.py",
+      "target_path": "packages/ai4e-viz/backend/modules/reportManage/application.py",
+      "source_sha256": "6d2ce7ad9e9340a5fc80067a2d6073b7fcb1b8fd9c5f6b203f96a6f8ceb11e50",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "b16cef65c48d55cc9a8a7e52ef4b96dbc4be5b6fee4c33771f016663fddad5e7"
+    },
+    {
+      "source_path": "backend/modules/reportManage/builtinReports.py",
+      "target_path": "packages/ai4e-viz/backend/modules/reportManage/builtinReports.py",
+      "source_sha256": "ba8633af901f92394d93fed25a957210713c140430d064bb6cb7c1f4b1d66890",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ba8633af901f92394d93fed25a957210713c140430d064bb6cb7c1f4b1d66890"
+    },
+    {
+      "source_path": "backend/modules/reportManage/gradShafranovReport.py",
+      "target_path": "packages/ai4e-viz/backend/modules/reportManage/gradShafranovReport.py",
+      "source_sha256": "4323fc31e8a1f6fadd4cd00bfb2c1af2c88e27f0a7370fb7de7774bcff4786ee",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "4323fc31e8a1f6fadd4cd00bfb2c1af2c88e27f0a7370fb7de7774bcff4786ee"
+    },
+    {
+      "source_path": "backend/modules/reportManage/millerReport.py",
+      "target_path": "packages/ai4e-viz/backend/modules/reportManage/millerReport.py",
+      "source_sha256": "a378e792aba6d4420054674da328b143f2445f76333ead90383ad63032b47810",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a378e792aba6d4420054674da328b143f2445f76333ead90383ad63032b47810"
+    },
+    {
+      "source_path": "backend/modules/reportManage/quarto.py",
+      "target_path": "packages/ai4e-viz/backend/modules/reportManage/quarto.py",
+      "source_sha256": "cf6ee55ad539b46da9baa3921f9e44b01e9aa92ab3c8b266e7fbd31ff532ec9e",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "5c4ec505676ca76296aaba73b1b850d14e74ca1934e134e2c69d88f78dc86c4c"
+    },
+    {
+      "source_path": "backend/modules/reportManage/reportRepository.py",
+      "target_path": "packages/ai4e-viz/backend/modules/reportManage/reportRepository.py",
+      "source_sha256": "8fac3d25bdec882883a2fb074efb572398d2613fa1425a0f71d96bc577917c90",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "8fac3d25bdec882883a2fb074efb572398d2613fa1425a0f71d96bc577917c90"
+    },
+    {
+      "source_path": "backend/modules/reportManage/repository.py",
+      "target_path": "packages/ai4e-viz/backend/modules/reportManage/repository.py",
+      "source_sha256": "4b13a1a6b1a417499ee73476bc33c193450e530d24ba23f1f1ad930d8424300d",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "4b13a1a6b1a417499ee73476bc33c193450e530d24ba23f1f1ad930d8424300d"
+    },
+    {
+      "source_path": "backend/modules/visConvertor/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visConvertor/__init__.py",
+      "source_sha256": "dfea70fb10cadad2ae9c38b751b2614316ef096393d6926fe6cd1f53e6da13ea",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "dfea70fb10cadad2ae9c38b751b2614316ef096393d6926fe6cd1f53e6da13ea"
+    },
+    {
+      "source_path": "backend/modules/visConvertor/api.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visConvertor/api.py",
+      "source_sha256": "f2f9bb4bb8e9394a89f6b352b2b9e81070ff315d7e93d10f275944a72183df63",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "f2f9bb4bb8e9394a89f6b352b2b9e81070ff315d7e93d10f275944a72183df63"
+    },
+    {
+      "source_path": "backend/modules/visConvertor/application.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visConvertor/application.py",
+      "source_sha256": "e29c3e3e1b73f586b92b06003e398f3ce892ead587ccd3a323dcc113da4b2880",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e29c3e3e1b73f586b92b06003e398f3ce892ead587ccd3a323dcc113da4b2880"
+    },
+    {
+      "source_path": "backend/modules/visConvertor/converter.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visConvertor/converter.py",
+      "source_sha256": "c283f16ea14fafeaf5a3c0c58e26afa452115850f337ae6cee92d42d3cb6f794",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "c283f16ea14fafeaf5a3c0c58e26afa452115850f337ae6cee92d42d3cb6f794"
+    },
+    {
+      "source_path": "backend/modules/visConvertor/domain.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visConvertor/domain.py",
+      "source_sha256": "b5cd2e5c728fddb7a1c13dae5547ab3335110ef9dc895030d4e76a43d22be8b9",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "b5cd2e5c728fddb7a1c13dae5547ab3335110ef9dc895030d4e76a43d22be8b9"
+    },
+    {
+      "source_path": "backend/modules/visDatasets/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visDatasets/__init__.py",
+      "source_sha256": "93bb39f03536b5a8eb26eeb0cdb2c83df8cd9dd4babeacb55cbbaabea4874620",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "ffc97542ea5eedf6e9f97819485a86d66f000de4f16297eda7cfe4afdfb1d5be"
+    },
+    {
+      "source_path": "backend/modules/visDatasets/api.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visDatasets/api.py",
+      "source_sha256": "261ca610db45800c2fae9a7e970cf09f524ac1014bd7de72cbb91e187aa7c458",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "261ca610db45800c2fae9a7e970cf09f524ac1014bd7de72cbb91e187aa7c458"
+    },
+    {
+      "source_path": "backend/modules/visDatasets/application.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visDatasets/application.py",
+      "source_sha256": "b652c9d1eaba5a81363049484fb931432afc1c4131b43ae0dab3817d31de288a",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "b652c9d1eaba5a81363049484fb931432afc1c4131b43ae0dab3817d31de288a"
+    },
+    {
+      "source_path": "backend/modules/visDatasets/domain.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visDatasets/domain.py",
+      "source_sha256": "80606234e2749119c016f0bf10b2f6dcb50f150a1a031b14925f2b7941d355cc",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "80606234e2749119c016f0bf10b2f6dcb50f150a1a031b14925f2b7941d355cc"
+    },
+    {
+      "source_path": "backend/modules/visDatasets/inspection.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visDatasets/inspection.py",
+      "source_sha256": "045ae3c9a4a4dae91141b485dd40c4556f52330916d257564c13d4c09b149eaa",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "045ae3c9a4a4dae91141b485dd40c4556f52330916d257564c13d4c09b149eaa"
+    },
+    {
+      "source_path": "backend/modules/visDatasets/pipeline.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visDatasets/pipeline.py",
+      "source_sha256": "b05086b6ae6f44bd5f22e3538908d6dc23ac60cf6a45a684969fe460a35afe83",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "b05086b6ae6f44bd5f22e3538908d6dc23ac60cf6a45a684969fe460a35afe83"
+    },
+    {
+      "source_path": "backend/modules/visEngine/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visEngine/__init__.py",
+      "source_sha256": "989cfc277b81fdaae7963fd6caf054c757a5cda1a8cd480edd18025ce57ca68f",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "bc9db779972360872691b05d0ad4ea8ec3c241fd40705424912648e5348957a0"
+    },
+    {
+      "source_path": "backend/modules/visEngine/cache.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visEngine/cache.py",
+      "source_sha256": "7e8c9b442fed6f2d5b0eb8718ff90c9de003506b2dcacef75d5ac63cee2804ee",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "108124abd5600997b86efb901fb7ef59ded153d64c931cd159c6d0e8123c7558"
+    },
+    {
+      "source_path": "backend/modules/visEngine/performance.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visEngine/performance.py",
+      "source_sha256": "a6b8901fab2bc1a4076305a78d5444bde71d12c170de45c17af05203eb7461a5",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a6b8901fab2bc1a4076305a78d5444bde71d12c170de45c17af05203eb7461a5"
+    },
+    {
+      "source_path": "backend/modules/visEngine/physicalField.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visEngine/physicalField.py",
+      "source_sha256": "4e677858fcbf42426d79f3d3be06dbba00681d10418076b2b1bcf2c4e66e23de",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "4e677858fcbf42426d79f3d3be06dbba00681d10418076b2b1bcf2c4e66e23de"
+    },
+    {
+      "source_path": "backend/modules/visFigure/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visFigure/__init__.py",
+      "source_sha256": "7b282d468bf4e9784be9daa134511e36f53a1db6b948b56dc547303878e95120",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "7b282d468bf4e9784be9daa134511e36f53a1db6b948b56dc547303878e95120"
+    },
+    {
+      "source_path": "backend/modules/visFigure/api.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visFigure/api.py",
+      "source_sha256": "3bf142986b972734836bca7667400dc8a873010ad29ee28904bc3be8858de26a",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "3bf142986b972734836bca7667400dc8a873010ad29ee28904bc3be8858de26a"
+    },
+    {
+      "source_path": "backend/modules/visFigure/application.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visFigure/application.py",
+      "source_sha256": "cf8a43b3413e2c5ae11ef63cf4e05ef723f7380dd6c46f690ecf1d944ba09eb1",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "cf8a43b3413e2c5ae11ef63cf4e05ef723f7380dd6c46f690ecf1d944ba09eb1"
+    },
+    {
+      "source_path": "backend/modules/visFigure/domain.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visFigure/domain.py",
+      "source_sha256": "47120355e02688f024907f94ebd6a54467f114842944b20dde09eaf5b799fe63",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "47120355e02688f024907f94ebd6a54467f114842944b20dde09eaf5b799fe63"
+    },
+    {
+      "source_path": "backend/modules/visGeometry/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visGeometry/__init__.py",
+      "source_sha256": "078a17bb3fbecb07f058c9aa79ba8e654cee45279302a47732e187e9038cac78",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "078a17bb3fbecb07f058c9aa79ba8e654cee45279302a47732e187e9038cac78"
+    },
+    {
+      "source_path": "backend/modules/visGeometry/api.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visGeometry/api.py",
+      "source_sha256": "f3314c4e1f4153103342332f4a341640ec32e832b1cadd47cfe9c575f0ececdb",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "f3314c4e1f4153103342332f4a341640ec32e832b1cadd47cfe9c575f0ececdb"
+    },
+    {
+      "source_path": "backend/modules/visGeometry/application.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visGeometry/application.py",
+      "source_sha256": "af46054687e83d3dc009052e65e1507c2dbddcff2999f52ce380e2b4628d781c",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "af46054687e83d3dc009052e65e1507c2dbddcff2999f52ce380e2b4628d781c"
+    },
+    {
+      "source_path": "backend/modules/visGeometry/domain.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visGeometry/domain.py",
+      "source_sha256": "d1ff9ce5fe61908e75d06df67d5312de559ab178b945a340bdeed6ed1f1889f6",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "d1ff9ce5fe61908e75d06df67d5312de559ab178b945a340bdeed6ed1f1889f6"
+    },
+    {
+      "source_path": "backend/modules/visGeometry/o3dv.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visGeometry/o3dv.py",
+      "source_sha256": "92606f15ac50af15ed5f83fa1aca6e54abcd6de1cfedf07010cd321c10a63039",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "92606f15ac50af15ed5f83fa1aca6e54abcd6de1cfedf07010cd321c10a63039"
+    },
+    {
+      "source_path": "backend/modules/visIO/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visIO/__init__.py",
+      "source_sha256": "86389721b824e711050c2a5a6e4b9fe51d6c53070485a6ed9cb49f86e59542c5",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "7540a2c9c2cf80e93755685205ad28c2a7d62d013933e2de6282653125477032"
+    },
+    {
+      "source_path": "backend/modules/visIO/api.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visIO/api.py",
+      "source_sha256": "1501737a0e613e4031fa7852aab8c53436054ceebe6e98ef3b161342f0f289c5",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "ff55f71ac4061f555bf063b9331227f21af20ceadde303b91ef316a0d799d817"
+    },
+    {
+      "source_path": "backend/modules/visIO/application.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visIO/application.py",
+      "source_sha256": "73b5b804b982ec25c6b0296ae93b77966682a47ca7993f214dd67fa23b844f88",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "5a7dbcd04e516f2190c55711933af6a73892b17dcd691940ae314d65aed2e484"
+    },
+    {
+      "source_path": "backend/modules/visIO/domain.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visIO/domain.py",
+      "source_sha256": "35b298325d2f344a0c0f18caecd0d197b8f65b340e2b8af54089de599abeb229",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "35b298325d2f344a0c0f18caecd0d197b8f65b340e2b8af54089de599abeb229"
+    },
+    {
+      "source_path": "backend/modules/visIO/repository.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visIO/repository.py",
+      "source_sha256": "f65987817b48a2f70f5f6e37fc7263657083faf4896f0de981646ff06e6bbe94",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "f65987817b48a2f70f5f6e37fc7263657083faf4896f0de981646ff06e6bbe94"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/__init__.py",
+      "source_sha256": "518a35ebe7d03913c544c516ee6f6b3c6c88951a8a0fcf5026e29e6ef466b5d3",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "3e17a21c913d49881eb224f742aee27150a8ccaeae4bf8813826c09139d55432"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/api.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/api.py",
+      "source_sha256": "ce42d3fef3f0ff18f61554a8e3b4ca9d387c038f81b88244b64124f68115745d",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "1690410864f80b3002a5efadfab18038ad00945f5491774680c274070d1b715a"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/application.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/application.py",
+      "source_sha256": "125b81265d57a1f7e75ba2958e5228f31136db5c9ba1dc55f71997efc0ac69fb",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "125b81265d57a1f7e75ba2958e5228f31136db5c9ba1dc55f71997efc0ac69fb"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/domain.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/domain.py",
+      "source_sha256": "c4f6ea8390b025ec446ff28cf5316b095b1a258ebd5b6557a2e79f3697ce8624",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "c4f6ea8390b025ec446ff28cf5316b095b1a258ebd5b6557a2e79f3697ce8624"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/__init__.py",
+      "source_sha256": "f75ef41ae3730202a3ea2e372e51f22355570d562d9154c3c9d98f4104b468dd",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "f75ef41ae3730202a3ea2e372e51f22355570d562d9154c3c9d98f4104b468dd"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/dataExtraction/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/dataExtraction/__init__.py",
+      "source_sha256": "3fc205bf089d7233f9dbd5c073e37e39df1954d3669223759900b5eb3c4e1996",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "3fc205bf089d7233f9dbd5c073e37e39df1954d3669223759900b5eb3c4e1996"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/dataExtraction/aggregate.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/dataExtraction/aggregate.py",
+      "source_sha256": "e03bd451f8918dc957c336f1ce668c2aabd8427267f8b3732e8aec4e91665ffa",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e03bd451f8918dc957c336f1ce668c2aabd8427267f8b3732e8aec4e91665ffa"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/dataExtraction/spatial.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/dataExtraction/spatial.py",
+      "source_sha256": "d6a81f882150335966c905c266b7d0131a51cdea8019490c4796df0939f34df9",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "b03ac18a7c8f3c6471e6a4449dfc5fe20d5af941739e701be1a38b7ac0c50325"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/dataExtraction/temporal.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/dataExtraction/temporal.py",
+      "source_sha256": "34d7ab86d3cecbfb05742f898868391b4f8e792d87356f4c808a701be946a1d6",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "3a84819ac77ca1eedd3d024040277a434eebcecb2226ad4de767769da0ce3738"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/dataOverview/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/dataOverview/__init__.py",
+      "source_sha256": "f5c6e454251a75caff1a0fbbedfefce9eaea5b1abc8deda015d6780491d7d254",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "f5c6e454251a75caff1a0fbbedfefce9eaea5b1abc8deda015d6780491d7d254"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/dataOverview/basicCharts.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/dataOverview/basicCharts.py",
+      "source_sha256": "27f4a3152c69fb4a93c7512080ccac3dfbe02ce89ee2ba3abee1e0e768dc250f",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "30033d8fb983f9ac51e5d099948982459db364881498c65de1ca3f7e4cffdf30"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/dataOverview/multiDimensionalCloud.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/dataOverview/multiDimensionalCloud.py",
+      "source_sha256": "db78b16780938b2373f87b5d75f8dba2aa55f72adc0ae39016fd63ce8f928020",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "db78b16780938b2373f87b5d75f8dba2aa55f72adc0ae39016fd63ce8f928020"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/dataOverview/table.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/dataOverview/table.py",
+      "source_sha256": "125ede81ad511d69269ea5febe89b3f8682afd5f6f80885f9c6ca9c7cfba4160",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "125ede81ad511d69269ea5febe89b3f8682afd5f6f80885f9c6ca9c7cfba4160"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/fieldVisualization/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/fieldVisualization/__init__.py",
+      "source_sha256": "f978d7659242a3a28e6fae64f649e5bce3f7327f11fc4c603e4cb0038f35f9e4",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "f978d7659242a3a28e6fae64f649e5bce3f7327f11fc4c603e4cb0038f35f9e4"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/fieldVisualization/animation.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/fieldVisualization/animation.py",
+      "source_sha256": "43d0d8d01c837e8f5a7dfebf61340afbac4ee1ff004fd7fde93e6ef5797c0170",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "43d0d8d01c837e8f5a7dfebf61340afbac4ee1ff004fd7fde93e6ef5797c0170"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/fieldVisualization/colorMapping.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/fieldVisualization/colorMapping.py",
+      "source_sha256": "be1dc21c72d14bbf91d28b25322f237eec431511f86c8325fd2942a352f15c9c",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "c670a2c62deacd85dead5150371cb5d4361e50419f6f0c2b8e05fbbab2fc3d7c"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/fieldVisualization/cutAnalysis.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/fieldVisualization/cutAnalysis.py",
+      "source_sha256": "ad026b61a2b33dcb1702735e831d8e8fee9f1806d4d5ccdafe183da4b750551b",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "8614625e75b306e379df82c3d44f73fd8d5cae96a5fea6288cf794bae83c3260"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/fieldVisualization/displayStyle.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/fieldVisualization/displayStyle.py",
+      "source_sha256": "a62879506a184fc69eb255d0e01c68f8354256a77cf6d4e8b346b2a589035f57",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a62879506a184fc69eb255d0e01c68f8354256a77cf6d4e8b346b2a589035f57"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/fieldVisualization/multiResult.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/fieldVisualization/multiResult.py",
+      "source_sha256": "4767196515a39276d402b59285ea91967ae66bc34c6ebbf5244a6c3effd15a13",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "4767196515a39276d402b59285ea91967ae66bc34c6ebbf5244a6c3effd15a13"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/fieldVisualization/probe.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/fieldVisualization/probe.py",
+      "source_sha256": "978183ba47b263d4011395319f03a19f92d81b593a23e4731cf49c32ea3d2d9c",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "978183ba47b263d4011395319f03a19f92d81b593a23e4731cf49c32ea3d2d9c"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/fieldVisualization/scalarCloud.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/fieldVisualization/scalarCloud.py",
+      "source_sha256": "d996846d238bf52cdf0253c141935c31026f4006a083f47d4523b78671037f75",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "ca112ebfe9b051d1e06a81329c9d4624fb1264e14deb14b6ccc2d77cb4d7752f"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/fieldVisualization/timeline.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/fieldVisualization/timeline.py",
+      "source_sha256": "b30663c1b0b5b27ec722fa4215ea52ebd43ec9d4a8c13821e239315940fe9827",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "b30663c1b0b5b27ec722fa4215ea52ebd43ec9d4a8c13821e239315940fe9827"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/fieldVisualization/timelineAnimation.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/fieldVisualization/timelineAnimation.py",
+      "source_sha256": "1bc5ec2625e8fb4634591501048adcb240b0fe3fcc519b16d106ea0cc69023f5",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "1bc5ec2625e8fb4634591501048adcb240b0fe3fcc519b16d106ea0cc69023f5"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/fieldVisualization/vectorField.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/fieldVisualization/vectorField.py",
+      "source_sha256": "a2365b652d321d8afc9a9945d4a442297ecfb30c7e1774afdc5d58d801cc4644",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "ce25df733cd0875a417997280355bd2c1ce265fc1455e4734c6a2fbb6beceb23"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/modules/fieldVisualization/view.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/modules/fieldVisualization/view.py",
+      "source_sha256": "b90c255f3fcc8c1218d8aa1ad0be050e71f35ab81a626f09a0cc03e6edc2b4f3",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "ab5368f717137a308228acbab78eeacac6ac206c79ee945d4db322bd8b6c1d60"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/repository.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/repository.py",
+      "source_sha256": "9c6658703cbb140b078a37a3522baa8151ee1631d57503332182b177bad09146",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "9c6658703cbb140b078a37a3522baa8151ee1631d57503332182b177bad09146"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/trame.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/trame.py",
+      "source_sha256": "1e5f27c0aba06ef489c7555ed33384558e9529860be71c04d2332131c33a0f42",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "97c04aa5dcdd80961bfbaaa43ac43da0e31048320257333c8a9dcc87c58e5c73"
+    },
+    {
+      "source_path": "backend/modules/visPhysField/trameServer.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visPhysField/trameServer.py",
+      "source_sha256": "75fcaa0a83b2a13f2512478c476f6d64d4fde0adae2f584e68188006b689fdd4",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "eed56226ff0251e3172fc4c0d9ed60507e737143a2151f95bb7fb1939b61bdf5"
+    },
+    {
+      "source_path": "backend/modules/visTaskManage/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visTaskManage/__init__.py",
+      "source_sha256": "60b76b7b2159850079a8d7870cb21fd54da6344113b70ca04d8e9cf613bdd20f",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "29ea9d644c46bc073105e263ba604cc78820e7166855a07eb8dd6772563c511a"
+    },
+    {
+      "source_path": "backend/modules/visTaskManage/api.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visTaskManage/api.py",
+      "source_sha256": "69f0dd54702af53b48d1e95c9fec1ab47b9305f703d7d02de77fb707de4c3d25",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "3152da05d44bcf2597ec9cf46d810ac7e84793d803d53ee78f4ddc5cb42c3bef"
+    },
+    {
+      "source_path": "backend/modules/visTaskManage/application.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visTaskManage/application.py",
+      "source_sha256": "2840f86adcfcc91d1d96bccebedd523df42a29d380b40f1c0c08a1550d484381",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "b220307ec61390a89faad3825e83b3bf43c92bf3ee1f53e3adc65fa5fea000c4"
+    },
+    {
+      "source_path": "backend/modules/visTaskManage/catalog.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visTaskManage/catalog.py",
+      "source_sha256": "a014f054aed208c91da77fc09a995729562c83c61e2ea4f789dde5d55f56ddbf",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a014f054aed208c91da77fc09a995729562c83c61e2ea4f789dde5d55f56ddbf"
+    },
+    {
+      "source_path": "backend/modules/visTaskManage/domain.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visTaskManage/domain.py",
+      "source_sha256": "dd4936a1d288fae566d18f82cf05305f168f71eedb567f638383d2df0e2a1133",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "dd4936a1d288fae566d18f82cf05305f168f71eedb567f638383d2df0e2a1133"
+    },
+    {
+      "source_path": "backend/modules/visTaskManage/examples.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visTaskManage/examples.py",
+      "source_sha256": "9d28d399db5fe4d2a6314a07c75fa53190df9f1d13d0c41ce41d343d9492f872",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "9d28d399db5fe4d2a6314a07c75fa53190df9f1d13d0c41ce41d343d9492f872"
+    },
+    {
+      "source_path": "backend/modules/visTaskManage/parameterRegistry.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visTaskManage/parameterRegistry.py",
+      "source_sha256": "519195a9a600f734ecca2cca7fbc2d139680d102d431aada607fbba85c7207f4",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "519195a9a600f734ecca2cca7fbc2d139680d102d431aada607fbba85c7207f4"
+    },
+    {
+      "source_path": "backend/modules/visTaskManage/repository.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visTaskManage/repository.py",
+      "source_sha256": "3c428a5f8dbb83461deb2c514f55cfbd0beb7705f1cc9260d76b08738ee39121",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "3c428a5f8dbb83461deb2c514f55cfbd0beb7705f1cc9260d76b08738ee39121"
+    },
+    {
+      "source_path": "backend/modules/visTaskManage/specRepository.py",
+      "target_path": "packages/ai4e-viz/backend/modules/visTaskManage/specRepository.py",
+      "source_sha256": "88d4961830ef40abbe08e830e7a501f7b67cc816740234664da3e915ad84d6b5",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "88d4961830ef40abbe08e830e7a501f7b67cc816740234664da3e915ad84d6b5"
+    },
+    {
+      "source_path": "backend/requirements.txt",
+      "target_path": "packages/ai4e-viz/backend/requirements.txt",
+      "source_sha256": "71a455e006e2579f77ec308c61c0282b51adbb71012966d57675e420df1991ce",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "d3e4a93645bd9969781b87d123c13f276672c9a0c1b17988426498e676235674"
+    },
+    {
+      "source_path": "backend/run.py",
+      "target_path": "packages/ai4e-viz/backend/run.py",
+      "source_sha256": "50ecaef535463f4a0dc9fec72ecf0d6841855b07c5c55621411daa9ae1b7f1aa",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "50ecaef535463f4a0dc9fec72ecf0d6841855b07c5c55621411daa9ae1b7f1aa"
+    },
+    {
+      "source_path": "backend/scripts/create_portable_bundle.py",
+      "target_path": "packages/ai4e-viz/backend/scripts/create_portable_bundle.py",
+      "source_sha256": "d1f77c24317b5b762e2dce9ab2ae043021137c1f8dab025c639b6874c16d0a5c",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "d1f77c24317b5b762e2dce9ab2ae043021137c1f8dab025c639b6874c16d0a5c"
+    },
+    {
+      "source_path": "backend/scripts/generate_example_data.py",
+      "target_path": "packages/ai4e-viz/backend/scripts/generate_example_data.py",
+      "source_sha256": "7ae603e5af7fb246903feecedbd72c4fd9bf693c45b71a32bdd07da09cee0243",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "7ae603e5af7fb246903feecedbd72c4fd9bf693c45b71a32bdd07da09cee0243"
+    },
+    {
+      "source_path": "backend/scripts/import_grad_shafranov_fixture.py",
+      "target_path": "packages/ai4e-viz/backend/scripts/import_grad_shafranov_fixture.py",
+      "source_sha256": "480175e3bfb0672ddf5938a25dd9b2f9b2e8b0f0133f2ac6642f66ce9efd0247",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "480175e3bfb0672ddf5938a25dd9b2f9b2e8b0f0133f2ac6642f66ce9efd0247"
+    },
+    {
+      "source_path": "backend/scripts/install_quarto.py",
+      "target_path": "packages/ai4e-viz/backend/scripts/install_quarto.py",
+      "source_sha256": "0736ef02be5f7ba66f19f240c70e46b7107d2742fead08664b00765b19a5d8c3",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "0736ef02be5f7ba66f19f240c70e46b7107d2742fead08664b00765b19a5d8c3"
+    },
+    {
+      "source_path": "backend/scripts/maintenance.py",
+      "target_path": "packages/ai4e-viz/backend/scripts/maintenance.py",
+      "source_sha256": "915c2deaa3e707962b0a522a45026c40872f201db99eaa60bcd9d07c69f5209c",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "915c2deaa3e707962b0a522a45026c40872f201db99eaa60bcd9d07c69f5209c"
+    },
+    {
+      "source_path": "backend/scripts/migrate_runtime_database.py",
+      "target_path": "packages/ai4e-viz/backend/scripts/migrate_runtime_database.py",
+      "source_sha256": "3f39c139dbe9ccfe70adbb94e6654be5838f2d488eb636ca20fefa19cf8b40a8",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "3f39c139dbe9ccfe70adbb94e6654be5838f2d488eb636ca20fefa19cf8b40a8"
+    },
+    {
+      "source_path": "backend/scripts/prune_runtime_storage.py",
+      "target_path": "packages/ai4e-viz/backend/scripts/prune_runtime_storage.py",
+      "source_sha256": "d34aa0f7337af99c0bdec8a86e511329c8e1c65d304c6f4dae05a54df4234140",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "d34aa0f7337af99c0bdec8a86e511329c8e1c65d304c6f4dae05a54df4234140"
+    },
+    {
+      "source_path": "backend/scripts/quarto_smoke.py",
+      "target_path": "packages/ai4e-viz/backend/scripts/quarto_smoke.py",
+      "source_sha256": "494deae1462f06368141d5179dd4705ab7fba0805d5b9fea3450f5d5a85fd7a9",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "494deae1462f06368141d5179dd4705ab7fba0805d5b9fea3450f5d5a85fd7a9"
+    },
+    {
+      "source_path": "backend/scripts/run_isolated_api.py",
+      "target_path": "packages/ai4e-viz/backend/scripts/run_isolated_api.py",
+      "source_sha256": "296133537560274b9a37edc52a75f9a67bf6a066ed9a99e94ed7303d45a7b558",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "296133537560274b9a37edc52a75f9a67bf6a066ed9a99e94ed7303d45a7b558"
+    },
+    {
+      "source_path": "backend/server/__init__.py",
+      "target_path": "packages/ai4e-viz/backend/server/__init__.py",
+      "source_sha256": "01c99dd805da7cd78c70ad6c1009f840b5123e81f6b3d9d833061c07b0ed9339",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "01c99dd805da7cd78c70ad6c1009f840b5123e81f6b3d9d833061c07b0ed9339"
+    },
+    {
+      "source_path": "backend/server/api.py",
+      "target_path": "packages/ai4e-viz/backend/server/api.py",
+      "source_sha256": "4100029035cc4a9e942d9e25b9ec4b6095c91cf725442dd6c8c6a816aa590895",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "a5fba33c76af2010998d66f34a78fb528475c7b966dd97ac78573bf4cea4f194"
+    },
+    {
+      "source_path": "backend/server/moduleRegistry.py",
+      "target_path": "packages/ai4e-viz/backend/server/moduleRegistry.py",
+      "source_sha256": "7b3e38fd12ddd19118901011261a36f48cbb8eee92c7c249531f1e8b10f0203a",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "7b3e38fd12ddd19118901011261a36f48cbb8eee92c7c249531f1e8b10f0203a"
+    },
+    {
+      "source_path": "backend/server/trame.py",
+      "target_path": "packages/ai4e-viz/backend/server/trame.py",
+      "source_sha256": "b3aacfad65fc002c6024da3efc81920b8b92a46de102159c6476921ae7a2f5c6",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "b3aacfad65fc002c6024da3efc81920b8b92a46de102159c6476921ae7a2f5c6"
+    },
+    {
+      "source_path": "backend/tests/conftest.py",
+      "target_path": "packages/ai4e-viz/backend/tests/conftest.py",
+      "source_sha256": "7c7b050b081c0b5d1d2fe84a4cf247271e1f3b769044f5bc7d042f83d8cdc7d4",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "7c7b050b081c0b5d1d2fe84a4cf247271e1f3b769044f5bc7d042f83d8cdc7d4"
+    },
+    {
+      "source_path": "backend/tests/modules/test_automation.py",
+      "target_path": "packages/ai4e-viz/backend/tests/modules/test_automation.py",
+      "source_sha256": "e44d49984898ee389d72218a9e16bfcdd1eb8a9a60d9914dc7702110d760f51a",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e44d49984898ee389d72218a9e16bfcdd1eb8a9a60d9914dc7702110d760f51a"
+    },
+    {
+      "source_path": "backend/tests/modules/test_data_assets.py",
+      "target_path": "packages/ai4e-viz/backend/tests/modules/test_data_assets.py",
+      "source_sha256": "1e6d879bb6f5e148439c12a1d1db10805c4dccccbc7ef48057a589cc7b5c8443",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "1e6d879bb6f5e148439c12a1d1db10805c4dccccbc7ef48057a589cc7b5c8443"
+    },
+    {
+      "source_path": "backend/tests/modules/test_mcp.py",
+      "target_path": "packages/ai4e-viz/backend/tests/modules/test_mcp.py",
+      "source_sha256": "443b82927a86fbdc4239c703a06bb681b3f51f194330a4e3758267f6a3fa85f7",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "443b82927a86fbdc4239c703a06bb681b3f51f194330a4e3758267f6a3fa85f7"
+    },
+    {
+      "source_path": "backend/tests/modules/test_report_designer.py",
+      "target_path": "packages/ai4e-viz/backend/tests/modules/test_report_designer.py",
+      "source_sha256": "bdc30e7bb48150ff17ccda449fd99e954de3bedfcc5aae7450a5292a86ef0181",
+      "action": "adapt",
+      "reason": "保留原回归意图，适配明确存储上下文、配置修订和示例惰性构建",
+      "target_sha256": "d0a354530f1308d1c85768e93d3861ad85aaa180511340511d09f841ba899f5b"
+    },
+    {
+      "source_path": "backend/tests/modules/test_report_manage.py",
+      "target_path": "packages/ai4e-viz/backend/tests/modules/test_report_manage.py",
+      "source_sha256": "87407fcafde1bfa61b26eb97aaab580c490ffcf7fdaa30b2f832c0080325f77c",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "87407fcafde1bfa61b26eb97aaab580c490ffcf7fdaa30b2f832c0080325f77c"
+    },
+    {
+      "source_path": "backend/tests/modules/test_vis_convertor.py",
+      "target_path": "packages/ai4e-viz/backend/tests/modules/test_vis_convertor.py",
+      "source_sha256": "5b2364641a811dc3b9b11ffdf44aeaef3fec0df80e21b285b1b930555f25a52a",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "5b2364641a811dc3b9b11ffdf44aeaef3fec0df80e21b285b1b930555f25a52a"
+    },
+    {
+      "source_path": "backend/tests/modules/test_vis_datasets.py",
+      "target_path": "packages/ai4e-viz/backend/tests/modules/test_vis_datasets.py",
+      "source_sha256": "557e83430fe57e5759709ec89e9597e0d02798f9b4dfd3f971247f0ef6c6ac43",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "557e83430fe57e5759709ec89e9597e0d02798f9b4dfd3f971247f0ef6c6ac43"
+    },
+    {
+      "source_path": "backend/tests/modules/test_vis_engine.py",
+      "target_path": "packages/ai4e-viz/backend/tests/modules/test_vis_engine.py",
+      "source_sha256": "1100cc83c08aaeb1976243adeeccb201d0a346e8dcbe38d37bfb820554725961",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "1100cc83c08aaeb1976243adeeccb201d0a346e8dcbe38d37bfb820554725961"
+    },
+    {
+      "source_path": "backend/tests/modules/test_vis_figure.py",
+      "target_path": "packages/ai4e-viz/backend/tests/modules/test_vis_figure.py",
+      "source_sha256": "19a0e98f273429d30e4b3cd24e0ff119607280076dc80021a7bb562d634c5164",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "19a0e98f273429d30e4b3cd24e0ff119607280076dc80021a7bb562d634c5164"
+    },
+    {
+      "source_path": "backend/tests/modules/test_vis_geometry.py",
+      "target_path": "packages/ai4e-viz/backend/tests/modules/test_vis_geometry.py",
+      "source_sha256": "044453843c89c03eb68655555abda4896c46657a8a28b215a9c8c07c98998715",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "044453843c89c03eb68655555abda4896c46657a8a28b215a9c8c07c98998715"
+    },
+    {
+      "source_path": "backend/tests/modules/test_vis_io.py",
+      "target_path": "packages/ai4e-viz/backend/tests/modules/test_vis_io.py",
+      "source_sha256": "1d5d13a212c95f84f273c8aaf0619f45d60d123e70a74e9a9ce06e169e805f93",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "1d5d13a212c95f84f273c8aaf0619f45d60d123e70a74e9a9ce06e169e805f93"
+    },
+    {
+      "source_path": "backend/tests/modules/test_vis_phys_field.py",
+      "target_path": "packages/ai4e-viz/backend/tests/modules/test_vis_phys_field.py",
+      "source_sha256": "73e4cf28586e4fd8cb28b11a5e78ba722a7e32969411aa8cf439e1b6df846350",
+      "action": "adapt",
+      "reason": "保留原回归意图，适配明确存储上下文、配置修订和示例惰性构建",
+      "target_sha256": "518df7c9d39d0d6936f1a804afd66c1294c8b10f2d0d822d5de0c38aae85d5d4"
+    },
+    {
+      "source_path": "backend/tests/modules/test_vis_task_manage.py",
+      "target_path": "packages/ai4e-viz/backend/tests/modules/test_vis_task_manage.py",
+      "source_sha256": "dbdf3c1719bbbe30f272409e28ee5db9e0dea456ad89b81ddf40901e6b878692",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "dbdf3c1719bbbe30f272409e28ee5db9e0dea456ad89b81ddf40901e6b878692"
+    },
+    {
+      "source_path": "backend/tests/test_architecture.py",
+      "target_path": "packages/ai4e-viz/backend/tests/test_architecture.py",
+      "source_sha256": "00d27182062a785f734d75ddeb0bb67b185eb5740fd3789047702974d578f80f",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "00d27182062a785f734d75ddeb0bb67b185eb5740fd3789047702974d578f80f"
+    },
+    {
+      "source_path": "backend/tests/test_contract.py",
+      "target_path": "packages/ai4e-viz/backend/tests/test_contract.py",
+      "source_sha256": "ecab8daeac15519a527855e09ce1f1b967f97d159c11bc9d3bcdb2f79dfa27f1",
+      "action": "adapt",
+      "reason": "保留原回归意图，适配明确存储上下文、配置修订和示例惰性构建",
+      "target_sha256": "0afcecb97d6562681d48fe1cd555caa4ec86fa2f2599e2800f70ef0cb88401fb"
+    },
+    {
+      "source_path": "backend/tests/test_excel_implemented_features.py",
+      "target_path": "packages/ai4e-viz/backend/tests/test_excel_implemented_features.py",
+      "source_sha256": "9a20a0aee6b16f17da352d0fe3746ec8e5b46928651c2b2292fd59fd906b45b7",
+      "action": "adapt",
+      "reason": "保留原回归意图，适配明确存储上下文、配置修订和示例惰性构建",
+      "target_sha256": "56c29c6f9f3a4fe2fd1f9813270ebc8aedf7538ab28eef1a4d3a5289cc53c58d"
+    },
+    {
+      "source_path": "backend/tests/test_install_quarto.py",
+      "target_path": "packages/ai4e-viz/backend/tests/test_install_quarto.py",
+      "source_sha256": "be30708a8de91cd79ebc551502de42ad5c20aa523c42dbee172a8c690e7db5d8",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "be30708a8de91cd79ebc551502de42ad5c20aa523c42dbee172a8c690e7db5d8"
+    },
+    {
+      "source_path": "backend/tests/test_miller_animation.py",
+      "target_path": "packages/ai4e-viz/backend/tests/test_miller_animation.py",
+      "source_sha256": "bcb23bc5aed5ec29db5a4109f4c68a9df576d09e65ce9692e3063df64a3a9163",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "bcb23bc5aed5ec29db5a4109f4c68a9df576d09e65ce9692e3063df64a3a9163"
+    },
+    {
+      "source_path": "backend/tests/test_portability.py",
+      "target_path": "packages/ai4e-viz/backend/tests/test_portability.py",
+      "source_sha256": "6af787a47a237d65d847aa0b475d01b13e72f51bfed06adfbeab8ac6ac2d3649",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "6af787a47a237d65d847aa0b475d01b13e72f51bfed06adfbeab8ac6ac2d3649"
+    },
+    {
+      "source_path": "backend/tests/test_quarto_export.py",
+      "target_path": "packages/ai4e-viz/backend/tests/test_quarto_export.py",
+      "source_sha256": "64c7623715592adb0c04f5fc81dbd9deb85f9cd38b8b1be840c4b0c0b70d01b3",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "64c7623715592adb0c04f5fc81dbd9deb85f9cd38b8b1be840c4b0c0b70d01b3"
+    },
+    {
+      "source_path": "backend/tests/test_quarto_project.py",
+      "target_path": "packages/ai4e-viz/backend/tests/test_quarto_project.py",
+      "source_sha256": "26a5667f34f17340c295b5fc162807644e91f59f7e9983606f91bef2df312dd3",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "26a5667f34f17340c295b5fc162807644e91f59f7e9983606f91bef2df312dd3"
+    },
+    {
+      "source_path": "docs/AgentsTeam/pm-agent-guidelines.md",
+      "target_path": "packages/ai4e-viz/docs/AgentsTeam/pm-agent-guidelines.md",
+      "source_sha256": "74a96cd1f6254896ace0cde32a3487eec5abe9b6aab5827723a4b98bf79f1fd3",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "74a96cd1f6254896ace0cde32a3487eec5abe9b6aab5827723a4b98bf79f1fd3"
+    },
+    {
+      "source_path": "docs/AgentsTeam/research-agent-guidelines.md",
+      "target_path": "packages/ai4e-viz/docs/AgentsTeam/research-agent-guidelines.md",
+      "source_sha256": "a3c431a236586ce4fe08a380c8f4de254e3421caa61b0d33140dd52231171b65",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a3c431a236586ce4fe08a380c8f4de254e3421caa61b0d33140dd52231171b65"
+    },
+    {
+      "source_path": "docs/AgentsTeam/test-agent-guidelines.md",
+      "target_path": "packages/ai4e-viz/docs/AgentsTeam/test-agent-guidelines.md",
+      "source_sha256": "685776058044a3e68c6ed4ec731d469b70f19a0fdd5bc8bc685603b69f8fd0a2",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "685776058044a3e68c6ed4ec731d469b70f19a0fdd5bc8bc685603b69f8fd0a2"
+    },
+    {
+      "source_path": "docs/PRD/CHANGELOG.md",
+      "target_path": "packages/ai4e-viz/docs/PRD/CHANGELOG.md",
+      "source_sha256": "3240a7fd40759b497fe4b401917db76fb82f5ad60bd82d52bbdc8a70b844e06d",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "545e4098b77ee4af9747cd5931f26fc7ae529d3aabb49097acd7b14467072f2a"
+    },
+    {
+      "source_path": "docs/PRD/MCP.md",
+      "target_path": "packages/ai4e-viz/docs/PRD/MCP.md",
+      "source_sha256": "b5871fbbe30688f6ca6d3b1dc9f5695d59a8d2b2647410869eeba1c3cf1d5bc9",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "b5871fbbe30688f6ca6d3b1dc9f5695d59a8d2b2647410869eeba1c3cf1d5bc9"
+    },
+    {
+      "source_path": "docs/PRD/README.md",
+      "target_path": "packages/ai4e-viz/docs/PRD/README.md",
+      "source_sha256": "a20ee46ef88b4bdb338496c39dbd521a80e2eed163916683b646e6eb74c95d7b",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "0fb2d97e51e40ae6c83e6c5b8e6df4778733cbfbfc3e029716a40aa1273eea31"
+    },
+    {
+      "source_path": "docs/PRD/automation.md",
+      "target_path": "packages/ai4e-viz/docs/PRD/automation.md",
+      "source_sha256": "a65f81c7d87a354202193a8d22bc89a7a58e0c6b56f108387f07170b32227698",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a65f81c7d87a354202193a8d22bc89a7a58e0c6b56f108387f07170b32227698"
+    },
+    {
+      "source_path": "docs/PRD/dataAssets.md",
+      "target_path": "packages/ai4e-viz/docs/PRD/dataAssets.md",
+      "source_sha256": "b4fa4d9d02710a86e445ae95216c4f5a89edb7531d8663d04604f4bdd67a0fda",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "e4ce95bf6df317fc8da73b238788348b8033e6c76a506e1b306fa8ac52214e00"
+    },
+    {
+      "source_path": "docs/PRD/reportDesigner.md",
+      "target_path": "packages/ai4e-viz/docs/PRD/reportDesigner.md",
+      "source_sha256": "a2b2c03e0fad94154c66a74bf5a411f8b62ba2bd818933b9038a402e2cb9c277",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "e7e024b68b1e23826b8bb909fa188d1cad963e055b5b966ccce6f50da4e75c31"
+    },
+    {
+      "source_path": "docs/PRD/reportManage.md",
+      "target_path": "packages/ai4e-viz/docs/PRD/reportManage.md",
+      "source_sha256": "bc7f428c32153ea3fe84e4b8ad50eaed667d501bc93ac4c55d9d91b29e148cf9",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "df14006db231a396c05db09f231ac9aa7e728083295cf85a75404391063e6392"
+    },
+    {
+      "source_path": "docs/PRD/visConvertor.md",
+      "target_path": "packages/ai4e-viz/docs/PRD/visConvertor.md",
+      "source_sha256": "4e6593d5bc51ecde37e0298f32ec1aa1197be9fa7d8a0e44ed617eee9db09838",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "4e6593d5bc51ecde37e0298f32ec1aa1197be9fa7d8a0e44ed617eee9db09838"
+    },
+    {
+      "source_path": "docs/PRD/visDatasets.md",
+      "target_path": "packages/ai4e-viz/docs/PRD/visDatasets.md",
+      "source_sha256": "1d3cf622dca06e8dffeef982b1aba4ea202432aea8d7df2fcfc6d0ebd782a36b",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "0af70a6e96a72894fd1ce7c5c7a3c314da169ed85b246059f552006c2a2bfc49"
+    },
+    {
+      "source_path": "docs/PRD/visEngine.md",
+      "target_path": "packages/ai4e-viz/docs/PRD/visEngine.md",
+      "source_sha256": "7eba542306ffd6f8d38063b29b7f0870b1ac7caebe051398b7255006adfc3922",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "b70715a05e685f35f6053f386cbf70c32d89120521c21dadc54732c32df27ab4"
+    },
+    {
+      "source_path": "docs/PRD/visFigure.md",
+      "target_path": "packages/ai4e-viz/docs/PRD/visFigure.md",
+      "source_sha256": "77c9111981fa7524f9e77cf83caa988d219191adf4e90f08837924079d415671",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "77c9111981fa7524f9e77cf83caa988d219191adf4e90f08837924079d415671"
+    },
+    {
+      "source_path": "docs/PRD/visGeometry.md",
+      "target_path": "packages/ai4e-viz/docs/PRD/visGeometry.md",
+      "source_sha256": "1f24bc21fdc9b76a9bcdee044829b04d656ab378fb4ac94dbc9d7a9a217c3ec9",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "1f24bc21fdc9b76a9bcdee044829b04d656ab378fb4ac94dbc9d7a9a217c3ec9"
+    },
+    {
+      "source_path": "docs/PRD/visIO.md",
+      "target_path": "packages/ai4e-viz/docs/PRD/visIO.md",
+      "source_sha256": "e74ad570df2c01f8ccf1ed82b38d2c3891eeac97aab8f016ff3c73c9a3e09374",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "8e0e3c5cbea99a7e378b46024db978ac504b55a9cd873b5a813e56e8bcb9b1b7"
+    },
+    {
+      "source_path": "docs/PRD/visPhysField.md",
+      "target_path": "packages/ai4e-viz/docs/PRD/visPhysField.md",
+      "source_sha256": "7489f36dc56fa4724fcd95d6bc207da9e3085731f2980aa2b7f66d9fe63be2e0",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "78246cf37056f2fb19f497f6f5def20d09d74e7da1c924a406cc0e3d95bf2c56"
+    },
+    {
+      "source_path": "docs/PRD/visTaskManage.md",
+      "target_path": "packages/ai4e-viz/docs/PRD/visTaskManage.md",
+      "source_sha256": "7e29fcbd3696aaff422977c90ed50348602e46042d23311865f34985acd30a31",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "fb894b7c9fd67542db2ee984143a9329413c30e202724172684b0d286e50107b"
+    },
+    {
+      "source_path": "docs/api/README.md",
+      "target_path": "packages/ai4e-viz/docs/api/README.md",
+      "source_sha256": "be90b752aeb395d7f0311c7dced98ea89d82e46f3969d5437a741116f6cb76dd",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "be90b752aeb395d7f0311c7dced98ea89d82e46f3969d5437a741116f6cb76dd"
+    },
+    {
+      "source_path": "docs/architecture/README.md",
+      "target_path": "packages/ai4e-viz/docs/architecture/README.md",
+      "source_sha256": "d07ce0923cddd91eb456cc7c47766c80dfc82d02c763bd4e59adc8e70a0ab468",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "d07ce0923cddd91eb456cc7c47766c80dfc82d02c763bd4e59adc8e70a0ab468"
+    },
+    {
+      "source_path": "docs/architecture/architecture.md",
+      "target_path": "packages/ai4e-viz/docs/architecture/architecture.md",
+      "source_sha256": "c8f4603cfff278560c8ac85c51e5a427a34342199cded1bf3c4b7f21b7028598",
+      "action": "adapt",
+      "reason": "保留原治理目录，适配包作用域、依赖真源、任务保存和当前验收",
+      "target_sha256": "91a94b4bb611a2c46d6bd700ea2eb9dee6d66c3770630f23e5cb383a3e79aa45"
+    },
+    {
+      "source_path": "docs/data-provenance-and-storage.md",
+      "target_path": "packages/ai4e-viz/docs/data-provenance-and-storage.md",
+      "source_sha256": "9c1dfa2bbf81aadc1d5b5d40107e991d0e2197098ce3b19389cff887290be875",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "9c1dfa2bbf81aadc1d5b5d40107e991d0e2197098ce3b19389cff887290be875"
+    },
+    {
+      "source_path": "docs/migration/MODULAR_REFACTOR_PLAN.md",
+      "target_path": "packages/ai4e-viz/docs/migration/MODULAR_REFACTOR_PLAN.md",
+      "source_sha256": "1a571afcc636b1288234a703378f7ba97cb0f8d134095a18116d5ff1c6a461fc",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "1a571afcc636b1288234a703378f7ba97cb0f8d134095a18116d5ff1c6a461fc"
+    },
+    {
+      "source_path": "docs/migration/README.md",
+      "target_path": "packages/ai4e-viz/docs/migration/README.md",
+      "source_sha256": "fede8b014e0aca133d38ec2332cabba01170d68d738f65e705959a5d07f2de77",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "fede8b014e0aca133d38ec2332cabba01170d68d738f65e705959a5d07f2de77"
+    },
+    {
+      "source_path": "docs/testing/BASELINE.md",
+      "target_path": "packages/ai4e-viz/docs/testing/BASELINE.md",
+      "source_sha256": "8d331ec7252c3ed993e6a66b3a52185a60cbcc3c4f8e50e30d2c4ba77f466259",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "8d331ec7252c3ed993e6a66b3a52185a60cbcc3c4f8e50e30d2c4ba77f466259"
+    },
+    {
+      "source_path": "docs/testing/EXCEL_FEATURE_TEST_MATRIX.md",
+      "target_path": "packages/ai4e-viz/docs/testing/EXCEL_FEATURE_TEST_MATRIX.md",
+      "source_sha256": "6879cdd09b117e213f57fd02f8a2a073ce3a5b16d3ac076ed5702111f5fa3bb6",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "6879cdd09b117e213f57fd02f8a2a073ce3a5b16d3ac076ed5702111f5fa3bb6"
+    },
+    {
+      "source_path": "error.log",
+      "target_path": "packages/ai4e-viz/error.log",
+      "source_sha256": "025ae94c0859ed18a4352845907c76c4d18675802b799dd921725c6f9f02c45f",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "025ae94c0859ed18a4352845907c76c4d18675802b799dd921725c6f9f02c45f"
+    },
+    {
+      "source_path": "fixtures/README.md",
+      "target_path": "packages/ai4e-viz/fixtures/README.md",
+      "source_sha256": "32370230b28bd336e282ea381e68adfb641a97b12857f9f61e1d9fea7dffa15b",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "32370230b28bd336e282ea381e68adfb641a97b12857f9f61e1d9fea7dffa15b"
+    },
+    {
+      "source_path": "fixtures/gs/cases/circular/comparison_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/circular/comparison_metrics.json",
+      "source_sha256": "e576b8799954ab512a329d397e5bddc6817b038ecf2ed02a8fa8ed9efd31463c",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e576b8799954ab512a329d397e5bddc6817b038ecf2ed02a8fa8ed9efd31463c"
+    },
+    {
+      "source_path": "fixtures/gs/cases/circular/pino_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/circular/pino_inference.npz",
+      "source_sha256": "f11d428ba0987dadc6e3e65d319469adfa8e7a82703ec75d7c40dbe9b80edc93",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "f11d428ba0987dadc6e3e65d319469adfa8e7a82703ec75d7c40dbe9b80edc93"
+    },
+    {
+      "source_path": "fixtures/gs/cases/circular/pino_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/circular/pino_metrics.json",
+      "source_sha256": "f88520435509ae19ffea0f6123fe5ad712f1a5c6db5c51c023c4fe26965cb581",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "f88520435509ae19ffea0f6123fe5ad712f1a5c6db5c51c023c4fe26965cb581"
+    },
+    {
+      "source_path": "fixtures/gs/cases/circular/pino_vs_traditional_comparison.png",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/circular/pino_vs_traditional_comparison.png",
+      "source_sha256": "0f0eebd034793f955547863939e738bfa411d102dd6e1480f3e69e0f2fd3caba",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "0f0eebd034793f955547863939e738bfa411d102dd6e1480f3e69e0f2fd3caba"
+    },
+    {
+      "source_path": "fixtures/gs/cases/circular/traditional_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/circular/traditional_inference.npz",
+      "source_sha256": "e4473efc0c8b27a1ebd7f672608749ab49eee8b1821e84c356434d1dd6054d75",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e4473efc0c8b27a1ebd7f672608749ab49eee8b1821e84c356434d1dd6054d75"
+    },
+    {
+      "source_path": "fixtures/gs/cases/extreme_elongation/comparison_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/extreme_elongation/comparison_metrics.json",
+      "source_sha256": "9f5a8655fd6d72e5d62fbedbf9d27b8a876169b9bf74e021c280ff8f8c44251a",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "9f5a8655fd6d72e5d62fbedbf9d27b8a876169b9bf74e021c280ff8f8c44251a"
+    },
+    {
+      "source_path": "fixtures/gs/cases/extreme_elongation/pino_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/extreme_elongation/pino_inference.npz",
+      "source_sha256": "ea1d00c775e622be72d0db015c8a6625e851ed101f25deb43bc8695af6d01f22",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ea1d00c775e622be72d0db015c8a6625e851ed101f25deb43bc8695af6d01f22"
+    },
+    {
+      "source_path": "fixtures/gs/cases/extreme_elongation/pino_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/extreme_elongation/pino_metrics.json",
+      "source_sha256": "80e391688f638b8ae27996726d5825b46c233e7713bc4ecf0a1ee6ca49d3319b",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "80e391688f638b8ae27996726d5825b46c233e7713bc4ecf0a1ee6ca49d3319b"
+    },
+    {
+      "source_path": "fixtures/gs/cases/extreme_elongation/pino_vs_traditional_comparison.png",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/extreme_elongation/pino_vs_traditional_comparison.png",
+      "source_sha256": "e51bf880ca186903c370ba60a47a1ba4ef96a6fbd3bdc0785bfe76fd243ef8b5",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e51bf880ca186903c370ba60a47a1ba4ef96a6fbd3bdc0785bfe76fd243ef8b5"
+    },
+    {
+      "source_path": "fixtures/gs/cases/extreme_elongation/traditional_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/extreme_elongation/traditional_inference.npz",
+      "source_sha256": "8452bbba239f15181fadbd51d415b2217794e7963453cd4320bea732d81b313f",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "8452bbba239f15181fadbd51d415b2217794e7963453cd4320bea732d81b313f"
+    },
+    {
+      "source_path": "fixtures/gs/cases/high_elongation/comparison_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/high_elongation/comparison_metrics.json",
+      "source_sha256": "1e9fe7dececf1da06b4f6696049e3c9afbf1a7a6640b96757927a5c010dde938",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "1e9fe7dececf1da06b4f6696049e3c9afbf1a7a6640b96757927a5c010dde938"
+    },
+    {
+      "source_path": "fixtures/gs/cases/high_elongation/pino_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/high_elongation/pino_inference.npz",
+      "source_sha256": "53bd5845780a02218916915b983ef4d4a969b01202ac7b26a04e38aaf1d07956",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "53bd5845780a02218916915b983ef4d4a969b01202ac7b26a04e38aaf1d07956"
+    },
+    {
+      "source_path": "fixtures/gs/cases/high_elongation/pino_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/high_elongation/pino_metrics.json",
+      "source_sha256": "a9dc87141e144837bd42d1497aaadebdec99239e0c62a76af28381e8d111ce31",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a9dc87141e144837bd42d1497aaadebdec99239e0c62a76af28381e8d111ce31"
+    },
+    {
+      "source_path": "fixtures/gs/cases/high_elongation/pino_vs_traditional_comparison.png",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/high_elongation/pino_vs_traditional_comparison.png",
+      "source_sha256": "a821d7c3f39e1b42f07a4488d3c0fa52063372f91e16a34fd42ade8f5d0fd20c",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a821d7c3f39e1b42f07a4488d3c0fa52063372f91e16a34fd42ade8f5d0fd20c"
+    },
+    {
+      "source_path": "fixtures/gs/cases/high_elongation/traditional_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/high_elongation/traditional_inference.npz",
+      "source_sha256": "363aada8fcfa44161186fe11025da6768824f01ede768d27476e2374530fc97d",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "363aada8fcfa44161186fe11025da6768824f01ede768d27476e2374530fc97d"
+    },
+    {
+      "source_path": "fixtures/gs/cases/large_plasma/comparison_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/large_plasma/comparison_metrics.json",
+      "source_sha256": "ccff28a8a7cd5e521e569749c24df89fa4c3e4eed23087d0e2126ec2acc51a74",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ccff28a8a7cd5e521e569749c24df89fa4c3e4eed23087d0e2126ec2acc51a74"
+    },
+    {
+      "source_path": "fixtures/gs/cases/large_plasma/pino_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/large_plasma/pino_inference.npz",
+      "source_sha256": "2f838f578da2a458385b9d329d2ea2f876ffb72027840002eb9e8cead2111dd3",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "2f838f578da2a458385b9d329d2ea2f876ffb72027840002eb9e8cead2111dd3"
+    },
+    {
+      "source_path": "fixtures/gs/cases/large_plasma/pino_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/large_plasma/pino_metrics.json",
+      "source_sha256": "9be71a75a3b29f9091866cc1ac13dc3af2e697162978c3258d2e9f63e6bbf31d",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "9be71a75a3b29f9091866cc1ac13dc3af2e697162978c3258d2e9f63e6bbf31d"
+    },
+    {
+      "source_path": "fixtures/gs/cases/large_plasma/pino_vs_traditional_comparison.png",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/large_plasma/pino_vs_traditional_comparison.png",
+      "source_sha256": "c3a295deec34494ce2795f431f38177ec0aaa52892451f27bbe83e81fe373d46",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "c3a295deec34494ce2795f431f38177ec0aaa52892451f27bbe83e81fe373d46"
+    },
+    {
+      "source_path": "fixtures/gs/cases/large_plasma/traditional_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/large_plasma/traditional_inference.npz",
+      "source_sha256": "cf5c3b399239752bff14e817069ab6de089997518d9fc4746df310c6481aaa42",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "cf5c3b399239752bff14e817069ab6de089997518d9fc4746df310c6481aaa42"
+    },
+    {
+      "source_path": "fixtures/gs/cases/low_elongation/comparison_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/low_elongation/comparison_metrics.json",
+      "source_sha256": "b70b96ccd3761dd5118c3562c095ee8390af712ee2b63f80169a733be0300948",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "b70b96ccd3761dd5118c3562c095ee8390af712ee2b63f80169a733be0300948"
+    },
+    {
+      "source_path": "fixtures/gs/cases/low_elongation/pino_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/low_elongation/pino_inference.npz",
+      "source_sha256": "40f619faabe1ae43dce50776d896d85db4c9b5781f1e2238beadb02d6724e6f7",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "40f619faabe1ae43dce50776d896d85db4c9b5781f1e2238beadb02d6724e6f7"
+    },
+    {
+      "source_path": "fixtures/gs/cases/low_elongation/pino_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/low_elongation/pino_metrics.json",
+      "source_sha256": "b248bdfa9c62b86bba2eaf127a77965470d1645a61270d10efd2a1f0dc55e0d8",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "b248bdfa9c62b86bba2eaf127a77965470d1645a61270d10efd2a1f0dc55e0d8"
+    },
+    {
+      "source_path": "fixtures/gs/cases/low_elongation/pino_vs_traditional_comparison.png",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/low_elongation/pino_vs_traditional_comparison.png",
+      "source_sha256": "505ba2274c8fe8e3bbb36b6a8fead5b35afc6558079186dc07cb652d2f79baa1",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "505ba2274c8fe8e3bbb36b6a8fead5b35afc6558079186dc07cb652d2f79baa1"
+    },
+    {
+      "source_path": "fixtures/gs/cases/low_elongation/traditional_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/low_elongation/traditional_inference.npz",
+      "source_sha256": "c5b186223a6a2fda7b6d0b1985245e296125800421875611888261656d15cbad",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "c5b186223a6a2fda7b6d0b1985245e296125800421875611888261656d15cbad"
+    },
+    {
+      "source_path": "fixtures/gs/cases/medium_elongation/comparison_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/medium_elongation/comparison_metrics.json",
+      "source_sha256": "7a524f84cdbf5694ba4b4abfb0c127fb480b1b4cf65fb4dfb4c5cdfec57fe089",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "7a524f84cdbf5694ba4b4abfb0c127fb480b1b4cf65fb4dfb4c5cdfec57fe089"
+    },
+    {
+      "source_path": "fixtures/gs/cases/medium_elongation/pino_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/medium_elongation/pino_inference.npz",
+      "source_sha256": "5085dff277a1e1e1e4c3d374f810c0bc94b28589f7449b0b53ac54d0fe949ddc",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "5085dff277a1e1e1e4c3d374f810c0bc94b28589f7449b0b53ac54d0fe949ddc"
+    },
+    {
+      "source_path": "fixtures/gs/cases/medium_elongation/pino_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/medium_elongation/pino_metrics.json",
+      "source_sha256": "1a2ee4698e62e62d0e279dcfb18131879049241fe13c89e58d9e93f6e5c3b97f",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "1a2ee4698e62e62d0e279dcfb18131879049241fe13c89e58d9e93f6e5c3b97f"
+    },
+    {
+      "source_path": "fixtures/gs/cases/medium_elongation/pino_vs_traditional_comparison.png",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/medium_elongation/pino_vs_traditional_comparison.png",
+      "source_sha256": "d6c7a10935365258ff95195b29596c46325d319298831f5ce7104b5ef565b923",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "d6c7a10935365258ff95195b29596c46325d319298831f5ce7104b5ef565b923"
+    },
+    {
+      "source_path": "fixtures/gs/cases/medium_elongation/traditional_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/medium_elongation/traditional_inference.npz",
+      "source_sha256": "b8b4738366808d79c8694fe16f35100b39275534f24bcd549386ecebfca3d400",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "b8b4738366808d79c8694fe16f35100b39275534f24bcd549386ecebfca3d400"
+    },
+    {
+      "source_path": "fixtures/gs/cases/negative_triangularity/comparison_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/negative_triangularity/comparison_metrics.json",
+      "source_sha256": "c9f0cce88ee03c5c88a2c8a3bf9a8765cf498493a5aa8abd32b3e0285b195234",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "c9f0cce88ee03c5c88a2c8a3bf9a8765cf498493a5aa8abd32b3e0285b195234"
+    },
+    {
+      "source_path": "fixtures/gs/cases/negative_triangularity/pino_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/negative_triangularity/pino_inference.npz",
+      "source_sha256": "6a8b79f97fe71fd57e77b0e6ee6dca9885b62be4cef1e5c8d49a8093fb5c27b3",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "6a8b79f97fe71fd57e77b0e6ee6dca9885b62be4cef1e5c8d49a8093fb5c27b3"
+    },
+    {
+      "source_path": "fixtures/gs/cases/negative_triangularity/pino_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/negative_triangularity/pino_metrics.json",
+      "source_sha256": "8233251aea99d371a7a7f83878a12b53a3bfee406d959ffdf464989a6c8f386c",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "8233251aea99d371a7a7f83878a12b53a3bfee406d959ffdf464989a6c8f386c"
+    },
+    {
+      "source_path": "fixtures/gs/cases/negative_triangularity/pino_vs_traditional_comparison.png",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/negative_triangularity/pino_vs_traditional_comparison.png",
+      "source_sha256": "06a6c56f5a4cdb45173bc96aa31e8ae7e41bb2b9d20a2a66c79d14bcfa32dfee",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "06a6c56f5a4cdb45173bc96aa31e8ae7e41bb2b9d20a2a66c79d14bcfa32dfee"
+    },
+    {
+      "source_path": "fixtures/gs/cases/negative_triangularity/traditional_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/negative_triangularity/traditional_inference.npz",
+      "source_sha256": "c1349a7e694a279f7bcbf08cd0ab50263c08b852223683632172362a4934fab0",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "c1349a7e694a279f7bcbf08cd0ab50263c08b852223683632172362a4934fab0"
+    },
+    {
+      "source_path": "fixtures/gs/cases/small_plasma/comparison_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/small_plasma/comparison_metrics.json",
+      "source_sha256": "f3ec1cb52e4ae588ea8ffc50a81e02c06c4343392e4cee78aba3a420cf5a08f9",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "f3ec1cb52e4ae588ea8ffc50a81e02c06c4343392e4cee78aba3a420cf5a08f9"
+    },
+    {
+      "source_path": "fixtures/gs/cases/small_plasma/pino_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/small_plasma/pino_inference.npz",
+      "source_sha256": "741208c32e36551d06e1a48c9ff56718abe85b19607387bef6f08151559be4c3",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "741208c32e36551d06e1a48c9ff56718abe85b19607387bef6f08151559be4c3"
+    },
+    {
+      "source_path": "fixtures/gs/cases/small_plasma/pino_metrics.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/small_plasma/pino_metrics.json",
+      "source_sha256": "0a0c3e12d56e2febeaf1c6891a7ba8382e27df630cb200350b5af84550a5e839",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "0a0c3e12d56e2febeaf1c6891a7ba8382e27df630cb200350b5af84550a5e839"
+    },
+    {
+      "source_path": "fixtures/gs/cases/small_plasma/pino_vs_traditional_comparison.png",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/small_plasma/pino_vs_traditional_comparison.png",
+      "source_sha256": "6a5b2cd0ef7d3ff051492aa636366e09cae67fb3aa22196b38165786d08a0da2",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "6a5b2cd0ef7d3ff051492aa636366e09cae67fb3aa22196b38165786d08a0da2"
+    },
+    {
+      "source_path": "fixtures/gs/cases/small_plasma/traditional_inference.npz",
+      "target_path": "packages/ai4e-viz/fixtures/gs/cases/small_plasma/traditional_inference.npz",
+      "source_sha256": "4f67f14dd2a82c7dae965ccc03f6d9e9c767d9f6212b2eb6b40adb8486461763",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "4f67f14dd2a82c7dae965ccc03f6d9e9c767d9f6212b2eb6b40adb8486461763"
+    },
+    {
+      "source_path": "fixtures/gs/manifest.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/manifest.json",
+      "source_sha256": "862251806ce68a33cfd170dc20d5b40edb58703c8b8a5a537f9090d18aa37737",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "862251806ce68a33cfd170dc20d5b40edb58703c8b8a5a537f9090d18aa37737"
+    },
+    {
+      "source_path": "fixtures/gs/models/cnn_kan/comparison_summary.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/cnn_kan/comparison_summary.json",
+      "source_sha256": "68500965a4402933f1a500809287b534d0286250ff9ea2da734c9783d6705429",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "68500965a4402933f1a500809287b534d0286250ff9ea2da734c9783d6705429"
+    },
+    {
+      "source_path": "fixtures/gs/models/cnn_kan/metrics.csv",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/cnn_kan/metrics.csv",
+      "source_sha256": "0a9cde5ab6aba27a979fdce2f3e4f8c9d1328ebbe2436c8f4f7411202c247b98",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "0a9cde5ab6aba27a979fdce2f3e4f8c9d1328ebbe2436c8f4f7411202c247b98"
+    },
+    {
+      "source_path": "fixtures/gs/models/cnn_mlp/comparison_summary.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/cnn_mlp/comparison_summary.json",
+      "source_sha256": "53a8972f5d58ea255c218c3e2dd4f0b45af2a28ba5c72d2fdbc261ae0aacc388",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "53a8972f5d58ea255c218c3e2dd4f0b45af2a28ba5c72d2fdbc261ae0aacc388"
+    },
+    {
+      "source_path": "fixtures/gs/models/cnn_mlp/metrics.csv",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/cnn_mlp/metrics.csv",
+      "source_sha256": "235a604beb9ee2f811f7d6806023067dfe1c779ff66aeac1cec110e300322902",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "235a604beb9ee2f811f7d6806023067dfe1c779ff66aeac1cec110e300322902"
+    },
+    {
+      "source_path": "fixtures/gs/models/fno_kan/comparison_summary.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/fno_kan/comparison_summary.json",
+      "source_sha256": "21286337e905f7d8dba48f2527fe62a0bf3f5bbbfa8720b78fc964a942836c91",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "21286337e905f7d8dba48f2527fe62a0bf3f5bbbfa8720b78fc964a942836c91"
+    },
+    {
+      "source_path": "fixtures/gs/models/fno_kan/metrics.csv",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/fno_kan/metrics.csv",
+      "source_sha256": "04fd082122d9e33681bdbea395c78569803bce198269fdaa1147abf3f981d8ac",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "04fd082122d9e33681bdbea395c78569803bce198269fdaa1147abf3f981d8ac"
+    },
+    {
+      "source_path": "fixtures/gs/models/fno_mlp/comparison_summary.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/fno_mlp/comparison_summary.json",
+      "source_sha256": "59739ceb93be33bfc6c7de198083a17ff5b6417483e2208772aa4346f8dbcc63",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "59739ceb93be33bfc6c7de198083a17ff5b6417483e2208772aa4346f8dbcc63"
+    },
+    {
+      "source_path": "fixtures/gs/models/fno_mlp/metrics.csv",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/fno_mlp/metrics.csv",
+      "source_sha256": "c82fc7fbfdb355455478cb7102e9d2f952ffd15d309955f6a92f52aa8f41c48b",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "c82fc7fbfdb355455478cb7102e9d2f952ffd15d309955f6a92f52aa8f41c48b"
+    },
+    {
+      "source_path": "fixtures/gs/models/kan_kan/comparison_summary.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/kan_kan/comparison_summary.json",
+      "source_sha256": "dd5cce9874e8c40b8895a5fa33ef436ba47ecd3adfb7caf3ea1f2649867cb705",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "dd5cce9874e8c40b8895a5fa33ef436ba47ecd3adfb7caf3ea1f2649867cb705"
+    },
+    {
+      "source_path": "fixtures/gs/models/kan_kan/metrics.csv",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/kan_kan/metrics.csv",
+      "source_sha256": "1b4f471dac926f50a811e0d5d85cd6a5567a9576ad8a57b7c8165f774de94e92",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "1b4f471dac926f50a811e0d5d85cd6a5567a9576ad8a57b7c8165f774de94e92"
+    },
+    {
+      "source_path": "fixtures/gs/models/mlp_mlp/comparison_summary.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/mlp_mlp/comparison_summary.json",
+      "source_sha256": "a0a3308a7d884981fb2adeb813e71ce1158e091aecf8c0dd11a8e6899b778d69",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a0a3308a7d884981fb2adeb813e71ce1158e091aecf8c0dd11a8e6899b778d69"
+    },
+    {
+      "source_path": "fixtures/gs/models/mlp_mlp/metrics.csv",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/mlp_mlp/metrics.csv",
+      "source_sha256": "5e2707d01224be750174c6504f6f12567a251e6e83f23ec2070777a499e120e1",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "5e2707d01224be750174c6504f6f12567a251e6e83f23ec2070777a499e120e1"
+    },
+    {
+      "source_path": "fixtures/gs/models/transformer_kan/comparison_summary.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/transformer_kan/comparison_summary.json",
+      "source_sha256": "cafe1b2fbeb7bdbb39c383e14b9bdfe27874a49150b283d6fd54bdd312e73598",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "cafe1b2fbeb7bdbb39c383e14b9bdfe27874a49150b283d6fd54bdd312e73598"
+    },
+    {
+      "source_path": "fixtures/gs/models/transformer_kan/metrics.csv",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/transformer_kan/metrics.csv",
+      "source_sha256": "bbdeb40d2031b384310034e72463014010ad5370185cbd112366f11cd334df48",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "bbdeb40d2031b384310034e72463014010ad5370185cbd112366f11cd334df48"
+    },
+    {
+      "source_path": "fixtures/gs/models/transformer_mlp/comparison_summary.json",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/transformer_mlp/comparison_summary.json",
+      "source_sha256": "f5733661ba37c44b7588fe58f9592508d83081a354e11267718239a4b953df35",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "f5733661ba37c44b7588fe58f9592508d83081a354e11267718239a4b953df35"
+    },
+    {
+      "source_path": "fixtures/gs/models/transformer_mlp/metrics.csv",
+      "target_path": "packages/ai4e-viz/fixtures/gs/models/transformer_mlp/metrics.csv",
+      "source_sha256": "45b705156e1f6eb175a157127a6cb4529556d1c62d547a36aade64ccaed3c0b7",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "45b705156e1f6eb175a157127a6cb4529556d1c62d547a36aade64ccaed3c0b7"
+    },
+    {
+      "source_path": "fixtures/gs/sources/PROJECT_DOCUMENTATION_2.html",
+      "target_path": "packages/ai4e-viz/fixtures/gs/sources/PROJECT_DOCUMENTATION_2.html",
+      "source_sha256": "a4ae8861adef46396604d778a829deb168868a2b75fc0abd434fc5e56d6bb28c",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a4ae8861adef46396604d778a829deb168868a2b75fc0abd434fc5e56d6bb28c"
+    },
+    {
+      "source_path": "frontend/canvas-design.html",
+      "target_path": "packages/ai4e-viz/frontend/canvas-design.html",
+      "source_sha256": "e28780c26787d4ee06de4e088f91165f2ed9ac611255ada15074015f1e02163b",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e28780c26787d4ee06de4e088f91165f2ed9ac611255ada15074015f1e02163b"
+    },
+    {
+      "source_path": "frontend/canvas-selection-bridge.js",
+      "target_path": "packages/ai4e-viz/frontend/canvas-selection-bridge.js",
+      "source_sha256": "516d83042d086aa99bf6961deccc38bf47b7035b85ab168381658be65b0de9f8",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "516d83042d086aa99bf6961deccc38bf47b7035b85ab168381658be65b0de9f8"
+    },
+    {
+      "source_path": "frontend/e2e/excel-implemented-features.spec.js",
+      "target_path": "packages/ai4e-viz/frontend/e2e/excel-implemented-features.spec.js",
+      "source_sha256": "d3d0deb0e00ab79059595946f1ca181ebfd592e940694264886c6f24885579e4",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "d3d0deb0e00ab79059595946f1ca181ebfd592e940694264886c6f24885579e4"
+    },
+    {
+      "source_path": "frontend/e2e/upload-recommend-draw.spec.js",
+      "target_path": "packages/ai4e-viz/frontend/e2e/upload-recommend-draw.spec.js",
+      "source_sha256": "a4460b2d4a426088de89943890b3d1602aad4765169ac6f6c4bbc1224430cf23",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a4460b2d4a426088de89943890b3d1602aad4765169ac6f6c4bbc1224430cf23"
+    },
+    {
+      "source_path": "frontend/index.html",
+      "target_path": "packages/ai4e-viz/frontend/index.html",
+      "source_sha256": "54ca70f1ad9901753b04db84c3266c072affb551ad2a35cb7cf44dda0ee72294",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "54ca70f1ad9901753b04db84c3266c072affb551ad2a35cb7cf44dda0ee72294"
+    },
+    {
+      "source_path": "frontend/package-lock.json",
+      "target_path": "packages/ai4e-viz/frontend/package-lock.json",
+      "source_sha256": "63581f4ac8c786d7d480146b0e0fae79ceb4a42e906c23addd6363d8ab5edf06",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "63581f4ac8c786d7d480146b0e0fae79ceb4a42e906c23addd6363d8ab5edf06"
+    },
+    {
+      "source_path": "frontend/package.json",
+      "target_path": "packages/ai4e-viz/frontend/package.json",
+      "source_sha256": "d7cdad5e7d2287e894c03fc102710b7f55454a9ab4cd8de729311a2336284805",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "d7cdad5e7d2287e894c03fc102710b7f55454a9ab4cd8de729311a2336284805"
+    },
+    {
+      "source_path": "frontend/playwright.config.js",
+      "target_path": "packages/ai4e-viz/frontend/playwright.config.js",
+      "source_sha256": "29c0956a30faa59f718f7b4cf4ad4c0bb4efff4a26cfe960b35226ef2620cdf9",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "29c0956a30faa59f718f7b4cf4ad4c0bb4efff4a26cfe960b35226ef2620cdf9"
+    },
+    {
+      "source_path": "frontend/public/3dviewer/embed.html",
+      "target_path": "packages/ai4e-viz/frontend/public/3dviewer/embed.html",
+      "source_sha256": "a5b8142963caab66858787c786023aa31cc7259efd12c87c0e97c963eacfec40",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "a5b8142963caab66858787c786023aa31cc7259efd12c87c0e97c963eacfec40"
+    },
+    {
+      "source_path": "frontend/public/3dviewer/o3dv.license.md",
+      "target_path": "packages/ai4e-viz/frontend/public/3dviewer/o3dv.license.md",
+      "source_sha256": "1927cc1a53b4ee5a4fb8213b21c4ed5b2a412f5aa314fb8777edccc1f3e5749e",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "1927cc1a53b4ee5a4fb8213b21c4ed5b2a412f5aa314fb8777edccc1f3e5749e"
+    },
+    {
+      "source_path": "frontend/public/3dviewer/o3dv.min.js",
+      "target_path": "packages/ai4e-viz/frontend/public/3dviewer/o3dv.min.js",
+      "source_sha256": "3b3bf3ad87a6bb697c001db40c0640674849b20e27c7e58abf29a64691c00b08",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "3b3bf3ad87a6bb697c001db40c0640674849b20e27c7e58abf29a64691c00b08"
+    },
+    {
+      "source_path": "frontend/public/canvas-selection-bridge.js",
+      "target_path": "packages/ai4e-viz/frontend/public/canvas-selection-bridge.js",
+      "source_sha256": "516d83042d086aa99bf6961deccc38bf47b7035b85ab168381658be65b0de9f8",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "516d83042d086aa99bf6961deccc38bf47b7035b85ab168381658be65b0de9f8"
+    },
+    {
+      "source_path": "frontend/scripts/capture-report.mjs",
+      "target_path": "packages/ai4e-viz/frontend/scripts/capture-report.mjs",
+      "source_sha256": "ce1658a2b98cbacd68dd8526dc69bef467532e9d39f3bac53b82b03485839403",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ce1658a2b98cbacd68dd8526dc69bef467532e9d39f3bac53b82b03485839403"
+    },
+    {
+      "source_path": "frontend/scripts/capture-visualization.mjs",
+      "target_path": "packages/ai4e-viz/frontend/scripts/capture-visualization.mjs",
+      "source_sha256": "b4b95310ba143b3c0e49644f9ff5fc912ed9076e67b8be71503b61300ce97a4b",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "b4b95310ba143b3c0e49644f9ff5fc912ed9076e67b8be71503b61300ce97a4b"
+    },
+    {
+      "source_path": "frontend/scripts/check-architecture.mjs",
+      "target_path": "packages/ai4e-viz/frontend/scripts/check-architecture.mjs",
+      "source_sha256": "13d852016a2ed0c1ed13bc7a062e33550ff4830e94916e6545a9263944c91892",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "13d852016a2ed0c1ed13bc7a062e33550ff4830e94916e6545a9263944c91892"
+    },
+    {
+      "source_path": "frontend/src/App.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/App.jsx",
+      "source_sha256": "0c562e67826cc3c354de695127bf1c776ec21d9ba86e2d363b6661a9036f2189",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "19aedea08e91c49386d2934ead5ff1b4d0f5d87d4be5354abade803a9ce1fb5a"
+    },
+    {
+      "source_path": "frontend/src/app/moduleRegistry.js",
+      "target_path": "packages/ai4e-viz/frontend/src/app/moduleRegistry.js",
+      "source_sha256": "6e50c744e34226b222bd413058d15c9ebe3f26a26e523ea2bcf6d0c3823f683a",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "6e50c744e34226b222bd413058d15c9ebe3f26a26e523ea2bcf6d0c3823f683a"
+    },
+    {
+      "source_path": "frontend/src/app/workspace.js",
+      "target_path": "packages/ai4e-viz/frontend/src/app/workspace.js",
+      "source_sha256": "e6f24d81d06cf61150023c14a888af3b4124d6a8d5bc7df35e016c928f792a91",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e6f24d81d06cf61150023c14a888af3b4124d6a8d5bc7df35e016c928f792a91"
+    },
+    {
+      "source_path": "frontend/src/infrastructure/components/ConnectionStatus.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/infrastructure/components/ConnectionStatus.jsx",
+      "source_sha256": "5fcbbddc3b9822b3601ecfdb4c50f622b272c09368724d8fc610b95881ec02e8",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "5fcbbddc3b9822b3601ecfdb4c50f622b272c09368724d8fc610b95881ec02e8"
+    },
+    {
+      "source_path": "frontend/src/infrastructure/components/PageTitle.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/infrastructure/components/PageTitle.jsx",
+      "source_sha256": "50d7bc2fc87c9937940d5efe9a7254fed1a04042c958c75c9cd4059a0b454a42",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "50d7bc2fc87c9937940d5efe9a7254fed1a04042c958c75c9cd4059a0b454a42"
+    },
+    {
+      "source_path": "frontend/src/infrastructure/hooks/useRemoteSnapshot.js",
+      "target_path": "packages/ai4e-viz/frontend/src/infrastructure/hooks/useRemoteSnapshot.js",
+      "source_sha256": "e7f6f0cb2287784fc1307f2678c0e58c8e1dda4b3e0c084095ef927fbce41e0f",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e7f6f0cb2287784fc1307f2678c0e58c8e1dda4b3e0c084095ef927fbce41e0f"
+    },
+    {
+      "source_path": "frontend/src/infrastructure/http/client.js",
+      "target_path": "packages/ai4e-viz/frontend/src/infrastructure/http/client.js",
+      "source_sha256": "e002738323dc53cc8012d160d9c75d3e3f2dc6135d1ef61c180ebb764fb7e861",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "1a2decf358d85966f4bae2889da5cce7cd38d7ddcce5221b551e11dd57f16652"
+    },
+    {
+      "source_path": "frontend/src/infrastructure/rendering/renderers/EChartsRenderer.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/infrastructure/rendering/renderers/EChartsRenderer.jsx",
+      "source_sha256": "aab07b85f163c8001f98af9b9bf6697c11abe37f9b7d7a713f476807b1e28603",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "aab07b85f163c8001f98af9b9bf6697c11abe37f9b7d7a713f476807b1e28603"
+    },
+    {
+      "source_path": "frontend/src/infrastructure/rendering/renderers/PlotlyRenderer.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/infrastructure/rendering/renderers/PlotlyRenderer.jsx",
+      "source_sha256": "e70eb0e70c3739f82db412d097b3411fec5c63ee10807f3c9f45597b04a0ab04",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e70eb0e70c3739f82db412d097b3411fec5c63ee10807f3c9f45597b04a0ab04"
+    },
+    {
+      "source_path": "frontend/src/infrastructure/rendering/renderers/ReactFlowRenderer.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/infrastructure/rendering/renderers/ReactFlowRenderer.jsx",
+      "source_sha256": "ec7ee67a6d037c9220fd51cbc71774abb477c3697f9284059a419a2792fb3de6",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ec7ee67a6d037c9220fd51cbc71774abb477c3697f9284059a419a2792fb3de6"
+    },
+    {
+      "source_path": "frontend/src/infrastructure/rendering/renderers/VegaRenderer.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/infrastructure/rendering/renderers/VegaRenderer.jsx",
+      "source_sha256": "8efabd60396cf250fed0dc662c2a08092ef67287963d056aae8fce26ac6fad34",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "8efabd60396cf250fed0dc662c2a08092ef67287963d056aae8fce26ac6fad34"
+    },
+    {
+      "source_path": "frontend/src/main.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/main.jsx",
+      "source_sha256": "db7d5357c99deb11ba6b0f204f422b05ee55313699c1d7087e09cedaa66b80d3",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "db7d5357c99deb11ba6b0f204f422b05ee55313699c1d7087e09cedaa66b80d3"
+    },
+    {
+      "source_path": "frontend/src/modules/dataAssets/api.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/dataAssets/api.js",
+      "source_sha256": "ced9b440a7de50f196ca231e011051be1a92aa25e5a3ea098eaeffa962726bd1",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ced9b440a7de50f196ca231e011051be1a92aa25e5a3ea098eaeffa962726bd1"
+    },
+    {
+      "source_path": "frontend/src/modules/dataAssets/index.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/dataAssets/index.js",
+      "source_sha256": "e7dcf1b2bfb158611e8c9ee9885a4d270b9f9fd16263de34665c58cf8637c8de",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e7dcf1b2bfb158611e8c9ee9885a4d270b9f9fd16263de34665c58cf8637c8de"
+    },
+    {
+      "source_path": "frontend/src/modules/dataAssets/model.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/dataAssets/model.js",
+      "source_sha256": "5e0428642922047e75d832549a5aae88b831da107378f1d532c102b8bd57c4e3",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "5e0428642922047e75d832549a5aae88b831da107378f1d532c102b8bd57c4e3"
+    },
+    {
+      "source_path": "frontend/src/modules/dataAssets/module.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/dataAssets/module.js",
+      "source_sha256": "af96b9af0dffaa0e059b4ea7aa4d70d3b6f05b9a66d2dd6836272c63f4666679",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "af96b9af0dffaa0e059b4ea7aa4d70d3b6f05b9a66d2dd6836272c63f4666679"
+    },
+    {
+      "source_path": "frontend/src/modules/dataAssets/pages/ArtifactDetail.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/dataAssets/pages/ArtifactDetail.jsx",
+      "source_sha256": "73071f45117436400d7094612f5f2af005eeef5bd466e5f0a705481ac928db1c",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "73071f45117436400d7094612f5f2af005eeef5bd466e5f0a705481ac928db1c"
+    },
+    {
+      "source_path": "frontend/src/modules/dataAssets/pages/ArtifactDetailPage.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/dataAssets/pages/ArtifactDetailPage.jsx",
+      "source_sha256": "31af5b6c1f545db4f5a54f167644da80699341f223510eb6ae5678bb6d2d4b91",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "31af5b6c1f545db4f5a54f167644da80699341f223510eb6ae5678bb6d2d4b91"
+    },
+    {
+      "source_path": "frontend/src/modules/dataAssets/pages/DataAssets.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/dataAssets/pages/DataAssets.jsx",
+      "source_sha256": "cb49e2fc428b7ae72bd74efbc735c417a8d36d74f28f6e98930ac06b2df7fdbc",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "cb49e2fc428b7ae72bd74efbc735c417a8d36d74f28f6e98930ac06b2df7fdbc"
+    },
+    {
+      "source_path": "frontend/src/modules/dataAssets/pages/DataAssetsPage.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/dataAssets/pages/DataAssetsPage.jsx",
+      "source_sha256": "4d1ada962e9d54309721160b20acf862e785dbf13065f2c36da634bed386def0",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "4d1ada962e9d54309721160b20acf862e785dbf13065f2c36da634bed386def0"
+    },
+    {
+      "source_path": "frontend/src/modules/reportDesigner/api.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/reportDesigner/api.js",
+      "source_sha256": "4d4e92b5d9a40e3b5cff0b2a4702c21230af36973e384460a94f6c78e8e3fa81",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "4d4e92b5d9a40e3b5cff0b2a4702c21230af36973e384460a94f6c78e8e3fa81"
+    },
+    {
+      "source_path": "frontend/src/modules/reportDesigner/domain/reportDocument.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/reportDesigner/domain/reportDocument.js",
+      "source_sha256": "859488120d1592a669e6b7a4b48c02f896ddfa95fef82ba503e9852e3ab845a6",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "3c2023e57637531a6015dee31c4288b7f9a3b8bd1f10fbf2c3dc1b7a8dc7464e"
+    },
+    {
+      "source_path": "frontend/src/modules/reportDesigner/index.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/reportDesigner/index.js",
+      "source_sha256": "cb6a97de127768d65c3e60e3cbbf34355ad6db97f4dd26fd45eba61f26c6cc90",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "cb6a97de127768d65c3e60e3cbbf34355ad6db97f4dd26fd45eba61f26c6cc90"
+    },
+    {
+      "source_path": "frontend/src/modules/reportDesigner/model.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/reportDesigner/model.js",
+      "source_sha256": "3854cd51665b2ee615769a1f76526b13f7be589f6464935986413344710b6df1",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "3854cd51665b2ee615769a1f76526b13f7be589f6464935986413344710b6df1"
+    },
+    {
+      "source_path": "frontend/src/modules/reportDesigner/module.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/reportDesigner/module.js",
+      "source_sha256": "8d587c8ff40bc18a68dda91d425a22f35e9f5326d9efe6db1bc1b7ba6a254e2a",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "8d587c8ff40bc18a68dda91d425a22f35e9f5326d9efe6db1bc1b7ba6a254e2a"
+    },
+    {
+      "source_path": "frontend/src/modules/reportDesigner/pages/ReportComposerPage.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/reportDesigner/pages/ReportComposerPage.jsx",
+      "source_sha256": "e85b02ca75769ccedc7fad6c5d14123ae74bd92e982641e861ceab42f9f1af5a",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "f4e307afe70342a317e70a40eb7f4922760953fe038e1e59629b9e9543ae74e5"
+    },
+    {
+      "source_path": "frontend/src/modules/reportManage/api.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/reportManage/api.js",
+      "source_sha256": "60d65db62989aacb8077e7616c627e2cbb6493f518327bc7cc572ef7c31112af",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "8e29abf9dc5c5e84fc466d215207ff6b97ae63b727adafff872f7039fbb95727"
+    },
+    {
+      "source_path": "frontend/src/modules/reportManage/fallback.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/reportManage/fallback.js",
+      "source_sha256": "ec4c430afe296f156f54e9194375416f6a6b132653554b5c4999cd696c337356",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ec4c430afe296f156f54e9194375416f6a6b132653554b5c4999cd696c337356"
+    },
+    {
+      "source_path": "frontend/src/modules/reportManage/index.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/reportManage/index.js",
+      "source_sha256": "d633ab902d3f4df11eac156532f2a20ade4904d922ec56df9bc9198ae17d23e9",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "d633ab902d3f4df11eac156532f2a20ade4904d922ec56df9bc9198ae17d23e9"
+    },
+    {
+      "source_path": "frontend/src/modules/reportManage/model.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/reportManage/model.js",
+      "source_sha256": "e7117290221e63e988ae224ceb649767fbdfd9ac4ac6c8f3c9e553f0f387e5ae",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e7117290221e63e988ae224ceb649767fbdfd9ac4ac6c8f3c9e553f0f387e5ae"
+    },
+    {
+      "source_path": "frontend/src/modules/reportManage/module.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/reportManage/module.js",
+      "source_sha256": "8f76a0be4118f3932143faeb854d9c589b1917da851a248d4aad09d8349d4927",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "8f76a0be4118f3932143faeb854d9c589b1917da851a248d4aad09d8349d4927"
+    },
+    {
+      "source_path": "frontend/src/modules/reportManage/pages/ReportPage.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/reportManage/pages/ReportPage.jsx",
+      "source_sha256": "086dde2b3a546f87a0bb27b38954e187eb9bec99b449643bdb2d5fa6c61d5f9f",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "086dde2b3a546f87a0bb27b38954e187eb9bec99b449643bdb2d5fa6c61d5f9f"
+    },
+    {
+      "source_path": "frontend/src/modules/reportManage/pages/ReportsPage.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/reportManage/pages/ReportsPage.jsx",
+      "source_sha256": "1bd3fd98ecea74cfbd3f58227f8b6aa8d07905c4327ff1c036b6aa1d6937e374",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "1bd3fd98ecea74cfbd3f58227f8b6aa8d07905c4327ff1c036b6aa1d6937e374"
+    },
+    {
+      "source_path": "frontend/src/modules/visDatasets/api.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visDatasets/api.js",
+      "source_sha256": "0a7707906af655d2d4465bd07c5c3e35598e12c5928ce5322002246ce78ae887",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "0a7707906af655d2d4465bd07c5c3e35598e12c5928ce5322002246ce78ae887"
+    },
+    {
+      "source_path": "frontend/src/modules/visDatasets/index.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visDatasets/index.js",
+      "source_sha256": "ccb21f7f2245dfe3b413a9379a31e49d698265f1eabc7b12f8b217d885d082d0",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ccb21f7f2245dfe3b413a9379a31e49d698265f1eabc7b12f8b217d885d082d0"
+    },
+    {
+      "source_path": "frontend/src/modules/visDatasets/module.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visDatasets/module.js",
+      "source_sha256": "f2669d01b4782aa3760edc1bf7e481fad59da5754123fa6d867303eb2ded1b54",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "f2669d01b4782aa3760edc1bf7e481fad59da5754123fa6d867303eb2ded1b54"
+    },
+    {
+      "source_path": "frontend/src/modules/visGeometry/api.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visGeometry/api.js",
+      "source_sha256": "20c7ecabedd0e6f0d632171fa42931e6f0b029be8de34a9aaa1fc38062c5ddbd",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "20c7ecabedd0e6f0d632171fa42931e6f0b029be8de34a9aaa1fc38062c5ddbd"
+    },
+    {
+      "source_path": "frontend/src/modules/visGeometry/components/GeometryViewer.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visGeometry/components/GeometryViewer.jsx",
+      "source_sha256": "3619b0f82404071b83383545873d58bfeb3da39c24e1953c6f988a5e41276c22",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "3619b0f82404071b83383545873d58bfeb3da39c24e1953c6f988a5e41276c22"
+    },
+    {
+      "source_path": "frontend/src/modules/visGeometry/index.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visGeometry/index.js",
+      "source_sha256": "0d6927fa2def5a5892022016b9e4693f6999460e2b4718bbb94e82ca01d6ce8b",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "0d6927fa2def5a5892022016b9e4693f6999460e2b4718bbb94e82ca01d6ce8b"
+    },
+    {
+      "source_path": "frontend/src/modules/visGeometry/model.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visGeometry/model.js",
+      "source_sha256": "b33d3c628987ad85e044c60a432a3d25bd04d845b5e663807054b0ff8a98b974",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "b33d3c628987ad85e044c60a432a3d25bd04d845b5e663807054b0ff8a98b974"
+    },
+    {
+      "source_path": "frontend/src/modules/visGeometry/module.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visGeometry/module.js",
+      "source_sha256": "e9119d8dde1a72894272345695e0f3f0eab731e928d06b7cc12576acaed5ae96",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e9119d8dde1a72894272345695e0f3f0eab731e928d06b7cc12576acaed5ae96"
+    },
+    {
+      "source_path": "frontend/src/modules/visIO/api.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visIO/api.js",
+      "source_sha256": "e3f1ded2632d29ea3d61ad2351b68ab7ca83d51531bcdda7f964408451530eae",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "794842cabdd5a3ab621dd49ccbbdf663f20dafab43a76377f4ee4fcbc78cc737"
+    },
+    {
+      "source_path": "frontend/src/modules/visIO/index.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visIO/index.js",
+      "source_sha256": "99e768d53d128d8ce543d95f698199e1b71b67103604ec2c77904dc654769d90",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "85b56a53f7fe42c59e8829b74798d22eeeb184c31a40e71dba57289a11d58f82"
+    },
+    {
+      "source_path": "frontend/src/modules/visIO/model.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visIO/model.js",
+      "source_sha256": "68f17d3c6806a607a6dddbd939461a5da915dc62ac766a415dda1fa9a54cd643",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "68f17d3c6806a607a6dddbd939461a5da915dc62ac766a415dda1fa9a54cd643"
+    },
+    {
+      "source_path": "frontend/src/modules/visIO/module.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visIO/module.js",
+      "source_sha256": "d1979db7ad554f17aa73d5c98dcd07ad7c65f56bc3768dd220d939673bb70a29",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "d1979db7ad554f17aa73d5c98dcd07ad7c65f56bc3768dd220d939673bb70a29"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/api.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/api.js",
+      "source_sha256": "52f5f4eceaf72805c282740238edb7225f3ca7575037f2957b1d1b5c9b7d4d81",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "09d11af11f91c18581579e7ca88b519ea3be41df31237ee08ef0c29a997898d5"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/components/PhysFieldProvider.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/components/PhysFieldProvider.jsx",
+      "source_sha256": "36e52bf1fb084f884edd84a58a4d17d34231eeeb6f15815ee64d364acc98927f",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "36e52bf1fb084f884edd84a58a4d17d34231eeeb6f15815ee64d364acc98927f"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/components/PhysFieldViewport.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/components/PhysFieldViewport.jsx",
+      "source_sha256": "35669bd68e221d1026b2e7cbed15451544117a982d17e9f466bd2f9f55431b19",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "35669bd68e221d1026b2e7cbed15451544117a982d17e9f466bd2f9f55431b19"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/components/PhysFieldViewport.module.css",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/components/PhysFieldViewport.module.css",
+      "source_sha256": "37390a787c9c26f71398bd294453d37ef04dd35c811dcaf14b8b7d695434655d",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "37390a787c9c26f71398bd294453d37ef04dd35c811dcaf14b8b7d695434655d"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/hooks/usePhysField.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/hooks/usePhysField.js",
+      "source_sha256": "1222815857042c17933ff154119b2c0950ffff3f8e3d6a228f90650960c02e2c",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "072e220dfc55a1efd074418a99e0ddf5b3e51d287d2fd76d6caffc274cc8a271"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/index.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/index.js",
+      "source_sha256": "9276b482a16d80815e751754b231f5045c32251d9f96e67cc5ee14cfff9fcdb9",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "9276b482a16d80815e751754b231f5045c32251d9f96e67cc5ee14cfff9fcdb9"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/model.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/model.js",
+      "source_sha256": "ffe688c01cb7c36792a2c27170762f22b307e99cd510e2bff52b2c3868bb7fcf",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ffe688c01cb7c36792a2c27170762f22b307e99cd510e2bff52b2c3868bb7fcf"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/module.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/module.js",
+      "source_sha256": "fa61c867822ece95ff8e397157268b6505d6f129ef3507078cac8d5155301037",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "fa61c867822ece95ff8e397157268b6505d6f129ef3507078cac8d5155301037"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/modules/dataExtraction/components/DataExtractionPanel.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/modules/dataExtraction/components/DataExtractionPanel.jsx",
+      "source_sha256": "2ad45703ddb65e2862a2777b8c86e4d387b74c34bf7086d850919646d42e6c1c",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "2ad45703ddb65e2862a2777b8c86e4d387b74c34bf7086d850919646d42e6c1c"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/modules/dataExtraction/hooks/useDataExtraction.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/modules/dataExtraction/hooks/useDataExtraction.js",
+      "source_sha256": "2e6b958bedbf353a8e921669970d260df36a72d6da49d99b262e15364f6d2b9e",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "2e6b958bedbf353a8e921669970d260df36a72d6da49d99b262e15364f6d2b9e"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/modules/dataExtraction/model.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/modules/dataExtraction/model.js",
+      "source_sha256": "bf2869d55b54c21c2f727fefc817f9fd154ca8a4c7078a698407bcdcb2f61127",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "bf2869d55b54c21c2f727fefc817f9fd154ca8a4c7078a698407bcdcb2f61127"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/modules/dataOverview/components/DataOverviewTable.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/modules/dataOverview/components/DataOverviewTable.jsx",
+      "source_sha256": "3627c20f3e803564c5c79e69eb03f3a48842651e3cb6d5156de946ba55b64039",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "3627c20f3e803564c5c79e69eb03f3a48842651e3cb6d5156de946ba55b64039"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/modules/dataOverview/hooks/useDataOverview.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/modules/dataOverview/hooks/useDataOverview.js",
+      "source_sha256": "30579da69e7f37ac76b82bf24b50a3adea356351aa489b871eb95e39c29671fd",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "30579da69e7f37ac76b82bf24b50a3adea356351aa489b871eb95e39c29671fd"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/modules/dataOverview/model.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/modules/dataOverview/model.js",
+      "source_sha256": "5ef6bff03a923767ec5948d2dd8453326051cdcf8cb6e71b04a2efa1e7d27b0d",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "5ef6bff03a923767ec5948d2dd8453326051cdcf8cb6e71b04a2efa1e7d27b0d"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/modules/fieldVisualization/components/ViewControls.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/modules/fieldVisualization/components/ViewControls.jsx",
+      "source_sha256": "af0748e01d623aefebc9e32b9c692804e10f1be6cd11ab123f633863f898fc3f",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "af0748e01d623aefebc9e32b9c692804e10f1be6cd11ab123f633863f898fc3f"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/modules/fieldVisualization/hooks/useFieldView.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/modules/fieldVisualization/hooks/useFieldView.js",
+      "source_sha256": "720a87773bf174c27075262bc70450573f3258b9c940f9039a1def73e2050a7f",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "720a87773bf174c27075262bc70450573f3258b9c940f9039a1def73e2050a7f"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/modules/fieldVisualization/model.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/modules/fieldVisualization/model.js",
+      "source_sha256": "656d361ba100477e184d7494fd36d26c9ea92aca61abf8fc7d38a8a1f93a54ce",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "656d361ba100477e184d7494fd36d26c9ea92aca61abf8fc7d38a8a1f93a54ce"
+    },
+    {
+      "source_path": "frontend/src/modules/visPhysField/pages/PhysFieldWorkspacePage.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visPhysField/pages/PhysFieldWorkspacePage.jsx",
+      "source_sha256": "bd0f6d5fa164a24f96ee7be564d9923153951a9f3e54e93ff06a1867cb75560d",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "ee57f0f0b068bc4ac4010cca0ca5985c55efdabe1de2e5f40c248737a5c0fc1e"
+    },
+    {
+      "source_path": "frontend/src/modules/visTaskManage/api.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visTaskManage/api.js",
+      "source_sha256": "2ab0a72a18b1b284479237c81c5d84375b608582f870bcc470cd15c8b6858e9f",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "276308cddd0ba2b857c3eb80aafb9054c92a098da88cbeb15e4e8cd748398121"
+    },
+    {
+      "source_path": "frontend/src/modules/visTaskManage/components/ExamplePreview.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visTaskManage/components/ExamplePreview.jsx",
+      "source_sha256": "55f0416ba1e59f914b06a4f4d542071c491d8c51ba7ec3fa91b25cfaff27d50a",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "55f0416ba1e59f914b06a4f4d542071c491d8c51ba7ec3fa91b25cfaff27d50a"
+    },
+    {
+      "source_path": "frontend/src/modules/visTaskManage/fallback.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visTaskManage/fallback.js",
+      "source_sha256": "dc5722b9cdacc8edafeca8d411f181f4f57ff91d00b265720e7d0ababa803935",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "dc5722b9cdacc8edafeca8d411f181f4f57ff91d00b265720e7d0ababa803935"
+    },
+    {
+      "source_path": "frontend/src/modules/visTaskManage/index.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visTaskManage/index.js",
+      "source_sha256": "259b1da8d771a7561ab22c8f65180c4c47b49ec829e1ef8e82767c9040b2176f",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "259b1da8d771a7561ab22c8f65180c4c47b49ec829e1ef8e82767c9040b2176f"
+    },
+    {
+      "source_path": "frontend/src/modules/visTaskManage/model.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visTaskManage/model.js",
+      "source_sha256": "44282b801179e2c2cc09b7e6931437a3ae98ce8b8e420981e58374f241a8d5ca",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "44282b801179e2c2cc09b7e6931437a3ae98ce8b8e420981e58374f241a8d5ca"
+    },
+    {
+      "source_path": "frontend/src/modules/visTaskManage/module.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visTaskManage/module.js",
+      "source_sha256": "6739293efab8ad9f13db6a420c586504cd14388dad314d45709700a9bac95ccc",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "6739293efab8ad9f13db6a420c586504cd14388dad314d45709700a9bac95ccc"
+    },
+    {
+      "source_path": "frontend/src/modules/visTaskManage/pages/ExamplePage.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visTaskManage/pages/ExamplePage.jsx",
+      "source_sha256": "30669ced3acfa9a1b6f7267b36ecbf38b02f98fd66d528547dcf603deb81cef4",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "30669ced3acfa9a1b6f7267b36ecbf38b02f98fd66d528547dcf603deb81cef4"
+    },
+    {
+      "source_path": "frontend/src/modules/visTaskManage/pages/RecommendationsPage.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visTaskManage/pages/RecommendationsPage.jsx",
+      "source_sha256": "82444ed6ce8867f5f2631b07a98c2378356a260e97a3a36c7db07ee8f48c53dd",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "82444ed6ce8867f5f2631b07a98c2378356a260e97a3a36c7db07ee8f48c53dd"
+    },
+    {
+      "source_path": "frontend/src/modules/visTaskManage/pages/SpecsPage.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visTaskManage/pages/SpecsPage.jsx",
+      "source_sha256": "33f2605b6ba244fbc30188814b6ecbd643acac4ea2ddb821f8e43c4876ac339c",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "33f2605b6ba244fbc30188814b6ecbd643acac4ea2ddb821f8e43c4876ac339c"
+    },
+    {
+      "source_path": "frontend/src/modules/visTaskManage/pages/VisualizationConfiguratorPage.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visTaskManage/pages/VisualizationConfiguratorPage.jsx",
+      "source_sha256": "be5ed4eb5a9a05b674744c27ca6683d03992aeed7a0b4fe8448a162dd3788007",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "8ae12f236bed0d2833fc7c5df46aa13c5c5b44ba7fb649da6e2b4ea2942dc859"
+    },
+    {
+      "source_path": "frontend/src/modules/visTaskManage/terminology.js",
+      "target_path": "packages/ai4e-viz/frontend/src/modules/visTaskManage/terminology.js",
+      "source_sha256": "be7f89a223cf068ec4581efeccfc25f9619398140b66fb1742eab485949e05a6",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "be7f89a223cf068ec4581efeccfc25f9619398140b66fb1742eab485949e05a6"
+    },
+    {
+      "source_path": "frontend/src/qoder-design-runtime.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/qoder-design-runtime.jsx",
+      "source_sha256": "f257f4371a8ac78dbc7aafcf0e558fb328f1bed0c4bb939dee4008fc5b6be127",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "f257f4371a8ac78dbc7aafcf0e558fb328f1bed0c4bb939dee4008fc5b6be127"
+    },
+    {
+      "source_path": "frontend/src/styles.css",
+      "target_path": "packages/ai4e-viz/frontend/src/styles.css",
+      "source_sha256": "c958f999f58bcbbc48a587eeae66f2b05227822447af813a1681372ed1a61664",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "c958f999f58bcbbc48a587eeae66f2b05227822447af813a1681372ed1a61664"
+    },
+    {
+      "source_path": "frontend/src/test/contracts.test.jsx",
+      "target_path": "packages/ai4e-viz/frontend/src/test/contracts.test.jsx",
+      "source_sha256": "621b858bfa9240da2bd6259dab20ea104cff40f1c4435080d968e6fb41b56575",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "621b858bfa9240da2bd6259dab20ea104cff40f1c4435080d968e6fb41b56575"
+    },
+    {
+      "source_path": "frontend/src/test/setup.js",
+      "target_path": "packages/ai4e-viz/frontend/src/test/setup.js",
+      "source_sha256": "23dacd2fc2af16f7a6df16a29aba5c1141dcdf18b5b46cf6504a7d0d487252fb",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "23dacd2fc2af16f7a6df16a29aba5c1141dcdf18b5b46cf6504a7d0d487252fb"
+    },
+    {
+      "source_path": "frontend/vite.config.js",
+      "target_path": "packages/ai4e-viz/frontend/vite.config.js",
+      "source_sha256": "7627ac2d793178c38d8adabb022080c3c5295d2fd53ce166fd0a48fd9c63b3f7",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "8fbe8958de4c5eeaf42ee94903e174a1c798a51d56914ec270af1cec7c59680d"
+    },
+    {
+      "source_path": "portable-manifest.json",
+      "target_path": "packages/ai4e-viz/portable-manifest.json",
+      "source_sha256": "fefb064e99e2ad8cb9d61b59fec0b7b4672198cc7136b50e1e30b658f6ff461c",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "fefb064e99e2ad8cb9d61b59fec0b7b4672198cc7136b50e1e30b658f6ff461c"
+    },
+    {
+      "source_path": "resources/README.md",
+      "target_path": "packages/ai4e-viz/resources/README.md",
+      "source_sha256": "c70ee03f8cbdea8db3e7959e0b685081c65e0b31dde7c4debb05f1d81faaabbc",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "c70ee03f8cbdea8db3e7959e0b685081c65e0b31dde7c4debb05f1d81faaabbc"
+    },
+    {
+      "source_path": "resources/examples/assets/o3dv_A-1027_fixed_camera.png",
+      "target_path": "packages/ai4e-viz/resources/examples/assets/o3dv_A-1027_fixed_camera.png",
+      "source_sha256": "5079ed2cd18051f70bc0050cc38266d54bfbb9478bf709cba83f9636fb4e95ce",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "5079ed2cd18051f70bc0050cc38266d54bfbb9478bf709cba83f9636fb4e95ce"
+    },
+    {
+      "source_path": "resources/examples/assets/plume_evolution_silent.mp4",
+      "target_path": "packages/ai4e-viz/resources/examples/assets/plume_evolution_silent.mp4",
+      "source_sha256": "ce35a55be5fc4d3e859da10cc3aea0003f23a35599eab31aa8e22457eec92e94",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ce35a55be5fc4d3e859da10cc3aea0003f23a35599eab31aa8e22457eec92e94"
+    },
+    {
+      "source_path": "resources/examples/assets/temperature_fixed_camera.png",
+      "target_path": "packages/ai4e-viz/resources/examples/assets/temperature_fixed_camera.png",
+      "source_sha256": "d1e08affe918f0ac1fef0d5cb1bf5ecf2250026cb7481ef68378d28fcc6126c8",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "d1e08affe918f0ac1fef0d5cb1bf5ecf2250026cb7481ef68378d28fcc6126c8"
+    },
+    {
+      "source_path": "resources/examples/assets/trame_A-1028_fixed_camera.png",
+      "target_path": "packages/ai4e-viz/resources/examples/assets/trame_A-1028_fixed_camera.png",
+      "source_sha256": "778c8424be3973789146dd6176d63135a72daa84fb662ef51d012709ddb198d1",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "778c8424be3973789146dd6176d63135a72daa84fb662ef51d012709ddb198d1"
+    },
+    {
+      "source_path": "resources/examples/assets/trame_A-1029_fixed_camera.png",
+      "target_path": "packages/ai4e-viz/resources/examples/assets/trame_A-1029_fixed_camera.png",
+      "source_sha256": "262fd20b5ba4c1c72052cf7df9af5b124922f8bfb8196eb431d01b00a0d56ea9",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "262fd20b5ba4c1c72052cf7df9af5b124922f8bfb8196eb431d01b00a0d56ea9"
+    },
+    {
+      "source_path": "resources/examples/assets/trame_A-1108_fixed_camera.png",
+      "target_path": "packages/ai4e-viz/resources/examples/assets/trame_A-1108_fixed_camera.png",
+      "source_sha256": "5896e6b961518951aeaffb4899952d0fb2536d7446e341ad48d3803794133181",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "5896e6b961518951aeaffb4899952d0fb2536d7446e341ad48d3803794133181"
+    },
+    {
+      "source_path": "resources/examples/cfd_wing_pressure_surface.csv",
+      "target_path": "packages/ai4e-viz/resources/examples/cfd_wing_pressure_surface.csv",
+      "source_sha256": "0a559a6d286da0f0b63a395970ffed74a1a25625b0402077081f90886dccc202",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "0a559a6d286da0f0b63a395970ffed74a1a25625b0402077081f90886dccc202"
+    },
+    {
+      "source_path": "resources/examples/combustor_temp_volume.vti",
+      "target_path": "packages/ai4e-viz/resources/examples/combustor_temp_volume.vti",
+      "source_sha256": "0284f4f8a9130b5244a6c9b387686b3ff166f00b561bef39d8946bad2d2b1d22",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "0284f4f8a9130b5244a6c9b387686b3ff166f00b561bef39d8946bad2d2b1d22"
+    },
+    {
+      "source_path": "resources/examples/fusion_station_geometry.glb",
+      "target_path": "packages/ai4e-viz/resources/examples/fusion_station_geometry.glb",
+      "source_sha256": "6ca462f26bc455e580947c947d0f7bf0029ce46ce940bfcf241ba7c4ce843bee",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "6ca462f26bc455e580947c947d0f7bf0029ce46ce940bfcf241ba7c4ce843bee"
+    },
+    {
+      "source_path": "resources/examples/heater_plate_field.stl",
+      "target_path": "packages/ai4e-viz/resources/examples/heater_plate_field.stl",
+      "source_sha256": "e9654dd96428c964d50492126aa35042f26e5c52a7c139a0d6aaa47dbbc93e8a",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e9654dd96428c964d50492126aa35042f26e5c52a7c139a0d6aaa47dbbc93e8a"
+    },
+    {
+      "source_path": "resources/examples/miller_tokamak_timeseries_240frames.npz",
+      "target_path": "packages/ai4e-viz/resources/examples/miller_tokamak_timeseries_240frames.npz",
+      "source_sha256": "bafe7524066a74e7c8b3416ea88a13739cae6ead3bcf6c68c7fc8fa961361b23",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "bafe7524066a74e7c8b3416ea88a13739cae6ead3bcf6c68c7fc8fa961361b23"
+    },
+    {
+      "source_path": "resources/examples/nozzle_geometry.obj",
+      "target_path": "packages/ai4e-viz/resources/examples/nozzle_geometry.obj",
+      "source_sha256": "124a516e14aa396f4eba4fdfe802dfd57df5083a462ded32e01c80e5a01c9f7b",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "124a516e14aa396f4eba4fdfe802dfd57df5083a462ded32e01c80e5a01c9f7b"
+    },
+    {
+      "source_path": "resources/examples/particle_traj_plume.parquet",
+      "target_path": "packages/ai4e-viz/resources/examples/particle_traj_plume.parquet",
+      "source_sha256": "b2a9c96ca5242b263ef985658e043b9412f6c8434d0d19244fa0d1b42c380032",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "b2a9c96ca5242b263ef985658e043b9412f6c8434d0d19244fa0d1b42c380032"
+    },
+    {
+      "source_path": "resources/examples/simulation_log_raw.csv",
+      "target_path": "packages/ai4e-viz/resources/examples/simulation_log_raw.csv",
+      "source_sha256": "ba6757a150b3501d494282c36217ed434bb0c23a3e353b52770c117e2182cfd1",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "ba6757a150b3501d494282c36217ed434bb0c23a3e353b52770c117e2182cfd1"
+    },
+    {
+      "source_path": "resources/examples/sources/export_miller_tokamak_timeseries.py",
+      "target_path": "packages/ai4e-viz/resources/examples/sources/export_miller_tokamak_timeseries.py",
+      "source_sha256": "7c0f85dd6d34c7534090b4d47d3f1f48a5d3852943fae4e21d1106d966987c72",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "7c0f85dd6d34c7534090b4d47d3f1f48a5d3852943fae4e21d1106d966987c72"
+    },
+    {
+      "source_path": "resources/examples/stress_tensor_cycle118.npz",
+      "target_path": "packages/ai4e-viz/resources/examples/stress_tensor_cycle118.npz",
+      "source_sha256": "9407ad446e03f5a51c2c2fce5c7a5b74c09b39332c36d5f979e0d4d7161a2869",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "9407ad446e03f5a51c2c2fce5c7a5b74c09b39332c36d5f979e0d4d7161a2869"
+    },
+    {
+      "source_path": "resources/examples/turbine_blade_mesh.vtu",
+      "target_path": "packages/ai4e-viz/resources/examples/turbine_blade_mesh.vtu",
+      "source_sha256": "55899ef9f48804aea2c8a4d91624b1838891cdd720b51d5bb83b2e7d4dc6ab86",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "55899ef9f48804aea2c8a4d91624b1838891cdd720b51d5bb83b2e7d4dc6ab86"
+    },
+    {
+      "source_path": "resources/examples/wind_tunnel_cp_survey.csv",
+      "target_path": "packages/ai4e-viz/resources/examples/wind_tunnel_cp_survey.csv",
+      "source_sha256": "762c87fcb2f3871a5e0c44dfd0b604fc4921cf76b6244960b103ab991e44de6e",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "762c87fcb2f3871a5e0c44dfd0b604fc4921cf76b6244960b103ab991e44de6e"
+    },
+    {
+      "source_path": "resources/examples/wind_tunnel_ts_pitot.csv",
+      "target_path": "packages/ai4e-viz/resources/examples/wind_tunnel_ts_pitot.csv",
+      "source_sha256": "4b0a83db44bbeb9583cad2eac821fce39ad14c0b4fa25e81112ed03664e39e35",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "4b0a83db44bbeb9583cad2eac821fce39ad14c0b4fa25e81112ed03664e39e35"
+    },
+    {
+      "source_path": "resources/examples/wing_surface_geometry.ply",
+      "target_path": "packages/ai4e-viz/resources/examples/wing_surface_geometry.ply",
+      "source_sha256": "b15eb18f720079c47db715f957cc21a46473cb2fa9ade8673cb8705853b69552",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "b15eb18f720079c47db715f957cc21a46473cb2fa9ade8673cb8705853b69552"
+    },
+    {
+      "source_path": "run_project.py",
+      "target_path": "packages/ai4e-viz/run_project.py",
+      "source_sha256": "3c7be5508a5bf65b791c6296cd4a7af451093858d474b1fe9a15f40cb0c13723",
+      "action": "adapt",
+      "reason": "保留模块与公开能力，适配独立进程、受控来源、任务配置保存或同源嵌入",
+      "target_sha256": "e6b36f596d653e9545c104f05705a8a22e4987697b88f7832744ae5d00daa188"
+    },
+    {
+      "source_path": ".cursor/rules/clarify-before-execute.mdc",
+      "target_path": "packages/ai4e-viz/.cursor/rules/clarify-before-execute.mdc",
+      "source_sha256": "8ef673aacb4ddac667e7c26a7910465c5f9493538d545df67fe187386fa7bb9c",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "8ef673aacb4ddac667e7c26a7910465c5f9493538d545df67fe187386fa7bb9c"
+    },
+    {
+      "source_path": ".cursor/rules/error-log.mdc",
+      "target_path": "packages/ai4e-viz/.cursor/rules/error-log.mdc",
+      "source_sha256": "78185a4dcfa8183e6dd45e133f8e056db75467c9716667f4ded4bc200e4d4088",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "78185a4dcfa8183e6dd45e133f8e056db75467c9716667f4ded4bc200e4d4088"
+    },
+    {
+      "source_path": ".cursor/rules/lessons.mdc",
+      "target_path": "packages/ai4e-viz/.cursor/rules/lessons.mdc",
+      "source_sha256": "b3179020bad682d7d9c983811283f5752748284b3301f3cd2c6c3113ecb3dffc",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "b3179020bad682d7d9c983811283f5752748284b3301f3cd2c6c3113ecb3dffc"
+    },
+    {
+      "source_path": ".cursor/skills/distill/SKILL.md",
+      "target_path": "packages/ai4e-viz/.cursor/skills/distill/SKILL.md",
+      "source_sha256": "35591fbf2057b87e99c2c49a21a711ccbf0384c99b2085af91820774536362f2",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "35591fbf2057b87e99c2c49a21a711ccbf0384c99b2085af91820774536362f2"
+    },
+    {
+      "source_path": ".cursor/skills/frontend-ui/SKILL.md",
+      "target_path": "packages/ai4e-viz/.cursor/skills/frontend-ui/SKILL.md",
+      "source_sha256": "91a714ef02fc28ff042f8175f58e0dab2da42c7319025d7f21a6f0386961f4c9",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "91a714ef02fc28ff042f8175f58e0dab2da42c7319025d7f21a6f0386961f4c9"
+    },
+    {
+      "source_path": ".cursor/skills/html-to-react/SKILL.md",
+      "target_path": "packages/ai4e-viz/.cursor/skills/html-to-react/SKILL.md",
+      "source_sha256": "1e9cde75badb6445a0258fd25061c4f5bdcf0aff9a94301c61e017f4f471f6fb",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "1e9cde75badb6445a0258fd25061c4f5bdcf0aff9a94301c61e017f4f471f6fb"
+    },
+    {
+      "source_path": ".cursor/skills/web-design-engineer/SKILL.md",
+      "target_path": "packages/ai4e-viz/.cursor/skills/web-design-engineer/SKILL.md",
+      "source_sha256": "3371b871682edd16699e07cd8b7778dc6d7ffbdd4523605486a9b7e17a3b0998",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "3371b871682edd16699e07cd8b7778dc6d7ffbdd4523605486a9b7e17a3b0998"
+    },
+    {
+      "source_path": ".cursor/skills/web-design-engineer/references/advanced-patterns.md",
+      "target_path": "packages/ai4e-viz/.cursor/skills/web-design-engineer/references/advanced-patterns.md",
+      "source_sha256": "e25a37f18e9c578ce24c90ba7b95025eb28c2c75bb03df91b365af9fb8f304d8",
+      "action": "copy",
+      "reason": "保持源文件内容及原相对路径",
+      "target_sha256": "e25a37f18e9c578ce24c90ba7b95025eb28c2c75bb03df91b365af9fb8f304d8"
+    }
+  ],
+  "excluded": [
+    ".git",
+    "var",
+    "backend/state",
+    "backend/.venv",
+    "frontend/node_modules",
+    "frontend/dist",
+    ".cursor/settings.json",
+    ".cursor/mcp.json",
+    ".cursor/agent-schedules.json",
+    ".cursor/skills/use-experience"
+  ],
+  "disposition_counts": {
+    "copy": 311,
+    "adapt": 82
+  }
+}

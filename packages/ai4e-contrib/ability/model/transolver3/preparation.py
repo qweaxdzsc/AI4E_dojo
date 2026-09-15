@@ -99,7 +99,7 @@ def predict_sample(
             yield ids, {"features": x[ids][None]}
 
     result = torch.empty(count, config["model"]["parameters"]["out_dim"])
-    for ids, prediction in SurfaceInference(model).predict(chunks):
+    for ids, prediction in SurfaceInference(model).predict(chunks, query_chunk_size=(config.get("infer") or {}).get("query_chunk_size")):
         result[ids] = prediction["fields"][0].cpu()
     output = {}
     offset = 0

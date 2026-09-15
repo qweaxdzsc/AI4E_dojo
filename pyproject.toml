@@ -24,13 +24,14 @@ ai4e-server = { workspace = true }
 ai4e-viz = { workspace = true }
 
 [dependency-groups]
+visualization = ["ai4e-viz[workbench]"]
 verification = ["pyvista>=0.48"]
 dev = [
     "pytest>=8.3",
     "ruff>=0.6",
     "ai4e-spec",
     "ai4e-core",
-    "ai4e-contrib[abupt,transolver3]",
+    "ai4e-contrib[abupt,transolver3,pibsnet]",
     "ai4e-task",
     "ai4e-server",
     "ai4e-viz",

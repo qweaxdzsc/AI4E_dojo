@@ -6,6 +6,7 @@ import shutil
 import subprocess
 import sys
 import threading
+from datetime import UTC, datetime
 from pathlib import Path
 from uuid import uuid4
 
@@ -55,17 +56,8 @@ def shutdown_operations(service):
 
 
 def digest(path):
-    """目录身份包含全部成员内容，拒绝外逃符号链接。"""
-    if path.is_file():
-        return revision(path)
-    h = hashlib.sha256()
-    for member in sorted(path.rglob("*")):
-        if member.is_symlink():
-            raise ValueError("asset_symlink_forbidden")
-        if member.is_file():
-            h.update(str(member.relative_to(path)).encode())
-            h.update(revision(member).encode())
-    return h.hexdigest()
+    """复用公共内容修订，保持新旧预览接口的目录身份完全一致。"""
+    return revision(path)
 
 
 def register(service, project, root, relative, task_id=None):
@@ -413,6 +405,11 @@ def submit_model_inspection(
             "operation_id": identity,
             "project_id": project,
             "kind": operation,
+            "task_id": task_id,
+            "created_at": datetime.now(UTC).isoformat(),
+            "revision": revision,
+            "stage": selection.get("stage", "model" if operation == "trace_model" else None),
+            "inputs": inputs,
             "status": "queued",
             "phase": None,
             "progress": None,
@@ -525,3 +522,44 @@ def submit_model_inspection(
 
     threading.Thread(target=execute, daemon=True).start()
     return value
+
+
+def archive_asset(service, project, ref):
+    """按固定修订打包目录资产，保留隐藏元数据；拒绝链接并原子发布缓存。"""
+    import os
+    import stat
+    import zipfile
+
+    root = asset(service, project, ref)
+    if not root.is_dir():
+        raise ValueError("directory_required")
+    output = service.settings.root / "downloads"
+    output.mkdir(parents=True, exist_ok=True)
+    key = hashlib.sha256(
+        json.dumps({"project": project, "ref": ref}, sort_keys=True).encode()
+    ).hexdigest()
+    target = output / (key + ".zip")
+    if not target.exists():
+        temporary = output / (uuid4().hex + ".tmp")
+        try:
+            with zipfile.ZipFile(temporary, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+                for path in sorted(root.rglob("*")):
+                    if path.is_symlink() or not path.resolve().is_relative_to(root):
+                        raise ValueError("asset_symlink_forbidden")
+                    relative = path.relative_to(root).as_posix()
+                    if path.is_dir():
+                        archive.writestr(relative + "/", b"")
+                    elif path.is_file():
+                        # 不跟随读取期间被替换的链接，目录内容发布前再次核验修订。
+                        descriptor = os.open(path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0))
+                        with os.fdopen(descriptor, "rb") as source:
+                            if not stat.S_ISREG(os.fstat(source.fileno()).st_mode):
+                                raise ValueError("asset_regular_file_required")
+                            with archive.open(relative, "w") as destination:
+                                shutil.copyfileobj(source, destination)
+            asset(service, project, ref)
+            temporary.replace(target)
+        finally:
+            temporary.unlink(missing_ok=True)
+    asset(service, project, ref)
+    return target, root.name + ".zip"

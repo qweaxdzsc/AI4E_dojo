@@ -39,6 +39,10 @@ def resolve_paths(config: dict, path: str | Path) -> dict:
         ("train", "resume"),
         ("model", "initial_weights"),
         ("post", "checkpoint"),
+        ("post", "results"),
+        ("infer", "checkpoint"),
+        ("infer", "preparation"),
+        ("infer", "results"),
     ):
         value = cfg.get(section, {}).get(key)
         if value and str(value) not in {"last", "best", "latest"}:

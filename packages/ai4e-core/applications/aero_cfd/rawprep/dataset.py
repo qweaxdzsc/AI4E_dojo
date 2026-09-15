@@ -2,6 +2,7 @@
 
 import json
 from copy import deepcopy
+from dataclasses import dataclass
 from pathlib import Path
 from uuid import uuid4
 
@@ -18,6 +19,24 @@ from .select import filter_points as filter_one
 from .select import select_fields as select_one
 from .select import validate_fields as validate_one
 from .stats import resolve_statistics
+
+
+def open_source(*, component, settings) -> Dataset:
+    """打开来源清单与官方分片，不读取网格数组。"""
+    values = (
+        OmegaConf.to_container(settings, resolve=True)
+        if OmegaConf.is_config(settings)
+        else dict(settings)
+    )
+    values.pop("processed_name", None)
+    data = component.open_dataset(**values)
+    if hasattr(component, "LAYOUT"):
+        from dataclasses import replace
+
+        data = replace(
+            data, metadata={**data.metadata, "physical_layout": deepcopy(component.LAYOUT)}
+        )
+    return data
 
 
 def read(dataset: Dataset, *, sources) -> Dataset:
@@ -40,11 +59,23 @@ def read(dataset: Dataset, *, sources) -> Dataset:
     return dataset.then("读取", lambda ctx: dataread(ctx), config=config)
 
 
-def extract_fields(data, *, fields=None):
+def extract_fields(data, *, fields=None, extraction=None):
     """选择字段与分量并登记提取；字典输入保留单样本公开能力。"""
     if not isinstance(data, Dataset):
         return extract_one(data)
     config = deepcopy(data.options["config"])
+    fields = deepcopy(dict(fields))
+    if extraction:
+        from .extraction import compile_extraction
+
+        plan = compile_extraction(
+            dict(extraction),
+            format="pt",
+            declarations=data.metadata["outputs"],
+            source_catalog=data.metadata["fields"],
+        )
+        for domain, requested in plan.pop("source_fields", {}).items():
+            fields.setdefault(domain, {}).update(requested)
     for role, requested in fields.items():
         if role not in config["pre"]:
             raise ValueError(f"提取域未读取: {role}")
@@ -78,10 +109,20 @@ def derive_geometry(data, *, features=None, enabled=None):
     )
 
 
-def select_fields(data, *, fields=None, output=None):
+def select_fields(data, *, fields=None, output=None, extraction=None):
     """按 manifest 的输出契约选场，文件名由逻辑字段生成。"""
     if not isinstance(data, Dataset):
         return select_one(data, output=output)
+    if extraction:
+        from .extraction import compile_extraction
+
+        output = compile_extraction(
+            dict(extraction),
+            format="pt",
+            declarations=data.metadata["outputs"],
+            source_catalog=data.metadata["fields"],
+        )
+        output.pop("source_fields", None)
     if output is not None:
         return data.then("字段选择", lambda ctx: select_one(ctx, output=output), output=output)
     if len(fields) != len(set(fields)):
@@ -130,6 +171,32 @@ def to_tensors(data: Dataset, *, vtkhdf: bool = False) -> Dataset:
     return data.then("张量编码", lambda ctx: {**tensorize(ctx), "vtkhdf": vtkhdf})
 
 
+def encode(data: Dataset, *, format: str | None = None, formats=None, vtkhdf: bool = False) -> Dataset:
+    """登记编码与容器选择；保存策略仍负责实际提交。"""
+    from dataclasses import replace
+
+    from .descriptor import primary_format, resolved_formats
+
+    selected = resolved_formats(
+        {"formats": formats} if formats is not None else {"format": format or "pt"}
+    )
+    primary = primary_format(selected)
+    output = deepcopy(data.options["output"])
+    stems = {
+        key: str(Path(value).with_suffix("")) for key, value in output["filemap"].items()
+    }
+    output["formats"] = selected
+    output["format_filemaps"] = {
+        item: {key: stem + "." + item for key, stem in stems.items()} for item in selected
+    }
+    output["filemap"] = output["format_filemaps"][primary]
+
+    def encode_one(ctx):
+        return {**tensorize({**ctx, "output": output}), "vtkhdf": vtkhdf}
+
+    return replace(data, options={**data.options, "output": output}).then("张量编码", encode_one)
+
+
 def save_sample(ctx: dict, *, output: dict) -> dict:
     """按所属分片保存；保留安全提交、实体身份和字段形状。"""
     ctx = dict(ctx)
@@ -172,8 +239,24 @@ def _atomic_json(path: Path, value: dict) -> None:
         temp.unlink(missing_ok=True)
 
 
-def publish_dataset(results: dict) -> dict:
+@dataclass(frozen=True)
+class StatisticsResult:
+    """本次执行对应的统计与待发布清单，不可用于另一批执行。"""
+
+    results: dict
+    manifest: dict
+
+
+def publish_dataset(results: dict, *, statistics: StatisticsResult | None = None) -> dict:
     """准备本次清单；统计成功后才发布完整 manifest。"""
+    if statistics is not None:
+        if statistics.results is not results or results["failed"]:
+            raise ValueError("统计与本次成功执行不匹配")
+        result = {**results, "manifest": statistics.manifest}
+        if not results["dry_run"]:
+            with operation("数据清单", 状态="physical", 归一化="未执行"):
+                _atomic_json(Path(results["output"]["root"]) / "manifest.json", statistics.manifest)
+        return result
     dataset = results["dataset"]
     result = {
         **results,
@@ -187,11 +270,31 @@ def publish_dataset(results: dict) -> dict:
             "statistics": None,
         },
     }
+    if dataset.metadata.get("extensions"):
+        result["manifest"]["extensions"] = deepcopy(dataset.metadata["extensions"])
+    if results["results"] and not results["dry_run"]:
+        available = set(results["results"][0]["filemap"]) | set(
+            results["results"][0].get("field_aliases", {})
+        )
+        result["manifest"]["field_definitions"] = {
+            name: value for name, value in dataset.metadata["outputs"].items() if name in available
+        }
+        if dataset.metadata.get("physical_layout"):
+            from .physical import actual_layout
+
+            result["manifest"]["physical_layout"] = actual_layout(
+                dataset.metadata["physical_layout"], results["results"]
+            )
     return result
 
 
-def compute_statistics(dataset: dict, spec) -> None:
+def compute_statistics(dataset: dict, spec=None, *, settings=None):
     """只统计本次完整训练分片；发布清单与统计引用，不执行归一化。"""
+    original = dataset
+    modern = settings is not None
+    if modern:
+        spec = settings
+        dataset = publish_dataset(dataset)
     if dataset["failed"]:
         raise ValueError("样本处理部分失败；不发布完整数据清单或训练统计")
     source = dataset["dataset"]
@@ -237,6 +340,8 @@ def compute_statistics(dataset: dict, spec) -> None:
             "state": "physical",
             "samples": train if mode == "fit" else None,
         }
+    if modern:
+        return StatisticsResult(original, dataset["manifest"])
     if not dataset["dry_run"]:
         with operation("数据清单", 状态="physical", 归一化="未执行"):
             _atomic_json(Path(dataset["output"]["root"]) / "manifest.json", dataset["manifest"])
@@ -268,7 +373,8 @@ def _preflight(data, output, *, flags, settings):
     if root.is_relative_to(source) or source.is_relative_to(root):
         raise ValueError("数据清单目录与原始数据重叠")
     meta = [root / "manifest.json"]
-    if settings.get("statistics", {}).get("mode", "fit") == "fit":
+    statistics = settings.get("rawprep", settings).get("statistics", {})
+    if statistics.get("mode", "fit") == "fit":
         if "train" not in roots:
             raise ValueError("统计拟合需要 train 分片")
         meta.append(roots["train"] / "statistics.yaml")

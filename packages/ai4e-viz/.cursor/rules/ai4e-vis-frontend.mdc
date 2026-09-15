@@ -1,0 +1,22 @@
+---
+description: AI4E_Vis 当前 JavaScript/React/Vite 模块优先前端规范
+globs: frontend/src/**/*.{js,jsx,css}
+alwaysApply: false
+---
+
+# 前端规范
+
+- 先读根 `AGENTS.md`、`.context/index.md`、`.context/modules/frontend-architecture.md`、目标模块索引和相关 PRD；从 Page 沿 Component、Hook、Model、API、后端接口和测试读完整链路后再改。代码子目录不建立局部 `AGENTS.md`。
+- 使用 JavaScript/JSX、React 18、Vite 5、Ant Design；依赖由 `frontend/package.json` 和 `package-lock.json` 管理，不擅自改 TypeScript 或替换框架。
+- 总体采用“模块优先 + 微领域驱动”思想：十三级后端限界上下文在有 UI 时映射为 `frontend/src/modules/<一级模块>`，目录先按业务模块切分，再在模块内部按实际规模组织 Model、API、Hook、Component 和 Page；禁止恢复全局业务 pages、api、Store、Components 或 Hooks。
+- 前端不机械复制后端 DDD 层级：`model.js` 表达前端业务实体、值对象与状态字典；`api.js` 是防腐层，合并 Endpoint、HTTP 请求和 DTO 转换；Hook 编排 Query、Command、状态和副作用；业务 Component 通过 Props/事件协作且不直接请求后端；Page 只组织页面布局和交互区域，可以组合一个或多个模块公开的聚合业务对象。
+- `index.js` 是跨模块唯一门面；`module.js` 只定义路由/导航；`api.js` 集中 Endpoint、请求和 DTO 转换，不另建 `url.js`。
+- 数据资产列表/详情/API归`dataAssets`；`visDatasets`只暴露解析、画像和体检能力。资产详情组合数据集分析和任务推荐时只能导入两个目标模块的`index.js`。
+- 模块内 `components/` 只服务本领域并可读取本模块 Model/Hook；共享基座 `infrastructure/components/` 只放无业务含义的布局、导航、反馈、表单和数据展示组件。无业务含义的 HTTP、运行时、Renderer 与通用 Hook 也放 `infrastructure`；Infrastructure 不得导入业务模块。
+- O3DV 继续负责几何，Trame + VTK 继续负责物理场；`visPhysField/modules/*` 共享一级 API、Provider、Store、路由和 Trame 连接，禁止二级 `api.js/module.js/index.js`。
+- 每个 JS/JSX 有中文文件头，导出 Component/Hook/函数有中文 JSDoc；复杂 Effect/Memo/Callback、JSX 与 CSS 分区解释业务原因。
+- 每次修改同步目标 `.context` 文件、相关 PRD 或 `docs/PRD/CHANGELOG.md`、对应 Vitest/Playwright；新增/删除/移动文件必须同步文件索引。
+- 错误必须记入根 `error.log`，记录现象、上下游链路、根因、修复和验证，不写敏感信息。
+- 先跑受影响用例，再执行 `cd frontend && npm run check:architecture && npm test && npm run build`；跨页面、O3DV 或 Trame 行为还要跑 Playwright。
+
+详细文件位置见 `.context/index.md` 和 `.context/modules/<module>.md`。

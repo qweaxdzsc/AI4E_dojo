@@ -1,0 +1,26 @@
+/* 模型领域：整合原型的紧凑分组，真实结构保留独立显示区域。 */
+.model-layout{display:grid;grid-template-columns:.83fr 1.17fr;gap:10px;height:700px;margin-top:8px;align-items:stretch}
+.model-layout>.ant-card{min-width:0;height:100%;overflow:auto;border:1px solid #dceaff;border-radius:6px}
+.model-layout .ant-card-head{min-height:38px;padding:0 12px;font-size:17px}
+.model-layout .ant-card-body{padding:0 8px 6px}
+.model-layout .model-section{border:1px solid #dfeaff;border-radius:5px;padding:6px 9px;margin-bottom:5px}
+.model-section summary{font-size:12px;font-weight:600;cursor:pointer;line-height:22px}
+.model-section-body{padding-top:4px}
+.model-layout p{font-size:11px;line-height:1.5;margin:4px 0 7px;color:#728bbb}
+.model-layout .configuration-grid,.model-layout .sampling-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px 27px}
+.model-layout .configuration-field{display:grid;grid-template-columns:minmax(80px,1fr) minmax(50px,1fr);align-items:center;gap:7px;margin:0;min-height:24px}
+.model-layout .configuration-field>label{font-size:10px;overflow-wrap:anywhere;color:#526b98}
+.model-layout .ant-input,.model-layout .ant-input-number,.model-layout .ant-select{font-size:10px;height:22px;width:100%}
+.model-layout .ant-input-number-input{height:20px;padding:2px 6px;font-size:10px}
+.model-layout .ant-select-selector{min-height:22px!important;padding:0 6px!important;font-size:10px}
+.model-layout .ant-select-selection-item{line-height:20px!important}
+.model-layout .ant-table-cell{padding:3px 5px!important;font-size:10px}
+.model-layout .model-visualization .ant-card-body{height:calc(100% - 39px);display:flex;flex-direction:column;padding:8px}
+.model-layout .model-visualization iframe{width:100%;flex:1;min-height:300px;border:0}
+.model-layout .model-visualization .empty-record{flex:1}
+@container(max-width:1200px){.model-layout{grid-template-columns:1fr;height:auto}.model-layout>.ant-card:first-child{height:auto;max-height:none}.model-layout>.ant-card:last-child{height:670px}}
+
+/* 模型选择与训练输入分开，选项来自官方模型与项目预设。 */
+.model-picker{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px;align-items:center;margin-bottom:8px;font-size:12px}
+.model-export{display:flex;gap:8px;align-items:center;margin:8px 0}
+.model-export .ant-input{flex:1}

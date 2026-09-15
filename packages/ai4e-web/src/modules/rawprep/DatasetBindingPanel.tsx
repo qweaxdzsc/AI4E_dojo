@@ -1,26 +1,34 @@
-import {Alert, Button, Empty, Modal, Select, Spin} from 'antd';
+import {Alert, Button, Empty, Modal, Spin} from 'antd';
 import {type ReactNode,useEffect,useState} from 'react';
 import {ActionButton} from '../../infrastructure/components/ActionButton';
-import {readBinding,saveBinding,sourceRoots,sourceFiles,type DatasetBinding} from './api';
+import {listPublicDatasets,readBinding,saveBinding,type DatasetBinding,type PublicDataset,type PublicDatasetCatalog} from './api';
 import './dataset-binding.css';
-const labels:Record<string,string>={root:'ShapeNet 数据目录',train_h5:'NASA 训练文件',test_h5:'NASA 测试文件',connectivity_h5:'NASA 拓扑文件'};
-/** 选择只来自受控根和目录返回值，页面不接受手写路径。 */
-function SourcePicker({project,task,name,directory,initial,onPick,onClose}:{project:string;task:string;name:string;directory:boolean;initial?:{root:string;path:string};onPick:(v:{root:string;path:string})=>void;onClose:()=>void}){
- const [roots,setRoots]=useState<any[]>([]),[root,setRoot]=useState(initial?.root||''),[path,setPath]=useState(initial?(directory?initial.path:initial.path.split('/').slice(0,-1).join('/')):''),[rows,setRows]=useState<any[]>([]),[busy,setBusy]=useState(false),[error,setError]=useState('');
- useEffect(()=>{let live=true;sourceRoots(project,task).then(v=>{if(!live)return;const options=v.filter((r:any)=>r.id.startsWith('data'));setRoots(options);if(!root)setRoot(options[0]?.id||'')}).catch(e=>setError(e.message));return()=>{live=false}},[project,task]);
- useEffect(()=>{let live=true;if(!root)return;setBusy(true);setError('');sourceFiles(project,task,root,path).then(v=>{if(live)setRows(v)}).catch(e=>{if(live){setRows([]);setError(e.message)}}).finally(()=>live&&setBusy(false));return()=>{live=false}},[project,task,root,path]);
- return <Modal open title={'选择'+name} onCancel={onClose} footer={<Button onClick={onClose}>取消选择</Button>} width={680}><div className="binding-picker"><Select virtual={false} disabled={!roots.length} aria-label="受控数据根" value={root||undefined} options={roots.map(r=>({value:r.id,label:r.id+' · '+r.label}))} onChange={value=>{setRoot(value);setPath('')}}/><div className="binding-picker-path"><Button disabled={!path} onClick={()=>setPath(path.split('/').slice(0,-1).join('/'))}>上级目录</Button><span>{path||'数据根目录'}</span>{directory&&<Button type="primary" disabled={!root||busy||!!error} onClick={()=>onPick({root,path})}>使用当前目录</Button>}</div>{error&&<Alert type="error" message={error}/>} {busy?<Spin/>:<div className="binding-picker-list">{rows.map(r=><div key={r.path}><Button type="text" disabled={!r.directory} onClick={()=>setPath(r.path)}>{r.directory?'▸ ':''}{r.name}</Button>{r.directory?(directory&&<Button aria-label={'选择目录 '+r.name} onClick={()=>onPick({root,path:r.path})}>选择目录</Button>):!directory&&<Button aria-label={'选择文件 '+r.name} disabled={!/\.h(?:5|df5)$/i.test(r.name)} onClick={()=>onPick({root,path:r.path})}>选择文件</Button>}</div>)}{!rows.length&&<Empty description="此目录没有内容"/>}</div>}</div></Modal>
-}
-/** 数据绑定独立于任务元信息，保存使用当前配置修订并由服务核验真实范围。 */
-export function DatasetBindingPanel({project,task,onBinding,disabled=false,children}:{project:string;task:string;onBinding:(binding:DatasetBinding,saved:boolean)=>void;disabled?:boolean;children?:(ui:{action:ReactNode;notices:ReactNode;dialogs:ReactNode})=>ReactNode}){
- const [value,setValue]=useState<DatasetBinding>(),[draft,setDraft]=useState<DatasetBinding['sources']>({}),[open,setOpen]=useState(false),[picker,setPicker]=useState<string>(),[busy,setBusy]=useState(false),[error,setError]=useState('');
+
+/** 绑定只选 contrib 公开数据集及其本机完整副本，不手填路径。 */
+export function DatasetBindingPanel({project,task,onBinding,disabled=false,beforeSave,children}:{project:string;task:string;onBinding:(binding:DatasetBinding,saved:boolean)=>void;disabled?:boolean;beforeSave?:()=>Promise<string>;children?:(ui:{action:ReactNode;notices:ReactNode;dialogs:ReactNode})=>ReactNode}){
+ const [value,setValue]=useState<DatasetBinding>(),[catalog,setCatalog]=useState<PublicDatasetCatalog>(),[datasetId,setDatasetId]=useState(''),[instanceId,setInstanceId]=useState(''),[open,setOpen]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState('');
  useEffect(()=>{let live=true;readBinding(project,task).then(v=>{if(!live)return;setValue(v);onBinding(v,false)}).catch(e=>live&&setError(e.message));return()=>{live=false}},[project,task]);
- async function edit(){setError('');setBusy(true);try{const v=await readBinding(project,task);setValue(v);setDraft(v.sources);onBinding(v,false);setOpen(true)}catch(e:any){setError(e.message)}finally{setBusy(false)}}
- async function save(){if(!value||busy)return;setBusy(true);setError('');try{const v=await saveBinding(project,task,value.revision,draft);setValue(v);setOpen(false);onBinding(v,true)}catch(e:any){setError(e.message)}finally{setBusy(false)}}
- const keys=value?.dataset_id==='nasa_crm'?['train_h5','test_h5','connectivity_h5']:['root'];
+ async function edit(){setError('');setBusy(true);try{const [v,list]=await Promise.all([readBinding(project,task),listPublicDatasets(project,task)]);setValue(v);setCatalog(list);const current=list.datasets.find(d=>d.dataset_id===(v.dataset_id||list.current_dataset_id));setDatasetId(current?.dataset_id||'');setInstanceId(current?.instances[0]?.id||'');onBinding(v,false);setOpen(true)}catch(e:any){setError(e.message)}finally{setBusy(false)}}
+ async function save(){if(!value||busy||!datasetId||!instanceId)return;setBusy(true);setError('');try{const revision=beforeSave?await beforeSave():value.revision;const v=await saveBinding(project,task,revision,{dataset_id:datasetId,instance_id:instanceId});setValue(v);setOpen(false);onBinding(v,true)}catch(e:any){setError(e.message)}finally{setBusy(false)}}
+ const selected=catalog?.datasets.find(d=>d.dataset_id===datasetId);
+ const instance=selected?.instances.find(i=>i.id===instanceId);
  const action=<ActionButton className="addfile" aria-label="配置数据来源" disabled={disabled} loading={busy} onClick={edit}>{value?.status==='unbound'?'绑定数据':'修改绑定'}</ActionButton>;
- const notices=<>{value&&<><span className={'binding-status '+value.status}>{{unbound:'尚未绑定数据',valid:'数据来源已绑定',invalid:'数据来源需要修正'}[value.status]}</span><small>{value.dataset_id==='nasa_crm'?'分别选择训练、测试和拓扑文件，可来自不同数据根。':'选择包含案例样本的 ShapeNet 数据目录。'}</small>{value.status==='invalid'&&<Alert type="warning" message="来源失效，请重新选择" description={value.errors.map(e=>typeof e==='string'?e:JSON.stringify(e)).join('；')}/>}</>}{error&&<Alert type="error" message={error}/>}{disabled&&<small>请先保存处理设置，再修改数据绑定。</small>}</>;
- const dialogs=<><Modal open={open} title="配置数据来源" onCancel={()=>!busy&&setOpen(false)} footer={<><Button disabled={busy} onClick={()=>setOpen(false)}>取消</Button><ActionButton type="primary" loading={busy} disabled={keys.some(k=>!draft[k]?.root)} onClick={save}>保存数据绑定</ActionButton></>}><p>数据来源保存于当前任务配置；完整样本仍需在执行前检查。</p>{error&&<Alert type="error" message={error}/>}<div className="binding-sources">{keys.map(key=><div key={key}><b>{labels[key]}</b><code>{draft[key]?draft[key].root+' / '+(draft[key].path||'数据根目录'):'未选择'}</code><Button aria-label={'浏览'+labels[key]} onClick={()=>setPicker(key)}>浏览选择</Button></div>)}</div></Modal>{picker&&<SourcePicker project={project} task={task} name={labels[picker]} directory={picker==='root'} initial={draft[picker]} onClose={()=>setPicker(undefined)} onPick={source=>{setDraft({...draft,[picker]:source});setPicker(undefined)}}/>}</>;
+ const notices=<>{value?.status==='invalid'&&<Alert type="warning" message="来源失效，请重新选择" description={value.errors.map(e=>typeof e==='string'?e:JSON.stringify(e)).join('；')}/>}{error&&<Alert type="error" message={error}/>}{disabled&&<small>当前操作进行中，请稍候。</small>}</>;
+ const dialogs=<Modal open={open} title="选择公开数据集" onCancel={()=>!busy&&setOpen(false)} footer={<><Button disabled={busy} onClick={()=>setOpen(false)}>取消</Button><ActionButton type="primary" loading={busy} disabled={!selected?.compatible||!instance} onClick={save}>保存数据绑定</ActionButton></>} width={680}><p>名单来自 contrib 公开数据集；选中后接入该集处理方式与平台已登记的本机地址。</p>{error&&<Alert type="error" message={error}/>}{!catalog?<Spin/>:<div className="public-datasets">{catalog.datasets.map(dataset=><DatasetChoice key={dataset.dataset_id} dataset={dataset} selected={datasetId===dataset.dataset_id} instanceId={datasetId===dataset.dataset_id?instanceId:''} onSelect={(id,copy)=>{setDatasetId(id);setInstanceId(copy)}}/>)}</div>}</Modal>;
  if(children)return <>{children({action,notices,dialogs})}</>;
  return <div className="dataset-binding-panel"><div className="panel-title"><b>数据来源</b>{action}</div>{notices}{dialogs}</div>;
+}
+
+function DatasetChoice({dataset,selected,instanceId,onSelect}:{dataset:PublicDataset;selected:boolean;instanceId:string;onSelect:(datasetId:string,instanceId:string)=>void}){
+ const available=dataset.compatible&&dataset.instances.length>0;
+ return <div className={'public-dataset'+(selected?' selected':'')+(available?'':' disabled')}>
+  <button type="button" className="public-dataset-pick" disabled={!available} aria-pressed={selected} onClick={()=>onSelect(dataset.dataset_id,dataset.instances[0]?.id||'')}>
+   <b>{dataset.label}</b>
+   <small>处理方式：{dataset.description}</small>
+   {!dataset.compatible&&<small>当前模型没有对应登记案例</small>}
+   {dataset.compatible&&!dataset.instances.length&&<small>本机未找到完整副本</small>}
+  </button>
+  {selected&&dataset.instances.length>1&&<div className="public-dataset-copies">{dataset.instances.map(item=><label key={item.id}><input type="radio" name={'copy-'+dataset.dataset_id} checked={instanceId===item.id} onChange={()=>onSelect(dataset.dataset_id,item.id)}/>{item.label}</label>)}</div>}
+  {selected&&dataset.instances.length===1&&<small className="public-dataset-location">本机地址：{dataset.instances[0].label}</small>}
+ </div>;
 }

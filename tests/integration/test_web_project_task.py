@@ -55,3 +55,40 @@ def test_unbound_template_create_does_not_weaken_execution(platform):
     with pytest.raises(FileNotFoundError):
         task.submit_run(project, t["id"])
     assert task.list_runs(project, t["id"]) == []
+
+
+def test_case_create_clears_template_manifest_placeholder(platform):
+    """新建外流案例不把模板数据根上的清单占位带进用户任务。"""
+    c, p, _, _, _ = platform
+    created = c.post(
+        f"/api/v1/projects/{p}/tasks",
+        json={"name": "case-manifest", "case_id": "shapenet_car_abupt"},
+    )
+    assert created.status_code == 200, created.text
+    project = c.app.state.services.project(p)
+    cfg = task.read_configuration(project, created.json()["id"])
+    assert cfg["config"].get("train", {}).get("manifest") in {None, ""}
+    items = c.get(
+        f"/api/v1/projects/{p}/tasks/{created.json()['id']}/stage-inputs"
+    ).json()
+    assert not any(item["binding"] == "train.manifest" for item in items)
+
+
+def test_new_task_vtkhdf_follows_case_capability(platform):
+    """新建官方案例：ShapeNet 默认打开 VTKHDF，NASA 未接入不强开。"""
+    c, p, _, _, _ = platform
+    for case_id, enabled in (
+        ("shapenet_car_abupt", True),
+        ("shapenet_car_transolver3_surface", True),
+        ("shapenet_car_transolver3_volume", True),
+        ("nasa_crm_abupt", False),
+        ("nasa_crm_transolver3", False),
+    ):
+        created = c.post(
+            f"/api/v1/projects/{p}/tasks",
+            json={"name": f"vtkhdf-{case_id}", "case_id": case_id},
+        )
+        assert created.status_code == 200, created.text
+        shown = c.get(f"/api/v1/projects/{p}/tasks/{created.json()['id']}/rawprep").json()
+        assert shown["profile"]["vtkhdf"] is enabled, case_id
+        assert shown["rawprep"]["vtkhdf"] is enabled, case_id

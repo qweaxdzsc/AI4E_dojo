@@ -10,6 +10,9 @@ from pathlib import Path
 
 from ai4e_core.abilities.data.save.normalization import materialize, save_record
 from ai4e_core.abilities.data.source.manifest import ManifestIndex
+from ai4e_core.abilities.data.source.split import apply_declared_split, default_counts
+from ai4e_core.base.config import operation_record, plain, resolve_operation
+from ai4e_core.base.config.steps import restore_operation
 
 from .dataset import iter_partition_batches, prepare_physical_sample
 from .normalization import Normalization, bind_normalization, validate_frozen
@@ -22,6 +25,8 @@ def digest(value: dict) -> str:
 
 def component_record(component) -> dict:
     """冻结入口名称及其源码内容，安装位置不参与摘要。"""
+    if isinstance(component, partial) or not inspect.isfunction(component):
+        return operation_record(component)
     path = inspect.getsourcefile(component)
     if path is None:
         raise ValueError("准备组件必须有可快照的 Python 源码")
@@ -61,7 +66,7 @@ class Preparation:
     record: dict = field(default_factory=dict)
 
 
-def open_dataset(config: dict, dataset=None) -> Preparation:
+def open_dataset(config: dict, dataset=None, overlay=None) -> Preparation:
     """打开 datapre 产物或已有清单，独立入口无需执行原始数据处理。"""
     config = deepcopy(config)
     path = (
@@ -72,9 +77,9 @@ def open_dataset(config: dict, dataset=None) -> Preparation:
         path = Path(dataset["output"]["root"]) / "manifest.json"
         config["train"]["manifest"] = str(path)
     index = ManifestIndex(path)
-    selection = config["train"].get("evaluation_split", "test")
-    if not index.partitions.get("train") or not index.partitions.get(selection):
-        raise ValueError("训练或指定评估分片缺失")
+    apply_declared_split(index, config, overlay)
+    if not index.partitions.get("train"):
+        raise ValueError("训练分片缺失")
     return Preparation(config, index)
 
 
@@ -86,8 +91,20 @@ def prepare_fields(data: Preparation) -> Preparation:
     return data
 
 
-def freeze_normalization(data: Preparation) -> Preparation:
+def bind_fields(data: Preparation, *, settings=None) -> Preparation:
+    """公开字段绑定步骤；用户配置中的归一化和采样另由相应步骤消费。"""
+    if settings is not None:
+        values = plain(settings)
+        values.pop("normalization", None)
+        values.pop("sampling", None)
+        data.config["trainprep"] = values
+    return prepare_fields(data)
+
+
+def freeze_normalization(data: Preparation, *, settings=None) -> Preparation:
     """绑定实际统计值或已有冻结记录；不把归一化数据再次变换。"""
+    if settings is not None:
+        data.config["normalization"] = plain(settings)
     manifest = data.index.manifest
     if manifest["state"] == "normalized":
         data.normalization = Normalization(manifest["normalization"])
@@ -99,15 +116,24 @@ def freeze_normalization(data: Preparation) -> Preparation:
     return data
 
 
-def configure_sampling(data: Preparation, *, prepare) -> Preparation:
+def configure_sampling(
+    data: Preparation, *, prepare=None, settings=None, model_component=None, operation=None
+) -> Preparation:
     """注入模型样本组织组件；每个 epoch 的采样由训练迭代器调用。"""
-    data.prepare = prepare
+    if settings is not None:
+        data.config["sampling"] = plain(settings)
+    default = prepare or (model_component.prepare_inputs if model_component else None)
+    data.prepare = resolve_operation(data.config["sampling"], default=default, operation=operation)
     return data
 
 
-def configure_batching(data: Preparation, *, collate) -> Preparation:
+def configure_batching(
+    data: Preparation, *, collate=None, batch_size=None, model_component=None
+) -> Preparation:
     """注入模型拼批组件，保留跨样本索引偏移契约。"""
-    data.collate = collate
+    if batch_size is not None:
+        data.config["train"]["batch_size"] = batch_size
+    data.collate = collate or model_component.collate
     return data
 
 
@@ -148,6 +174,13 @@ def validate_preparation(data: Preparation) -> Preparation:
             for name, component in [("prepare", data.prepare), ("collate", data.collate)]
         },
         "split_counts": {name: len(samples) for name, samples in data.index.partitions.items()},
+        "partitions": {name: list(samples) for name, samples in data.index.partitions.items()},
+        "split": deepcopy((data.config.get("trainprep") or {}).get("split"))
+        or {
+            "method": "original",
+            "seed": 0,
+            "counts": default_counts(data.index.partitions),
+        },
     }
     return data
 
@@ -167,8 +200,9 @@ def declarations(config: dict) -> dict:
     )
 
 
-def publish(data: Preparation, run) -> dict:
+def publish(data: Preparation, run=None, *, session=None) -> dict:
     """发布可独立消费的准备引用；检查模式不写归一化或阶段产物。"""
+    run = session or run
     if not data.record:
         raise ValueError("发布前必须校验准备结果")
     if run.dry_run:
@@ -199,8 +233,18 @@ def publish(data: Preparation, run) -> dict:
     return result
 
 
+def check_report(data, *, session):
+    """准备检查报告，不发布任何持久化阶段产物。"""
+    if not data.record:
+        raise ValueError("检查前必须校验准备")
+    result = {"mode": "trainprep_check", "split_counts": data.record["split_counts"]}
+    session.report(result, stage="trainprep")
+    return result
+
+
 def consume(config: dict, reference, *, prepare, collate) -> Preparation:
     """从准备引用恢复并验证配置、组件和数据；不再读取原统计文件。"""
+    prepare = resolve_operation(config["sampling"], default=prepare)
     path = reference["preparation"] if isinstance(reference, dict) else reference
     record = json.loads(Path(path).read_text())
     payload = {key: value for key, value in record.items() if key != "digest"}
@@ -208,6 +252,13 @@ def consume(config: dict, reference, *, prepare, collate) -> Preparation:
         raise ValueError("准备结果版本或摘要不一致")
     if record["declarations"] != declarations(config):
         raise ValueError("配置与准备结果冲突，请重新运行 trainprep")
+    if (
+        not config["sampling"].get("target")
+        and record["components"]["prepare"]["name"] != component_record(prepare)["name"]
+    ):
+        prepare = restore_operation(record["components"]["prepare"])
+    if record["components"]["collate"]["name"] != component_record(collate)["name"]:
+        collate = restore_operation(record["components"]["collate"])
     if record["components"] != {
         name: component_record(component)
         for name, component in [("prepare", prepare), ("collate", collate)]
@@ -220,7 +271,7 @@ def consume(config: dict, reference, *, prepare, collate) -> Preparation:
         raise ValueError("训练清单与准备结果冲突")
     cfg = deepcopy(config)
     cfg["train"]["manifest"] = record["manifest"]
-    data = prepare_fields(open_dataset(cfg))
+    data = prepare_fields(open_dataset(cfg, overlay=record.get("partitions")))
     if dataset_digest(data.index) != record["dataset_digest"]:
         raise ValueError("准备后数据已变化，请重新运行 trainprep")
     data.normalization = Normalization(record["normalization"])

@@ -19,7 +19,11 @@ def bind_normalization(config: dict, manifest: dict, index=None) -> Normalizatio
     for name, item in declaration.get("fields", {}).items():
         method = item["method"]
         supplied = dict(item.get("parameters", {}))
-        if method == "identity":
+        if method == "custom":
+            if not item.get("target"):
+                raise ValueError("自定义变换必须指定 target")
+            parameters = supplied
+        elif method == "identity":
             parameters = {}
         elif method == "minmax":
             if supplied or index is None:
@@ -53,6 +57,8 @@ def bind_normalization(config: dict, manifest: dict, index=None) -> Normalizatio
             "parameters": parameters,
             "scope": item.get("scope", "point"),
         }
+        if method == "custom":
+            fields[name]["target"] = item["target"]
     if not fields:
         raise ValueError("准备需要显式冻结变换声明")
     return Normalization(
@@ -63,7 +69,9 @@ def bind_normalization(config: dict, manifest: dict, index=None) -> Normalizatio
             "statistics_provenance": {"mode": "explicit", "path": str(source)}
             if declaration.get("statistics")
             else manifest.get("statistics", {}),
-            "training_samples": manifest["partitions"].get("train", []),
+            "training_samples": list(index.partitions.get("train", []))
+            if index is not None
+            else manifest["partitions"].get("train", []),
         }
     )
 
@@ -74,6 +82,8 @@ def validate_frozen(config: dict, normalization: Normalization) -> None:
         frozen = normalization.record["fields"].get(name)
         if frozen is None or declaration["method"] != frozen["method"]:
             raise ValueError("配置与冻结变换方法冲突")
+        if declaration["method"] == "custom" and declaration.get("target") != frozen.get("target"):
+            raise ValueError("配置与冻结变换实现冲突")
         if declaration.get("scope", "point") != frozen.get("scope", "point"):
             raise ValueError("配置与冻结变换字段空间冲突")
         for key, value in declaration.get("parameters", {}).items():

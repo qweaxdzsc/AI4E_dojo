@@ -1,0 +1,60 @@
+{
+  "command": "DOJO_BINDING_REAL_ROOT=/Users/zonghui/work/project_simulation/dojo_train/ui-consistency DOJO_BINDING_SHAPENET=/Users/zonghui/work/datasets/shapenet_car_cfd/mlcfd_data/training_data uv run --no-sync pytest tests/integration/test_web_binding_real.py -q",
+  "result": "4 passed, 0 skipped",
+  "cases": [
+    {
+      "case": "nasa_crm_transolver3",
+      "format": "pt",
+      "status": "succeeded",
+      "run_id": "d9c62c3ff4044ef3ade57d31fd847a0e",
+      "evidence": "/Users/zonghui/work/project_simulation/dojo_train/ui-consistency/bb09c4d3c4264a669c041dd28e21c073/binding-result.json",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/ui-consistency/bb09c4d3c4264a669c041dd28e21c073/projects/fd1dacdaef274da89d94f7697fa00287/tasks/55a9f4c61de3408bbccae42c362d77df/runs/d9c62c3ff4044ef3ade57d31fd847a0e",
+      "data_dir": "/Users/zonghui/work/project_simulation/dojo_train/ui-consistency/bb09c4d3c4264a669c041dd28e21c073/projects/fd1dacdaef274da89d94f7697fa00287/tasks/55a9f4c61de3408bbccae42c362d77df/data/d9c62c3ff4044ef3ade57d31fd847a0e",
+      "prepared_field": "surface_cp",
+      "preview_shape": [
+        454404,
+        1
+      ]
+    },
+    {
+      "case": "nasa_crm_transolver3",
+      "format": "zarr",
+      "status": "succeeded",
+      "run_id": "91c8153b50f740aea2c02652d6917fee",
+      "evidence": "/Users/zonghui/work/project_simulation/dojo_train/ui-consistency/44268a2b2cad4e018dc0ed85e0a2fd19/binding-result.json",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/ui-consistency/44268a2b2cad4e018dc0ed85e0a2fd19/projects/02caf39d3ab6485b83a18fc619eeb372/tasks/82b2fe26c9f74c1c916d74294fd74010/runs/91c8153b50f740aea2c02652d6917fee",
+      "data_dir": "/Users/zonghui/work/project_simulation/dojo_train/ui-consistency/44268a2b2cad4e018dc0ed85e0a2fd19/projects/02caf39d3ab6485b83a18fc619eeb372/tasks/82b2fe26c9f74c1c916d74294fd74010/data/91c8153b50f740aea2c02652d6917fee",
+      "prepared_field": "surface_cp",
+      "preview_shape": [
+        454404,
+        1
+      ]
+    },
+    {
+      "case": "shapenet_car_abupt",
+      "format": "pt",
+      "status": "succeeded",
+      "run_id": "5630f8e01c714105abc5158983c441ff",
+      "evidence": "/Users/zonghui/work/project_simulation/dojo_train/ui-consistency/28d9cc80c55c42f29a9dfea6fcd03c62/binding-result.json",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/ui-consistency/28d9cc80c55c42f29a9dfea6fcd03c62/projects/76cb37ed937c49e7b1de6d5a3cf95b1f/tasks/817ba6f5b95f4b8a9cd691ef1abab8b5/runs/5630f8e01c714105abc5158983c441ff",
+      "data_dir": "/Users/zonghui/work/project_simulation/dojo_train/ui-consistency/28d9cc80c55c42f29a9dfea6fcd03c62/projects/76cb37ed937c49e7b1de6d5a3cf95b1f/tasks/817ba6f5b95f4b8a9cd691ef1abab8b5/data/5630f8e01c714105abc5158983c441ff",
+      "prepared_field": "surface_pressure",
+      "preview_shape": [
+        3586
+      ]
+    },
+    {
+      "case": "shapenet_car_abupt",
+      "format": "zarr",
+      "status": "succeeded",
+      "run_id": "10a1de979324472c99ad25e38e33360b",
+      "evidence": "/Users/zonghui/work/project_simulation/dojo_train/ui-consistency/93d6f58cf5404022a1b21674fcbca7d2/binding-result.json",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/ui-consistency/93d6f58cf5404022a1b21674fcbca7d2/projects/48075dcbeb5148659160914086f177c4/tasks/c1602438860a4c53831fd04e83a8ff67/runs/10a1de979324472c99ad25e38e33360b",
+      "data_dir": "/Users/zonghui/work/project_simulation/dojo_train/ui-consistency/93d6f58cf5404022a1b21674fcbca7d2/projects/48075dcbeb5148659160914086f177c4/tasks/c1602438860a4c53831fd04e83a8ff67/data/10a1de979324472c99ad25e38e33360b",
+      "prepared_field": "surface_pressure",
+      "preview_shape": [
+        3586
+      ]
+    }
+  ]
+}

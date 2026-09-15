@@ -1,0 +1,21 @@
+/* 训练领域：参数来源保持案例能力声明，尺寸采用整合原型。 */
+.training-layout{display:grid;grid-template-columns:1.22fr 1fr;gap:10px;margin-top:8px;height:656px}
+.training-layout>.ant-card,.training-layout>.training-right{min-width:0;height:100%;overflow:auto}
+.training-layout .training-right{display:flex;flex-direction:column;gap:7px}
+.training-layout .ant-card{border:1px solid #dceaff;border-radius:6px;flex-shrink:0}
+.training-layout .ant-card-head{min-height:36px;padding:0 12px;font-size:16px}
+.training-layout .ant-card-body{padding:7px 12px}
+.training-layout h3{font-size:12px;border-top:1px solid #e3edff;padding-top:7px;margin:7px 0}
+.training-layout h3:first-child{border:0;margin-top:0}
+.training-layout .configuration-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 28px}
+.training-layout .configuration-field{display:grid;grid-template-columns:minmax(75px,1fr) minmax(50px,1fr);align-items:center;gap:8px;min-height:28px;margin:0}
+.training-layout .configuration-field>label{font-size:11px;overflow-wrap:anywhere}
+.training-layout .ant-input,.training-layout .ant-input-number,.training-layout .ant-select{height:26px;font-size:11px;width:100%}
+.training-layout .ant-input-number-input{height:24px;padding:4px 7px;font-size:11px}
+.training-layout .ant-select-selector{min-height:26px!important;padding:0 7px!important;font-size:11px}
+.training-layout .ant-select-selection-item{line-height:24px!important}
+.training-layout p{font-size:10px;color:#7d91b8;margin:7px 0}
+.training-layout .diagnostic-options{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.training-layout .ant-checkbox-wrapper{font-size:11px}
+@container(max-width:1200px){.training-layout{height:auto;min-height:656px}.training-layout .configuration-grid{gap:7px 15px}}
+@container(max-width:1200px){.training-layout{height:695.5px}}

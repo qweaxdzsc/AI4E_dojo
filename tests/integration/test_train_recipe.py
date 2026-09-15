@@ -21,6 +21,7 @@ def prepared_case(tmp_path):
     cfg.statistics.mode = "reference"
     assert execute_case(folder, cfg) == 0
     cfg.normalization.execute = True
+    cfg.normalization.materialize = False
     cfg.train.mode = "prepare"
     cfg.sampling.supernodes.num_points = 2
     cfg.sampling.domains.surface.anchor.num_points = 2
@@ -203,6 +204,17 @@ def test_script_probe_and_fit_check_have_no_training_artifacts(tmp_path):
     assert summary["dry_run"]
     assert not list(directory.rglob("*.pt"))
     assert not Path(cfg.paths.datasets.normalize.root).exists()
+
+
+def test_legacy_coordinate_method_still_prepares(tmp_path):
+    """旧 method: coordinate 仍按共享边界变换消费，不被新页面拆列破坏。"""
+    _, cfg = prepared_case(tmp_path)
+    fields = OmegaConf.to_container(cfg.normalization.fields, resolve=True)
+    assert fields["surface_position"]["method"] == "coordinate"
+    cfg.normalization.materialize = True
+    config = OmegaConf.to_container(cfg, resolve=True)
+    result = probe(config, prepare=prepare_inputs)
+    assert "surface_position" in result["normalized"]
 
 
 def test_real_recipe_read_failure_is_run_failure(tmp_path):

@@ -4,7 +4,7 @@ from .adapter import MANIFEST_PATH, open_dataset
 
 __all__ = ["MANIFEST_PATH", "open_dataset"]
 
-from .physical import open_physical
+from .physical import LAYOUT, open_physical
 
 __all__ += ["open_physical"]
 
@@ -48,3 +48,11 @@ __all__ += ["inspect_dataset"]
 from .physical import comparison_metadata
 
 __all__ += ["comparison_metadata"]
+
+from .descriptor import describe_rawprep
+
+__all__ += ["describe_rawprep"]
+
+from .physical import inference_fields
+
+__all__ += ["inference_fields"]

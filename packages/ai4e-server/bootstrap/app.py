@@ -2,11 +2,12 @@
 
 from contextlib import asynccontextmanager
 from importlib import import_module
+from uuid import uuid4
 
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from ..infrastructure.transport import FiniteJSONResponse
+from ..infrastructure.transport import FiniteJSONResponse, error_payload
 from .dependencies import Services
 
 
@@ -19,6 +20,7 @@ def create_app(settings):
         from ..modules.visualization.application import shutdown_operations
 
         shutdown_operations(app.state.services)
+        app.state.services.vis.close()
 
     app = FastAPI(
         lifespan=lifespan, title="Dojo", version="0.1.0", default_response_class=FiniteJSONResponse
@@ -28,7 +30,7 @@ def create_app(settings):
     @app.exception_handler(ValueError)
     async def value_error(request: Request, exc: ValueError):
         return JSONResponse(
-            {"detail": str(exc)}, status_code=409 if "conflict" in str(exc) else 400
+            error_payload(str(exc), uuid4().hex), status_code=409 if "conflict" in str(exc) else 400
         )
 
     @app.exception_handler(KeyError)
@@ -52,6 +54,7 @@ def create_app(settings):
     for name in [
         "projects",
         "tasks",
+        "datasets",
         "rawprep",
         "assets",
         "previews",
@@ -62,6 +65,8 @@ def create_app(settings):
         "reports",
         "visualization",
         "stages",
+        "inference",
+        "post",
     ]:
         app.include_router(
             import_module("ai4e_server.modules." + name + ".api").router, prefix="/api/v1"
@@ -70,6 +75,9 @@ def create_app(settings):
     @app.get("/api/v1/health")
     def health():
         return {"status": "ok"}
+
+    from ..infrastructure.vis_proxy import router as vis_proxy_router
+    app.include_router(vis_proxy_router)
 
     if settings.web_dist:
         from fastapi.responses import FileResponse

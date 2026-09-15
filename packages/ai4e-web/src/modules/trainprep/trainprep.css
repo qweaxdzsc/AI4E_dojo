@@ -120,6 +120,16 @@
 .prepare-layout .prep-files .breadcrumb {
   margin: 4px 0;
 }
+.prepare-layout .prep-files .ant-empty {
+  margin: 20px 0 8px;
+}
+.prepare-layout .prep-files .ant-empty-image {
+  height: 48px;
+}
+.prepare-layout .prep-files .ant-empty-description {
+  font-size: 12px;
+  color: #6a7da4;
+}
 .prepare-layout .prep-files .scroll {
   max-height: 280px;
 }
@@ -206,13 +216,126 @@
   width: 100%;
   font-size: 10px;
 }
-.prepare-layout .prep-delete {
-  border: 0;
-  background: transparent;
-  color: #eb6060;
-  padding: 0;
-  cursor: pointer;
-  font-size: 10px;
+.prepare-layout .prep-bind-list {
+  display: grid;
+  gap: 8px;
+  margin: 2px 0 6px;
+}
+.prepare-layout .prep-bind-legend {
+  display: grid;
+  grid-template-columns: 48px minmax(118px, 0.9fr) 28px minmax(168px, 1.5fr);
+  align-items: end;
+  gap: 10px;
+  padding: 2px 12px 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #5b6f9a;
+}
+.prepare-layout .prep-bind-legend-model {
+  grid-column: 1 / 3;
+}
+.prepare-layout .prep-bind-legend-data {
+  grid-column: 4;
+}
+.prepare-layout .prep-bind-group {
+  border: 1px solid #dceaff;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #f7fbff 0%, #fff 18px);
+  overflow: hidden;
+}
+.prepare-layout .prep-bind-domain {
+  padding: 6px 10px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #0875ff;
+}
+.prepare-layout .prep-bind {
+  display: grid;
+  grid-template-columns: 48px minmax(118px, 0.9fr) 28px minmax(168px, 1.5fr);
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 7px 12px;
+  border-top: 1px solid #edf3ff;
+}
+.prepare-layout .prep-bind-role {
+  font-size: 11px;
+  color: #6d80ab;
+  white-space: nowrap;
+}
+.prepare-layout .prep-bind-model {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+.prepare-layout .prep-bind-name {
+  font-size: 12px;
+  font-weight: 650;
+  color: #152653;
+  overflow-wrap: anywhere;
+}
+.prepare-layout .prep-shape,
+.prep-option code {
+  font: 11px/1.3 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color: #3d5a94;
+  background: #eef5ff;
+  border: 1px solid #d4e4fb;
+  border-radius: 4px;
+  padding: 1px 5px;
+  white-space: nowrap;
+}
+.prep-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+}
+.prepare-layout .prep-bind .ant-select {
+  min-width: 0;
+}
+.prepare-layout .prep-bind .ant-select-selector {
+  min-height: 28px !important;
+  height: 28px !important;
+  border-color: #c8dcfd !important;
+  border-radius: 5px !important;
+}
+.prepare-layout .prep-bind-ok {
+  box-shadow: inset 2px 0 0 #2f9d5c;
+}
+.prepare-layout .prep-bind-mismatch {
+  box-shadow: inset 2px 0 0 #d4380d;
+  background: #fff8f6;
+}
+.prepare-layout .prep-bind-empty,
+.prepare-layout .prep-bind-unknown {
+  box-shadow: inset 2px 0 0 #b8c4d8;
+}
+.prepare-layout .prep-match {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  background: #f3f7ff;
+}
+.prepare-layout .prep-match-ok {
+  color: #1f8a4c;
+  background: #e8f7ee;
+}
+.prepare-layout .prep-match-mismatch {
+  color: #d4380d;
+  background: #ffece8;
+}
+.prepare-layout .prep-match-empty,
+.prepare-layout .prep-match-unknown {
+  color: #8a94a8;
 }
 .prepare-layout .prep-readonly,
 .prepare-layout .prep-note {
@@ -232,28 +355,23 @@
 .prepare-layout .prep-execution > small {
   margin: 4px 0 8px;
 }
-.prepare-layout .prep-execution > label {
+.prepare-layout .prep-execution > label,
+.prepare-layout .prep-execution > h3 {
   display: block;
   font-size: 12px;
   font-weight: 600;
-  margin: 6px 0 4px;
+  margin: 10px 0 4px;
   color: #152653;
 }
-.prepare-layout .prep-execution .ant-input-number {
+.prepare-layout .prep-execution > h3 {
+  margin-top: 12px;
+}
+.prepare-layout .prep-execution .ant-input,
+.prepare-layout .prep-execution .ant-select {
   width: 100%;
 }
-.prepare-layout .prep-execution .ant-input-number-input {
+.prepare-layout .prep-execution .ant-input {
   height: 28px;
-}
-.prepare-layout .prep-execution .checkrow {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  margin: 6px 0;
-}
-.prepare-layout .prep-execution .checkrow small {
-  font-weight: 400;
-  margin: 2px 0 0;
 }
 .prepare-layout .prep-run.ant-btn {
   width: 100%;
@@ -267,31 +385,37 @@
   margin-top: 6px;
   font-size: 12px;
 }
-.task-workbench .prepare-layout ~ .execution-log {
-  display: flex;
-  align-items: center;
+.prepare-layout .prep-split {
+  display: grid;
   gap: 8px;
-  height: 62px;
-  min-height: 62px;
-  max-height: 62px;
-  margin-top: 9px;
-  padding: 0 12px;
-  overflow: hidden;
+  margin: 4px 0 8px;
 }
-.task-workbench .prepare-layout ~ .execution-log .panel-title {
+.prepare-layout .prep-split-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.prepare-layout .prep-split-field {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.prepare-layout .prep-split-field span {
+  font-size: 11px;
+  color: #5b6f9a;
+}
+.prepare-layout .prep-split .ant-input-number,
+.prepare-layout .prep-split .ant-select {
+  width: 100%;
+}
+.prepare-layout .prep-split-error {
   margin: 0;
-  padding: 0;
-  border: 0;
-  white-space: nowrap;
+  font-size: 11px;
+  color: #c53030;
 }
-.task-workbench .prepare-layout ~ .execution-log pre {
-  flex: 1;
-  min-height: 0;
-  max-height: 52px;
-  margin: 0;
-  padding: 4px 8px;
-  background: #fff;
-  color: #7790b9;
-  font-size: 10px;
-  line-height: 15px;
-}
+.rawprep-progress{margin:10px 0 0;padding:10px 12px;background:#fff;border:1px solid #dceaff;border-radius:6px}
+.rawprep-progress-label{font-size:12px;color:#3d547d;margin-bottom:6px}
+.rawprep-progress-track{height:8px;background:#e8f0fc;border-radius:99px;overflow:hidden}
+.rawprep-progress-track>div{height:100%;width:0;background:#0874ff;border-radius:99px}
+.rawprep-progress-track.indeterminate>div{width:40%;animation:rawprep-progress-slide 1.2s ease-in-out infinite}
+@keyframes rawprep-progress-slide{0%{transform:translateX(-100%)}100%{transform:translateX(280%)}}

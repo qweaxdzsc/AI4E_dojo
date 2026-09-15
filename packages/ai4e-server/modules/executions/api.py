@@ -29,7 +29,13 @@ def stop(project: str, identity: str, request: Request):
 @router.get("/{identity}")
 def detail(project: str, identity: str, request: Request):
     """读取已有对象详情，不创建新运行。"""
-    return task.get_run(services(request).project(project), identity)
+    service = services(request)
+    value = task.get_run(service.project(project), identity)
+    if value.get("status") == "succeeded":
+        from ..datasets.application import publish_run
+
+        publish_run(service, project, value.get("task_id") or "", value)
+    return value
 
 
 @router.get("/{identity}/log")
@@ -78,3 +84,15 @@ def resume(project: str, identity: str, request: Request):
 def metrics(project: str, identity: str, request: Request):
     """只展示运行已有记录和可读取的本机进程资源。"""
     return task.read_run_metrics(services(request).project(project), identity)
+
+
+@router.get("/{identity}/log/download")
+def download_log(project: str, identity: str, request: Request):
+    """下载完整原始日志；不因页面清空或筛选改变运行证据。"""
+    from fastapi.responses import Response
+
+    return Response(
+        task.read_log(services(request).project(project), identity),
+        media_type="text/plain; charset=utf-8",
+        headers={"Content-Disposition": 'attachment; filename="run.log"'},
+    )

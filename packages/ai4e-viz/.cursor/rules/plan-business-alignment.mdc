@@ -1,0 +1,21 @@
+---
+description: AI4E_Vis 方案规划必须对齐业务模块、持久化、迁移与逐模块测试
+alwaysApply: false
+---
+
+# AI4E_Vis 计划规范
+
+计划先说明用户可见业务结果，再列技术实施。功能范围以用户当前指令和 `docs/PRD/` 为准，代码现状从 `.context/` 导航验证，不把目录占位当作功能实现。
+
+每份实施计划必须说明：
+
+- 涉及哪个一级业务模块，是否触及其公开前后端门面。
+- Router/Application/Domain/Repository 或 Page/Hook/Component 的职责变化。
+- SQLite 表所有权、storage key、文件落盘、迁移、备份和回滚影响。
+- 跨模块依赖方向及为何不能放入 Infrastructure 或 `visEngine`。
+- 现有 API、HashRouter、Trame、O3DV、报告导出与数据兼容边界。
+- 每个模块迁移后的独立测试，以及全部迁移后的契约、架构、构建和 E2E 回归。
+- 删除旧文件前的引用归零证据和 Git 恢复点；运行数据库与上传资产不得当缓存删除。
+- 公开代码的中文 Docstring/JSDoc 与复杂流程注释验收。
+
+每份实施计划都把 `.context`、相关 PRD/变更记录、测试用例和错误记录联动列为正式 Todo；实现前必须沿需求的完整前后端与持久化链路核对影响面。

@@ -8,7 +8,9 @@ pipeline:
   - trainprep
   - train
   - post
+# 本次生成的数据根目录；各分片/归一化/预测路径仍可独立覆盖。
 data_root: /shared/datasets/car_experiment
+# 运行配置、日志、检查点和报告目录；与输入和数据输出分开。
 run_root: /shared/runs/shapenet_car_transolver3_volume
 paths:
   datasets:
@@ -22,14 +24,20 @@ paths:
       eval: ${paths.datasets.normalize.root}/eval
       test: ${paths.datasets.normalize.root}/test
     predictions: ${data_root}/predictions/shapenet_car_transolver3_volume
+# 训练控制、优化器、调度、评价与恢复。
 train:
+  # 训练总轮数；恢复时仍表示总预算，不是追加轮数。
   max_epochs: 1
+  # 每次更新读取的样本数；当前物理五例固定为 1。
   batch_size: 1
   num_workers: 0
+  # auto 按 CUDA/MPS/CPU 选择；点名设备不可用时失败。
   device: auto
   precision: fp32
   optimizer: adamw
+  # 优化器初始学习率；调度按下方预算逐步调整。
   learning_rate: 0.001
+  # 参数衰减系数；实际参数分组策略由训练配置决定。
   weight_decay: 0.0
   betas:
   - 0.9
@@ -39,11 +47,13 @@ train:
   gradient_clip: 1.0
   evaluation_split: validation
   validation_interval: 1
+  # null 从头训练；已有完整检查点路径可恢复模型、优化器及随机状态。
   resume: null
   evaluation_enabled: false
   manifest: ${data_root}/manifest.json
   parameter_group_policy: all
   ema_decay: null
+# 模型构造、学习目标与在线采样预算。
 model:
   parameters:
     n_hidden: 256
@@ -56,11 +66,15 @@ model:
     out_dim: 3
     unified_pos: false
     gradient_checkpointing: true
+  # 训练准备登记的在线采样预算；实际取样发生在每轮读取样本时。
   sampling:
+    # 可复现抽样与初始化种子；不保证不同设备之间逐值一致。
     seed: 2
     stride: 4
     chunk_count: 20
+    # global 沿共享随机流；independent 使用声明的独立采样流。
     random_stream: independent
+# 训练准备：字段绑定与冻结变换；采样在训练迭代执行。
 trainprep:
   domains:
     volume:
@@ -77,7 +91,9 @@ trainprep:
         method: identity
       volume_velocity:
         method: zscore
+# 预测、评价、保存和网格回贴；步骤顺序见 post.py。
 post:
+  # global 沿共享随机流；independent 使用声明的独立采样流。
   random_stream: global
   split: test
   evaluate: true
@@ -86,6 +102,7 @@ post:
   query: true
   sample_indices:
   - 0
+  # 完整网格查询单次处理的点数，控制峰值内存，不改变原实体身份。
   query_chunk_size: 16384
   overwrite: false
   checkpoint: last
@@ -98,6 +115,7 @@ post:
 snapshot_modules:
 - ai4e_spec
 - ai4e_contrib
+# 原始处理：参数分别交给读取、提取、几何、筛选和保存步骤。
 rawprep:
   sources:
   - surface
@@ -105,12 +123,15 @@ rawprep:
   fields:
     surface:
       pressure:
+        # 可安装模块全限定路径；按对应 example 的公开输入契约选择数据与模型。
         components: 1
     volume:
       velocity:
+        # 可安装模块全限定路径；按对应 example 的公开输入契约选择数据与模型。
         components: 3
   geometry:
   - nearest_vertex
+  - volume_normals
   - surface_normals
   - exterior_mask
   save_fields:
@@ -139,8 +160,33 @@ rawprep:
     position_fields:
     - surface_position
     - volume_position
-  vtkhdf: false
+  # 同时保留网格关联输出；false 仅按声明保存张量。
+  vtkhdf: true
+# 可安装模块全限定路径；按对应 example 的公开输入契约选择数据与模型。
 components:
-  workflow: ai4e_core.applications.aero_cfd.workflow
   dataset: ai4e_contrib.application.datasets.shapenet_car
   model: ai4e_contrib.ability.model.transolver3.component
+
+# 独立推理参数。post 中的计算参数仅供历史 post-only 执行兼容。
+infer:
+  fields: null
+  metrics: [relative_l2, mae, rmse, max_abs_error, r2]
+  random_stream: global
+  split: test
+  evaluate: true
+  save_predictions: true
+  export_vtk: true
+  query: true
+  sample_indices:
+  - 0
+  query_chunk_size: 16384
+  overwrite: false
+  checkpoint: null
+  samples:
+  - param0/1abeca7159db7ed9f200a72c9245aee7
+  - param0/1641efa5c92514d86c4f4dbcda5f2fc0
+  - param0/192fdf42f5a2623d673ddeabdcc8c6e
+  - param0/10e99b1475098c0aaa69dfdc5532bb13
+  - param0/1dbb02c20bb93af81c1b3b2ed8d13bf8
+  preparation: null
+  device: cpu

@@ -21,3 +21,5 @@ alwaysApply: false
 - PRD 是模块功能的长期唯一正文；其他接入说明只做导航。每次改动更新现行正文，不在文末无归属地追加摘要。跨模块分层仍由架构文档维护。
 
 - 普通 `recipes/` 模板集合不再安装；其 PRD 使用 `docs/PRD/recipes/{案例}/PRD.md`，作为 package 目录规则的明确例外。
+
+独立 Vis 迁移例外：`packages/ai4e-viz/.context`、`docs/PRD` 和 `docs/architecture/architecture.md` 是包内现行真源；根 `.context/modules/ai4e-viz.md` 只导航，全局架构只描述包间交接。不得将包内文档复制成第二套正文。

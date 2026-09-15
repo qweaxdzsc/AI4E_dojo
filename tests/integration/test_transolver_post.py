@@ -163,7 +163,13 @@ def test_real_post_write_failure_and_retry(tmp_path, monkeypatch):
     cfg, path = configuration(tmp_path)
     root = Path(__file__).resolve().parents[2]
     result = subprocess.run(
-        [sys.executable, "-B", str(root / "recipes/aero_cfd/pipeline.py"), "--config", str(path)],
+        [
+            sys.executable,
+            "-B",
+            str(root / "tools/verification/transolver3/dojo.py"),
+            "--config",
+            str(path),
+        ],
         env={**os.environ, "OMP_NUM_THREADS": "1"},
         capture_output=True,
         text=True,

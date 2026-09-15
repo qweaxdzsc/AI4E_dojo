@@ -1,1 +1,12 @@
 .dataset-binding-panel{padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid #e1ebfb}.dataset-binding-panel small{display:block;color:#6a7da4;font-size:11px;line-height:1.7;margin-top:6px}.binding-status{font-size:11px;color:#7a879d}.binding-status.valid{color:#13875c}.binding-status.invalid{color:#b76a13}.binding-sources{display:flex;flex-direction:column;gap:14px}.binding-sources>div{display:grid;grid-template-columns:1fr auto;gap:8px;border:1px solid #e3edfa;border-radius:6px;padding:12px}.binding-sources code{grid-column:1;white-space:normal;overflow-wrap:anywhere;color:#6a7da4}.binding-sources button{grid-column:2;grid-row:1/3;align-self:center}.binding-picker>.ant-select{width:100%}.binding-picker-path{display:flex;align-items:center;gap:10px;margin:12px 0}.binding-picker-path span{flex:1;overflow-wrap:anywhere}.binding-picker-list{max-height:380px;overflow:auto}.binding-picker-list>div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #edf2fa}.binding-picker-list>div>.ant-btn-text{overflow:hidden;text-overflow:ellipsis;max-width:75%;color:#304969}.binding-picker-list>div>.ant-btn-text:disabled{color:#304969}.bound-dataset-files .scroll{max-height:340px;overflow:auto}.bound-dataset-files .breadcrumb{display:flex;align-items:center;gap:8px;margin:8px 0;overflow-wrap:anywhere}.bound-dataset-files table{width:100%;border-collapse:collapse}.bound-dataset-files td,.bound-dataset-files th{padding:7px 3px;text-align:left;font-size:11px;border-bottom:1px solid #edf2fa}.bound-dataset-files td:first-child{overflow-wrap:anywhere}.bound-dataset-files .link{border:0;background:transparent;color:#2864b9;cursor:pointer;padding:4px}
+.binding-summary{display:flex;flex-direction:column;gap:2px;margin-top:6px}
+.binding-summary span{display:block}
+.public-datasets{display:flex;flex-direction:column;gap:10px}
+.public-dataset{border:1px solid #e3edfa;border-radius:8px;padding:10px 12px}
+.public-dataset.selected{border-color:#79b6ff;background:#f5f9ff}
+.public-dataset.disabled{opacity:.55}
+.public-dataset-pick{width:100%;border:0;background:transparent;text-align:left;padding:0;color:inherit}
+.public-dataset-pick b{display:block;font-size:14px}
+.public-dataset-pick small,.public-dataset-location{display:block;color:#6a7da4;margin-top:4px}
+.public-dataset-copies{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.public-dataset-copies label{display:flex;gap:8px;align-items:flex-start}

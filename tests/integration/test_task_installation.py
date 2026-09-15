@@ -103,6 +103,23 @@ def test_wheel_install_outside_checkout(tmp_path):
     assert completed["status"] == "succeeded", completed
     assert completed["lineage"]["version_id"] == runnable["version_id"]
 
+    # 同一真实 wheel 环境执行仓库外完整用户字段扩展，覆盖安装包与模板交接。
+    from tests.integration.test_recipe_extensions import extension_case
+
+    folder, _ = extension_case(tmp_path / "extension", "field_mapping")
+    result = subprocess.run(
+        [str(python), "-B", str(folder / "pipeline.py")],
+        cwd=tmp_path,
+        env={**clean, "OMP_NUM_THREADS": "1", "VECLIB_MAXIMUM_THREADS": "1"},
+        capture_output=True,
+        text=True,
+        timeout=90,
+        check=False,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert (tmp_path / "extension/data/train/a/volume_speed.pt").is_file()
+    assert list((tmp_path / "extension/records").glob("*/checkpoints/last.pt"))
+
     subprocess.run(
         [str(python), "-m", "ai4e_task", "--help"],
         cwd=tmp_path,

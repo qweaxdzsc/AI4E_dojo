@@ -14,3 +14,18 @@ __all__ = [
     "RunContext",
     "SceneDocument",
 ]
+
+from .visualization import VisualizationRef, VisualizationSession, VisualizationStorageScope
+from .visualization import VisualizationSourceRef, VisualizationExportRef
+
+from .platform import RawprepDescriptor, DatasetDescriptor
+
+__all__ += ["RawprepDescriptor", "DatasetDescriptor"]
+
+from .inference import InferenceCheckpointRef, InferenceRequest, InferenceResultRef
+
+__all__ += ["InferenceCheckpointRef", "InferenceRequest", "InferenceResultRef"]
+
+from .inference import InferenceSampleSelection, InferenceFieldDescription, InferenceMetricDescription, InferenceStatistic
+
+__all__ += ["InferenceSampleSelection", "InferenceFieldDescription", "InferenceMetricDescription", "InferenceStatistic"]

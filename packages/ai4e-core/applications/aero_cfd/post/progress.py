@@ -9,10 +9,11 @@ from ai4e_core.base.events import LOGGER, sample_context
 class PostProgress:
     """记录操作、样本和已提交路径，失败不抹去已完成交付。"""
 
-    def __init__(self, run, enabled):
+    def __init__(self, run, enabled, *, phase="post"):
         self.run = run
+        self.phase = phase
         self.report = {
-            "mode": "post",
+            "mode": phase,
             "status": "running",
             "operations": {
                 name: {
@@ -32,10 +33,10 @@ class PostProgress:
     def publish(self):
         """先更新最终摘要的内存副本，再原子写出最后一次可恢复进度。"""
         value = deepcopy(self.report)
-        self.run.report(value, stage="post")
+        self.run.report(value, stage=self.phase)
         if self.protocol is not None:
             self.run.artifact("comparison-protocol.json", self.protocol)
-        self.run.artifact("post-progress.json", value)
+        self.run.artifact("inference-progress.json" if self.phase == "infer" else "post-progress.json", value)
 
     @contextmanager
     def operation(self, name):

@@ -111,3 +111,8 @@ def comparison_metadata(config, sample, domain):
         ),
         "units": units,
     }
+
+
+def inference_fields() -> dict:
+    """返回本数据集真实物理量的显示和分量说明。"""
+    return {'surface_cp': {'label': 'Cp', 'components': 1, 'unit': '1', 'category': '流体'}, 'surface_cf': {'label': 'Cf', 'components': 3, 'unit': '1', 'component_labels': ['X', 'Y', 'Z'], 'category': '流体'}}

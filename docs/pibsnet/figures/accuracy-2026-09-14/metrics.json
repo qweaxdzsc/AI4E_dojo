@@ -1,0 +1,417 @@
+[
+  {
+    "case": "convection_diffusion",
+    "count": 1,
+    "mean_relative_l2": 0.019395496054439344,
+    "paper": null,
+    "mae": 0.003695772316326499,
+    "rmse": 0.014198454357361072,
+    "max_absolute_error": 0.8324046730995178,
+    "sample_relative_l2": 0.019395496054439344,
+    "files": [
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/convection_diffusion/predictions_paper_v3/test-00000.pt",
+        "sha256": "5e8d60d9dd4ffacdcc1b946d452aa0fcf98851a552c6f81b779fbdf670da500b",
+        "relative_l2": 0.019395496054439344
+      }
+    ]
+  },
+  {
+    "case": "neumann_diffusion",
+    "count": 10,
+    "mean_relative_l2": 0.018813866272418954,
+    "paper": 0.01932,
+    "mae": 0.0013593195065084733,
+    "rmse": 0.0033085738851234042,
+    "max_absolute_error": 0.06820130348205566,
+    "sample_relative_l2": 0.0320855874343692,
+    "files": [
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/predictions/test-00000.pt",
+        "sha256": "616cb71dd44fdca213cd05be2c3dd1a124bea18210ad77ead8d229c13653fcbc",
+        "relative_l2": 0.0320855874343692
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/predictions/test-00001.pt",
+        "sha256": "ff4c8a93cd15224abb6f995270393dc9e9aff64bf194fc2663e9ec81f7613f5f",
+        "relative_l2": 0.025145830672365643
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/predictions/test-00002.pt",
+        "sha256": "fc2c1c20aa34a477600620ea75f7376bad10b23a31979aa28caef76f10e888eb",
+        "relative_l2": 0.029098498985163875
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/predictions/test-00003.pt",
+        "sha256": "882787b097b8fd5591c839ec7a7d0036664e36fbcbcee90ffa10ac1dd8be0052",
+        "relative_l2": 0.02856472942254466
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/predictions/test-00004.pt",
+        "sha256": "feec0ae64a4e1443186fd89dd51135366f86decd383a45a94bf8e00f9868df29",
+        "relative_l2": 0.01718003421956763
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/predictions/test-00005.pt",
+        "sha256": "1491ca070c84ce7df2a7737138d3eb0fa9f6b0a84db6c0337916eb1095a13420",
+        "relative_l2": 0.028651738096722296
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/predictions/test-00006.pt",
+        "sha256": "a9a4b6f8477fd61ea172e53cb6e75b9335b7ba845000785c865b9a996a67f678",
+        "relative_l2": 0.006187216160145209
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/predictions/test-00007.pt",
+        "sha256": "6fbf501255c910f03dc246dcfcc20c9fdc23dc87baa774602d0aa4e09f40a77f",
+        "relative_l2": 0.007050633110329238
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/predictions/test-00008.pt",
+        "sha256": "3e041c6e631f57f69415e072e5ec4d6f2c4a76e8ca328b5b49901ce8291256e9",
+        "relative_l2": 0.005091763205460777
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/predictions/test-00009.pt",
+        "sha256": "486db80cb47377d0256b695deef1d1d895b48aba4e53893bbe059547d345cdba",
+        "relative_l2": 0.009082631417521
+      }
+    ]
+  },
+  {
+    "case": "advection",
+    "count": 30,
+    "mean_relative_l2": 0.10427001951815083,
+    "paper": 0.1444,
+    "mae": 0.05710279975249662,
+    "rmse": 0.08495741378173463,
+    "max_absolute_error": 0.8243387937545776,
+    "sample_relative_l2": 0.08604941861750645,
+    "files": [
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00000.pt",
+        "sha256": "de2ef3cc1a252fc88e34ccb4acb37cc24dc6b865de6bce72f0fc5a8c6e0ca7b5",
+        "relative_l2": 0.08604941861750645
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00001.pt",
+        "sha256": "6e539740a53ae1a23ab0a13097b2b19c9b011694de0814f18db11d01d46b8837",
+        "relative_l2": 0.1756188116675295
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00002.pt",
+        "sha256": "f9cd2193bf0bd3ecb140bb05107294ba559042315c07de2f75583b1d2d92165c",
+        "relative_l2": 0.15917515817365577
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00003.pt",
+        "sha256": "6f36cd285aeeca276834f51dd906837eab78a31c077f3f2339902707088550e2",
+        "relative_l2": 0.06445123031644204
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00004.pt",
+        "sha256": "2f386e7b99eb7a780535bbd99131f8c026fd7c6bffba6aaec5aa6c7b8586fb37",
+        "relative_l2": 0.32316951924768006
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00005.pt",
+        "sha256": "d92f129004544940119f16a0ae981d3a3287d8fa8c9fbe94d2f36abc39fc0eef",
+        "relative_l2": 0.09686345525188537
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00006.pt",
+        "sha256": "602040b4abb1e5bf0cb144d1b4aff2c0c4e357e460106943484ea3248e8f41e2",
+        "relative_l2": 0.1068883158982108
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00007.pt",
+        "sha256": "d66d18a1b35f6c47e44f3e8ff8e62fb6fc4d9542e303ce8a5a3cfd4017e9e643",
+        "relative_l2": 0.09941363545846836
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00008.pt",
+        "sha256": "aa244bd40ff244cff3b0401da0cebfa24ca30ac771d118e31951f227f150e396",
+        "relative_l2": 0.05038677308225404
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00009.pt",
+        "sha256": "85ac33e2bcc3c8d5ed846dbe7bcf67d5ece84e5c164692ea5ca773afcf0c10a3",
+        "relative_l2": 0.058011525005389204
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00010.pt",
+        "sha256": "1d3c991881b6137ba72f3876e7d90c7ad3505e0f50ed5c81d8e2913e0d1c25b9",
+        "relative_l2": 0.07106356643714366
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00011.pt",
+        "sha256": "8c3f2f6241b1e65e45a7273b7c370db8d9861e56525960380acf3e25786b18cf",
+        "relative_l2": 0.07468258101515839
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00012.pt",
+        "sha256": "b150a86c680b258a60991a7c000c3c4f89d50dc6459acdf832578ea76c70a0b5",
+        "relative_l2": 0.08752489830727193
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00013.pt",
+        "sha256": "aa19d09eeec15fa9e61405febb2dbf4601e33a94699382909e145183401c48da",
+        "relative_l2": 0.14245102621589353
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00014.pt",
+        "sha256": "35bff77d09bf8d6a40ce500d51d2a0cc8b0157db48ef6322f2166a00ce0e9e11",
+        "relative_l2": 0.05542604998464377
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00015.pt",
+        "sha256": "31e963cbf127cbabf22c996174968137e02e698b6516044663ab3e885a2867d4",
+        "relative_l2": 0.050617534540833106
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00016.pt",
+        "sha256": "9e223b1ef3b4e4981e86ef29bd987cb3359eff4e339715d498758097ad3c7fd1",
+        "relative_l2": 0.07929841671024472
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00017.pt",
+        "sha256": "b55222d9ca5823d39db59df89b38b1f6631ef6cabff326d856e428531ebafa49",
+        "relative_l2": 0.12612771193608655
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00018.pt",
+        "sha256": "c72682f69edb40e34b8957750dccc42947fbeab5432543c6a3fc24689e9428d1",
+        "relative_l2": 0.12315567111090193
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00019.pt",
+        "sha256": "60da18a7486090577344d9a598f2fdd4c1fd8b2ed3bfc79029c094d9b5befb5e",
+        "relative_l2": 0.038360514501021674
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00020.pt",
+        "sha256": "aaf316b9a4fc6eb0804c0a17abbe005fab34ccb7aea0ec7319c1546c9ce86f5e",
+        "relative_l2": 0.21735376014910943
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00021.pt",
+        "sha256": "b26d4e614df67617fa11de08e85738794d87626b05cd98ad9b06ff4e000d56e7",
+        "relative_l2": 0.1376949931043937
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00022.pt",
+        "sha256": "0b3550d3f7557def36e52d6a6ff010c5c359e72bc69f5cdee167d92a901032c9",
+        "relative_l2": 0.05933150381726121
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00023.pt",
+        "sha256": "d7110f81e64edfad15249a4134e37759b260cf350a8b04339ae72e551866cc8c",
+        "relative_l2": 0.12427821677438075
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00024.pt",
+        "sha256": "92686d792343d62a453401bd2bfe88eaedd3168b82abbe711cf8ed6d15ccaa8c",
+        "relative_l2": 0.06370808141313751
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00025.pt",
+        "sha256": "b0d3a7d8640528412a66ad236a6ae37ba53e8f10a2ac23ead68da2eabf941973",
+        "relative_l2": 0.0523095077784406
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00026.pt",
+        "sha256": "63849728b0bd66e82a498030c9beef0c294a6340ae2c36cd491b5b478227d21c",
+        "relative_l2": 0.1793785544949072
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00027.pt",
+        "sha256": "58e07a19dec72fba6d19030f6cf64101c8cb0bd0be1edc5b4d09bbf5913a5227",
+        "relative_l2": 0.0698449712929257
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00028.pt",
+        "sha256": "268925f229f56735aed9171b66a845dc7e5f72ac89921e2c645d9a165d50a279",
+        "relative_l2": 0.07088768890066421
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions/test-00029.pt",
+        "sha256": "65f0b30665b3f4996ec6ea059215704f6092f35bd9d51c064de6e942554910db",
+        "relative_l2": 0.08457749434108355
+      }
+    ]
+  },
+  {
+    "case": "burgers",
+    "count": 20,
+    "mean_relative_l2": 0.10060745710370142,
+    "paper": 0.07294,
+    "mae": 0.015403634802380564,
+    "rmse": 0.04016683160657782,
+    "max_absolute_error": 0.5817069709300995,
+    "sample_relative_l2": 0.07178798271491178,
+    "files": [
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00000.pt",
+        "sha256": "068da7c3ed8efcf2395dd34023259be5853710a988403265f32821be8bef376e",
+        "relative_l2": 0.07178798271491178
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00001.pt",
+        "sha256": "609165ae0f5434060b3565530664da7e7fdbed89e1b0e0536ff202e04b8fced0",
+        "relative_l2": 0.10862192071205243
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00002.pt",
+        "sha256": "4980ba3c4499a0af76dd9869846746ce8257e1cb1452b59ca2e9a622d0218167",
+        "relative_l2": 0.12671291458315675
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00003.pt",
+        "sha256": "822cd047d017fff38aa60ca3bc6f8e2d06b5ded66672f0bebbcdf757a4b6ba7a",
+        "relative_l2": 0.130729977184254
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00004.pt",
+        "sha256": "80b166614f8c0dd9d7c029f9513ae7f433387ce980c773ca83d34df04c95ab2b",
+        "relative_l2": 0.08507260144699984
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00005.pt",
+        "sha256": "1a1179ec2e31a4ede8d286c70506ffd3a0dbeec23d82292a605273e9bf11069d",
+        "relative_l2": 0.10882600364098338
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00006.pt",
+        "sha256": "0a495912f1c090b43c5ba2cca50ff4d2334efa210c914d6001ac4119519051fb",
+        "relative_l2": 0.0629703133022118
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00007.pt",
+        "sha256": "1e31b0faca4594513af968807cfd0fa9ad8dcd077b89d5e9c0e8fbc76629f8ec",
+        "relative_l2": 0.06351233707800497
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00008.pt",
+        "sha256": "b08fb2e49dcf58d753dd3c17865aa3a4be5d85664709b1bee443ca3f631067a1",
+        "relative_l2": 0.13628237140501745
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00009.pt",
+        "sha256": "5d5bc30b05bd2414926c162205cac1abea9ffaed60fa3a82878c4c94019886f3",
+        "relative_l2": 0.11965381495096969
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00010.pt",
+        "sha256": "5f07deffbcc46610a275b78ba9a4410dbb523b35b7f2adc8430ef4f2cf0cf991",
+        "relative_l2": 0.08318256282345665
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00011.pt",
+        "sha256": "ef26d534612bba49c8d26c00567f80791043873b5aec4acc4a93b6a37adeb133",
+        "relative_l2": 0.0744779002651963
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00012.pt",
+        "sha256": "3d4da3fee27e06b1e063bbb6145ac4bc121ee613a95536fa71123decc2e42ab7",
+        "relative_l2": 0.08763041873389794
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00013.pt",
+        "sha256": "be1e1bb3047771308cc5d7b460ff2bb27c4953db5417352281c409e878b9b5f9",
+        "relative_l2": 0.08490190649325982
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00014.pt",
+        "sha256": "a7b64d3652fc066e336c4955750105c45eb240f16455601c473e77a4c424d723",
+        "relative_l2": 0.15545040099556467
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00015.pt",
+        "sha256": "32f66223cdaf435b0c7031d764bd3a6b1fd9c88477b57f10fad81bdf7c964f73",
+        "relative_l2": 0.18534426787265507
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00016.pt",
+        "sha256": "ea7e4173fdcbb7c6a71eb22e1636583b4274c8bed76aeb44e19094963595a1ad",
+        "relative_l2": 0.09077545672562329
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00017.pt",
+        "sha256": "e56851fe447de18c57fac95d214a164719d2c0192830b9c9f14accff82f42fea",
+        "relative_l2": 0.07421594553516815
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00018.pt",
+        "sha256": "2decf8ae324fe418f27790736afbbf82a360b1727d0de1272d908f83422be035",
+        "relative_l2": 0.06484428068827632
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3/test-00019.pt",
+        "sha256": "da32d1f4613173743f8fde46b05e474fec439e377929b5e342c89aac48f09ead",
+        "relative_l2": 0.09715576492236827
+      }
+    ]
+  },
+  {
+    "case": "diffusion_trapezoid",
+    "count": 10,
+    "mean_relative_l2": 0.005404546048577303,
+    "paper": 0.003172,
+    "mae": 0.003464236978924889,
+    "rmse": 0.004988930508323773,
+    "max_absolute_error": 0.19970974326133728,
+    "sample_relative_l2": 0.003731797025939139,
+    "files": [
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/predictions/test-00000.pt",
+        "sha256": "8ce0cbac038a0221fdc09c36fdb70505d330c7b8374d13494a06c900e34182db",
+        "relative_l2": 0.003731797025939139
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/predictions/test-00001.pt",
+        "sha256": "58879b684edb42f862c0b3c2cdd1ee9b15b25d7c17d2a91b59d3aeb004773e9d",
+        "relative_l2": 0.004792020997743423
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/predictions/test-00002.pt",
+        "sha256": "ba392df1ed0c7e8d5765ab91397c763b2ee09320e1776134cfaf169b48982637",
+        "relative_l2": 0.00608603033677666
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/predictions/test-00003.pt",
+        "sha256": "7e21bc20a5e221de14d323be993647483e99c68ce7e00c4db5703ec2ea164709",
+        "relative_l2": 0.005273361276533975
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/predictions/test-00004.pt",
+        "sha256": "3f5c416c44d052fd09fc5418d5736c77bcf8efc0307b42d32107c484e458aa75",
+        "relative_l2": 0.005309184129739225
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/predictions/test-00005.pt",
+        "sha256": "bed5cda8106a907f47bed3bdefef735c60541c11741c0ebe1d71989236ed30ae",
+        "relative_l2": 0.006487489178940458
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/predictions/test-00006.pt",
+        "sha256": "30c7456b313d3265c52eb49a63717240b7a28a07161a66ac3e079488c196706e",
+        "relative_l2": 0.006753079104414762
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/predictions/test-00007.pt",
+        "sha256": "13c2f70c7a2c2e1b87d76a96139acf71d576c88c5c75c8d99217db1e1cd7f821",
+        "relative_l2": 0.004882146786960264
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/predictions/test-00008.pt",
+        "sha256": "5b5ea5dbbc72b325f9a8cf0998493cc2c7d232ae1b5485748511e5283293548a",
+        "relative_l2": 0.007036165412725339
+      },
+      {
+        "file": "/Users/zonghui/work/project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/predictions/test-00009.pt",
+        "sha256": "47b4919eca821c5161e71b788e899f54fcc25ddc9cf90d0f9ddcd1f6e8269f28",
+        "relative_l2": 0.003694186235999794
+      }
+    ]
+  }
+]

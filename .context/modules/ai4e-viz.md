@@ -7,7 +7,7 @@
 - 允许依赖：`ai4e-spec` 和独立渲染库。
 - 禁止依赖：`ai4e-core`、模型、Trainer、Dataset 实现。
 - 计算边界：误差与守恒量等研究计算归 core；viz 可执行显示切片/裁切等通用 VTK 过滤，不计算研究差值。
-- 结构原则：按稳定 artifact 的读取、渲染和组合能力聚合，不使用 DDD 或 Web 微领域目录。
+- 原库按能力聚合；迁入应用的 backend 采用轻量 DDD、frontend 采用 JSX 微领域。
 
 ## 目录索引
 
@@ -82,3 +82,36 @@ render/comparison.py：共色标表面、切面和曲线；compose/comparison.py
 - 浏览器 `visualization-subscriptions.spec.ts`：传输协议夹具验证取消仅释放本调用的订阅，并覆盖旧无订阅字段服务；后端共享进程真实隔离由平台验收。
 
 - 浏览器 `visualization-camera.spec.ts`：完整固定源身份、显式同坐标声明、恢复联动重校验；真实服务解析VTK夹具和实际NASA未知单位拒绝分别验收。
+
+## 独立 Vis 应用迁移
+
+- `packages/ai4e-viz/backend/modules/`：完整十三模块；逐文件职责在包内 `.context/modules/`。
+- `packages/ai4e-viz/backend/server/`：独立装配与上下文注册；`backend/infrastructure/`：进程、文件事务和通信。
+- `packages/ai4e-viz/frontend/`：保留 JSX 应用，`visPhysField` 嵌入独立 Trame 会话。
+- `packages/ai4e-viz/{AGENTS.md,.context,.cursor,docs,resources,fixtures}`：原治理、架构、产品、测试资源。
+- `packages/ai4e-viz/cli.py`：安装后的独立应用入口；`pyproject.toml`：单层 wheel 与 workbench 可选依赖。
+- `packages/ai4e-viz/docs/migration/source-manifest.json`：385 个跟踪文件与 8 个额外规则/技能文件的来源清单。
+- `packages/ai4e-viz/docs/migration/dojo-integration.md`：迁移说明、可运行命令和验收边界。
+- `packages/ai4e-viz/.context/modules/visIO.md`、`visTaskManage.md`、`visPhysField.md`：资产、修订与物理工作区文件入口。
+
+- `.context/mvp/vis-migration-acceptance.md`：393份来源迁入、配置链路、三维实际验收与环境边界。
+- `packages/ai4e-viz/docs/migration/file-inventory.md`：迁入后完整有效文件目录。
+
+迁移时期浏览器入口（旧 UI）：tests/integration/viz_workbench_browser.cjs（本地/远程、真实像素视频、拾取、Probe、切面）；viz_timeline_browser.cjs（PVD时间、四视口、相机联动）；viz_host_browser.cjs（宿主三模式和真实项目文件页面）。
+
+三维对象工作台的当前 UI/配置与文件目录由包内 `.context/modules/visPhysField.md` 维护。新增浏览器入口 `tests/integration/viz_objects_browser.cjs`；验收记录 `.context/mvp/phys-workbench-acceptance.md`。
+
+真实 CFD 文件验收：`tests/integration/viz_real_results_browser.cjs`，ShapeNet/NASA 既有后处理结果只读引用与双字段视图、Probe、保存重开及输出。结果继续归 `mvp/phys-workbench-acceptance.md`。
+
+参考图样式校正入口：`tests/integration/viz_visual_browser.cjs`；四种宽度实际截图与功能回归见 `.context/mvp/phys-workbench-acceptance.md`，视觉验收与计算验收分别记录。
+
+## 后处理三页签与固定结果评价
+
+- `backend/modules/visPhysField/worker.py`：IPC操作前保留草稿；visibility仅暂停/重绘。
+- `trameUI/controller.py`、`client/bridge.js`：隐藏暂停及返回尺寸通知。
+- `frontend/src/modules/visPhysField/hooks/usePhysField.js`、`pages/PhysFieldWorkspacePage.jsx`：直接同源宿主消息校验，常驻心跳。
+- 宿主后处理通过既有来源绑定链追加，独立Vis不依赖task或core。
+
+验收导航：`.context/mvp/post-workspace-acceptance.md`。
+
+物理场嵌入样式 `frontend/src/modules/visPhysField/pages/PhysFieldWorkspacePage.css` 绑定iframe视口高度，避免自动高度包装层造成150px裁切；后处理真实浏览器同时断言内外iframe尺寸。

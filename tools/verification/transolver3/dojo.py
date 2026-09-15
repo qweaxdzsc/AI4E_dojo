@@ -1,7 +1,6 @@
 """运行真实 recipe 并通过原 writer 额外保留轮次快照，供恢复验收使用。"""
 
 import argparse
-import runpy
 import shutil
 import sys
 from pathlib import Path
@@ -26,10 +25,46 @@ def main():
         return result
 
     TrainingRun.checkpoint = checkpoint
-    recipe = Path(__file__).resolve().parents[3] / "recipes/aero_cfd/pipeline.py"
-    sys.path.insert(0, str(recipe.parent))
-    sys.argv = [str(recipe), "--config", str(args.config)]
-    runpy.run_path(str(recipe), run_name="__main__")
+    recipe = Path(__file__).resolve().parents[3] / "recipes/aero_cfd"
+    sys.path.insert(0, str(recipe))
+    from configuration import application_parameters, load_configuration
+    from omegaconf import OmegaConf
+
+    from ai4e_contrib.application.aero_cfd import load
+    from ai4e_core import run
+
+    def pipeline(cfg):
+        """历史 NPY 参考路线显式调用兼容入口，不冒充五例物理 PT 流程。"""
+        components = load(cfg)
+        config = OmegaConf.create(application_parameters(cfg))
+        session = TrainingRun()
+        common = {
+            "dataset_component": components.dataset,
+            "model_component": components.model,
+            "session": session,
+        }
+        dataset = prepared = trained = None
+        if "rawprep" in cfg.pipeline.stages:
+            dataset = run.stage(
+                "rawprep",
+                lambda _: components.workflow.datapre(config, executor=run.execute, **common),
+                cfg,
+            )
+        if "trainprep" in cfg.pipeline.stages:
+            prepared = run.stage(
+                "trainprep", lambda _: components.workflow.trainprep(config, dataset, **common), cfg
+            )
+        if "train" in cfg.pipeline.stages:
+            trained = run.stage(
+                "train", lambda _: components.workflow.train(config, prepared, **common), cfg
+            )
+        if "post" in cfg.pipeline.stages:
+            return run.stage("post", lambda _: components.workflow.post(config, **common), cfg)
+        return trained or prepared or dataset
+
+    raise SystemExit(
+        run.run_recipe(load_configuration(args.config), stages=pipeline, script=__file__)
+    )
 
 
 if __name__ == "__main__":

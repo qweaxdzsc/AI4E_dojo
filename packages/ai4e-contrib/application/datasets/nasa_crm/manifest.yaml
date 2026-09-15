@@ -1,12 +1,155 @@
 name: nasa_crm
 adapter: ai4e_contrib.application.datasets.nasa_crm
-identity: [source, partition, sample]
+identity:
+- source
+- partition
+- sample
 point_fields:
-  coordinates: [CoordinateX, CoordinateY, CoordinateZ]
-  normals: [NormalX, NormalY, NormalZ]
-  labels: [PressureCoefficient, cfx, cfy, cfz]
+  coordinates:
+  - CoordinateX
+  - CoordinateY
+  - CoordinateZ
+  normals:
+  - NormalX
+  - NormalY
+  - NormalZ
+  labels:
+  - PressureCoefficient
+  - cfx
+  - cfy
+  - cfz
   area: Surface
-sample_conditions: [Mach, AlphaMean, aileronInboard, aileronOutboard, htp, elevator]
+sample_conditions:
+- Mach
+- AlphaMean
+- aileronInboard
+- aileronOutboard
+- htp
+- elevator
 split_seed: 42
 validation_fraction: 0.2
 chunk_count: 20
+rawprep:
+  defaults:
+    sources:
+    - surface
+    fields: {}
+    geometry: []
+    filters: {}
+    save_fields:
+    - surface_position
+    - surface_normals
+    - surface_cp
+    - surface_cf
+    - surface_area
+    - conditions
+    - global_targets
+    - surface_ids
+    format: pt
+    vtkhdf: false
+    statistics:
+      mode: none
+      fields: []
+      position_fields: []
+  binding:
+    mode: files
+    root_key: train_h5
+    slots:
+    - key: train_h5
+      label: NASA 训练文件
+      kind: file
+      extensions:
+      - .h5
+      - .hdf5
+    - key: test_h5
+      label: NASA 测试文件
+      kind: file
+      extensions:
+      - .h5
+      - .hdf5
+    - key: connectivity_h5
+      label: NASA 拓扑文件
+      kind: file
+      extensions:
+      - .h5
+      - .hdf5
+    description: 按 NASA CRM 声明读取训练、测试与拓扑 HDF5，只处理表面场。
+    locate:
+      mode: files
+      filenames:
+        train_h5:
+        - trainingData_NASA-CRM.h5
+        - train_h5.h5
+        test_h5:
+        - testData_NASA-CRM.h5
+        - test_h5.h5
+        connectivity_h5:
+        - connectivity_NASA-CRM.h5
+        - connectivity_h5.h5
+  domains:
+    surface: 表面
+  formats:
+  - pt
+  - zarr
+  vtkhdf: false
+  statistics_modes:
+  - none
+  outputs:
+  - name: surface_position
+    label: 表面坐标
+    domain: surface
+    association: point
+    components: 3
+    source_field: surface_position
+    required: true
+  - name: surface_normals
+    label: 表面法向
+    domain: surface
+    association: point
+    components: 3
+    source_field: surface_normals
+    required: false
+  - name: surface_cp
+    label: 压力系数
+    domain: surface
+    association: point
+    components: 1
+    source_field: surface_cp
+    required: false
+  - name: surface_cf
+    label: 摩擦系数
+    domain: surface
+    association: point
+    components: 3
+    source_field: surface_cf
+    required: false
+  - name: surface_area
+    label: 表面积
+    domain: surface
+    association: point
+    components: 1
+    source_field: surface_area
+    required: false
+  - name: conditions
+    label: 工况参数
+    domain: surface
+    association: global
+    components: 6
+    source_field: conditions
+    required: false
+  - name: global_targets
+    label: 全局目标
+    domain: surface
+    association: global
+    components: 3
+    source_field: global_targets
+    required: false
+  - name: surface_ids
+    label: 原始点身份
+    domain: surface
+    association: point
+    components: 1
+    source_field: surface_ids
+    required: true
+  geometry: []
+  filters: []

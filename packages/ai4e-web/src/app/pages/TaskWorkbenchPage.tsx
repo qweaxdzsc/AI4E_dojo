@@ -1,12 +1,14 @@
 import { Alert } from "antd";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { UnavailablePanel } from "../../infrastructure/components/UnavailablePanel";
 import { listProjects } from "../../modules/projects";
 import { StageWorkbench } from "../../modules/stages";
 import { RawprepWorkbench } from "../../modules/rawprep";
-import { configuration, taskDetail, WORKBENCH_STAGES } from "../../modules/tasks";
+import { configuration, taskDetail, WORKBENCH_STAGES, STAGE_SLUGS, resolveStage, stageDisplay, taskDisplay } from "../../modules/tasks";
 import "./task-workbench.css";
+import { InferenceWorkspace } from "../../modules/inference";
+import { PostResultsWorkspace } from "../../modules/post";
 
 function recipeBadge(task: any, text: string) {
   const id = String(task?.case_id || "");
@@ -22,25 +24,21 @@ function scrollHandoff() {
   document.getElementById("stage-handoff")?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-/** 工作台标题、八步与 Recipe 条对照整合 HTML；不复刻示意模板弹窗。 */
+/** 工作台标题、九步与 Recipe 条对照整合 HTML；不复刻示意模板弹窗。 */
 export function TaskWorkbenchPage() {
   const { p = "", t = "", step = "1" } = useParams();
-  const current = Number(step);
+  const slug=resolveStage(step), current=STAGE_SLUGS.indexOf(slug as typeof STAGE_SLUGS[number]);
+  const navigate=useNavigate(), [params]=useSearchParams();
   const [task, setTask] = useState<any>(),
     [projectName, setProjectName] = useState(""),
     [recipe, setRecipe] = useState("未绑定案例"),
     [error, setError] = useState("");
   useEffect(() => {
-    taskDetail(p, t)
-      .then((value) => {
-        setTask(value);
-        localStorage.setItem(
-          "dojo.last-workbench",
-          JSON.stringify({ project: p, task: t, step: current >= 0 && current <= 7 ? step : "1" }),
-        );
-      })
-      .catch((e) => setError(e.message));
-  }, [p, t, step, current]);
+    let live=true;
+    const read=()=>taskDetail(p,t).then(value=>{if(!live)return;setTask(value);setError('');localStorage.setItem('dojo.last-workbench',JSON.stringify({project:p,task:t,step:slug}))}).catch(e=>live&&setError(e.message));
+    const changed=(event:Event)=>{const detail=(event as CustomEvent).detail;if(detail?.project===p&&detail?.task===t)void read()};
+    void read();const timer=setInterval(read,3000);window.addEventListener('dojo:task-updated',changed);return()=>{live=false;clearInterval(timer);window.removeEventListener('dojo:task-updated',changed)};
+  },[p,t,step,current]);
   useEffect(() => {
     listProjects()
       .then((rows) => setProjectName(rows.find((r: any) => r.id === p)?.name || ""))
@@ -51,7 +49,7 @@ export function TaskWorkbenchPage() {
       .then((cfg) => setRecipe(recipeBadge(task, JSON.stringify(cfg || {}))))
       .catch(() => setRecipe(recipeBadge(task, "")));
   }, [p, t, task]);
-  const status = task?.archived ? "已归档" : "研究中";
+  const status = taskDisplay(task).label;
   return (
     <section className="task-workbench">
       <div className="taskheading">
@@ -67,7 +65,7 @@ export function TaskWorkbenchPage() {
           <div className="recipestrip">
             <span className="badge blue">{recipe}</span>
             <span>可复制 Recipe</span>
-            <span className="recipeflow">原始处理 → 训练准备 → 训练 → 后处理</span>
+            <span className="recipeflow">原始处理 → 训练准备 → 训练 → 推理 → 后处理</span>
             <button type="button" onClick={scrollHandoff}>
               输入输出交接
             </button>
@@ -81,21 +79,29 @@ export function TaskWorkbenchPage() {
         </div>
       </div>
       <nav className="workbench-steps topsteps" aria-label="工作台步骤">
-        {WORKBENCH_STAGES.map((title, i) => (
+        {WORKBENCH_STAGES.map((title, i) => { const state=stageDisplay(task,i);return (
           <Link
             key={title}
-            className={"topstep " + (i === current ? "active" : i < current ? "done" : "")}
-            to={"/projects/" + p + "/tasks/" + t + "/" + i}
+            className={"topstep " + (i === current ? "active " : "") + (state.finished ? "done" : "")}
+            title={state.label}
+            aria-label={title+" · "+state.label}
+            aria-current={i===current?"step":undefined}
+            to={"/projects/" + p + "/tasks/" + t + "/" + STAGE_SLUGS[i]}
           >
-            <span>{i < current ? "✓" : i + 1}</span>
+            <span>{state.finished ? "✓" : i + 1}</span>
             <b>{title}</b>
           </Link>
-        ))}
+        )})}
       </nav>
       {error && <Alert type="error" message={error} />}
-      {step === "1" ? (
+      <div className="workbench-stage">
+      {slug === "rawprep" ? (
         <RawprepWorkbench key={t} project={p} task={t} />
-      ) : current >= 2 && current <= 6 ? (
+      ) : slug === "infer" ? (
+        <InferenceWorkspace key={p+t} project={p} task={t} onOpenResult={(batch,run,sample,index,split)=>navigate(`/projects/${p}/tasks/${t}/post?`+new URLSearchParams({batch,run,sample,result:String(index),...(split?{split}:{})}))}/>
+      ) : slug === "post" ? (
+        <PostResultsWorkspace key={p+t} project={p} task={t} tab={params.get('tab')||undefined} batchId={params.get('batch')||undefined} resultIndex={Number(params.get('result')||0)} runId={params.get('run')||undefined} sample={params.get('sample')||undefined} split={params.get('split')||undefined}/>
+      ) : current >= 2 && current <= 5 ? (
         <StageWorkbench key={t + step} project={p} task={t} stage={["", "", "trainprep", "model", "train", "execution", "post"][current]} />
       ) : (
         <div className="stage-toolbar" id="stage-handoff">
@@ -106,15 +112,16 @@ export function TaskWorkbenchPage() {
           <UnavailablePanel />
         </div>
       )}
+      </div>
       <div className="stage-foot">
         {current > 0 ? (
-          <Link to={"/projects/" + p + "/tasks/" + t + "/" + (current - 1)}>← 上一步</Link>
+          <Link to={"/projects/" + p + "/tasks/" + t + "/" + STAGE_SLUGS[current - 1]}>← 上一步</Link>
         ) : (
           <span />
         )}
         <div className="toolbar-spacer" />
-        {current < 7 ? (
-          <Link className="next" to={"/projects/" + p + "/tasks/" + t + "/" + (current + 1)}>
+        {current < STAGE_SLUGS.length - 1 ? (
+          <Link className="next" to={"/projects/" + p + "/tasks/" + t + "/" + STAGE_SLUGS[current + 1]}>
             下一步 →
           </Link>
         ) : null}

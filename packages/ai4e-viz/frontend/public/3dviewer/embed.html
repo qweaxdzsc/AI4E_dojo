@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Online3DViewer · AI4E VizReport</title>
+  <script type="text/javascript" src="o3dv.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #161a20;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    #stage { position: relative; width: 100%; height: 100%; }
+    #viewer { position: absolute; inset: 0; }
+    #viewer canvas { display: block; touch-action: none; }
+    /* 引擎自带的英文进度条与画布冲突，隐藏后由自定义覆盖层接管 */
+    #viewer > div { display: none !important; }
+
+    #overlay {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      pointer-events: none;
+    }
+    #overlay .panel {
+      pointer-events: auto;
+      max-width: 76%;
+      padding: 12px 18px;
+      border-radius: 10px;
+      background: rgba(18, 21, 27, 0.86);
+      color: #dbe2ea;
+      font-size: 13px;
+      line-height: 1.6;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    }
+    #overlay .panel.err { border-color: rgba(255, 122, 122, 0.45); }
+    #overlay .panel .spin {
+      display: inline-block; width: 12px; height: 12px; margin-right: 8px;
+      border: 2px solid rgba(255,255,255,0.25); border-top-color: #4c9aff;
+      border-radius: 50%; vertical-align: -2px;
+      animation: rot 0.9s linear infinite;
+    }
+    @keyframes rot { to { transform: rotate(360deg); } }
+
+    #toolbar {
+      position: absolute; top: 10px; right: 10px;
+      display: flex; gap: 6px; z-index: 10;
+    }
+    #toolbar button {
+      appearance: none; border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(18, 21, 27, 0.72); color: #dbe2ea;
+      min-width: 44px; min-height: 44px; font-size: 12px; padding: 6px 10px; border-radius: 7px; cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    #toolbar button:hover { background: rgba(44, 52, 66, 0.9); border-color: rgba(255,255,255,0.3); }
+    #toolbar button.active { background: #2b6bd9; border-color: #2b6bd9; color: #fff; }
+    #toolbar button:focus-visible { outline: 3px solid #6ea8ff; outline-offset: 2px; }
+
+    #credit {
+      position: absolute; left: 10px; bottom: 8px; z-index: 10;
+      font-size: 11px; color: rgba(219, 226, 234, 0.55);
+    }
+    #credit a { color: rgba(219, 226, 234, 0.7); text-decoration: none; }
+    #credit a:hover { text-decoration: underline; }
+    #gesture-help { position:absolute; left:10px; top:10px; z-index:9; max-width:46%; color:rgba(219,226,234,.72); font-size:11px; line-height:1.45; pointer-events:none; }
+    @media (max-width: 720px), (pointer: coarse) {
+      #toolbar { max-width: 58%; flex-wrap: wrap; justify-content:flex-end; }
+      #toolbar button { min-width:44px; min-height:44px; padding:6px 9px; }
+      #gesture-help { max-width:38%; }
+    }
+  </style>
+</head>
+<body>
+  <main id="stage" data-component="Online3DViewer Embed Stage">
+    <div id="viewer" data-component="viewer-canvas"></div>
+    <div id="overlay" data-component="viewer-overlay" aria-live="polite"><div class="panel"><span class="spin"></span>正在加载模型…</div></div>
+    <nav id="toolbar" data-component="viewer-toolbar" aria-label="三维查看工具栏">
+      <button id="btn-fit" title="复位视图">复位视图</button>
+      <button id="btn-zoom-in" title="放大（键盘 +）" aria-label="放大模型">＋</button>
+      <button id="btn-zoom-out" title="缩小（键盘 -）" aria-label="缩小模型">－</button>
+      <button id="btn-edges" title="显示/隐藏网格棱边">线框</button>
+      <button id="btn-bg" title="切换深色/浅色背景">背景</button>
+      <button id="btn-full" title="全屏">全屏</button>
+    </nav>
+    <div id="gesture-help">单指旋转 · 双指平移/缩放<br>键盘方向键旋转 · +/− 缩放 · R 复位</div>
+    <footer id="credit" data-component="viewer-credit">引擎 <a href="https://github.com/kovacsv/Online3DViewer" target="_blank" rel="noreferrer">Online3DViewer</a>（MIT）· AI4E VizReport</footer>
+  </main>
+
+  <script type="text/javascript">
+    (function () {
+      function showOverlay(html, isErr) {
+        var panel = document.querySelector('#overlay .panel');
+        panel.className = 'panel' + (isErr ? ' err' : '');
+        panel.innerHTML = html;
+        document.getElementById('overlay').style.display = 'flex';
+      }
+      function hideOverlay() {
+        document.getElementById('overlay').style.display = 'none';
+      }
+
+      // 解析受控 hash 参数；不会执行任意表达式。
+      var modelUrl = null;
+      var options = {};
+      var hash = location.hash.replace(/^#/, '');
+      if (hash) {
+        hash.split('&').forEach(function (kv) {
+          var idx = kv.indexOf('=');
+          if (idx > -1) {
+            var key = decodeURIComponent(kv.substring(0, idx));
+            var value = decodeURIComponent(kv.substring(idx + 1));
+            if (key === 'model') modelUrl = value;
+            else if (['background','material','edges','projection','camera','target','up','fit'].indexOf(key) > -1) options[key] = value;
+          }
+        });
+      }
+
+      var stage = document.getElementById('stage');
+      var viewerDiv = document.getElementById('viewer');
+      if (!modelUrl) {
+        showOverlay('未指定模型链接。请通过 <code>#model=&lt;URL&gt;</code> 传入模型地址。', true);
+        return;
+      }
+
+      function rgb(hex, fallback) {
+        var match = /^#?([0-9a-f]{6})$/i.exec(hex || '');
+        if (!match) return fallback;
+        var value = parseInt(match[1], 16);
+        return new OV.RGBColor((value >> 16) & 255, (value >> 8) & 255, value & 255);
+      }
+      function rgba(hex, fallback) {
+        var match = /^#?([0-9a-f]{6})$/i.exec(hex || '');
+        if (!match) return fallback;
+        var value = parseInt(match[1], 16);
+        return new OV.RGBAColor((value >> 16) & 255, (value >> 8) & 255, value & 255, 255);
+      }
+      function vector(text, fallback) {
+        var values = String(text || '').split(',').map(Number);
+        return values.length === 3 && values.every(Number.isFinite) ? values : fallback;
+      }
+      var backgroundHex = options.background || '#161A20';
+      var bgDark = backgroundHex.toLowerCase() !== '#eef1f6';
+      var edgesOn = options.edges === 'true';
+      var autoFit = options.fit !== 'false';
+      var materialColor = rgb(options.material, new OV.RGBColor(214, 222, 232));
+      var viewer = new OV.EmbeddedViewer(viewerDiv, {
+        backgroundColor: rgba(backgroundHex, new OV.RGBAColor(22, 26, 32, 255)),
+        defaultColor: materialColor,
+        edgeSettings: new OV.EdgeSettings(edgesOn, new OV.RGBColor(90, 102, 118), 20),
+        onModelLoaded: function () { applyConfiguredView(); hideOverlay(); },
+        onModelLoadFailed: function () {
+          showOverlay('模型加载失败：' + modelUrl + '<br>请确认 API 服务可用且模型格式受支持（STL / PLY / OBJ / GLB）。', true);
+        }
+      });
+
+      var engineViewer = viewer.GetViewer();
+      function applyConfiguredView() {
+        try {
+          if (options.projection && OV.ProjectionMode) {
+            engineViewer.SetProjectionMode(options.projection === 'orthographic' ? OV.ProjectionMode.Orthographic : OV.ProjectionMode.Perspective);
+          }
+          var axisMap = OV.Direction || {};
+          var upDirection = {x: axisMap.X, y: axisMap.Y, z: axisMap.Z}[options.up || 'y'];
+          if (upDirection !== undefined) engineViewer.SetUpVector(upDirection, false);
+          var current = engineViewer.GetCamera();
+          var eye = vector(options.camera, null);
+          var center = vector(options.target, null);
+          if (current && eye && center) {
+            current.eye.x = eye[0]; current.eye.y = eye[1]; current.eye.z = eye[2];
+            current.center.x = center[0]; current.center.y = center[1]; current.center.z = center[2];
+            engineViewer.SetCamera(current);
+          } else if (autoFit) fitView();
+          applyEdges();
+        } catch (e) { if (autoFit) fitView(); }
+      }
+      function fitView() {
+        try {
+          var sphere = engineViewer.GetBoundingSphere(function () { return true; });
+          if (sphere) { engineViewer.FitSphereToWindow(sphere, true); }
+        } catch (e) { /* 忽略 */ }
+      }
+      function applyEdges() {
+        var edgeColor = bgDark ? new OV.RGBColor(120, 132, 150) : new OV.RGBColor(70, 76, 88);
+        engineViewer.SetEdgeSettings(new OV.EdgeSettings(edgesOn, edgeColor, 20));
+      }
+      function applyBg() {
+        var c = bgDark ? rgba(backgroundHex, new OV.RGBAColor(22, 26, 32, 255)) : new OV.RGBAColor(238, 241, 246, 255);
+        engineViewer.SetBackgroundColor(c);
+        applyEdges();
+        document.body.style.background = bgDark ? '#161a20' : '#eef1f6';
+      }
+
+      document.getElementById('btn-fit').addEventListener('click', fitView);
+      function zoom(factor) { try { engineViewer.Zoom(factor); } catch (e) { /* ignore unsupported camera operation */ } }
+      function orbit(x, y) { try { engineViewer.Orbit(x, y); } catch (e) { /* ignore unsupported camera operation */ } }
+      document.getElementById('btn-zoom-in').addEventListener('click', function () { zoom(1.18); });
+      document.getElementById('btn-zoom-out').addEventListener('click', function () { zoom(0.84); });
+      document.getElementById('btn-edges').addEventListener('click', function () {
+        edgesOn = !edgesOn;
+        this.classList.toggle('active', edgesOn);
+        applyEdges();
+      });
+      document.getElementById('btn-edges').classList.toggle('active', edgesOn);
+      document.getElementById('btn-bg').addEventListener('click', function () {
+        bgDark = !bgDark;
+        this.classList.toggle('active', !bgDark);
+        applyBg();
+      });
+      document.getElementById('btn-full').addEventListener('click', function () {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        } else {
+          stage.requestFullscreen && stage.requestFullscreen();
+        }
+      });
+      document.addEventListener('keydown', function (event) {
+        var handled = true;
+        if (event.key === 'r' || event.key === 'R') fitView();
+        else if (event.key === '+' || event.key === '=') zoom(1.18);
+        else if (event.key === '-' || event.key === '_') zoom(0.84);
+        else if (event.key === 'ArrowLeft') orbit(-0.08, 0);
+        else if (event.key === 'ArrowRight') orbit(0.08, 0);
+        else if (event.key === 'ArrowUp') orbit(0, -0.08);
+        else if (event.key === 'ArrowDown') orbit(0, 0.08);
+        else handled = false;
+        if (handled) event.preventDefault();
+      });
+
+      viewer.LoadModelFromUrlList([modelUrl]);
+      // 首帧就绪后补一次适配（异步加载完成前 GetBoundingSphere 为空）
+      if (autoFit) setTimeout(fitView, 1500);
+    })();
+  </script>
+</body>
+</html>

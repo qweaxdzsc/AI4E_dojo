@@ -1,27 +1,43 @@
-"""train 阶段：选择组件并调用外流标准装配。"""
+"""训练：消费准备，构建模型、目标、优化和评价，再执行。"""
 
 import sys
 
 sys.dont_write_bytecode = True
-from configuration import application_parameters, load_configuration
-from omegaconf import OmegaConf
+from configuration import application_parameters, load_components, load_configuration
+from trainprep import trainprep
 
-from ai4e_contrib.application.aero_cfd import load
 from ai4e_core import run
+from ai4e_core.applications.aero_cfd.train import physical as fitting
 from ai4e_core.run.training import TrainingRun
 
 
 def train(cfg, prepared=None):
-    """同一入口消费案例配置，业务装配保留在 application。"""
-    cfg = OmegaConf.create(application_parameters(cfg))
-    selected = load(cfg)
-    return selected.workflow.train(
-        cfg,
-        prepared,
-        dataset_component=selected.dataset,
-        model_component=selected.model,
-        session=TrainingRun(),
+    """缺少准备引用时显式调用同一准备阶段，不隐藏另一套准备链。"""
+    components = load_components(cfg)
+    session = TrainingRun()
+    config = application_parameters(cfg)
+    reference = prepared or cfg.train.get("preparation")
+    if reference and isinstance(reference, dict) and reference.get("mode", "").endswith("_check"):
+        result = {"mode": "train_check", "deferred": True, "reason": "准备检查未发布产物"}
+        session.report(result)
+        return result
+    if not session.dry_run and reference is None:
+        reference = run.stage("trainprep", trainprep, cfg)
+    job = fitting.open_training(
+        config,
+        reference=reference,
+        dataset_component=components.dataset,
+        model_component=components.model,
+        session=session,
     )
+    if session.dry_run:
+        return fitting.check_report(job)
+    job = fitting.build_model(job, settings=cfg.model)
+    job = fitting.configure_objectives(job, settings=cfg.model.get("supervision"))
+    job = fitting.configure_optimization(job, settings=cfg.train)
+    job = fitting.configure_evaluation(job, settings=cfg.train)
+    job = fitting.configure_resume(job, checkpoint=cfg.train.get("resume"))
+    return fitting.execute_training(job)
 
 
 if __name__ == "__main__":

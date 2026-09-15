@@ -18,7 +18,7 @@ class SurfaceInference:
         self.device = device
 
     @torch.no_grad()
-    def predict(self, chunks, *, observer=None):
+    def predict(self, chunks, *, observer=None, query_chunk_size=None):
         """chunks 为可重新遍历的输入工厂，返回保留身份的归一化预测块。"""
         cache = []
         try:
@@ -37,7 +37,11 @@ class SurfaceInference:
                     observer("cache", layer, state)
             for identity, inputs in chunks():
                 tensor = inputs["features"].to(self.device)
-                value = self.decoding([tensor], cache, use_checkpoint=False)[0]
-                yield identity, {"fields": value}
+                size = query_chunk_size if query_chunk_size is not None else tensor.shape[1]
+                if isinstance(size, bool) or not isinstance(size, int) or size < 1:
+                    raise ValueError("查询块大小必须为正整数")
+                for start in range(0, tensor.shape[1], size):
+                    value = self.decoding([tensor[:, start:start+size]], cache, use_checkpoint=False)[0]
+                    yield identity[start:start+size], {"fields": value}
         finally:
             cache.clear()

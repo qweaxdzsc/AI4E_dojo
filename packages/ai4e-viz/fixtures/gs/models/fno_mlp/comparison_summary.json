@@ -1,0 +1,154 @@
+[
+  {
+    "psi_l1_relative": 4.2888995775777765,
+    "psi_l2_relative": 19.27566694533348,
+    "pde_l1_residual": 8.512414932250977,
+    "Ip_pino": 3000706.448563646,
+    "Ip_traditional": -2999980.77751815,
+    "Ip_relative_error": 2.0002418918984195,
+    "traditional_iterations": 25,
+    "traditional_converged": true,
+    "geometry_params": {
+      "R0": 1.2,
+      "a": 0.4,
+      "kappa": 1.0,
+      "delta": 0.0
+    },
+    "name": "circular",
+    "description": "\u6807\u51c6\u5706\u5f62\u7b49\u79bb\u5b50\u4f53",
+    "checkpoint": "outputs/checkpoints/pino_gs/20260723_235132_pino_tkno_high_precision_fno_mlp/best.pt"
+  },
+  {
+    "psi_l1_relative": 3.0466907052680257,
+    "psi_l2_relative": 9.651626578908967,
+    "pde_l1_residual": 6.445460319519043,
+    "Ip_pino": 2995998.0748259337,
+    "Ip_traditional": -2999972.679353761,
+    "Ip_relative_error": 1.9986751197585295,
+    "traditional_iterations": 24,
+    "traditional_converged": true,
+    "geometry_params": {
+      "R0": 1.2,
+      "a": 0.4,
+      "kappa": 1.3,
+      "delta": 0.2
+    },
+    "name": "low_elongation",
+    "description": "\u4f4e\u62c9\u4f38D\u5f62",
+    "checkpoint": "outputs/checkpoints/pino_gs/20260723_235132_pino_tkno_high_precision_fno_mlp/best.pt"
+  },
+  {
+    "psi_l1_relative": 1.9330515724761075,
+    "psi_l2_relative": 3.8909508332670257,
+    "pde_l1_residual": 4.632723331451416,
+    "Ip_pino": 2998599.73342796,
+    "Ip_traditional": -3000004.544740113,
+    "Ip_relative_error": 1.9995317302720037,
+    "traditional_iterations": 24,
+    "traditional_converged": true,
+    "geometry_params": {
+      "R0": 1.2,
+      "a": 0.4,
+      "kappa": 1.8,
+      "delta": 0.3
+    },
+    "name": "medium_elongation",
+    "description": "\u4e2d\u7b49\u62c9\u4f38D\u5f62",
+    "checkpoint": "outputs/checkpoints/pino_gs/20260723_235132_pino_tkno_high_precision_fno_mlp/best.pt"
+  },
+  {
+    "psi_l1_relative": 1.3115364519666652,
+    "psi_l2_relative": 1.7972391773904717,
+    "pde_l1_residual": 3.626569986343384,
+    "Ip_pino": 2995125.208819674,
+    "Ip_traditional": -2999999.4265435636,
+    "Ip_relative_error": 1.998375260448131,
+    "traditional_iterations": 24,
+    "traditional_converged": true,
+    "geometry_params": {
+      "R0": 1.2,
+      "a": 0.4,
+      "kappa": 2.3,
+      "delta": 0.4
+    },
+    "name": "high_elongation",
+    "description": "\u9ad8\u62c9\u4f38D\u5f62",
+    "checkpoint": "outputs/checkpoints/pino_gs/20260723_235132_pino_tkno_high_precision_fno_mlp/best.pt"
+  },
+  {
+    "psi_l1_relative": 1.890970782419211,
+    "psi_l2_relative": 3.727776839209164,
+    "pde_l1_residual": 4.88981294631958,
+    "Ip_pino": 2998944.919893747,
+    "Ip_traditional": -3000004.544740113,
+    "Ip_relative_error": 1.999646792252957,
+    "traditional_iterations": 24,
+    "traditional_converged": true,
+    "geometry_params": {
+      "R0": 1.2,
+      "a": 0.4,
+      "kappa": 1.8,
+      "delta": -0.3
+    },
+    "name": "negative_triangularity",
+    "description": "\u8d1f\u4e09\u89d2\u5f62\u5ea6\uff08\u53cdD\u5f62\uff09",
+    "checkpoint": "outputs/checkpoints/pino_gs/20260723_235132_pino_tkno_high_precision_fno_mlp/best.pt"
+  },
+  {
+    "psi_l1_relative": 0.6588608704089846,
+    "psi_l2_relative": 0.4757184441385346,
+    "pde_l1_residual": 3.0650293827056885,
+    "Ip_pino": 2997014.233241286,
+    "Ip_traditional": -3000021.100021399,
+    "Ip_relative_error": 1.9989977181226855,
+    "traditional_iterations": 23,
+    "traditional_converged": true,
+    "geometry_params": {
+      "R0": 1.4,
+      "a": 0.5,
+      "kappa": 2.0,
+      "delta": 0.35
+    },
+    "name": "large_plasma",
+    "description": "\u5927\u5c3a\u5bf8\u7b49\u79bb\u5b50\u4f53",
+    "checkpoint": "outputs/checkpoints/pino_gs/20260723_235132_pino_tkno_high_precision_fno_mlp/best.pt"
+  },
+  {
+    "psi_l1_relative": 5.45315499171542,
+    "psi_l2_relative": 30.570129312464104,
+    "pde_l1_residual": 9.289764404296875,
+    "Ip_pino": 2995400.1580027356,
+    "Ip_traditional": -3000003.4769321075,
+    "Ip_relative_error": 1.9984655621352547,
+    "traditional_iterations": 25,
+    "traditional_converged": true,
+    "geometry_params": {
+      "R0": 1.1,
+      "a": 0.3,
+      "kappa": 1.5,
+      "delta": 0.25
+    },
+    "name": "small_plasma",
+    "description": "\u5c0f\u5c3a\u5bf8\u7b49\u79bb\u5b50\u4f53",
+    "checkpoint": "outputs/checkpoints/pino_gs/20260723_235132_pino_tkno_high_precision_fno_mlp/best.pt"
+  },
+  {
+    "psi_l1_relative": 1.13910909424003,
+    "psi_l2_relative": 1.3747051296847626,
+    "pde_l1_residual": 3.353924036026001,
+    "Ip_pino": 3002328.576382038,
+    "Ip_traditional": -2999980.822221347,
+    "Ip_relative_error": 2.000782589723008,
+    "traditional_iterations": 24,
+    "traditional_converged": true,
+    "geometry_params": {
+      "R0": 1.2,
+      "a": 0.4,
+      "kappa": 2.5,
+      "delta": 0.5
+    },
+    "name": "extreme_elongation",
+    "description": "\u6781\u7aef\u62c9\u4f38",
+    "checkpoint": "outputs/checkpoints/pino_gs/20260723_235132_pino_tkno_high_precision_fno_mlp/best.pt"
+  }
+]

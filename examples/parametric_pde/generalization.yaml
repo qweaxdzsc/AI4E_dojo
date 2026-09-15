@@ -1,0 +1,20 @@
+# 复用 Advection 的独立物理数据，不新增第六个数据集。
+case: advection
+dataset:
+  manifest: ../../../../project_simulation/dojo_train/pibsnet/advection/datasets/manifest.json
+run_root: ../../../../project_simulation/dojo_train/pibsnet/generalization/runs
+trainprep:
+  output: ../../../../project_simulation/dojo_train/pibsnet/generalization/prepared_paper_v3
+model:
+  constraints:
+    equations:
+      weight: 10.0
+    supervision:
+      weight: 10.0
+train:
+  max_epochs: 2000
+  evaluation:
+    enabled: true
+    interval: 50
+post:
+  output: ../../../../project_simulation/dojo_train/pibsnet/generalization/predictions_paper_v3

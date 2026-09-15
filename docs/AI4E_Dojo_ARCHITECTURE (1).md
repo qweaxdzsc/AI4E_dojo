@@ -3,7 +3,7 @@
 > AI for Engineering / Science 的研究工作台。
 > 目标读者：框架开发者，以及要在其上做模型研究的工程师。
 
-> 平台设计更新（2026-09-09）：[第 19 节：Dojo Web / Server 架构草案 v2](#19-dojo-web--server-架构草案-v2) 对应项目管理、任务工作台及项目内六个 Tab。该节为待评审目标架构，不代表实现；平台模块划分以该节为准。产品交互正文见 [Dojo WEB 平台产品设计](PRD/ai4e-web/src/PRD.md)。
+> 平台设计更新（2026-09-14，独立推理实施中）：[第 19 节：Dojo Web / Server 架构草案 v2](#19-dojo-web--server-架构草案-v2) 对应项目管理、任务工作台及项目内六个 Tab。该节描述批准的模块边界；独立推理验收见 `.context/mvp/inference-acceptance.md`，不将设计或旧平台测试当作新能力完成证明。产品交互正文见 [Dojo WEB 平台产品设计](PRD/ai4e-web/src/PRD.md)。
 
 ---
 
@@ -276,14 +276,14 @@ class Transform(Protocol):
 
 这是本仓库最重要的结构决策，先讲清楚为什么。
 
-一个直觉是：既然 recipe 的用户入口分为 `rawprep / trainprep / model / train / post` 四段，代码就全部按四阶段分包。**这个做法在原子层会失败**，因为很多能力天然跨阶段：
+一个直觉是：既然 recipe 的用户入口分为 `rawprep / trainprep / model / train / infer / post` 业务入口，代码就全部按这些阶段分包。**这个做法在原子层会失败**，因为很多能力天然跨阶段：
 
 | 能力 | 出现在哪些阶段 |
 |---|---|
-| transform | pre（fit 统计量）、train（apply）、post（inverse） |
-| eval | train（每个 val epoch）、post（最终评估） |
+| transform | pre（fit 统计量）、train（apply）、infer（inverse） |
+| eval | train（每个 val epoch）、infer（预测评价） |
 | sampling | pre（离线降采样）、train（在线 supernode 采样） |
-| data/online | train、post 中的推理 |
+| data/source | train、infer 读取模型输入 |
 | geometry | pre、model 的输入编码 |
 
 按四阶段切原子，`transform` 要么被复制三份，要么放进其中一个然后被另外两个反向 import，后者立刻产生循环依赖。
@@ -292,10 +292,10 @@ class Transform(Protocol):
 
 ```
 原子层（按能力分）      能力是「有什么」，跨阶段复用，无重复
-装配层（按业务分）      业务是「怎么用」，recipe 按 rawprep/trainprep/model/train/post 展开
+装配层（按业务分）      业务是「怎么用」，recipe 按 rawprep/trainprep/model/train/infer/post 展开
 ```
 
-用户在 recipe 中看到 `rawprep / trainprep / model / train / post` 四段，维护者在 core 中看到可跨阶段复用的原子能力。`infer` 和最终 `eval` 不再作为独立的 recipe 阶段，而由 `post` 调用；core 内仍保留 `inference`、`eval` 两项独立能力，避免把推理、指标算法和结果处理揉成一个实现模块。
+用户在 recipe 中看到 `rawprep / trainprep / model / train / infer / post` 业务入口，维护者在 core 中看到可跨阶段复用的原子能力。`infer` 是独立 recipe 阶段，业务装配位于 `applications/aero_cfd/infer`；原子 `inference` 与 `eval` 仍各自独立。infer 组织恢复、预测、评价和结果交付，新 post 只读取固定结果。旧 post 公开调用入口保留原执行语义，不允许新流水线缺失结果时静默回退到模型预测。
 
 ### 5.2 目录
 
@@ -322,7 +322,7 @@ packages/ai4e-core/             # 构建时映射为 Python 导入包 ai4e_core
 │   │   └── models/              # 框架管理的模型装配；外部模型保持独立
 │   ├── constraint/              # Constraint / ConstraintResult 与权重策略
 │   ├── training/                # loop / strategy / callbacks / checkpoint
-│   ├── inference/               # checkpoint 重建和推理 runner
+│   ├── inference/               # 权重恢复、无梯度预测、查询和状态保护
 │   ├── eval/                    # 工程指标、守恒、泛化和 worst-k
 │   ├── postproc/                # inverse、误差场、工程量、网格回贴与导出
 │   └── report/                  # report artifact、自包含报告与风险提示
@@ -350,7 +350,8 @@ packages/ai4e-core/             # 构建时映射为 Python 导入包 ai4e_core
 │       ├── trainprep/            # 项目数据准备、归一化、采样及监督目标
 │       ├── model/                # 网络选择、参数与学习目标的标准装配
 │       ├── train/                # 优化器、训练循环、监控与 checkpoint 的标准装配
-│       └── post/                 # infer、eval、inverse/回贴、导出和报告的标准装配
+│       ├── infer/                # 准备/模型绑定、预测、评价与固定结果交付
+│       └── post/                 # 固定结果消费；保留旧调用入口兼容
 │
 ├── tools/                       # 生成/改写文件的工具（非运行时）
 │   ├── new.py                   # 新建项目
@@ -362,11 +363,11 @@ packages/ai4e-core/             # 构建时映射为 Python 导入包 ai4e_core
 └── cli.py                       # 薄壳，见 §6
 ```
 
-五个一级分组有明确的依赖方向：`base` 提供最小基础设施，`abilities` 在公开契约上形成原子能力，`applications/base` 提供通用装配机制，`applications/aero_cfd` 则按 `rawprep / trainprep / model / train / post` 放置 Aero CFD 的标准业务装配。recipe 选择、配置或轻量覆盖这些标准装配，不复制 core 的算法与执行机制。
+五个一级分组有明确的依赖方向：`base` 提供最小基础设施，`abilities` 在公开契约上形成原子能力，`applications/base` 提供通用装配机制，`applications/aero_cfd` 则按 `rawprep / trainprep / model / train / infer / post` 放置 Aero CFD 的标准业务装配。recipe 显式组合这些业务步骤，展示参数与交接，不复制 core 的算法与执行机制，也不以整段 workflow 隐藏可编辑流程。
 
-AB-UPT 多域架构：贡献模型维护有序域/字段声明、token 布局、条件调制与层内 K/V；core 不引入 Noether 依赖或统一模型容器。trainprep 绑定数据和采样，model 定义学习目标，train 保留更新/评估/恢复机制，post 通过注入的推理上下文组织分块查询。缓存仅属于当前模型的无梯度评估，权重/设备/精度/训练模式改变使其失效，不进入检查点或跨运行内容缓存。新模型与检查点使用版本 2，不保留旧双域实现。
+AB-UPT 多域架构：贡献模型维护有序域/字段声明、token 布局、条件调制与层内 K/V；core 不引入 Noether 依赖或统一模型容器。trainprep 绑定数据和采样，model 定义学习目标，train 保留更新/评估/恢复机制，infer 通过注入的推理上下文组织分块查询。缓存仅属于当前模型的无梯度评估，权重/设备/精度/训练模式改变使其失效，不进入检查点或跨运行内容缓存。新模型与检查点使用版本 2，不保留旧双域实现。
 
-`post` 是用户视角的一段流程，可以依次调用 `abilities/inference`、`abilities/eval`、`abilities/postproc` 和 `abilities/report`。这些能力在实现层仍然彼此独立，不能因为 recipe 合并入口而互相复制代码。
+`infer` 业务组合 `abilities/inference`、`transform`、`eval`、`data/save` 和 `postproc`，不重新实现这些原子能力。模型的无梯度上下文与专用解码归模型组件；推理结果保存后，`post` 通过固定引用读回，Web 消费结果并交给独立 Vis。旧 post 兼容入口继续复用原数值路径，兼容支持不能变成新入口的隐式行为。
 
 ### 5.2.1 `constraint/`：把“优化什么”表达完整
 
@@ -452,7 +453,7 @@ recipe 单样本阶段：读取 → 提取 → 几何派生 → 选择字段
 
 用户用 Dataset 登记步骤，内部复用现有 Stage。run 接收样本引用和顺序步骤，不解释业务字段；每次处理一个样本，只汇总轻量结果。application 不反向依赖 run；recipe 负责将双方公开接口连起来。datapre(cfg) 显式展示次一级步骤，循环封装在 run 内。
 
-允许不同领域链路存在少量顺序代码；不建立带大量分支的通用业务工厂。单条装配链超过 30 行时拆分 application 的业务封装，不能将算法留在 recipe。
+允许不同领域链路存在少量顺序代码；不建立带大量分支的通用业务工厂。不以行数限制装配正文。领域 application 提供可组合业务步骤与数据契约，recipe 显式表达顺序、参数来源和交接，算法与循环留在库内。
 
 同组身份校验、字段与文件选择属于训练数据交付边界，不等同于完整 Sample/Artifact 系统。数据目录提交由 save 负责，运行配置、日志与业务报告由 RunWriter 独占；完整生命周期规划不因目录存在而视为已实现。
 
@@ -632,30 +633,21 @@ post:
     # predictions: runs/2026-08-11_a3f21c/predictions/   # 对旧结果重做后处理
 ```
 
-这三种场景（共享数据集、复用他人产物、基于旧 checkpoint 继续）真实且高频，所以显式指定是正常用法，不是逃生口。**只是默认必须是 auto**——默认值决定 95% 用户的行为，把手写路径设成默认，等于把静默错误设成默认。
+这三种场景（共享数据集、复用他人产物、基于旧 checkpoint 继续）真实且高频，所以显式指定是正常用法，不是逃生口。上述 auto 描述长期缓存设计；独立推理实际提交要求明确检查点、准备和样本引用，后处理要求固定结果，不用 auto 猜最近运行或静默替换修订。
 
 指定显式路径时，该 stage 的 key 改为基于该路径的内容哈希，下游依然正常工作。
 
-### pipeline 跑哪些模块，写在 yaml 里
+### pipeline 顺序由 Python 决定，配置只选择范围
 
 ```yaml
 pipeline:
-  stages: [pre, model, train, post]
-  # stages: [model, train, post]     # 用共享数据集，跳过前处理
-  # stages: [post]                   # 从 checkpoint 推理、评估并重做结果处理
+  stages: [rawprep, trainprep, train, infer, post]
+  # 仅选择执行范围，不新增一份步骤编排语言。
 ```
 
-于是 recipe 的运行入口只需三行，不含任何编排逻辑：
+`pipeline.py` 正文决定顺序和引用交接：训练交付检查点，infer 接收训练引用或明确的外部权重及准备记录，post 接收已保存推理结果。单独运行 infer 必须有实际输入，单独运行新 post 必须有固定结果；不能因选择范围省略上游而猜测最近目录。
 
-```python
-from ai4e_core.applications.base import Pipeline
-from ai4e_core.base.config import load_config
-
-if __name__ == "__main__":
-    Pipeline.from_config(load_config()).run()
-```
-
-**改跑哪几段是配置，不是代码。** 这样它和其他所有实验参数一样进 run 记录、可被 diff、可被 sweep。
+权重固定与等待批次属于 task，样本执行属于通用运行器，步骤登记属于 recipe；任何层都不能因减少脚本行数隐藏这三类职责。原 post 脚本的历史兼容分支与新入口分开核验。
 
 ### 覆盖链必须可见
 
@@ -673,15 +665,22 @@ sampling.max_nodes = 4096
 
 ## 9. recipes 普通模板与共享数据集
 
-recipes 是普通可复制目录，不参与包安装。当前 aero_cfd 提供 README、config、datapre、trainprep、train、post 和 pipeline。pipeline 显式交接阶段引用，datapre(cfg) 展示处理步骤，不要求用户编写 Stage、partial 或样本循环。
+2026-09-11 批准的显式流程设计：Python 是步骤顺序唯一来源，YAML 保留五段配置、常用参数和能力选择。每个步骤须让用户看见输入、输出与执行时机；无参数步骤无需空配置。领域 application 负责业务绑定与校验，ability 负责计算，run 负责通用循环和运行记录。默认模板与五例允许按数据/模型保留局部流程差异，旧 workflow 仅作共用公开步骤的兼容包装。
+
+字段能力接收具名只读数组，输出按 entity_like 继承来源、point/cell 与原行身份；同步筛选由独立接口承担。新增逻辑字段继续完成选择、PT/Zarr 保存、读回、训练分片统计、冻结变换和模型绑定。采样声明在准备期冻结，实际调用在训练迭代；普通函数、全限定 target/parameters 共用解析路径，可持久化对象以可重建声明交接，不序列化闭包。变换、学习目标、指标、预测分别具有具名接口，不能用任意上下文字典混装。
+
+检查报告不是产物。没有发布上游引用时下游只能检查已有外部输入或明确延后。旧准备与检查点按既有业务语义消费；扩展来源分别进入数据、训练或评价协议，相关语义变化要求重新准备/训练或判为不可比较，历史证据保留。实现证据见 `.context/mvp/recipe-explicit-acceptance.md`。
+
+
+recipes 是普通可复制目录，不参与包安装。当前 aero_cfd 提供 README、config、configuration、rawprep、trainprep、train、infer、post 和 pipeline。pipeline 显式交接阶段引用，datapre(cfg) 展示处理步骤，不要求用户编写 Stage、partial 或样本循环。
 
 数据结构事实与官方分片属于 contrib/application/datasets 的 manifest；adapter 解释来源和样本身份；recipe 声明字段、分量、样本、分片、处理方法和参数。contrib 可安装并通过公开 core/spec 契约复用，也可复制修改。core 不反向依赖 contrib。
 
 Dataset 只持有样本引用和顺序步骤，run 逐样本执行并释放数组。保存策略解释分片输出，训练读盘消费实际产物 manifest。代码、运行记录和 datasets 独立配置；路径使用 ${data_root}/train 等显式插值，相对路径按配置文件解析。
 
-阶段引用可独立重建：datapre 交付数据 manifest，trainprep 交付包含归一化、数据与组件内容摘要的 preparation.json，train 交付 training.json 与检查点。持久化记录不包含 Python 闭包；样本采样在训练迭代发生。领域 application 提供公开装配步骤，recipe 显示输入输出和参数，算法与循环仍在原子能力层。配置 resolver 由入口注入 run，run 不反向识别领域默认值。模型内部归一化、投影与输出头按计算单元组织，参数注册顺序也是数值可复现契约的一部分。
+阶段引用可独立重建：datapre 交付数据 manifest，trainprep 交付包含归一化、数据与组件内容摘要的 preparation.json，train 交付 training.json 与检查点；infer 固定检查点和准备来源，交付预测清单、逐样本数据及指标，post 读取这些固定结果。持久化记录不包含 Python 闭包；样本采样在训练迭代发生。领域 application 提供公开装配步骤，recipe 显示输入输出和参数，算法与循环仍在原子能力层。配置 resolver 由入口注入 run，run 不反向识别领域默认值。模型内部归一化、投影与输出头按计算单元组织，参数注册顺序也是数值可复现契约的一部分。
 
-原子能力发事件，writer 独占日志文件；输入只保留最终生效 YAML。训练统计仅使用本次完整训练分片；归一化和训练循环已交付。平台上传和跨运行内容缓存仍为后续；task new/fork 见第 19.5 节。
+原子能力发事件，writer 独占日志文件；输入只保留最终生效 YAML。训练统计仅使用本次完整训练分片；归一化和训练循环已交付。平台上传和跨运行内容缓存仍为后续；task new/fork 及推理批次见第 10、19.11 节。
 
 ## 10. `ai4e-task`
 
@@ -882,27 +881,19 @@ training/checkpoint.py 打包：
 
 ### 12.7 第 6 步：推理与后处理
 
+```text
+固定 checkpoint + preparation + 有序样本
+  → recipe infer 登记业务步骤
+  → application/infer 绑定数据与模型
+  → abilities/inference 恢复权重并执行模型预测
+  → 按模型输出声明校验或反归一化到物理量
+  → eval 评价 + data/save 提交预测 + postproc 按选择生成网格
+  → writer 写轻量结果索引和真实进度
+  → 固定批次/运行/样本结果引用
+  → post 只读结果，Web/Vis 展示与显式可视化输出
 ```
-inference/rebuild.py
-  从 checkpoint 反序列化，重建 model 和 transform
-  ↑ 与训练走同一条构造路径，不是另写一套
-  ↓
-预测 (NORMALIZED)
-  ↓ transform.inverse
-预测 (RAW，物理量纲)          ← 所有指标和导出必须在这之后
-  ↓
-┌── eval ───────────────────────────────┐
-│ decompose       表面/体积、边界层/远场、梯度分桶
-│ conservation    质量/动量/能量残差
-│ generalization  内插 vs 外插分开报
-│ worst_k         最差 K 个样本
-└───────────────────────────────────────┘
-  ↓
-postproc/export   → fields/*.vtp, *.vtu
-  ↓
-report/build      → report.json（有哪些图、每张图的数据源和语义）
-report/local_html → report.html（自包含一页纸）
-```
+
+计算字段、实体身份、物理单位和有效性须贯穿保存及读回。模型已返回物理量时不重复反归一化；AB-UPT 随机流和 Transolver-3 专用解码保持原路径。完整推理与旧 post 数值一致性、派生字段扩展、安装和真实平台交接分别核验；本节不承诺尚未实现的守恒诊断或报告生成功能。
 
 ### 12.8 第 7 步：落盘（下图含后续训练产物规划）
 
@@ -960,7 +951,7 @@ train:
     preprocessed: /shared/prep/drivaerml_v3/
 ```
 ```python
-Pipeline([model, train, post], cfg)     # 不含 pre；post 内执行 infer/eval
+Pipeline([model, train, infer, post], cfg)  # 顺序示意；infer 产出，post 消费固定结果
 ```
 ```
 train 的上游 key = hash(/shared/prep/drivaerml_v3/ 的内容)
@@ -995,8 +986,8 @@ StageContractError: train 需要字段 'surface_normal' (FACE, VECTOR, RAW)
 | 入口 | 什么时候用 | 得到什么 |
 |---|---|---|
 | `ai4e new --flat` | 探索期，一个全新的想法 | ~200 行单文件，从数据到评估全在里面 |
-| `ai4e fork aero_external` | 日常，做一个具体案例 | 一份 config + 四个薄装配脚本 |
-| 直接 import | 已有项目里嵌入 | 从 recipe 导入 `rawprep/trainprep/model/train/post` 的构造函数 |
+| `ai4e fork aero_external` | 日常，做一个具体案例 | 一份 config + 四个显式步骤脚本 |
+| 直接 import | 已有项目里嵌入 | 从 recipe 导入 `rawprep/trainprep/model/train/infer/post` 的构造函数 |
 
 **为什么要有单文件入口**：研究的真实起点永远是脚本。我有个想法，第一件事是复制一个能跑的短脚本改它，而不是配置一个框架。一个不能容纳脚本的框架，最后会变成一个所有人都绕开的框架。
 
@@ -1554,7 +1545,7 @@ recipe: aero_external，fork 自 recipes 0.4.1（当前 0.6.0）
 | 风险 | 表现 | 对策 |
 |---|---|---|
 | 业务包变成巨型工厂 | 十几个开关参数，谁也看不懂 | 按问题类分裂，允许重复；单条链路超 30 行就分裂 |
-| 用户 fork 后漂移 | 200 份副本各带旧 bug | recipe 保持极薄 + `doctor`（需 changelog 维护成本） |
+| 用户 fork 后漂移 | 200 份副本各带旧 bug | recipe 保持可读步骤与稳定公开接口 + `doctor`（需 changelog 维护成本） |
 | 多包版本不匹配 | viz 渲染空白页 | 跨包 schema 由 spec 定义并带 version，不兼容明确报错 |
 | 默认值静默出错 | 矢量场逐分量归一化，loss 正常但丢了物理性质 | `report/warnings.py` 主动提示 + `explain` 可展开 |
 | key 白名单写错 | 缓存永不命中，或用错产物 | 显式声明；`ai4e explain --cache <stage>` 打印参与哈希的字段 |
@@ -1590,7 +1581,7 @@ recipe: aero_external，fork 自 recipes 0.4.1（当前 0.6.0）
 验收：改模型代码，前处理缓存 100% 命中；改采样参数自动失效重跑，旧产物仍可复现
 
 **第 3 步：一个真实业务包跑通**
-交付 `applications/aero_cfd/{pre,model,train,post}/` + 完整 `aero_external` recipe
+交付 `applications/aero_cfd/{pre,trainprep,model,train,infer,post}/` + 完整 `aero_external` recipe
 验收：**「换个采样策略」的 diff ≤ 3 行**。超了回头改前两步，不要往前走
 
 **第 4 步：eval + report**
@@ -1618,7 +1609,7 @@ recipe: aero_external，fork 自 recipes 0.4.1（当前 0.6.0）
 |---|---|
 | `ai4e-spec` | 大家怎么描述同一件事——共享词汇表，不含实现 |
 | `ai4e-core` | 原子能力 + 业务装配 + 执行引擎，算完并序列化，不渲染 |
-| `recipes` | 问题模板，极薄，可验证，可被社区贡献 |
+| `recipes` | 可编辑流程正文，可扩展、可验证、可被社区贡献 |
 | `ai4e-task` | run 之间的关系——项目、difftree、假设、任务 |
 | `ai4e-viz` | 只读 run 目录的渲染器 |
 | `ai4e-server` | 多用户索引与协作，不是真相的所在 |
@@ -1634,7 +1625,7 @@ recipe: aero_external，fork 自 recipes 0.4.1（当前 0.6.0）
 | 进 core 还是 recipes？ | 半年动一次进 core；每周都在加的独立成包 |
 | 按能力分还是按阶段分？ | 原子按能力（跨阶段复用），装配按阶段（符合心智模型） |
 | 进 yaml 还是命令行？ | 「算什么」进 yaml 并参与 key；「在哪算」进命令行不参与 key |
-| 用户该复制什么？ | 薄的、属于这个问题的复制；厚的、通用的导入 |
+| 用户该复制什么？ | 属于研究问题的步骤正文复制；算法与通用循环导入 |
 | 扩展点开在哪？ | 开在数据流的「缝」上，不是「块」上。能替换整块 = 复制粘贴 = 分叉 |
 | 抽象是否成功？ | 量 10 个真实想法的 diff 大小。超过 3 个文件说明有隐式耦合没抽干净 |
 | 默认值是否安全？ | 能否被完全展开查看 + 报告是否主动标注风险 |
@@ -1682,7 +1673,7 @@ source 在入口统一为 VTK 内存表示，extract 提取具名字段，filter
 
 ### 19.1 产品与所有权
 
-项目导航与详情六页签、任务八步导航保留；本轮实现第 2–7 步，报告、批量与队列入口未开放。任务只有 new/fork 创建正式版本，配置编辑、检查、试跑与再次运行均不创建版本。task 拥有研究记录和执行身份；server 拥有项目位置索引、辅助操作与场景，不直接写 task 数据库。已有报告证据保留但新界面不开放报告操作。
+项目导航与详情六页签保留；外流工作台调整为九步，训练运行之后新增推理，后处理消费固定结果。项目通用批量和队列入口仍未开放，任务内推理批次按本节扩展，不等于通用调度产品。任务只有 new/fork 创建正式版本，配置编辑、检查、试跑与再次运行均不创建版本。task 拥有研究记录和执行身份；server 拥有项目位置索引、辅助操作与场景，不直接写 task 数据库。已有报告证据保留但新界面不开放报告操作。
 
 ### 19.2 两条执行链
 
@@ -1696,13 +1687,19 @@ source 在入口统一为 VTK 内存表示，extract 提取具名字段，filter
 
 采样页面及新 YAML 归 model.sampling；原配置迁移读取但双键冲突拒绝。数据读取分块不等于模型采样，训练批大小仍归 train。归一化 mean/std/min/max 只能由数据统计产生，目标显示范围和变换目标区间不是输入统计。通用 Min-Max 保留既有坐标边界和算术兼容，不维护第二套坐标数值实现。
 
+阶段协调在浏览器按保存、提交、查询顺序执行，保存与提交不是一个跨请求事务。固定绑定与阶段参数共用任务配置修订，不建立另一份可执行选择。请求凭据用于失败重试与重连，研究运行事实仍由 task 返回。无显式来源时只展示候选，不能各自选择最新物理清单和最新准备记录。文件浏览按清单成员或选定运行收窄，缺历史声明时保留无法确认，不回退项目根。
+
 ### 19.4 字段与存储
+
+原始处理描述由 contrib 的数据集 manifest 提供，core 公共门面解析并经 task 独立检查返回，server 不导入数据组件，Web 不读取 Python 包文件。默认值经案例和任务覆盖写入同一份配置；功能依赖由组件声明校验，Python recipe 仍决定顺序。新执行按数据集样本范围解析配套文件，文件浏览与样本选择分离。逐场张量输出与旧容器共存，清单只声明实际交付字段。
 
 数据组件描述真实文件、文件内样本、字段和完整依赖，平台不套用 ShapeNet 文件名识别 NASA。自由字段输出保存源成员与输出成员映射；PT 和 Zarr 直接交付，不能强制经 PT 中转。成员保留 point/cell/global、实体身份、形状及物理状态。保存沿用事务和完整清单门禁；部分结果不能冒充完整数据集。
 
 ### 19.5 前端微领域
 
-React/TypeScript/Vite 保留，页面壳组合项目、任务、处理、准备、模型、训练设置、运行、后处理和比较。visualization 独占查看器、场景与多窗口；文件弹窗、后处理和版本比较只通过公开组件接入。基础设施只管理 HTTP、二进制缓存、vtk.js 生命周期，不承载训练与业务规则。原型配色尺寸通过专属样式还原，不使用默认组件布局替代。
+React/TypeScript/Vite 保留，页面壳组合项目、任务、处理、准备、模型、训练设置、运行、推理、后处理和比较。visualization 独占查看器、场景与多窗口；文件弹窗、后处理和版本比较只通过公开组件接入。基础设施只管理 HTTP、二进制缓存、vtk.js 生命周期，不承载训练与业务规则。原型配色尺寸通过专属样式还原，不使用默认组件布局替代。
+
+模型、训练、日志和后处理样式由领域持有；外壳只组合公开组件。原型坐标统一到顶层页面，业务新增区域单独说明。PT/Zarr 单格式选择与 VTKHDF 附加输出分开；归一化统计不能与显示色标范围混淆。
 
 ### 19.6 可视化数据和有限管线
 
@@ -1730,11 +1727,45 @@ JSON 传元信息，二进制传坐标、连接关系、字段与身份映射，
 
 REST 快照与 SSE 事件恢复互补；断线不判训练失败，不重复提交。辅助操作明确 queued/running/succeeded/failed/canceled/interrupted/stale；task 原生状态不被辅助记录替代。重启核对进程和已发布产物，不能把失联进程标成功。固定比较与场景使用修订检查，防止并发覆盖。
 
+任务查询提供正式阶段事实，服务把已有辅助检查与当前配置及输入修订关联；不另存第二套研究运行状态。浏览位置、检查有效性、历史成功分开，晚到事件不改写终态。前端任务表与工作台共用状态映射，缺逐阶段证据的多阶段失败不猜测前序成功。
+
 ### 19.10 分工和验收
 
 算法 Agent 拥有 core/contrib/recipe，显示 Agent 拥有 viz 和浏览器查看器，平台 Agent 拥有 server/task 和宿主页面；主 Agent 独占 spec、依赖锁、统一接口和跨包验收。公共契约变更必须同步生产者与所有消费者。
 
 自动化验收覆盖契约、数值、四个真实数据集/模型组合、受控文件、异步恢复、VTK 语义、多窗口资源与原型截图。不安排人工手点，不以模拟页面、构建成功或跳过测试声明完成。依赖和安装维持单层包映射。
+
+### 19.11 独立推理、批次及固定结果交接（2026-09-15）
+
+本节记录当前批准并在实施的跨包边界。代码、数值、安装和真实服务的验收分开记录于 `.context/mvp/inference-acceptance.md`；Web 契约夹具及真实 CPU 小模型 2 份权重 × 2 辆 ShapeNet 车的推理、下载和 Trame 交接已分别通过；此规模不代表生产精度或完整模型矩阵验收。
+
+**分层。** spec 的 `artifacts/inference.py` 只交接固定检查点引用、批次选择和结果身份。`abilities/inference` 负责无梯度预测、权重恢复、查询及状态保护；`applications/aero_cfd/infer` 组织准备、模型、字段、评价及保存步骤。recipe 明确登记顺序，run 提供通用样本执行及唯一 writer；contrib 保留模型专用算法。新 post 只读固定结果，Vis 继续只依赖 spec 和文件协议，不导入 core 或模型。
+
+**批次。** Web 选择当前任务的多检查点和同一准备的有序样本，Server 校验任务范围并调用 task。task 核对配置修订、准备摘要和模型声明，拒绝重复内容标签及越界样本。完整已提交的训练中检查点可以成为候选；固定时复制实际字节到任务私有 assets，核对摘要后发布。禁止用硬链接或可变 latest 路径代替固定输入；原权重和数据不修改。配置、代码和输入声明随批次捕获，等待期间修改页面不影响已提交意图。
+
+每个检查点×分片对应一个子运行，样本身份为分片＋样本；同检查点完整字节只固定一次。子运行执行本分片所选样本；同任务推理串行，多批次共享任务推理锁，训练独立执行。已知设备占用参与默认选择，用户可明确共享设备；不保证识别所有外部进程。关闭页面不终止计算。取消、恢复和重试使用明确操作；中断核验进程身份及收据，不重复启动未知运行。失败保留已交付文件，其他检查点可继续；重试新建运行，不覆盖历史结果。
+
+**指标与固定结果。** eval 提供 float64 物理场指标、有效性和样本等权统计，inference 提供设备同步计时，report 提供真实 CSV/XLSX。application 将模型真实输出与数据描述装成字段目录，分量选择只影响评价，保存保留原始向量。派生字段在物理输出后、选择前登记，无独立真值时记录不可评价原因。普通用户评价函数消费固定物理数组并声明算法来源。新结果清单版本2保存字段、指标、计时和证据摘要；只评价不依赖张量清单。旧版本1仍可读，历史全元素累计指标与新版样本等权指标分别命名。Transolver 的查询块仅影响完成原物理状态缓存后的解码，不改变缓存累加顺序。
+
+**完整状态。** task 根据完整批次覆盖步骤状态，最后成功子运行不能掩盖其他失败；重试分别展示本次子运行和沿用的固定成功来源。服务和页面仅组织结果，不重新执行预测来切换图表、导出或重算指标。此次UI与真实功能证据另见 `.context/mvp/inference-ui-acceptance.md`，旧验收不自动扩大。
+
+**存储所有权。** 不新增研究版本，不另建平行运行数据库：
+
+```text
+tasks/<task-id>/
+├── assets/<asset-id>/                    # 固定权重完整副本与来源记录
+├── .dojo/inference_batches/<batch-id>/   # 捕获请求/代码、协调状态与收据
+├── .dojo/executions/<run-id>/            # 既有执行快照及控制记录
+├── runs/<run-id>/                        # writer：配置、日志、进度、轻量结果索引
+├── data/<run-id>/predictions/            # data/save：张量、样本清单和所选网格
+└── visualizations/                      # Vis：配置修订及显式可视化输出
+```
+
+task 管理批次记录、只读计算报告，不写 runs 内科学结果；数据输出由业务通过保存能力提交。文件必须限定本任务及子运行范围。结果列表取自已提交报告或账本，不扫描旧目录猜成功。总体指标和可比性由 core 检查，服务和浏览器不重新计算累计量；部分交付不冒充完整总体结果。
+
+**HTTP 与导航。** Server 的任务下 `/inference` 上下文提供 checkpoints、samples、check、batches 和结果/取消/重试/恢复。HTTP Router 只转换协议，Application 使用 task 和 visualization 公开入口；结果成员登记为含修订的受控资产。Web 微领域拥有批次交互，Post 通过公开门面消费 `batch/run/split/sample`，保持同一 Trame 入口。新导航使用 `sampling/rawprep/trainprep/model/training/train/infer/post/report`，旧数字 `6→post`、`7→report` 保持原义，最近访问不表示阶段完成。
+
+**迁移。** 原 post API 保留历史调用语义，新 infer 流程缺失结果不能回退执行模型。历史准备、权重和结果清单不批量改写。平台仍要求核验模板内容；已知旧 profile 通过固定的 36 份脚本清单核验，原 AS 任务保持目录内容不变，不能按文件名相同就放行未知脚本，也不能自动替换用户工作目录。其他案例（含 PI-BSNet）不因本次外流推理拆分自动调整其流程。
 
 ## 20. 外流数据与模型组件边界
 
@@ -1748,6 +1779,39 @@ REST 快照与 SSE 事件恢复互补；断线不判训练失败，不重复提�
 
 ## 案例配置与运行快照边界（2026-09-09）
 
-案例以 rawprep/trainprep/model/train/post 五段表达用户输入，configuration.py 负责默认展开、路径解析与向既有 application 参数的映射。rawprep 案例函数可以调用库 datapre 方法；文件名不构成库接口约束。
+外流案例以 rawprep/trainprep/model/train/infer/post 表达用户输入，configuration.py 负责默认展开、路径解析与向既有 application 参数的映射。rawprep 案例函数可以调用库 datapre 方法；文件名不构成库接口约束。
 
 run.launch 接收通用 config_loader，writer 保存启动时最终配置快照；内部调用参数不回写用户配置。实际数据来源与分片进入运行报告，准备和检查点引用进入业务产物。检查点附带同一份用户快照；原子能力、模型、训练和既有产物版本不随配置分组变更。
+
+## 21. 参数化 PDE 与原生方程函数（2026-09-11）
+
+用户以普通 PyTorch 张量编写残差，或直接调用 contrib 已实现的 Burgers、扩散、对流与二维不可压缩 NS 函数。函数接收物理场、导数、参数并返回逐点残差，不求导、不归约、不创建字段对象；用户训练步可替换默认损失。常密度 NS 使用物理压力和运动黏度。
+
+contrib 独立数据生成器先交付数据清单，随后 recipe 显式执行 rawprep → trainprep → train → post。application 负责数据身份与公开组件装配；geometry、sampling、transform、constraint 分别承担域、点集、坐标和条件。PI-BSNet样条重建及案例导数属于模型组件；Neumann、Advection和梯形选定实验保留参数空间导数，不能混称物理导数。core不导入contrib，recipe不实现数值算法。
+
+采样意图来自 model.sampling，trainprep 保存实际点集、物理法向、周期配对和样条矩阵；数据身份、条件、模型源码变更需重新准备。边界使用 fixed_value、fixed_gradient、zero_gradient；梯度为物理外法向，零梯度不普遍等于零通量。硬条件由模型公开支持范围预检，训练只记录其违约指标，交角规则显式声明。
+
+已有训练步继续接收 model/batch。逻辑更新可为单实例或整轮实例损失先求和后一次反传；gradient_clip=null 关闭裁剪，已有案例默认行为保留。run/writer 独占运行目录，数据保存能力写独立数据目录。每个案例只维护一个当前实现；梯形采用用户选定的原数值行为与获批参数，不提供双版本开关。外部参考在验证工具中运行，修正项和预算差异必须披露。实现与正式验收分开记录，不增加第六个 NS 训练案例或 Web 配置层。
+
+
+## 独立 Vis 的项目任务交接（2026-09-14）
+
+ai4e-viz 包含完整原 Vis 应用与现有算法库。内部十三模块、前端 JSX、Trame 和轻量 DDD 的设计只在包内 `docs/architecture/architecture.md` 维护。Dojo Web 通过同源 iframe 嵌入 Vis React，Vis React 再承载 Trame 工作区；实时控件属于 Trame，通用资产表单属于 Vis React，宿主只负责研究项目任务入口。
+
+依赖保持 `viz → spec`；task 提供 `visualization_storage`，Server 先核验来源，再把存储区域与受控绑定通过独立 Vis HTTP 进程交付。Server 不加载 VTK，不导入 Vis 内部模块；Vis 不读取 task 数据库。实际输入路径只存在可信运行上下文，浏览器使用不透明上下文身份。
+
+配置交付位于 `tasks/<task>/visualizations/<asset>/asset.json` 与 `revisions/<revision>/spec.json`。保存新修订采用预期修订校验，配置先落盘、索引最后原子提交。显式导出产生独立 exports 清单和文件，取消或失败不发布成功清单。调整配置不新增任务版本，不修改 recipe，不进入 run/writer 所有的 runs。
+
+宿主三个入口复用同一 visualization 微领域。原有限查看器与旧 scene 协议保留；新工作台通过每任务 visualizations 子资源接入，公共 API 继续使用平台已有 `/api/v1` 前缀。包内独立应用维持 `/api/visualizations` 与 `/api/phys/sessions`。
+
+### 三维工作台会话内来源交接
+
+物理工作台由 ai4e-viz 独立维护。Web 通过 visualization 公开门面响应嵌入应用的来源选择请求，Server 校验同项目资产及固定修订，将新增绑定交给当前 Vis 会话；不以重建研究任务或复制原数据实现导入。Trame 处理对象/视图交互，Vis React 处理保存与输出表单。Vis 不反向导入 task、core 或 server；包内对象模型和配置兼容见 ai4e-viz 唯一内部架构文档。
+
+## 21. 固定结果后处理交接
+
+后处理使用三页签：指标、结果文件和三维物理场。任务目录按已提交清单提供批次/运行/样本/文件引用；Server只转换和授权，Web不解释磁盘绝对路径。
+
+指标计算由 task 提交独立评价运行，core applications/aero_cfd/post 绑定已保存物理字段与实体，abilities/eval 计算；不构建模型。管理记录归任务 .dojo，writer 独占 runs 中配置、日志和摘要，data/save提交 data/post 下的评价数据及显式导出。评价不修改原推理run、不创建正式版本。
+
+后处理持有任务级Trame宿主，首次打开创建，Tab隐藏保留iframe和心跳，暂停播放；返回只更新尺寸。文件加入走已有来源授权和可信绑定链，按修订/成员去重，失败不提交新增对象。离开页面回收会话；重新进入通过显式保存的可视化配置恢复，不提供隐式草稿保存。

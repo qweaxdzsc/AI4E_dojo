@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
+import random
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
 import yaml
+
+SPLIT_BUCKETS = ("train", "test", "eval")
 
 
 def load_split_lists(source: str | Path | Mapping[str, Any]) -> dict[str, list[str]]:
@@ -66,6 +69,117 @@ def require_split_counts(
         actual = len(splits.get(str(name), ()))
         if actual != int(count):
             raise ValueError(f"分片 {name} 期望 {count} 个样本，实际 {actual}")
+
+
+def flatten_samples(partitions: Mapping[str, Sequence[str]]) -> list[str]:
+    """跨原分片去重保序，得到当前清单已经处理出来的全部样本。"""
+    seen: list[str] = []
+    names: set[str] = set()
+    for samples in partitions.values():
+        for sample in samples:
+            identity = str(sample)
+            if identity in names:
+                continue
+            names.add(identity)
+            seen.append(identity)
+    return seen
+
+
+def default_counts(partitions: Mapping[str, Sequence[str]]) -> dict[str, int]:
+    """用原分片人数作默认值；缺的桶为 0，未识别分片并进 train。"""
+    counts = {name: len(partitions.get(name) or []) for name in SPLIT_BUCKETS}
+    leftovers = flatten_samples(
+        {key: value for key, value in partitions.items() if key not in SPLIT_BUCKETS}
+    )
+    counts["train"] += len(leftovers)
+    return counts
+
+
+def restrict_partitions(
+    partitions: Mapping[str, Sequence[str]],
+    samples: Sequence[str] | None,
+) -> dict[str, list[str]]:
+    """执行范围指定样本时先缩小样本池；未指定则保持全部已处理样本。"""
+    if samples is None:
+        return {str(key): [str(item) for item in value] for key, value in partitions.items()}
+    allowed = [str(item) for item in samples]
+    if not allowed:
+        raise ValueError("指定样本不能为空")
+    if len(set(allowed)) != len(allowed):
+        raise ValueError("指定样本重复")
+    known = set(flatten_samples(partitions))
+    missing = [item for item in allowed if item not in known]
+    if missing:
+        raise ValueError(f"指定样本不在当前清单: {missing[0]}")
+    chosen = set(allowed)
+    return {
+        str(key): [str(item) for item in value if str(item) in chosen]
+        for key, value in partitions.items()
+        if any(str(item) in chosen for item in value)
+    }
+
+
+def resolve_split(
+    partitions: Mapping[str, Sequence[str]],
+    split: Mapping[str, Any] | None,
+) -> dict[str, list[str]]:
+    """按准备声明重划 train/test/eval；不改张量，只返回新名单。
+
+    ``method=original`` 保持原成员（未识别分片并进 train），忽略数量改写。
+    ``method=random`` 打平后按种子抽取，数量之和必须等于全部样本，train 至少一个。
+    可选 ``samples`` 先限定执行范围，再划分。
+    """
+    declaration = split or {}
+    source = restrict_partitions(partitions, declaration.get("samples"))
+    method = str(declaration.get("method") or "original")
+    if method == "original":
+        result = {name: [str(item) for item in source.get(name) or []] for name in SPLIT_BUCKETS}
+        extras = flatten_samples(
+            {key: value for key, value in source.items() if key not in SPLIT_BUCKETS}
+        )
+        result["train"] = list(result["train"]) + extras
+        return {name: items for name, items in result.items() if items}
+    if method != "random":
+        raise ValueError(f"不支持的抽取方法: {method}")
+    counts = declaration.get("counts") or default_counts(source)
+    return draw_random(flatten_samples(source), counts, int(declaration.get("seed") or 0))
+
+
+def draw_random(
+    samples: Sequence[str],
+    counts: Mapping[str, Any],
+    seed: int,
+) -> dict[str, list[str]]:
+    """按种子打乱后切成 train/test/eval；空桶不进入结果。"""
+    normalized = {name: int(counts.get(name) or 0) for name in SPLIT_BUCKETS}
+    if any(value < 0 for value in normalized.values()):
+        raise ValueError("分片数量不能为负")
+    if sum(normalized.values()) != len(samples):
+        raise ValueError(
+            f"分片数量之和必须等于全部样本数 {len(samples)}，当前为 {sum(normalized.values())}"
+        )
+    if normalized["train"] < 1:
+        raise ValueError("训练分片至少需要 1 个样本")
+    pool = [str(item) for item in samples]
+    random.Random(seed).shuffle(pool)
+    result: dict[str, list[str]] = {}
+    offset = 0
+    for name in SPLIT_BUCKETS:
+        size = normalized[name]
+        if size:
+            result[name] = pool[offset : offset + size]
+        offset += size
+    return result
+
+
+def apply_declared_split(index, config: Mapping[str, Any], overlay=None) -> None:
+    """把准备记录里的名单或当前 ``trainprep.split`` 套到已打开的清单索引。"""
+    if overlay:
+        index.remap_partitions(overlay)
+        return
+    split = (config.get("trainprep") or {}).get("split")
+    if split:
+        index.remap_partitions(resolve_split(index.partitions, split))
 
 
 def _as_mapping(source: str | Path | Mapping[str, Any]) -> Mapping[str, Any]:

@@ -1,32 +1,24 @@
 import {test,expect} from '@playwright/test';
+import {postFixture} from './post-fixture';
+for(const width of [1440,1920])test(`三个Tab与指标布局 ${width}`,async({page})=>{
+ await page.setViewportSize({width,height:1000});const state=await postFixture(page);await page.goto('/projects/p/tasks/t/post');
+ const tabs=page.getByRole('tablist',{name:'后处理视图'});await expect(tabs.getByRole('tab')).toHaveText(['指标','结果文件','三维物理场可视化']);
+ await expect(page.getByRole('button',{name:'计算指标',exact:true})).toBeEnabled();await page.getByRole('button',{name:'计算指标',exact:true}).click();
+ await expect(page.getByRole('cell',{name:'0.500000'}).first()).toBeVisible();expect(state.submitted).toHaveLength(1);expect(state.creates).toBe(0);
+ await expect(page.getByRole('combobox',{name:'指标推理批次',includeHidden:true})).toBeVisible();await tabs.getByRole('tab',{name:'结果文件',exact:true}).click();await expect(page.getByRole('combobox',{name:'指标推理批次',includeHidden:true})).toBeHidden();await expect(page.getByRole('button',{name:'批量加入三维物理场',exact:true})).toBeVisible();
+ const tree=await page.locator('.post-result-tree').boundingBox(),preview=await page.locator('.post-file-preview').boundingBox();expect(tree!.x+tree!.width).toBeLessThan(preview!.x);expect(tree!.width/preview!.width).toBeCloseTo(2/3,1);
+});
 
-/** 后处理页对照整合 HTML 的页签与三栏，只用真实运行入口。 */
-test('后处理页签、配置条与三维栏可操作',async({page,request})=>{
- const api=process.env.DOJO_API_URL||'http://127.0.0.1:8002';
- const p=process.env.DOJO_POST_PROJECT||'ae6834dbf6cc44b58371b68d96f05a39';
- const t=process.env.DOJO_POST_TASK||'3092ee50ddaa46b282c373cd01ed38a0';
- const probe=await request.get(`${api}/api/v1/projects/${p}/tasks/${t}`);
- test.skip(!probe.ok(),'本机没有可用的后处理任务');
- await page.setViewportSize({width:1440,height:1000});
- await page.goto(`/projects/${p}/tasks/${t}/6`);
- await expect(page.getByRole('heading',{name:'后处理',exact:true})).toBeVisible();
- await expect(page.getByText('在管线浏览器中选择结果，设置显示与过滤器；同时查看指标和图表。')).toBeVisible();
- await expect(page.getByRole('button',{name:'检查配置与交接',exact:true})).toBeVisible();
- await expect(page.getByRole('button',{name:'保存配置',exact:true})).toBeVisible();
- await expect(page.getByRole('button',{name:'运行后处理',exact:true})).toBeVisible();
- await expect(page.locator('.post-shell')).toBeVisible();
- await expect(page.locator('.post-config')).toBeVisible();
- await expect(page.locator('.post-tabs [role=tab]')).toHaveCount(3);
- await expect(page.getByRole('combobox',{name:'后处理运行',exact:true})).toBeVisible();
- await expect(page.getByRole('combobox',{name:'train.preparation',exact:true})).toBeVisible();
- await expect(page.getByRole('combobox',{name:'post.checkpoint',exact:true})).toBeVisible();
- await expect(page.getByText('结果文件',{exact:true})).toBeVisible();
- await expect(page.getByText('三维可视化窗口',{exact:true}).or(page.getByText('可视化视图',{exact:true}))).toBeVisible();
- await page.getByRole('tab',{name:'指标数据',exact:true}).click();
- await expect(page.locator('.metric-data-table')).toBeVisible();
- await page.getByRole('tab',{name:'图表',exact:true}).click();
- await expect(page.locator('.post-chart-grid>.ant-card')).toHaveCount(4);
- await expect(page.getByRole('button',{name:'暂无记录',exact:true})).toHaveCount(2);
- await page.getByRole('tab',{name:'结果可视化',exact:true}).click();
- await expect(page.getByRole('button',{name:'将所选文件加入场景',exact:true})).toBeVisible();
+
+test('同名样本按分片独立选择',async({page})=>{
+ const state=await postFixture(page,{sameSampleAcrossSplits:true});
+ await page.goto('/projects/p/tasks/t/post');
+ await page.getByRole('combobox',{name:'指标样本',exact:true}).click();
+ await expect(page.getByRole('option',{name:'训练集 · same-car',exact:true})).toHaveCount(1);
+ await expect(page.getByRole('option',{name:'测试集 · same-car',exact:true})).toHaveCount(1);
+ await page.locator('.ant-select-item-option').filter({hasText:'测试集 · same-car'}).click();
+ await page.getByRole('combobox',{name:'指标样本',exact:true}).press('Escape');
+ await page.getByRole('button',{name:'计算指标',exact:true}).click();
+ await expect.poll(()=>state.submitted.length).toBe(1);
+ expect(state.submitted[0].results.map((r:any)=>r.id)).toEqual(['batch1a']);
 });

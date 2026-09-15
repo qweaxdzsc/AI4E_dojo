@@ -1,0 +1,229 @@
+dataset:
+  root: /shared/raw/shapenet_car
+  manifest: null
+  samples: all
+  partition: official
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - post
+data_root: /shared/datasets/car_experiment
+run_root: /shared/runs/car_experiment
+paths:
+  datasets:
+    root: ${data_root}
+    train: ${data_root}/train
+    eval: ${data_root}/eval
+    test: ${data_root}/test
+    normalize:
+      root: ${data_root}/normalize
+      train: ${paths.datasets.normalize.root}/train
+      eval: ${paths.datasets.normalize.root}/eval
+      test: ${paths.datasets.normalize.root}/test
+    predictions: ${data_root}/predictions
+snapshot_modules:
+- ai4e_spec
+- ai4e_contrib
+rawprep:
+  sources:
+  - surface
+  - volume
+  fields:
+    surface:
+      pressure:
+        components: 1
+    volume:
+      velocity:
+        components: 3
+  geometry:
+  - nearest_vertex
+  - volume_normals
+  - surface_normals
+  - exterior_mask
+  save_fields:
+  - surface_pressure
+  - surface_position
+  - surface_normals
+  - volume_velocity
+  - volume_position
+  - volume_sdf
+  - volume_normals
+  filters:
+    surface:
+    - mask
+    volume:
+    - exterior_mask
+  statistics:
+    mode: reference
+    fields:
+    - surface_pressure
+    - surface_position
+    - surface_normals
+    - volume_velocity
+    - volume_position
+    - volume_sdf
+    - volume_normals
+    position_fields:
+    - surface_position
+    - volume_position
+  vtkhdf: false
+trainprep:
+  use_physics_features: false
+  physical_rules:
+    zero_fields:
+      surface_sdf: surface_position
+  geometry_field: surface_position
+  domains:
+    surface:
+      position: surface_position
+      features: {}
+      targets:
+        pressure: surface_pressure
+      query_targets: false
+    volume:
+      position: volume_position
+      features: {}
+      targets:
+        velocity: volume_velocity
+      query_targets: false
+  conditioning: {}
+  geometry_conditioning: {}
+  normalization:
+    execute: true
+    fields:
+      surface_pressure:
+        method: zscore
+      volume_velocity:
+        method: zscore
+      volume_sdf:
+        method: zscore
+      surface_position:
+        method: coordinate
+      volume_position:
+        method: coordinate
+      surface_sdf:
+        method: identity
+      surface_normals:
+        method: identity
+    materialize: false
+model:
+  parameters:
+    dim: 192
+    geometry_depth: 6
+    num_heads: 3
+    blocks: pscscscscsc
+    radius: 9.0
+    require_features: false
+    num_domain_decoder_blocks:
+      surface: 12
+      volume: 12
+  initial_weights: null
+  freeze: []
+  data_specs:
+    position_dim: 3
+    domains:
+      surface:
+        output_dims:
+          pressure: 1
+        feature_dim:
+          surface_sdf: 1
+          surface_normals: 3
+      volume:
+        output_dims:
+          velocity: 3
+        feature_dim:
+          volume_sdf: 1
+          volume_normals: 3
+    conditioning_dims: {}
+  supervision:
+  - name: surface_pressure
+    prediction: surface_pressure
+    target: surface_pressure_target
+    normalization: surface_pressure
+    weight: 1.0
+    loss: mse
+  - name: volume_velocity
+    prediction: volume_velocity
+    target: volume_velocity_target
+    normalization: volume_velocity
+    weight: 1.0
+    loss: mse
+  sampling:
+    random_stream: global
+    pipeline_seed: null
+    seed: 42
+    train_randomness: per_epoch
+    evaluation_randomness: fixed
+    geometry:
+      method: uniform
+      max_points: 3586
+      replacement: false
+      keep_order_when_all: true
+    supernodes:
+      method: uniform
+      num_points: 512
+      insufficient: error
+    domains:
+      surface:
+        anchor:
+          method: uniform
+          num_points: 256
+          insufficient: error
+        query:
+          method: uniform
+          num_points: 0
+          insufficient: error
+      volume:
+        anchor:
+          method: uniform
+          num_points: 256
+          insufficient: error
+        query:
+          method: uniform
+          num_points: 0
+          insufficient: error
+train:
+  mode: fit
+  max_epochs: 2
+  batch_size: 1
+  device: auto
+  precision: fp32
+  num_workers: 0
+  optimizer: lion
+  learning_rate: 5.0e-05
+  weight_decay: 0.05
+  betas:
+  - 0.9
+  - 0.99
+  scheduler: warmup_cosine
+  warmup_ratio: 0.05
+  min_lr: 1.0e-06
+  accumulate: 1
+  gradient_clip: 1.0
+  ema_decay: 0.9999
+  ema_save_every: 10
+  test_repeat: 10
+  evaluate_repeat: false
+  snapshot: true
+  save_on_interrupt: true
+  evaluation_split: test
+  resume: null
+  log_every: 1
+  log_every_updates: null
+post:
+  random_stream: global
+  split: test
+  evaluate: true
+  save_predictions: true
+  export_vtk: true
+  query: true
+  sample_indices:
+  - 0
+  query_chunk_size: 16384
+  overwrite: false
+components:
+  workflow: ai4e_core.applications.aero_cfd.anchor_workflow
+  dataset: ai4e_contrib.application.datasets.shapenet_car
+  model: ai4e_contrib.ability.model.abupt.component

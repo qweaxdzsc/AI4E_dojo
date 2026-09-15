@@ -1,0 +1,7 @@
+case: neumann_diffusion
+seed: 42
+train: 50
+test: 10
+nx: 128
+nt: 128
+output: ../../../../../project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/datasets

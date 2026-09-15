@@ -35,6 +35,16 @@ def _read(path: Path, reader: str | None = None):
     return data
 
 
+def _leaf_name(iterator):
+    """复合块名称来自元数据，无名块不编造。"""
+    import vtk
+
+    meta = iterator.GetCurrentMetaData()
+    if meta is None or not meta.Has(vtk.vtkCompositeDataSet.NAME()):
+        return ""
+    return meta.Get(vtk.vtkCompositeDataSet.NAME()) or ""
+
+
 def _leaves(data):
     iterator = data.NewIterator()
     iterator.InitTraversal()
@@ -42,7 +52,7 @@ def _leaves(data):
     while not iterator.IsDoneWithTraversal():
         current = iterator.GetCurrentDataObject()
         if current is not None:
-            leaves.append(current)
+            leaves.append((current, _leaf_name(iterator)))
         iterator.GoToNextItem()
     return leaves
 
@@ -56,7 +66,7 @@ def read_mesh(path: Path, block: int | None = None, reader: str | None = None):
             raise ValueError("multiblock_requires_block_selection")
         if not 0 <= int(block) < len(leaves):
             raise ValueError("invalid_block_selection")
-        mesh = leaves[int(block)]
+        mesh = leaves[int(block)][0]
     if not hasattr(mesh, "GetNumberOfPoints") or mesh.GetNumberOfPoints() == 0:
         raise ValueError("empty_or_invalid_mesh")
     return mesh
@@ -112,7 +122,8 @@ def inspect_mesh(path: Path, reader: str | None = None) -> dict:
     mesh = _read(path, reader)
     if mesh.IsA("vtkCompositeDataSet"):
         blocks = [
-            {"block": i, **_describe(part, f"block:{i}:")} for i, part in enumerate(_leaves(mesh))
+            {"block": i, "name": name, **_describe(part, f"block:{i}:")}
+            for i, (part, name) in enumerate(_leaves(mesh))
         ]
         return {
             "kind": "mesh",
@@ -124,3 +135,30 @@ def inspect_mesh(path: Path, reader: str | None = None) -> dict:
     if not hasattr(mesh, "GetNumberOfPoints") or mesh.GetNumberOfPoints() == 0:
         raise ValueError("empty_or_invalid_mesh")
     return _describe(mesh)
+
+
+def list_named_blocks(path: Path, reader: str | None = None) -> list[dict]:
+    """只列出带名称的二维块，不合并到显示网格。"""
+    mesh = _read(path, reader)
+    if not mesh.IsA("vtkCompositeDataSet"):
+        return []
+    surfaces = []
+    for index, (part, name) in enumerate(_leaves(mesh)):
+        if not name or not hasattr(part, "GetNumberOfCells"):
+            continue
+        dimension = max(
+            (part.GetCell(i).GetCellDimension() for i in range(part.GetNumberOfCells())),
+            default=0,
+        )
+        if dimension > 2 or part.GetNumberOfPoints() <= 0:
+            continue
+        surfaces.append(
+            {
+                "block": index,
+                "name": name,
+                "dimension": dimension,
+                "points": part.GetNumberOfPoints(),
+                "cells": part.GetNumberOfCells(),
+            }
+        )
+    return surfaces

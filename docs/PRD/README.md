@@ -152,3 +152,9 @@ docs/PRD/
 - `ai4e-server/modules/PRD.md`：研究管理代理、处理配置、文件与报告。
 - `ai4e-spec/data/PRD.md`：跨包文件检查描述。
 - `ai4e-viz/inspect/PRD.md`、`ai4e-viz/preview/PRD.md`、`ai4e-viz/runtime/PRD.md`：真实检查、预览与独立请求执行。
+
+参数化 PDE 模板正文：[参数化 PDE](recipes/parametric_pde/PRD.md)。
+
+## 独立 Vis 应用的迁移例外
+
+原十三模块产品正文继续在 `packages/ai4e-viz/docs/PRD/` 维护，保留原结构；根 `docs/PRD/ai4e-viz` 继续描述现有静态/预览库。两者按职责维护，不重复同一正文。

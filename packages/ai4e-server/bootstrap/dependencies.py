@@ -12,6 +12,10 @@ class Services:
 
     def __init__(self, settings):
         self.settings = settings
+        from ..infrastructure.vis_client import VisClient
+        self.vis = VisClient(settings)
+        self.vis_sessions = {}
+        self.vis_contexts = {}
         self.store = Store(settings.root)
         from ..modules.visualization.application import recover_operations
 

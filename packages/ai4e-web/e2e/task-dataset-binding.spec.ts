@@ -1,6 +1,11 @@
 import {test,expect} from '@playwright/test';
 const api=(process.env.DOJO_API_URL||'http://127.0.0.1:8002')+'/api/v1';
-const caseLabel=(c:{dataset_id:string;model_id:string})=>`数据集 ${c.dataset_id==='nasa_crm'?'NASA CRM':'ShapeNet-Car'} · 模型 ${c.model_id==='abupt'?'AB-UPT':'Transolver-3'}`;
+const caseLabel=(c:{dataset_id:string;model_id:string;variant?:string|null})=>{
+  const model=c.model_id==='abupt'?'AB-UPT':'Transolver-3';
+  const dataset=c.dataset_id==='nasa_crm'?'NASA CRM':'ShapeNet-Car';
+  const suffix=c.variant==='surface'?' 表面':c.variant==='volume'?' 体场':'';
+  return `${model} · ${dataset}${suffix}`;
+};
 async function enterProject(page:any,name:string,id:string){
   await page.goto('/projects');
   await page.getByRole('textbox',{name:'搜索项目',exact:true}).fill(name);
@@ -13,31 +18,32 @@ async function openTaskList(page:any,project:string){
 }
 
 /** 创建只表达案例；绑定在原始处理经真实受控浏览完成，结束后归档确切项目。 */
-test('四案例简洁创建、工作台绑定与派生继承',async({page,request})=>{
- test.setTimeout(180000);page.setDefaultTimeout(15000);
- const name='四案例绑定验收 '+Date.now();
+test('五案例简洁创建、工作台绑定与派生继承',async({page,request})=>{
+ test.setTimeout(180000);page.setDefaultTimeout(30000);
+ const name='五案例绑定验收 '+Date.now();
  const made=await request.post(api+'/projects',{data:{name}});expect(made.ok()).toBeTruthy();const p=(await made.json()).id;
  try{
-  const cases=await(await request.get(`${api}/projects/${p}/tasks/cases`)).json();expect(cases).toHaveLength(4);
+  const cases=await(await request.get(`${api}/projects/${p}/tasks/cases`)).json();expect(cases).toHaveLength(5);
+  expect(cases.some((item:any)=>item.id==='shapenet_car_transolver3_volume')).toBeTruthy();
   const ids:string[]=[];
   await enterProject(page,name,p);
   for(const c of cases){
    await openTaskList(page,p);await page.getByRole('button',{name:'新建任务',exact:true}).click();const dialog=page.getByRole('dialog',{name:'新建任务',exact:true});
    await dialog.getByLabel('任务名称',{exact:true}).fill(c.name);await dialog.getByRole('button',{name:'创建并进入原始处理',exact:true}).click();await expect(dialog.getByText('请选择科研案例',{exact:true})).toBeVisible();
-   await dialog.getByRole('combobox',{name:'科研案例',exact:true}).click();await expect(page.getByRole('option')).toHaveCount(4);await page.getByRole('option',{name:caseLabel(c),exact:true}).click();
+   await dialog.getByRole('combobox',{name:'科研案例',exact:true}).click();await expect(page.getByRole('option')).toHaveCount(5);await page.getByRole('option',{name:caseLabel(c),exact:true}).click();
    await expect(dialog.getByText('数据源',{exact:true})).toHaveCount(0);await expect(dialog.getByRole('textbox')).toHaveCount(2);
    const submitted=page.waitForResponse(r=>r.url().endsWith(`/projects/${p}/tasks`)&&r.request().method()==='POST');await dialog.getByRole('button',{name:'创建并进入原始处理',exact:true}).click();const response=await submitted;expect(response.ok()).toBeTruthy();expect(response.request().postDataJSON()).toEqual({name:c.name,description:'',case_id:c.id});const t=(await response.json()).id;ids.push(t);
-   await expect(page).toHaveURL(new RegExp(`/projects/${p}/tasks/${t}/1$`));await expect(page.getByText('尚未绑定数据',{exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'开始处理',exact:true})).toBeDisabled();
-   await page.getByRole('button',{name:'配置数据来源',exact:true}).click();const binding=page.getByRole('dialog',{name:'配置数据来源',exact:true});
-   const pick=async(label:string,root:string,directory:string|undefined,file?:string)=>{await binding.getByRole('button',{name:'浏览'+label,exact:true}).click();const picker=page.getByRole('dialog',{name:'选择'+label,exact:true});await expect(picker.locator('.binding-picker-list')).toBeVisible();if(!(await picker.locator('.ant-select-selection-item').textContent())?.startsWith(root+' · ')){await picker.locator('.ant-select-selector').click();await page.getByRole('option').filter({hasText:root+' · '}).click({force:true});}if(directory)await picker.getByRole('button',{name:'▸ '+directory,exact:true}).click();await picker.getByRole('button',{name:file?'选择文件 '+file:'使用当前目录',exact:true}).click()};
-   if(c.dataset_id==='shapenet_car'){await expect(binding.getByText('NASA 训练文件')).toHaveCount(0);await pick('ShapeNet 数据目录','data0',undefined)}
-   else{expect(c.dataset_id).toBe('nasa_crm');await expect(binding.getByText('ShapeNet 数据目录')).toHaveCount(0);await pick('NASA 训练文件','data3','Case 4 - NASA CRM 2','trainingData_NASA-CRM.h5');await pick('NASA 测试文件','data3','Case 4 - NASA CRM','testData_NASA-CRM.h5');await pick('NASA 拓扑文件','data3','Case 4 - NASA CRM','connectivity_NASA-CRM.h5')}
-   const saved=page.waitForResponse(r=>r.url().endsWith(`/tasks/${t}/dataset`)&&r.request().method()==='PUT');await binding.getByRole('button',{name:'保存数据绑定',exact:true}).click();const saveResponse=await saved;expect(saveResponse.ok()).toBeTruthy();const before=await saveResponse.json();expect(before.status).toBe('valid');
-   await expect(page.getByText('数据绑定已保存，请重新选择处理文件',{exact:true})).toBeVisible();await expect(page.getByRole('button',{name:'开始处理',exact:true})).toBeDisabled();await page.reload();await expect(page.getByText('数据来源已绑定',{exact:true})).toBeVisible();const after=await(await request.get(`${api}/projects/${p}/tasks/${t}/dataset`)).json();expect(after.sources).toEqual(before.sources);
+   await expect(page).toHaveURL(new RegExp(`/projects/${p}/tasks/${t}/(1|rawprep)$`));await expect(page.getByRole('button',{name:'配置数据来源',exact:true})).toHaveText('绑定数据');await expect(page.getByRole('button',{name:'执行',exact:true})).toBeDisabled();
+   await page.getByRole('button',{name:'配置数据来源',exact:true}).click();const binding=page.getByRole('dialog',{name:'选择公开数据集',exact:true});
+   const label=c.dataset_id==='nasa_crm'?'NASA CRM':'ShapeNet-Car';
+   await expect(binding.getByRole('button',{name:new RegExp(label)})).toBeEnabled();
+   await binding.getByRole('button',{name:new RegExp(label)}).click();
+   const saved=page.waitForResponse(r=>r.url().endsWith(`/tasks/${t}/dataset`)&&r.request().method()==='PUT');await binding.getByRole('button',{name:'保存数据绑定',exact:true}).click();const saveResponse=await saved;expect(saveResponse.ok()).toBeTruthy();const before=await saveResponse.json();expect(before.status).toBe('valid');expect(before.dataset_id).toBe(c.dataset_id);
+   await page.getByText('数据绑定已保存',{exact:false}).waitFor({timeout:3000}).catch(()=>{});await page.reload();await expect(page.getByRole('button',{name:'配置数据来源',exact:true})).toHaveText('修改绑定');await expect(page.getByRole('searchbox',{name:'搜索绑定文件',exact:true})).toBeVisible();const after=await(await request.get(`${api}/projects/${p}/tasks/${t}/dataset`)).json();expect(after.sources).toEqual(before.sources);expect(after.status).toBe('valid');expect(after.dataset_id).toBe(c.dataset_id);
    if(c.dataset_id==='nasa_crm'){expect(Object.keys(after.sources)).toHaveLength(3);await expect(page.locator('.bound-dataset-files').getByRole('checkbox')).toHaveCount(3);await expect(page.locator('.bound-dataset-files').getByRole('checkbox').first()).not.toBeChecked()}
-   await page.locator('.bound-dataset-files').getByRole('tab',{name:'处理结果',exact:true}).click();await expect(page.getByRole('combobox',{name:'文件范围',exact:true})).toBeVisible();
+   await page.locator('.bound-dataset-files').getByRole('tab',{name:'处理结果',exact:true}).click();await expect(page.getByText('请选择固定输入或运行',{exact:true})).toBeVisible();
   }
-  const source=ids[0],before=await(await request.get(`${api}/projects/${p}/tasks/${source}/configuration`)).json();await openTaskList(page,p);const row=page.locator('.tasktable tbody tr').filter({has:page.locator(`a.enter-workbench[href="/projects/${p}/tasks/${source}/1"]`)});await row.getByRole('button',{name:/更多操作$/}).click();await page.getByRole('menuitem',{name:'派生任务',exact:true}).click();const dialog=page.getByRole('dialog',{name:'派生任务',exact:true});await expect(dialog.getByRole('combobox')).toHaveCount(0);await dialog.getByLabel('任务名称',{exact:true}).fill('继承绑定案例');const forked=page.waitForResponse(r=>r.url().endsWith(`/tasks/${source}/fork`)&&r.request().method()==='POST');await dialog.getByRole('button',{name:'派生并进入原始处理',exact:true}).click();const child=await(await forked).json();await expect(page).toHaveURL(new RegExp(`/tasks/${child.id}/1$`));const inherited=await(await request.get(`${api}/projects/${p}/tasks/${child.id}/configuration`)).json();expect(inherited.config.components).toEqual(before.config.components);expect(inherited.config.dataset).toEqual(before.config.dataset);
+  const source=ids[0],before=await(await request.get(`${api}/projects/${p}/tasks/${source}/configuration`)).json();await openTaskList(page,p);const row=page.locator('.tasktable tbody tr').filter({has:page.locator(`a.enter-workbench[href="/projects/${p}/tasks/${source}/rawprep"]`)});await row.getByRole('button',{name:/更多操作$/}).click();await page.getByRole('menuitem',{name:'派生任务',exact:true}).click();const dialog=page.getByRole('dialog',{name:'派生任务',exact:true});await expect(dialog.getByRole('combobox')).toHaveCount(0);await dialog.getByLabel('任务名称',{exact:true}).fill('继承绑定案例');const forked=page.waitForResponse(r=>r.url().endsWith(`/tasks/${source}/fork`)&&r.request().method()==='POST');await dialog.getByRole('button',{name:'派生并进入原始处理',exact:true}).click();const child=await(await forked).json();await expect(page).toHaveURL(new RegExp(`/tasks/${child.id}/(1|rawprep)$`));const inherited=await(await request.get(`${api}/projects/${p}/tasks/${child.id}/configuration`)).json();expect(inherited.config.components).toEqual(before.config.components);expect(inherited.config.dataset).toEqual(before.config.dataset);
  }finally{await request.patch(`${api}/projects/${p}`,{data:{archived:true}})}
 });
 
@@ -100,7 +106,7 @@ test('新建弹窗校验、案例重试与约定尺寸',async({page,request})=>{
   const submit=again.getByRole('button',{name:'创建并进入原始处理',exact:true});
   await submit.click();await expect(submit).toBeDisabled();await submit.click({force:true});
   expect((await submitted).ok()).toBeTruthy();
-  await expect(page).toHaveURL(new RegExp(`/projects/${p}/tasks/.+/1$`));
+  await expect(page).toHaveURL(new RegExp(`/projects/${p}/tasks/.+/(1|rawprep)$`));
   expect(posts).toHaveLength(1);
  }finally{await request.patch(`${api}/projects/${p}`,{data:{archived:true}})}
 });

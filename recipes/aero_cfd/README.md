@@ -109,8 +109,32 @@ run.launch 的 config_loader 接收案例加载函数；run 在执行前保存�
 
 ## 物理 PT 跨模型实验
 
-五个独立配置见 `examples/aero_cfd`。统一工作流由 `components.workflow: ai4e_core.applications.aero_cfd.workflow` 选择；在该工作流中切换 `components.model` 和对应的字段绑定、模型参数即可更换实验。已准备物理数据时配置 `train.manifest`，从 trainprep 开始；原始数据可独立执行 rawprep。NASA 的物理 PT 和参考 NPY 两条路径均保留。
+五个独立配置见 `examples/aero_cfd`。五例在脚本中显式使用物理数据准备、训练和完整预测步骤；`components.model` 选择模型，配合字段绑定与模型参数切换实验。新模板不声明 `components.workflow`，历史调用仍可使用兼容包装。已准备物理数据时配置 `train.manifest`，从 trainprep 开始；原始数据可独立执行 rawprep。NASA 的物理 PT 和参考 NPY 两条路径均保留。
 
-每个 example 一个模型实例。训练准备在 artifacts 中冻结，独立 train 用 `train.preparation`，独立 post 用 `post.checkpoint` 指定最后权重；默认使用相邻运行目录的冻结准备。比较入口在 `tools/verification/cross_model`，报告写独立输出目录，不增加 recipe。
+每个 example 一个模型实例。训练准备在 artifacts 中冻结，独立 train 用 `train.preparation`，独立 infer 用 `infer.checkpoint` 指定最后权重，post 用 `post.results` 消费固定结果；默认使用相邻运行目录的冻结准备。比较入口在 `tools/verification/cross_model`，报告写独立输出目录，不增加 recipe。
 
 平台配置新增：采样统一放在 `model.sampling`；旧 `trainprep.sampling` 单键仍可读取，但不能同时填写。阶段 `rawprep.format` 选择 `pt` 或 `zarr`，两者直接进入清单读盘；字段输出容器使用 `rawprep.extraction`，成员不要求同形状。
+
+## 怎样修改流程
+
+打开 rawprep.py 依次查看来源、提取、几何、选择、校验、过滤、编码、执行、统计和发布；Dataset 步骤在 run.execute 前只登记处理方式。trainprep.py 显示字段绑定、冻结变换、采样与拼批；采样在每个训练迭代实际调用。train.py 显示模型、目标、优化、评估、恢复和执行；infer.py 显示恢复、预测、物理输出及交付；post.py 读取固定结果。pipeline.py 只选择阶段并传递返回引用。
+
+改预算和参数使用对应 YAML 块或 --set；插入方法在对应 Python 步骤间接收并传递返回值。无参数步骤无需空配置；额外参数通过 configuration.py 的 STEP_PARAMETERS 在案例本地校验。target/parameters 由所属步骤解析，直接 operation=callable 使用同一调用契约。来源模块要随复制目录或已安装研究包提供；不要使用不可重建闭包作为持久化采样。
+
+完整字段示例见 `examples/recipe_extensions/field_mapping`，采样示例见 `examples/recipe_extensions/sampling`。新字段不能只算出数组：还要声明实体身份与单位、添加 save_fields/statistics/normalization/trainprep 绑定和模型 feature_dim。map_fields 不承担跨网格映射，筛选走同步字段/身份接口。
+
+普通锚点预测返回归一化映射；五例物理预测返回完整物理字段，不能重复反归一化。两类接口按模型契约分别校验。历史产物不改写；默认方法不变时保持原消费语义，能力或字段语义改变时需要重新准备，相关训练或比较契约冲突会明确失败。检查报告不作为下游产物。Web 继续保留标准编辑和未编辑扩展配置，不增加通用能力编辑页。
+
+## 独立推理
+
+`infer.py` 显式配置恢复、预测、评价与保存。设置 `infer.checkpoint`、`infer.preparation`、`infer.samples` 后执行 `uv run python infer.py`；调用 pipeline 时选择包含 infer 的阶段名单。原生 post-only 需要固定结果；明确设置 `post.legacy_predict=true` 才进入历史预测兼容模式，页面不会自动开启。
+
+原生 infer 只解释 infer 参数；后处理以 `post.results` 或 `infer.results` 指向已经完成的 `physical-predictions.json`，不会再次预测。完整物理场五例交付同形预测与物理指标；旧锚点模板保留独立兼容结果，不冒充同一比较口径。进度为 `inference-progress.json`，所有运行文件由 writer 提交，数组写配置指定数据目录。
+
+派生字段例子见 `examples/recipe_extensions/inference_fields/`；详细功能约定见 `docs/PRD/recipes/aero_cfd/PRD.md`。
+
+### 推理字段与指标选择
+
+`infer.fields` 使用 `域:字段:分量`，默认全部真实输出；显式空列表拒绝。`infer.metrics` 默认相对L2、MAE、RMSE、Max Error、R²。选择向量的部分分量仅限制评价，保存保留完整向量。`save_predictions=false`时需关闭`export_vtk`，仍交付轻量指标；新`inference-results.json`与旧结果保持可读，新post不重跑模型。研究者可在物理输出后显式登记派生字段及选择，再配置评价和保存。
+
+普通用户逐场评价扩展示例见 `examples/recipe_extensions/inference_metrics/`。原生后处理缺少固定结果时拒绝；旧计算API保留，历史脚本按固定兼容指纹核验，不改写历史证据。

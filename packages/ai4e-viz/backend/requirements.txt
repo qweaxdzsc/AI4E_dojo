@@ -1,0 +1,22 @@
+# HISTORICAL SOURCE BASELINE ONLY — 当前安装使用 ai4e-viz[workbench]，不维护或安装本清单。
+# AI4E VizReport 可视化后端
+# Python >= 3.11（推荐 3.13）；安装：
+#   uv venv backend/.venv --python 3.13
+#   uv pip install --python backend/.venv/bin/python -r backend/requirements.txt
+trame>=3.5
+trame-vtk>=2.8
+trame-vuetify>=2.6
+vtk>=9.4
+pandas>=2.2
+numpy>=1.26
+fastapi>=0.115
+uvicorn[standard]>=0.34
+python-multipart>=0.0.20
+pyarrow>=18.0
+trimesh>=4.6
+pillow>=11.0
+imageio>=2.37
+imageio-ffmpeg>=0.6
+httpx>=0.28
+pytest>=8.3
+jsonschema>=4.23

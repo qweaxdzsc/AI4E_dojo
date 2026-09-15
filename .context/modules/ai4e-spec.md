@@ -71,3 +71,25 @@ components/dataset.py 与 model.py：物理数据视图及模型准备/预测协
 - `packages/ai4e-web/scripts/generate-platform-contracts.py`：从该契约生成浏览器类型。
 - `tests/integration/test_web_integrated_pipeline.py`：跨语言生成一致性及真实服务到显示数组交接。
 - 产品语义：`docs/PRD/ai4e-spec/artifacts/PRD.md`。
+
+## 独立可视化任务交接
+
+- `packages/ai4e-spec/artifacts/visualization.py`：存储上下文、资产与会话公开交接类型。
+
+## 声明驱动原始处理
+
+artifacts/platform.py 增加 RawprepDescriptor 与检查范围、缺项及原生选择；同步生成 TypeScript 描述。
+
+圈定验收入口：`.context/mvp/manifest-rawprep-acceptance.md`。
+
+## 独立推理交接
+
+- `artifacts/inference.py`：`InferenceCheckpointRef` 固定权重身份与修订；`InferenceRequest` 声明配置修订、多检查点、有序样本、分片、设备、输出选择和幂等身份；`InferenceResultRef` 固定任务/批次/运行/权重修订/样本。
+- `artifacts/__init__.py`：公开上述标准库类型。配置字节、模型、数组和任意机器路径不进入这些契约；结果成员仍经固定资产引用读取。
+- `docs/PRD/ai4e-spec/artifacts/PRD.md` 第三章：来源与选择的长期使用约定；`.context/mvp/inference-acceptance.md`：圈定测试和当前未验收边界。
+
+## 推理工作台选择与统计
+
+`artifacts/inference.py`：跨分片请求、字段/指标选择与固定结果身份，拒绝新旧名单同时提交。
+
+专项状态与证据见 `.context/mvp/inference-ui-acceptance.md`，不沿用旧验收结论。

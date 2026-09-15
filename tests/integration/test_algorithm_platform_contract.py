@@ -389,6 +389,64 @@ def test_preparation_rejects_selected_different_manifest(tmp_path):
         open_preparation(cfg, dataset, model, prep)
 
 
+def test_physical_prepare_rejects_version2_record(tmp_path):
+    """旧物理准备接口遇到现行 version=2 记录时给出定位，不再抛 KeyError('dataset')。"""
+    from types import SimpleNamespace
+
+    from ai4e_core.applications.aero_cfd.trainprep.physical import open_preparation
+    from tests.integration.test_physical_dataset_contract import physical_fixture
+
+    view = physical_fixture(tmp_path)
+    config = {
+        "model": {},
+        "sampling": {"seed": 1},
+        "trainprep": {"domains": {"surface": {"position": "pos", "targets": {"p": "p"}}}},
+        "normalization": {"execute": True, "fields": {"pos": {"method": "identity"}}},
+        "train": {},
+    }
+    model = SimpleNamespace(SOURCE="test-component", prepare_sample=lambda *args, **kwargs: None)
+    dataset = SimpleNamespace(open_physical=lambda _: view)
+    path = tmp_path / "preparation.json"
+    path.write_text(
+        json.dumps(
+            {
+                "version": 2,
+                "manifest": str(tmp_path / "manifest.json"),
+                "dataset_digest": "unused",
+                "declarations": {},
+            }
+        )
+    )
+    with pytest.raises(ValueError, match="trainprep.preparation"):
+        open_preparation(config, dataset, model, path)
+
+
+def test_trace_model_uses_version2_preparation(tmp_path, monkeypatch):
+    """结构跟踪对现行准备走训练同一条 consume，不再打开旧物理接口。"""
+    from types import SimpleNamespace
+
+    from ai4e_core.applications.aero_cfd.inspection import _trace_batch
+
+    prep = tmp_path / "preparation.json"
+    prep.write_text(json.dumps({"version": 2, "digest": "d1", "declarations": {}}))
+    called = {}
+
+    def consume(config, reference, *, prepare, collate):
+        called["reference"] = reference
+        called["prepare"] = prepare
+        raise RuntimeError("version2-consume-reached")
+
+    monkeypatch.setattr("ai4e_core.applications.aero_cfd.trainprep.preparation.consume", consume)
+    model = SimpleNamespace(
+        prepare_inputs=object(),
+        prepare_sample=object(),
+        collate=object(),
+    )
+    with pytest.raises(RuntimeError, match="version2-consume-reached"):
+        _trace_batch({"sampling": {}}, object(), model, str(prep))
+    assert called["reference"] == str(prep)
+
+
 def test_trace_model_requires_physical_manifest():
     from pathlib import Path
 
@@ -448,3 +506,44 @@ def test_declared_legacy_provider_and_actual_training_capabilities():
     }
     assert "scheduler_unit" in caps["parameter_descriptors"]
     assert "min_lr_ratio" in caps["parameter_descriptors"]
+
+
+def test_model_sampling_capability_follows_component():
+    """采样与固定损失行由模型组件和准备域声明，不把 Transolver 抽稀当成没有采样。"""
+    from pathlib import Path
+
+    import yaml
+
+    from ai4e_core.applications.aero_cfd.inspection import execute
+
+    root = Path(__file__).resolve().parents[2]
+    abupt = execute(
+        {
+            "operation": "describe_case",
+            "config": yaml.safe_load(
+                (root / "examples/aero_cfd/shapenet_car_abupt/config.yaml").read_text()
+            ),
+        }
+    )
+    transolver = execute(
+        {
+            "operation": "describe_case",
+            "config": yaml.safe_load(
+                (root / "examples/aero_cfd/nasa_crm_transolver3/config.yaml").read_text()
+            ),
+        }
+    )
+    assert abupt["capabilities"]["sampling"] == {"configurable": True}
+    assert "supernodes" in abupt["configuration"]["model"]["sampling"]
+    sampling = transolver["capabilities"]["sampling"]
+    assert sampling["configurable"] is True
+    assert sampling["constraints"]["stride"]["readOnly"] is True
+    assert transolver["configuration"]["model"]["parameters"]["slice_num"] == 64
+    assert transolver["configuration"]["model"]["sampling"]["stride"] == 4
+    assert transolver["configuration"]["model"]["sampling"]["chunk_count"] == 20
+    assert "supernodes" not in transolver["configuration"]["model"]["sampling"]
+    assert transolver["capabilities"]["losses"]["configurable"] is False
+    assert {item["target"] for item in transolver["capabilities"]["losses"]["terms"]} == {
+        "surface_cp",
+        "surface_cf",
+    }

@@ -48,6 +48,36 @@
   font-size: 12px;
   line-height: 1.45;
 }
+.workbench-grid > section.settings-panel .geometry-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(132px, 1fr);
+  align-items: start;
+  column-gap: 10px;
+  min-height: 28px;
+  margin: 6px 0;
+}
+.workbench-grid > section.settings-panel .geometry-row > .ant-checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  min-width: 0;
+  min-height: 26px;
+}
+.workbench-grid > section.settings-panel .geometry-names {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  min-width: 0;
+  min-height: 26px;
+}
+.workbench-grid > section.settings-panel .geometry-names .ant-input {
+  width: 100%;
+  max-width: 100%;
+  height: 26px;
+  padding: 0 8px;
+  font-size: 12px;
+}
 .workbench-grid > section.settings-panel .settings-badge {
   margin-left: auto;
   font-size: 12px;
@@ -69,24 +99,21 @@
 .data-panel-head {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  justify-content: space-between;
   gap: 6px;
   padding: 9px 13px 7px;
 }
 .data-panel-head-main {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
-  width: 100%;
-  margin-right: auto;
+  min-width: 0;
 }
 .data-panel-head-actions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
+  justify-content: flex-end;
   gap: 6px;
+  margin-left: auto;
 }
 .dataset-tabs {
   display: flex;
@@ -143,20 +170,6 @@
   flex: 1;
   padding: 0 0 10px;
 }
-.data-panel-body .directory-info {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  padding: 0 13px 7px;
-  color: #5776ac;
-  font-size: 12px;
-  overflow-wrap: anywhere;
-}
-.data-panel-body .directory-info small,
-.data-panel-body .binding-status {
-  font-size: 10px;
-  line-height: 1.5;
-}
 .data-panel-body .file-search,
 .data-panel-body .ant-input-search {
   display: block;
@@ -187,13 +200,14 @@
   flex: 1;
   min-height: 0;
   overflow: auto;
+  overflow-x: hidden;
   padding: 0 12px;
 }
 .data-panel-body .filetable {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   font-size: 12px;
-  white-space: nowrap;
 }
 .data-panel-body .filetable th {
   padding: 7px 5px;
@@ -206,12 +220,40 @@
 .data-panel-body .filetable th:first-child,
 .data-panel-body .filetable td:first-child {
   padding-left: 12px;
+  width: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.data-panel-body .filetable th:nth-child(2),
+.data-panel-body .filetable td:nth-child(2) {
+  width: 36px;
+}
+.data-panel-body .filetable th:nth-child(3),
+.data-panel-body .filetable td:nth-child(3) {
+  width: 58px;
+}
+.data-panel-body .filetable th:nth-child(4),
+.data-panel-body .filetable td:nth-child(4) {
+  width: 96px;
+}
+.data-panel-body .filetable th:last-child,
+.data-panel-body .filetable td:last-child {
+  width: 44px;
+  white-space: nowrap;
+}
+.data-panel-body.artifact-body .filetable th:last-child,
+.data-panel-body.artifact-body .filetable td:last-child {
+  width: 88px;
 }
 .data-panel-body .filetable td {
   padding: 3px 5px;
   height: 27px;
   border-bottom: 1px solid #edf2fa;
   color: #7183bb;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .data-panel-body .filetable td:first-child {
   color: #172258;
@@ -230,6 +272,10 @@
 }
 .data-panel-body .filetable .link {
   color: #172258;
+  max-width: calc(100% - 22px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
 }
 .data-panel-body .foldericon,
 .data-panel-body .docicon {
@@ -360,3 +406,106 @@
     display: none;
   }
 }
+
+/* 整合 HTML 的最终三栏比例；只在此领域维护，避免全局旧比例覆盖。 */
+.workbench-grid.layout{grid-template-columns:minmax(280px,1.23fr) minmax(300px,1fr) minmax(260px,1.14fr);gap:10px}
+@container(max-width:1200px){.workbench-grid.layout{grid-template-columns:minmax(240px,1.2fr) minmax(280px,1fr) minmax(240px,1.05fr)}}
+.workbench-grid > section.settings-panel { overflow: hidden; }
+.workbench-grid > section.settings-panel .settings-body { flex: 1; min-height: 0; overflow: auto; }
+/* 字段提取：顶栏添加，固定高度列表，每条配置单行图标操作。 */
+.workbench-grid > section.settings-panel .extraction-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 6px 0;
+}
+.workbench-grid > section.settings-panel .extraction-toolbar .ant-btn {
+  height: 28px;
+  padding: 0 10px;
+  font-size: 12px;
+  flex: 0 0 auto;
+}
+.workbench-grid > section.settings-panel .extraction-toolbar small {
+  display: block;
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #7e90b9;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.workbench-grid > section.settings-panel .extraction-list {
+  height: 182px;
+  overflow: auto;
+  border: 1px solid #d7e4f8;
+  border-radius: 6px;
+  background: #fff;
+}
+.workbench-grid > section.settings-panel .extraction-card {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  height: 36px;
+  padding: 0 6px 0 8px;
+  margin: 0;
+  border: 0;
+  border-bottom: 1px solid #edf2fa;
+  border-radius: 0;
+  background: #fff;
+  overflow: hidden;
+}
+.workbench-grid > section.settings-panel .extraction-card:nth-child(even) { background: #f8fbff; }
+.workbench-grid > section.settings-panel .extraction-card:last-child { border-bottom: 0; }
+.workbench-grid > section.settings-panel .extraction-card b {
+  flex: 0 1 auto;
+  max-width: 62%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #172258;
+  font-size: 12px;
+  font-weight: 600;
+}
+.workbench-grid > section.settings-panel .extraction-card .extraction-meta {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #7e90b9;
+  font-size: 11px;
+}
+.workbench-grid > section.settings-panel .extraction-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0 0 48px;
+  gap: 0;
+}
+.workbench-grid > section.settings-panel .extraction-actions .ant-btn {
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.workbench-grid > section.settings-panel .extraction-empty {
+  margin: 0;
+  padding: 18px 8px;
+  text-align: center;
+  color: #8ba1c6;
+  font-size: 12px;
+}
+.executionbox > .ant-select { width: 100%; margin-bottom: 10px; }
+.rawprep-progress{margin:10px 0 0;padding:10px 12px;background:#fff;border:1px solid #dceaff;border-radius:6px}
+.rawprep-progress-label{font-size:12px;color:#3d547d;margin-bottom:6px}
+.rawprep-progress-track{height:8px;background:#e8f0fc;border-radius:99px;overflow:hidden}
+.rawprep-progress-track>div{height:100%;width:0;background:#0874ff;border-radius:99px}
+.rawprep-progress-track.indeterminate>div{width:40%;animation:rawprep-progress-slide 1.2s ease-in-out infinite}
+@keyframes rawprep-progress-slide{0%{transform:translateX(-100%)}100%{transform:translateX(280%)}}
+.data-panel-body .filetable .preview-link+a,.data-panel-body .filetable .preview-link+.preview-link{margin-left:10px}

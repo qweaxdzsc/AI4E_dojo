@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 [project]
 name = "ai4e-viz"
 version = "0.1.0"
-description = "稳定科学产物的静态图像和离线报告"
+description = "独立科学可视化应用、任务配置资产与静态表达"
 requires-python = ">=3.12"
 dependencies = ["ai4e-spec", "pyvista>=0.48", "matplotlib>=3.10", "torch>=2.0", "numpy>=2.0", "zarr>=3.1,<4", "h5py>=3.11"]
 [tool.uv.sources]
@@ -21,3 +21,17 @@ bypass-selection = true
 "runtime" = "ai4e_viz/runtime"
 "pipeline" = "ai4e_viz/pipeline"
 "serialization" = "ai4e_viz/serialization"
+"cli.py" = "ai4e_viz/cli.py"
+"backend" = "ai4e_viz/backend"
+"resources" = "ai4e_viz/resources"
+"frontend/public" = "ai4e_viz/frontend/public"
+"frontend/scripts" = "ai4e_viz/frontend/scripts"
+
+[project.optional-dependencies]
+workbench = ["trame>=3.5,<4", "trame-vtk>=2.8", "trame-vuetify>=2.6", "vtk>=9.4", "pandas>=2.2", "fastapi>=0.115", "uvicorn[standard]>=0.34", "python-multipart>=0.0.20", "pyarrow>=18.0", "trimesh>=4.6", "pillow>=11.0", "imageio>=2.37", "imageio-ffmpeg>=0.6", "httpx>=0.28", "jsonschema>=4.23", "aiohttp>=3.11"]
+
+[project.scripts]
+ai4e-vis = "ai4e_viz.cli:main"
+
+[tool.hatch.build.hooks.custom]
+path = "build_hook.py"

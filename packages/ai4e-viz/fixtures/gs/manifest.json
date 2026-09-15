@@ -1,0 +1,665 @@
+{
+  "revision": "gs-portable-audit-v1",
+  "source_note": "Portable subset: all eight training histories/summaries plus CNN-MLP eight-geometry field evidence.",
+  "excluded": [
+    "last.pt",
+    "non-CNN-MLP per-geometry field arrays",
+    ".DS_Store"
+  ],
+  "models": {
+    "cnn_kan": {
+      "epochs": 5000,
+      "validation_column": "val_loss",
+      "best_validation_loss": 0.02025444,
+      "best_epoch": 4369,
+      "mean_psi_l2_relative": 12.333600702617165,
+      "mean_ip_relative_error": 1.992174521678628
+    },
+    "cnn_mlp": {
+      "epochs": 5000,
+      "validation_column": "val_loss",
+      "best_validation_loss": 0.003603155,
+      "best_epoch": 4553,
+      "mean_psi_l2_relative": 8.297847410135963,
+      "mean_ip_relative_error": 1.999724426969521
+    },
+    "fno_kan": {
+      "epochs": 5000,
+      "validation_column": "val_loss",
+      "best_validation_loss": 0.003372949,
+      "best_epoch": 4848,
+      "mean_psi_l2_relative": 9.078505726825199,
+      "mean_ip_relative_error": 2.000722084149071
+    },
+    "fno_mlp": {
+      "epochs": 5000,
+      "validation_column": "val_loss",
+      "best_validation_loss": 0.00332072,
+      "best_epoch": 4963,
+      "mean_psi_l2_relative": 8.845476657549563,
+      "mean_ip_relative_error": 1.9993395830763736
+    },
+    "kan_kan": {
+      "epochs": 5000,
+      "validation_column": "val_loss",
+      "best_validation_loss": 0.1723304,
+      "best_epoch": 4855,
+      "mean_psi_l2_relative": 132.0199203885983,
+      "mean_ip_relative_error": 1.3448651683086783
+    },
+    "mlp_mlp": {
+      "epochs": 5000,
+      "validation_column": "val_loss",
+      "best_validation_loss": 0.003408344,
+      "best_epoch": 4917,
+      "mean_psi_l2_relative": 9.28789662823779,
+      "mean_ip_relative_error": 1.9995376851786577
+    },
+    "transformer_kan": {
+      "epochs": 5000,
+      "validation_column": "val_loss",
+      "best_validation_loss": 0.003875146,
+      "best_epoch": 4643,
+      "mean_psi_l2_relative": 8.825852929640943,
+      "mean_ip_relative_error": 1.9979504088626026
+    },
+    "transformer_mlp": {
+      "epochs": 5000,
+      "validation_column": "val_loss",
+      "best_validation_loss": 0.003385628,
+      "best_epoch": 4918,
+      "mean_psi_l2_relative": 9.001556167662294,
+      "mean_ip_relative_error": 1.9990677418852885
+    }
+  },
+  "geometries": {
+    "circular": {
+      "grid_shape": [
+        151,
+        241
+      ],
+      "psi_l2_relative": 18.463771197205272,
+      "ip_relative_error": 2.0001566239700104,
+      "pino_current_sum": 168776417280.0,
+      "traditional_current_sum": 168749994970.8582,
+      "files": {
+        "pino_inference.npz": {
+          "path": "cases/circular/pino_inference.npz",
+          "size_bytes": 875144,
+          "sha256": "f11d428ba0987dadc6e3e65d319469adfa8e7a82703ec75d7c40dbe9b80edc93"
+        },
+        "traditional_inference.npz": {
+          "path": "cases/circular/traditional_inference.npz",
+          "size_bytes": 1021219,
+          "sha256": "e4473efc0c8b27a1ebd7f672608749ab49eee8b1821e84c356434d1dd6054d75"
+        },
+        "pino_metrics.json": {
+          "path": "cases/circular/pino_metrics.json",
+          "size_bytes": 626,
+          "sha256": "f88520435509ae19ffea0f6123fe5ad712f1a5c6db5c51c023c4fe26965cb581"
+        },
+        "comparison_metrics.json": {
+          "path": "cases/circular/comparison_metrics.json",
+          "size_bytes": 588,
+          "sha256": "e576b8799954ab512a329d397e5bddc6817b038ecf2ed02a8fa8ed9efd31463c"
+        },
+        "pino_vs_traditional_comparison.png": {
+          "path": "cases/circular/pino_vs_traditional_comparison.png",
+          "size_bytes": 536131,
+          "sha256": "0f0eebd034793f955547863939e738bfa411d102dd6e1480f3e69e0f2fd3caba"
+        }
+      }
+    },
+    "low_elongation": {
+      "grid_shape": [
+        151,
+        241
+      ],
+      "psi_l2_relative": 9.140388292944333,
+      "ip_relative_error": 1.9977360262439274,
+      "pino_current_sum": 129513807872.0,
+      "traditional_current_sum": 129807695134.72485,
+      "files": {
+        "pino_inference.npz": {
+          "path": "cases/low_elongation/pino_inference.npz",
+          "size_bytes": 875144,
+          "sha256": "40f619faabe1ae43dce50776d896d85db4c9b5781f1e2238beadb02d6724e6f7"
+        },
+        "traditional_inference.npz": {
+          "path": "cases/low_elongation/traditional_inference.npz",
+          "size_bytes": 1021219,
+          "sha256": "c5b186223a6a2fda7b6d0b1985245e296125800421875611888261656d15cbad"
+        },
+        "pino_metrics.json": {
+          "path": "cases/low_elongation/pino_metrics.json",
+          "size_bytes": 636,
+          "sha256": "b248bdfa9c62b86bba2eaf127a77965470d1645a61270d10efd2a1f0dc55e0d8"
+        },
+        "comparison_metrics.json": {
+          "path": "cases/low_elongation/comparison_metrics.json",
+          "size_bytes": 574,
+          "sha256": "b70b96ccd3761dd5118c3562c095ee8390af712ee2b63f80169a733be0300948"
+        },
+        "pino_vs_traditional_comparison.png": {
+          "path": "cases/low_elongation/pino_vs_traditional_comparison.png",
+          "size_bytes": 438456,
+          "sha256": "505ba2274c8fe8e3bbb36b6a8fead5b35afc6558079186dc07cb652d2f79baa1"
+        }
+      }
+    },
+    "medium_elongation": {
+      "grid_shape": [
+        151,
+        241
+      ],
+      "psi_l2_relative": 3.7312658910292287,
+      "ip_relative_error": 1.999336918797318,
+      "pino_current_sum": 93687832576.0,
+      "traditional_current_sum": 93749994877.72604,
+      "files": {
+        "pino_inference.npz": {
+          "path": "cases/medium_elongation/pino_inference.npz",
+          "size_bytes": 875144,
+          "sha256": "5085dff277a1e1e1e4c3d374f810c0bc94b28589f7449b0b53ac54d0fe949ddc"
+        },
+        "traditional_inference.npz": {
+          "path": "cases/medium_elongation/traditional_inference.npz",
+          "size_bytes": 1021219,
+          "sha256": "b8b4738366808d79c8694fe16f35100b39275534f24bcd549386ecebfca3d400"
+        },
+        "pino_metrics.json": {
+          "path": "cases/medium_elongation/pino_metrics.json",
+          "size_bytes": 634,
+          "sha256": "1a2ee4698e62e62d0e279dcfb18131879049241fe13c89e58d9e93f6e5c3b97f"
+        },
+        "comparison_metrics.json": {
+          "path": "cases/medium_elongation/comparison_metrics.json",
+          "size_bytes": 582,
+          "sha256": "7a524f84cdbf5694ba4b4abfb0c127fb480b1b4cf65fb4dfb4c5cdfec57fe089"
+        },
+        "pino_vs_traditional_comparison.png": {
+          "path": "cases/medium_elongation/pino_vs_traditional_comparison.png",
+          "size_bytes": 368724,
+          "sha256": "d6c7a10935365258ff95195b29596c46325d319298831f5ce7104b5ef565b923"
+        }
+      }
+    },
+    "high_elongation": {
+      "grid_shape": [
+        151,
+        241
+      ],
+      "psi_l2_relative": 1.7232067892330802,
+      "ip_relative_error": 1.9982335165771619,
+      "pino_current_sum": 73239953408.0,
+      "traditional_current_sum": 73369562793.13583,
+      "files": {
+        "pino_inference.npz": {
+          "path": "cases/high_elongation/pino_inference.npz",
+          "size_bytes": 875144,
+          "sha256": "53bd5845780a02218916915b983ef4d4a969b01202ac7b26a04e38aaf1d07956"
+        },
+        "traditional_inference.npz": {
+          "path": "cases/high_elongation/traditional_inference.npz",
+          "size_bytes": 1021219,
+          "sha256": "363aada8fcfa44161186fe11025da6768824f01ede768d27476e2374530fc97d"
+        },
+        "pino_metrics.json": {
+          "path": "cases/high_elongation/pino_metrics.json",
+          "size_bytes": 635,
+          "sha256": "a9dc87141e144837bd42d1497aaadebdec99239e0c62a76af28381e8d111ce31"
+        },
+        "comparison_metrics.json": {
+          "path": "cases/high_elongation/comparison_metrics.json",
+          "size_bytes": 578,
+          "sha256": "1e9fe7dececf1da06b4f6696049e3c9afbf1a7a6640b96757927a5c010dde938"
+        },
+        "pino_vs_traditional_comparison.png": {
+          "path": "cases/high_elongation/pino_vs_traditional_comparison.png",
+          "size_bytes": 315389,
+          "sha256": "a821d7c3f39e1b42f07a4488d3c0fa52063372f91e16a34fd42ade8f5d0fd20c"
+        }
+      }
+    },
+    "extreme_elongation": {
+      "grid_shape": [
+        151,
+        241
+      ],
+      "psi_l2_relative": 1.3844631494904982,
+      "ip_relative_error": 2.0030393426478814,
+      "pino_current_sum": 67705155584.0,
+      "traditional_current_sum": 67499998994.171616,
+      "files": {
+        "pino_inference.npz": {
+          "path": "cases/extreme_elongation/pino_inference.npz",
+          "size_bytes": 875144,
+          "sha256": "ea1d00c775e622be72d0db015c8a6625e851ed101f25deb43bc8695af6d01f22"
+        },
+        "traditional_inference.npz": {
+          "path": "cases/extreme_elongation/traditional_inference.npz",
+          "size_bytes": 1021219,
+          "sha256": "8452bbba239f15181fadbd51d415b2217794e7963453cd4320bea732d81b313f"
+        },
+        "pino_metrics.json": {
+          "path": "cases/extreme_elongation/pino_metrics.json",
+          "size_bytes": 633,
+          "sha256": "80e391688f638b8ae27996726d5825b46c233e7713bc4ecf0a1ee6ca49d3319b"
+        },
+        "comparison_metrics.json": {
+          "path": "cases/extreme_elongation/comparison_metrics.json",
+          "size_bytes": 579,
+          "sha256": "9f5a8655fd6d72e5d62fbedbf9d27b8a876169b9bf74e021c280ff8f8c44251a"
+        },
+        "pino_vs_traditional_comparison.png": {
+          "path": "cases/extreme_elongation/pino_vs_traditional_comparison.png",
+          "size_bytes": 299391,
+          "sha256": "e51bf880ca186903c370ba60a47a1ba4ef96a6fbd3bdc0785bfe76fd243ef8b5"
+        }
+      }
+    },
+    "negative_triangularity": {
+      "grid_shape": [
+        151,
+        241
+      ],
+      "psi_l2_relative": 3.693669353194075,
+      "ip_relative_error": 1.9996669868309198,
+      "pino_current_sum": 93718773760.0,
+      "traditional_current_sum": 93749994877.72604,
+      "files": {
+        "pino_inference.npz": {
+          "path": "cases/negative_triangularity/pino_inference.npz",
+          "size_bytes": 875144,
+          "sha256": "6a8b79f97fe71fd57e77b0e6ee6dca9885b62be4cef1e5c8d49a8093fb5c27b3"
+        },
+        "traditional_inference.npz": {
+          "path": "cases/negative_triangularity/traditional_inference.npz",
+          "size_bytes": 1021219,
+          "sha256": "c1349a7e694a279f7bcbf08cd0ab50263c08b852223683632172362a4934fab0"
+        },
+        "pino_metrics.json": {
+          "path": "cases/negative_triangularity/pino_metrics.json",
+          "size_bytes": 637,
+          "sha256": "8233251aea99d371a7a7f83878a12b53a3bfee406d959ffdf464989a6c8f386c"
+        },
+        "comparison_metrics.json": {
+          "path": "cases/negative_triangularity/comparison_metrics.json",
+          "size_bytes": 612,
+          "sha256": "c9f0cce88ee03c5c88a2c8a3bf9a8765cf498493a5aa8abd32b3e0285b195234"
+        },
+        "pino_vs_traditional_comparison.png": {
+          "path": "cases/negative_triangularity/pino_vs_traditional_comparison.png",
+          "size_bytes": 369771,
+          "sha256": "06a6c56f5a4cdb45173bc96aa31e8ae7e41bb2b9d20a2a66c79d14bcfa32dfee"
+        }
+      }
+    },
+    "large_plasma": {
+      "grid_shape": [
+        151,
+        241
+      ],
+      "psi_l2_relative": 0.40748301949143856,
+      "ip_relative_error": 2.003135998020989,
+      "pino_current_sum": 54169341952.0,
+      "traditional_current_sum": 53999999999.999985,
+      "files": {
+        "pino_inference.npz": {
+          "path": "cases/large_plasma/pino_inference.npz",
+          "size_bytes": 875144,
+          "sha256": "2f838f578da2a458385b9d329d2ea2f876ffb72027840002eb9e8cead2111dd3"
+        },
+        "traditional_inference.npz": {
+          "path": "cases/large_plasma/traditional_inference.npz",
+          "size_bytes": 1021219,
+          "sha256": "cf5c3b399239752bff14e817069ab6de089997518d9fc4746df310c6481aaa42"
+        },
+        "pino_metrics.json": {
+          "path": "cases/large_plasma/pino_metrics.json",
+          "size_bytes": 630,
+          "sha256": "9be71a75a3b29f9091866cc1ac13dc3af2e697162978c3258d2e9f63e6bbf31d"
+        },
+        "comparison_metrics.json": {
+          "path": "cases/large_plasma/comparison_metrics.json",
+          "size_bytes": 591,
+          "sha256": "ccff28a8a7cd5e521e569749c24df89fa4c3e4eed23087d0e2126ec2acc51a74"
+        },
+        "pino_vs_traditional_comparison.png": {
+          "path": "cases/large_plasma/pino_vs_traditional_comparison.png",
+          "size_bytes": 343302,
+          "sha256": "c3a295deec34494ce2795f431f38177ec0aaa52892451f27bbe83e81fe373d46"
+        }
+      }
+    },
+    "small_plasma": {
+      "grid_shape": [
+        151,
+        241
+      ],
+      "psi_l2_relative": 27.838531588499777,
+      "ip_relative_error": 1.9964900026679588,
+      "pino_current_sum": 199298007040.0,
+      "traditional_current_sum": 200000017219.12073,
+      "files": {
+        "pino_inference.npz": {
+          "path": "cases/small_plasma/pino_inference.npz",
+          "size_bytes": 875144,
+          "sha256": "741208c32e36551d06e1a48c9ff56718abe85b19607387bef6f08151559be4c3"
+        },
+        "traditional_inference.npz": {
+          "path": "cases/small_plasma/traditional_inference.npz",
+          "size_bytes": 1021219,
+          "sha256": "4f67f14dd2a82c7dae965ccc03f6d9e9c767d9f6212b2eb6b40adb8486461763"
+        },
+        "pino_metrics.json": {
+          "path": "cases/small_plasma/pino_metrics.json",
+          "size_bytes": 630,
+          "sha256": "0a0c3e12d56e2febeaf1c6891a7ba8382e27df630cb200350b5af84550a5e839"
+        },
+        "comparison_metrics.json": {
+          "path": "cases/small_plasma/comparison_metrics.json",
+          "size_bytes": 590,
+          "sha256": "f3ec1cb52e4ae588ea8ffc50a81e02c06c4343392e4cee78aba3a420cf5a08f9"
+        },
+        "pino_vs_traditional_comparison.png": {
+          "path": "cases/small_plasma/pino_vs_traditional_comparison.png",
+          "size_bytes": 416937,
+          "sha256": "6a5b2cd0ef7d3ff051492aa636366e09cae67fb3aa22196b38165786d08a0da2"
+        }
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "models/cnn_kan/metrics.csv",
+      "size_bytes": 796894,
+      "sha256": "0a9cde5ab6aba27a979fdce2f3e4f8c9d1328ebbe2436c8f4f7411202c247b98"
+    },
+    {
+      "path": "models/cnn_kan/comparison_summary.json",
+      "size_bytes": 5013,
+      "sha256": "68500965a4402933f1a500809287b534d0286250ff9ea2da734c9783d6705429"
+    },
+    {
+      "path": "models/cnn_mlp/metrics.csv",
+      "size_bytes": 796826,
+      "sha256": "235a604beb9ee2f811f7d6806023067dfe1c779ff66aeac1cec110e300322902"
+    },
+    {
+      "path": "models/cnn_mlp/comparison_summary.json",
+      "size_bytes": 5016,
+      "sha256": "53a8972f5d58ea255c218c3e2dd4f0b45af2a28ba5c72d2fdbc261ae0aacc388"
+    },
+    {
+      "path": "models/fno_kan/metrics.csv",
+      "size_bytes": 796690,
+      "sha256": "04fd082122d9e33681bdbea395c78569803bce198269fdaa1147abf3f981d8ac"
+    },
+    {
+      "path": "models/fno_kan/comparison_summary.json",
+      "size_bytes": 5013,
+      "sha256": "21286337e905f7d8dba48f2527fe62a0bf3f5bbbfa8720b78fc964a942836c91"
+    },
+    {
+      "path": "models/fno_mlp/metrics.csv",
+      "size_bytes": 796636,
+      "sha256": "c82fc7fbfdb355455478cb7102e9d2f952ffd15d309955f6a92f52aa8f41c48b"
+    },
+    {
+      "path": "models/fno_mlp/comparison_summary.json",
+      "size_bytes": 5006,
+      "sha256": "59739ceb93be33bfc6c7de198083a17ff5b6417483e2208772aa4346f8dbcc63"
+    },
+    {
+      "path": "models/kan_kan/metrics.csv",
+      "size_bytes": 796498,
+      "sha256": "1b4f471dac926f50a811e0d5d85cd6a5567a9576ad8a57b7c8165f774de94e92"
+    },
+    {
+      "path": "models/kan_kan/comparison_summary.json",
+      "size_bytes": 5007,
+      "sha256": "dd5cce9874e8c40b8895a5fa33ef436ba47ecd3adfb7caf3ea1f2649867cb705"
+    },
+    {
+      "path": "models/mlp_mlp/metrics.csv",
+      "size_bytes": 795548,
+      "sha256": "5e2707d01224be750174c6504f6f12567a251e6e83f23ec2070777a499e120e1"
+    },
+    {
+      "path": "models/mlp_mlp/comparison_summary.json",
+      "size_bytes": 5006,
+      "sha256": "a0a3308a7d884981fb2adeb813e71ce1158e091aecf8c0dd11a8e6899b778d69"
+    },
+    {
+      "path": "models/transformer_kan/metrics.csv",
+      "size_bytes": 800420,
+      "sha256": "bbdeb40d2031b384310034e72463014010ad5370185cbd112366f11cd334df48"
+    },
+    {
+      "path": "models/transformer_kan/comparison_summary.json",
+      "size_bytes": 5075,
+      "sha256": "cafe1b2fbeb7bdbb39c383e14b9bdfe27874a49150b283d6fd54bdd312e73598"
+    },
+    {
+      "path": "models/transformer_mlp/metrics.csv",
+      "size_bytes": 799471,
+      "sha256": "45b705156e1f6eb175a157127a6cb4529556d1c62d547a36aade64ccaed3c0b7"
+    },
+    {
+      "path": "models/transformer_mlp/comparison_summary.json",
+      "size_bytes": 5076,
+      "sha256": "f5733661ba37c44b7588fe58f9592508d83081a354e11267718239a4b953df35"
+    },
+    {
+      "path": "cases/circular/pino_inference.npz",
+      "size_bytes": 875144,
+      "sha256": "f11d428ba0987dadc6e3e65d319469adfa8e7a82703ec75d7c40dbe9b80edc93"
+    },
+    {
+      "path": "cases/circular/traditional_inference.npz",
+      "size_bytes": 1021219,
+      "sha256": "e4473efc0c8b27a1ebd7f672608749ab49eee8b1821e84c356434d1dd6054d75"
+    },
+    {
+      "path": "cases/circular/pino_metrics.json",
+      "size_bytes": 626,
+      "sha256": "f88520435509ae19ffea0f6123fe5ad712f1a5c6db5c51c023c4fe26965cb581"
+    },
+    {
+      "path": "cases/circular/comparison_metrics.json",
+      "size_bytes": 588,
+      "sha256": "e576b8799954ab512a329d397e5bddc6817b038ecf2ed02a8fa8ed9efd31463c"
+    },
+    {
+      "path": "cases/circular/pino_vs_traditional_comparison.png",
+      "size_bytes": 536131,
+      "sha256": "0f0eebd034793f955547863939e738bfa411d102dd6e1480f3e69e0f2fd3caba"
+    },
+    {
+      "path": "cases/low_elongation/pino_inference.npz",
+      "size_bytes": 875144,
+      "sha256": "40f619faabe1ae43dce50776d896d85db4c9b5781f1e2238beadb02d6724e6f7"
+    },
+    {
+      "path": "cases/low_elongation/traditional_inference.npz",
+      "size_bytes": 1021219,
+      "sha256": "c5b186223a6a2fda7b6d0b1985245e296125800421875611888261656d15cbad"
+    },
+    {
+      "path": "cases/low_elongation/pino_metrics.json",
+      "size_bytes": 636,
+      "sha256": "b248bdfa9c62b86bba2eaf127a77965470d1645a61270d10efd2a1f0dc55e0d8"
+    },
+    {
+      "path": "cases/low_elongation/comparison_metrics.json",
+      "size_bytes": 574,
+      "sha256": "b70b96ccd3761dd5118c3562c095ee8390af712ee2b63f80169a733be0300948"
+    },
+    {
+      "path": "cases/low_elongation/pino_vs_traditional_comparison.png",
+      "size_bytes": 438456,
+      "sha256": "505ba2274c8fe8e3bbb36b6a8fead5b35afc6558079186dc07cb652d2f79baa1"
+    },
+    {
+      "path": "cases/medium_elongation/pino_inference.npz",
+      "size_bytes": 875144,
+      "sha256": "5085dff277a1e1e1e4c3d374f810c0bc94b28589f7449b0b53ac54d0fe949ddc"
+    },
+    {
+      "path": "cases/medium_elongation/traditional_inference.npz",
+      "size_bytes": 1021219,
+      "sha256": "b8b4738366808d79c8694fe16f35100b39275534f24bcd549386ecebfca3d400"
+    },
+    {
+      "path": "cases/medium_elongation/pino_metrics.json",
+      "size_bytes": 634,
+      "sha256": "1a2ee4698e62e62d0e279dcfb18131879049241fe13c89e58d9e93f6e5c3b97f"
+    },
+    {
+      "path": "cases/medium_elongation/comparison_metrics.json",
+      "size_bytes": 582,
+      "sha256": "7a524f84cdbf5694ba4b4abfb0c127fb480b1b4cf65fb4dfb4c5cdfec57fe089"
+    },
+    {
+      "path": "cases/medium_elongation/pino_vs_traditional_comparison.png",
+      "size_bytes": 368724,
+      "sha256": "d6c7a10935365258ff95195b29596c46325d319298831f5ce7104b5ef565b923"
+    },
+    {
+      "path": "cases/high_elongation/pino_inference.npz",
+      "size_bytes": 875144,
+      "sha256": "53bd5845780a02218916915b983ef4d4a969b01202ac7b26a04e38aaf1d07956"
+    },
+    {
+      "path": "cases/high_elongation/traditional_inference.npz",
+      "size_bytes": 1021219,
+      "sha256": "363aada8fcfa44161186fe11025da6768824f01ede768d27476e2374530fc97d"
+    },
+    {
+      "path": "cases/high_elongation/pino_metrics.json",
+      "size_bytes": 635,
+      "sha256": "a9dc87141e144837bd42d1497aaadebdec99239e0c62a76af28381e8d111ce31"
+    },
+    {
+      "path": "cases/high_elongation/comparison_metrics.json",
+      "size_bytes": 578,
+      "sha256": "1e9fe7dececf1da06b4f6696049e3c9afbf1a7a6640b96757927a5c010dde938"
+    },
+    {
+      "path": "cases/high_elongation/pino_vs_traditional_comparison.png",
+      "size_bytes": 315389,
+      "sha256": "a821d7c3f39e1b42f07a4488d3c0fa52063372f91e16a34fd42ade8f5d0fd20c"
+    },
+    {
+      "path": "cases/extreme_elongation/pino_inference.npz",
+      "size_bytes": 875144,
+      "sha256": "ea1d00c775e622be72d0db015c8a6625e851ed101f25deb43bc8695af6d01f22"
+    },
+    {
+      "path": "cases/extreme_elongation/traditional_inference.npz",
+      "size_bytes": 1021219,
+      "sha256": "8452bbba239f15181fadbd51d415b2217794e7963453cd4320bea732d81b313f"
+    },
+    {
+      "path": "cases/extreme_elongation/pino_metrics.json",
+      "size_bytes": 633,
+      "sha256": "80e391688f638b8ae27996726d5825b46c233e7713bc4ecf0a1ee6ca49d3319b"
+    },
+    {
+      "path": "cases/extreme_elongation/comparison_metrics.json",
+      "size_bytes": 579,
+      "sha256": "9f5a8655fd6d72e5d62fbedbf9d27b8a876169b9bf74e021c280ff8f8c44251a"
+    },
+    {
+      "path": "cases/extreme_elongation/pino_vs_traditional_comparison.png",
+      "size_bytes": 299391,
+      "sha256": "e51bf880ca186903c370ba60a47a1ba4ef96a6fbd3bdc0785bfe76fd243ef8b5"
+    },
+    {
+      "path": "cases/negative_triangularity/pino_inference.npz",
+      "size_bytes": 875144,
+      "sha256": "6a8b79f97fe71fd57e77b0e6ee6dca9885b62be4cef1e5c8d49a8093fb5c27b3"
+    },
+    {
+      "path": "cases/negative_triangularity/traditional_inference.npz",
+      "size_bytes": 1021219,
+      "sha256": "c1349a7e694a279f7bcbf08cd0ab50263c08b852223683632172362a4934fab0"
+    },
+    {
+      "path": "cases/negative_triangularity/pino_metrics.json",
+      "size_bytes": 637,
+      "sha256": "8233251aea99d371a7a7f83878a12b53a3bfee406d959ffdf464989a6c8f386c"
+    },
+    {
+      "path": "cases/negative_triangularity/comparison_metrics.json",
+      "size_bytes": 612,
+      "sha256": "c9f0cce88ee03c5c88a2c8a3bf9a8765cf498493a5aa8abd32b3e0285b195234"
+    },
+    {
+      "path": "cases/negative_triangularity/pino_vs_traditional_comparison.png",
+      "size_bytes": 369771,
+      "sha256": "06a6c56f5a4cdb45173bc96aa31e8ae7e41bb2b9d20a2a66c79d14bcfa32dfee"
+    },
+    {
+      "path": "cases/large_plasma/pino_inference.npz",
+      "size_bytes": 875144,
+      "sha256": "2f838f578da2a458385b9d329d2ea2f876ffb72027840002eb9e8cead2111dd3"
+    },
+    {
+      "path": "cases/large_plasma/traditional_inference.npz",
+      "size_bytes": 1021219,
+      "sha256": "cf5c3b399239752bff14e817069ab6de089997518d9fc4746df310c6481aaa42"
+    },
+    {
+      "path": "cases/large_plasma/pino_metrics.json",
+      "size_bytes": 630,
+      "sha256": "9be71a75a3b29f9091866cc1ac13dc3af2e697162978c3258d2e9f63e6bbf31d"
+    },
+    {
+      "path": "cases/large_plasma/comparison_metrics.json",
+      "size_bytes": 591,
+      "sha256": "ccff28a8a7cd5e521e569749c24df89fa4c3e4eed23087d0e2126ec2acc51a74"
+    },
+    {
+      "path": "cases/large_plasma/pino_vs_traditional_comparison.png",
+      "size_bytes": 343302,
+      "sha256": "c3a295deec34494ce2795f431f38177ec0aaa52892451f27bbe83e81fe373d46"
+    },
+    {
+      "path": "cases/small_plasma/pino_inference.npz",
+      "size_bytes": 875144,
+      "sha256": "741208c32e36551d06e1a48c9ff56718abe85b19607387bef6f08151559be4c3"
+    },
+    {
+      "path": "cases/small_plasma/traditional_inference.npz",
+      "size_bytes": 1021219,
+      "sha256": "4f67f14dd2a82c7dae965ccc03f6d9e9c767d9f6212b2eb6b40adb8486461763"
+    },
+    {
+      "path": "cases/small_plasma/pino_metrics.json",
+      "size_bytes": 630,
+      "sha256": "0a0c3e12d56e2febeaf1c6891a7ba8382e27df630cb200350b5af84550a5e839"
+    },
+    {
+      "path": "cases/small_plasma/comparison_metrics.json",
+      "size_bytes": 590,
+      "sha256": "f3ec1cb52e4ae588ea8ffc50a81e02c06c4343392e4cee78aba3a420cf5a08f9"
+    },
+    {
+      "path": "cases/small_plasma/pino_vs_traditional_comparison.png",
+      "size_bytes": 416937,
+      "sha256": "6a5b2cd0ef7d3ff051492aa636366e09cae67fb3aa22196b38165786d08a0da2"
+    },
+    {
+      "path": "sources/PROJECT_DOCUMENTATION_2.html",
+      "size_bytes": 2909525,
+      "sha256": "a4ae8861adef46396604d778a829deb168868a2b75fc0abd434fc5e56d6bb28c"
+    }
+  ],
+  "source_report": {
+    "path": "sources/PROJECT_DOCUMENTATION_2.html",
+    "size_bytes": 2909525,
+    "sha256": "a4ae8861adef46396604d778a829deb168868a2b75fc0abd434fc5e56d6bb28c"
+  }
+}

@@ -1,0 +1,13 @@
+# 正式网络/预算由共享 recipe 按 case 展开；路径相对本文件。
+case: advection
+dataset:
+  manifest: ../../../../../project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/datasets/manifest.json
+run_root: ../../../../../project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/runs
+trainprep:
+  execute: true
+  output: ../../../../../project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/prepared_final
+train:
+  execute: true
+  device: cpu
+post:
+  output: ../../../../../project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/predictions

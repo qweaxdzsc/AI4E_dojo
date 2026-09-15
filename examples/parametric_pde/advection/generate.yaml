@@ -1,0 +1,7 @@
+case: advection
+seed: 42
+train: 100
+test: 30
+nx: 100
+nt: 100
+output: ../../../../../project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/advection/datasets

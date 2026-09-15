@@ -62,6 +62,8 @@ def test_real_rawprep_to_existing_trainprep(platform):
     assert result["status"] == "succeeded", result.get("error") or task.read_log(
         project, result["id"]
     )
+    published = c.get("/api/v1/datasets").json()
+    assert any(item["name"] == "shapenet_car" and item["status"] == "available" for item in published)
     repeated = c.post(url + "/execute", json=body)
     assert repeated.json()["id"] == result["id"], repeated.text
     assert len(task.get_lineage(project)) == 1

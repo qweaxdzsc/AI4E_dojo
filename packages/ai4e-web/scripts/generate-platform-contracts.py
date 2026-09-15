@@ -42,7 +42,15 @@ def generate():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     lines = ["/** 自动生成自 ai4e-spec/artifacts/platform.py；请勿手改。 */"]
-    for name, value in vars(module).items():
+    extra_spec = importlib.util.spec_from_file_location("visualization_contract", SOURCE.with_name("visualization.py"))
+    extra = importlib.util.module_from_spec(extra_spec)
+    extra_spec.loader.exec_module(extra)
+    values = {**vars(module), **{name: value for name, value in vars(extra).items() if is_typeddict(value) and name != "VisualizationStorageScope"}}
+    inference_spec = importlib.util.spec_from_file_location("inference_contract", SOURCE.with_name("inference.py"))
+    inference = importlib.util.module_from_spec(inference_spec)
+    inference_spec.loader.exec_module(inference)
+    values.update({name: value for name, value in vars(inference).items() if is_typeddict(value)})
+    for name, value in values.items():
         if not is_typeddict(value):
             continue
         lines.append(f"export interface {name} {{")

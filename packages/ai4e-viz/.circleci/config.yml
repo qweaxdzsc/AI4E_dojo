@@ -1,0 +1,192 @@
+version: 2.1
+
+jobs:
+  backend-contracts:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v2-pip-py311-{{ checksum "uv.lock" }}
+      - run:
+          name: Install backend dependencies
+          command: |
+            pip install uv
+            uv sync --group visualization
+      - save_cache:
+          key: v2-pip-py311-{{ checksum "uv.lock" }}
+          paths:
+            - ~/.cache/pip
+      - run:
+          name: Contracts, NPZ physical fields, seeded reports, persistence and parser tests
+          command: |
+            PYTHONPATH=packages/ai4e-viz/backend uv run pytest --import-mode=importlib packages/ai4e-viz/backend/tests/modules packages/ai4e-viz/backend/tests/test_architecture.py -q --junitxml=packages/ai4e-viz/backend/test-results/junit.xml
+      - store_test_results:
+          path: packages/ai4e-viz/backend/test-results
+      - store_artifacts:
+          path: packages/ai4e-viz/backend/test-results
+          destination: backend-tests
+
+  frontend-unit-build:
+    docker:
+      - image: cimg/node:22.19
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v2-npm-node20-{{ checksum "packages/ai4e-viz/frontend/package-lock.json" }}
+      - run:
+          name: Install locked frontend dependencies
+          command: cd packages/ai4e-viz/frontend && npm ci
+      - save_cache:
+          key: v2-npm-node20-{{ checksum "packages/ai4e-viz/frontend/package-lock.json" }}
+          paths:
+            - ~/.npm
+      - run:
+          name: Component and route tests
+          command: |
+            cd packages/ai4e-viz/frontend
+            mkdir -p test-results
+            npx vitest run --reporter=default --reporter=junit --outputFile=test-results/vitest-junit.xml
+      - run:
+          name: Production build
+          command: cd packages/ai4e-viz/frontend && npm run build
+      - store_test_results:
+          path: packages/ai4e-viz/frontend/test-results
+      - store_artifacts:
+          path: packages/ai4e-viz/frontend/test-results
+          destination: frontend-tests
+      - store_artifacts:
+          path: packages/ai4e-viz/frontend/dist
+          destination: production-build
+
+  browser-e2e:
+    docker:
+      - image: mcr.microsoft.com/playwright:v1.62.1-noble
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v2-e2e-npm-{{ checksum "packages/ai4e-viz/frontend/package-lock.json" }}
+      - restore_cache:
+          keys:
+            - v2-e2e-pip-{{ checksum "uv.lock" }}
+      - run:
+          name: Install Python runtime and locked dependencies
+          command: |
+            apt-get update
+            DEBIAN_FRONTEND=noninteractive apt-get install -y python3 python3-pip python3-venv
+            python3 -m venv backend/.venv
+            backend/.venv/bin/pip install -r backend/requirements.txt
+      - run:
+          name: Install frontend dependencies
+          command: cd packages/ai4e-viz/frontend && npm ci
+      - save_cache:
+          key: v2-e2e-npm-{{ checksum "packages/ai4e-viz/frontend/package-lock.json" }}
+          paths:
+            - ~/.npm
+      - save_cache:
+          key: v2-e2e-pip-{{ checksum "uv.lock" }}
+          paths:
+            - ~/.cache/pip
+      - run:
+          name: Upload → recommend → choose → draw browser tests
+          command: |
+            cd packages/ai4e-viz/frontend
+            mkdir -p test-results/playwright
+            npm run test:e2e
+      - store_test_results:
+          path: packages/ai4e-viz/frontend/test-results
+      - store_artifacts:
+          path: packages/ai4e-viz/frontend/test-results
+          destination: browser-e2e
+
+  quarto-export-smoke:
+    docker:
+      - image: cimg/python:3.12-node
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-quarto-linux-amd64-1.10.18-afad071b5bd22c02f2d300695743189d3650e0537a53073e654b630cff2b0c73
+      - run:
+          name: Install and verify Quarto 1.10.18
+          command: |
+            if [ ! -x backend/.tools/quarto/1.10.18/bin/quarto ]; then
+              python backend/scripts/install_quarto.py
+            fi
+            backend/.tools/quarto/1.10.18/bin/quarto --version | grep '^1.10.18$'
+      - save_cache:
+          key: v1-quarto-linux-amd64-1.10.18-afad071b5bd22c02f2d300695743189d3650e0537a53073e654b630cff2b0c73
+          paths:
+            - backend/.tools/quarto/1.10.18
+      - restore_cache:
+          keys:
+            - v2-quarto-pip-py311-{{ checksum "uv.lock" }}
+      - restore_cache:
+          keys:
+            - v2-quarto-npm-node20-{{ checksum "packages/ai4e-viz/frontend/package-lock.json" }}
+      - restore_cache:
+          keys:
+            - v1-quarto-playwright-linux-amd64-{{ checksum "packages/ai4e-viz/frontend/package-lock.json" }}
+      - run:
+          name: Install Noto CJK fonts and project dependencies
+          command: |
+            sudo apt-get update
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y fonts-noto-cjk
+            python -m venv backend/.venv
+            backend/.venv/bin/pip install -r backend/requirements.txt
+            cd packages/ai4e-viz/frontend
+            npm ci
+            npx playwright install --with-deps chromium
+      - save_cache:
+          key: v2-quarto-pip-py311-{{ checksum "uv.lock" }}
+          paths:
+            - ~/.cache/pip
+      - save_cache:
+          key: v2-quarto-npm-node20-{{ checksum "packages/ai4e-viz/frontend/package-lock.json" }}
+          paths:
+            - ~/.npm
+      - save_cache:
+          key: v1-quarto-playwright-linux-amd64-{{ checksum "packages/ai4e-viz/frontend/package-lock.json" }}
+          paths:
+            - ~/.cache/ms-playwright
+      - run:
+          name: Real PDF and HTML export smoke
+          command: |
+            mkdir -p backend/test-results/quarto
+            cd backend
+            RUN_QUARTO_SMOKE=1 .venv/bin/python -m pytest tests/test_quarto_export.py -q --junitxml=test-results/quarto-junit.xml
+      - store_test_results:
+          path: packages/ai4e-viz/backend/test-results
+      - store_artifacts:
+          path: packages/ai4e-viz/backend/test-results/quarto
+          destination: quarto-exports
+      - store_artifacts:
+          path: packages/ai4e-viz/backend/test-results/quarto-junit.xml
+          destination: quarto-junit.xml
+
+  portability-contracts:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - run:
+          name: Verify slim portable bundle and non-destructive maintenance plan
+          command: |
+            mkdir -p backend/test-results/portability
+            python backend/scripts/create_portable_bundle.py --check-only > backend/test-results/portability/bundle-plan.json
+            python backend/scripts/maintenance.py > backend/test-results/portability/maintenance-plan.json
+      - store_artifacts:
+          path: packages/ai4e-viz/backend/test-results/portability
+          destination: portability
+
+workflows:
+  verify-qoder-design2:
+    jobs:
+      - backend-contracts
+      - frontend-unit-build
+      - browser-e2e
+      - quarto-export-smoke
+      - portability-contracts

@@ -30,7 +30,13 @@ from ai4e_core.base.config import load_config
 from tests.recipe_assets import CONFIG_PATH
 from tests.support import SHAPENET_SAMPLES
 
-ALL_GEOMETRY = ("nearest_vertex", "mesh_signed_distance", "surface_normals", "exterior_mask")
+ALL_GEOMETRY = (
+    "nearest_vertex",
+    "volume_normals",
+    "mesh_signed_distance",
+    "surface_normals",
+    "exterior_mask",
+)
 
 
 def _quad_xy() -> vtkUnstructuredGrid:
@@ -577,12 +583,14 @@ def test_optional_geometry_independent_without_labels(monkeypatch, selected):
     module = importlib.import_module("ai4e_core.applications.aero_cfd.rawprep.derive")
     functions = {
         "nearest_vertex": "nearest_vertex_distance_and_direction",
+        "volume_normals": "nearest_vertex_distance_and_direction",
         "mesh_signed_distance": "mesh_signed_distance",
         "surface_normals": "surface_point_normals_with_mask",
         "exterior_mask": "exterior_mask",
     }
     expected = {
-        "nearest_vertex": {"nearest_distance", "nearest_direction"},
+        "nearest_vertex": {"nearest_distance"},
+        "volume_normals": {"nearest_direction"},
         "mesh_signed_distance": {"signed_distance", "closest_on_surface", "surface_direction"},
         "surface_normals": {"normals", "normals_valid_mask"},
         "exterior_mask": {"exterior_mask"},
@@ -591,8 +599,9 @@ def test_optional_geometry_independent_without_labels(monkeypatch, selected):
     def forbidden(*args, **kwargs):
         raise AssertionError("调用了未启用的能力")
 
-    for name, function in functions.items():
-        if name not in selected:
+    needed = {functions[name] for name in selected}
+    for function in set(functions.values()):
+        if function not in needed:
             monkeypatch.setattr(module, function, forbidden)
     data = {"surface": {"vtk": _quad_xy()}, "volume": {"vtk": _hex()}, "extra": {"note": "保留"}}
     result = derive_configured_geometry(data, enabled=selected)
@@ -612,6 +621,10 @@ def test_normals_only_and_point_cloud_paths():
     data = {"surface": {"vtk": cloud}, "volume": {"vtk": _hex()}}
     result = derive_configured_geometry(data, enabled=["nearest_vertex", "exterior_mask"])
     assert result["volume"]["nearest_distance"].shape == (8,)
+    assert "nearest_direction" not in result["volume"]
+    only_normals = derive_configured_geometry(data, enabled=["volume_normals"])
+    assert only_normals["volume"]["nearest_direction"].shape == (8, 3)
+    assert "nearest_distance" not in only_normals["volume"]
     with pytest.raises(ValueError, match="裸点云"):
         derive_configured_geometry(data, enabled=["mesh_signed_distance"])
 

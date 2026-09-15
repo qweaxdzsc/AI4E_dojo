@@ -40,6 +40,26 @@ class DatasetDescriptor(TypedDict):
     fields: list[FieldDescriptor]
     dependencies: list[dict[str, Any]]
     capabilities: dict[str, Any]
+    profile: NotRequired[dict[str, Any]]
+    inspection: NotRequired[dict[str, Any]]
+    errors: NotRequired[list[dict[str, Any]]]
+    selection: NotRequired[list[str] | dict[str, list[str]]]
+
+
+class RawprepDescriptor(TypedDict):
+    """数据组件的原始处理描述，前端不维护默认值或绑定规则。"""
+
+    schema_version: int
+    dataset_id: str
+    defaults: dict[str, Any]
+    binding: dict[str, Any]
+    domains: dict[str, str]
+    outputs: list[dict[str, Any]]
+    geometry: list[dict[str, Any]]
+    filters: list[dict[str, Any]]
+    formats: list[str]
+    vtkhdf: bool
+    statistics_modes: list[str]
 
 
 class ExtractionMember(TypedDict):
