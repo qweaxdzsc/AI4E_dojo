@@ -160,6 +160,8 @@ def compare_results(reports: list[dict]) -> dict:
                     "overwrite",
                     "save_predictions",
                     "export_vtk",
+                    "export_pointcloud",
+                    "export_mesh",
                 }
             }
             signatures.append(
@@ -222,6 +224,8 @@ def _compare_v2(reports, rows):
                     "overwrite",
                     "save_predictions",
                     "export_vtk",
+                    "export_pointcloud",
+                    "export_mesh",
                 }
             }
             signature["extensions"] = protocol.get("extensions", {})

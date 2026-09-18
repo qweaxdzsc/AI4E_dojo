@@ -1,0 +1,342 @@
+ M .context/index.md
+ M .context/modules/ai4e-contrib.md
+ M .context/modules/ai4e-core.md
+ M .context/modules/ai4e-server.md
+ M .context/modules/ai4e-spec.md
+ M .context/modules/ai4e-task.md
+ M .context/modules/ai4e-viz.md
+ M .context/modules/ai4e-web.md
+ M .context/modules/recipes.md
+ M .context/mvp/model-picker-acceptance.md
+ M .context/mvp/phys-workbench-acceptance.md
+ M .cursor/rules/ai4e-algorithm-architecture.mdc
+ M .cursor/rules/ai4e-recipe-authoring.mdc
+ M .cursor/rules/ai4e-task-architecture.mdc
+ M AGENTS.md
+ M "docs/AI4E_Dojo_ARCHITECTURE (1).md"
+ M docs/PRD/README.md
+ M docs/PRD/ai4e-contrib/ability/PRD.md
+ M docs/PRD/ai4e-contrib/application/PRD.md
+ M docs/PRD/ai4e-core/abilities/PRD.md
+ M docs/PRD/ai4e-core/applications/PRD.md
+ M docs/PRD/ai4e-core/base/PRD.md
+ M docs/PRD/ai4e-core/run/PRD.md
+ M docs/PRD/ai4e-server/infrastructure/PRD.md
+ M docs/PRD/ai4e-server/modules/PRD.md
+ M docs/PRD/ai4e-spec/artifacts/PRD.md
+ M docs/PRD/ai4e-spec/components/PRD.md
+ M docs/PRD/ai4e-task/cli/PRD.md
+ M docs/PRD/ai4e-task/storage/PRD.md
+ M docs/PRD/ai4e-task/tasks/PRD.md
+ M docs/PRD/ai4e-task/templates/PRD.md
+ M docs/PRD/ai4e-viz/pipeline/PRD.md
+ M docs/PRD/ai4e-viz/serialization/PRD.md
+ M docs/PRD/ai4e-web/src/PRD.md
+ M docs/PRD/recipes/aero_cfd/PRD.md
+ M docs/abilities-inventory.md
+ M docs/abilities-merged.md
+ M docs/abilities-summary.md
+ M "docs/\344\270\211\347\273\264\347\211\251\347\220\206\345\234\272\345\217\257\350\247\206\345\214\226_UI\347\225\214\351\235\242\350\257\264\346\230\216.md"
+ M error.log
+ M examples/aero_cfd/nasa_crm_abupt/config.yaml
+ M examples/aero_cfd/nasa_crm_abupt/configuration.py
+ M examples/aero_cfd/nasa_crm_abupt/infer.py
+ M examples/aero_cfd/nasa_crm_abupt/pipeline.py
+ M examples/aero_cfd/nasa_crm_abupt/post.py
+ M examples/aero_cfd/nasa_crm_abupt/rawprep.py
+ M examples/aero_cfd/nasa_crm_abupt/train.py
+ M examples/aero_cfd/nasa_crm_abupt/trainprep.py
+ M examples/aero_cfd/nasa_crm_transolver3/config.yaml
+ M examples/aero_cfd/nasa_crm_transolver3/configuration.py
+ M examples/aero_cfd/nasa_crm_transolver3/infer.py
+ M examples/aero_cfd/nasa_crm_transolver3/pipeline.py
+ M examples/aero_cfd/nasa_crm_transolver3/post.py
+ M examples/aero_cfd/nasa_crm_transolver3/rawprep.py
+ M examples/aero_cfd/nasa_crm_transolver3/train.py
+ M examples/aero_cfd/nasa_crm_transolver3/trainprep.py
+ M examples/aero_cfd/shapenet_car_abupt/README.md
+ M examples/aero_cfd/shapenet_car_abupt/config.yaml
+ M examples/aero_cfd/shapenet_car_abupt/configuration.py
+ M examples/aero_cfd/shapenet_car_abupt/infer.py
+ M examples/aero_cfd/shapenet_car_abupt/pipeline.py
+ M examples/aero_cfd/shapenet_car_abupt/post.py
+ M examples/aero_cfd/shapenet_car_abupt/train.py
+ M examples/aero_cfd/shapenet_car_abupt/trainprep.py
+ M examples/aero_cfd/shapenet_car_transolver3_surface/config.yaml
+ M examples/aero_cfd/shapenet_car_transolver3_surface/configuration.py
+ M examples/aero_cfd/shapenet_car_transolver3_surface/infer.py
+ M examples/aero_cfd/shapenet_car_transolver3_surface/pipeline.py
+ M examples/aero_cfd/shapenet_car_transolver3_surface/post.py
+ M examples/aero_cfd/shapenet_car_transolver3_surface/train.py
+ M examples/aero_cfd/shapenet_car_transolver3_surface/trainprep.py
+ M examples/aero_cfd/shapenet_car_transolver3_volume/config.yaml
+ M examples/aero_cfd/shapenet_car_transolver3_volume/configuration.py
+ M examples/aero_cfd/shapenet_car_transolver3_volume/infer.py
+ M examples/aero_cfd/shapenet_car_transolver3_volume/pipeline.py
+ M examples/aero_cfd/shapenet_car_transolver3_volume/post.py
+ M examples/aero_cfd/shapenet_car_transolver3_volume/train.py
+ M examples/aero_cfd/shapenet_car_transolver3_volume/trainprep.py
+ M examples/recipe_extensions/README.md
+ M examples/recipe_extensions/field_mapping/config.yaml
+ M examples/recipe_extensions/field_mapping/configuration.py
+ M examples/recipe_extensions/field_mapping/pipeline.py
+ M examples/recipe_extensions/field_mapping/post.py
+ M examples/recipe_extensions/field_mapping/task-entry.json
+ M examples/recipe_extensions/field_mapping/train.py
+ M examples/recipe_extensions/field_mapping/trainprep.py
+ M examples/recipe_extensions/sampling/config.yaml
+ M examples/recipe_extensions/sampling/configuration.py
+ M examples/recipe_extensions/sampling/pipeline.py
+ M examples/recipe_extensions/sampling/post.py
+ M examples/recipe_extensions/sampling/task-entry.json
+ M examples/recipe_extensions/sampling/train.py
+ M examples/recipe_extensions/sampling/trainprep.py
+ M packages/ai4e-contrib/ability/model/abupt/component.py
+ M packages/ai4e-contrib/ability/model/pibsnet/component.py
+ M packages/ai4e-contrib/ability/model/transolver3/component.py
+ M packages/ai4e-contrib/ability/model/transolver3/inference.py
+ M packages/ai4e-core/abilities/eval/result_metrics.py
+ M packages/ai4e-core/abilities/modeling/inspection.py
+ M packages/ai4e-core/applications/aero_cfd/__init__.py
+ M packages/ai4e-core/applications/aero_cfd/anchor_workflow.py
+ M packages/ai4e-core/applications/aero_cfd/infer/__init__.py
+ M packages/ai4e-core/applications/aero_cfd/infer/anchor.py
+ M packages/ai4e-core/applications/aero_cfd/infer/evaluation.py
+ M packages/ai4e-core/applications/aero_cfd/infer/exports.py
+ M packages/ai4e-core/applications/aero_cfd/infer/stage.py
+ M packages/ai4e-core/applications/aero_cfd/pointfield_workflow.py
+ M packages/ai4e-core/applications/aero_cfd/post/__init__.py
+ M packages/ai4e-core/applications/aero_cfd/post/evaluation.py
+ M packages/ai4e-core/applications/aero_cfd/post/export.py
+ M packages/ai4e-core/applications/aero_cfd/post/inference.py
+ M packages/ai4e-core/applications/aero_cfd/post/mesh.py
+ M packages/ai4e-core/applications/aero_cfd/post/mesh_export.py
+ M packages/ai4e-core/applications/aero_cfd/post/physical.py
+ M packages/ai4e-core/applications/aero_cfd/post/pointfields.py
+ M packages/ai4e-core/applications/aero_cfd/post/progress.py
+ M packages/ai4e-core/applications/aero_cfd/post/result_evaluation.py
+ M packages/ai4e-core/applications/aero_cfd/post/stage.py
+ M packages/ai4e-core/applications/aero_cfd/rawprep/__init__.py
+ M packages/ai4e-core/applications/aero_cfd/train/__init__.py
+ M packages/ai4e-core/applications/aero_cfd/train/physical.py
+ M packages/ai4e-core/applications/aero_cfd/train/resolve.py
+ M packages/ai4e-core/applications/aero_cfd/workflow.py
+ M packages/ai4e-core/applications/parametric_pde/contracts.py
+ M packages/ai4e-core/pyproject.toml
+ M packages/ai4e-core/run/__init__.py
+ M packages/ai4e-core/run/session.py
+ M packages/ai4e-server/infrastructure/transport.py
+ M packages/ai4e-server/modules/capabilities/aero_cfd.py
+ M packages/ai4e-server/modules/capabilities/model_cases.py
+ D packages/ai4e-server/modules/capabilities/recipe_profile.py
+ M packages/ai4e-server/modules/datasets/application.py
+ M packages/ai4e-server/modules/rawprep/api.py
+ M packages/ai4e-server/modules/rawprep/application.py
+ M packages/ai4e-server/modules/stages/application.py
+ M packages/ai4e-server/modules/stages/domain.py
+ M packages/ai4e-task/__init__.py
+ M packages/ai4e-task/storage/processed_datasets.py
+ M packages/ai4e-task/tasks/artifacts.py
+ M packages/ai4e-task/tasks/checkpoints.py
+ M packages/ai4e-task/tasks/execution.py
+ M packages/ai4e-task/tasks/inference.py
+ M packages/ai4e-task/tasks/inference_exports.py
+ M packages/ai4e-task/tasks/inference_inspection.py
+ M packages/ai4e-task/tasks/inference_results.py
+ M packages/ai4e-task/tasks/inference_worker.py
+ M packages/ai4e-task/tasks/inspection_worker.py
+ M packages/ai4e-task/tasks/inspections.py
+ M packages/ai4e-task/tasks/post_metrics.py
+ M packages/ai4e-task/tasks/post_metrics_worker.py
+ M packages/ai4e-task/tasks/post_results.py
+ M packages/ai4e-task/tasks/query.py
+ M packages/ai4e-task/tasks/rawprep.py
+ M packages/ai4e-task/tasks/visualizations.py
+ M packages/ai4e-task/tasks/worker.py
+ M packages/ai4e-task/templates/models.py
+ M packages/ai4e-viz/.context/api-registry.md
+ M packages/ai4e-viz/.context/index.md
+ M packages/ai4e-viz/.context/modules/visDatasets.md
+ M packages/ai4e-viz/.context/modules/visEngine.md
+ M packages/ai4e-viz/.context/modules/visPhysField.md
+ M packages/ai4e-viz/.cursor/rules/ai4e-vis-backend.mdc
+ M packages/ai4e-viz/AGENTS.md
+ M packages/ai4e-viz/backend/modules/visDatasets/physicalDataset.py
+ M packages/ai4e-viz/backend/modules/visEngine/filters.py
+ M packages/ai4e-viz/backend/modules/visPhysField/commands.py
+ M packages/ai4e-viz/backend/modules/visPhysField/rendering.py
+ M packages/ai4e-viz/backend/modules/visPhysField/scene.py
+ M packages/ai4e-viz/backend/modules/visPhysField/trameUI/client/interaction.js
+ M packages/ai4e-viz/backend/modules/visPhysField/trameUI/controller.py
+ M packages/ai4e-viz/backend/modules/visPhysField/trameUI/pipelinePanel.py
+ M packages/ai4e-viz/backend/modules/visPhysField/trameUI/propertiesPanel.py
+ M packages/ai4e-viz/backend/modules/visPhysField/trameUI/viewportGrid.py
+ M packages/ai4e-viz/backend/tests/modules/test_phys_objects.py
+ M packages/ai4e-viz/cli.py
+ M packages/ai4e-viz/docs/PRD/MCP.md
+ M packages/ai4e-viz/docs/PRD/automation.md
+ M packages/ai4e-viz/docs/PRD/dataAssets.md
+ M packages/ai4e-viz/docs/PRD/reportDesigner.md
+ M packages/ai4e-viz/docs/PRD/reportManage.md
+ M packages/ai4e-viz/docs/PRD/visConvertor.md
+ M packages/ai4e-viz/docs/PRD/visDatasets.md
+ M packages/ai4e-viz/docs/PRD/visEngine.md
+ M packages/ai4e-viz/docs/PRD/visFigure.md
+ M packages/ai4e-viz/docs/PRD/visGeometry.md
+ M packages/ai4e-viz/docs/PRD/visIO.md
+ M packages/ai4e-viz/docs/PRD/visPhysField.md
+ M packages/ai4e-viz/docs/PRD/visTaskManage.md
+ M packages/ai4e-viz/docs/architecture/architecture.md
+ M packages/ai4e-viz/error.log
+ M packages/ai4e-web/e2e/execution-monitor.spec.ts
+ M packages/ai4e-web/e2e/http-errors.spec.ts
+ M packages/ai4e-web/e2e/inference-fixture.ts
+ M packages/ai4e-web/e2e/inference-results.spec.ts
+ M packages/ai4e-web/e2e/post-files.spec.ts
+ M packages/ai4e-web/e2e/post-fixture.ts
+ M packages/ai4e-web/e2e/post-session.spec.ts
+ M packages/ai4e-web/e2e/post-ui.spec.ts
+ M packages/ai4e-web/e2e/post-workspace.spec.ts
+ M packages/ai4e-web/e2e/rawprep-consistency.spec.ts
+ M packages/ai4e-web/e2e/stage-consistency.spec.ts
+ M packages/ai4e-web/e2e/task-dataset-binding.spec.ts
+ M packages/ai4e-web/src/app/pages/TaskWorkbenchPage.tsx
+ M packages/ai4e-web/src/infrastructure/contracts/api.generated.ts
+ M packages/ai4e-web/src/modules/executions/TrainingMonitor.tsx
+ M packages/ai4e-web/src/modules/executions/executions.css
+ M packages/ai4e-web/src/modules/files/ArtifactFileTree.tsx
+ M packages/ai4e-web/src/modules/files/StageFiles.tsx
+ M packages/ai4e-web/src/modules/files/artifact-file-tree.css
+ M packages/ai4e-web/src/modules/files/artifactTree.ts
+ M packages/ai4e-web/src/modules/files/index.ts
+ M packages/ai4e-web/src/modules/inference/InferenceCharts.tsx
+ M packages/ai4e-web/src/modules/inference/InferenceMetricTable.tsx
+ M packages/ai4e-web/src/modules/inference/InferenceWorkspace.tsx
+ M packages/ai4e-web/src/modules/inference/ResultViewSettings.tsx
+ M packages/ai4e-web/src/modules/inference/inference.css
+ M packages/ai4e-web/src/modules/inference/useInferenceResults.ts
+ M packages/ai4e-web/src/modules/models/ModelPanel.tsx
+ M packages/ai4e-web/src/modules/models/model.css
+ M packages/ai4e-web/src/modules/post/PostResultFilesPanel.tsx
+ M packages/ai4e-web/src/modules/rawprep/BoundDatasetFiles.tsx
+ M packages/ai4e-web/src/modules/rawprep/RawprepWorkbench.tsx
+ M packages/ai4e-web/src/modules/rawprep/api.ts
+ M packages/ai4e-web/src/modules/rawprep/rawprep-workbench.css
+ M packages/ai4e-web/src/modules/stages/StageWorkbench.tsx
+ M packages/ai4e-web/src/modules/stages/api.ts
+ M pyproject.toml
+ M recipes/aero_cfd/README.md
+ M recipes/aero_cfd/config.yaml
+ M recipes/aero_cfd/configuration.py
+ M recipes/aero_cfd/infer.py
+ M recipes/aero_cfd/pipeline.py
+ M recipes/aero_cfd/post.py
+ M recipes/aero_cfd/task-entry.json
+ M recipes/aero_cfd/train.py
+ M recipes/aero_cfd/trainprep.py
+ M recipes/parametric_pde/pipeline.py
+ M tests/contract/test_model_components.py
+ M tests/fixtures/recipe_before_explicit/physical_workflow.py
+ M tests/integration/test_abupt_recipe.py
+ M tests/integration/test_aero_cfd_documents.py
+ M tests/integration/test_algorithm_platform_contract.py
+ M tests/integration/test_cross_model_recipe.py
+ M tests/integration/test_dataset_recipe.py
+ M tests/integration/test_framework_correctness.py
+ M tests/integration/test_infer_compatibility.py
+ M tests/integration/test_infer_stage.py
+ M tests/integration/test_model_evaluation.py
+ M tests/integration/test_post_inference.py
+ M tests/integration/test_post_mesh.py
+ M tests/integration/test_post_result_metrics.py
+ M tests/integration/test_rawprep_workers.py
+ M tests/integration/test_recipe_explicit_equivalence.py
+ M tests/integration/test_recipe_extensions.py
+ M tests/integration/test_task_execution.py
+ M tests/integration/test_task_management.py
+ M tests/integration/test_task_post_metrics.py
+ M tests/integration/test_train_resolved_config.py
+ M tests/integration/test_transolver_post.py
+ M tests/integration/test_viz_installation.py
+ M tests/integration/test_web_inference.py
+ M tests/integration/test_web_processed_datasets.py
+ M tests/integration/test_web_project_task.py
+ M tests/integration/test_web_rawprep.py
+ M tests/integration/test_web_rawprep_handoff.py
+ M tests/integration/test_web_recipe_compatibility.py
+ M tests/integration/test_web_stage_consistency.py
+ M tools/verification/transolver3/dojo.py
+ M uv.lock
+?? .context/modules/repository.md
+?? .context/mvp/architecture-alignment-acceptance.md
+?? .context/mvp/architecture-alignment-results/
+?? .context/mvp/inference-result-views-acceptance.md
+?? .context/mvp/physical-post-abilities-acceptance.md
+?? .context/mvp/task-shared-datasets-results/
+?? .cursor/plans/trame-response-and-independent-visibility.plan.md
+?? .cursor/plans/wdno-reproduction-and-agent-composition.plan.md
+?? ".cursor/plans/\346\230\276\345\274\217_recipe_\346\255\245\351\252\244_9ea01c80.plan.md"
+?? "docs/pibsnet/\345\256\236\346\226\275\346\230\240\345\260\204.xlsx.inspect.ndjson"
+?? examples/recipe_extensions/field_mapping/infer.py
+?? examples/recipe_extensions/free_wiring/
+?? examples/recipe_extensions/physical_visualization/
+?? examples/recipe_extensions/sampling/infer.py
+?? packages/ai4e-contrib/application/aero_cfd/abupt.py
+?? packages/ai4e-contrib/application/aero_cfd/configuration.py
+?? packages/ai4e-contrib/application/aero_cfd/loader_adapter.py
+?? packages/ai4e-contrib/application/aero_cfd/transolver3.py
+?? packages/ai4e-contrib/application/parametric_pde/
+?? packages/ai4e-core/abilities/eval/region_statistics.py
+?? packages/ai4e-core/abilities/postproc/export/visualization.py
+?? packages/ai4e-core/abilities/postproc/visualization/
+?? packages/ai4e-core/applications/aero_cfd/infer/anchor_evaluation.py
+?? packages/ai4e-core/applications/aero_cfd/infer/anchor_export.py
+?? packages/ai4e-core/applications/aero_cfd/infer/anchor_stage.py
+?? packages/ai4e-core/applications/aero_cfd/infer/artifact_operations.py
+?? packages/ai4e-core/applications/aero_cfd/infer/mesh.py
+?? packages/ai4e-core/applications/aero_cfd/infer/pointfields.py
+?? packages/ai4e-core/applications/aero_cfd/infer/query.py
+?? packages/ai4e-core/applications/aero_cfd/infer/snapshot.py
+?? packages/ai4e-core/applications/aero_cfd/post/analysis.py
+?? packages/ai4e-core/applications/aero_cfd/post/analysis_export.py
+?? packages/ai4e-core/applications/aero_cfd/post/field_analysis.py
+?? packages/ai4e-core/applications/aero_cfd/post/field_binding.py
+?? packages/ai4e-core/applications/aero_cfd/post/field_rendering.py
+?? packages/ai4e-core/run/operation.py
+?? packages/ai4e-task/tasks/entry_compat.py
+?? packages/ai4e-task/tasks/operations.py
+?? packages/ai4e-task/tasks/records.py
+?? packages/ai4e-viz/backend/modules/visPhysField/trameUI/camera_controls.py
+?? packages/ai4e-viz/backend/modules/visPhysField/trameUI/export_controls.py
+?? packages/ai4e-viz/backend/modules/visPhysField/trameUI/object_controls.py
+?? packages/ai4e-viz/backend/modules/visPhysField/trameUI/session_controls.py
+?? packages/ai4e-viz/backend/tests/modules/test_phys_display_updates.py
+?? packages/ai4e-web/e2e/inference-result-views-real.spec.ts
+?? packages/ai4e-web/e2e/trame-responsiveness.spec.ts
+?? packages/ai4e-web/src/modules/inference/ChartViewSettings.tsx
+?? packages/ai4e-web/src/modules/models/graphViewport.ts
+?? packages/ai4e-web/src/modules/stages/inputChoices.ts
+?? packages/ai4e-web/src/modules/stages/useModelSelection.ts
+?? packages/ai4e-web/test-results-main/
+?? packages/ai4e-web/test-results-ui-tasktable/
+?? packages/ai4e-web/test-results-ui/
+?? tests/fixtures/numeric_anchor_infer.py
+?? tests/fixtures/public_api_baseline/
+?? tests/integration/test_architecture_alignment_documents.py
+?? tests/integration/test_infer_result_views.py
+?? tests/integration/test_post_analysis_recipe.py
+?? tests/integration/test_post_region_statistics.py
+?? tests/integration/test_post_visualization_abupt.py
+?? tests/integration/test_post_visualization_export.py
+?? tests/integration/test_post_visualization_fields.py
+?? tests/integration/test_post_visualization_installation.py
+?? tests/integration/test_post_visualization_probe.py
+?? tests/integration/test_post_visualization_render.py
+?? tests/integration/test_post_visualization_sections.py
+?? tests/integration/test_post_visualization_vectors.py
+?? tests/integration/test_public_api_stability.py
+?? tests/integration/test_task_operation_provider.py
+?? tests/integration/test_train_post_observation.py
+?? tools/ssh-git-remote.conf
+?? tools/verification/architecture_inventory.py
+?? tools/verification/inference_result_views.py

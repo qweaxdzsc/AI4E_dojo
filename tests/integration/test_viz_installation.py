@@ -1,5 +1,4 @@
 """实际 wheel 安装后的独立 CLI、资产保存与 Trame 工作进程验收。"""
-from pathlib import Path
 import hashlib
 import os
 import socket
@@ -7,10 +6,27 @@ import subprocess
 import sys
 import time
 import zipfile
+from pathlib import Path
+
 import httpx
 import vtk
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def test_workbench_dependency_preflight(monkeypatch):
+    """缺可选依赖时提示当前环境的正确安装入口。"""
+    import importlib.util
+
+    import pytest
+    spec = importlib.util.spec_from_file_location("viz_cli_preflight", ROOT / "packages/ai4e-viz/cli.py")
+    cli = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(cli)
+    monkeypatch.setattr(cli, "find_spec", lambda name: None if name in {"trame", "pandas"} else object())
+    with pytest.raises(RuntimeError, match=r"trame, pandas.*ai4e-viz\[workbench\]"):
+        cli.check_workbench_dependencies()
+    monkeypatch.setattr(cli, "find_spec", lambda _: object())
+    cli.check_workbench_dependencies()
 
 
 def test_installed_wheel_has_resources_and_never_writes_installation(tmp_path):
@@ -49,7 +65,14 @@ def test_installed_wheel_has_resources_and_never_writes_installation(tmp_path):
                 created=client.post('/api/phys/sessions',json={'context_id':context})
                 assert created.is_success,created.text
                 session=created.json()
-                saved=client.post('/api/visualizations',json={'context_id':context,'name':'wheel','spec':session['snapshot']['spec']})
+                command_url='/api/phys/sessions/'+session['session_id']+'/commands'
+                base_id=session['snapshot']['spec']['pipeline'][0]['id']
+                sliced=client.post(command_url,json={'context_id':context,'command':{'operation':'object_create','id':'slice','name':'切面','type':'slice','input':base_id,'view':0,'parameters':{'origin':[1,1,1],'normal':[1,0,0]}}})
+                assert sliced.is_success,sliced.text
+                hidden=client.post(command_url,json={'context_id':context,'command':{'operation':'display','id':base_id,'view':0,'visible':False}})
+                assert hidden.is_success,hidden.text
+                snapshot=client.post(command_url,json={'context_id':context,'command':{'operation':'snapshot'}}).json()
+                saved=client.post('/api/visualizations',json={'context_id':context,'name':'wheel','spec':snapshot['spec']})
                 assert saved.is_success,saved.text
                 assert client.delete('/api/phys/sessions/'+session['session_id'],params={'context_id':context}).is_success
                 asset=saved.json()
@@ -57,6 +80,7 @@ def test_installed_wheel_has_resources_and_never_writes_installation(tmp_path):
                 reopened=client.post('/api/phys/sessions',json={'context_id':context,'spec':loaded['spec']})
                 assert reopened.is_success,reopened.text
                 assert reopened.json()['snapshot']['spec']['schema_version']==2
+                assert [l['visible'] for l in reopened.json()['snapshot']['spec']['layers']]==[False,True]
                 job=client.post('/api/visualizations/'+asset['visualization_id']+'/exports',json={'context_id':context,'revision':asset['revision'],'options':{'format':'png','width':320,'height':240}})
                 assert job.is_success,job.text
                 export_id=job.json()['export_id']

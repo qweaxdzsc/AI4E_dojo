@@ -1,4 +1,8 @@
-"""能力事件、阶段上下文与真实耗时；只发日志，由运行写入方连接文件。"""
+"""能力事件、阶段上下文与真实耗时；只发日志，由运行写入方连接文件。
+
+常规 info 留给 application 阶段、批量摘要与稀疏进度。循环内原子能力
+默认 debug，避免每个样本的读取/提交刷屏；失败仍记错误。
+"""
 
 import contextvars
 import functools
@@ -12,6 +16,7 @@ LOGGER = logging.getLogger("ai4e_core.run")
 SAMPLE = contextvars.ContextVar("ai4e_sample", default="")
 PHASE = contextvars.ContextVar("ai4e_phase", default="")
 INTERVAL = 10.0
+ATOMIC_LEVEL = logging.DEBUG
 
 
 class _EventContext(logging.Filter):
@@ -70,34 +75,47 @@ def phase(name: str):
         PHASE.reset(token)
 
 
-def event(name: str, state: str, /, **details) -> None:
-    """记录小型事实字段，不接受数组和整个上下文作为日志载荷。"""
+def event(name: str, state: str, /, *, level: int = logging.INFO, **details) -> None:
+    """记录小型事实字段，不接受数组和整个上下文作为日志载荷。
+
+    Args:
+        name: 能力或阶段名。
+        state: 事件状态，如开始、结束、进度。
+        level: 日志等级；循环原子传 ``ATOMIC_LEVEL``。
+        **details: 小型可打印字段。
+    """
     if SAMPLE.get():
         details = {"样本": SAMPLE.get(), **details}
     text = "；".join(f"{k}={v}" for k, v in details.items())
-    LOGGER.info(text, extra={"operation": name, "event_state": state})
+    LOGGER.log(level, text, extra={"operation": name, "event_state": state})
 
 
 @contextmanager
-def operation(name: str, /, **details):
-    """记录开始、结束、失败与耗时；不可分块计算报告运行中而非虚构百分比。"""
+def operation(name: str, /, *, level: int = logging.INFO, **details):
+    """记录开始、结束、失败与耗时；不可分块计算报告运行中而非虚构百分比。
+
+    ``level`` 低于 INFO 时不启动心跳，供循环内逐步调用使用。失败仍记
+    错误。长任务心跳只在 INFO 级操作上每十秒发一次，不虚构百分比。
+    """
     started = time.monotonic()
+    event(name, "开始", level=level, **details)
     stopped = threading.Event()
-    event(name, "开始", **details)
+    worker = None
+    if level >= logging.INFO:
 
-    def heartbeat():
-        while not stopped.wait(INTERVAL):
-            event(
-                name,
-                "运行中",
-                已耗时=f"{time.monotonic() - started:.2f}秒",
-                状态="底层计算尚未返回",
-            )
+        def heartbeat():
+            while not stopped.wait(INTERVAL):
+                event(
+                    name,
+                    "运行中",
+                    已耗时=f"{time.monotonic() - started:.2f}秒",
+                    状态="底层计算尚未返回",
+                )
 
-    # 新线程不自动继承 ContextVar，捕获阶段与样本身份后显式传递。
-    context = contextvars.copy_context()
-    worker = threading.Thread(target=context.run, args=(heartbeat,), daemon=True)
-    worker.start()
+        # 新线程不自动继承 ContextVar，捕获阶段与样本身份后显式传递。
+        context = contextvars.copy_context()
+        worker = threading.Thread(target=context.run, args=(heartbeat,), daemon=True)
+        worker.start()
     try:
         yield
     except Exception as exc:
@@ -110,14 +128,15 @@ def operation(name: str, /, **details):
         )
         raise
     else:
-        event(name, "结束", 耗时=f"{time.monotonic() - started:.3f}秒")
+        event(name, "结束", level=level, 耗时=f"{time.monotonic() - started:.3f}秒")
     finally:
-        stopped.set()
-        worker.join()
+        if worker is not None:
+            stopped.set()
+            worker.join()
 
 
 def traced(name: str):
-    """为独立公开能力提供埋点，不改变输入输出契约。"""
+    """为独立公开能力提供 debug 埋点，不改变输入输出契约，不感知 recipe。"""
 
     def decorate(fn):
         @functools.wraps(fn)
@@ -128,14 +147,21 @@ def traced(name: str):
             for index, value in enumerate(args):
                 if hasattr(value, "shape"):
                     details[f"输入{index}形状"] = tuple(value.shape)
-            with operation(name, **details):
+            with operation(name, level=ATOMIC_LEVEL, **details):
                 result = fn(*args, **kwargs)
                 if hasattr(result, "shape"):
-                    event(name, "结果", 形状=tuple(result.shape), 类型=str(result.dtype))
+                    event(
+                        name,
+                        "结果",
+                        level=ATOMIC_LEVEL,
+                        形状=tuple(result.shape),
+                        类型=str(result.dtype),
+                    )
                 elif hasattr(result, "GetNumberOfPoints"):
                     event(
                         name,
                         "结果",
+                        level=ATOMIC_LEVEL,
                         点数=result.GetNumberOfPoints(),
                         单元数=result.GetNumberOfCells(),
                     )

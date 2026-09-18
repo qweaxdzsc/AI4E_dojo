@@ -60,8 +60,26 @@ def pipeline_panel(ui):
                 with v.VList(dense=True):
                     for label, callback in [
                         ("适合窗口", ui.camera),
-                        ("左右分割", lambda: ui.view_action("view_create", "horizontal")),
-                        ("上下分割", lambda: ui.view_action("view_create", "vertical")),
+                        (
+                            "左右分割 · 三维渲染",
+                            lambda: ui.view_action("view_create", "horizontal", view_type="render"),
+                        ),
+                        (
+                            "左右分割 · 折线图",
+                            lambda: ui.view_action(
+                                "view_create", "horizontal", view_type="line_chart"
+                            ),
+                        ),
+                        (
+                            "上下分割 · 三维渲染",
+                            lambda: ui.view_action("view_create", "vertical", view_type="render"),
+                        ),
+                        (
+                            "上下分割 · 折线图",
+                            lambda: ui.view_action(
+                                "view_create", "vertical", view_type="line_chart"
+                            ),
+                        ),
                         ("最大化 / 恢复", ui.maximize),
                     ]:
                         with v.VListItem(click=callback):
@@ -87,7 +105,16 @@ def pipeline_panel(ui):
             v.Template(v_slot_label="{ item }"),
             html.Div(classes=("item.id === selected ? 'phys-node selected' : 'phys-node'",)),
         ):
-            with v.VBtn(icon=True, x_small=True, click=(ui.visible, "[item.id]")):
+            v.VIcon("mdi-tag", v_if="item.source", small=True)
+            with v.VBtn(
+                v_if="!item.source",
+                icon=True,
+                x_small=True,
+                disabled=("item.draft",),
+                aria_label=("(item.visible ? '隐藏 ' : '显示 ') + item.name",),
+                __properties=[("aria_label", "aria-label")],
+                click=(ui.visible, "[item.id, !item.visible]"),
+            ):
                 v.VIcon(
                     '{{ item.source ? "mdi-tag" : (item.probe ? "mdi-map-marker-outline" : (item.visible ? "mdi-eye-outline" : "mdi-eye-off-outline")) }}',
                     small=True,

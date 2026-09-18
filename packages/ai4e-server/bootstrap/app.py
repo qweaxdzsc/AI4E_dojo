@@ -37,6 +37,10 @@ def create_app(settings):
     async def missing(request: Request, exc: KeyError):
         return JSONResponse({"detail": "not_found: " + str(exc)}, status_code=404)
 
+    @app.exception_handler(FileExistsError)
+    async def existing(request: Request, exc: FileExistsError):
+        return JSONResponse(error_payload(str(exc), uuid4().hex), status_code=409)
+
     @app.exception_handler(FileNotFoundError)
     async def file_missing(request: Request, exc: FileNotFoundError):
         return JSONResponse({"detail": "文件不存在或数据根未配置"}, status_code=404)
@@ -77,6 +81,7 @@ def create_app(settings):
         return {"status": "ok"}
 
     from ..infrastructure.vis_proxy import router as vis_proxy_router
+
     app.include_router(vis_proxy_router)
 
     if settings.web_dist:

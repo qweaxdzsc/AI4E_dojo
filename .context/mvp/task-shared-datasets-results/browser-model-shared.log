@@ -1,0 +1,10 @@
+
+> ai4e-web@0.1.0 test:e2e
+> playwright test model-inspection.spec.ts --grep 正式模型检查操作
+
+
+Running 1 test using 1 worker
+
+  -  1 e2e/model-inspection.spec.ts:5:1 › 正式模型检查操作到沙箱图形渲染
+
+  1 skipped

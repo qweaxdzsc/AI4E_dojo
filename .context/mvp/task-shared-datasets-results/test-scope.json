@@ -1,0 +1,65 @@
+{
+  "task_platform": [
+    "tests/integration/test_task_shared_execution.py",
+    "tests/integration/test_task_shared_datasets.py",
+    "tests/integration/test_task_shared_dataset_overwrite.py",
+    "tests/integration/test_task_shared_dataset_migration.py",
+    "tests/integration/test_task_management.py",
+    "tests/integration/test_task_execution.py",
+    "tests/integration/test_task_assets.py",
+    "tests/integration/test_task_contracts.py",
+    "tests/integration/test_task_configuration.py",
+    "tests/integration/test_task_recipe.py",
+    "tests/integration/test_task_documents.py",
+    "tests/integration/test_aero_cfd_documents.py",
+    "tests/integration/test_public_api_stability.py",
+    "tests/integration/test_web_processed_datasets.py",
+    "tests/integration/test_web_rawprep.py",
+    "tests/integration/test_web_rawprep_handoff.py",
+    "tests/integration/test_web_recipe_compatibility.py",
+    "tests/integration/test_web_dataset_binding.py",
+    "tests/integration/test_web_stage_consistency.py",
+    "tests/integration/test_web_project_task.py",
+    "tests/integration/test_web_architecture.py"
+  ],
+  "data_model": [
+    "tests/integration/test_physical_dataset_contract.py",
+    "tests/integration/test_model_preparation_contract.py",
+    "tests/integration/test_trainprep_split.py",
+    "tests/integration/test_normalized_dataset.py",
+    "tests/integration/test_train_checkpoint.py",
+    "tests/integration/test_infer_stage.py",
+    "tests/integration/test_infer_results.py",
+    "tests/integration/test_post_inference.py",
+    "tests/integration/test_post_mesh.py",
+    "tests/integration/test_rawprep_manifest_configuration.py",
+    "tests/integration/test_rawprep_workers.py",
+    "tests/integration/test_recipe_configuration.py",
+    "tests/integration/test_dataset_rawprep_descriptor.py",
+    "tests/integration/test_recipe_explicit_equivalence.py",
+    "tests/integration/test_recipe_extensions.py",
+    "tests/integration/test_train_recipe.py",
+    "tests/integration/test_rawprep_dataset.py"
+  ],
+  "installation": [
+    "tests/integration/test_task_shared_dataset_installation.py",
+    "tests/integration/test_task_installation.py"
+  ],
+  "browser": [
+    "shared-datasets.spec.ts",
+    "rawprep-consistency.spec.ts",
+    "stage-consistency.spec.ts",
+    "stage-files.spec.ts",
+    "model-inspection.spec.ts"
+  ],
+  "python_prefix": "uv run --no-sync /tmp/dojo-shared-final-env/bin/python -m pytest",
+  "note": "最终 Python 运行使用当前源码构建的独立 wheel 环境；安装专项自身另建环境，浏览器使用7999/5172。",
+  "supplemental": [
+    "tests/integration/test_task_shared_dataset_migration.py",
+    "tests/integration/test_task_shared_datasets.py",
+    "tests/integration/test_web_configuration_composition.py",
+    "tests/integration/test_web_configuration_handoff.py",
+    "tests/integration/test_pibsnet_generation.py"
+  ],
+  "configuration_filter": "-k \"not real_five\""
+}

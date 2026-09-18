@@ -10,7 +10,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from uuid import uuid4
 
-from ...infrastructure.content_access import resolve, revision
+from ...infrastructure.content_access import listing_stamp, resolve, revision
 
 _LOCK = threading.RLock()
 _CAPACITY = threading.Semaphore(1)
@@ -60,10 +60,17 @@ def digest(path):
     return revision(path)
 
 
-def register(service, project, root, relative, task_id=None):
-    """将受控文件登记为固定修订的资产。"""
+def register(service, project, root, relative, task_id=None, *, integrity="content"):
+    """将受控文件登记为固定修订的资产。列表交接可用文件戳，预览与写出仍用内容摘要。"""
+    if integrity not in {"content", "stat"}:
+        raise ValueError("unsupported_asset_integrity")
     path = resolve(service, project, root, relative, task_id)
-    rev = digest(path)
+    if integrity == "stat":
+        rev, mtime_ns, size = listing_stamp(path)
+    else:
+        rev = digest(path)
+        stat = path.stat()
+        mtime_ns, size = stat.st_mtime_ns, stat.st_size
     identity = hashlib.sha256(f"{project}:{path}:{rev}".encode()).hexdigest()
     ref = {"project_id": project, "asset_id": identity, "revision": rev, "task_id": task_id}
     service.store.put(
@@ -73,10 +80,21 @@ def register(service, project, root, relative, task_id=None):
             "ref": ref,
             "path": str(path),
             "kind": "source",
+            "integrity": integrity,
+            "mtime_ns": mtime_ns,
+            "size": size,
             "locator": {"root": root, "relative": relative, "task_id": task_id},
         },
     )
     return ref
+
+
+def locate(service, project, ref):
+    """只取已登记路径，不重算文件内容摘要。"""
+    record = service.store.get("asset", ref["asset_id"])
+    if record["ref"]["project_id"] != project or ref.get("project_id", project) != project:
+        raise ValueError("asset_project_mismatch")
+    return Path(record["path"])
 
 
 def asset(service, project, ref):
@@ -97,10 +115,19 @@ def asset(service, project, ref):
         or path.is_symlink()
     ):
         raise ValueError("asset_display_outside_root")
-    if (
-        ref.get("revision", record["ref"]["revision"]) != record["ref"]["revision"]
-        or digest(path) != record["ref"]["revision"]
-    ):
+    expected_revision = record["ref"]["revision"]
+    if ref.get("revision", expected_revision) != expected_revision:
+        raise ValueError("asset_revision_conflict")
+    if record.get("integrity") == "stat":
+        stamp, mtime_ns, size = listing_stamp(path)
+        if (
+            stamp != expected_revision
+            or mtime_ns != record.get("mtime_ns")
+            or size != record.get("size")
+        ):
+            raise ValueError("asset_revision_conflict")
+        return path
+    if digest(path) != expected_revision:
         raise ValueError("asset_revision_conflict")
     return path
 
@@ -379,6 +406,7 @@ def submit_model_inspection(
     inputs,
     idempotency_key=None,
     operation="trace_model",
+    section_digest=None,
 ):
     """异步调用 task 检查门面，结构资产固定配置和输入来源。"""
     identity = uuid4().hex
@@ -418,6 +446,7 @@ def submit_model_inspection(
             "event_cursor": 0,
             "fingerprint": fingerprint,
             "idempotency_key": idempotency_key,
+            "section_digest": section_digest,
         }
         service.store.put("operation", identity, value)
         _ACTIVE.add(identity)
@@ -494,7 +523,26 @@ def submit_model_inspection(
                         result.pop("metadata_path", None)
                     result.pop("path", None)
                     if operation == "trace_model":
-                        result["member"] = "model.html"
+                        views = result.get("views") if isinstance(result.get("views"), dict) else {}
+                        published = {
+                            key: {
+                                "member": item["member"],
+                                "label": item.get("label", key),
+                                "graph_nodes": item.get("graph_nodes"),
+                            }
+                            for key, item in views.items()
+                            if isinstance(item, dict) and item.get("member")
+                        }
+                        if published:
+                            default = result.get("default_view")
+                            if default not in published:
+                                default = next(iter(published))
+                            result["views"] = published
+                            result["default_view"] = default
+                            result["member"] = published[default]["member"]
+                        else:
+                            result.pop("views", None)
+                            result["member"] = result.get("member") or "model.html"
                     result["configuration_revision"] = revision
                     state.update(
                         status="succeeded",

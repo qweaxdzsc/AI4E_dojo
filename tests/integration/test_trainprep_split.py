@@ -1,6 +1,8 @@
 """数据准备重划 train/test/eval：全部已处理样本入池，不改张量。"""
 
+import importlib.util
 import json
+from pathlib import Path
 
 import pytest
 import torch
@@ -13,6 +15,14 @@ from ai4e_core.abilities.data.source.split import (
     resolve_split,
 )
 from ai4e_core.applications.aero_cfd.trainprep.preparation import open_dataset
+
+
+def _source_split():
+    path = Path(__file__).resolve().parents[2] / "packages/ai4e-core/abilities/data/source/split.py"
+    spec = importlib.util.spec_from_file_location("dojo_source_split", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def write_physical_manifest(root, partitions):
@@ -149,6 +159,33 @@ def test_open_dataset_overlay_uses_stored_partitions(tmp_path):
     )
     assert data.index.partitions == {"train": ["b"], "eval": ["a"]}
     data.index.read("eval", 0, fields=["pos"])
+
+
+def test_published_slices_fill_missing_buckets_and_keep_zero():
+    split = _source_split()
+    slices = split.published_slices(
+        {
+            "partitions": {"train": ["a", "b"]},
+            "split": {"method": "random", "seed": 3, "counts": {"train": 2, "test": 0, "eval": 0}},
+            "split_counts": {"train": 2},
+        }
+    )
+    assert [item["name"] for item in slices] == ["train", "test", "eval"]
+    assert slices[0] == {
+        "name": "train",
+        "role": "train",
+        "label": "训练集",
+        "count": 2,
+        "method": "random",
+        "seed": 3,
+    }
+    assert slices[1]["count"] == 0
+    assert slices[2]["count"] == 0
+    assert split.complete_split_buckets({"train": ["a"], "validation": ["b"]}) == {
+        "train": ["a"],
+        "test": [],
+        "eval": ["b"],
+    }
 
 
 def test_open_dataset_rejects_empty_train_split(tmp_path):

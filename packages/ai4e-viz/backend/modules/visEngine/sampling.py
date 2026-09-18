@@ -3,6 +3,32 @@
 import vtk
 
 
+def sample_line(mesh, start, end, count=1000, fields=None) -> list[dict]:
+    """沿线等距取值，横轴为弧长，域外点保留无效标记。"""
+    import math
+
+    if not isinstance(count, int) or isinstance(count, bool) or not 2 <= count <= 20000:
+        raise ValueError("invalid_line_resolution")
+    start = [float(x) for x in start]
+    end = [float(x) for x in end]
+    if len(start) != 3 or len(end) != 3 or not all(math.isfinite(x) for x in start + end):
+        raise ValueError("invalid_line_points")
+    span = math.sqrt(sum((end[i] - start[i]) ** 2 for i in range(3)))
+    positions = [
+        [start[j] + (end[j] - start[j]) * i / (count - 1) for j in range(3)] for i in range(count)
+    ]
+    rows = probe(mesh, positions)
+    selected = {str(item) for item in fields or []}
+    for index, row in enumerate(rows):
+        row["distance"] = span * index / (count - 1)
+        if selected and row.get("fields"):
+            row["fields"] = {key: value for key, value in row["fields"].items() if key in selected}
+            row["values"] = {
+                key: value for key, value in (row.get("values") or {}).items() if key in selected
+            }
+    return rows
+
+
 def probe(mesh, positions: list) -> list[dict]:
     """域外位置保留 valid=false，不以零值冒充有效样本。"""
     points = vtk.vtkPoints()

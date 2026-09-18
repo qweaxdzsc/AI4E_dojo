@@ -45,7 +45,8 @@ rawprep:
     - conditions
     - global_targets
     - surface_ids
-    format: pt
+    formats:
+    - pt
     vtkhdf: false
     statistics:
       mode: none

@@ -1,0 +1,3 @@
+warning: `--no-sync` has no effect when used alongside `--no-project`
+............s.s.....                                                     [100%]
+18 passed, 2 skipped in 38.92s

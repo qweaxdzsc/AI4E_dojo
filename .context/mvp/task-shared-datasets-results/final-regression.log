@@ -1,0 +1,301 @@
+.............................................................F.......F.. [ 38%]
+......................F................................................. [ 77%]
+...........................ss.........F....                              [100%]
+=================================== FAILURES ===================================
+______________ test_old_recipe_rejects_workers_until_launch_wrap _______________
+
+tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_old_recipe_rejects_worker0')
+
+    def test_old_recipe_rejects_workers_until_launch_wrap(tmp_path):
+        loader = _loader_without_workers_key(tmp_path)
+        with pytest.raises(ValueError, match="未知 rawprep 配置"):
+            loader(RECIPE / "config.yaml", {"rawprep.workers": 10})
+        public = load_user_configuration(loader, RECIPE / "config.yaml", {"rawprep.workers": 10})
+>       assert public.rawprep.workers == 10
+               ^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_rawprep_workers.py:90: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/omegaconf/dictconfig.py:355: in __getattr__
+    self._format_and_raise(
+.venv/lib/python3.12/site-packages/omegaconf/base.py:231: in _format_and_raise
+    format_and_raise(
+.venv/lib/python3.12/site-packages/omegaconf/_utils.py:899: in format_and_raise
+    _raise(ex, cause)
+.venv/lib/python3.12/site-packages/omegaconf/_utils.py:797: in _raise
+    raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.12/site-packages/omegaconf/dictconfig.py:351: in __getattr__
+    return self._get_impl(
+.venv/lib/python3.12/site-packages/omegaconf/dictconfig.py:442: in _get_impl
+    node = self._get_child(
+.venv/lib/python3.12/site-packages/omegaconf/basecontainer.py:73: in _get_child
+    child = self._get_node(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = {'sources': ['surface', 'volume'], 'fields': {'surface': {'pressure': {'components': 1}}, 'volume': {'velocity': {'com...df', 'volume_normals'], 'position_fields': ['surface_position', 'volume_position']}, 'vtkhdf': True, 'formats': ['pt']}
+key = 'workers', validate_access = True, validate_key = False
+throw_on_missing_value = False, throw_on_missing_key = True
+
+    def _get_node(
+        self,
+        key: DictKeyType,
+        validate_access: bool = True,
+        validate_key: bool = True,
+        throw_on_missing_value: bool = False,
+        throw_on_missing_key: bool = False,
+    ) -> Optional[Node]:
+        try:
+            key = self._validate_and_normalize_key(key)
+        except KeyValidationError:
+            if validate_access and validate_key:
+                raise
+            else:
+                if throw_on_missing_key:
+                    raise ConfigAttributeError
+                else:
+                    return None
+    
+        if validate_access:
+            self._validate_get(key)
+    
+        value: Optional[Node] = self.__dict__["_content"].get(key)
+        if value is None:
+            if throw_on_missing_key:
+>               raise ConfigKeyError(f"Missing key {key!s}")
+E               omegaconf.errors.ConfigAttributeError: Missing key workers
+E                   full_key: rawprep.workers
+E                   object_type=dict
+
+.venv/lib/python3.12/site-packages/omegaconf/dictconfig.py:480: ConfigAttributeError
+____________________ test_invalid_car_configuration[edit3] _____________________
+
+edit = {'format': 'bad'}
+
+    @pytest.mark.parametrize(
+        "edit",
+        [
+            {"geometry": []},
+            {"geometry": ["nearest_vertex", "mesh_signed_distance"]},
+            {"save_fields": ["surface_pressure"]},
+            {"format": "bad"},
+            {"fields": []},
+            {"sources": [{}]},
+            {"geometry": {"nearest_vertex": {"epsilon": -1}}},
+            {"statistics": {"fields": "invalid"}},
+        ],
+    )
+    def test_invalid_car_configuration(edit):
+        profile = shapenet_car.describe_rawprep()
+        raw = {**deepcopy(profile["defaults"]), **edit}
+>       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/integration/test_rawprep_manifest_configuration.py:27: Failed
+________ test_reference_statistics_preflight_without_training_partition ________
+
+tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0')
+
+    def test_reference_statistics_preflight_without_training_partition(tmp_path):
+        from tests.integration.test_dataset_recipe import execute_case
+    
+        folder, cfg = setup_case(tmp_path)
+        cfg.dataset.partition = {"test": ["b"]}
+        cfg.statistics.mode = "reference"
+        assert execute_case(folder, cfg) == 0
+>       assert not (Path(cfg.data_root) / "train/statistics.yaml").exists()
+E       AssertionError: assert not True
+E        +  where True = exists()
+E        +    where exists = (PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/data') / 'train/statistics.yaml').exists
+E        +      where PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/data') = Path('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/data')
+E        +        where '/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/data' = {'dataset': {'processed_name': None, 'root': '/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zongh...'coordinate'}, 'surface_sdf': {'method': 'identity'}, 'surface_normals': {'method': 'identity'}}, 'materialize': True}}.data_root
+
+tests/integration/test_recipe_configuration.py:87: AssertionError
+----------------------------- Captured stderr call -----------------------------
+INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/experiment/rawprep.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/records/2026-09-16T11-41-03_c0007b；生效配置=inputs/config.yaml
+INFO [rawprep/阶段/开始] 
+INFO [rawprep/数据集/开始] root=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/raw
+INFO [rawprep/数据集/选择结果] 样本总数=1；test=1
+INFO [rawprep/数据集/结束] 耗时=0.005秒
+INFO [rawprep/批量前处理/开始] 样本数=1
+INFO [rawprep/批量前处理/进度] 样本=b；完成=1；总数=1；失败=0；未执行=0
+INFO [rawprep/批量前处理/结束] 耗时=0.013秒
+INFO [rawprep/统计/开始] 方法=reference；参数来源=/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/ai4e_contrib/application/datasets/shapenet_car/statistics.yaml
+INFO [rawprep/统计/结束] 耗时=0.001秒
+INFO [rawprep/数据清单/开始] 状态=physical；归一化=未执行
+INFO [rawprep/数据清单/结束] 耗时=0.000秒
+INFO [rawprep/阶段/结束] 耗时=0.022秒
+INFO [运行/结束] 状态=成功；成功=1；失败=0；未执行=0；耗时=0.022秒
+------------------------------ Captured log call -------------------------------
+INFO     ai4e_core.run:events.py:78 [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/experiment/rawprep.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/records/2026-09-16T11-41-03_c0007b；生效配置=inputs/config.yaml
+INFO     ai4e_core.run:events.py:78 [rawprep/阶段/开始] 
+INFO     ai4e_core.run:events.py:78 [rawprep/数据集/开始] root=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/raw
+INFO     ai4e_core.run:events.py:78 [rawprep/数据集/选择结果] 样本总数=1；test=1
+INFO     ai4e_core.run:events.py:78 [rawprep/数据集/结束] 耗时=0.005秒
+INFO     ai4e_core.run:events.py:78 [rawprep/输出预检/开始] 
+INFO     ai4e_core.run:events.py:78 [rawprep/输出规划/开始] overwrite=False；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/data/test/b
+INFO     ai4e_core.run:events.py:78 [rawprep/输出规划/结束] 耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/输出预检/目标] test=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/data/test
+INFO     ai4e_core.run:events.py:78 [rawprep/输出预检/结束] 耗时=0.001秒
+INFO     ai4e_core.run:events.py:78 [rawprep/批量前处理/开始] 样本数=1
+INFO     ai4e_core.run:events.py:78 [rawprep/样本读取/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/读取/开始] 样本=b；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/raw/b/quadpress_smpl.vtk
+INFO     ai4e_core.run:events.py:78 [rawprep/读取/结果] 样本=b；点数=4；单元数=1
+INFO     ai4e_core.run:events.py:78 [rawprep/读取/结束] 样本=b；耗时=0.001秒
+INFO     ai4e_core.run:events.py:78 [rawprep/读取/开始] 样本=b；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/raw/b/hexvelo_smpl.vtk
+INFO     ai4e_core.run:events.py:78 [rawprep/读取/结果] 样本=b；点数=8；单元数=1
+INFO     ai4e_core.run:events.py:78 [rawprep/读取/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本读取/结束] 样本=b；耗时=0.001秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本字段提取/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/结果] 样本=b；形状=(4, 3)；类型=float32
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/字段提取/开始] 样本=b；name=pressure；association=point；kind=scalar
+INFO     ai4e_core.run:events.py:78 [rawprep/字段提取/结果] 样本=b；形状=(4,)；类型=float64
+INFO     ai4e_core.run:events.py:78 [rawprep/字段提取/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/有效点标记/开始] 样本=b；cell_type=9
+INFO     ai4e_core.run:events.py:78 [rawprep/有效点标记/结果] 样本=b；形状=(4,)；类型=bool
+INFO     ai4e_core.run:events.py:78 [rawprep/有效点标记/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/结果] 样本=b；形状=(8, 3)；类型=float32
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/字段提取/开始] 样本=b；name=velocity；association=point；kind=vector
+INFO     ai4e_core.run:events.py:78 [rawprep/字段提取/结果] 样本=b；形状=(8, 3)；类型=float32
+INFO     ai4e_core.run:events.py:78 [rawprep/字段提取/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本字段提取/结束] 样本=b；耗时=0.001秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本几何派生/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/结果] 样本=b；形状=(4, 3)；类型=float32
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/结果] 样本=b；形状=(8, 3)；类型=float32
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/点到最近顶点/开始] 样本=b；输入0形状=(8, 3)；输入1形状=(4, 3)
+INFO     ai4e_core.run:events.py:78 [rawprep/点到最近顶点/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/表面法向/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/表面法向/结束] 样本=b；耗时=0.001秒
+INFO     ai4e_core.run:events.py:78 [rawprep/重合点标记/开始] 样本=b；输入0形状=(8, 3)；输入1形状=(4, 3)
+INFO     ai4e_core.run:events.py:78 [rawprep/重合点标记/结果] 样本=b；形状=(8,)；类型=bool
+INFO     ai4e_core.run:events.py:78 [rawprep/重合点标记/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本几何派生/结束] 样本=b；耗时=0.002秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本字段选择/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/结果] 样本=b；形状=(4, 3)；类型=float32
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/结果] 样本=b；形状=(8, 3)；类型=float32
+INFO     ai4e_core.run:events.py:78 [rawprep/坐标提取/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本字段选择/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本字段校验/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/字段身份校验/开始] 样本=b；sample=b
+INFO     ai4e_core.run:events.py:78 [rawprep/字段身份校验/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本字段校验/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本筛选/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/记录筛选/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/字段身份校验/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/字段身份校验/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/字段身份校验/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/字段身份校验/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/记录筛选/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/字段身份校验/开始] 样本=b；sample=b
+INFO     ai4e_core.run:events.py:78 [rawprep/字段身份校验/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/筛选/结果] 样本=b；组=surface:point；筛选前=4；保留=4；删除=0
+INFO     ai4e_core.run:events.py:78 [rawprep/筛选/结果] 样本=b；组=volume:point；筛选前=8；保留=4；删除=4
+INFO     ai4e_core.run:events.py:78 [rawprep/样本筛选/结束] 样本=b；耗时=0.001秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本字段校验/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/字段身份校验/开始] 样本=b；sample=b
+INFO     ai4e_core.run:events.py:78 [rawprep/字段身份校验/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本字段校验/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本张量编码/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/字段身份校验/开始] 样本=b；sample=b
+INFO     ai4e_core.run:events.py:78 [rawprep/字段身份校验/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/结果] 样本=b；形状=(4,)；类型=torch.float32
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/结果] 样本=b；形状=(4, 3)；类型=torch.float32
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/结果] 样本=b；形状=(4, 3)；类型=torch.float32
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/结果] 样本=b；形状=(4, 3)；类型=torch.float32
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/结果] 样本=b；形状=(4, 3)；类型=torch.float32
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/结果] 样本=b；形状=(4,)；类型=torch.float32
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/开始] 样本=b
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/结果] 样本=b；形状=(4, 3)；类型=torch.float32
+INFO     ai4e_core.run:events.py:78 [rawprep/张量编码/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本张量编码/结束] 样本=b；耗时=0.001秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本提交/开始] 样本=b；分片=test
+INFO     ai4e_core.run:events.py:78 [rawprep/输出规划/开始] 样本=b；overwrite=False；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/data/test/b
+INFO     ai4e_core.run:events.py:78 [rawprep/输出规划/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/张量提交/开始] 样本=b；overwrite=False；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/data/test/b
+INFO     ai4e_core.run:events.py:78 [rawprep/输出规划/开始] 样本=b；overwrite=False；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/data/test/b
+INFO     ai4e_core.run:events.py:78 [rawprep/输出规划/结束] 样本=b；耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/张量提交/结束] 样本=b；耗时=0.006秒
+INFO     ai4e_core.run:events.py:78 [rawprep/样本提交/结果] 样本=b；目标=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_reference_statistics_pref0/data/test/b；文件数=7；状态=已提交
+INFO     ai4e_core.run:events.py:78 [rawprep/样本提交/结束] 样本=b；耗时=0.006秒
+INFO     ai4e_core.run:events.py:78 [rawprep/批量前处理/进度] 样本=b；完成=1；总数=1；失败=0；未执行=0
+INFO     ai4e_core.run:events.py:78 [rawprep/批量前处理/结束] 耗时=0.013秒
+INFO     ai4e_core.run:events.py:78 [rawprep/统计/开始] 方法=reference；参数来源=/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/ai4e_contrib/application/datasets/shapenet_car/statistics.yaml
+INFO     ai4e_core.run:events.py:78 [rawprep/统计参数读取/开始] 来源=/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/ai4e_contrib/application/datasets/shapenet_car/statistics.yaml
+INFO     ai4e_core.run:events.py:78 [rawprep/统计参数读取/结束] 耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/统计/结束] 耗时=0.001秒
+INFO     ai4e_core.run:events.py:78 [rawprep/数据清单/开始] 状态=physical；归一化=未执行
+INFO     ai4e_core.run:events.py:78 [rawprep/数据清单/结束] 耗时=0.000秒
+INFO     ai4e_core.run:events.py:78 [rawprep/阶段/结束] 耗时=0.022秒
+INFO     ai4e_core.run:events.py:78 [运行/结束] 状态=成功；成功=1；失败=0；未执行=0；耗时=0.022秒
+____________ test_unbound_template_create_does_not_weaken_execution ____________
+
+platform = (<starlette.testclient.TestClient object at 0x16f2cd430>, 'b50ef82f46dc44f7947188b0614bd30f', {'id': '042c783f826e4d63...4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-307/test_unbound_template_create_d0/raw')], web_dist=None))
+
+    def test_unbound_template_create_does_not_weaken_execution(platform):
+        c, p, t, _, _ = platform
+        project = c.app.state.services.project(p)
+        with pytest.raises(FileNotFoundError):
+>           task.submit_run(project, t["id"])
+
+tests/integration/test_web_project_task.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/ai4e_task/tasks/execution.py:95: in submit_run
+    _, shared_outputs = allocate_outputs(
+.venv/lib/python3.12/site-packages/ai4e_task/tasks/output_bindings.py:76: in allocate_outputs
+    name = validate_processed_name(OmegaConf.select(cfg, declaration["name_key"]))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+name = None
+
+    def validate_processed_name(name: str) -> str:
+        """校验平台数据集名称；空值与非法字符都拒绝。"""
+        if not isinstance(name, str) or not name.strip():
+>           raise ValueError("processed_dataset_name_required")
+E           ValueError: processed_dataset_name_required
+
+.venv/lib/python3.12/site-packages/ai4e_task/storage/processed_datasets.py:41: ValueError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+.venv/lib/python3.12/site-packages/starlette/testclient.py:53
+  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+tests/integration/test_post_inference.py::test_post_metrics_match_shared_evaluate
+  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_rawprep_workers.py::test_old_recipe_rejects_workers_until_launch_wrap
+FAILED tests/integration/test_rawprep_manifest_configuration.py::test_invalid_car_configuration[edit3]
+FAILED tests/integration/test_recipe_configuration.py::test_reference_statistics_preflight_without_training_partition
+FAILED tests/integration/test_web_project_task.py::test_unbound_template_create_does_not_weaken_execution
+4 failed, 181 passed, 2 skipped, 3 warnings in 739.20s (0:12:19)

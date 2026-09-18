@@ -8,15 +8,17 @@ import vtk
 from vtk.util.numpy_support import numpy_to_vtk, numpy_to_vtkIdTypeArray
 
 
-def write_pointcloud(path: str | Path, positions, fields: dict) -> Path:
+def write_pointcloud(path: str | Path, positions, fields: dict, *, field_data: dict | None = None) -> Path:
     """写出每个点带一个 VTK_VERTEX 的 ``.vtp`` 点云，保留输入数值类型。
 
     这是锚点预览，不是完整网格回贴。标量 ``(N, 1)`` 压成一维，矢量保留分量。
+    ``field_data`` 写单值字符串，用于 ``sample_id`` 等对照身份。
 
     Args:
         path: 目标 ``.vtp`` 路径。
         positions: 点坐标，形状必须是 ``(N, 3)``。
         fields: 点数据场，首维必须等于点数。
+        field_data: 可选网格级字符串属性。
 
     Returns:
         已提交的目标路径。
@@ -48,6 +50,13 @@ def write_pointcloud(path: str | Path, positions, fields: dict) -> Path:
         vtk_array = numpy_to_vtk(np.ascontiguousarray(array), deep=True)
         vtk_array.SetName(str(name))
         poly.GetPointData().AddArray(vtk_array)
+    for name, value in (field_data or {}).items():
+        if value in (None, ""):
+            continue
+        array = vtk.vtkStringArray()
+        array.SetName(str(name))
+        array.InsertNextValue(str(value))
+        poly.GetFieldData().AddArray(array)
     target = Path(path)
     target.parent.mkdir(parents=True, exist_ok=True)
     temporary = target.with_name(f".{target.stem}.{uuid4().hex}.vtp")

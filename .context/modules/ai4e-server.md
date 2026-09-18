@@ -1,4 +1,15 @@
 # ai4e-server 模块索引
+## 当前职责与本轮变更
+
+bootstrap 装配，infrastructure 受控存储与传输，modules 平台业务用例。
+
+- `packages/ai4e-server/modules/capabilities/aero_cfd.py`：平台操作可用性门禁，不再比较模板 AST 或代码文件集合。
+- `packages/ai4e-server/modules/capabilities/model_cases.py`：官方目录映射，未知模型不冒充 AB-UPT；按数据集列出可加载的数据准备组合。`model-options` 进页只读 YAML 目录，点选 `/model-option` 再描述目标默认值与能力。
+- `packages/ai4e-server/modules/stages/application.py`：开训合成现行配置，只认 version=2 准备；仅当任务脚本摘要已核验时才替换旧官方包装。阶段提交按当前 recipe 投影的 `inputs.*` 捕获输入。阶段输入列表按文件戳登记检查点，不整文件摘要；准备完成的数据带回 train/test/eval 切片。准备处理结果列举现行 `data_dir/trainprep/normalize`，历史运行回退 `data_dir/normalize`。
+- `packages/ai4e-server/modules/rawprep/application.py`：正式提交覆盖 `inputs.rawprep.source`，不再写旧键 `dataset.root`。
+- `packages/ai4e-server/modules/stages/domain.py`：`normalize_field_scales` 为每场写入显式 scale。
+- 本轮文件与回归清单：`.context/mvp/architecture-alignment-acceptance.md`。
+
 
 本机 API、任务公开门面代理、原始处理映射和报告存储。
 
@@ -12,7 +23,8 @@
 - `packages/ai4e-server/bootstrap/dependencies.py`：请求、领域规则或业务视图。
 - `packages/ai4e-server/bootstrap/settings.py`：请求、领域规则或业务视图。
 - `packages/ai4e-server/infrastructure/__init__.py`：请求、领域规则或业务视图。
-- `packages/ai4e-server/infrastructure/content_access.py`：请求、领域规则或业务视图。
+- `packages/ai4e-server/infrastructure/transport.py`：错误码到页面文案；缺推理批次映射为「不存在或已被清理」，不再冒充数据根未配置。
+- `packages/ai4e-server/infrastructure/content_access.py`：受控根解析；预览用内容修订，阶段列表可用文件戳。
 - `packages/ai4e-server/infrastructure/persistence.py`：请求、领域规则或业务视图。
 - `packages/ai4e-server/modules/__init__.py`：请求、领域规则或业务视图。
 - `packages/ai4e-server/modules/assets/__init__.py`：请求、领域规则或业务视图。
@@ -20,8 +32,7 @@
 - `packages/ai4e-server/modules/capabilities/__init__.py`：官方模型、起步案例与预设门面。
 - `packages/ai4e-server/modules/capabilities/model_cases.py`：两个官方模型与五个起步 example。
 - `packages/ai4e-server/modules/capabilities/model_presets.py`：项目共享模型配置预设。
-- `packages/ai4e-server/modules/capabilities/trace_source.py`：结构跟踪最近可用物理来源。
-- `packages/ai4e-server/modules/capabilities/aero_cfd.py`：登记模板与任务文件集合检查；`recipe_profile.py` 比较 Python 语法/入口 JSON，有限登记已核验的旧配置入口。历史夹具为 `tests/fixtures/rawprep_legacy/configuration.py`，回归入口 `test_web_recipe_compatibility.py`。
+- `packages/ai4e-server/modules/capabilities/trace_source.py`：结构跟踪优先已选或可导入的现行 version=2 准备，否则最近正式清单；不拿冻结声明挡当前模型。
 - `packages/ai4e-server/modules/capabilities/api.py`：请求、领域规则或业务视图。
 - `packages/ai4e-server/modules/comparisons/__init__.py`：请求、领域规则或业务视图。
 - `packages/ai4e-server/modules/comparisons/api.py`：请求、领域规则或业务视图。
@@ -36,9 +47,9 @@
 - `packages/ai4e-server/modules/projects/api.py`：请求、领域规则或业务视图。
 - `packages/ai4e-server/modules/projects/application.py`：请求、领域规则或业务视图。
 - `packages/ai4e-server/modules/rawprep/__init__.py`：请求、领域规则或业务视图。
-- `packages/ai4e-server/modules/datasets/`：工作区已处理数据集列表、补登记与数据准备候选项；列表与候选项按登记时间倒序，不扫描 contrib。
-- `packages/ai4e-server/modules/rawprep/api.py`：请求、领域规则或业务视图；保存 `dataset.processed_name`，正式执行预检名称；ShapeNet 新建任务描述回 VTKHDF 打开。
-- `packages/ai4e-server/modules/rawprep/application.py`：请求、领域规则或业务视图。
+- `packages/ai4e-server/modules/datasets/`：工作区已处理数据集列表、补登记与数据准备候选项；列表与候选项按登记时间倒序并带回 `created_at`，不扫描 contrib。
+- `packages/ai4e-server/modules/rawprep/api.py`：保存 `dataset.processed_name`，读取/保存回传 `processed_name_status`，正式执行由 Task 检查项目内名称并发布共享数据；提交可带 `overwrite_processed_name` 授权本次同名物理内容覆盖；ShapeNet 新建任务描述回 VTKHDF 打开。
+- `packages/ai4e-server/modules/rawprep/application.py`：打开目录只解析受控路径，提交前才登记并哈希来源。
 - `packages/ai4e-server/modules/rawprep/domain.py`：请求、领域规则或业务视图。
 - `packages/ai4e-server/modules/rawprep/recipe_mapping.py`：请求、领域规则或业务视图。
 - `packages/ai4e-server/modules/reports/__init__.py`：请求、领域规则或业务视图。
@@ -62,17 +73,17 @@
 ## 并行工作区接入
 
 - `modules/stages/api.py`：五段配置修订、独立检查、阶段提交及固定产物候选。
-- `modules/visualization/application.py`：受控资产、串行转换、幂等、超时、取消和重启核对。
-- `modules/visualization/api.py`：资产内容、辅助操作事件与场景接口。
+- `modules/visualization/application.py`：受控资产、串行转换、幂等、超时、取消和重启核对；模型跟踪结果登记两档成员，默认回主干，历史单图不补第二档。
+- `modules/visualization/api.py`：资产内容、辅助操作事件、场景接口，以及任务可视化网格来源列表。
 - `modules/visualization/scenes.py`：场景身份、视图引用和联动门禁。
 - `infrastructure/persistence.py`：服务记录和场景修订原子比较保存。
 - `tests/integration/test_web_platform_operations.py`：固定内容、场景冲突、真实文本进程、符号链接及重启行为。
 
-- `infrastructure/transport.py`：标准JSON非有限统计为空，保留原始产物与运行状态；已知业务码映射中文 `error.message`；产品说明 `docs/PRD/ai4e-server/infrastructure/PRD.md`。
+- `infrastructure/transport.py`：标准JSON非有限统计为空，保留原始产物与运行状态；已知业务码映射中文 `error.message`，缺推理批次映射为「不存在或已被清理」而非数据根未配置；产品说明 `docs/PRD/ai4e-server/infrastructure/PRD.md`。
 
 `modules/tasks/api.py` 同时提供修订保护的数据来源文件绑定；NASA 三个源文件允许不同已登记目录。`docs/PRD/ai4e-server/infrastructure/PRD.md` 记录服务持久化、受控访问和非有限数传输规则。
 
-`modules/stages/api.py` 仅做传输适配；`stages/application.py` 捕获配置修订、解析固定输入并调用 task，根外且不存在的模板清单占位视为未绑定；`stages/domain.py` 集中阶段顺序、试跑、只读统计、字段匹配和阶段输入选择规则。跨可视化上下文通过 `visualization/__init__.py` 公开门面。
+`modules/stages/api.py` 仅做传输适配；`stages/application.py` 捕获配置修订、解析固定输入并调用 task，根外且不存在的模板清单占位视为未绑定；准备完成的数据在阶段输入里带回数据准备所选平台数据集名称供页面展示；`stages/domain.py` 集中阶段顺序、试跑、只读统计、字段匹配、设置完成摘要和阶段输入选择规则；训练设置提交开训，拒绝 `prepare_first`，按当次所选准备合成运行清单，继续训练可覆盖 `train.resume`。保存模型/训练设置记下完成，未改参数的保存也会盖住旧失败预检；检查或结构跟踪不能冒充或清掉。摘要按已保存事实恢复，本页参数变化只附带过期原因。跨可视化上下文通过 `visualization/__init__.py` 公开门面。
 
 `modules/lineage/api.py` 的版本详情使用 task `read_version_details`，不读取任务内部数据库。可视化相同协议/来源修订/选项共享转换；每个消费方有独立订阅，取消最后订阅才终止，旧不带订阅取消保留明确整体停止语义。
 
@@ -80,7 +91,7 @@
 
 ## 平台一致性接口与验证
 
-- `modules/stages/application.py`：配置与受控输入同修订保存，能力枚举适配、检查修订失效、固定阶段文件范围；阶段文件条目带预览用受控根与相对路径；数据准备附带字段匹配清单、分片默认值和样本名单，保存时校验域、张量形状、执行范围及分片数量；`train.manifest` 候选项同一文件只保留平台名称，不并列任务历史。
+- `modules/stages/application.py`：配置与受控输入同修订保存，能力枚举适配、检查修订失效、固定阶段文件范围；同一配置修订的 `describe_case` 在步骤间复用；阶段文件条目带预览用受控根与相对路径；数据准备附带字段匹配清单、分片默认值和样本名单，保存时校验域、张量形状、执行范围及分片数量；`inputs.trainprep.dataset` 候选项同一文件只保留平台名称，不并列任务历史。
 - `modules/stages/__init__.py`：向任务上下文公开阶段摘要，列表与工作台共用。
 - `modules/stages/api.py`：`stage-summary`、`stage-files`（明确 run_id 或 asset_id+revision）与兼容配置保存接口。
 - `modules/visualization/application.py`：辅助检查记录保留任务、阶段、输入、修订及创建时间；查询失效不改历史终态。
@@ -100,13 +111,13 @@
 
 ## 独立可视化任务交接
 
-- `packages/ai4e-server/modules/visualization/bindings.py`：受控来源、task 存储与 Vis API 交接。
+- `packages/ai4e-server/modules/visualization/bindings.py`：受控来源、task 存储与 Vis API 交接；`list_visualizable_sources` 合并任务产物、共享数据集和已挂数据根中的网格。
 - `packages/ai4e-server/infrastructure/vis_client.py`：独立服务生命周期与 HTTP 客户端。
-- `packages/ai4e-server/infrastructure/vis_proxy.py`：拒绝内部控制 API 的 HTTP/WS 代理。
+- `packages/ai4e-server/infrastructure/vis_proxy.py`：拒绝内部控制 API 的 HTTP/WS 代理。宿主 uvicorn 必须带 standard extras，否则 Trame WebSocket 升级失败。
 
 ## 声明驱动原始处理
 
-原始处理描述及绑定来自 task 门面。rawprep 的 sample_scope 为新样本选择入口，旧 files 请求独立兼容；描述校验不在服务维护汽车字段常量。
+原始处理描述及绑定来自 task 门面。rawprep 的 sample_scope 为新样本选择入口，旧 files 请求独立兼容；`samples=all` 时 catalog 用绑定数据集官方或自身分片当输入宇宙，execute 对非 NASA 写 `unsplit` 覆盖，产物不按官方 train/test 落盘，也不把任务里看不见的 partitions 子集或当次输出名单写回任务配置。描述校验不在服务维护汽车字段常量。
 
 圈定验收入口：`.context/mvp/manifest-rawprep-acceptance.md`。
 
@@ -117,22 +128,21 @@
 - `modules/capabilities/model_cases.py` 与公开门面：两个官方模型和五个起步 example，按当前数据集与变体解析默认值；任务创建与模板注册复用此登记。
 - `modules/capabilities/model_presets.py`：导出项目共享 `kind=model_preset` 配置快照，同数据集列出与选用。
 - `modules/capabilities/trace_source.py`：结构跟踪只读解析最近相容准备或正式清单，不回写任务绑定。
-- `modules/stages/api.py`：model-options、model-presets 与 `target_model`/`target_preset`；`application.py` 装配原子替换、解除旧输入并在当次检查登记跟踪来源。阶段配置与模型选项透传检查门面的损失、采样能力，不在服务层另推断页面区块。
+- `modules/stages/api.py`：model-options 目录、model-option 点选描述、model-presets 与 `target_model`/`target_preset`；数据准备保存可带 `target_case_id` 加载同数据集官方组合；模型/训练保存可带同一身份只覆盖本页。`ConfigurationEdit` 接受 `edited_paths`/`removed_paths`。`application.py` 装配原子替换、解除旧输入并在当次检查登记跟踪来源；同模型只换准备段，不同模型走换模。准备阶段文件合并 `artifacts/preparation.json` 与运行归一化副本树：现行看 `data_dir/trainprep/normalize`，历史运行回退 `data_dir/normalize`，树上仍以 `normalize/` 展开。阶段配置与点选后的模型选项透传检查门面的损失、采样能力，不在服务层另推断页面区块。
 - 长期行为归 server 模块 PRD；`test_web_stage_consistency.py`、`test_task_configuration.py`、`test_web_dataset_binding.py` 核验换模、导出与自动跟踪；专项见 `mvp/model-picker-acceptance.md`。
 
 ## 独立推理服务（实施中）
 
-- `modules/inference/api.py`：任务范围的 checkpoints、samples、check、batches 及 cancel/retry/recover/results HTTP 转换。
-- `modules/inference/application.py`：调用 task 公开门面，合并同内容候选标签、核验 profile，将结果成员交给 visualization 公开登记。
+- `modules/inference/api.py`：任务范围的 checkpoints、samples、check、batches 及 cancel/retry/recover/results HTTP 转换。`export_pointcloud` / `export_mesh` 缺省保持未写，旧 `export_vtk` 才能同时开关二者。
+- `modules/inference/application.py`：调用 task 公开门面，合并同内容候选标签、核验 profile，将结果成员交给 visualization 公开登记；列样本必须带上任务检查里的 `vtk_exports`。检查/提交把项目路径交给官方脚本迁移，缺准备改为明确错误。
 - `modules/inference/domain.py`：轻量检查点与批次传输形状，移除工作路径及计算对象；`__init__.py`：公开路由装配。
 - `bootstrap/app.py`：装配 inference 路由；`modules/stages` 和 `modules/tasks`：阶段摘要交接，不用页面位置替代运行状态。
-- `modules/capabilities/recipe_profile.py`：核验模板内容；新 infer 与已知旧模板通过固定内容清单核验（36 份旧脚本），AS 原工作目录不改写，未知用户改动不可自动放行。
 - 路径 `/api/v1/projects/{project}/tasks/{task}/inference`；样本查询 `checkpoint_id` 保留 `run_id:filename` 身份；重试正文使用 `idempotency_key`。后处理只接固定批次、运行、样本引用，结果文件带固定 ref。
 - 长期产品说明：`docs/PRD/ai4e-server/modules/PRD.md` 第三章；`tests/integration/test_web_inference.py` 验证 HTTP、文件与请求契约；实际新服务证据及剩余测试由主任务补入 `.context/mvp/inference-acceptance.md`。
 
 ## 后处理三页签与固定结果评价
 
-- `modules/post/{api,application,domain,__init__}.py`：评价目录与按层结果文件分开；列举不登记，导出仍固定引用。
+- `modules/post/{api,application,domain,__init__}.py`：评价目录与按层结果文件分开；文件树代理 task 的平台数据集、推理固定结果和训练 run 输出文件夹，无写出仍列出空态，列举不登记，导出仍固定引用。
 - `bootstrap/app.py` 注册post，`modules/visualization/bindings.py`按来源修订和成员去重、串行追加。
 - `test_web_post_results.py`、`test_web_post_metrics.py`、`test_viz_host_bindings.py`：授权、引用及来源追加回归。
 
@@ -140,6 +150,22 @@
 
 ## 推理工作台选择与统计
 
-`modules/inference/{api,application,domain}.py`：类型化跨分片请求、目录/统计/导出。`modules/capabilities/recipe_profile.py`：固定旧原生infer兼容指纹。
 
 专项状态与证据见 `.context/mvp/inference-ui-acceptance.md`，不沿用旧验收结论。
+
+## 项目共享数据切片
+
+modules/datasets/registry.py 汇聚 Task 项目共享资源；rawprep 传显式覆盖，stages 与 trace_source 消费 Task 的共享产物引用。
+
+长期说明见对应包 PRD；当前证据见 `.context/mvp/task-shared-datasets-acceptance.md`。
+
+## 平台配置生成
+
+`packages/ai4e-server/modules/stages/configuration.py`：平台完整配置合成，明确编辑/删除、格式与采样别名、方法参数及原始处理依赖清理。stages公开门面供rawprep复用；既有算法只校验及执行。
+
+专项证据：`../mvp/platform-configuration-acceptance.md`。
+
+官方脚本迁移：`modules/stages/application.py` 按 `capabilities/model_cases.py` 中当前数据集、模型及变体选择案例，调用Task已核验摘要的迁移事务；不再统一替换为默认模板。测试见 `test_task_configuration.py::test_platform_migration_selects_matching_case`。
+
+
+训练指标编辑：`modules/stages/configuration.py` 允许 `evaluation_metrics` 明确编辑及显式空选择，算法描述透传指标目录。交接测试见 `tests/integration/test_model_evaluation.py` 与 `test_web_configuration_composition.py`。

@@ -5,14 +5,14 @@ import sys
 sys.dont_write_bytecode = True
 
 from configuration import load_configuration
-from post import post
 from infer import infer
+from post import post
 from rawprep import rawprep
 from train import train
 from trainprep import trainprep
 
 from ai4e_core import run
-from ai4e_core.run.training import TrainingRun
+from ai4e_core.run import TrainingRun
 
 
 def pipeline(cfg):

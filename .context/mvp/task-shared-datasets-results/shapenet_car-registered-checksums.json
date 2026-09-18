@@ -1,0 +1,26 @@
+{
+  "source": {
+    "manifest.json": "21a0efa4bfd3163c12aae390129c305ced6d027bb21d1c0468268ea17b3b15ee",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/field-identities.json": "27e00c4f106597cb1873ca447ef9dd457d48360e14ea155fad23d924766d6d6f",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/surface_normals.pt": "917dbb15960f48af002dafa8d8c9064344b082bb38bb41bb5f3743a1d724042a",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/surface_position.pt": "0905810250ae7afe76d1c4e58aa06fef8f132440633102a2d5d0299e8ccddfd3",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/surface_pressure.pt": "7c5b02cf1afed3b474ba6966621ed5ad1f2c243c86f0f424d08019ac56c44515",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/volume_normals.pt": "c0697e5b09c308953bd508f75dda742224b445090ef03daffe4576eb2956ed4c",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/volume_position.pt": "4cb2adeba639b90834ceaae7e9a647a7a5817680273e4ff68d80509b584c0e69",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/volume_sdf.pt": "3e0a1e6f54383149aa5636d5b630c1148cdfc9634ed63cd97ba5f1cf51894d4b",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/volume_velocity.pt": "10c5664fe27dd8fe99274d801e3d8a125c9be89582adb50af700a7361b828003"
+  },
+  "shared": {
+    "dependencies/source-manifest.yaml": "b956bbe27cbfa73232b61920886fd48f64c4a68b0cbc96ade9fe57ee431b0286",
+    "dependencies/statistics.yaml": "a78cf5b83048c0456c318b6378e0040b207484dbfabf493364bec5340bcc23b7",
+    "manifest.json": "26740941846aa79357d99d87dfe97f3c6890a8b3da104e8ec6b557afcd0d1482",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/field-identities.json": "27e00c4f106597cb1873ca447ef9dd457d48360e14ea155fad23d924766d6d6f",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/surface_normals.pt": "917dbb15960f48af002dafa8d8c9064344b082bb38bb41bb5f3743a1d724042a",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/surface_position.pt": "0905810250ae7afe76d1c4e58aa06fef8f132440633102a2d5d0299e8ccddfd3",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/surface_pressure.pt": "7c5b02cf1afed3b474ba6966621ed5ad1f2c243c86f0f424d08019ac56c44515",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/volume_normals.pt": "c0697e5b09c308953bd508f75dda742224b445090ef03daffe4576eb2956ed4c",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/volume_position.pt": "4cb2adeba639b90834ceaae7e9a647a7a5817680273e4ff68d80509b584c0e69",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/volume_sdf.pt": "3e0a1e6f54383149aa5636d5b630c1148cdfc9634ed63cd97ba5f1cf51894d4b",
+    "train/param1/1dc58be25e1b6e5675cad724c63e222e/volume_velocity.pt": "10c5664fe27dd8fe99274d801e3d8a125c9be89582adb50af700a7361b828003"
+  }
+}

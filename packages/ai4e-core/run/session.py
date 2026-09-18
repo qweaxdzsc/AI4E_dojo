@@ -3,6 +3,7 @@
 import argparse
 import contextvars
 import time
+from contextlib import contextmanager
 from copy import deepcopy
 from pathlib import Path
 
@@ -13,16 +14,38 @@ from ai4e_core.base.events import LOGGER, event, operation, phase
 from .writer import RunWriter
 
 CURRENT = contextvars.ContextVar("ai4e_session", default=None)
+_CONFIGURATION_ADAPTER = contextvars.ContextVar("ai4e_configuration_adapter", default=None)
+_ADAPTED_WORKERS = contextvars.ContextVar("ai4e_adapted_rawprep_workers", default=None)
 
 
-def load_recipe_config(path, overrides=None):
-    """旧外流配置加载兼容入口；新案例通过 config_loader 提供自己的解析。"""
-    from ai4e_core.applications.aero_cfd.configuration import load_configuration
+@contextmanager
+def configuration_adapter(adapter):
+    """显式注入一次托管运行的加载适配器，退出后恢复；不猜测领域。"""
+    token = _CONFIGURATION_ADAPTER.set(adapter)
+    try:
+        yield
+    finally:
+        _CONFIGURATION_ADAPTER.reset(token)
+        _ADAPTED_WORKERS.set(None)
 
-    return load_configuration(path, overrides)
+
+def bind_adapted_workers(value: int | None) -> None:
+    """记下已校验的并行线程，只给样本循环读；不写回用户配置树。"""
+    _ADAPTED_WORKERS.set(value)
 
 
-def launch(stages, *, script, argv=None, only=None, resolver=None, config_loader=None) -> int:
+def adapted_workers() -> int | None:
+    """当前托管运行取出的并行线程；未适配时为空。"""
+    return _ADAPTED_WORKERS.get()
+
+
+def load_user_configuration(config_loader, path, overrides=None):
+    """完整转交调用方的配置加载器；不读取或改写领域参数。"""
+    adapter = _CONFIGURATION_ADAPTER.get()
+    return adapter(config_loader, path, overrides) if adapter else config_loader(path, overrides)
+
+
+def launch(stages, *, script, config_loader, argv=None, only=None, resolver=None) -> int:
     """通用启动入口；config_loader 接收配置路径和覆盖，返回完整生效配置。"""
     parser = argparse.ArgumentParser(description="按 config.yaml 运行实验")
     parser.add_argument("--config", default=str(Path(script).with_name("config.yaml")))
@@ -31,7 +54,7 @@ def launch(stages, *, script, argv=None, only=None, resolver=None, config_loader
     parser.add_argument("--overwrite", action="store_true", default=None)
     parser.add_argument("--continue-on-error", action="store_true", default=None)
     args = parser.parse_args(argv)
-    cfg = OmegaConf.create((config_loader or load_recipe_config)(args.config, args.set))
+    cfg = OmegaConf.create(load_user_configuration(config_loader, args.config, args.set))
     return run_recipe(
         cfg,
         stages=stages,
@@ -77,6 +100,20 @@ def run_recipe(
     if run_root == code or run_root.is_relative_to(code):
         raise ValueError("运行记录目录不能位于 recipe 代码目录内")
     writer = RunWriter.create(config["run_root"], nested=False)
+    from .provenance import MANAGED
+
+    managed = MANAGED.get()
+    data_dir = (
+        Path(managed["context"].data_dir).resolve()
+        if managed is not None else
+        Path(config.get("data_root", Path(config["run_root"]).parent / "data")).resolve()
+        / writer.run_dir.name
+    )
+    if data_dir == code or data_dir.is_relative_to(code) or code.is_relative_to(data_dir):
+        raise ValueError("数据目录与 recipe 代码目录不能相互包含")
+    if (data_dir == writer.run_dir or data_dir.is_relative_to(writer.run_dir)
+            or writer.run_dir.is_relative_to(data_dir)):
+        raise ValueError("数据目录与运行记录必须分离")
     writer.write_inputs(source_config, config)
     if "train" in selected and config.get("train", {}).get("snapshot", True):
         import importlib.util
@@ -96,6 +133,8 @@ def run_recipe(
         "flags": flags,
         "writer": writer,
         "script": str(Path(script).resolve()),
+        "data_dir": str(data_dir),
+        "stage_events": [],
     }
     token = CURRENT.set(state)
     failed = False
@@ -127,6 +166,15 @@ def run_recipe(
             run_dir=str(writer.run_dir),
         )
         summary["reports"] = state.get("reports", {})
+        summary["stage_events"] = state["stage_events"]
+        completed = {item["stage"] for item in state["stage_events"] if item["status"] == "succeeded"}
+        summary["unverified_stages"] = [name for name in selected if name not in completed]
+        summary["research_status"] = (
+            "failed" if summary["failed"] else
+            "checked" if flags["dry_run"] else
+            "incomplete" if summary["unverified_stages"] else "completed"
+        )
+        summary["data_dir"] = str(data_dir)
         writer.write_summary(summary)
         event(
             "运行",
@@ -150,5 +198,14 @@ def stage(name, function, *args, **kwargs):
     """在当前会话执行一个业务阶段，返回交付物并恢复日志上下文。"""
     if CURRENT.get() is None:
         raise RuntimeError("阶段必须在运行会话内执行")
-    with phase(name), operation("阶段"):
-        return function(*args, **kwargs)
+    state = CURRENT.get()
+    event_record = {"stage": name, "status": "running"}
+    state.setdefault("stage_events", []).append(event_record)
+    try:
+        with phase(name), operation("阶段"):
+            result = function(*args, **kwargs)
+        event_record["status"] = "checked" if state["flags"]["dry_run"] else "succeeded"
+        return result
+    except BaseException as exc:
+        event_record.update(status="failed", error=f"{type(exc).__name__}: {exc}")
+        raise

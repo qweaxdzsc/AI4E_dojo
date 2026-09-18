@@ -30,18 +30,60 @@ class TrainingRun:
         """本次会话运行目录，供后处理解析本 run 的检查点。"""
         return Path(self._state["writer"].run_dir)
 
+    @property
+    def data_dir(self) -> Path:
+        """本次运行科学数据目录；托管目录与独立运行采用相同交接。"""
+        return Path(self._state["data_dir"])
+
+    def output_dir(self, stage: str) -> Path:
+        """分配阶段数据目录；检查模式只返回位置，不创建目录。"""
+        if not isinstance(stage, str) or not stage.isidentifier():
+            raise ValueError("阶段目录必须为标识符")
+        from .provenance import MANAGED
+
+        managed = MANAGED.get()
+        locations = managed["context"].stage_outputs if managed is not None else {}
+        target = Path(locations[stage]) if stage in locations else self.data_dir / stage
+        if not self.dry_run:
+            target.mkdir(parents=True, exist_ok=True)
+        return target
+
+    def record_asset(
+        self, name: str, path: str | Path, *, kind: str, stage: str,
+        dependencies=(), semantics: dict | None = None, bundle_root: str | Path | None = None,
+    ) -> Path:
+        """登记已落盘的数据及依赖；不替代领域产物保存。"""
+        if self.dry_run:
+            raise RuntimeError("检查模式不能发布资产")
+        return self._state["writer"].record_asset(
+            name, path, kind=kind, stage=stage,
+            dependencies=dependencies, semantics=semantics, bundle_root=bundle_root,
+        )
+
+    def record_metric(
+        self, name: str, value: float, *, stage: str, semantics: dict, assets,
+    ) -> Path:
+        """提交具有明确口径和来源的科学指标。"""
+        if self.dry_run:
+            raise RuntimeError("检查模式不能发布指标")
+        return self._state["writer"].record_metric(
+            name, value, stage=stage, semantics=semantics, assets=assets,
+        )
+
     def report(self, value: dict, *, stage: str = "train") -> None:
         """将轻量报告交给现有 writer 的最终摘要。"""
         from copy import deepcopy
 
         self._state.setdefault("reports", {})[stage] = deepcopy(value)
 
-    def checkpoint(self, label: str, payload: dict):
+    def checkpoint(self, label: str, payload: dict, *, namespace: str | None = None):
         """检查点提交委托现有唯一 writer，检查模式禁止写入。"""
         if self.dry_run:
             raise RuntimeError("检查模式不能保存检查点")
         return self._state["writer"].write_checkpoint(
-            label, {**payload, "effective_config": deepcopy(self._state["config"])}
+            label,
+            {**payload, "effective_config": deepcopy(self._state["config"])},
+            namespace=namespace,
         )
 
     def artifact(self, name: str, value: dict) -> Path:

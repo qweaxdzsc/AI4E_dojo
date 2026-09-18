@@ -22,7 +22,7 @@ def resolve_paths(config: dict, path: str | Path) -> dict:
     cfg["dataset"]["root"] = absolute(cfg["dataset"]["root"])
     for key in ("manifest", "partition"):
         value = cfg["dataset"].get(key)
-        if isinstance(value, str) and value != "official":
+        if isinstance(value, str) and value not in {"official", "unsplit"}:
             cfg["dataset"][key] = absolute(value)
 
     def paths(node):

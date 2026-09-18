@@ -40,16 +40,6 @@ def case_files(service, case_id: str) -> dict[str, bytes]:
     ):
         if name not in files:
             raise ValueError("registered_case_file_missing: " + name)
-    import yaml
-
-    config = yaml.safe_load(files["config.yaml"])
-    entry = json.loads((service.settings.template / "task-entry.json").read_text())
-    entry["platform_case"] = case_id
-    entry["components"] = config.get("components", {})
-    if case_id.startswith("nasa_crm_"):
-        for key in ("train_h5", "test_h5", "connectivity_h5"):
-            entry["inputs"]["dataset." + key] = "dataset"
-    files["task-entry.json"] = json.dumps(entry, ensure_ascii=False, sort_keys=True).encode()
     return files
 
 

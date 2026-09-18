@@ -24,8 +24,8 @@ def dataset_kind(config):
         return "nasa_crm", "files"
     if str(component).endswith("shapenet_car"):
         return "shapenet_car", "directory"
-    dataset = config.get("dataset") or {}
-    if any(dataset.get(key) for key in NASA_KEYS):
+    dataset = config.get("inputs", {}).get("rawprep") or {}
+    if any(dataset.get("source" if key == "root" else key) for key in NASA_KEYS):
         return "nasa_crm", "files"
     if {"rawprep", "trainprep", "model", "train", "post"} <= set(config):
         return "shapenet_car", "directory"
@@ -242,11 +242,11 @@ def read_binding(service, project, identity):
     slots = profile["binding"]["slots"]
     keys = [slot["key"] for slot in slots]
     sources, errors = {}, []
-    dataset = OmegaConf.create(value["config"]).get("dataset", {})
+    dataset = OmegaConf.create(value["config"]).get("inputs", {}).get("rawprep", {})
     supplied = False
     for key in keys:
         try:
-            raw = dataset.get(key)
+            raw = dataset.get("source" if key == "root" else key)
             if not raw:
                 errors.append({"location": key, "code": "dataset_source_unbound"})
                 continue
@@ -309,7 +309,8 @@ def _write_sources(service, project, identity, sources, expected_revision, *, da
         paths[key] = str(path)
     if mode == "files":
         paths["root"] = str(Path(paths[profile["binding"]["root_key"]]).parent)
-    patch = {"dataset": paths}
+    paths["source"] = paths.pop("root", None)
+    patch = {"inputs": {"rawprep": paths}}
     replace = ()
     if target != current:
         components = dict(value["config"].get("components") or {})

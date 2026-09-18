@@ -16,7 +16,7 @@
 
 - [`trameServer.py`](../../backend/modules/visPhysField/trameServer.py) 是统一运行适配器，九类场景共享会话和状态传输。
 - [`timelineAnimation.py`](../../backend/modules/visPhysField/modules/fieldVisualization/timelineAnimation.py) 管 Miller 时序业务。
-- [`visEngine`](../../backend/modules/visEngine/) 只提供过滤、种子、平面预览、`physicalField.py`、`cache.py`、`performance.py` 的纯内核能力，不依赖 FastAPI、Trame Server、SQLite 或业务模块。
+- [`visEngine`](../../backend/modules/visEngine/) 只提供过滤、种子、平面预览、默认 Light Kit、远程阴影、`physicalField.py`、`cache.py`、`performance.py` 的纯内核能力，不依赖 FastAPI、Trame Server、SQLite 或业务模块。
 
 前端对应 [`frontend/src/modules/visPhysField/`](../../frontend/src/modules/visPhysField/)，二级模块共享 `PhysFieldProvider`、一级 API 与连接。
 

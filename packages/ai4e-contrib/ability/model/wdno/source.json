@@ -1,0 +1,45 @@
+{
+  "revision": "2d5c0ffbe11797e669efe0a34bd22f087eae51d7",
+  "files": {
+    "model/wdno/unet.py": {
+      "source": "ddpm_burgers/unet.py",
+      "original_sha256": "73f069846020df4f623c10a69fcc42cdc073e1378197ed5af1c4b36486be617e",
+      "sha256": "94e5142ad7dde5ff62090784df35645e12a85a93bf993c0c06fd6bc8c9aefb5d"
+    },
+    "model/wdno/schedules.py": {
+      "source": "ddpm_burgers/model_utils.py",
+      "original_sha256": "b2b3b3332b7fd3ff9eefffb93a868bd95921debbfd1342cc1b08a7f3f1d7249c",
+      "sha256": "9e904d239dd85cf7899ef650141f58eb45a429b452940424036c524b17aee178"
+    },
+    "transform/wdno/layout.py": {
+      "source": "wave_trans.py",
+      "original_sha256": "0a3f19521ee38782a5adb0e04f948961c5a2d4f6af68d1ae57d15e4f1b30866e",
+      "sha256": "2ec07c4ea4e5f14812bee129bb127c0549d9cb77a9f51fca3b5c7732d74e95af"
+    },
+    "transform/wdno/multiscale.py": {
+      "source": "ddpm_burgers/wavelet_utils.py",
+      "original_sha256": "1eeda9b82db6fbdb26f4de8a21f026c6d22507504d6e2ba53d91efaf9ca4d3ff",
+      "sha256": "69b49e6135631f57554b952b203bd541bb70793e55da058b5e003c568b3af8d5"
+    },
+    "transform/wdno/preparation.py": {
+      "source": "ddpm_burgers/data_burgers_1d.py",
+      "original_sha256": "2cc87567393155a0c5dc4e882f6a28612be29394340893d7dd395d4be862453b",
+      "sha256": "eccb1ac8ea26265956488437b93c43b19b3b851043387c4faad770cda2c8cb95"
+    },
+    "constraint/wdno/objective.py": {
+      "source": "ddpm_burgers/diffusion_1d.py",
+      "original_sha256": "bcede14ebf70e1172b97eb62551e9fa55de96fc8d9dc6c6c04a32314083042ae",
+      "sha256": "a8e56750fd2f9d525d845d050fee3079cd5f310e848f724cc0c756c1052cd112"
+    },
+    "inference/wdno/diffusion.py": {
+      "source": "ddpm_burgers/diffusion_1d.py",
+      "original_sha256": "bcede14ebf70e1172b97eb62551e9fa55de96fc8d9dc6c6c04a32314083042ae",
+      "sha256": "870b87fb6b00b78191876e56ade3fdb76e7e0fefc53c5e6ab60a367844085a8f"
+    },
+    "eval/wdno/metrics.py": {
+      "source": "ddpm_burgers/test_util.py",
+      "original_sha256": "ff0133bd0ee6f8f71bcdbeffb29863826f43def68547b210643f4c41f944ee27",
+      "sha256": "1a969e6c0d32bc109b70624fa469cd500001abdabaac5a4d79bc7fd740ee66f7"
+    }
+  }
+}

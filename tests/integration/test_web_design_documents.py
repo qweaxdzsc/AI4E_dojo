@@ -55,9 +55,9 @@ def test_product_chapters_follow_prd_contract():
 def test_v2_is_in_single_authoritative_document():
     """架构 v2 在既有权威文档中，产品稿继续单独维护功能正文。"""
     text = ARCHITECTURE.read_text()
-    assert text.count("## 19. Dojo Web / Server 架构草案 v2\n") == 1
+    assert text.count("## 19. Web / Server 当前架构\n") == 1
     assert "PRD/ai4e-web/src/PRD.md" in text
-    assert "并行实施修订" in text
+    assert "平台配置编辑在 Server 阶段模块合成" in text
     assert "状态：圈定真实链路" in PRODUCT.read_text()
     assert "不承诺所有状态逐像素一致或生产训练精度" in PRODUCT.read_text()
 

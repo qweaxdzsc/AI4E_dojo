@@ -125,7 +125,14 @@ def _run_script(folder, cfg, *, entry="train.py", extra=()):
     import subprocess
     import sys
 
-    OmegaConf.save(public_config(cfg), folder / "config.yaml")
+    public = public_config(cfg)
+    if entry == "train.py" and cfg.train.get("mode", "fit") == "fit" and not cfg.train.get("preparation"):
+        # 本夹具显式执行准备再训练；独立 train 的缺引用错误由新入口测试覆盖。
+        entry = "pipeline.py"
+        public.pipeline.stages = ["trainprep", "train"]
+    elif entry == "pipeline.py" and "train" in public.pipeline.stages and "trainprep" not in public.pipeline.stages and not cfg.train.get("preparation"):
+        public.pipeline.stages = ["trainprep", *public.pipeline.stages]
+    OmegaConf.save(public, folder / "config.yaml")
     root = Path(cfg.run_root)
     before = set(root.iterdir()) if root.exists() else set()
     result = subprocess.run(

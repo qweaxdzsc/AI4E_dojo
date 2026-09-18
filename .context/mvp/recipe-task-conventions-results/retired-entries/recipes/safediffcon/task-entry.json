@@ -1,0 +1,115 @@
+{
+  "script": "task.py",
+  "config": "config.yaml",
+  "resume_key": "train.resume",
+  "inputs": {
+    "data.root": "dataset",
+    "train.resume": "checkpoint",
+    "posttrain.checkpoint": "checkpoint",
+    "infer.checkpoint": "checkpoint",
+    "post.results": "other",
+    "solver.assets": "other",
+    "data.physical.train": "dataset",
+    "data.physical.cal": "dataset",
+    "data.physical.test": "dataset",
+    "data.prepared.train": "preparation",
+    "data.prepared.cal": "preparation",
+    "data.prepared.test": "preparation"
+  },
+  "outputs": {
+    "run_root": "{run_root}",
+    "data.output": "{data_dir}"
+  },
+  "stage_inputs": {
+    "rawprep": [
+      {
+        "key": "data.root"
+      }
+    ],
+    "trainprep": [
+      {
+        "key": "data.physical.train",
+        "provided_by": "rawprep"
+      },
+      {
+        "key": "data.physical.cal",
+        "provided_by": "rawprep"
+      },
+      {
+        "key": "data.physical.test",
+        "provided_by": "rawprep"
+      }
+    ],
+    "train": [
+      {
+        "key": "data.prepared.train",
+        "provided_by": "trainprep"
+      },
+      {
+        "key": "data.prepared.cal",
+        "provided_by": "trainprep"
+      },
+      {
+        "key": "data.prepared.test",
+        "provided_by": "trainprep"
+      },
+      {
+        "key": "train.resume"
+      }
+    ],
+    "posttrain": [
+      {
+        "key": "data.prepared.train",
+        "provided_by": "trainprep"
+      },
+      {
+        "key": "data.prepared.cal",
+        "provided_by": "trainprep"
+      },
+      {
+        "key": "data.prepared.test",
+        "provided_by": "trainprep"
+      },
+      {
+        "key": "posttrain.checkpoint",
+        "provided_by": "train"
+      }
+    ],
+    "infer": [
+      {
+        "key": "data.prepared.train",
+        "provided_by": "trainprep"
+      },
+      {
+        "key": "data.prepared.cal",
+        "provided_by": "trainprep"
+      },
+      {
+        "key": "data.prepared.test",
+        "provided_by": "trainprep"
+      },
+      {
+        "key": "infer.checkpoint",
+        "provided_by": "posttrain"
+      },
+      {
+        "key": "solver.assets"
+      }
+    ],
+    "post": [
+      {
+        "key": "post.results",
+        "provided_by": "infer"
+      }
+    ]
+  },
+  "produced_assets": {
+    "checkpoint": [
+      "checkpoints/pretrain/*.pt",
+      "checkpoints/posttrain_0/*.pt",
+      "checkpoints/posttrain_1/*.pt",
+      "checkpoints/adapt/*.pt"
+    ]
+  },
+  "operations": {}
+}

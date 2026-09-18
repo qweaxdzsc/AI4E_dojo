@@ -5,7 +5,6 @@ from fastapi import APIRouter, Request
 from pydantic import BaseModel, ConfigDict, Field
 
 from ...bootstrap.dependencies import services
-from ..capabilities.aero_cfd import require_profile
 from .application import preflight, submit
 
 router = APIRouter(prefix="/projects/{project}/tasks/{identity}/rawprep")
@@ -17,6 +16,8 @@ class ConfigEdit(BaseModel):
     model_config = ConfigDict(extra="forbid")
     revision: str
     rawprep: dict
+    edited_paths: list[list[str]] | None = None
+    removed_paths: list[list[str]] | None = None
     processed_name: str | None = None
     profile: dict | None = None
 
@@ -34,33 +35,45 @@ class Selection(BaseModel):
     idempotency_key: str | None = None
     sample_scope: dict | None = None
     catalog_revision: str | None = None
+    overwrite_processed_name: bool = False
+
+
+def _with_name_status(service, project: str, identity: str, value: dict) -> dict:
+    """读取/保存后附带名称状态，与正式执行预检使用同一份声明。"""
+    from ..datasets.application import claim_config, describe_name
+
+    cfg = task.read_configuration(service.project(project), identity)
+    value["processed_name_status"] = describe_name(
+        service,
+        value.get("processed_name") or "",
+        claim_config(cfg["config"], value.get("rawprep") or {}),
+        project=project,
+    )
+    return value
 
 
 @router.get("")
 def read(project: str, identity: str, request: Request):
     """读取持久化的当前内容。"""
-    return task.describe_rawprep(services(request).project(project), identity)
+    service = services(request)
+    return _with_name_status(
+        service,
+        project,
+        identity,
+        task.describe_rawprep(service.project(project), identity),
+    )
 
 
 @router.put("")
 def save(project: str, identity: str, body: ConfigEdit, request: Request):
     """校验并保存当前编辑内容。"""
-    require_profile(services(request), project, identity)
+    from .application import save_configuration
+
+    save_configuration(services(request), project, identity, body)
     base = services(request).project(project)
-    task.validate_rawprep_configuration(base, identity, body.rawprep, revision=body.revision)
-    if body.processed_name is not None:
-        task.validate_processed_name(body.processed_name)
-    patch = {"rawprep": body.rawprep}
-    if body.processed_name is not None:
-        patch["dataset"] = {"processed_name": body.processed_name}
-    task.save_configuration(
-        base,
-        identity,
-        patch,
-        revision=body.revision,
-        replace_sections=("rawprep",),
+    return _with_name_status(
+        services(request), project, identity, task.describe_rawprep(base, identity)
     )
-    return task.describe_rawprep(base, identity)
 
 
 @router.post("/preflight")

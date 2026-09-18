@@ -28,7 +28,16 @@ def tool(label, glyph, click, *, caption=False, **kwargs):
 def creation_bar(ui):
     """大图标加名称的分析工具带，不创建任何占位资产。"""
     with html.Div(classes="phys-creation"):
-        tools = ["glyph", "slice", "clip", "streamline", "isosurface", "contour", "probe"]
+        tools = [
+            "glyph",
+            "slice",
+            "clip",
+            "streamline",
+            "isosurface",
+            "contour",
+            "probe",
+            "plot_over_line",
+        ]
         for kind in tools:
             disabled = "busy || !can_create" + (
                 " || !can_vector"
@@ -148,16 +157,9 @@ def view_bar(ui):
                 hide_details=True,
                 outlined=True,
                 disabled=("!kind || kind === 'probe'",),
-                change=(lambda value: ui.set_display("coloring", value), "[$event]"),
+                change=(lambda value, identity: ui.set_display("coloring", value, identity), "[$event, selected]"),
             )
         with html.Div(classes="phys-tool-group phys-display-tools"):
-            tool(
-                "色标",
-                "legend",
-                lambda: ui.set_display("legend", not ui.server.state.legend),
-                classes=("legend ? 'phys-tool toggled' : 'phys-tool'",),
-                aria_pressed=("legend",),
-            )
             with v.VMenu(offset_y=True, attach="body", allow_overflow=True, close_on_content_click=False):
                 with v.Template(v_slot_activator="{ on, attrs }"):
                     with v.VBtn(
@@ -181,7 +183,7 @@ def view_bar(ui):
                         max=1,
                         step=0.01,
                         thumb_label=True,
-                        change=(lambda x: ui.set_display("opacity", x), "[$event]"),
+                        change=(lambda x, identity: ui.set_display("opacity", x, identity), "[$event, selected]"),
                     )
             with v.VMenu(offset_y=True, attach="body", allow_overflow=True):
                 with v.Template(v_slot_activator="{ on, attrs }"):
@@ -203,6 +205,7 @@ def view_bar(ui):
                         ("表面", "surface"),
                         ("网格", "wireframe"),
                         ("表面+网格", "surface_edges"),
+                        ("Surface LIC", "surface_lic"),
                     ]:
                         with v.VListItem(click=lambda m=mode: ui.set_display("display_mode", m)):
                             v.VListItemTitle(label)
@@ -227,7 +230,7 @@ def view_bar(ui):
                         label="光照",
                         dense=True,
                         hide_details=True,
-                        change=(lambda x: ui.set_display("lighting", x), "[$event]"),
+                        change=(lambda x, identity: ui.set_display("lighting", x, identity), "[$event, selected]"),
                     )
                     v.VCheckbox(
                         v_model=("shadows",),
@@ -235,6 +238,6 @@ def view_bar(ui):
                         dense=True,
                         hide_details=True,
                         disabled=("!can_shadow",),
-                        title="需要受支持的 Linux 远程渲染",
+                        title="默认关闭，与 ParaView 一致；仅 Linux 远程可开",
                         change=(lambda x: ui.view_setting("shadows", x), "[$event]"),
                     )

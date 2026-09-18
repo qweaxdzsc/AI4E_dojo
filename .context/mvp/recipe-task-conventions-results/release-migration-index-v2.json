@@ -1,0 +1,169 @@
+[
+  {
+    "project": "4753032f34914c339c311ea02cd4bcb5",
+    "task": "f9fca9f6c4414c17abae50f8713fd86b",
+    "source": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/4753032f34914c339c311ea02cd4bcb5/tasks/f9fca9f6c4414c17abae50f8713fd86b/recipe",
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/release-20260917-v2/migrations/f9fca9f6c4414c17abae50f8713fd86b",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "pipeline.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "flow": "native",
+    "training_budget_unchanged": true,
+    "status": "prepared_not_applied"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "5efda0a77ae94017a439a95da98b0df3",
+    "source": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/5efda0a77ae94017a439a95da98b0df3/recipe",
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/release-20260917-v2/migrations/5efda0a77ae94017a439a95da98b0df3",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "flow": "physical",
+    "training_budget_unchanged": true,
+    "status": "prepared_not_applied"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "885aa4bad4c04f3da12441c0bd19a787",
+    "source": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/885aa4bad4c04f3da12441c0bd19a787/recipe",
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/release-20260917-v2/migrations/885aa4bad4c04f3da12441c0bd19a787",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "flow": "native",
+    "training_budget_unchanged": true,
+    "status": "prepared_not_applied"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "9a9de296d0cd4d7398cd4b95de710264",
+    "source": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/9a9de296d0cd4d7398cd4b95de710264/recipe",
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/release-20260917-v2/migrations/9a9de296d0cd4d7398cd4b95de710264",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "flow": "physical",
+    "training_budget_unchanged": true,
+    "status": "prepared_not_applied"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "9bb3729b7001425fa380adc9044c13ab",
+    "source": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/9bb3729b7001425fa380adc9044c13ab/recipe",
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/release-20260917-v2/migrations/9bb3729b7001425fa380adc9044c13ab",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "flow": "native",
+    "training_budget_unchanged": true,
+    "status": "prepared_not_applied"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "9c1dac251856411d9091d8d1cc60bc3e",
+    "source": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/9c1dac251856411d9091d8d1cc60bc3e/recipe",
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/release-20260917-v2/migrations/9c1dac251856411d9091d8d1cc60bc3e",
+    "changes": [
+      "__pycache__/configuration.cpython-312.pyc",
+      "__pycache__/pipeline.cpython-312.pyc",
+      "task-entry.json"
+    ],
+    "flow": "native",
+    "training_budget_unchanged": true,
+    "status": "prepared_not_applied"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "da62c1c8f4114146a3b3b13a3967a114",
+    "source": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/da62c1c8f4114146a3b3b13a3967a114/recipe",
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/release-20260917-v2/migrations/da62c1c8f4114146a3b3b13a3967a114",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "flow": "physical",
+    "training_budget_unchanged": true,
+    "status": "prepared_not_applied"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "e0086a31a4b04da0a466c295c44d6cd6",
+    "source": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/e0086a31a4b04da0a466c295c44d6cd6/recipe",
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/release-20260917-v2/migrations/e0086a31a4b04da0a466c295c44d6cd6",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "flow": "physical",
+    "training_budget_unchanged": true,
+    "status": "prepared_not_applied"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "f540a1f563f8419ba2adf8dbe47e1cb4",
+    "source": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/f540a1f563f8419ba2adf8dbe47e1cb4/recipe",
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/release-20260917-v2/migrations/f540a1f563f8419ba2adf8dbe47e1cb4",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "flow": "physical",
+    "training_budget_unchanged": true,
+    "status": "prepared_not_applied"
+  }
+]

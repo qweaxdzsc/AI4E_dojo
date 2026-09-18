@@ -16,17 +16,18 @@ def read_version_details(project, version_id: str) -> dict:
     folder = Path(project).resolve() / "tasks" / version["task_id"] / ".dojo/snapshots/creation"
     if digest(inventory(folder)) != version["snapshot"]["digest"]:
         raise ValueError("version_snapshot_changed")
-    entry_file = folder / "task-entry.json"
     config = {}
-    if entry_file.is_file():
-        entry = read_json(entry_file)
-        config_file = (folder / entry["config"]).resolve()
+    if (folder / "config.yaml").is_file():
+        config_file = (folder / "config.yaml").resolve()
         if not config_file.is_relative_to(folder):
             raise ValueError("version_configuration_escape")
         config = OmegaConf.to_container(OmegaConf.load(config_file), resolve=False)
     runs = list_runs(project, version["task_id"])
     stages = []
-    for stage in ("rawprep", "trainprep", "model", "train", "post"):
+    for stage in dict.fromkeys([
+        "rawprep", "trainprep", "model", "train", "infer", "post",
+        *config.get("pipeline", {}).get("stages", []),
+    ]):
         selected = []
         for run in runs:
             if stage in (run.get("stages") or list(run.get("summary", {}).get("reports", {}))):

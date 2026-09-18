@@ -34,7 +34,7 @@
 - `backend/modules/visDatasets/application.py`：数据集解析、画像和检测用例的应用门面。
 - `backend/modules/visDatasets/domain.py`：数据格式、数据语义、画像与检测状态的领域定义。
 - `backend/modules/visDatasets/inspection.py`：数据集业务检测入口，与服务健康检查严格分离。
-- `backend/modules/visDatasets/physicalDataset.py`：完整网格、显式点云和时间数据读取；列出授权文件中的命名二维块与文字分区，不合并多块。命名块按路径、阅读器和修改时间缓存。
+- `backend/modules/visDatasets/physicalDataset.py`：完整网格、显式点云和时间数据读取；列出授权文件中的命名二维块与文字分区，不合并多块。命名块按路径、阅读器和修改时间缓存；物理画像按数据对象 MTime 复用，返回副本。
 - `backend/modules/visDatasets/pipeline.py`：数据集文件解析、画像、检测和可视化推荐的数据处理管线。
 - `frontend/src/modules/visDatasets/api.js`：独立应用交互与调用适配。
 - `frontend/src/modules/visDatasets/index.js`：独立应用交互与调用适配。

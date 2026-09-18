@@ -64,23 +64,11 @@ def test_real_default_modified_and_handoff(case):
             )
         )
         actual_project = client.app.state.services.project(project)
-        if not nasa:
-            current = task.read_configuration(actual_project, identity)
-            task.save_configuration(
-                actual_project,
-                identity,
-                {"dataset": {"partition": inputs["car_samples"]}},
-                revision=current["revision"],
-            )
         selections = inputs["nasa_samples"] if nasa else inputs["car_samples"]
-        scope = (
-            {
-                "mode": "samples",
-                "values": [sample_key(k, n) for k, names in selections.items() for n in names],
-            }
-            if nasa
-            else {"mode": "all", "values": []}
-        )
+        scope = {
+            "mode": "samples",
+            "values": [sample_key(k, n) for k, names in selections.items() for n in names],
+        }
         # 官方全名单发现与实际转换规模分开记录。
         evidence = {"case": case, "project": project, "task": identity, "runs": []}
         for modified in [False, True]:

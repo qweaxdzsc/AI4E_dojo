@@ -1,0 +1,282 @@
+.................F......F....F....FF..............................ss.... [ 94%]
+....                                                                     [100%]
+=================================== FAILURES ===================================
+_______________________ test_empty_name_rejects_execute ________________________
+
+binding_platform = (<starlette.testclient.TestClient object at 0x156f512e0>, '/api/v1/projects/3987ae521d984f1ab1e66500b005b9ae', PosixPa...4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-303/test_empty_name_rejects_execut0/raw')], web_dist=None))
+
+    def test_empty_name_rejects_execute(binding_platform):
+        client, base, _, _ = binding_platform
+        created = create(client, base, "shapenet_car_abupt")
+        url = base + "/tasks/" + created["id"]
+        initial = client.get(url + "/dataset").json()
+        bound = client.put(
+            url + "/dataset",
+            json={"expected_revision": initial["revision"], "sources": sources("shapenet_car_abupt")},
+        )
+        assert bound.status_code == 200, bound.text
+        cfg = client.get(url + "/rawprep").json()
+        rejected = client.post(
+            url + "/rawprep/execute",
+            json={"revision": cfg["revision"], "sample_scope": {"mode": "all", "values": []}},
+        )
+        assert rejected.status_code == 400
+>       assert "processed_dataset_name" in rejected.text
+E       assert 'processed_dataset_name' in '{"detail":"原始数据检查失败: [{\\"sample\\": \\"[\\\\\\"train\\\\\\",\\\\\\"param1/1dc58be25e1b6e5675cad724c63e222e\\\\\\"]\\...ars/param1/1e54527efa629c37a047cd0a07d473f1/quadpress_smpl.vtk\\"}]","request_id":"95264e8bfa4f48f6b7edfc5273f028a6"}}'
+E        +  where '{"detail":"原始数据检查失败: [{\\"sample\\": \\"[\\\\\\"train\\\\\\",\\\\\\"param1/1dc58be25e1b6e5675cad724c63e222e\\\\\\"]\\...ars/param1/1e54527efa629c37a047cd0a07d473f1/quadpress_smpl.vtk\\"}]","request_id":"95264e8bfa4f48f6b7edfc5273f028a6"}}' = <Response [400 Bad Request]>.text
+
+tests/integration/test_web_processed_datasets.py:228: AssertionError
+______________________ test_name_conflict_rejects_execute ______________________
+
+binding_platform = (<starlette.testclient.TestClient object at 0x1565bea50>, '/api/v1/projects/0174415151ec44e396008d3bc45b8e1b', PosixPa...4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-303/test_name_conflict_rejects_exe0/raw')], web_dist=None))
+
+    def test_name_conflict_rejects_execute(binding_platform):
+        client, base, _, settings = binding_platform
+        created = create(client, base, "shapenet_car_abupt")
+        project = Path(client.app.state.services.project(base.rsplit("/", 1)[-1]))
+        (project / "shared/datasets/shapenet_car").mkdir(parents=True)
+        (project / "shared/datasets/shapenet_car/occupied").write_text("occupied")
+        occupied = _manifest(settings.root / "occupied" / "manifest.json", "other")
+        task.register_processed_dataset(
+            settings.root,
+            "shapenet_car",
+            manifest_path=occupied,
+            digest=task.manifest_digest(occupied),
+            claim={"fingerprint": "foreign"},
+        )
+        url = base + "/tasks/" + created["id"]
+        initial = client.get(url + "/dataset").json()
+        bound = client.put(
+            url + "/dataset",
+            json={"expected_revision": initial["revision"], "sources": sources("shapenet_car_abupt")},
+        )
+        assert bound.status_code == 200, bound.text
+        cfg = client.get(url + "/rawprep").json()
+        saved = client.put(
+            url + "/rawprep",
+            json={
+                "revision": cfg["revision"],
+                "rawprep": cfg["rawprep"],
+                "processed_name": "shapenet_car",
+            },
+        )
+        assert saved.status_code == 200, saved.text
+        rejected = client.post(
+            url + "/rawprep/execute",
+            json={"revision": saved.json()["revision"], "sample_scope": {"mode": "all", "values": []}},
+        )
+        assert rejected.status_code == 409
+>       assert "shared_dataset_exists" in rejected.text
+E       assert 'shared_dataset_exists' in '{"detail":"原始数据检查失败: [{\\"sample\\": \\"[\\\\\\"train\\\\\\",\\\\\\"param1/1dc58be25e1b6e5675cad724c63e222e\\\\\\"]\\...ars/param1/1e54527efa629c37a047cd0a07d473f1/quadpress_smpl.vtk\\"}]","request_id":"e867a1021cfe4ad9921e3836f669a43d"}}'
+E        +  where '{"detail":"原始数据检查失败: [{\\"sample\\": \\"[\\\\\\"train\\\\\\",\\\\\\"param1/1dc58be25e1b6e5675cad724c63e222e\\\\\\"]\\...ars/param1/1e54527efa629c37a047cd0a07d473f1/quadpress_smpl.vtk\\"}]","request_id":"e867a1021cfe4ad9921e3836f669a43d"}}' = <Response [409 Conflict]>.text
+
+tests/integration/test_web_processed_datasets.py:486: AssertionError
+___________________ test_real_rawprep_to_existing_trainprep ____________________
+
+platform = (<starlette.testclient.TestClient object at 0x1566ea540>, '75eda91e239c43d9a36b5fa18f6f1570', {'id': '3880e9633df3440b...4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-303/test_real_rawprep_to_existing_0/raw')], web_dist=None))
+
+    def test_real_rawprep_to_existing_trainprep(platform):
+        c, p, t, root, _ = platform
+        files = copy_real(root)
+        url = f"/api/v1/projects/{p}/tasks/{t['id']}/rawprep"
+        bind = f"/api/v1/projects/{p}/tasks/{t['id']}/dataset"
+        current = c.get(bind).json()
+        bound = c.put(
+            bind,
+            json={
+                "expected_revision": current["revision"],
+                "sources": {"root": {"root": "data0", "path": ""}},
+            },
+        )
+        assert bound.status_code == 200, bound.text
+        cfg = c.get(url).json()
+        cfg["rawprep"]["vtkhdf"] = True
+        cfg["processed_name"] = "test_prepared_dataset"
+        saved = c.put(url, json={k: v for k, v in cfg.items() if k != "processed_name_status"})
+        assert saved.status_code == 200, saved.text
+        body = {
+            "revision": saved.json()["revision"],
+            "root": "data0",
+            "files": files,
+            "all_selected": True,
+            "idempotency_key": "actual-1",
+        }
+        missing = c.post(url + "/preflight", json={**body, "files": files[:1]})
+        assert missing.status_code == 400 and "配套文件" in missing.text
+        checked = c.post(url + "/preflight", json=body)
+        assert checked.status_code == 200, checked.text
+        started = c.post(url + "/execute", json=body)
+        assert started.status_code == 200, started.text
+        project = c.app.state.services.project(p)
+        result = task.wait_run(project, started.json()["id"], timeout=60)
+        assert result["status"] == "succeeded", result.get("error") or task.read_log(
+            project, result["id"]
+        )
+        published = c.get("/api/v1/datasets").json()
+        assert any(
+            item["name"] == cfg["processed_name"] and item["status"] == "available"
+            for item in published
+        )
+        repeated = c.post(url + "/execute", json=body)
+        assert repeated.json()["id"] == result["id"], repeated.text
+        assert len(task.get_lineage(project)) == 1
+        data = Path(result["data_dir"])
+        manifest = data / "manifest.json"
+>       assert manifest.is_file()
+E       AssertionError: assert False
+E        +  where False = is_file()
+E        +    where is_file = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-303/test_real_rawprep_to_...1664ac4ea690d7de2e0b8277ac/tasks/3880e9633df3440b85c8360a58e7b7f5/data/9747b0a394ca42d196b708f499d94572/manifest.json').is_file
+
+tests/integration/test_web_rawprep_handoff.py:80: AssertionError
+________ test_legacy_loader_real_sample_executes_without_rewriting_task ________
+
+platform = (<starlette.testclient.TestClient object at 0x157efdc40>, '3c575b8f2b1e4cdc8461dda1144cd0a1', {'id': '6b52996948e445b0...4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-303/test_legacy_loader_real_sample0/raw')], web_dist=None))
+
+    def test_legacy_loader_real_sample_executes_without_rewriting_task(platform):
+        """旧任务脚本未声明 workers 时仍可按页面线程数执行，且不改写冻结文件。"""
+        import ai4e_task as task
+        import torch
+    
+        from ai4e_core.applications.aero_cfd.rawprep.catalog import sample_key
+        from tests.integration.test_web_rawprep_handoff import SAMPLE, copy_real
+    
+        client, project, item, root, _ = platform
+        copy_real(root)
+        base = client.app.state.services.project(project)
+        folder = base / "tasks" / item["id"] / "recipe"
+        url = f"/api/v1/projects/{project}/tasks/{item['id']}"
+        binding = client.get(url + "/dataset").json()
+        assert "revision" in binding, binding
+        bound = client.put(
+            url + "/dataset",
+            json={
+                "expected_revision": binding["revision"],
+                "sources": {"root": {"root": "data0", "path": ""}},
+            },
+        )
+        assert bound.status_code == 200, bound.text
+        (folder / "configuration.py").write_bytes(LEGACY.read_bytes())
+        entry_path = folder / "task-entry.json"
+        entry = json.loads(entry_path.read_text())
+        entry.pop("operations", None)
+        entry_path.write_text(json.dumps(entry, ensure_ascii=False))
+        captured = task.read_configuration(base, item["id"])
+        task.save_configuration(
+            base,
+            item["id"],
+            {"rawprep": {}},
+            revision=captured["revision"],
+            replace_sections=("rawprep",),
+        )
+        shown = client.get(url + "/rawprep")
+        assert shown.status_code == 200, shown.text
+        config = shown.json()
+        config["processed_name"] = "legacy_real"
+        config["rawprep"]["workers"] = 10
+        saved = client.put(url + "/rawprep", json=save_body(config))
+        assert saved.status_code == 200, saved.text
+        before = digest_tree(folder)
+        selection = {
+            "revision": saved.json()["revision"],
+            "sample_scope": {"mode": "samples", "values": [sample_key("train", SAMPLE)]},
+            "idempotency_key": "legacy-profile-real",
+        }
+        catalog = client.post(url + "/rawprep/catalog", json=selection)
+        assert catalog.status_code == 200, catalog.text
+        response = client.post(
+            url + "/rawprep/execute", json={**selection, "catalog_revision": catalog.json()["revision"]}
+        )
+        assert response.status_code == 200, response.text
+        run = task.wait_run(base, response.json()["id"], timeout=120)
+        assert run["status"] == "succeeded", task.read_log(base, run["id"])
+>       manifest = json.loads((Path(run["data_dir"]) / "manifest.json").read_text())
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_web_recipe_compatibility.py:167: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/pathlib.py:1027: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-303/test_legacy_loader_re...2fdbaf4138ab4496e29bfe165d/tasks/6b52996948e445b092244fe3252e3a95/data/e29b6060eed3434386758cc328ed6944/manifest.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-303/test_legacy_loader_real_sample0/platform/projects/236ae22fdbaf4138ab4496e29bfe165d/tasks/6b52996948e445b092244fe3252e3a95/data/e29b6060eed3434386758cc328ed6944/manifest.json'
+
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/pathlib.py:1013: FileNotFoundError
+____________________ test_formal_recipe_new_fork_train_post ____________________
+
+tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-303/test_formal_recipe_new_fork_tr0')
+
+    def test_formal_recipe_new_fork_train_post(tmp_path):
+        source, cfg = setup_case(tmp_path)
+        _fit_config(cfg)
+        cfg.statistics.mode = "reference"
+        cfg.dataset.processed_name = "shared_physical"
+        cfg.normalization.execute = True
+        cfg.train.device = "cpu"
+        cfg.train.max_epochs = 1
+        cfg.train.test_repeat = 1
+        cfg.sampling.supernodes.num_points = 2
+        cfg.sampling.domains.surface.anchor.num_points = 2
+        cfg.sampling.domains.volume.anchor.num_points = 1
+        cfg.pipeline.stages = ["datapre", "trainprep", "train", "infer", "post"]
+        cfg.post.sample_indices = [0]
+        cfg.infer = {"samples": ["b"], "split": "test", "device": "cpu"}
+        OmegaConf.save(public_config(cfg), source / "config.yaml")
+        project = tmp_path / "study"
+        task.create_project(project)
+        first = task.new_task(project, "baseline", source=source)
+        a = task.submit_run(project, first["id"])
+        a = task.wait_run(project, a["id"], timeout=90)
+        assert a["status"] == "succeeded", a
+        assert (Path(a["run_dir"]) / "checkpoints/last.pt").is_file()
+        assert "post" in a["summary"]["reports"]
+        assert "infer" in a["summary"]["reports"]
+        child = task.fork_task(
+            project, first["id"], copy_datasets=True, copy_preparation=True, copy_checkpoints=True
+        )
+        assert {a["kind"] for a in child["copied_outputs"].values()} == {"preparation", "checkpoint"}
+        assert all(asset["source"]["run_id"] == a["id"] for asset in child["copied_outputs"].values())
+        b = task.submit_run(project, child["id"], overrides=["train.learning_rate=0.0002", "dataset.processed_name=derived_physical"])
+        b = task.wait_run(project, b["id"], timeout=90)
+        assert b["status"] == "succeeded", b
+        assert Path(a["data_dir"]) != Path(b["data_dir"])
+        assert len(task.get_lineage(project)) == 2
+        assert len(task.list_runs(project)) == 2
+        comparison = task.compare_runs(project, a["id"], b["id"], save=True)
+        assert comparison["metrics"]
+>       assert all(x["status"] == "available" for x in comparison["metrics"].values()), comparison
+E       AssertionError: {'id': '41f373bd4a8d4ec9bede905a9bac45d5', 'kind': 'runs', 'left': '0a3d39a04953417e9d8d7504c74ede67', 'right': 'cfb5208b6cf5492bba0f650246f25548', ...}
+E       assert False
+E        +  where False = all(<generator object test_formal_recipe_new_fork_train_post.<locals>.<genexpr> at 0x1566d7780>)
+
+tests/integration/test_task_recipe.py:50: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+.venv/lib/python3.12/site-packages/starlette/testclient.py:53
+  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_web_processed_datasets.py::test_empty_name_rejects_execute
+FAILED tests/integration/test_web_processed_datasets.py::test_name_conflict_rejects_execute
+FAILED tests/integration/test_web_rawprep_handoff.py::test_real_rawprep_to_existing_trainprep
+FAILED tests/integration/test_web_recipe_compatibility.py::test_legacy_loader_real_sample_executes_without_rewriting_task
+FAILED tests/integration/test_task_recipe.py::test_formal_recipe_new_fork_train_post
+5 failed, 69 passed, 2 skipped, 2 warnings in 412.40s (0:06:52)

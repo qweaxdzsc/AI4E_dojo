@@ -1,0 +1,1493 @@
+{
+  "baseline_head": "e48bde91ad11fd60d8fb95897a53397827947e8c",
+  "scope": "与开工时内容摘要比较，包含期间其他线程变化；不将这些变化全部冒认本轮实现。",
+  "files": [
+    {
+      "path": ".context/index.md",
+      "before": "70077b297794f9741efc0fd6b17a17e4d39fde338a6b7abae0ce8f01844db77f",
+      "after": "efb3d71f0664709da8f2aca8176ec70ee3d3615b356ac833230d9a5a2f488a3e",
+      "status": "modified"
+    },
+    {
+      "path": ".context/modules/ai4e-contrib.md",
+      "before": "cd95a173319fe9e7497d88fccb60c6e3e97b422050925ff3ab44d2e955398fb4",
+      "after": "6b26a09e941eccc71ca02c60031a4402b837a9f4e417a88ef1ee5f5e5d25b086",
+      "status": "modified"
+    },
+    {
+      "path": ".context/modules/ai4e-core.md",
+      "before": "52a9c9df8e9f8b3c4f9a10e03c798f3dffd882a69761cc4182793218269bce13",
+      "after": "7101dfdc7a26be644c02d84e75ce170ce49fcdb2fc94b84863d97110b7e9eb60",
+      "status": "modified"
+    },
+    {
+      "path": ".context/modules/ai4e-server.md",
+      "before": "1dd53855056944f92a2d240a0a0a59583a6de618c3b4ed4e54365f6356de1bc3",
+      "after": "9695ae779df8431a3085cfd8e23a3485723c16bb3001dce41a430882c659b8e5",
+      "status": "modified"
+    },
+    {
+      "path": ".context/modules/ai4e-spec.md",
+      "before": "b153fd267075604033d5398d4e82a4364c7bb09557b11060ac3fa308400d155b",
+      "after": "1cf4ef6337871eef6de0567706f2d3f29660715b232656a62f3035e1700306fb",
+      "status": "modified"
+    },
+    {
+      "path": ".context/modules/ai4e-task.md",
+      "before": "6ef911ff1c9c8d08728557fb12895455c587a77cb3cc08ac87b399424f388b56",
+      "after": "e4208f36dcdb3c7cad08fb818bcb26a5a279a203e6b68c47511ae7ad3c8f5fb6",
+      "status": "modified"
+    },
+    {
+      "path": ".context/modules/ai4e-viz.md",
+      "before": "38f6dd98686c045cde3fe7e6a520be445c25f5acc190067ffef8111933b9496c",
+      "after": "24d0351633e2ece4a549b82eb1d5c059a54f1b5ed0add15e08e5acca7229260f",
+      "status": "modified"
+    },
+    {
+      "path": ".context/modules/ai4e-web.md",
+      "before": "623e5d853d0e3750faf5cc143628ffe89a66c40d7cc1c8c877f43e093f903348",
+      "after": "bdc0353ed668f5d4eacae304dc04aa5b019ca2952e503c229052824b17f34305",
+      "status": "modified"
+    },
+    {
+      "path": ".context/modules/recipes.md",
+      "before": "4a10d62bf11698479ed3c642b653b6b9cab1d65806f787fb76f3c822fecbdb51",
+      "after": "24e4fd699cb1ecef12491e3a782b4e1b4f03519022203097bc2eb18fe5fd5a6f",
+      "status": "modified"
+    },
+    {
+      "path": ".context/modules/repository.md",
+      "before": null,
+      "after": "2c4f9c4717b940f66a949a4d5c117c41a16f22b2d90b1633d64a04b0ee93c830",
+      "status": "added"
+    },
+    {
+      "path": ".context/mvp/architecture-alignment-acceptance.md",
+      "before": null,
+      "after": "a7822e8b4356cbc0e2319ad60756452e1814cc155c2fb7c5f143c80dcaff73af",
+      "status": "added"
+    },
+    {
+      "path": ".context/mvp/phys-workbench-acceptance.md",
+      "before": "9414278bbdd853b7b4dd33d00fc361699e2a5d47ef09e4862a2fa0725bbc3e85",
+      "after": "01ca9cf1d7994a3bba38f24abfd7774f792087a7ca66059581cfb796a2df25d5",
+      "status": "modified"
+    },
+    {
+      "path": ".cursor/plans/trame-response-and-independent-visibility.plan.md",
+      "before": "263ec9118adecfbdcfa32e7aa1c1da9e4197b8a99de58cd996f12ea10417fb17",
+      "after": "c9be696f37cf62d2b5cc28974e99e040b4c09982dfc881d215000a7fbda4494d",
+      "status": "modified"
+    },
+    {
+      "path": ".cursor/plans/wdno-reproduction-and-agent-composition.plan.md",
+      "before": null,
+      "after": "b2897e5b2b0fa8e0cb6ff56789fac8c224160f770af4017309fa99830aa2355c",
+      "status": "added"
+    },
+    {
+      "path": ".cursor/rules/ai4e-algorithm-architecture.mdc",
+      "before": "05df2ef03dc8c391e1c494101680583b4ce8515b6f1bf2d4182a7a83a805b143",
+      "after": "59a14cad61f9dc396b64a7572582617d32d90920b561102e25a320fe7809b8f4",
+      "status": "modified"
+    },
+    {
+      "path": ".cursor/rules/ai4e-task-architecture.mdc",
+      "before": "dddd54cd94f7de152c5c8b10ce40847587dcbefcb571f4f27f262e3bda964fee",
+      "after": "47bf07ac1b2c3bfa2171983bfa32f66e11123e04f4667e5c8d2ad66b0d8c4248",
+      "status": "modified"
+    },
+    {
+      "path": "AGENTS.md",
+      "before": "d94abd17f8d99e2c3c0dd34aac4ce8c1bb2c3d00a090e04357fd7387ab085063",
+      "after": "76a919a204bf7daa3e588b1ee0417f2f9dca2bd8f0d4fa128ee6bc039b9639fa",
+      "status": "modified"
+    },
+    {
+      "path": "docs/AI4E_Dojo_ARCHITECTURE (1).md",
+      "before": "002db8c5f5014286207d20e2eb25d98f7f6c85180b078023da76a5bbca2ccbcb",
+      "after": "548fae5895954fe1f9e36148e4e915275e0fe5d3c2681ce300e3a4bca7436a4f",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/README.md",
+      "before": "d3f8bee5fe750fcbc43fabf01e644f0ad53f32f2b90e520825e5d289c13f0bff",
+      "after": "644790cece896f0327f6efc5610cfb70af554877e38c3c17f0f6daf5ac4933b0",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-contrib/ability/PRD.md",
+      "before": "adcc391db2caab61a690f466b538ec38447b4e74a0b2758198bf90c3805af59c",
+      "after": "bad93ad3260f217f5dca0286012989fc9fd56b8463b3934f618ba776055c156e",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-contrib/application/PRD.md",
+      "before": "d7d4b201af595598dda942d72a577046d9587113dd5f3055ed64f6c9e0f6e26a",
+      "after": "0ee7c80d0b756367faa46cde6f9b3642ada053d63deeaa30070b1be975d9cfe5",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+      "before": "c29d1277e1b702fb1fae80e09a00cff4e44c66a30e9249f1836573958e59e937",
+      "after": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-core/applications/PRD.md",
+      "before": "69e96fc27ff20eb9dc14cf30d13db87e6b0e25a9ba8187dc671ae92b410ff27f",
+      "after": "1346e9c8b147cc4516eac10c39229344285d0705342d5c07116e2935c7a3eb19",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-core/base/PRD.md",
+      "before": "8523742eee89cf404887656203a853599b8c3fd79ef9e7c75e38df806b8a5f12",
+      "after": "9f4fddd92fc1dd18eac8341c1ef984225381754453ad79cea618ae505a7443d1",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-core/run/PRD.md",
+      "before": "e14622b4d2a7161b3485d9b2d03532c56047390910fb7cafbccf42b84f437784",
+      "after": "4f23a7675ebbfc9d88776b4d4eed32dedf643342e436226906f260ac5f63a898",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-server/infrastructure/PRD.md",
+      "before": "561e2488f7647d6d647098a6a4e27111a062ed4932b431788b147e58d894d4ac",
+      "after": "5f6f68547293e15bde4c8691d5ad9b377289ee030ab4c0c001311f95ab2cea39",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-server/modules/PRD.md",
+      "before": "7e01d05f762a8b79a3b4464836c2e8b0137e4a7c7958241daacdaf8ce5dd7f06",
+      "after": "89000108d5b61266fe817e5a7e523c1162bdf1af91f5afe072a2adaaf2051369",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-spec/artifacts/PRD.md",
+      "before": "01842cf3c26eae123fb57a05ccb2cc29eebe854d622b36a6b0e26eab06532985",
+      "after": "8936684ff9b5f4801f4f668fdd2d61e665819c9abb830b4e3054d201d4cc1e4d",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-spec/components/PRD.md",
+      "before": "1e01a85d8bf1dc1374346387beaff5d9f322a58ef467cdceacde9a6f8a2f155a",
+      "after": "1d854cca23bfa1dd49f58781118a988c6371b8bfecbbf07df5e0ea01ee2ad463",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-task/cli/PRD.md",
+      "before": "da41fc37bc9d91f4496bc1a3cc57d960e22bb7dcfd24337abb73907391e171e7",
+      "after": "37b7424e7d4f274eedc8b6fb0b1521b6c3adfe5018f008f0e6c2ddb41664d467",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-task/storage/PRD.md",
+      "before": "5099e8588e7fb7b803d6bb22ae1ea486137d7aeb67cb2186a250a98e8e4596b7",
+      "after": "bf99dacbea6b6d19cc240b0c46a3788d810ddb9b8f030029b3c18efe6386539a",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-task/tasks/PRD.md",
+      "before": "90434294ae627d3b482297f068df0b3cde127619c20ea6cf5ad81b45a586ee95",
+      "after": "a2a686df27f507a916ec56e68a59d12833b2b1c8d33fa37b552a49e918d002be",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-task/templates/PRD.md",
+      "before": "621884d9718e393ee645627cff85ae51cc66241e0ffbe9fe36bb190bf2e787ec",
+      "after": "6e7c73f73d28065bbd0b24f03b100baed349be7b06ee85e6fc6b85dd5c19ab64",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-viz/pipeline/PRD.md",
+      "before": "bb81f7a3d98b4936d2b52a950188e3bf3344687732a7c93271e0607d53e30464",
+      "after": "c4754733b69d767fc10dc045802b560f5c4e82235fb9074a7a3d6f814dff51ca",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-viz/serialization/PRD.md",
+      "before": "863c7bc8f24984ccdb78e18bb7b8a63082d26c6921b3bd47fc1c8b54bada265a",
+      "after": "6e6b787da7518f845fe8eb34c7a19f00e32ee51bd796fc579f7fb6eb1ad3b425",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/ai4e-web/src/PRD.md",
+      "before": "e1d0af59fa162b8760d2373bb7cdee63ccf61ccbb7b8d1493a695adbe320b818",
+      "after": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23",
+      "status": "modified"
+    },
+    {
+      "path": "docs/PRD/recipes/aero_cfd/PRD.md",
+      "before": "678f5a24fadf60569dcf25ff28c24b98c0576b32a25d3efc335b7ed0d7b7e11e",
+      "after": "98f989ceef2a5947d234acf5f3c21d6e567235c922e06cf1c8542ea5beac7b36",
+      "status": "modified"
+    },
+    {
+      "path": "docs/abilities-inventory.md",
+      "before": "29ebde6fe255b5dc04eac351e42070595d50ebef0862828a6dc2fa6c6290a2ec",
+      "after": "8a4b633bc550935c0bdc13e9b7c960f9016cf6eae06436a90615a55dbbaed46d",
+      "status": "modified"
+    },
+    {
+      "path": "docs/abilities-merged.md",
+      "before": "76a0b49032be71864c7673b15cb94c2f89a30389ae3a9be12fdc1fa99647d80b",
+      "after": "b1fd0541e0328329e70eceb262435226ab4a999ea0e60819a92642e5f62c259a",
+      "status": "modified"
+    },
+    {
+      "path": "error.log",
+      "before": "cf633190ba33a29b2150147e997a133ccdc3933e2e57364ced4de5e649b2b7d3",
+      "after": "6c0400604196c4bfdc63a912783f2f7f483863a798cadb52fcef816321b5a486",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_abupt/config.yaml",
+      "before": "77187bd42918f2775ce039c800002598e3668c1da64a9be7d233a85a24558159",
+      "after": "bb8240436905f7751d27c97a266fa8f759979284cf63a7722413dac48bf8f978",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_abupt/configuration.py",
+      "before": "7db3dcb38a15787c340386b95e2500a5e2b7a796a868e1b390045c8bb88e4803",
+      "after": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_abupt/infer.py",
+      "before": "8ec280823e51e938d3239f775591f4025c1a3b59f69a8500fd90fa9058b172e7",
+      "after": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_abupt/pipeline.py",
+      "before": "151bbeaff76480c644a8d0a64ec0f2218fd80829b3e93d6aa7b1b95322654c8a",
+      "after": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_abupt/post.py",
+      "before": "229feb36cb17d4bfddedb9747a0dcc2752ff52eb5c3496bf424540dae8352bc0",
+      "after": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_abupt/rawprep.py",
+      "before": "fd64aa5ae5e33599de5e023b620536c9f09f05d517ccd47894e1568e22b825a2",
+      "after": "479f21af44b9ab1ba2980525f9426223b6913f89a8c146c48633e632ea5216a7",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_abupt/train.py",
+      "before": "bd65ce30d49afb8827827019db40a076c9ec556c4a90de9e58de73bef182772c",
+      "after": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_abupt/trainprep.py",
+      "before": "af64ad92622f35253276f6b9f2500c28bead99c08b720c7338418d266939a513",
+      "after": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_transolver3/config.yaml",
+      "before": "cc773859ad39ed69adbeb1f058014614113c7429f5f43c66409e3d3a4ddf6fa3",
+      "after": "b0b290c7f09feed3dfee1f29301f2d96208f5b4c0ac7441064b9d1e5883c850e",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_transolver3/configuration.py",
+      "before": "7db3dcb38a15787c340386b95e2500a5e2b7a796a868e1b390045c8bb88e4803",
+      "after": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_transolver3/infer.py",
+      "before": "8ec280823e51e938d3239f775591f4025c1a3b59f69a8500fd90fa9058b172e7",
+      "after": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_transolver3/pipeline.py",
+      "before": "151bbeaff76480c644a8d0a64ec0f2218fd80829b3e93d6aa7b1b95322654c8a",
+      "after": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_transolver3/post.py",
+      "before": "229feb36cb17d4bfddedb9747a0dcc2752ff52eb5c3496bf424540dae8352bc0",
+      "after": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_transolver3/rawprep.py",
+      "before": "fd64aa5ae5e33599de5e023b620536c9f09f05d517ccd47894e1568e22b825a2",
+      "after": "479f21af44b9ab1ba2980525f9426223b6913f89a8c146c48633e632ea5216a7",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_transolver3/train.py",
+      "before": "bd65ce30d49afb8827827019db40a076c9ec556c4a90de9e58de73bef182772c",
+      "after": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/nasa_crm_transolver3/trainprep.py",
+      "before": "af64ad92622f35253276f6b9f2500c28bead99c08b720c7338418d266939a513",
+      "after": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_abupt/config.yaml",
+      "before": "0c8096c03924a2d46122f5cddf4349aae45aa49d4cd172c61aab54d2948a3592",
+      "after": "846ba30ac3ac4b0ea3e2fa31d34650a70b57a29e16b3e069cfe4b3ca4c08d7a3",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_abupt/configuration.py",
+      "before": "7db3dcb38a15787c340386b95e2500a5e2b7a796a868e1b390045c8bb88e4803",
+      "after": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_abupt/infer.py",
+      "before": "8ec280823e51e938d3239f775591f4025c1a3b59f69a8500fd90fa9058b172e7",
+      "after": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_abupt/pipeline.py",
+      "before": "151bbeaff76480c644a8d0a64ec0f2218fd80829b3e93d6aa7b1b95322654c8a",
+      "after": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_abupt/post.py",
+      "before": "229feb36cb17d4bfddedb9747a0dcc2752ff52eb5c3496bf424540dae8352bc0",
+      "after": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_abupt/train.py",
+      "before": "bd65ce30d49afb8827827019db40a076c9ec556c4a90de9e58de73bef182772c",
+      "after": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_abupt/trainprep.py",
+      "before": "af64ad92622f35253276f6b9f2500c28bead99c08b720c7338418d266939a513",
+      "after": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_transolver3_surface/config.yaml",
+      "before": "913b5742f93c644e97cf4ee52e5037a06ccd68b62a48b6084ad2198e1143a744",
+      "after": "1fdcec6406083e027199fcda087a82cbbbdfb1ea91e47d5c1412118bc3c242e5",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_transolver3_surface/configuration.py",
+      "before": "7db3dcb38a15787c340386b95e2500a5e2b7a796a868e1b390045c8bb88e4803",
+      "after": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_transolver3_surface/infer.py",
+      "before": "8ec280823e51e938d3239f775591f4025c1a3b59f69a8500fd90fa9058b172e7",
+      "after": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_transolver3_surface/pipeline.py",
+      "before": "151bbeaff76480c644a8d0a64ec0f2218fd80829b3e93d6aa7b1b95322654c8a",
+      "after": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_transolver3_surface/post.py",
+      "before": "229feb36cb17d4bfddedb9747a0dcc2752ff52eb5c3496bf424540dae8352bc0",
+      "after": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_transolver3_surface/train.py",
+      "before": "bd65ce30d49afb8827827019db40a076c9ec556c4a90de9e58de73bef182772c",
+      "after": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_transolver3_surface/trainprep.py",
+      "before": "af64ad92622f35253276f6b9f2500c28bead99c08b720c7338418d266939a513",
+      "after": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_transolver3_volume/config.yaml",
+      "before": "b7fa1f961f63169b9aed9378ad004b42f123956582da4f272dccbf122c0930e6",
+      "after": "c36de57933773f9f7c103bf7b6f1413dab4cd7645d60fcd2bf3f844fbf97ac9a",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_transolver3_volume/configuration.py",
+      "before": "7db3dcb38a15787c340386b95e2500a5e2b7a796a868e1b390045c8bb88e4803",
+      "after": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_transolver3_volume/infer.py",
+      "before": "8ec280823e51e938d3239f775591f4025c1a3b59f69a8500fd90fa9058b172e7",
+      "after": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_transolver3_volume/pipeline.py",
+      "before": "151bbeaff76480c644a8d0a64ec0f2218fd80829b3e93d6aa7b1b95322654c8a",
+      "after": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_transolver3_volume/post.py",
+      "before": "229feb36cb17d4bfddedb9747a0dcc2752ff52eb5c3496bf424540dae8352bc0",
+      "after": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_transolver3_volume/train.py",
+      "before": "bd65ce30d49afb8827827019db40a076c9ec556c4a90de9e58de73bef182772c",
+      "after": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+      "status": "modified"
+    },
+    {
+      "path": "examples/aero_cfd/shapenet_car_transolver3_volume/trainprep.py",
+      "before": "af64ad92622f35253276f6b9f2500c28bead99c08b720c7338418d266939a513",
+      "after": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f",
+      "status": "modified"
+    },
+    {
+      "path": "examples/recipe_extensions/README.md",
+      "before": "859f8a472aee31a09423d4faeebd90eb2d78a600500d1b0912f96d808b2ec50d",
+      "after": "73223501022d9085c19be5e7a056a178d8da5da5cba7bcbe0aec89d1b0969f9e",
+      "status": "modified"
+    },
+    {
+      "path": "examples/recipe_extensions/field_mapping/config.yaml",
+      "before": "773e434cb962cb412ab4f678470f8798789fd0ce29ab37069becfacf0e1ddadd",
+      "after": "bd8c626c860e0552e3376fe51b85a9150a94c3e91a0fcaff6126a939ea79b026",
+      "status": "modified"
+    },
+    {
+      "path": "examples/recipe_extensions/field_mapping/configuration.py",
+      "before": "5bc56cfefa6392dd97fec2cc3ba15e0be00110bdf3d2ed8bea444969c630be2a",
+      "after": "af1ffc15307bfb57013d10dee9fc686123922fe8dd4836f560b13db574c14135",
+      "status": "modified"
+    },
+    {
+      "path": "examples/recipe_extensions/field_mapping/infer.py",
+      "before": null,
+      "after": "e9ad74dc286de3db2f8d5b2cf61eb1d39653e43824bca64e57ca7ab389e5b7a2",
+      "status": "added"
+    },
+    {
+      "path": "examples/recipe_extensions/field_mapping/pipeline.py",
+      "before": "c64f4315397f1e793ff236ffd27bc09623036847b4913e783d051458daa9def1",
+      "after": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "status": "modified"
+    },
+    {
+      "path": "examples/recipe_extensions/field_mapping/post.py",
+      "before": "4242484fe749b38882af15acc390ab7dbff5f791d1b554a23e10a98d25165cde",
+      "after": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+      "status": "modified"
+    },
+    {
+      "path": "examples/recipe_extensions/field_mapping/task-entry.json",
+      "before": "2f4bd88ca5c48edf47cec2237cd824b65ef5d1a1ec28bb105875021ee6578bc2",
+      "after": "00d45005395e45f8ab41dc99acb5d422082ba687a85a89461adeac03149127d3",
+      "status": "modified"
+    },
+    {
+      "path": "examples/recipe_extensions/field_mapping/train.py",
+      "before": "b79388301b8f93715b4ef3a5b8ee94815589ed9890754fdfa80ef67dc1afa28b",
+      "after": "2217f876132de8a63c797200a41943857d2e1c500ce4a5af27bac3df22516b0b",
+      "status": "modified"
+    },
+    {
+      "path": "examples/recipe_extensions/field_mapping/trainprep.py",
+      "before": "1b534d900521a982cc5ea6276b953ea4a368695a9410652d46400204d95d05f5",
+      "after": "2e32fed9ddffa4d76d16776320646f5b1ebaa6958e18d5f38c9547bf9cc1dca8",
+      "status": "modified"
+    },
+    {
+      "path": "examples/recipe_extensions/free_wiring/README.md",
+      "before": null,
+      "after": "7e06067ab3e629298fa89c55505da16f435c3d0bfa8e14d644fa09bb30df83e1",
+      "status": "added"
+    },
+    {
+      "path": "examples/recipe_extensions/free_wiring/config.yaml",
+      "before": null,
+      "after": "24bfbc4de4d23b7582c0131352fb4555df7f85e200c935694895feb0159789c2",
+      "status": "added"
+    },
+    {
+      "path": "examples/recipe_extensions/free_wiring/configuration.py",
+      "before": null,
+      "after": "053af27ef1f5cc58beb2abe0b648fd89bb7fb7e2340f1dac8d3e8e54104bb5fc",
+      "status": "added"
+    },
+    {
+      "path": "examples/recipe_extensions/free_wiring/pipeline.py",
+      "before": null,
+      "after": "bd5bb30b4442ac519503028eb92b8024dda353d871eea5570e57426bdc00d42e",
+      "status": "added"
+    },
+    {
+      "path": "examples/recipe_extensions/free_wiring/points.json",
+      "before": null,
+      "after": "96b2f8c3bccbd1067c14f3e050e68a4bf5f1c07069bb596e308dccd3dd71054e",
+      "status": "added"
+    },
+    {
+      "path": "examples/recipe_extensions/free_wiring/task-entry.json",
+      "before": null,
+      "after": "f7aad90ab37949625f96b0ca93082edccb61ac2dab9bd03d2fbe67a78fac8a65",
+      "status": "added"
+    },
+    {
+      "path": "examples/recipe_extensions/free_wiring/user_steps.py",
+      "before": null,
+      "after": "359aa14361848e6ed6b52f6fe1bdf2c517eb8168d36471c538ed62277b9a655b",
+      "status": "added"
+    },
+    {
+      "path": "examples/recipe_extensions/free_wiring/user_wiring.py",
+      "before": null,
+      "after": "c6255790e5ade16aa7f6ea24c4b726416af394fed674d38110c76518754d1f29",
+      "status": "added"
+    },
+    {
+      "path": "examples/recipe_extensions/sampling/config.yaml",
+      "before": "c0fe942204dc14e2c0e0b158fe31790dbbf147337ed2802fd2e7e8d924c8aa08",
+      "after": "1f6ccbb675739a2a8b45a893f7b0f006c7100c8ae9fe6143fa9c3d50f4544c40",
+      "status": "modified"
+    },
+    {
+      "path": "examples/recipe_extensions/sampling/configuration.py",
+      "before": "27b769b26dc3e67aba029245f1e7ed4a95669b7a4d62bccf6b7a224b32fab572",
+      "after": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "status": "modified"
+    },
+    {
+      "path": "examples/recipe_extensions/sampling/infer.py",
+      "before": null,
+      "after": "e9ad74dc286de3db2f8d5b2cf61eb1d39653e43824bca64e57ca7ab389e5b7a2",
+      "status": "added"
+    },
+    {
+      "path": "examples/recipe_extensions/sampling/pipeline.py",
+      "before": "c64f4315397f1e793ff236ffd27bc09623036847b4913e783d051458daa9def1",
+      "after": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "status": "modified"
+    },
+    {
+      "path": "examples/recipe_extensions/sampling/post.py",
+      "before": "4242484fe749b38882af15acc390ab7dbff5f791d1b554a23e10a98d25165cde",
+      "after": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+      "status": "modified"
+    },
+    {
+      "path": "examples/recipe_extensions/sampling/task-entry.json",
+      "before": "2f4bd88ca5c48edf47cec2237cd824b65ef5d1a1ec28bb105875021ee6578bc2",
+      "after": "00d45005395e45f8ab41dc99acb5d422082ba687a85a89461adeac03149127d3",
+      "status": "modified"
+    },
+    {
+      "path": "examples/recipe_extensions/sampling/train.py",
+      "before": "b79388301b8f93715b4ef3a5b8ee94815589ed9890754fdfa80ef67dc1afa28b",
+      "after": "2217f876132de8a63c797200a41943857d2e1c500ce4a5af27bac3df22516b0b",
+      "status": "modified"
+    },
+    {
+      "path": "examples/recipe_extensions/sampling/trainprep.py",
+      "before": "1b534d900521a982cc5ea6276b953ea4a368695a9410652d46400204d95d05f5",
+      "after": "2e32fed9ddffa4d76d16776320646f5b1ebaa6958e18d5f38c9547bf9cc1dca8",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-contrib/ability/model/abupt/component.py",
+      "before": "bc5c09f7e4ed155f74c0f50460f2d987f8a78c247bae60e0189f1559e181a98a",
+      "after": "5bf70e6c32a9cd073038ef0b9d71a397df36319534292a34b11f832390be7205",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-contrib/ability/model/pibsnet/component.py",
+      "before": "9e1a520ccb41fcf0182ae52730646110275fa31b5329d83bbcbbbc034a57d987",
+      "after": "792d0c13797ad585bd45617e1dc6eb8b628682f9389f0fbd5033ed96d9a9f1d1",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-contrib/ability/model/transolver3/component.py",
+      "before": "9cb4193cd6f80722ee779ee984ba8082f3f53249325d45eec21fe127bd5fbe61",
+      "after": "6ecc0c6ee25eb25869ba1b940a6824765447af1d8e0c1ccf51d67b4f72cf8503",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-contrib/ability/model/transolver3/inference.py",
+      "before": "ef9da7710be512cb3d46deb2ad8f8954b4bc5a36f52ee11ffe342027e182904f",
+      "after": "f8cdbf4ec183fb8e72d599df271a5eb906fbfd4414a1e6e63c0c30e994957273",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-contrib/application/aero_cfd/abupt.py",
+      "before": null,
+      "after": "8a1ebf9b2beaa91bfbe90db29d42df446103a0c06921d022767257011b8395c9",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-contrib/application/aero_cfd/configuration.py",
+      "before": null,
+      "after": "ed17793af45fe4e79b54911955452731ff45690729a66ee8a58adab3de2dd33a",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-contrib/application/aero_cfd/loader_adapter.py",
+      "before": null,
+      "after": "04168c6dc2f3a0b0fa2a474822420c1b8f6f9f506cb767385dededefe9f2874c",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-contrib/application/aero_cfd/transolver3.py",
+      "before": null,
+      "after": "8d7c91b1881fe1ba7d65127e1d1621365a0b790792c5734870bd18d374997055",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-contrib/application/parametric_pde/__init__.py",
+      "before": null,
+      "after": "e63bff29ebb8271a5b261b8b248831297fc8d84a3072050f3c2748ca9343a79a",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-contrib/application/parametric_pde/pibsnet.py",
+      "before": null,
+      "after": "f8cc36ccfd6d07c410673eed14aa971be3377df536069cb43cd0f15050e82cc2",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/__init__.py",
+      "before": "bec76e4ce45851d6ff52c53d8eccf3c499319522fcdc0f53666f996389e9fd11",
+      "after": "62f6b757ad8bea81b1e6d2163535d631b72d1bc7e964892f720546fde2cb6a05",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/anchor_workflow.py",
+      "before": "580b549e8097736a65ac2c9c5f9ed6fdf113750e4060648cc45809cb150ee1fe",
+      "after": "e7eca034502270f171cd65446d1be23489abee69551eee2c8355a51f182d3596",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/infer/__init__.py",
+      "before": "5f82778a89a643a12db6b12293a88de6a1f12c2f1e300f075bd053047b80c1d7",
+      "after": "4f9bc9d0c21eb966b3e85734780c09f61535a4613e07e3c8124806e35d70b62b",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/infer/anchor.py",
+      "before": "1e6a42253cf2de5d72f356e3ae4a85ad059aaf136629487ccae3c51c3c8010a8",
+      "after": "72c8d4ab9650d4efbe654c14ae2813790525c91128de8563a0295fbcf837a599",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/infer/anchor_evaluation.py",
+      "before": null,
+      "after": "dda2ea5d6ddd2e4f79a530e0105571fa3be6465cf0abeb12793e233b2f675d13",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/infer/anchor_export.py",
+      "before": null,
+      "after": "0e32a3ab5907f411dadfe658bd9928c1195af11ad65701a8c893db5d9f8cf409",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/infer/anchor_stage.py",
+      "before": null,
+      "after": "873e1024a0d90ab6b36fac5c7be497d72e1d0a464f6e8b00b6bbc42f4bbea02b",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/infer/artifact_operations.py",
+      "before": null,
+      "after": "1d03c1428e83da36f90180631d61ba8b10588fe09e9adb9b10d6bb0e476b331c",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/infer/mesh.py",
+      "before": null,
+      "after": "7a5bd198a167eafc122ec2c183b1fbb9743fa3e834253f3b40c846a635cda549",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/infer/pointfields.py",
+      "before": null,
+      "after": "b9b26a3f2a15eac106bd8b544572cf366cca174f06ff5a56d8bcd18fa9e60126",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/infer/query.py",
+      "before": null,
+      "after": "708384577eac5889c1b9d1989c6021a7dbe3d3e189a64d81222d0acc1af8fa04",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/infer/stage.py",
+      "before": "ffaae85f57bf95ce454bce38b3478ad784391b1fe1497d8d5418c087aae44ea6",
+      "after": "1983abb778b7c56c450876244b488f37f479ca1e27b16c899758954271d681ce",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/pointfield_workflow.py",
+      "before": "0e005bbaef3b3ce7fbad8106e36aadd505334a4848d20069c40b3a19f4090cd4",
+      "after": "1272cc4ab7c75d9ddefa3f5899d318709c86362a32f80ec8ba5e1ad6b76dacaa",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/post/__init__.py",
+      "before": "b704e2580c3e19f17bb865d6f761f4532306519c035880141da04f396efbb743",
+      "after": "a086170a4b25ada91b7228c5da009930dbe927c21fdd69156a787be3cd2e74b4",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/post/evaluation.py",
+      "before": "dda2ea5d6ddd2e4f79a530e0105571fa3be6465cf0abeb12793e233b2f675d13",
+      "after": "3dfeb43ec0e78eb4964636127b60a87e272b97e82dacf7f8ca91b25a1ac769ba",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/post/export.py",
+      "before": "0e32a3ab5907f411dadfe658bd9928c1195af11ad65701a8c893db5d9f8cf409",
+      "after": "fb217fd270e4d31cc79382999b29d893f9d4427f67698f769a956dd7206c7a4d",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/post/inference.py",
+      "before": "aedcd9a62c1499e3b9fdd8509cc0313d042f9671a7035bc02f72146ff8627fb0",
+      "after": "a7a47ec521e9133d3b14b9f88b6a920a9c28ecc72b4cafe1af5b25655bfef76f",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/post/mesh.py",
+      "before": "7a5bd198a167eafc122ec2c183b1fbb9743fa3e834253f3b40c846a635cda549",
+      "after": "6b578e11d713e90369c779137879bdb0a2c4546cd31d38a16974b810e882ea07",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/post/physical.py",
+      "before": "d9407b9be876e30b269d691dff061a75e660982b7256fdd3ed7bb9b978f65731",
+      "after": "222ed823730525771129b65739952656933ca38042ef9a22c9f05aa52a4d9a4c",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/post/pointfields.py",
+      "before": "073960e16ca440ded14344636dad0ace61ae54e1ec1874b6cd9039cd18f4647c",
+      "after": "0868f04003cf76be42f3485bba4dfee327833ce08ffdd4ce7c54d9f13f02dcef",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/post/progress.py",
+      "before": "11bd584069d4cd7274573fb2c1e676ee290d7f31eb9395d920c874d9b6893106",
+      "after": "380f5e10bc245acad0b98e74106983644ef1abcaa84a30778747eeb38f41c55c",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/post/result_evaluation.py",
+      "before": "7f57cda5fb83aeaa2017aff76bc53ee079b4c6c516c914f9ae2b07af0ce82f18",
+      "after": "a1fa8eb4be6bdf104a1aecb968eb569ed5984e4069ed109a3592b1eb7f804fd5",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/post/stage.py",
+      "before": "2f582926302fc99f163f6798c4d69dcc800504628730aec4c6152921a8ba1512",
+      "after": "d4854430e173a0a273b50178f54fcb2c3356e859ff6ff994f106481fd5897f08",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/rawprep/__init__.py",
+      "before": "4c2ac777d36671bf284068c8a8b48c9efcd8f049245155ec42db958731caaff5",
+      "after": "1ed415cb1f969232b3e92467cd80b24c84c2fb7cf4cda688999473e035b17147",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/train/__init__.py",
+      "before": "97de68be4901a3dc2917e0f7415432414e2553295cb224c80da5aa56de67de47",
+      "after": "41948f451cd73d3d083993d258d839e8593c42dbb4ae0d471a8cf869acabd5dc",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/train/resolve.py",
+      "before": "48e17d26e7e812d5aea3e10740bd3e6b07f31c5a2f97b3a2f521d43081578ddf",
+      "after": "622603d16547305c30ec2391e0e3a7732fff89113305e6ed0067401cc1f6ee9b",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/aero_cfd/workflow.py",
+      "before": "0991464228288d6225016a9a47906743a5a5f83b24770b8f6402c6e4fd480d05",
+      "after": "d1da1d3def3acc307b90e5b84a723e3e6f48a57ae9f6dde467573ff6bc0e7050",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/applications/parametric_pde/contracts.py",
+      "before": "06d9589c9b79e1e6bb14f6432ebad6237ea99d674dfbbd0a14459592e9bed030",
+      "after": "a211f5cd5f3e351043359185f6d4825f60ac482b72cdd2f2742a6dc02bdbafb6",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/run/__init__.py",
+      "before": "5c139832458db466710d52b3fa4de20f7b0f2c461b5a0b27622a2e6a74af35f9",
+      "after": "11e7fb1ef79dd0207523a6dfb34f8fc56fbcd752a611fb4f575bac8053d48bd4",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-core/run/operation.py",
+      "before": null,
+      "after": "6fab343f2d94bd0c5dd1057c65f90fb7c9bf1a784cc4d840a9d9e8cefce9a801",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-core/run/session.py",
+      "before": "63e36bf6f5cb20687a36a205d4d543396722fb4ef8277a82974d219c5973a4db",
+      "after": "a5193668c918ed65e7201238d1d2807a625840067c9178b7f42f86415230c13a",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-server/modules/capabilities/aero_cfd.py",
+      "before": "dcccd24107710c237c3e400fd8266a8a5af7001b110375ee3b78874640bc970b",
+      "after": "09e562b0efc526dd7175a2354d9340d9007b40fdb11c9b981ba1ff65fb6040b9",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-server/modules/capabilities/model_cases.py",
+      "before": "eff152cd1e76a8cfb7fe374694ecce6c1f2c511d82f0091cf84d687e88b6e6bb",
+      "after": "621e23ec0e36c9b2c14123ab0845433f57a2e2604f755e396adaa3373936ca9a",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-server/modules/capabilities/recipe_profile.py",
+      "before": "1ef8d2c4d3201e76da01e1a48668e97ce122698e2ca1c016e8c3cf132a5b8d49",
+      "status": "deleted"
+    },
+    {
+      "path": "packages/ai4e-task/__init__.py",
+      "before": "e74d6fe13065916d5e9bb32f58e1b8932f9fba68c6cd8368f4399629420880f5",
+      "after": "08139fd4398b680a820931175e7dbf6591b68ae5d85a0bf8db91f48c7dcaaf8e",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/artifacts.py",
+      "before": "2899f76ca18945c75a31151f5656bea90a9cf85661d159935c707a4a9c2adcd9",
+      "after": "27389805e3beb20c81fa553e203ec7f98473d9aadbb931fcc28d31dbbe253761",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/checkpoints.py",
+      "before": "806010b576fa1dbb2c8f65da13dae9d293b5ec3f09b1a5a321075b7f3bd3cbba",
+      "after": "93871a611af46b2b9cea5e28dc205d23ca52e2651604c13608bd4725e947f3c9",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/inference.py",
+      "before": "deffbeec76f4e43d7fe45a3c6ad443bfed5fc1e09775e19a97fb9888654993fb",
+      "after": "9084de352977d07a9fd2a4842fdb5600eda72cf1bfb025e9df08af0ebdf508de",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/inference_exports.py",
+      "before": "b73a2b2cbc20c77c861a857b45743d17f2dcf13787405e72b272fa3780a0d438",
+      "after": "f0c70abe99d6d9944a2862045eb5725a5056eba5252236856527e8950e473d3e",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/inference_inspection.py",
+      "before": "6c8ea7a198f80ece452ca473045324648e9da190fd7af762796c630429644ec0",
+      "after": "6b4942bfaf1a97fd463d88a2441c39616012926570b7594e76af253fb1577e5a",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/inference_results.py",
+      "before": "cd0c92792e3d4d4214686c7c7d40d9c85db6a58ffc9877b3212798b670db77b2",
+      "after": "bb2f3587464edf2415c5d74fd0d62c7da362b742405b6a1f1cd608874c60c170",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/inference_worker.py",
+      "before": "faaf5e8bbfd788fbcc0be59767dda6534172d9e5b970576a315ca7ee793a9ad7",
+      "after": "a0ebc34507b38836e800ed7d384c55ca3589f40c93aa8cc747dbba7c86055a6f",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/inspection_worker.py",
+      "before": "38bf61ed64aa91e845a8235cf1759ae487cd7d257284364f140ebcba3ad471c4",
+      "after": "981f27ba34e654f1053688b81af9a8a8e339b3795dbbb4e554d1d2bcdfc599e5",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/inspections.py",
+      "before": "e090cf487a7609fe37c236dcba05bf51f32b004730d7dc881b97dd725e92740a",
+      "after": "5e223e4edfc07997766cb85005d980904fb53ca4f3350c0c942609799addc909",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/operations.py",
+      "before": null,
+      "after": "26565329e2c30abf675266804bec9d6cc2507d31686429903eb81031a9ec5b2b",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/post_metrics.py",
+      "before": "d5b06a2b3e9858cee14f94546f0075fd51a10199455b533122c9e07673d97d2b",
+      "after": "37ca832e924d35aaba2ada59438366c73cc40bb0f5959890aafa4efcbab63e21",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/post_metrics_worker.py",
+      "before": "05ccdc5ae07d44536c72c82e369707ba60c848113acbe557d7655fe9122e7f63",
+      "after": "d1436915a67616c00d3e191e8d4c0def55638e627efc88b53b2de53bd33a245b",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/post_results.py",
+      "before": "082a0e1cdf06b26d42a6b1680b96deec576ed4cecaf655bf804cfd5aaa0d5a3d",
+      "after": "008743ad9141d1778a590aa8d69025bda990b6a426a016310ce37d04e8146ac2",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/query.py",
+      "before": "023ebe018030eae25683edecf1f4f8a5bee02e402db14c6d8d366ee840247103",
+      "after": "a0760237b8fce20229057d8132b3afd01a54eaeed8130b20dc56dc0095c38307",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/rawprep.py",
+      "before": "abb24353760edae2d2ada045d5f87c81f689b8d1023af9ff34dc2f7fb6a7f8b7",
+      "after": "e9f5f4dd403d05dd598e84e13fb8af1f07a039e1a4d3331e0c92ffd6b3bbc8ad",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/records.py",
+      "before": null,
+      "after": "3ffa98caed73cfbf19e0fc8bbb5e586d434cdc1c43001a3c6230bac4a3ed5745",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/visualizations.py",
+      "before": "6f2ba1e1c32d1ce2c94ca1843501268cac9a8af378d08758f4c1407892d5f020",
+      "after": "1d37cbde40c8ce169c919e6549203fce24e152f9f5f977f4f1e45c5f07ac0264",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/tasks/worker.py",
+      "before": "64d538fc0ab1cab24f893f6f65af395f347b07fc4a222b076cc92e4839473c5a",
+      "after": "e7780313d9074311fce8af1a905470dd9a0a7578f4cc18fc135fdf618e9a8fb9",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-task/templates/models.py",
+      "before": "d329a16d4e868afb82327061781388d13396333b4c888b5ecc89c3a224fce0aa",
+      "after": "7f7bbd5e8dc7ab3680da4e4e5dc1644254233cecb72b7a9b0622a4ca60003103",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/.context/api-registry.md",
+      "before": "32b3b7b3e63b838ee684ae33b93b19e4da6c68c004eca928a0b956a3b411e808",
+      "after": "a9a08e83c5c68bb45d3c8831cfec0099188e9f416f245d8e4cec1073bf151352",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/.context/modules/visPhysField.md",
+      "before": "89640089868bfbc6625f304ab5439b283f36eaa1cbe71d022592a969fe129f6c",
+      "after": "0d2c140516b1bd40cfd2e4449d0051700f3c3174d37cedce46f98ee9030aa26d",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/backend/modules/visPhysField/scene.py",
+      "before": "1877f9809c3dc564177983650ae2c9aa5a1f92f667ad6327d2f3bb7e6648b000",
+      "after": "a1479036ac69b03c1b291cbcc5fae1ff8429fdc6ca485090b5a5513c454a1130",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/backend/modules/visPhysField/trameUI/camera_controls.py",
+      "before": null,
+      "after": "8c755d0d8dfab7940a9bc31f0685c9fca9910fd3a0513e946d8bd1480239f537",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-viz/backend/modules/visPhysField/trameUI/controller.py",
+      "before": "1ffb613a7e211bfed99be8f5d61deef07f2292a1a2c413baa9193967e53eef7a",
+      "after": "20089df2db24b9762d74d852165f76805396f9c8b5a22a24b2077cc3f27c3a01",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/backend/modules/visPhysField/trameUI/export_controls.py",
+      "before": null,
+      "after": "24a2d02114783617b3f39f2acdb7be19e6ffe5a8c571154ae37076d7558e49b0",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-viz/backend/modules/visPhysField/trameUI/object_controls.py",
+      "before": null,
+      "after": "0da2199d184474263ca7cf4b59903ddb3c0ab791ac937ed587d57c655a2e804e",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-viz/backend/modules/visPhysField/trameUI/session_controls.py",
+      "before": null,
+      "after": "f85f8c04d52f4a71441803795b96be9ef89aae30019727812fd280dc4c0a08e1",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-viz/backend/tests/modules/test_phys_display_updates.py",
+      "before": "358371379adf2127024e3d218ab26f0932818c03430f11a99fe97d1d09a1232b",
+      "after": "dd739a069b9360852917a0db2463509206649716564aa67090e0dccb25b1faf2",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/docs/PRD/MCP.md",
+      "before": "b5871fbbe30688f6ca6d3b1dc9f5695d59a8d2b2647410869eeba1c3cf1d5bc9",
+      "after": "4924f8f824bbe07435a3472bfedd430bcc26a4bc05d0d2566117fafa8e34b94e",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/docs/PRD/automation.md",
+      "before": "a65f81c7d87a354202193a8d22bc89a7a58e0c6b56f108387f07170b32227698",
+      "after": "f033c991953a0fb8b60aaf05cad8afcc3ad471a0b45e58b44cf30a3f449143f2",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/docs/PRD/dataAssets.md",
+      "before": "a47703c5088745e40d006a78df198fd5a9c79d372a8ff78d4ef4547c0c9ffc34",
+      "after": "a11a89035238b5c65a6c4487d97e0b2882d4f903cac0f501e6299521c3161797",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/docs/PRD/reportDesigner.md",
+      "before": "e7e024b68b1e23826b8bb909fa188d1cad963e055b5b966ccce6f50da4e75c31",
+      "after": "f1636192e3da1fb4592800c61831a3902ca150c2ded96c421b1bc49a1b7f0f99",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/docs/PRD/reportManage.md",
+      "before": "df14006db231a396c05db09f231ac9aa7e728083295cf85a75404391063e6392",
+      "after": "a2b4ffea1034d52eb1481a5a4816aaa8408d741c1732dceacad81a8b06e2d7c3",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/docs/PRD/visConvertor.md",
+      "before": "4e6593d5bc51ecde37e0298f32ec1aa1197be9fa7d8a0e44ed617eee9db09838",
+      "after": "4fc9aae3ab20fa0da497f7bf5426b9a54e389923abf8bb90abc06a02059ab5cd",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/docs/PRD/visDatasets.md",
+      "before": "7a5e57c852fb98bab483938c313694a6a1cb9a1e9a4a5381cb9a694a17f49d37",
+      "after": "912c26fa1c3819f9e236b933d71a021406ccbc645ee9010fce2a5812262f627d",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/docs/PRD/visEngine.md",
+      "before": "f14aab99ca2e23b6c92c999b237099b3eb8e316872f780595c37ab7a1c00516e",
+      "after": "165ebdbe9f1b74ab22fb30a93e6e046a07b10e3d95008270215f4aedcdc5cb0a",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/docs/PRD/visFigure.md",
+      "before": "77c9111981fa7524f9e77cf83caa988d219191adf4e90f08837924079d415671",
+      "after": "1df86f1414a1d7a73a97983150cc202b99a2c66628fc561537f6ad61e8532f11",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/docs/PRD/visGeometry.md",
+      "before": "1f24bc21fdc9b76a9bcdee044829b04d656ab378fb4ac94dbc9d7a9a217c3ec9",
+      "after": "38bdee20d029e90e2da04002d675e7500967fd4995f0360ef7a3a4bb4ff26800",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/docs/PRD/visIO.md",
+      "before": "0e5e2be4352859be5141e3c0dd374a3df77b00080e5b91f63c942caf757e03cb",
+      "after": "664da09a1ec9c403b00600870e6101d3e3774c69665d03a02bedf8ece464a105",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/docs/PRD/visPhysField.md",
+      "before": "7ead031d5282dc6131378f48921fc999a6d648073baf2e490d96b2fa27187efe",
+      "after": "645d2a0b968264577232445a659d039e73e996805ac00732f316181550605783",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/docs/PRD/visTaskManage.md",
+      "before": "9f6c32b8b788b9a8626b8db875e78aee21d2975e51498aff82426efdbc3d63b7",
+      "after": "a579ae1d5f93787d987180197de4ec680528b42c64bab3bfac5da693434421c2",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/docs/architecture/architecture.md",
+      "before": "e1502aeb0a762c55b489e18efda50069439abf5faaaf93f2ffe400018a680702",
+      "after": "2e66d648184465747595f924feed965686e6303219dc0e8482357dacf6af9d1f",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-viz/error.log",
+      "before": "92330d7920eaca50bbff50f61d3db14ac410c0fe3c524ad60aeea8fd27fed4b1",
+      "after": "e962451a0f71f86b5265a8a95797c1fe9a838b3f06d32a6d56f44cc05f8af7a1",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-web/e2e/post-session.spec.ts",
+      "before": "cb95d4e86dc500f86b4a8926d343f79d34de1339d629701d940e4b18cc083a43",
+      "after": "36c22c48823718dc2a022d3ea4eedd85d327023bfd6c8a39453510196b2eeabd",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-web/e2e/task-dataset-binding.spec.ts",
+      "before": "3fcaae1885c8b3732bb4b1179b2628d41519010abf0b38d0a5bdc0b93e2ea8a2",
+      "after": "2fe4070a91f5541827372dcc8aa4d95906d9424024858d8c8e421f6773ab792f",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-web/e2e/trame-responsiveness.spec.ts",
+      "before": "be17d108cfe1c307f59554ff92584fed9623d255bc441970373079b6d4f84ad6",
+      "after": "d6f2bf89d42c8309bf0d8e72d9f4fb138f72865b98798feb167b8b457497637a",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-web/src/modules/stages/StageWorkbench.tsx",
+      "before": "4cc6d4d8a34ec3dbb93c9a176606930427a377a3260e69c41ca4752d0ebe4f76",
+      "after": "baccb9c8a7bfb3c267732d06ff9cd8933868d352b766d4f99423e78758f7472e",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-web/src/modules/stages/api.ts",
+      "before": "8f33b9c08206d8c0663930f8a5ddf8ef1a82526d513b26401eb35e2169494119",
+      "after": "2608d9308cad9073cfc545fed19bd64f704fd9e8fd8a6c0930f601cd09270b72",
+      "status": "modified"
+    },
+    {
+      "path": "packages/ai4e-web/src/modules/stages/inputChoices.ts",
+      "before": null,
+      "after": "3b36aaaeb24f5d975067352c4e52035a365a7180ac4cea04c8d8b6fdb2c270ef",
+      "status": "added"
+    },
+    {
+      "path": "packages/ai4e-web/src/modules/stages/useModelSelection.ts",
+      "before": null,
+      "after": "705afd1be5ec39820392e9060a7e15659eac5bf4fb1d77fff8e9a7c188312036",
+      "status": "added"
+    },
+    {
+      "path": "pyproject.toml",
+      "before": "5c4ba5e8c0e3c9085b180b27843b295f608180d4391e1ab795257ffe59ab40c5",
+      "after": "74284a94106542fdd8f8c36ed600f1d0d677aa6b9304f0bb0e3c15e02c7ffa4c",
+      "status": "modified"
+    },
+    {
+      "path": "recipes/aero_cfd/config.yaml",
+      "before": "468713381431cd25bc893bfed843516d62b5d1426310ee09a5bdbf18dc9992ca",
+      "after": "c2c13e79e4afe2adc3261f853080ff423d1ab4fba095d596c48c87b687cc7d1c",
+      "status": "modified"
+    },
+    {
+      "path": "recipes/aero_cfd/configuration.py",
+      "before": "7db3dcb38a15787c340386b95e2500a5e2b7a796a868e1b390045c8bb88e4803",
+      "after": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "status": "modified"
+    },
+    {
+      "path": "recipes/aero_cfd/infer.py",
+      "before": "45620ca47d5319c798c26ec03b00b0d1390a015b4f94af4aacd433d3985de03f",
+      "after": "e9ad74dc286de3db2f8d5b2cf61eb1d39653e43824bca64e57ca7ab389e5b7a2",
+      "status": "modified"
+    },
+    {
+      "path": "recipes/aero_cfd/pipeline.py",
+      "before": "151bbeaff76480c644a8d0a64ec0f2218fd80829b3e93d6aa7b1b95322654c8a",
+      "after": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "status": "modified"
+    },
+    {
+      "path": "recipes/aero_cfd/post.py",
+      "before": "fb894bb1b8a399fb4b91b0efa79db120c417abc32437a9ad71639a3080db1754",
+      "after": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+      "status": "modified"
+    },
+    {
+      "path": "recipes/aero_cfd/task-entry.json",
+      "before": "f09b142f80a5bc3d0660f964b4710786d2ea0be96144c48607cc2628a2a07e72",
+      "after": "9516a5dc9ffaf128db8a2afa5ba8e573d3960814bf793fdf4476f983abc34f65",
+      "status": "modified"
+    },
+    {
+      "path": "recipes/aero_cfd/train.py",
+      "before": "b79388301b8f93715b4ef3a5b8ee94815589ed9890754fdfa80ef67dc1afa28b",
+      "after": "2217f876132de8a63c797200a41943857d2e1c500ce4a5af27bac3df22516b0b",
+      "status": "modified"
+    },
+    {
+      "path": "recipes/aero_cfd/trainprep.py",
+      "before": "1b534d900521a982cc5ea6276b953ea4a368695a9410652d46400204d95d05f5",
+      "after": "2e32fed9ddffa4d76d16776320646f5b1ebaa6958e18d5f38c9547bf9cc1dca8",
+      "status": "modified"
+    },
+    {
+      "path": "recipes/parametric_pde/pipeline.py",
+      "before": "5e4bde92e75cb9f216fd585661250a642633003fd95cc6d81640b7866f973f46",
+      "after": "51078001375a85f05bd75fd30b05e7fc3ba3e8c16dae5461db3862e14890a5ab",
+      "status": "modified"
+    },
+    {
+      "path": "tests/contract/test_model_components.py",
+      "before": "a224852d32523faf23fff2a0dbcffed31749d41ce4c9e151d44b96e4d0ea8eb7",
+      "after": "2d24b715c789306510b3e673d7921376633cee13e059d8bd19ee7153854f30c0",
+      "status": "modified"
+    },
+    {
+      "path": "tests/fixtures/numeric_anchor_infer.py",
+      "before": null,
+      "after": "718c49ec8aca42600707f75daebb252d57dbf05d50e63f7b0e952bd12fa09e3e",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/public_api_baseline/README.md",
+      "before": null,
+      "after": "7e06067ab3e629298fa89c55505da16f435c3d0bfa8e14d644fa09bb30df83e1",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/public_api_baseline/config.yaml",
+      "before": null,
+      "after": "24bfbc4de4d23b7582c0131352fb4555df7f85e200c935694895feb0159789c2",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/public_api_baseline/configuration.py",
+      "before": null,
+      "after": "3b990e9157472fe2205639f1fc3fd3f5a5f2a2a951e60293520cd2122a0b9927",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/public_api_baseline/pipeline.py",
+      "before": null,
+      "after": "9b56e9276053d6b116ec4224d16466eda0be296e40e5f422cc9b6d3058af28d0",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/public_api_baseline/points.json",
+      "before": null,
+      "after": "96b2f8c3bccbd1067c14f3e050e68a4bf5f1c07069bb596e308dccd3dd71054e",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/public_api_baseline/sha256.json",
+      "before": null,
+      "after": "5bffd1a50b1d7e5770f6d5553cfd7be6c09479dcba9b116390d0f9a733596618",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/public_api_baseline/task-entry.json",
+      "before": null,
+      "after": "f7aad90ab37949625f96b0ca93082edccb61ac2dab9bd03d2fbe67a78fac8a65",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/public_api_baseline/user_steps.py",
+      "before": null,
+      "after": "219ddca087adfb9fc260f8edca086312ef1da9bf6d3482ffb3685894a89df9e9",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/public_api_baseline/user_wiring.py",
+      "before": null,
+      "after": "c6255790e5ade16aa7f6ea24c4b726416af394fed674d38110c76518754d1f29",
+      "status": "added"
+    },
+    {
+      "path": "tests/fixtures/recipe_before_explicit/physical_workflow.py",
+      "before": "c13fee04b253ea9228c0f2328d240b4ad58729fca71652c420e4b3861ee71245",
+      "after": "34253a6fe5848db6cabb5fceff607af8d39a45179b9d03ff19cae9ceddb77f96",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_abupt_recipe.py",
+      "before": "80c87168895755584a04d65b2bba743bc54591805e635fc9a92c6570ec3f4173",
+      "after": "cb4c035b0b8adaa21feb5422858ffaf3faeaf035c187f87951334f0c2598a089",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_aero_cfd_documents.py",
+      "before": "3f8e99fc55c129235df3d9242aa437ed8495a447518311aae88aa7be257cbc12",
+      "after": "478d69d8ff3932d1aea2fb44e861736b25ca4540e607997a40aab16860d047c6",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_algorithm_platform_contract.py",
+      "before": "e2d00461feeea1f8664eca52ad46e3857df6b351b22893824cfac179be9582d2",
+      "after": "56d9c78590d30bbcda7a14b99e2da7baf6a76adf8016b521eb7075021e18674b",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_architecture_alignment_documents.py",
+      "before": null,
+      "after": "1f08b12684fffa126008153737bc9126d5f3436e231be7da5adfc891b225bae8",
+      "status": "added"
+    },
+    {
+      "path": "tests/integration/test_cross_model_recipe.py",
+      "before": "39d28ce67da754e075196d2f1104f5806b75ae414759c336655643437e1bcd01",
+      "after": "038c44d238065588a6cfe55d68ad1d2da12c892a1b3d39564603caabe0477f73",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_dataset_recipe.py",
+      "before": "a0518105f3b410e7202ca71bb1c97fbf7b3e239736e13d006ad38f4957dec41a",
+      "after": "6e2369e45eddfc6e22675fafb0246182097f5e343365f175dc129075995394cc",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_framework_correctness.py",
+      "before": "09fe047c8c9d832795271b648819f3967b3db3cb01fe96a22dc0436074c5f760",
+      "after": "49b3a5055a08fb53e85920c8d2a7dd3b52ef1e7de2fab515d7db32fc233d9843",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_infer_compatibility.py",
+      "before": "aec1d6a3789c0e604d858f6145e6a36b9f2646a0487b71b108ca414d7db1fb43",
+      "after": "9f9887d35aefc08db401054046ef4ef551ba01f056b0ef95bf73926968a4a5b7",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_infer_stage.py",
+      "before": "a2923aea0dce8d3031a43d6c68596b5081999e111b92b6016b5ed26bcfbeee63",
+      "after": "e5bb287923496e0cd70635bbb5699343c3b88d849cdb75de825d59e12e90fed6",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_model_evaluation.py",
+      "before": "bd061f09be2c6371a4732e83d59d58f0eae5f4ac1f92908d6810bb5b0165c115",
+      "after": "65c5067c3b8667491ecb64a085e2f867407fd6706bc3de803c40e323f531af63",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_post_inference.py",
+      "before": "b6cff2f95ea4b54695001cfeb00fc0d8e9edc004a3d5bfb68081e02e8609ae38",
+      "after": "e9d7fc94052fe62139709064383c78cd4ccf2a985a99c0e059019bdaf34c205f",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_post_mesh.py",
+      "before": "c0c164072e5f10e29b7c89f15ad61bf89a50c7210a05db3d4c50358e96fecb30",
+      "after": "386532736fd5e05f8f6184d4bdfcfa5e1a45ceaefab7f630dd093b2e9941cbb9",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_public_api_stability.py",
+      "before": null,
+      "after": "ba54627217c34e579fbc288219f5ff8bce8ff62d17430183209ad7a8b1154f1a",
+      "status": "added"
+    },
+    {
+      "path": "tests/integration/test_rawprep_workers.py",
+      "before": "d857756f39300cb0d0a232e590c4b2c3a1d01d454df523f8d87887d941bb3f7a",
+      "after": "307f90f4e18254b57c00be3bae6d740ae5394d74bfb26ea08d60ca521a005caa",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_recipe_explicit_equivalence.py",
+      "before": "d0e83a8e19a6d44128668be0893165d9598538a3719371a235f1184aca912403",
+      "after": "54954397ee1e15cce66a78989e575a3e53536fff6f0850143a9bf83553f30868",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_recipe_extensions.py",
+      "before": "ca73e5f53a2b267fa395452d9b03f52e6c12a751e8a874febea486bfe2dc5ad8",
+      "after": "f32211a87c1b0b29157941ae6f6b6ac5001858f5874c19aa5a2a6e37fdf13fa7",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_task_management.py",
+      "before": "ce2956bb337ac32b6b57e848c8b57c20a3d164c257b972906eb5b0d64defa6ba",
+      "after": "3d4962c2322250fc05f43d664950739c378ce9dd43a5fc367325bb675fcef2c1",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_task_operation_provider.py",
+      "before": null,
+      "after": "12d2b8a56c5bd5a01d6e9e4531b463407adb8fcb114d2289a74f6bd15ca1224e",
+      "status": "added"
+    },
+    {
+      "path": "tests/integration/test_task_post_metrics.py",
+      "before": "ea92b0675a384948c78cb6a2d573c9adc939973b382e21383400378d63a4f2ae",
+      "after": "f9b1883ab78d382cd3aa641ff8ee67ac9a781a7bd954257134120b172cc2075d",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_train_resolved_config.py",
+      "before": "d6fc58043132da97ee26fd6e3c1cfebbd0cf208b6a273dd8a665fac9068c50c0",
+      "after": "537db9af17240791813f79c8839fb7cfa8a1425e92045727459712d8d343496e",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_transolver_post.py",
+      "before": "197c5132278cceeadd73fbbf44a1dd613bd4ddecf305bd9f73d9223ef3df987d",
+      "after": "e9e50e437e5bcf5d0ea65bda2493b2ba53207c6376d301c269ce8c8d02188bae",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_web_inference.py",
+      "before": "59d9eb50d110809e275176e7743ea3eb6e6768ad797bfa4c1f527284e6fd4108",
+      "after": "001b103774de8394b92965abe61c28c5bc8dbd7193145feb4a9a5cf2310c9a0d",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_web_project_task.py",
+      "before": "ee1936635f3fe8f597419016cad8ebf01e770b7e48c56fb459f1658abe1f476c",
+      "after": "26e319fa420ea37692483415633a7e296a0431666c054b48aab312ee7208d5dc",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_web_rawprep.py",
+      "before": "debaed8f980d0cba59f9f3bf7221b72e45ac011e35085d54efea5c1168aeee8b",
+      "after": "42acec153f90daf8a7cd0fa1fb47b5d541657ab5fd13cb4a612e1d71a41dc9f7",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_web_rawprep_handoff.py",
+      "before": "5856a35b69b61a137b55346b4eb6ed0dfdcf5e4dbfdfd7a7d4d154b0d41dfba3",
+      "after": "b466f56e44f2be566e4116a01d9c7bc1743c1d3a6e07237956957b0cc19c547d",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_web_recipe_compatibility.py",
+      "before": "0add205e97669d9acd494da0cc50739ef50b9780c9cd930219c86858e6412c90",
+      "after": "0712b0c87eb0e6201ab1eff88acfe3cccd3b08b38d1f3025e7d76294083eba59",
+      "status": "modified"
+    },
+    {
+      "path": "tests/integration/test_web_stage_consistency.py",
+      "before": "49b6adb42a6f6fcb09642c2fb65e1d819200bc03f2c2241413a244851cafbb4d",
+      "after": "a3fb48daa1c5f8fe95fa5dd192c51d3c1a2199390bb489f03d1be95efbe7a900",
+      "status": "modified"
+    },
+    {
+      "path": "tools/verification/architecture_inventory.py",
+      "before": null,
+      "after": "c45dc5d9da79ce19ea03422d7699dc659f44e509672e2255c50924b2642e3bde",
+      "status": "added"
+    },
+    {
+      "path": "tools/verification/transolver3/dojo.py",
+      "before": "c1f1a81f49594901eca5f6e72b36d4d6867dfdf8d13bcfe4b59900de11f4329d",
+      "after": "af7bdf1418412389fc453160d534324cf86f12c7a08eca381f622c5c9b5397be",
+      "status": "modified"
+    }
+  ]
+}

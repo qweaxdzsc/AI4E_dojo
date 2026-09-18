@@ -1,5 +1,5 @@
 /* 模型领域：整合原型的紧凑分组，真实结构保留独立显示区域。 */
-.model-layout{display:grid;grid-template-columns:.83fr 1.17fr;gap:10px;height:700px;margin-top:8px;align-items:stretch}
+.model-layout{display:grid;grid-template-columns:.83fr 1.17fr;gap:10px;height:860px;margin-top:8px;align-items:stretch}
 .model-layout>.ant-card{min-width:0;height:100%;overflow:auto;border:1px solid #dceaff;border-radius:6px}
 .model-layout .ant-card-head{min-height:38px;padding:0 12px;font-size:17px}
 .model-layout .ant-card-body{padding:0 8px 6px}
@@ -16,11 +16,23 @@
 .model-layout .ant-select-selection-item{line-height:20px!important}
 .model-layout .ant-table-cell{padding:3px 5px!important;font-size:10px}
 .model-layout .model-visualization .ant-card-body{height:calc(100% - 39px);display:flex;flex-direction:column;padding:8px}
-.model-layout .model-visualization iframe{width:100%;flex:1;min-height:300px;border:0}
+.model-layout .model-visualization iframe{width:100%;flex:1;min-height:800px;border:0}
+.model-layout .model-graph-hint{margin-top:-2px;color:#8a9bb8}
+.model-layout .model-graph-views{display:flex;gap:8px;margin:0 0 8px}
 .model-layout .model-visualization .empty-record{flex:1}
-@container(max-width:1200px){.model-layout{grid-template-columns:1fr;height:auto}.model-layout>.ant-card:first-child{height:auto;max-height:none}.model-layout>.ant-card:last-child{height:670px}}
+.model-layout .model-visualization .ant-spin-nested-loading,
+.model-layout .model-visualization .ant-spin-container{flex:1;min-height:0;display:flex;flex-direction:column}
+.model-layout .model-graph-host{flex:1;min-height:320px;display:flex;flex-direction:column}
+.model-layout .model-graph-status{margin:0 0 8px;color:#3d5a80;font-size:13px}
+.model-layout .model-graph-placeholder{flex:1;min-height:280px;display:flex;align-items:center;justify-content:center;gap:18px;border:1px dashed #c5d6f0;border-radius:8px;background:linear-gradient(180deg,#f7fbff 0%,#eef5ff 100%)}
+.model-layout .model-graph-placeholder span{width:72px;height:36px;border-radius:8px;background:#d7e6ff;box-shadow:0 0 0 1px #b9d0f3;animation:model-graph-pulse 1.2s ease-in-out infinite}
+.model-layout .model-graph-placeholder span:nth-child(2){width:96px;height:48px;animation-delay:.15s}
+.model-layout .model-graph-placeholder span:nth-child(3){width:64px;height:32px;animation-delay:.3s}
+@keyframes model-graph-pulse{50%{opacity:.45;transform:translateY(-3px)}}
+@container(max-width:1200px){.model-layout{grid-template-columns:1fr;height:auto}.model-layout>.ant-card:first-child{height:auto;max-height:none}.model-layout>.ant-card:last-child{height:860px}}
 
 /* 模型选择与训练输入分开，选项来自官方模型与项目预设。 */
-.model-picker{display:grid;grid-template-columns:80px minmax(0,1fr);gap:8px;align-items:center;margin-bottom:8px;font-size:12px}
+.model-picker{display:grid;grid-template-columns:108px minmax(0,1fr);gap:8px;align-items:center;margin-bottom:8px;font-size:12px}
+.model-field-help{grid-column:1 / -1;margin:-2px 0 4px;font-size:11px;line-height:1.45;color:#728bbb}
 .model-export{display:flex;gap:8px;align-items:center;margin:8px 0}
 .model-export .ant-input{flex:1}

@@ -1,0 +1,62 @@
+[
+  {
+    "name": "shapenet_car3",
+    "status": "available",
+    "reason": null,
+    "digest": "c525e467c195c1e2267a157429a118c6e90a32520dbd003b4af9e0740cbadf0f",
+    "created_at": "2026-09-16T04:36:32.133787+00:00",
+    "origin_task": "f9fca9f6c4414c17abae50f8713fd86b",
+    "origin_run": "migration-cd8f4f86f3014dfa9e21275fca34fe3a",
+    "source_project": "34f74688805f4d4e815885da04a081d2",
+    "source_project_name": "abc",
+    "shared_asset_id": "0f78782b206d5c1dabd73f5e82f056e6"
+  },
+  {
+    "name": "shapenet_car2",
+    "status": "available",
+    "reason": null,
+    "digest": "c525e467c195c1e2267a157429a118c6e90a32520dbd003b4af9e0740cbadf0f",
+    "created_at": "2026-09-16T04:36:23.801494+00:00",
+    "origin_task": "f9fca9f6c4414c17abae50f8713fd86b",
+    "origin_run": "migration-a48b4e573b244e1d9adb55c34dfe3fbe",
+    "source_project": "34f74688805f4d4e815885da04a081d2",
+    "source_project_name": "abc",
+    "shared_asset_id": "66b4708e865d51f680acd3a0ea0d8032"
+  },
+  {
+    "name": "shapenet_car",
+    "status": "available",
+    "reason": null,
+    "digest": "26740941846aa79357d99d87dfe97f3c6890a8b3da104e8ec6b557afcd0d1482",
+    "created_at": "2026-09-16T04:36:15.017152+00:00",
+    "origin_task": "f9fca9f6c4414c17abae50f8713fd86b",
+    "origin_run": "migration-e496e4f8fa7840c69a183d7021126c88",
+    "source_project": "34f74688805f4d4e815885da04a081d2",
+    "source_project_name": "abc",
+    "shared_asset_id": "859db86ae5e151ee8c23bc8c362a045e"
+  },
+  {
+    "name": "shapenet_car",
+    "status": "available",
+    "reason": null,
+    "digest": "b0caa54df60333ced33e54d24d286b436cb6b558db9abb2f43950419ae205d08",
+    "created_at": "2026-09-16T03:47:12.361309+00:00",
+    "origin_task": "9c1dac251856411d9091d8d1cc60bc3e",
+    "origin_run": "0bc6a4952c9449bdbeb289d76182080e",
+    "source_project": "7142b2dc062e4808a1686795076b8028",
+    "source_project_name": "首页空项目回归 1789452980525",
+    "shared_asset_id": "ab0326442c3d531d82cd67eb2e74faac"
+  },
+  {
+    "name": "shapenet_car4",
+    "status": "available",
+    "reason": null,
+    "digest": "6c7fa11eb3d2a25f06b9d0b70cfc76608833efe714ad23cf268b74099e991c13",
+    "created_at": "2026-09-16T03:28:37.129410+00:00",
+    "origin_task": "9c1dac251856411d9091d8d1cc60bc3e",
+    "origin_run": "migration-8fc601297e0243bbb68b1086df29aed1",
+    "source_project": "7142b2dc062e4808a1686795076b8028",
+    "source_project_name": "首页空项目回归 1789452980525",
+    "shared_asset_id": "0dc2fa6569df57c2a1a5c46668fe9855"
+  }
+]

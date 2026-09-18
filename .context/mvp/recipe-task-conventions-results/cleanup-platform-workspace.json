@@ -1,0 +1,29 @@
+{
+  "copied": [
+    {"name": "shapenet_car3", "status": "copied", "samples": 889},
+    {"name": "shapenet_car2", "status": "copied", "samples": 889},
+    {"name": "shapenet_car", "status": "copied", "samples": 1}
+  ],
+  "updated": [
+    {"name": "shapenet_car4", "status": "binding_updated"}
+  ],
+  "deleted_tasks": [
+    "9a9de296d0cd4d7398cd4b95de710264",
+    "885aa4bad4c04f3da12441c0bd19a787",
+    "9bb3729b7001425fa380adc9044c13ab",
+    "5efda0a77ae94017a439a95da98b0df3",
+    "da62c1c8f4114146a3b3b13a3967a114",
+    "f540a1f563f8419ba2adf8dbe47e1cb4",
+    "e0086a31a4b04da0a466c295c44d6cd6"
+  ],
+  "deleted_preps": [
+    "a6547ae6eb374025ae3c406850a4f281",
+    "5befa8e197794ba6968764b2fd7d3ae1",
+    "9ebf273d85ed402ca897c1a2dcd2dbdb",
+    "0dbf033dfc844c0693168bc07f607dd1"
+  ],
+  "kept": {
+    "project_id": "7142b2dc062e4808a1686795076b8028",
+    "task_id": "9c1dac251856411d9091d8d1cc60bc3e"
+  }
+}

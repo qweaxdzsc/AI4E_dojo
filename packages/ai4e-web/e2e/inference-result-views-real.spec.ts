@@ -1,0 +1,31 @@
+import {test,expect} from '@playwright/test';
+import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
+const root='/Users/zonghui/work/project_simulation/dojo_train/inference-ui-acceptance';
+const output=root+'/result-views';
+/** 复用已完成的真实CFD批次，验证展示与导出；不拦截响应、不再次预测。 */
+test('正式入口真实固定结果：两种表格模式、坐标及下载',async({page,request})=>{
+ test.skip(process.env.DOJO_INFER_RESULT_VIEWS_REAL!=='1','显式启用真实固定结果验收');test.setTimeout(180000);page.setDefaultTimeout(30000);
+ const c=JSON.parse(readFileSync(root+'/real-cfd/context.json','utf8'));
+ const batch=JSON.parse(readFileSync(root+'/formal-browser/results.json','utf8')).batch.id;
+ const errors:string[]=[],failedRequests:string[]=[],exports:any[]=[];let predictions=0;
+ page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.url().includes('/api/')&&r.status()>=400)failedRequests.push(r.status()+' '+r.url());});
+ page.on('request',r=>{if(r.method()==='POST'&&r.url().endsWith('/inference/batches'))predictions++;if(r.method()==='POST'&&r.url().endsWith('/exports'))exports.push(r.postDataJSON());});
+ await page.addInitScript(({key,batch})=>sessionStorage.setItem(key,batch),{key:`dojo.infer.${c.project}.${c.task}`,batch});
+ await page.setViewportSize({width:1672,height:941});await page.goto('/projects');
+ await page.locator('.projectgrid .taskcard').filter({hasText:'真实 CFD 推理验收'}).getByRole('link',{name:'进入项目',exact:true}).click();
+ await page.locator(`a[href="/projects/${c.project}/tasks/${c.task}/data"]`).count().then(async n=>{if(n)await page.locator(`a[href="/projects/${c.project}/tasks/${c.task}/data"]`).click();else await page.getByRole('link',{name:'进入工作台',exact:true}).click();});
+ await page.locator('.workbench-steps').getByRole('link',{name:/^推理 ·/}).click();
+ const table=page.locator('[data-region="table"]'),chart=page.locator('[data-region="chart"]');await expect(table.locator('tbody tr')).toHaveCount(2);
+ const response=await request.get(`/api/v1/projects/${c.project}/tasks/${c.task}/inference/batches/${batch}/results`);expect(response.ok()).toBeTruthy();const value=await response.json();expect(value.records).toHaveLength(6);expect(new Set(value.records.map((r:any)=>r.split)).size).toBe(3);expect(value.statistics.filter((r:any)=>r.split==='__all__').every((r:any)=>r.expected===3)).toBeTruthy();
+ await table.getByRole('button',{name:'配置',exact:true}).click();for(const name of ['Median','Max']){const box=page.getByRole('checkbox',{name,exact:true});await box.click();await expect(box).not.toBeChecked();}
+ for(const name of ['mae','rmse']){const box=page.getByRole('dialog').getByRole('checkbox',{name,exact:true});await box.click();await expect(box).toBeChecked();}
+ await expect(page.getByRole('dialog')).toHaveCSS('transform','none');mkdirSync(output,{recursive:true});await page.waitForTimeout(350);await page.screenshot({animations:"disabled",path:output+'/real-table-checkpoint.png'});await page.getByRole('button',{name:'应用',exact:true}).click();await expect(table.locator('th')).toHaveCount(8);
+ async function save(mode:string){for(const [name,ext] of [['导出 CSV','csv'],['导出 Excel','xlsx']]){const pending=page.waitForEvent('download');await table.getByRole('button',{name,exact:true}).click();const file=await pending;await file.saveAs(`${output}/real-${mode}.${ext}`);expect(await file.failure()).toBeNull();}return {headers:await table.locator('th').allTextContents(),rows:await table.locator('tbody tr').evaluateAll(rs=>rs.map(r=>Array.from(r.querySelectorAll('td')).map(c=>c.textContent)))};}
+ const checkpoint=await save('checkpoint');
+ await chart.getByRole('button',{name:'配置',exact:true}).click();await expect(page.getByRole('combobox',{name:'图表 X 轴'})).toBeDisabled();await page.getByRole('combobox',{name:'图表 Y 轴字段'}).click();await page.locator('.ant-select-dropdown:visible .ant-select-item-option-content').filter({hasText:'rmse · P90'}).click();await page.getByRole('dialog').getByText('图表坐标配置',{exact:true}).click();await expect(page.getByRole('dialog')).toHaveCSS('transform','none');await page.waitForTimeout(350);await page.screenshot({animations:"disabled",path:output+'/real-chart-checkpoint.png'});await page.getByRole('button',{name:'应用',exact:true}).click();await expect(chart.locator('.infer-chart-legend')).toContainText('rmse · P90');
+ await table.getByRole('button',{name:'配置',exact:true}).click();await page.getByRole('radio',{name:'样本对比',exact:true}).click();await expect(page.getByRole('dialog')).not.toContainText('聚合方式');await page.locator('.ant-select').filter({has:page.getByRole('combobox',{name:'样本对比 Checkpoint'})}).click();await page.locator('.ant-select-dropdown:visible .ant-select-item-option').last().click();await expect(page.getByRole('dialog')).toHaveCSS('transform','none');await page.waitForTimeout(350);await page.screenshot({animations:"disabled",path:output+'/real-table-sample.png'});await page.getByRole('button',{name:'应用',exact:true}).click();await expect(table.locator('tbody tr')).toHaveCount(3);await expect(table.locator('th')).toHaveCount(5);await expect(table).toContainText('训练集');await expect(table).toContainText('验证集');await expect(table).toContainText('测试集');
+ const sample=await save('sample');await chart.getByRole('button',{name:'配置',exact:true}).click();await expect(page.getByRole('dialog')).toContainText('样本');await expect(page.getByRole('dialog')).not.toContainText('Mean');await expect(page.getByRole('dialog')).toHaveCSS('transform','none');await page.waitForTimeout(350);await page.screenshot({animations:"disabled",path:output+'/real-chart-sample.png'});await page.getByRole('button',{name:'应用',exact:true}).click();
+ for(const name of ['散点图','柱状图','折线图'])await chart.getByRole('button',{name,exact:true}).click();await expect(chart.locator('svg')).toBeVisible();await page.waitForTimeout(350);await page.screenshot({animations:"disabled",path:output+'/real-sample-view.png'});
+ await page.reload();await expect(table.locator('tbody tr')).toHaveCount(2);expect(errors).toEqual([]);expect(failedRequests).toEqual([]);expect(predictions).toBe(0);
+ writeFileSync(output+'/real-browser-evidence.json',JSON.stringify({batch,results:value,exports,checkpoint,sample,errors,failedRequests,predictions,status:'passed'},null,2));
+});

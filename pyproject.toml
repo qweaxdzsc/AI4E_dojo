@@ -30,11 +30,11 @@ dev = [
     "pytest>=8.3",
     "ruff>=0.6",
     "ai4e-spec",
-    "ai4e-core",
-    "ai4e-contrib[abupt,transolver3,pibsnet]",
+    "ai4e-core[post]",
+    "ai4e-contrib[abupt,transolver3,pibsnet,gencp]",
     "ai4e-task",
     "ai4e-server",
-    "ai4e-viz",
+    "ai4e-viz[workbench]",
 ]
 
 [tool.pytest.ini_options]
@@ -46,6 +46,30 @@ markers = [
 ]
 
 [tool.ruff]
+# 此目录是固定外部用户源码，不随内部重构或格式化改写。
+extend-exclude = [
+    # WDNO 数值定义按抽取记录保留原文和 AST。
+    "packages/ai4e-contrib/ability/model/wdno/unet.py",
+    "packages/ai4e-contrib/ability/model/wdno/schedules.py",
+    "packages/ai4e-contrib/ability/transform/wdno/layout.py",
+    "packages/ai4e-contrib/ability/transform/wdno/multiscale.py",
+    "packages/ai4e-contrib/ability/transform/wdno/preparation.py",
+    "packages/ai4e-contrib/ability/constraint/wdno/objective.py",
+    "packages/ai4e-contrib/ability/inference/wdno/diffusion.py",
+    "packages/ai4e-contrib/ability/eval/wdno/metrics.py",
+    "packages/ai4e-contrib/ability/model/safediffcon/*unet.py",
+    "packages/ai4e-contrib/ability/model/safediffcon/*model_utils.py",
+    "packages/ai4e-contrib/ability/inference/safediffcon/burgers.py",
+    "packages/ai4e-contrib/ability/inference/safediffcon/tokamak.py",
+    "packages/ai4e-contrib/ability/constraint/safediffcon/pinn_loss.py",
+    "packages/ai4e-contrib/ability/postproc/safediffcon/kstar.py",
+    "packages/ai4e-contrib/ability/postproc/safediffcon/kstar_common",
+    "tests/fixtures/public_api_baseline",
+    # 上游网络和辅助算子保留原算术/版权，不用自动修复改变参考实现。
+    "packages/ai4e-contrib/ability/model/gencp/cno.py",
+    "packages/ai4e-contrib/ability/model/gencp/sit_fno.py",
+    "packages/ai4e-contrib/ability/model/gencp/modules",
+]
 target-version = "py312"
 line-length = 100
 
@@ -56,6 +80,7 @@ line-length = 100
 known-first-party = ["ai4e_core", "ai4e_spec", "ai4e_contrib"]
 
 [tool.uv]
+default-groups = ["dev", "visualization"]
 # 仅图扩展复用已安装的 Torch；workspace 包继续隔离构建。
 no-build-isolation-package = ["torch-cluster", "torch-scatter"]
 

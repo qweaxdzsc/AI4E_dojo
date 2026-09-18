@@ -10,6 +10,7 @@ from typing import Any
 import yaml
 
 SPLIT_BUCKETS = ("train", "test", "eval")
+SLICE_LABELS = {"train": "训练集", "test": "测试集", "eval": "评价集"}
 
 
 def load_split_lists(source: str | Path | Mapping[str, Any]) -> dict[str, list[str]]:
@@ -83,6 +84,56 @@ def flatten_samples(partitions: Mapping[str, Sequence[str]]) -> list[str]:
             names.add(identity)
             seen.append(identity)
     return seen
+
+
+def complete_split_buckets(
+    partitions: Mapping[str, Sequence[str]] | None,
+) -> dict[str, list[str]]:
+    """补齐固定三分片；缺的桶为空名单。旧 validation 并进 eval。"""
+    source = partitions or {}
+    result = {name: [str(item) for item in source.get(name) or []] for name in SPLIT_BUCKETS}
+    if not result["eval"] and source.get("validation"):
+        result["eval"] = [str(item) for item in source["validation"]]
+    return result
+
+
+def published_slices(record: Mapping[str, Any] | None) -> list[dict[str, Any]]:
+    """从准备记录读出 train/test/eval；不改历史文件，缺的切片人数为 0。"""
+    payload = record if isinstance(record, Mapping) else {}
+    partitions = payload.get("partitions")
+    partitions = partitions if isinstance(partitions, Mapping) else {}
+    counts = payload.get("split_counts")
+    counts = counts if isinstance(counts, Mapping) else {}
+    split = payload.get("split")
+    split = split if isinstance(split, Mapping) else {}
+    completed = complete_split_buckets(partitions)
+    method = str(split.get("method") or "original")
+    try:
+        seed = int(split.get("seed") or 0)
+    except (TypeError, ValueError):
+        seed = 0
+    slices: list[dict[str, Any]] = []
+    for name in SPLIT_BUCKETS:
+        if name in partitions or (name == "eval" and "validation" in partitions):
+            count = len(completed[name])
+        elif name in counts:
+            try:
+                count = int(counts[name] or 0)
+            except (TypeError, ValueError):
+                count = len(completed[name])
+        else:
+            count = 0
+        slices.append(
+            {
+                "name": name,
+                "role": name,
+                "label": SLICE_LABELS[name],
+                "count": count,
+                "method": method,
+                "seed": seed,
+            }
+        )
+    return slices
 
 
 def default_counts(partitions: Mapping[str, Sequence[str]]) -> dict[str, int]:
@@ -175,7 +226,12 @@ def draw_random(
 def apply_declared_split(index, config: Mapping[str, Any], overlay=None) -> None:
     """把准备记录里的名单或当前 ``trainprep.split`` 套到已打开的清单索引。"""
     if overlay:
-        index.remap_partitions(overlay)
+        # 原分片已经完全相同时保持 (split, sample) 身份；同名样本可来自
+        # 不同文件，不能在恢复准备时先打平再查找而制造身份冲突。
+        current = {key: list(names) for key, names in index.partitions.items()}
+        frozen = {key: list(names) for key, names in overlay.items()}
+        if current != frozen:
+            index.remap_partitions(overlay)
         return
     split = (config.get("trainprep") or {}).get("split")
     if split:

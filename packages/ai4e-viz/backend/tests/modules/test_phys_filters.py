@@ -3,7 +3,7 @@ import numpy as np
 import pytest
 import vtk
 from vtk.util.numpy_support import numpy_to_vtk
-from modules.visEngine import apply_filter, probe, entity
+from modules.visEngine import apply_filter, probe, entity, style_streamline_mesh, streamline_style
 
 
 @pytest.fixture
@@ -155,16 +155,31 @@ def test_plane_widget_drag_does_not_cut(mesh):
 
     origin, normal = [0.0, 0.0, 0.0], [1.0, 0.0, 0.0]
     handles = plane_widget_geometry(origin, normal, mesh.GetBounds())
-    assert set(handles) >= {"plane", "axis_x", "axis_y", "axis_z", "rotate"}
+    assert set(handles) >= {"plane", "axis_x", "axis_y", "axis_z", "rotate_x", "rotate_y", "rotate_z"}
     moved, same = move_plane(origin, normal, "axis_x", [[-2, 0, 0], [2, 0, 0]], [[-1, 0, 0], [3, 0, 0]])
     assert moved[0] != origin[0] and same == normal
     aligned_origin, aligned = align_plane_normal(origin, "y")
     assert aligned_origin == origin and aligned == [0.0, 1.0, 0.0]
-    assert pick_plane_handle(handles, [[2, 0, 0], [-2, 0, 0]]) in {None, "axis_x", "plane", "rotate"}
+    assert pick_plane_handle(handles, [[2, 0, 0], [-2, 0, 0]]) in {None, "axis_x", "rotate_x", "rotate_y", "rotate_z"}
+
+
+def test_hex_slice_keeps_polygons(mesh):
+    """平面切开关闭默认三角化，交面以四边形或多边形为主。"""
+    sliced = apply_filter(
+        mesh,
+        {
+            "type": "slice",
+            "parameters": {"origin": [0, 0, 0], "normal": [1, 0, 0], "crinkle": False},
+        },
+    )
+    sizes = [sliced.GetCell(i).GetNumberOfPoints() for i in range(sliced.GetNumberOfCells())]
+    assert sizes
+    assert any(count >= 4 for count in sizes)
+    assert sum(count >= 4 for count in sizes) >= sum(count == 3 for count in sizes)
 
 
 def test_slice_iso_glyph_streamline(mesh):
-    slice = apply_filter(mesh, {'type': 'slice', 'parameters': {'origin': [0,0,0], 'normal': [1,0,0]}})
+    slice = apply_filter(mesh, {'type': 'slice', 'parameters': {'origin': [0,0,0], 'normal': [1,0,0], 'crinkle': False}})
     assert slice.GetNumberOfPoints() > 0
     assert all(abs(slice.GetPoint(i)[0]) < 1e-7 for i in range(slice.GetNumberOfPoints()))
     iso = apply_filter(mesh, {'type': 'isosurface', 'parameters': {'field': {'name': 'pressure'}, 'values': [0.5]}})
@@ -175,11 +190,115 @@ def test_slice_iso_glyph_streamline(mesh):
         assert output.GetNumberOfCells() > 0
 
 
+def test_streamline_style_line_and_tube(mesh):
+    """缺键按线；圆管改半径和圆周面数，不改积分结果身份。"""
+    lines = apply_filter(
+        mesh,
+        {
+            "type": "streamline",
+            "parameters": {
+                "field": {"name": "velocity"},
+                "seed_start": [0, -0.5, 0],
+                "seed_end": [0, 0.5, 0],
+                "length": 1,
+            },
+        },
+    )
+    assert streamline_style({})["shape"] == "line"
+    assert streamline_style({})["sides"] == 8
+    assert style_streamline_mesh(lines, {}) is lines
+    assert style_streamline_mesh(lines, {"streamline": {"shape": "line"}}) is lines
+    tube = style_streamline_mesh(
+        lines, {"streamline": {"shape": "tube", "thickness": 0.05, "sides": 8}}
+    )
+    coarse = style_streamline_mesh(
+        lines, {"streamline": {"shape": "tube", "thickness": 0.05, "sides": 3}}
+    )
+    assert tube.GetNumberOfPolys() > 0
+    assert coarse.GetNumberOfPolys() > 0
+    assert tube.GetNumberOfPoints() > coarse.GetNumberOfPoints()
+    assert lines.GetNumberOfLines() > 0
+    assert lines.GetNumberOfPolys() == 0
+
+
 def test_probe_validity_and_entity(mesh):
     rows = probe(mesh, [[.1,.2,.3], [100,100,100]])
     assert rows[0]['values']['pressure'][0] == pytest.approx(.5)
     assert rows[1] == {'position': [100,100,100], 'valid': False, 'values': None, 'fields':None}
     assert entity(mesh, 'point', 0)['values']['pressure'] == [-3.]
+
+
+def _single_hex():
+    grid = vtk.vtkUnstructuredGrid()
+    points = vtk.vtkPoints()
+    for z in (0.0, 1.0):
+        for y in (0.0, 1.0):
+            for x in (0.0, 1.0):
+                points.InsertNextPoint(x, y, z)
+    grid.SetPoints(points)
+    ids = vtk.vtkIdList()
+    for index in (0, 1, 3, 2, 4, 5, 7, 6):
+        ids.InsertNextId(index)
+    grid.InsertNextCell(vtk.VTK_HEXAHEDRON, ids)
+    return grid
+
+
+def test_crinkle_slice_keeps_hex_faces():
+    """皱折切面保留被切到的六面体表面，不是平面三角交面。"""
+    sliced = apply_filter(
+        _single_hex(),
+        {
+            "type": "slice",
+            "parameters": {"origin": [0.5, 0.5, 0.5], "normal": [1, 0, 0], "crinkle": True},
+        },
+    )
+    sizes = [sliced.GetCell(i).GetNumberOfPoints() for i in range(sliced.GetNumberOfCells())]
+    assert sizes
+    assert any(count >= 4 for count in sizes)
+    assert all(count != 3 for count in sizes) or sum(count >= 4 for count in sizes) >= sum(
+        count == 3 for count in sizes
+    )
+
+
+def test_triangulate_slice_makes_triangles():
+    """打开三角化后平面切开只剩三角面。"""
+    sliced = apply_filter(
+        _single_hex(),
+        {
+            "type": "slice",
+            "parameters": {
+                "origin": [0.5, 0.5, 0.5],
+                "normal": [1, 0, 0],
+                "crinkle": False,
+                "triangulate": True,
+            },
+        },
+    )
+    sizes = [sliced.GetCell(i).GetNumberOfPoints() for i in range(sliced.GetNumberOfCells())]
+    assert sizes
+    assert all(count == 3 for count in sizes)
+
+
+def test_crinkle_clip_keeps_hex_cells():
+    """剖切皱折保留被切到的整格，不拆成四面体。"""
+    clipped = apply_filter(
+        _single_hex(),
+        {
+            "type": "clip",
+            "parameters": {"origin": [0.5, 0.5, 0.5], "normal": [1, 0, 0], "crinkle": True},
+        },
+    )
+    assert clipped.GetNumberOfCells() == 1
+    assert clipped.GetCell(0).GetCellType() == vtk.VTK_HEXAHEDRON
+
+
+def test_iso_values_can_exceed_field_range(mesh):
+    """等值手填可越界，过滤器按填写值计算。"""
+    output = apply_filter(
+        mesh,
+        {"type": "isosurface", "parameters": {"field": {"name": "pressure"}, "values": [99.0]}},
+    )
+    assert output.GetNumberOfCells() == 0
 
 
 def test_actual_ray_pick(mesh):

@@ -173,7 +173,7 @@ def train(cfg, prepared=None, *, dataset_component, model_component, session):
 
 def post(cfg, *, dataset_component, model_component, session):
     """独立推理和导出操作由外流后处理装配。"""
-    from ai4e_core.applications.aero_cfd.post.pointfields import execute
+    from ai4e_core.applications.aero_cfd.infer.pointfields import execute
 
     config = model_component.resolve(OmegaConf.to_container(cfg, resolve=True))
     return execute(config, dataset_component, model_component, session)

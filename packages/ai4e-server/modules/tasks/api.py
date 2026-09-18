@@ -146,7 +146,7 @@ def create(project: str, body: TaskCreate, request: Request):
             configuration = OmegaConf.to_container(
                 OmegaConf.load(s.settings.template / "config.yaml"), resolve=False
             )
-        configuration.setdefault("dataset", {})["root"] = str(root)
+        configuration.setdefault("inputs", {}).setdefault("rawprep", {})["source"] = str(root)
     if body.data_sources:
         if configuration is None:
             from omegaconf import OmegaConf
@@ -154,7 +154,7 @@ def create(project: str, body: TaskCreate, request: Request):
             configuration = OmegaConf.to_container(
                 OmegaConf.load(s.settings.template / "config.yaml"), resolve=False
             )
-        configuration.setdefault("dataset", {}).update(_source_files(s, project, body.data_sources))
+        configuration.setdefault("inputs", {}).setdefault("rawprep", {}).update(_source_files(s, project, body.data_sources))
     declared = CASES.get(body.case_id or "")
     if declared and declared["binding_mode"] == "files" and (body.data_root or body.data_sources):
         from pathlib import Path
@@ -165,17 +165,17 @@ def create(project: str, body: TaskCreate, request: Request):
 
         resolved = OmegaConf.to_container(OmegaConf.create(configuration), resolve=True)
         for key in NASA_KEYS:
-            if not Path(resolved["dataset"].get(key, "")).is_file():
+            if not Path(resolved["inputs"]["rawprep"].get(key, "")).is_file():
                 raise ValueError("dataset_source_file_missing: " + key)
     if body.case_id and not body.data_root and not body.data_sources:
         # 新建任务只选择案例；模板开发路径不能成为用户的默认数据来源。
-        configuration.setdefault("dataset", {})["root"] = None
-        configuration["train"] = {**(configuration.get("train") or {}), "manifest": None}
+        configuration.setdefault("inputs", {}).setdefault("rawprep", {})["source"] = None
+        configuration.setdefault("inputs", {}).setdefault("trainprep", {})["dataset"] = None
         if declared and declared["binding_mode"] == "files":
             from .dataset import NASA_KEYS
 
             for key in NASA_KEYS:
-                configuration["dataset"][key] = None
+                configuration["inputs"]["rawprep"][key] = None
     source = s.settings.template
     if body.case_id:
         from .templates import register_case_template

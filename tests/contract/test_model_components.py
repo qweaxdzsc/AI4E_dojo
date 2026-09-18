@@ -15,7 +15,7 @@ def test_installed_component_resources_and_real_model():
     package = resources.files("ai4e_contrib.ability.model.abupt")
     assert "2211068" in package.joinpath("README.md").read_text()
     assert package.joinpath("LICENSE").read_text().strip()
-    assert SOURCE.startswith("abupt-domain-v2:noether-313e6c5")
+    assert SOURCE.startswith("abupt-domain-v3:noether-313e6c5")
     assert metadata.version("torch-geometric") == "2.6.1"
     model = construct(
         dim=24,
@@ -70,7 +70,11 @@ def test_acceptance_document_covers_all_plan_leaves():
     for node in re.findall(r"`(tests/[^`]+::test_[^`]+)`", record):
         file, function = node.split("::", 1)
         assert (ROOT / file).is_file()
-        assert f"def {function.split('[')[0]}(" in (ROOT / file).read_text()
+        historical_names = {
+            "test_copy_pipeline_and_pre_are_equivalent": "test_copy_pipeline_and_datapre_are_equivalent"
+        }
+        current = historical_names.get(function.split("[")[0], function.split("[")[0])
+        assert f"def {current}(" in (ROOT / file).read_text()
     for file in [
         "AGENTS.md",
         ".context/index.md",

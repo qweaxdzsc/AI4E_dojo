@@ -113,7 +113,7 @@ test('空项目新建任务后进入工作台，归档后不恢复失效任务',
     await page.getByRole('dialog').getByRole('button', { name: '创建并进入原始处理',exact:true }).click();
     await expect(page.locator('.workbench-steps .topstep')).toHaveCount(9);
     await expect(page.getByRole('heading', { name: /^从首页创建的任务/ })).toBeVisible();
-    await page.getByRole('link', { name: '切换任务', exact: true }).click();
+    await page.goto('/workbench?choose=1');
     await expect(page).toHaveURL(/\/workbench\?choose=1$/);
     await expect(page.getByRole('combobox', { name: '选择工作台项目', exact: true })).toBeVisible();
     expect((await request.patch(`${api}/projects/${id}`, { data: { archived: true } })).ok()).toBeTruthy();

@@ -36,7 +36,17 @@ def run_stages(cfg, names):
     components = configuration.components(cfg)
 
     def stage(name, config):
-        return getattr(parametric_pde, name)(cfg, **components, session=TrainingRun())
+        if name == "infer":
+            cfg["post"]["checkpoint"] = str(
+                max(
+                    Path(cfg["run_root"]).glob("*/checkpoints/last.pt"),
+                    key=lambda p: p.stat().st_mtime_ns,
+                )
+            )
+        result = getattr(parametric_pde, name)(cfg, **components, session=TrainingRun())
+        if name == "infer":
+            cfg["post"]["results"] = result["results"]
+        return result
 
     return run_recipe(
         cfg,
@@ -54,7 +64,7 @@ def test_five_cases_real_short_training(case, tmp_path):
         gen["ny"] = 7
     component(case).generate(gen)
     cfg = configuration_for(case, tmp_path)
-    assert run_stages(cfg, ["rawprep", "trainprep", "train", "post"]) == 0
+    assert run_stages(cfg, ["rawprep", "trainprep", "train", "infer", "post"]) == 0
     assert (tmp_path / "predictions/predictions.json").exists()
     ckpt = next((tmp_path / "runs").glob("*/checkpoints/last.pt"))
     state = torch.load(ckpt, weights_only=False)

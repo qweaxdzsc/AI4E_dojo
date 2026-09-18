@@ -1,14 +1,16 @@
 """调用任务公开门面，校验完整文件选择并使用既有覆盖参数运行。"""
 
 import json
+from copy import deepcopy
 from pathlib import Path
 
 import ai4e_task as task
 
+_SAMPLE_CATALOG = {}
+
 from ...infrastructure.content_access import resolve, revision, roots
 from ..capabilities.aero_cfd import require_profile
 from ..tasks import read_binding
-from .domain import validate
 
 
 def preflight(service, project, identity, body, *, mode="execute"):
@@ -29,9 +31,16 @@ def preflight(service, project, identity, body, *, mode="execute"):
     task.validate_rawprep_configuration(base, identity, resolved["rawprep"], revision=body.revision)
     name = (cfg["config"].get("dataset") or {}).get("processed_name")
     if mode == "execute":
-        from ..datasets.application import check_name
+        from ..datasets.application import check_name, claim_config
 
-        check_name(service, name, {**cfg["config"], "rawprep": resolved["rawprep"]})
+        overwrite = bool(getattr(body, "overwrite_processed_name", False))
+        check_name(
+            service,
+            name,
+            claim_config(cfg["config"], resolved["rawprep"]),
+            overwrite=overwrite,
+            project=project,
+        )
     if body.sample_scope is not None:
         return _sample_preflight(service, project, identity, body)
 
@@ -40,7 +49,14 @@ def preflight(service, project, identity, body, *, mode="execute"):
 
 def submit(service, project, identity, body, *, mode="execute"):
     """原样执行 pipeline.py，只覆盖原数据处理阶段和选择。"""
-    info = preflight(service, project, identity, body, mode=mode)
+    request_identity = body.model_dump(mode="json")
+    retry = bool(body.idempotency_key) and any(
+        run.get("operation_mode") == mode
+        and run.get("metadata", {}).get("rawprep_request") == request_identity
+        for run in task.list_runs(service.project(project), identity)
+    )
+    # 只有同一请求重放跳过名称预检；最终仍由 Task 核验完整幂等指纹。
+    info = preflight(service, project, identity, body, mode="submission" if retry else mode)
     fixed = task.read_configuration(service.project(project), identity)
     if fixed["revision"] != info["revision"]:
         raise ValueError("configuration_revision_conflict")
@@ -51,8 +67,7 @@ def submit(service, project, identity, body, *, mode="execute"):
     fixed["config"]["rawprep"] = resolved["rawprep"]
     overrides = [
         "pipeline.stages=[rawprep]",
-        "dataset.root=" + json.dumps(info["root"]),
-        "dataset.samples=" + json.dumps(info.get("sample_selection", info["samples"])),
+        "inputs.rawprep.source=" + json.dumps(info["root"]),
     ]
     # 固定本次核对的配置值，保存操作不会改变正在提交的原始处理设置。
     overrides += [
@@ -60,12 +75,18 @@ def submit(service, project, identity, body, *, mode="execute"):
         for key, value in fixed["config"].items()
         if key not in {"pipeline", "dataset"}
     ]
-    for key, value in fixed["config"].get("dataset", {}).items():
-        if key not in {"root", "samples"}:
-            overrides.append("dataset." + key + "=" + json.dumps(value))
+    overrides += dataset_run_overrides(
+        info.get("dataset_id"),
+        body.sample_scope,
+        info,
+        fixed["config"].get("dataset") or {},
+    )
     for name, digest in info["digests"].items():
         if revision(_selected_path(service, project, identity, body.root, name)) != digest:
             raise ValueError("file_changed_before_submission: " + name)
+    metadata = {"rawprep_request": request_identity}
+    if getattr(body, "overwrite_processed_name", False):
+        metadata["overwrite_processed_name"] = True
     result = task.submit_run(
         service.project(project),
         identity,
@@ -73,12 +94,12 @@ def submit(service, project, identity, body, *, mode="execute"):
         idempotency_key=body.idempotency_key,
         expected_revision=body.revision,
         operation_mode=mode,
+        metadata=metadata,
+        overwrite=bool(getattr(body, "overwrite_processed_name", False)),
         input_keys=[
             key
-            for key in task.get_task(service.project(project), identity)
-            .get("entry", {})
-            .get("inputs", {})
-            if key.startswith("dataset.")
+            for key in task.recipe_entry(service.project(project), identity).get("inputs", {})
+            if key.startswith("inputs.rawprep.")
         ],
     )
     return result
@@ -132,7 +153,8 @@ def dataset_catalog(service, project, identity, body, *, public=False):
                 raise ValueError("dataset_dependency_outside_selected_root")
             ref = {"root": body.root, "path": str(path.relative_to(base))}
         source["relative_path"] = ref["root"] + "::" + ref["path"] if is_nasa else ref["path"]
-        source["asset_ref"] = register(service, project, ref["root"], ref["path"], identity)
+        if not public:
+            source["asset_ref"] = register(service, project, ref["root"], ref["path"], identity)
         if public:
             source.pop("path", None)
     result["dependencies"] = result["sources"]
@@ -187,6 +209,7 @@ def _generic_preflight(service, project, identity, body):
             if descriptor["dataset_id"] == "nasa_crm"
             else [sample["sample_id"] for sample in wanted]
         ),
+        "dataset_id": descriptor["dataset_id"],
         "files": sorted(required),
         "file_count": len(required),
         "sample_count": len(wanted),
@@ -212,11 +235,38 @@ def _bound_root(service, project, identity):
     return path.parent if binding["binding_mode"] == "files" else path
 
 
-def _sample_catalog(service, project, identity, body, *, public=False, full=False):
-    """新样本入口只传范围；组件交付完整依赖，服务限定受控访问。"""
-    from uuid import uuid4
+def _publish_sources(service, project, identity, result, *, public, register_files):
+    """公开目录只解析受控相对路径；提交前才登记并哈希来源。"""
     from ..tasks import controlled_reference
     from ..visualization.application import register
+
+    for source in result["sources"]:
+        path = Path(source["path"]).resolve()
+        if source.get("exists", True):
+            ref = controlled_reference(service, project, path)
+            source["relative_path"] = ref["root"] + "::" + ref["path"]
+            if register_files:
+                source["asset_ref"] = register(service, project, ref["root"], ref["path"], identity)
+        if public:
+            source.pop("path", None)
+    return result
+
+
+def _sample_catalog(service, project, identity, body, *, public=False, full=False):
+    """新样本入口只传范围；打开页面不给全部来源做内容摘要。"""
+    from uuid import uuid4
+
+    key = (
+        str(service.project(project)),
+        identity,
+        body.revision,
+        json.dumps(body.sample_scope, sort_keys=True, ensure_ascii=False),
+        public,
+        full,
+    )
+    cached = _SAMPLE_CATALOG.get(key)
+    if cached is not None:
+        return deepcopy(cached)
 
     result = task.inspect_task(
         service.project(project),
@@ -229,14 +279,11 @@ def _sample_catalog(service, project, identity, body, *, public=False, full=Fals
             "inspection_scope": "all" if full else "representatives",
         },
     )
-    for source in result["sources"]:
-        path = Path(source["path"]).resolve()
-        if source.get("exists", True):
-            ref = controlled_reference(service, project, path)
-            source["relative_path"] = ref["root"] + "::" + ref["path"]
-            source["asset_ref"] = register(service, project, ref["root"], ref["path"], identity)
-        if public:
-            source.pop("path", None)
+    _publish_sources(service, project, identity, result, public=public, register_files=full)
+    if not full:
+        _SAMPLE_CATALOG[key] = deepcopy(result)
+        while len(_SAMPLE_CATALOG) > 8:
+            _SAMPLE_CATALOG.pop(next(iter(_SAMPLE_CATALOG)))
     return result
 
 
@@ -258,6 +305,7 @@ def _sample_preflight(service, project, identity, body):
     return {
         "samples": [sample["sample_id"] for sample in result["samples"]],
         "sample_selection": result["selection"],
+        "dataset_id": result["dataset_id"],
         "sample_count": len(result["samples"]),
         "files": files,
         "file_count": len(files),
@@ -269,3 +317,51 @@ def _sample_preflight(service, project, identity, body):
             for name in files
         },
     }
+
+
+def dataset_run_overrides(dataset_id, sample_scope, info, task_dataset):
+    """本次运行覆盖：读绑定数据集样本宇宙，不把官方切分写进平台原始处理产物。"""
+    overrides = []
+    skip = {"root", "samples", "partitions", "partition"}
+    for key, value in (task_dataset or {}).items():
+        if key not in skip:
+            overrides.append("dataset." + key + "=" + json.dumps(value))
+    if dataset_id != "nasa_crm":
+        overrides.append("dataset.partitions=" + json.dumps("unsplit"))
+    mode = (sample_scope or {}).get("mode")
+    if mode == "all":
+        overrides.append("dataset.samples=" + json.dumps("all"))
+        return overrides
+    selection = info.get("sample_selection", info["samples"])
+    overrides.append("dataset.samples=" + json.dumps(selection))
+    return overrides
+
+
+def save_configuration(service, project: str, identity: str, body):
+    """合成完整配置后校验原始处理，按同一修订原子保存。"""
+    from ..stages import compose_configuration
+
+    require_profile(service, project, identity)
+    base = service.project(project)
+    captured = task.read_configuration(base, identity)
+    if captured["revision"] != body.revision:
+        raise ValueError("configuration_revision_conflict")
+    config = compose_configuration(
+        captured["config"],
+        "rawprep",
+        body.rawprep,
+        edited_paths=body.edited_paths,
+        removed_paths=body.removed_paths,
+    )
+    task.validate_rawprep_configuration(base, identity, config["rawprep"], revision=body.revision)
+    original_dataset = captured["config"].get("dataset") or {}
+    dataset = config.setdefault("dataset", {})
+    if "partitions" in original_dataset:
+        dataset["partitions"] = deepcopy(original_dataset["partitions"])
+    else:
+        dataset.pop("partitions", None)
+    dataset.pop("partition", None)
+    if body.processed_name is not None:
+        task.validate_processed_name(body.processed_name)
+        dataset["processed_name"] = body.processed_name
+    return task.replace_configuration(base, identity, config, revision=body.revision)

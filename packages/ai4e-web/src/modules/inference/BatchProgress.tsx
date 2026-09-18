@@ -1,4 +1,5 @@
 import { Button, Empty, Progress, Select, Tag } from "antd";
+import { inferenceBatchLabel } from "./batchName";
 import { statusLabel, terminal, type Batch } from "./model";
 /** 只按服务已提交数量展示进度，不按时间插值。 */
 export function BatchProgress({
@@ -33,7 +34,7 @@ export function BatchProgress({
           onChange={onSelect}
           options={batches.map((b) => ({
             value: b.id,
-            label: (b.name || b.id) + " · " + statusLabel(b.status),
+            label: inferenceBatchLabel(b) + " · " + statusLabel(b.status),
           }))}
         />
         <Button

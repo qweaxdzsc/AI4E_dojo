@@ -1,0 +1,62 @@
+
+> ai4e-web@0.1.0 test:e2e
+> playwright test shared-datasets.spec.ts --grep 共享覆盖
+
+
+Running 2 tests using 1 worker
+
+  ✘  1 e2e/shared-datasets.spec.ts:3:35 › 共享覆盖取消及单次确认 已有名称 (2.0m)
+  ✘  2 e2e/shared-datasets.spec.ts:3:35 › 共享覆盖取消及单次确认 提交时冲突 (2.0m)
+
+
+  1) e2e/shared-datasets.spec.ts:3:35 › 共享覆盖取消及单次确认 已有名称 ───────────────────────────────────────────
+
+    Test timeout of 120000ms exceeded.
+
+    Error: locator.click: Test timeout of 120000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog').getByRole('button', { name: '取消' })
+
+
+      21 |   await page.getByRole('button',{name:'执行',exact:true}).click();
+      22 |   const dialog=page.getByRole('dialog');await expect(dialog).toContainText('覆盖已有共享数据集');
+    > 23 |   await dialog.getByRole('button',{name:'取消'}).click();
+         |                                                ^
+      24 |   expect(submitted.filter(x=>x.overwrite_processed_name)).toHaveLength(0);
+      25 |   if(!race) expect(submitted).toHaveLength(0);
+      26 |   await page.getByRole('button',{name:'执行',exact:true}).click();
+        at /Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-web/e2e/shared-datasets.spec.ts:23:48
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/shared-datasets-共享覆盖取消及单次确认-已有名称/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/shared-datasets-共享覆盖取消及单次确认-已有名称/error-context.md
+
+  2) e2e/shared-datasets.spec.ts:3:35 › 共享覆盖取消及单次确认 提交时冲突 ──────────────────────────────────────────
+
+    Test timeout of 120000ms exceeded.
+
+    Error: locator.click: Test timeout of 120000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog').getByRole('button', { name: '取消' })
+
+
+      21 |   await page.evaluate(async()=>{const React=(await import('/node_modules/.vite/deps/react.js' as any)).default;const {createRoot}=(await import('/node_modules/.vite/deps/react-dom_client.js' as any)).default;const {RawprepWorkbench}=await import('/src/modules/rawprep/RawprepWorkbench.tsx' as any);document.body.innerHTML='<div id="shared-test"></div>';createRoot(document.getElementById('shared-test')).render(React.createElement(RawprepWorkbench,{project:'shared-project',task:'consumer'}));});
+      22 |   await page.getByRole('button',{name:'执行',exact:true}).click();
+    > 23 |   const dialog=page.getByRole('dialog');await expect(dialog).toContainText('覆盖已有共享数据集');
+         |                                                ^
+      24 |   await dialog.getByRole('button',{name:/取\s*消/}).click();
+      25 |   expect(submitted.filter(x=>x.overwrite_processed_name)).toHaveLength(0);
+      26 |   if(!race) expect(submitted).toHaveLength(0);
+        at /Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-web/e2e/shared-datasets.spec.ts:23:48
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/shared-datasets-共享覆盖取消及单次确认-提交时冲突/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/shared-datasets-共享覆盖取消及单次确认-提交时冲突/error-context.md
+
+  2 failed
+    e2e/shared-datasets.spec.ts:3:35 › 共享覆盖取消及单次确认 已有名称 ────────────────────────────────────────────
+    e2e/shared-datasets.spec.ts:3:35 › 共享覆盖取消及单次确认 提交时冲突 ───────────────────────────────────────────

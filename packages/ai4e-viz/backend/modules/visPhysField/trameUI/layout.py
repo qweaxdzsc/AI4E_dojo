@@ -84,5 +84,5 @@ def build_ui(server, scene):
         from ..rendering import install_local_serializers
 
         install_local_serializers()
-    ui.refresh()
+    ui.refresh(push_cameras=True)
     return ui

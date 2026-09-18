@@ -1,0 +1,14 @@
+{
+  "completed_at": "2026-09-18T11:41:37.845526+08:00",
+  "head": "e48bde91ad11fd60d8fb95897a53397827947e8c",
+  "workspace_status_sha256": "a69259ba9f9fbe2e6d17e1d4c85bca87f34c01e740a4c59d845baa065b9a6cec",
+  "review_mode": "global_architecture",
+  "core_issues": [
+    "research_to_task_to_web promotion boundary",
+    "minimum shared lifecycle handoffs",
+    "task-oriented architecture navigation"
+  ],
+  "recommendations": 3,
+  "implementation": "none",
+  "experience_receipt": "receipt_23706c9788744fe7b45fe04fde02f45d"
+}

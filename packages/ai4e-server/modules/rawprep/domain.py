@@ -45,10 +45,7 @@ def validate(raw):
         "当前案例仅支持 point_scalars 压力与 point_vectors 速度；不支持重命名和单元场",
     )
     formats = raw.get("formats")
-    single = raw.get("format", "pt" if formats is None else None)
-    if formats is not None and single is not None and formats != [single]:
-        raise ValueError("rawprep.format: 不能同时声明不一致的 format 与 formats")
-    selected = list(formats) if formats is not None else [single or "pt"]
+    selected = list(formats) if formats is not None else [raw.get("format") or "pt"]
     if not selected or any(item not in {"pt", "zarr"} for item in selected):
         raise ValueError("rawprep.formats: unsupported_format")
     if "extraction" in raw:

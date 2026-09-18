@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="21" skipped="2" tests="450" time="1034.384" timestamp="2026-09-15T18:30:09.837423+08:00" hostname="zonghuideMacBook-Pro.local"><testcase classname="tests.contract.test_model_components" name="test_installed_component_resources_and_real_model" time="0.667" /><testcase classname="tests.contract.test_model_components" name="test_core_spec_dependency_direction_and_no_old_paths" time="0.108" /><testcase classname="tests.contract.test_model_components" name="test_acceptance_document_covers_all_plan_leaves" time="0.003"><failure message="assert 'def test_copy_pipeline_and_pre_are_equivalent(' in '&quot;&quot;&quot;复制脚本、可安装适配器、惰性数据流、产物读回与日志的整链验收。&quot;&quot;&quot;\n\nimport importlib.util\nimport json\nimport os\nimport shutil\nimport subproc...ometry.nearest_vertex.epsilon = 1e-6\n    assert execute_case(folder, cfg) == 0\n    assert received == [1e-6, 1e-6]\n'&#10; +  where '&quot;&quot;&quot;复制脚本、可安装适配器、惰性数据流、产物读回与日志的整链验收。&quot;&quot;&quot;\n\nimport importlib.util\nimport json\nimport os\nimport shutil\nimport subproc...ometry.nearest_vertex.epsilon = 1e-6\n    assert execute_case(folder, cfg) == 0\n    assert received == [1e-6, 1e-6]\n' = read_text()&#10; +    where read_text = (PosixPath('/Users/zonghui/work/new_code_project/AI4E_Dojo') / 'tests/integration/test_dataset_recipe.py').read_text">def test_acceptance_document_covers_all_plan_leaves():
+        import re
+    
+        record = (ROOT / ".context/mvp/abupt-acceptance.md").read_text()
+        expected = {
+            f"{letter}{n}"
+            for letter, count in zip("ABCDEFGHI", [3, 3, 5, 4, 4, 4, 4, 3, 4], strict=True)
+            for n in range(1, count + 1)
+        }
+        assert set(re.findall(r"^- \*\*([A-I][1-5])\*\*", record, re.MULTILINE)) == expected
+        for node in re.findall(r"`(tests/[^`]+::test_[^`]+)`", record):
+            file, function = node.split("::", 1)
+            assert (ROOT / file).is_file()
+&gt;           assert f"def {function.split('[')[0]}(" in (ROOT / file).read_text()
+E           assert 'def test_copy_pipeline_and_pre_are_equivalent(' in '"""复制脚本、可安装适配器、惰性数据流、产物读回与日志的整链验收。"""\n\nimport importlib.util\nimport json\nimport os\nimport shutil\nimport subproc...ometry.nearest_vertex.epsilon = 1e-6\n    assert execute_case(folder, cfg) == 0\n    assert received == [1e-6, 1e-6]\n'
+E            +  where '"""复制脚本、可安装适配器、惰性数据流、产物读回与日志的整链验收。"""\n\nimport importlib.util\nimport json\nimport os\nimport shutil\nimport subproc...ometry.nearest_vertex.epsilon = 1e-6\n    assert execute_case(folder, cfg) == 0\n    assert received == [1e-6, 1e-6]\n' = read_text()
+E            +    where read_text = (PosixPath('/Users/zonghui/work/new_code_project/AI4E_Dojo') / 'tests/integration/test_dataset_recipe.py').read_text
+
+tests/contract/test_model_components.py:73: AssertionError</failure></testcase><testcase classname="tests.contract.test_model_components" name="test_multidomain_acceptance_nodes_exist" time="0.001" /><testcase classname="tests.integration.test_ability_inventory_document" name="test_ability_inventory_source_coverage" time="0.003"><failure message="AssertionError: 实现文件缺失或重复：../packages/ai4e-core/abilities/constraint/physical.py&#10;assert 0 == 1&#10; +  where 0 = len([])">def test_ability_inventory_source_coverage():
+        """每个实现文件均有独立行，直接定义的公开函数与类型可从该行发现。"""
+        text = DOCUMENT.read_text(encoding="utf-8")
+        rows = [line for line in text.splitlines() if re.match(r"\| A\d{3} \|", line)]
+        expected = set()
+        for directory in ("packages/ai4e-core/abilities", "packages/ai4e-contrib/ability"):
+            for path in sorted((ROOT / directory).rglob("*.py")):
+                if path.name == "__init__.py":
+                    continue
+                tree = ast.parse(path.read_text(encoding="utf-8"))
+                public = [
+                    node
+                    for node in tree.body
+                    if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+                    and not node.name.startswith("_")
+                ]
+                if not public:
+                    continue
+                target = f"../{path.relative_to(ROOT).as_posix()}"
+                matches = [row for row in rows if f"]({target})" in row]
+&gt;               assert len(matches) == 1, f"实现文件缺失或重复：{target}"
+E               AssertionError: 实现文件缺失或重复：../packages/ai4e-core/abilities/constraint/physical.py
+E               assert 0 == 1
+E                +  where 0 = len([])
+
+tests/integration/test_ability_inventory_document.py:32: AssertionError</failure></testcase><testcase classname="tests.integration.test_ability_inventory_document" name="test_ability_inventory_links_and_navigation" time="0.004"><failure message="AssertionError: assert 'abilities-inventory.md' in '# AI4E_Dojo 当前仓库索引\n\n先读根 AGENTS，再从本页定位模块、PRD、源码、上下游和测试。架构决策进入唯一 [全局架构](../docs/AI4E_Dojo_ARCHITECTURE%20%281%29.md)，...-visualization-acceptance.md)\n\n- [Neumann与Advection输入核查](../docs/pibsnet/Neumann与Advection输入核查.md)：历史只读输入差异与未重训范围。\n'&#10; +  where 'abilities-inventory.md' = PosixPath('/Users/zonghui/work/new_code_project/AI4E_Dojo/docs/abilities-inventory.md').name&#10; +  and   '# AI4E_Dojo 当前仓库索引\n\n先读根 AGENTS，再从本页定位模块、PRD、源码、上下游和测试。架构决策进入唯一 [全局架构](../docs/AI4E_Dojo_ARCHITECTURE%20%281%29.md)，...-visualization-acceptance.md)\n\n- [Neumann与Advection输入核查](../docs/pibsnet/Neumann与Advection输入核查.md)：历史只读输入差异与未重训范围。\n' = read_text(encoding='utf-8')&#10; +    where read_text = (PosixPath('/Users/zonghui/work/new_code_project/AI4E_Dojo') / '.context/index.md').read_text">def test_ability_inventory_links_and_navigation():
+        """能力表引用均落在仓内文件，并可从全仓及两个模块索引发现。"""
+        text = DOCUMENT.read_text(encoding="utf-8")
+        for target in re.findall(r"\]\(([^)]+)\)", text):
+            path = (DOCUMENT.parent / unquote(target.split("#", 1)[0])).resolve()
+            assert path.is_relative_to(ROOT), target
+            assert path.is_file(), target
+        for relative in (
+            ".context/index.md",
+            ".context/modules/ai4e-core.md",
+            ".context/modules/ai4e-contrib.md",
+        ):
+&gt;           assert DOCUMENT.name in (ROOT / relative).read_text(encoding="utf-8")
+E           AssertionError: assert 'abilities-inventory.md' in '# AI4E_Dojo 当前仓库索引\n\n先读根 AGENTS，再从本页定位模块、PRD、源码、上下游和测试。架构决策进入唯一 [全局架构](../docs/AI4E_Dojo_ARCHITECTURE%20%281%29.md)，...-visualization-acceptance.md)\n\n- [Neumann与Advection输入核查](../docs/pibsnet/Neumann与Advection输入核查.md)：历史只读输入差异与未重训范围。\n'
+E            +  where 'abilities-inventory.md' = PosixPath('/Users/zonghui/work/new_code_project/AI4E_Dojo/docs/abilities-inventory.md').name
+E            +  and   '# AI4E_Dojo 当前仓库索引\n\n先读根 AGENTS，再从本页定位模块、PRD、源码、上下游和测试。架构决策进入唯一 [全局架构](../docs/AI4E_Dojo_ARCHITECTURE%20%281%29.md)，...-visualization-acceptance.md)\n\n- [Neumann与Advection输入核查](../docs/pibsnet/Neumann与Advection输入核查.md)：历史只读输入差异与未重训范围。\n' = read_text(encoding='utf-8')
+E            +    where read_text = (PosixPath('/Users/zonghui/work/new_code_project/AI4E_Dojo') / '.context/index.md').read_text
+
+tests/integration/test_ability_inventory_document.py:57: AssertionError</failure></testcase><testcase classname="tests.integration.test_ability_merged_document" name="test_ability_merged_complete_mapping" time="0.001" /><testcase classname="tests.integration.test_ability_merged_document" name="test_ability_merged_links_and_navigation" time="0.003"><failure message="AssertionError: 缺少导航：.context/index.md -&gt; abilities-merged.md&#10;assert []">def test_ability_merged_links_and_navigation():
+        """讨论稿与原表均可从模块索引找到，文档及索引链接指向实际文件。"""
+        text = DOCUMENT.read_text(encoding="utf-8")
+        for target in re.findall(r"\]\(([^)]+)\)", text):
+            if target.startswith("#"):
+                assert f'id="{target[1:]}"' in text, f"失效的阶段锚点：{target}"
+                continue
+            path = (DOCUMENT.parent / unquote(target.split("#", 1)[0])).resolve()
+            assert path.is_relative_to(ROOT), target
+            assert path.is_file(), target
+        for relative in (
+            ".context/index.md",
+            ".context/modules/ai4e-core.md",
+            ".context/modules/ai4e-contrib.md",
+        ):
+            index = ROOT / relative
+            content = index.read_text(encoding="utf-8")
+            for document in (DOCUMENT, INVENTORY):
+                targets = [
+                    target
+                    for target in re.findall(r"\]\(([^)]+)\)", content)
+                    if target.endswith(document.name)
+                ]
+&gt;               assert targets, f"缺少导航：{relative} -&gt; {document.name}"
+E               AssertionError: 缺少导航：.context/index.md -&gt; abilities-merged.md
+E               assert []
+
+tests/integration/test_ability_merged_document.py:67: AssertionError</failure></testcase><testcase classname="tests.integration.test_ability_merged_document" name="test_ability_merged_five_stage_visibility" time="0.001" /><testcase classname="tests.integration.test_ability_merged_document" name="test_ability_summary_stage_order_and_references" time="0.001"><failure message="assert False&#10; +  where False = any(&lt;generator object test_ability_summary_stage_order_and_references.&lt;locals&gt;.&lt;genexpr&gt; at 0x169e517e0&gt;)">def test_ability_summary_stage_order_and_references():
+        """简表按用户指定五类排列，能追溯详细清单且可从模块入口发现。"""
+        document = ROOT / "docs/abilities-summary.md"
+        text = document.read_text(encoding="utf-8")
+        categories = []
+        for line in text.splitlines():
+            if not re.match(r"\| (rawprep|trainprep|train|model|post) ", line):
+                continue
+            cells = [cell.strip() for cell in line.split("|")[1:-1]]
+            assert len(cells) == 3 and all(cells)
+            stage = cells[0].split()[0]
+            if not categories or categories[-1] != stage:
+                categories.append(stage)
+        assert categories == ["rawprep", "trainprep", "train", "model", "post"]
+        targets = re.findall(r"\]\(([^)]+)\)", text)
+        assert {"abilities-merged.md", "abilities-inventory.md"} &lt;= set(targets)
+        assert all((document.parent / target).is_file() for target in targets)
+        for relative in (
+            ".context/index.md",
+            ".context/modules/ai4e-core.md",
+            ".context/modules/ai4e-contrib.md",
+        ):
+            index = ROOT / relative
+            targets = re.findall(r"\]\(([^)]+)\)", index.read_text(encoding="utf-8"))
+&gt;           assert any((index.parent / target).resolve() == document for target in targets)
+E           assert False
+E            +  where False = any(&lt;generator object test_ability_summary_stage_order_and_references.&lt;locals&gt;.&lt;genexpr&gt; at 0x169e517e0&gt;)
+
+tests/integration/test_ability_merged_document.py:124: AssertionError</failure></testcase><testcase classname="tests.integration.test_abupt_multidomain" name="test_real_domains_forward_backward[domains0]" time="0.007" /><testcase classname="tests.integration.test_abupt_multidomain" name="test_real_domains_forward_backward[domains1]" time="0.008" /><testcase classname="tests.integration.test_abupt_multidomain" name="test_real_domains_forward_backward[domains2]" time="0.010" /><testcase classname="tests.integration.test_abupt_multidomain" name="test_real_batch_matches_individual_outputs_and_gradients[2]" time="0.019" /><testcase classname="tests.integration.test_abupt_multidomain" name="test_real_batch_matches_individual_outputs_and_gradients[3]" time="0.020" /><testcase classname="tests.integration.test_abupt_multidomain" name="test_condition_starts_identity_then_learns_response" time="0.012" /><testcase classname="tests.integration.test_abupt_multidomain" name="test_features_and_geometry_conditions[None]" time="0.008" /><testcase classname="tests.integration.test_abupt_multidomain" name="test_features_and_geometry_conditions[geometry_dims1]" time="0.007" /><testcase classname="tests.integration.test_abupt_multidomain" name="test_features_and_geometry_conditions[geometry_dims2]" time="0.007" /><testcase classname="tests.integration.test_abupt_recipe" name="test_new_recipe_defaults" time="0.043"><failure message="AssertionError: assert ['rawprep', '...nfer', 'post'] == ['rawprep', '...rain', 'post']&#10;  &#10;  At index 3 diff: 'infer' != 'post'&#10;  Left contains one more item: 'post'&#10;  Use -v to get more diff">def test_new_recipe_defaults():
+    
+        from tests.integration.test_dataset_recipe import load_internal
+    
+        cfg = load_internal(Path(__file__).parents[2] / "recipes/aero_cfd/config.yaml")
+        assert cfg.train.batch_size == 1
+        assert not cfg.model.data_specs.conditioning_dims
+        for d in cfg.model.data_specs.domains:
+            assert sum(cfg.model.data_specs.domains[d].feature_dim.values()) == 4
+            assert not cfg.trainprep.domains[d].features
+            assert cfg.sampling.domains[d].query.num_points == 0
+        assert cfg.trainprep.use_physics_features is False
+        assert cfg.model.parameters.require_features is False
+&gt;       assert list(cfg.pipeline.stages) == ["rawprep", "trainprep", "train", "post"]
+E       AssertionError: assert ['rawprep', '...nfer', 'post'] == ['rawprep', '...rain', 'post']
+E         
+E         At index 3 diff: 'infer' != 'post'
+E         Left contains one more item: 'post'
+E         Use -v to get more diff
+
+tests/integration/test_abupt_recipe.py:23: AssertionError</failure></testcase><testcase classname="tests.integration.test_abupt_recipe" name="test_prepared_query_derives_output_mapping" time="0.161" /><testcase classname="tests.integration.test_abupt_recipe" name="test_real_recipe_cached_query" time="7.006"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_real_recipe_cached_query0/experiment/post.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_real_recipe_cached_query0/records/2026-09-15T18-30-20_733ce8；生效配置=inputs/config.yaml&#10;  INFO [post/阶段/开始] &#10;  ERROR [post/阶段/失败] 样本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒&#10;  ERROR 运行失败：后处理需要固定推理结果，不能重新运行模型&#10;  INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.001秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '/private/var/folders/c4/hry...本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒\nERROR 运行失败：后处理需要固定推理结果，不能重新运行模型\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.001秒\n').returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_real_recipe_cached_query0')
+
+    def test_real_recipe_cached_query(tmp_path):
+        folder, cfg = prepared_case(tmp_path)
+        _fit_config(cfg)
+        cfg.train.max_epochs = 1
+        result, directory, _ = _run_script(folder, cfg)
+        assert result.returncode == 0, result.stderr
+        cfg.post.checkpoint = str(directory / "checkpoints/last.pt")
+        cfg.post.query_chunk_size = 1
+        cfg.post.sample_indices = [0]
+        cfg.post.evaluate = False
+        cfg.post.save_predictions = False
+        cfg.post.export_vtk = False
+        result, _, summary = _run_script(folder, cfg, entry="post.py")
+&gt;       assert result.returncode == 0, result.stderr
+E       AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_real_recipe_cached_query0/experiment/post.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_real_recipe_cached_query0/records/2026-09-15T18-30-20_733ce8；生效配置=inputs/config.yaml
+E         INFO [post/阶段/开始] 
+E         ERROR [post/阶段/失败] 样本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒
+E         ERROR 运行失败：后处理需要固定推理结果，不能重新运行模型
+E         INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.001秒
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '/private/var/folders/c4/hry...本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒\nERROR 运行失败：后处理需要固定推理结果，不能重新运行模型\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.001秒\n').returncode
+
+tests/integration/test_abupt_recipe.py:78: AssertionError</failure></testcase><testcase classname="tests.integration.test_abupt_recipe" name="test_batch_two_recipe_resume" time="8.392"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_batch_two_recipe_resume0/experiment/train.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_batch_two_recipe_resume0/records/2026-09-15T18-30-29_6531fa；生效配置=inputs/config.yaml&#10;  INFO [train/阶段/开始] &#10;  INFO [trainprep/阶段/开始] &#10;  ERROR [trainprep/阶段/失败] 样本=；原因=归一化数据版本已存在: /private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_batch_two_recipe_resume0/data/normalize/3c0cd09d4b1d6b3c4c6af4f3702c959b0abee2c33b44c39f27594b22789317ff/manifest.json；耗时=0.015秒&#10;  ERROR [train/阶段/失败] 样本=；原因=归一化数据版本已存在: /private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_batch_two_recipe_resume0/data/normalize/3c0cd09d4b1d6b3c4c6af4f3702c959b0abee2c33b44c39f27594b22789317ff/manifest.json；耗时=0.019秒&#10;  ERROR 运行失败：归一化数据版本已存在: /private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_batch_two_recipe_resume0/data/normalize/3c0cd09d4b1d6b3c4c6af4f3702c959b0abee2c33b44c39f27594b22789317ff/manifest.json&#10;  INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.020秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '/private/var/folders/c4/hry...b1d6b3c4c6af4f3702c959b0abee2c33b44c39f27594b22789317ff/manifest.json\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.020秒\n').returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_batch_two_recipe_resume0')
+
+    def test_batch_two_recipe_resume(tmp_path):
+        import shutil
+    
+        from tests.integration.test_dataset_recipe import execute_case, setup_case
+    
+        folder, cfg = setup_case(tmp_path)
+        shutil.copytree(Path(cfg.dataset.root) / "a", Path(cfg.dataset.root) / "c")
+        cfg.dataset.partition.train = ["a", "c"]
+        cfg.statistics.mode = "reference"
+        assert execute_case(folder, cfg) == 0
+        cfg.normalization.execute = True
+        cfg.sampling.supernodes.num_points = 2
+        cfg.sampling.domains.surface.anchor.num_points = 2
+        cfg.sampling.domains.volume.anchor.num_points = 1
+        _fit_config(cfg)
+        cfg.train.batch_size = 2
+        result, full_dir, _ = _run_script(folder, cfg)
+        assert result.returncode == 0, result.stderr
+        full = torch.load(full_dir / "checkpoints/last.pt", weights_only=False)
+        cfg.train.max_epochs = 1
+        result, one_dir, _ = _run_script(folder, cfg)
+&gt;       assert result.returncode == 0, result.stderr
+E       AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_batch_two_recipe_resume0/experiment/train.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_batch_two_recipe_resume0/records/2026-09-15T18-30-29_6531fa；生效配置=inputs/config.yaml
+E         INFO [train/阶段/开始] 
+E         INFO [trainprep/阶段/开始] 
+E         ERROR [trainprep/阶段/失败] 样本=；原因=归一化数据版本已存在: /private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_batch_two_recipe_resume0/data/normalize/3c0cd09d4b1d6b3c4c6af4f3702c959b0abee2c33b44c39f27594b22789317ff/manifest.json；耗时=0.015秒
+E         ERROR [train/阶段/失败] 样本=；原因=归一化数据版本已存在: /private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_batch_two_recipe_resume0/data/normalize/3c0cd09d4b1d6b3c4c6af4f3702c959b0abee2c33b44c39f27594b22789317ff/manifest.json；耗时=0.019秒
+E         ERROR 运行失败：归一化数据版本已存在: /private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_batch_two_recipe_resume0/data/normalize/3c0cd09d4b1d6b3c4c6af4f3702c959b0abee2c33b44c39f27594b22789317ff/manifest.json
+E         INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.020秒
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '/private/var/folders/c4/hry...b1d6b3c4c6af4f3702c959b0abee2c33b44c39f27594b22789317ff/manifest.json\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.020秒\n').returncode
+
+tests/integration/test_abupt_recipe.py:115: AssertionError</failure></testcase><testcase classname="tests.integration.test_aero_cfd_documents" name="test_all_items_have_real_implementation_paths" time="0.002" /><testcase classname="tests.integration.test_aero_cfd_documents" name="test_examples_share_configuration_and_explicit_domain_steps" time="0.001" /><testcase classname="tests.integration.test_aero_cfd_documents" name="test_shapenet_examples_enable_vtkhdf_nasa_does_not" time="0.020" /><testcase classname="tests.integration.test_aero_cfd_documents" name="test_module_navigation_and_no_reference_runtime_dependency" time="0.235" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_named_storage_members_and_large_ids[pt]" time="0.007" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_named_storage_members_and_large_ids[zarr]" time="0.025" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_minmax_constant_and_coordinate_compatibility" time="0.001" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_sampling_single_legacy_and_new_keys" time="0.000" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_difference_rejects_equal_count_different_identity" time="0.001" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_fit_graph_viewport_uses_width_not_entire_graph" time="0.001" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_real_torchvista_forward" time="0.097" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_extraction_keeps_point_and_cell_members_separate" time="0.001" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_minmax_fit_uses_training_only" time="0.000" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_sampling_change_invalidates_frozen_preparation" time="0.007" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_failed_trace_does_not_publish_partial_asset" time="0.006" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_physical_grouped_output_preserves_sample_identity" time="0.001" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_coordinate_exact_legacy_arithmetic[dtype0-divide]" time="0.000" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_coordinate_exact_legacy_arithmetic[dtype0-shift_scale]" time="0.000" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_coordinate_exact_legacy_arithmetic[dtype1-divide]" time="0.000" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_coordinate_exact_legacy_arithmetic[dtype1-shift_scale]" time="0.000" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_zarr_failure_preserves_previous_transaction" time="0.012" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_identity_sidecar_changes_digest_and_source_ids" time="0.006" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_minmax_manual_statistics_rejected" time="0.000" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_difference_rejects_foreign_same_filename" time="0.001" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_preparation_rejects_selected_different_manifest" time="0.005" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_physical_prepare_rejects_version2_record" time="0.003" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_trace_model_uses_version2_preparation" time="0.001" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_trace_model_requires_physical_manifest" time="0.017" /><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_declared_legacy_provider_and_actual_training_capabilities" time="0.024"><failure message="KeyError: 'evaluation_enabled'">def test_declared_legacy_provider_and_actual_training_capabilities():
+        from pathlib import Path
+    
+        import yaml
+    
+        from ai4e_core.applications.aero_cfd.inspection import execute
+    
+        root = Path(__file__).resolve().parents[2]
+        legacy = yaml.safe_load((root / "recipes/aero_cfd/config.yaml").read_text())
+        legacy.pop("components")
+        legacy["trainprep"]["sampling"] = legacy["model"].pop("sampling")
+        result = execute(
+            {
+                "operation": "describe_case",
+                "config": legacy,
+                "component_provider": "ai4e_contrib.application.aero_cfd",
+            }
+        )
+        assert "sampling" in result["configuration"]["model"]
+        assert "sampling" not in result["configuration"]["trainprep"]
+        assert result["capabilities"]["losses"]["configurable"] is True
+        config = yaml.safe_load(
+            (root / "examples/aero_cfd/nasa_crm_transolver3/config.yaml").read_text()
+        )
+        result = execute({"operation": "describe_case", "config": config})
+        caps = result["capabilities"]
+&gt;       assert caps["training_constraints"]["evaluation_enabled"]["allowed"] == [False]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'evaluation_enabled'
+
+tests/integration/test_algorithm_platform_contract.py:515: KeyError</failure></testcase><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_model_sampling_capability_follows_component" time="0.023" /><testcase classname="tests.integration.test_architecture_alignment_documents" name="test_all_module_prds_have_numbered_six_sections" time="0.004" /><testcase classname="tests.integration.test_architecture_alignment_documents" name="test_current_repository_entry_links_and_package_navigation" time="0.001" /><testcase classname="tests.integration.test_architecture_alignment_documents" name="test_unimplemented_products_remain_explicit" time="0.000" /><testcase classname="tests.integration.test_constraint_losses" name="test_compare_four_methods_match_formulas" time="0.001" /><testcase classname="tests.integration.test_constraint_losses" name="test_compare_rejects_shape_empty_unknown_and_tiny_relative" time="0.000" /><testcase classname="tests.integration.test_constraint_losses" name="test_supervised_default_and_alias_match_explicit_mse" time="0.000" /><testcase classname="tests.integration.test_constraint_losses" name="test_supervised_mae_and_gates" time="0.000" /><testcase classname="tests.integration.test_constraint_losses" name="test_aero_cfd_objectives_default_two_mse" time="0.010" /><testcase classname="tests.integration.test_constraint_losses" name="test_recipe_default_losses_are_mse" time="0.010" /><testcase classname="tests.integration.test_constraint_losses" name="test_recipe_rejects_unknown_loss_method" time="0.010" /><testcase classname="tests.integration.test_constraint_losses" name="test_recipe_losses_reach_train_step_and_eval[mse]" time="0.011" /><testcase classname="tests.integration.test_constraint_losses" name="test_recipe_losses_reach_train_step_and_eval[mae]" time="0.011" /><testcase classname="tests.integration.test_constraint_losses" name="test_recipe_losses_reach_train_step_and_eval[huber]" time="0.010" /><testcase classname="tests.integration.test_constraint_losses" name="test_recipe_losses_reach_train_step_and_eval[relative_l2]" time="0.010" /><testcase classname="tests.integration.test_dataset_rawprep_descriptor" name="test_description_without_input[ai4e_contrib.application.datasets.shapenet_car]" time="0.023" /><testcase classname="tests.integration.test_dataset_rawprep_descriptor" name="test_description_without_input[ai4e_contrib.application.datasets.nasa_crm]" time="0.010" /><testcase classname="tests.integration.test_dataset_rawprep_descriptor" name="test_legacy_volume_normals_promoted_from_nearest_vertex" time="0.009" /><testcase classname="tests.integration.test_dataset_rawprep_descriptor" name="test_explicit_empty_and_false_not_replaced" time="0.000" /><testcase classname="tests.integration.test_dataset_rawprep_descriptor" name="test_empty_formats_rejected_and_dual_formats_recorded" time="0.005" /><testcase classname="tests.integration.test_dataset_rawprep_descriptor" name="test_saved_task_keeps_case_defaults_and_empty_values" time="3.219" /><testcase classname="tests.integration.test_dataset_recipe" name="test_copy_pipeline_and_datapre_are_equivalent" time="5.997" /><testcase classname="tests.integration.test_dataset_recipe" name="test_pipeline_rejects_legacy_pre_stage" time="3.268" /><testcase classname="tests.integration.test_dataset_recipe" name="test_paths_and_independent_partition_override" time="0.252" /><testcase classname="tests.integration.test_dataset_recipe" name="test_invalid_interpolation_rejected[${missing_root}/train]" time="0.076" /><testcase classname="tests.integration.test_dataset_recipe" name="test_invalid_interpolation_rejected[${paths.datasets.train}]" time="0.076" /><testcase classname="tests.integration.test_dataset_recipe" name="test_dataset_registration_never_reads_mesh" time="0.124" /><testcase classname="tests.integration.test_dataset_recipe" name="test_train_statistics_excludes_test" time="0.126" /><testcase classname="tests.integration.test_dataset_recipe" name="test_failure_keeps_commits_without_complete_manifest[False]" time="0.107" /><testcase classname="tests.integration.test_dataset_recipe" name="test_failure_keeps_commits_without_complete_manifest[True]" time="0.111" /><testcase classname="tests.integration.test_dataset_recipe" name="test_dry_run_and_overwrite_preflight" time="0.197" /><testcase classname="tests.integration.test_dataset_recipe" name="test_unknown_field_dimensions_and_source_overlap" time="0.123" /><testcase classname="tests.integration.test_dataset_recipe" name="test_reference_statistics_and_normalization_declaration" time="0.167" /><testcase classname="tests.integration.test_dataset_recipe" name="test_duplicate_partition_identity_rejected" time="0.072" /><testcase classname="tests.integration.test_dataset_recipe" name="test_overwrite_failure_withdraws_old_manifest" time="0.168" /><testcase classname="tests.integration.test_dataset_recipe" name="test_long_operation_reports_time_without_fake_percentage" time="0.051" /><testcase classname="tests.integration.test_dataset_recipe" name="test_training_standard_uses_manifest" time="0.123" /><testcase classname="tests.integration.test_dataset_recipe" name="test_reader_checks_manifest_shape_and_state" time="0.124" /><testcase classname="tests.integration.test_dataset_recipe" name="test_adapter_can_be_copied_and_modified" time="0.073" /><testcase classname="tests.integration.test_dataset_recipe" name="test_previous_sample_meshes_released_before_next_sample" time="0.116" /><testcase classname="tests.integration.test_dataset_recipe" name="test_geometry_parameters_are_forwarded" time="0.120" /><testcase classname="tests.integration.test_framework_comparison_document" name="test_framework_comparison_navigation" time="0.000"><failure message="AssertionError: assert 'ai4s-framework-comparison.md' in '正式模型结构显示（2026-09-15）：左侧生成成功只表示 TorchVista HTML 已发布。正式 AB-UPT 图含数千算子，默认整图塞进 800px 会缩成看不见的细线，右侧只剩水印。新跟踪写压缩模块视图，发布与页面载入都...ntegration/test_viz_host_bindings.py`；真实项目/任务环境变量缺失导致 skip 不算实际入口验收。证据见 `.context/mvp/phys-workbench-acceptance.md`。\n'&#10; +  where 'ai4s-framework-comparison.md' = PosixPath('/Users/zonghui/work/new_code_project/AI4E_Dojo/docs/ai4s-framework-comparison.md').name&#10; +  and   '正式模型结构显示（2026-09-15）：左侧生成成功只表示 TorchVista HTML 已发布。正式 AB-UPT 图含数千算子，默认整图塞进 800px 会缩成看不见的细线，右侧只剩水印。新跟踪写压缩模块视图，发布与页面载入都...ntegration/test_viz_host_bindings.py`；真实项目/任务环境变量缺失导致 skip 不算实际入口验收。证据见 `.context/mvp/phys-workbench-acceptance.md`。\n' = read_text(encoding='utf-8')&#10; +    where read_text = (PosixPath('/Users/zonghui/work/new_code_project/AI4E_Dojo') / 'AGENTS.md').read_text">def test_framework_comparison_navigation():
+        """参考文档可从治理入口及案例模块索引发现。"""
+        assert DOCUMENT.is_file()
+        for relative in ("AGENTS.md", ".context/index.md", ".context/modules/recipes.md"):
+&gt;           assert DOCUMENT.name in (ROOT / relative).read_text(encoding="utf-8")
+E           AssertionError: assert 'ai4s-framework-comparison.md' in '正式模型结构显示（2026-09-15）：左侧生成成功只表示 TorchVista HTML 已发布。正式 AB-UPT 图含数千算子，默认整图塞进 800px 会缩成看不见的细线，右侧只剩水印。新跟踪写压缩模块视图，发布与页面载入都...ntegration/test_viz_host_bindings.py`；真实项目/任务环境变量缺失导致 skip 不算实际入口验收。证据见 `.context/mvp/phys-workbench-acceptance.md`。\n'
+E            +  where 'ai4s-framework-comparison.md' = PosixPath('/Users/zonghui/work/new_code_project/AI4E_Dojo/docs/ai4s-framework-comparison.md').name
+E            +  and   '正式模型结构显示（2026-09-15）：左侧生成成功只表示 TorchVista HTML 已发布。正式 AB-UPT 图含数千算子，默认整图塞进 800px 会缩成看不见的细线，右侧只剩水印。新跟踪写压缩模块视图，发布与页面载入都...ntegration/test_viz_host_bindings.py`；真实项目/任务环境变量缺失导致 skip 不算实际入口验收。证据见 `.context/mvp/phys-workbench-acceptance.md`。\n' = read_text(encoding='utf-8')
+E            +    where read_text = (PosixPath('/Users/zonghui/work/new_code_project/AI4E_Dojo') / 'AGENTS.md').read_text
+
+tests/integration/test_framework_comparison_document.py:15: AssertionError</failure></testcase><testcase classname="tests.integration.test_framework_comparison_document" name="test_framework_comparison_local_evidence_links" time="0.005" /><testcase classname="tests.integration.test_framework_correctness" name="test_tensor_diagnostic[value0-\u8f93\u5165\u7c7b\u578b]" time="0.003" /><testcase classname="tests.integration.test_framework_correctness" name="test_tensor_diagnostic[value1-\u5f62\u72b6]" time="0.002" /><testcase classname="tests.integration.test_framework_correctness" name="test_tensor_diagnostic[value2-\u7cbe\u5ea6]" time="0.002" /><testcase classname="tests.integration.test_framework_correctness" name="test_tensor_diagnostic[value3-\u8bbe\u5907]" time="0.002" /><testcase classname="tests.integration.test_framework_correctness" name="test_tensor_diagnostic[value4-\u975e\u6709\u9650]" time="0.002" /><testcase classname="tests.integration.test_framework_correctness" name="test_move_preserves_index_mask_and_float_precision[cpu]" time="0.000" /><testcase classname="tests.integration.test_framework_correctness" name="test_move_preserves_index_mask_and_float_precision[mps]" time="0.003" /><testcase classname="tests.integration.test_framework_correctness" name="test_batch_error_identity_restores_context" time="0.000" /><testcase classname="tests.integration.test_framework_correctness" name="test_progress_write_error_does_not_replace_original" time="0.002" /><testcase classname="tests.integration.test_framework_correctness" name="test_post_failure_retains_completed_work[evaluation]" time="5.327" /><testcase classname="tests.integration.test_framework_correctness" name="test_post_failure_retains_completed_work[tensor]" time="4.899" /><testcase classname="tests.integration.test_framework_correctness" name="test_post_failure_retains_completed_work[pointcloud]" time="5.400" /><testcase classname="tests.integration.test_framework_correctness" name="test_post_failure_retains_completed_work[surface]" time="4.762" /><testcase classname="tests.integration.test_framework_correctness" name="test_post_failure_retains_completed_work[volume]" time="4.706" /><testcase classname="tests.integration.test_framework_correctness" name="test_query_only_does_not_rewrite_anchor_files" time="4.693" /><testcase classname="tests.integration.test_framework_correctness" name="test_radius_fallback_matches_cpu" time="0.003" /><testcase classname="tests.integration.test_framework_correctness" name="test_evaluation_forward_failure_has_batch_identity" time="4.381" /><testcase classname="tests.integration.test_framework_correctness" name="test_generated_protocol_and_unknown_history_gate" time="4.562" /><testcase classname="tests.integration.test_framework_correctness" name="test_training_report_is_snapshot" time="0.000" /><testcase classname="tests.integration.test_framework_correctness" name="test_training_step_failure_has_real_batch_identity" time="4.437" /><testcase classname="tests.integration.test_infer_compatibility" name="test_infer_parameters_isolate_training_and_legacy_values" time="0.000" /><testcase classname="tests.integration.test_infer_compatibility" name="test_invalid_settings_are_rejected[settings0]" time="0.000" /><testcase classname="tests.integration.test_infer_compatibility" name="test_invalid_settings_are_rejected[settings1]" time="0.000" /><testcase classname="tests.integration.test_infer_compatibility" name="test_invalid_settings_are_rejected[settings2]" time="0.000" /><testcase classname="tests.integration.test_infer_compatibility" name="test_invalid_settings_are_rejected[settings3]" time="0.000" /><testcase classname="tests.integration.test_infer_compatibility" name="test_invalid_settings_are_rejected[settings4]" time="0.000" /><testcase classname="tests.integration.test_infer_compatibility" name="test_invalid_settings_are_rejected[settings5]" time="0.000" /><testcase classname="tests.integration.test_infer_compatibility" name="test_metadata_never_exports_tensors_and_does_not_change_rng" time="0.001" /><testcase classname="tests.integration.test_infer_compatibility" name="test_comparison_rejects_incomplete_or_changed_protocol[None-comparable]" time="0.001" /><testcase classname="tests.integration.test_infer_compatibility" name="test_comparison_rejects_incomplete_or_changed_protocol[partial-insufficient]" time="0.001" /><testcase classname="tests.integration.test_infer_compatibility" name="test_comparison_rejects_incomplete_or_changed_protocol[samples-insufficient]" time="0.001" /><testcase classname="tests.integration.test_infer_compatibility" name="test_comparison_rejects_incomplete_or_changed_protocol[device-incompatible]" time="0.001" /><testcase classname="tests.integration.test_infer_compatibility" name="test_comparison_rejects_incomplete_or_changed_protocol[aggregate-incompatible]" time="0.001" /><testcase classname="tests.integration.test_infer_compatibility" name="test_comparison_rejects_incomplete_or_changed_protocol[missing-insufficient]" time="0.001" /><testcase classname="tests.integration.test_infer_compatibility" name="test_infer_paths_are_resolved_without_mutating_train" time="0.102" /><testcase classname="tests.integration.test_infer_extensions" name="test_copied_recipe_derived_field_reaches_real_vtk[False]" time="10.554" /><testcase classname="tests.integration.test_infer_extensions" name="test_copied_recipe_derived_field_reaches_real_vtk[True]" time="10.659" /><testcase classname="tests.integration.test_infer_result_views" name="test_checkpoint_pool_uses_samples_not_partition_means" time="0.001" /><testcase classname="tests.integration.test_infer_result_views" name="test_table_columns_export_same_fixed_values[checkpoint]" time="0.015" /><testcase classname="tests.integration.test_infer_result_views" name="test_table_columns_export_same_fixed_values[sample]" time="0.012" /><testcase classname="tests.integration.test_infer_result_views" name="test_performance_values_use_recorded_prediction_time" time="0.001" /><testcase classname="tests.integration.test_infer_result_views" name="test_identical_field_labels_keep_distinct_export_columns" time="0.001" /><testcase classname="tests.integration.test_infer_stage" name="test_native_infer_matches_old_post_and_consumes_results[shapenet_car_abupt]" time="13.223" /><testcase classname="tests.integration.test_infer_stage" name="test_native_infer_matches_old_post_and_consumes_results[nasa_crm_transolver3]" time="12.924" /><testcase classname="tests.integration.test_infer_stage" name="test_native_infer_matches_old_post_and_consumes_results[nasa_crm_abupt]" time="14.090" /><testcase classname="tests.integration.test_infer_stage" name="test_native_infer_matches_old_post_and_consumes_results[shapenet_car_transolver3_surface]" time="12.114" /><testcase classname="tests.integration.test_infer_stage" name="test_native_infer_matches_old_post_and_consumes_results[shapenet_car_transolver3_volume]" time="12.047" /><testcase classname="tests.integration.test_infer_stage" name="test_anchor_template_has_independent_infer_and_fixed_post[False]" time="7.727" /><testcase classname="tests.integration.test_infer_stage" name="test_anchor_template_has_independent_infer_and_fixed_post[True]" time="8.524" /><testcase classname="tests.integration.test_infer_stage" name="test_wheel_installed_external_recipe_infer_and_post" time="14.835" /><testcase classname="tests.integration.test_model_evaluation" name="test_metrics_zero_target" time="0.000" /><testcase classname="tests.integration.test_model_evaluation" name="test_evaluation_restores_state_on_failure" time="0.001" /><testcase classname="tests.integration.test_model_evaluation" name="test_evaluation_is_per_sample_and_shared_with_post" time="0.001" /><testcase classname="tests.integration.test_model_preparation_contract" name="test_freeze_change_rejected_and_rng_preserved" time="0.008" /><testcase classname="tests.integration.test_physical_dataset_contract" name="test_roundtrip_and_conditions" time="0.006" /><testcase classname="tests.integration.test_physical_dataset_contract" name="test_condition_statistics_are_per_sample" time="0.006" /><testcase classname="tests.integration.test_physical_dataset_contract" name="test_missing_field_and_duplicate_ids" time="0.005" /><testcase classname="tests.integration.test_physical_mesh_export" name="test_real_topology_and_prediction_export[surface-9]" time="0.005" /><testcase classname="tests.integration.test_physical_mesh_export" name="test_real_topology_and_prediction_export[volume-10]" time="0.005" /><testcase classname="tests.integration.test_pibsnet_documents" name="test_inventory_122_rows_preserved_and_mapped" time="0.001" /><testcase classname="tests.integration.test_pibsnet_documents" name="test_public_entries_and_source_provenance" time="0.004" /><testcase classname="tests.integration.test_pibsnet_documents" name="test_trapezoid_migration_and_input_audit_documentation" time="0.001" /><testcase classname="tests.integration.test_pibsnet_documents" name="test_selected_source_cases_and_migration_entries" time="0.000" /><testcase classname="tests.integration.test_pibsnet_training" name="test_five_cases_real_short_training[convection_diffusion]" time="0.044" /><testcase classname="tests.integration.test_pibsnet_training" name="test_five_cases_real_short_training[neumann_diffusion]" time="0.031" /><testcase classname="tests.integration.test_pibsnet_training" name="test_five_cases_real_short_training[advection]" time="0.030" /><testcase classname="tests.integration.test_pibsnet_training" name="test_five_cases_real_short_training[burgers]" time="0.041" /><testcase classname="tests.integration.test_pibsnet_training" name="test_five_cases_real_short_training[diffusion_trapezoid]" time="0.069" /><testcase classname="tests.integration.test_pibsnet_training" name="test_native_no_clip_sum_accumulation_matches_one_update" time="0.001" /><testcase classname="tests.integration.test_pibsnet_trapezoid_alignment" name="test_original_basis_forward_gradients_adam_and_axis_layout" time="0.040" /><testcase classname="tests.integration.test_pibsnet_trapezoid_alignment" name="test_dataset_scalar_numpy1_arithmetic_and_rng" time="0.002" /><testcase classname="tests.integration.test_pibsnet_trapezoid_alignment" name="test_reject_old_data_and_unsupported_conditions" time="0.000" /><testcase classname="tests.integration.test_pibsnet_trapezoid_alignment" name="test_restore_and_independent_post" time="0.087" /><testcase classname="tests.integration.test_post_inference" name="test_rebuild_loads_weights_only" time="0.001" /><testcase classname="tests.integration.test_post_inference" name="test_rebuild_rejects_semantic_conflict" time="0.001" /><testcase classname="tests.integration.test_post_inference" name="test_pointcloud_rejects_mismatched_fields" time="0.001" /><testcase classname="tests.integration.test_post_inference" name="test_anchor_eval_save_and_pointcloud" time="8.414" /><testcase classname="tests.integration.test_post_inference" name="test_missing_checkpoint_uses_current_run_last" time="4.668" /><testcase classname="tests.integration.test_post_inference" name="test_semantic_conflict_writes_no_predictions" time="8.186" /><testcase classname="tests.integration.test_post_inference" name="test_dry_run_does_not_write_predictions" time="7.383" /><testcase classname="tests.integration.test_post_inference" name="test_export_vtk_can_be_disabled" time="8.364" /><testcase classname="tests.integration.test_post_inference" name="test_post_metrics_match_shared_evaluate" time="8.582" /><testcase classname="tests.integration.test_post_mesh" name="test_coordinate_apply_can_skip_range_check" time="0.001" /><testcase classname="tests.integration.test_post_mesh" name="test_full_mesh_query_writes_aligned_fields" time="8.404" /><testcase classname="tests.integration.test_post_mesh" name="test_sample_index_out_of_range_writes_nothing" time="8.380" /><testcase classname="tests.integration.test_post_mesh" name="test_missing_raw_surface_rejects" time="8.236" /><testcase classname="tests.integration.test_post_mesh" name="test_query_geometry_matches_eval_prepare" time="8.468" /><testcase classname="tests.integration.test_post_mesh" name="test_dry_run_writes_no_mesh" time="7.316" /><testcase classname="tests.integration.test_post_mesh" name="test_verify_rejects_missing_pred_or_cells" time="0.006" /><testcase classname="tests.integration.test_post_mesh" name="test_official_sample_mesh_points_exceed_anchors" time="0.095" /><testcase classname="tests.integration.test_post_mesh" name="test_mesh_query_accepts_unused_surface_vertices" time="8.378" /><testcase classname="tests.integration.test_post_mesh" name="test_mps_train_then_complete_mesh_query" time="8.586" /><testcase classname="tests.integration.test_post_reference" name="test_inference_randomness_repeats_and_restores_on_failure" time="0.002" /><testcase classname="tests.integration.test_post_reference" name="test_atomic_tensor_bundle_failure_preserves_previous_file" time="0.002" /><testcase classname="tests.integration.test_post_reference" name="test_post_flags_do_not_change_saved_prediction" time="12.947" /><testcase classname="tests.integration.test_post_reference" name="test_mps_randomness_restored_on_exception" time="0.002" /><testcase classname="tests.integration.test_post_reference" name="test_rope_mps_forward_backward_stays_on_device" time="0.007" /><testcase classname="tests.integration.test_public_api_stability" name="test_fixed_user_code_against_installed_framework" time="0.638" /><testcase classname="tests.integration.test_public_api_stability" name="test_local_adapter_and_failure_context" time="0.004" /><testcase classname="tests.integration.test_public_api_stability" name="test_configuration_adapter_is_explicit_and_scoped" time="0.000" /><testcase classname="tests.integration.test_public_api_stability" name="test_progress_publishes_one_snapshot_without_double_copy" time="0.004" /><testcase classname="tests.integration.test_rawprep_manifest_configuration" name="test_invalid_car_configuration[edit0]" time="0.005" /><testcase classname="tests.integration.test_rawprep_manifest_configuration" name="test_invalid_car_configuration[edit1]" time="0.005" /><testcase classname="tests.integration.test_rawprep_manifest_configuration" name="test_invalid_car_configuration[edit2]" time="0.005" /><testcase classname="tests.integration.test_rawprep_manifest_configuration" name="test_invalid_car_configuration[edit3]" time="0.005" /><testcase classname="tests.integration.test_rawprep_manifest_configuration" name="test_invalid_car_configuration[edit4]" time="0.005" /><testcase classname="tests.integration.test_rawprep_manifest_configuration" name="test_invalid_car_configuration[edit5]" time="0.005" /><testcase classname="tests.integration.test_rawprep_manifest_configuration" name="test_invalid_car_configuration[edit6]" time="0.005" /><testcase classname="tests.integration.test_rawprep_manifest_configuration" name="test_invalid_car_configuration[edit7]" time="0.005" /><testcase classname="tests.integration.test_rawprep_manifest_configuration" name="test_nasa_rejects_inactive_vtk_output" time="0.003" /><testcase classname="tests.integration.test_rawprep_workers" name="test_missing_workers_is_sequential" time="0.000" /><testcase classname="tests.integration.test_rawprep_workers" name="test_invalid_workers_rejected_on_load_and_validate" time="0.031" /><testcase classname="tests.integration.test_rawprep_workers" name="test_legacy_post_physical_export" time="0.000" /><testcase classname="tests.integration.test_rawprep_workers" name="test_template_accepts_workers_override" time="0.037" /><testcase classname="tests.integration.test_rawprep_workers" name="test_old_recipe_rejects_workers_until_launch_wrap" time="0.227" /><testcase classname="tests.integration.test_rawprep_workers" name="test_launch_wrap_rejects_invalid_workers" time="0.020" /><testcase classname="tests.integration.test_rawprep_workers" name="test_workers_overlap_and_first_error_keeps_started" time="0.316" /><testcase classname="tests.integration.test_rawprep_workers" name="test_single_worker_does_not_overlap" time="0.177" /><testcase classname="tests.integration.test_rawprep_workers" name="test_workers_write_distinct_sample_directories" time="0.026" /><testcase classname="tests.integration.test_recipe_configuration" name="test_default_business_semantics_and_isolated_arguments" time="0.049" /><testcase classname="tests.integration.test_recipe_configuration" name="test_old_user_keys_rejected[sampling.seed]" time="0.036" /><testcase classname="tests.integration.test_recipe_configuration" name="test_old_user_keys_rejected[normalization.execute]" time="0.045" /><testcase classname="tests.integration.test_recipe_configuration" name="test_old_user_keys_rejected[sources]" time="0.036" /><testcase classname="tests.integration.test_recipe_configuration" name="test_old_user_keys_rejected[pre]" time="0.032" /><testcase classname="tests.integration.test_recipe_configuration" name="test_old_user_keys_rejected[datapre]" time="0.032" /><testcase classname="tests.integration.test_recipe_configuration" name="test_old_stage_rejected[pre]" time="0.032" /><testcase classname="tests.integration.test_recipe_configuration" name="test_old_stage_rejected[datapre]" time="0.031" /><testcase classname="tests.integration.test_recipe_configuration" name="test_relative_statistics_and_defaults" time="0.109" /><testcase classname="tests.integration.test_recipe_configuration" name="test_transolver_defaults_and_custom_parameters" time="0.033" /><testcase classname="tests.integration.test_recipe_configuration" name="test_reference_statistics_preflight_without_training_partition" time="0.110" /><testcase classname="tests.integration.test_recipe_configuration" name="test_current_template_sampling_selector" time="0.001" /><testcase classname="tests.integration.test_recipe_configuration" name="test_frozen_task_entry_retains_legacy_sampling_selector" time="0.406" /><testcase classname="tests.integration.test_recipe_documents" name="test_authoring_rule_and_development_entry" time="0.001" /><testcase classname="tests.integration.test_recipe_documents" name="test_historical_plan_matches_registered_pre_infer_bodies" time="0.007" /><testcase classname="tests.integration.test_recipe_documents" name="test_indexes_and_current_responsibilities" time="0.001" /><testcase classname="tests.integration.test_recipe_explicit_equivalence" name="test_five_examples_match_frozen_workflow_and_resume[shapenet_car_abupt]" time="15.689" /><testcase classname="tests.integration.test_recipe_explicit_equivalence" name="test_five_examples_match_frozen_workflow_and_resume[nasa_crm_transolver3]" time="14.199" /><testcase classname="tests.integration.test_recipe_explicit_equivalence" name="test_five_examples_match_frozen_workflow_and_resume[nasa_crm_abupt]" time="15.087" /><testcase classname="tests.integration.test_recipe_explicit_equivalence" name="test_five_examples_match_frozen_workflow_and_resume[shapenet_car_transolver3_surface]" time="13.203" /><testcase classname="tests.integration.test_recipe_explicit_equivalence" name="test_five_examples_match_frozen_workflow_and_resume[shapenet_car_transolver3_volume]" time="13.138" /><testcase classname="tests.integration.test_recipe_extensions" name="test_field_extension_saved_normalized_and_trained[pt]" time="8.508"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_field_extension_saved_nor0/experiment/post.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_field_extension_saved_nor0/records/2026-09-15T18-36-42_9780f5；生效配置=inputs/config.yaml&#10;  INFO [post/阶段/开始] &#10;  ERROR [post/阶段/失败] 样本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=1.001秒&#10;  ERROR 运行失败：后处理需要固定推理结果，不能重新运行模型&#10;  INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=1.002秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=1.001秒\nERROR 运行失败：后处理需要固定推理结果，不能重新运行模型\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=1.002秒\n').returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_field_extension_saved_nor0')
+format = 'pt'
+
+    @pytest.mark.parametrize("format", ["pt", "zarr"])
+    def test_field_extension_saved_normalized_and_trained(tmp_path, format):
+        folder, cfg = extension_case(tmp_path, "field_mapping")
+        result = script(folder, "pipeline.py", "--set", f"rawprep.format={format}")
+        assert result.returncode == 0, result.stdout + result.stderr
+        from ai4e_core.abilities.data.source.manifest import ManifestIndex
+    
+        index = ManifestIndex(tmp_path / "data/manifest.json")
+        fields = index.read("train")
+        torch.testing.assert_close(
+            fields["volume_speed"], torch.linalg.vector_norm(fields["volume_velocity"], dim=-1)
+        )
+        manifest = index.manifest
+        assert manifest["extensions"][0]["outputs"]["speed"]["state"] == "physical"
+        assert (
+            yaml.safe_load((tmp_path / "data/train/statistics.yaml").read_text())["volume_speed_count"]
+            &gt; 0
+        )
+        directory = next((tmp_path / "records").iterdir())
+        prepared = json.loads((directory / "artifacts/preparation.json").read_text())
+        assert "volume_speed" in prepared["normalization"]["fields"]
+        checkpoint = torch.load(directory / "checkpoints/last.pt", weights_only=False)
+        assert checkpoint["updates"] == 2
+        assert prepared["declarations"]["trainprep"]["domains"]["volume"]["features"] == {
+            "speed": "volume_speed"
+        }
+        assert checkpoint["model"]["feature_projections.volume.0.weight"].shape[1] == 1
+        # 从真实准备重建输入，断言新字段进入模型特征且影响同权重前向。
+        check = folder / "check_features.py"
+        check.write_text("""from configuration import load_configuration, application_parameters, load_components
+    from ai4e_core.applications.aero_cfd.trainprep.preparation import consume
+    from ai4e_core.applications.aero_cfd.trainprep.dataset import iter_partition_batches
+    import torch, sys
+    cfg = load_configuration(__file__.replace("check_features.py", "config.yaml"))
+    config = application_parameters(cfg)
+    component = load_components(cfg).model
+    data = consume(config, sys.argv[1], prepare=component.prepare_inputs, collate=component.collate)
+    batch = next(iter_partition_batches(data.index, "train", prepare=data.prepare, collate=data.collate, normalization=data.normalization, physical_prepare=data.physical_prepare, normalized_input=False, sampling=config["sampling"], config=config, batch_size=1, device=torch.device("cpu"), evaluation=True))
+    features = batch["inputs"]["domain_anchor_features"]["volume"]
+    assert features.shape[-1] == 1 and features.abs().sum() &gt; 0
+    model = component.construct(**config["model"]["parameters"], data_specs=config["model"]["data_specs"]).eval()
+    model.load_state_dict(torch.load(sys.argv[2], weights_only=False)["model"])
+    with torch.no_grad():
+        before = component.predict(model, batch["inputs"])
+        batch["inputs"]["domain_anchor_features"]["volume"] = features + 2
+        after = component.predict(model, batch["inputs"])
+    assert not torch.equal(before["volume_velocity"], after["volume_velocity"])
+    """)
+        check_result = script(
+            folder,
+            "check_features.py",
+            str(directory / "artifacts/preparation.json"),
+            str(directory / "checkpoints/last.pt"),
+        )
+        assert check_result.returncode == 0, check_result.stderr
+        snapshot = yaml.safe_load((directory / "inputs/config.yaml").read_text())
+        assert snapshot["rawprep"]["speed"] == cfg["rawprep"]["speed"]
+        cfg["post"]["checkpoint"] = str(directory / "checkpoints/last.pt")
+        cfg["post"]["query"] = False
+        (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
+        result = script(folder, "post.py")
+&gt;       assert result.returncode == 0, result.stdout + result.stderr
+E       AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_field_extension_saved_nor0/experiment/post.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_field_extension_saved_nor0/records/2026-09-15T18-36-42_9780f5；生效配置=inputs/config.yaml
+E         INFO [post/阶段/开始] 
+E         ERROR [post/阶段/失败] 样本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=1.001秒
+E         ERROR 运行失败：后处理需要固定推理结果，不能重新运行模型
+E         INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=1.002秒
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=1.001秒\nERROR 运行失败：后处理需要固定推理结果，不能重新运行模型\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=1.002秒\n').returncode
+
+tests/integration/test_recipe_extensions.py:128: AssertionError</failure></testcase><testcase classname="tests.integration.test_recipe_extensions" name="test_field_extension_saved_normalized_and_trained[zarr]" time="9.005"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_field_extension_saved_nor1/experiment/post.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_field_extension_saved_nor1/records/2026-09-15T18-36-51_8ca4ff；生效配置=inputs/config.yaml&#10;  INFO [post/阶段/开始] &#10;  ERROR [post/阶段/失败] 样本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.982秒&#10;  ERROR 运行失败：后处理需要固定推理结果，不能重新运行模型&#10;  INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.983秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.982秒\nERROR 运行失败：后处理需要固定推理结果，不能重新运行模型\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.983秒\n').returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_field_extension_saved_nor1')
+format = 'zarr'
+
+    @pytest.mark.parametrize("format", ["pt", "zarr"])
+    def test_field_extension_saved_normalized_and_trained(tmp_path, format):
+        folder, cfg = extension_case(tmp_path, "field_mapping")
+        result = script(folder, "pipeline.py", "--set", f"rawprep.format={format}")
+        assert result.returncode == 0, result.stdout + result.stderr
+        from ai4e_core.abilities.data.source.manifest import ManifestIndex
+    
+        index = ManifestIndex(tmp_path / "data/manifest.json")
+        fields = index.read("train")
+        torch.testing.assert_close(
+            fields["volume_speed"], torch.linalg.vector_norm(fields["volume_velocity"], dim=-1)
+        )
+        manifest = index.manifest
+        assert manifest["extensions"][0]["outputs"]["speed"]["state"] == "physical"
+        assert (
+            yaml.safe_load((tmp_path / "data/train/statistics.yaml").read_text())["volume_speed_count"]
+            &gt; 0
+        )
+        directory = next((tmp_path / "records").iterdir())
+        prepared = json.loads((directory / "artifacts/preparation.json").read_text())
+        assert "volume_speed" in prepared["normalization"]["fields"]
+        checkpoint = torch.load(directory / "checkpoints/last.pt", weights_only=False)
+        assert checkpoint["updates"] == 2
+        assert prepared["declarations"]["trainprep"]["domains"]["volume"]["features"] == {
+            "speed": "volume_speed"
+        }
+        assert checkpoint["model"]["feature_projections.volume.0.weight"].shape[1] == 1
+        # 从真实准备重建输入，断言新字段进入模型特征且影响同权重前向。
+        check = folder / "check_features.py"
+        check.write_text("""from configuration import load_configuration, application_parameters, load_components
+    from ai4e_core.applications.aero_cfd.trainprep.preparation import consume
+    from ai4e_core.applications.aero_cfd.trainprep.dataset import iter_partition_batches
+    import torch, sys
+    cfg = load_configuration(__file__.replace("check_features.py", "config.yaml"))
+    config = application_parameters(cfg)
+    component = load_components(cfg).model
+    data = consume(config, sys.argv[1], prepare=component.prepare_inputs, collate=component.collate)
+    batch = next(iter_partition_batches(data.index, "train", prepare=data.prepare, collate=data.collate, normalization=data.normalization, physical_prepare=data.physical_prepare, normalized_input=False, sampling=config["sampling"], config=config, batch_size=1, device=torch.device("cpu"), evaluation=True))
+    features = batch["inputs"]["domain_anchor_features"]["volume"]
+    assert features.shape[-1] == 1 and features.abs().sum() &gt; 0
+    model = component.construct(**config["model"]["parameters"], data_specs=config["model"]["data_specs"]).eval()
+    model.load_state_dict(torch.load(sys.argv[2], weights_only=False)["model"])
+    with torch.no_grad():
+        before = component.predict(model, batch["inputs"])
+        batch["inputs"]["domain_anchor_features"]["volume"] = features + 2
+        after = component.predict(model, batch["inputs"])
+    assert not torch.equal(before["volume_velocity"], after["volume_velocity"])
+    """)
+        check_result = script(
+            folder,
+            "check_features.py",
+            str(directory / "artifacts/preparation.json"),
+            str(directory / "checkpoints/last.pt"),
+        )
+        assert check_result.returncode == 0, check_result.stderr
+        snapshot = yaml.safe_load((directory / "inputs/config.yaml").read_text())
+        assert snapshot["rawprep"]["speed"] == cfg["rawprep"]["speed"]
+        cfg["post"]["checkpoint"] = str(directory / "checkpoints/last.pt")
+        cfg["post"]["query"] = False
+        (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
+        result = script(folder, "post.py")
+&gt;       assert result.returncode == 0, result.stdout + result.stderr
+E       AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_field_extension_saved_nor1/experiment/post.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_field_extension_saved_nor1/records/2026-09-15T18-36-51_8ca4ff；生效配置=inputs/config.yaml
+E         INFO [post/阶段/开始] 
+E         ERROR [post/阶段/失败] 样本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.982秒
+E         ERROR 运行失败：后处理需要固定推理结果，不能重新运行模型
+E         INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.983秒
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.982秒\nERROR 运行失败：后处理需要固定推理结果，不能重新运行模型\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.983秒\n').returncode
+
+tests/integration/test_recipe_extensions.py:128: AssertionError</failure></testcase><testcase classname="tests.integration.test_recipe_extensions" name="test_sampling_runs_during_each_training_epoch[target]" time="4.081"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_sampling_runs_during_each0/experiment/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_sampling_runs_during_each0/records/2026-09-15T18-36-55_334c31；生效配置=inputs/config.yaml&#10;  INFO [rawprep/阶段/开始] &#10;  INFO [rawprep/数据集/开始] root=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_sampling_runs_during_each0/raw&#10;  INFO [rawprep/数据集/选择结果] 样本总数=2；train=1；test=1&#10;  INFO [rawprep/数据集/结束] 耗时=0.005秒&#10;  INFO [rawprep/批量前处理/开始] 样本数=2&#10;  INFO [rawprep/批量前处理/进度] 样本=b；完成=2；总数=2；失败=0；未执行=0&#10;  INFO [rawprep/批量前处理/结束] 耗时=0.019秒&#10;  INFO [rawprep/统计/开始] 方法=reference；参数来源=/tmp/dojo-architecture-20260915/source/ai4e_contrib/application/datasets/shapenet_car/statistics.yaml&#10;  INFO [rawprep/统计/结束] 耗时=0.001秒&#10;  INFO [rawprep/数据清单/开始] 状态=physical；归一化=未执行&#10;  INFO [rawprep/数据清单/结束] 耗时=0.000秒&#10;  INFO [rawprep/阶段/结束] 耗时=0.028秒&#10;  INFO [trainprep/阶段/开始] &#10;  INFO [trainprep/阶段/结束] 耗时=0.012秒&#10;  INFO [train/阶段/开始] &#10;  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.&#10;    warnings.warn(&#10;  INFO [train/训练/进度] 轮次=1；更新=1；损失=3.4917778968811035；学习率=5e-05；耗时=0.014124542009085417；峰值内存=710836224；在线={'surface_pressure': 0.46552979946136475, 'volume_velocity': 3.0262482166290283}&#10;  INFO [train/训练/进度] 轮次=2；更新=2；损失=3.1509299278259277；学习率=5e-05；耗时=0.011567207984626293；峰值内存=710836224；在线={'surface_pressure': 0.36138689517974854, 'volume_velocity': 2.7895431518554688}&#10;  INFO [train/阶段/结束] 耗时=0.790秒&#10;  INFO [post/阶段/开始] &#10;  ERROR [post/阶段/失败] 样本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒&#10;  ERROR 运行失败：后处理需要固定推理结果，不能重新运行模型&#10;  INFO [运行/结束] 状态=失败；成功=2；失败=0；未执行=0；耗时=0.832秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒\nERROR 运行失败：后处理需要固定推理结果，不能重新运行模型\nINFO [运行/结束] 状态=失败；成功=2；失败=0；未执行=0；耗时=0.832秒\n&quot;).returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_sampling_runs_during_each0')
+injection = 'target'
+
+    @pytest.mark.parametrize("injection", ["target", "direct"])
+    def test_sampling_runs_during_each_training_epoch(tmp_path, injection):
+        folder, cfg = extension_case(tmp_path, "sampling")
+        cfg["pipeline"]["stages"].append("post")
+        (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
+        path = folder / "custom_abilities.py"
+        source = path.read_text().replace(
+            "count = len(",
+            'with open(__file__ + ".calls", "a") as stream:\n        stream.write(str(kwargs.get("epoch")) + ":" + str(kwargs.get("evaluation")) + "\\n")\n    count = len(',
+        )
+        path.write_text(source)
+        if injection == "direct":
+            cfg["model"]["sampling"].pop("target")
+            cfg["model"]["sampling"].pop("parameters")
+            (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
+            stage = folder / "trainprep.py"
+            stage.write_text(
+                "from custom_abilities import reverse_geometry\n"
+                + stage.read_text().replace(
+                    "data, settings=cfg.model.sampling, model_component=components.model",
+                    "data, settings=cfg.model.sampling, model_component=components.model, operation=reverse_geometry",
+                )
+            )
+        result = script(folder)
+&gt;       assert result.returncode == 0, result.stdout + result.stderr
+E       AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_sampling_runs_during_each0/experiment/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_sampling_runs_during_each0/records/2026-09-15T18-36-55_334c31；生效配置=inputs/config.yaml
+E         INFO [rawprep/阶段/开始] 
+E         INFO [rawprep/数据集/开始] root=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_sampling_runs_during_each0/raw
+E         INFO [rawprep/数据集/选择结果] 样本总数=2；train=1；test=1
+E         INFO [rawprep/数据集/结束] 耗时=0.005秒
+E         INFO [rawprep/批量前处理/开始] 样本数=2
+E         INFO [rawprep/批量前处理/进度] 样本=b；完成=2；总数=2；失败=0；未执行=0
+E         INFO [rawprep/批量前处理/结束] 耗时=0.019秒
+E         INFO [rawprep/统计/开始] 方法=reference；参数来源=/tmp/dojo-architecture-20260915/source/ai4e_contrib/application/datasets/shapenet_car/statistics.yaml
+E         INFO [rawprep/统计/结束] 耗时=0.001秒
+E         INFO [rawprep/数据清单/开始] 状态=physical；归一化=未执行
+E         INFO [rawprep/数据清单/结束] 耗时=0.000秒
+E         INFO [rawprep/阶段/结束] 耗时=0.028秒
+E         INFO [trainprep/阶段/开始] 
+E         INFO [trainprep/阶段/结束] 耗时=0.012秒
+E         INFO [train/阶段/开始] 
+E         /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+E           warnings.warn(
+E         INFO [train/训练/进度] 轮次=1；更新=1；损失=3.4917778968811035；学习率=5e-05；耗时=0.014124542009085417；峰值内存=710836224；在线={'surface_pressure': 0.46552979946136475, 'volume_velocity': 3.0262482166290283}
+E         INFO [train/训练/进度] 轮次=2；更新=2；损失=3.1509299278259277；学习率=5e-05；耗时=0.011567207984626293；峰值内存=710836224；在线={'surface_pressure': 0.36138689517974854, 'volume_velocity': 2.7895431518554688}
+E         INFO [train/阶段/结束] 耗时=0.790秒
+E         INFO [post/阶段/开始] 
+E         ERROR [post/阶段/失败] 样本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒
+E         ERROR 运行失败：后处理需要固定推理结果，不能重新运行模型
+E         INFO [运行/结束] 状态=失败；成功=2；失败=0；未执行=0；耗时=0.832秒
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒\nERROR 运行失败：后处理需要固定推理结果，不能重新运行模型\nINFO [运行/结束] 状态=失败；成功=2；失败=0；未执行=0；耗时=0.832秒\n").returncode
+
+tests/integration/test_recipe_extensions.py:155: AssertionError</failure></testcase><testcase classname="tests.integration.test_recipe_extensions" name="test_sampling_runs_during_each_training_epoch[direct]" time="4.063"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_sampling_runs_during_each1/experiment/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_sampling_runs_during_each1/records/2026-09-15T18-37-00_0b3fdd；生效配置=inputs/config.yaml&#10;  INFO [rawprep/阶段/开始] &#10;  INFO [rawprep/数据集/开始] root=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_sampling_runs_during_each1/raw&#10;  INFO [rawprep/数据集/选择结果] 样本总数=2；train=1；test=1&#10;  INFO [rawprep/数据集/结束] 耗时=0.005秒&#10;  INFO [rawprep/批量前处理/开始] 样本数=2&#10;  INFO [rawprep/批量前处理/进度] 样本=b；完成=2；总数=2；失败=0；未执行=0&#10;  INFO [rawprep/批量前处理/结束] 耗时=0.018秒&#10;  INFO [rawprep/统计/开始] 方法=reference；参数来源=/tmp/dojo-architecture-20260915/source/ai4e_contrib/application/datasets/shapenet_car/statistics.yaml&#10;  INFO [rawprep/统计/结束] 耗时=0.001秒&#10;  INFO [rawprep/数据清单/开始] 状态=physical；归一化=未执行&#10;  INFO [rawprep/数据清单/结束] 耗时=0.000秒&#10;  INFO [rawprep/阶段/结束] 耗时=0.027秒&#10;  INFO [trainprep/阶段/开始] &#10;  INFO [trainprep/阶段/结束] 耗时=0.012秒&#10;  INFO [train/阶段/开始] &#10;  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.&#10;    warnings.warn(&#10;  INFO [train/训练/进度] 轮次=1；更新=1；损失=3.4917778968811035；学习率=5e-05；耗时=0.01403487502830103；峰值内存=711884800；在线={'surface_pressure': 0.46552979946136475, 'volume_velocity': 3.0262482166290283}&#10;  INFO [train/训练/进度] 轮次=2；更新=2；损失=3.1509299278259277；学习率=5e-05；耗时=0.011900291952770203；峰值内存=711884800；在线={'surface_pressure': 0.36138689517974854, 'volume_velocity': 2.7895431518554688}&#10;  INFO [train/阶段/结束] 耗时=0.788秒&#10;  INFO [post/阶段/开始] &#10;  ERROR [post/阶段/失败] 样本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒&#10;  ERROR 运行失败：后处理需要固定推理结果，不能重新运行模型&#10;  INFO [运行/结束] 状态=失败；成功=2；失败=0；未执行=0；耗时=0.829秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒\nERROR 运行失败：后处理需要固定推理结果，不能重新运行模型\nINFO [运行/结束] 状态=失败；成功=2；失败=0；未执行=0；耗时=0.829秒\n&quot;).returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_sampling_runs_during_each1')
+injection = 'direct'
+
+    @pytest.mark.parametrize("injection", ["target", "direct"])
+    def test_sampling_runs_during_each_training_epoch(tmp_path, injection):
+        folder, cfg = extension_case(tmp_path, "sampling")
+        cfg["pipeline"]["stages"].append("post")
+        (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
+        path = folder / "custom_abilities.py"
+        source = path.read_text().replace(
+            "count = len(",
+            'with open(__file__ + ".calls", "a") as stream:\n        stream.write(str(kwargs.get("epoch")) + ":" + str(kwargs.get("evaluation")) + "\\n")\n    count = len(',
+        )
+        path.write_text(source)
+        if injection == "direct":
+            cfg["model"]["sampling"].pop("target")
+            cfg["model"]["sampling"].pop("parameters")
+            (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
+            stage = folder / "trainprep.py"
+            stage.write_text(
+                "from custom_abilities import reverse_geometry\n"
+                + stage.read_text().replace(
+                    "data, settings=cfg.model.sampling, model_component=components.model",
+                    "data, settings=cfg.model.sampling, model_component=components.model, operation=reverse_geometry",
+                )
+            )
+        result = script(folder)
+&gt;       assert result.returncode == 0, result.stdout + result.stderr
+E       AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_sampling_runs_during_each1/experiment/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_sampling_runs_during_each1/records/2026-09-15T18-37-00_0b3fdd；生效配置=inputs/config.yaml
+E         INFO [rawprep/阶段/开始] 
+E         INFO [rawprep/数据集/开始] root=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_sampling_runs_during_each1/raw
+E         INFO [rawprep/数据集/选择结果] 样本总数=2；train=1；test=1
+E         INFO [rawprep/数据集/结束] 耗时=0.005秒
+E         INFO [rawprep/批量前处理/开始] 样本数=2
+E         INFO [rawprep/批量前处理/进度] 样本=b；完成=2；总数=2；失败=0；未执行=0
+E         INFO [rawprep/批量前处理/结束] 耗时=0.018秒
+E         INFO [rawprep/统计/开始] 方法=reference；参数来源=/tmp/dojo-architecture-20260915/source/ai4e_contrib/application/datasets/shapenet_car/statistics.yaml
+E         INFO [rawprep/统计/结束] 耗时=0.001秒
+E         INFO [rawprep/数据清单/开始] 状态=physical；归一化=未执行
+E         INFO [rawprep/数据清单/结束] 耗时=0.000秒
+E         INFO [rawprep/阶段/结束] 耗时=0.027秒
+E         INFO [trainprep/阶段/开始] 
+E         INFO [trainprep/阶段/结束] 耗时=0.012秒
+E         INFO [train/阶段/开始] 
+E         /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+E           warnings.warn(
+E         INFO [train/训练/进度] 轮次=1；更新=1；损失=3.4917778968811035；学习率=5e-05；耗时=0.01403487502830103；峰值内存=711884800；在线={'surface_pressure': 0.46552979946136475, 'volume_velocity': 3.0262482166290283}
+E         INFO [train/训练/进度] 轮次=2；更新=2；损失=3.1509299278259277；学习率=5e-05；耗时=0.011900291952770203；峰值内存=711884800；在线={'surface_pressure': 0.36138689517974854, 'volume_velocity': 2.7895431518554688}
+E         INFO [train/阶段/结束] 耗时=0.788秒
+E         INFO [post/阶段/开始] 
+E         ERROR [post/阶段/失败] 样本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒
+E         ERROR 运行失败：后处理需要固定推理结果，不能重新运行模型
+E         INFO [运行/结束] 状态=失败；成功=2；失败=0；未执行=0；耗时=0.829秒
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒\nERROR 运行失败：后处理需要固定推理结果，不能重新运行模型\nINFO [运行/结束] 状态=失败；成功=2；失败=0；未执行=0；耗时=0.829秒\n").returncode
+
+tests/integration/test_recipe_extensions.py:155: AssertionError</failure></testcase><testcase classname="tests.integration.test_recipe_extensions" name="test_extension_parameters_and_bad_output_fail_before_publish" time="3.336" /><testcase classname="tests.integration.test_recipe_extensions" name="test_transform_objective_metric_prediction_replacements" time="4.007"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_transform_objective_metri0/experiment/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_transform_objective_metri0/records/2026-09-15T18-37-07_d5cd06；生效配置=inputs/config.yaml&#10;  INFO [rawprep/阶段/开始] &#10;  INFO [rawprep/数据集/开始] root=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_transform_objective_metri0/raw&#10;  INFO [rawprep/数据集/选择结果] 样本总数=2；train=1；test=1&#10;  INFO [rawprep/数据集/结束] 耗时=0.005秒&#10;  INFO [rawprep/批量前处理/开始] 样本数=2&#10;  INFO [rawprep/批量前处理/进度] 样本=b；完成=2；总数=2；失败=0；未执行=0&#10;  INFO [rawprep/批量前处理/结束] 耗时=0.019秒&#10;  INFO [rawprep/统计/开始] 方法=reference；参数来源=/tmp/dojo-architecture-20260915/source/ai4e_contrib/application/datasets/shapenet_car/statistics.yaml&#10;  INFO [rawprep/统计/结束] 耗时=0.001秒&#10;  INFO [rawprep/数据清单/开始] 状态=physical；归一化=未执行&#10;  INFO [rawprep/数据清单/结束] 耗时=0.000秒&#10;  INFO [rawprep/阶段/结束] 耗时=0.028秒&#10;  INFO [trainprep/阶段/开始] &#10;  INFO [trainprep/阶段/结束] 耗时=0.013秒&#10;  INFO [train/阶段/开始] &#10;  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.&#10;    warnings.warn(&#10;  INFO [train/训练/进度] 轮次=1；更新=1；损失=0.0；学习率=5e-05；耗时=0.01126224995823577；峰值内存=710737920；在线={'custom': 0.0}&#10;  INFO [train/训练/进度] 轮次=2；更新=2；损失=0.0；学习率=5e-05；耗时=0.008067416958510876；峰值内存=710737920；在线={'custom': 0.0}&#10;  INFO [train/阶段/结束] 耗时=0.771秒&#10;  INFO [post/阶段/开始] &#10;  ERROR [post/阶段/失败] 样本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒&#10;  ERROR 运行失败：后处理需要固定推理结果，不能重新运行模型&#10;  INFO [运行/结束] 状态=失败；成功=2；失败=0；未执行=0；耗时=0.813秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒\nERROR 运行失败：后处理需要固定推理结果，不能重新运行模型\nINFO [运行/结束] 状态=失败；成功=2；失败=0；未执行=0；耗时=0.813秒\n&quot;).returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_transform_objective_metri0')
+
+    def test_transform_objective_metric_prediction_replacements(tmp_path):
+        """四类接口分别改变真实训练目标、评价结果和保存的物理预测。"""
+        folder, cfg = extension_case(tmp_path, "sampling")
+        ability = folder / "custom_abilities.py"
+        ability.write_text(
+            ability.read_text()
+            + """
+    from ai4e_contrib.ability.model.abupt.component import predict
+    
+    class Scale:
+        def __init__(self, factor=2.0):
+            self.factor = factor
+        def apply(self, value):
+            return value * self.factor
+        def inverse(self, value):
+            return value / self.factor
+    
+    def zero_objective(model, batch, config):
+        values = predict(model, batch["inputs"])
+        loss = sum(value.square().mean() for value in values.values()) * 0
+        return {"loss": loss, "losses": {"custom": loss}}
+    
+    def count_metric(model, batches, config, normalization):
+        count = sum(1 for batch in batches if predict(model, batch["inputs"]))
+        return {"loss": 7.0, "metrics": {"custom_count": count}}
+    
+    def constant_prediction(model, inputs):
+        return {key: value * 0 + 2 for key, value in predict(model, inputs).items()}
+    """
+        )
+        cfg["model"]["objective"] = {"target": "custom_abilities.zero_objective", "parameters": {}}
+        cfg["train"]["metric"] = {"target": "custom_abilities.count_metric", "parameters": {}}
+        cfg["trainprep"]["normalization"]["fields"]["surface_pressure"] = {
+            "method": "custom",
+            "target": "custom_abilities.Scale",
+            "parameters": {"factor": 2.0},
+        }
+        cfg["post"].update(query=False, evaluate=False)
+        cfg["post"]["prediction"] = {"target": "custom_abilities.constant_prediction", "parameters": {}}
+        cfg["pipeline"]["stages"].append("post")
+        (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
+        result = script(folder)
+&gt;       assert result.returncode == 0, result.stdout + result.stderr
+E       AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_transform_objective_metri0/experiment/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_transform_objective_metri0/records/2026-09-15T18-37-07_d5cd06；生效配置=inputs/config.yaml
+E         INFO [rawprep/阶段/开始] 
+E         INFO [rawprep/数据集/开始] root=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_transform_objective_metri0/raw
+E         INFO [rawprep/数据集/选择结果] 样本总数=2；train=1；test=1
+E         INFO [rawprep/数据集/结束] 耗时=0.005秒
+E         INFO [rawprep/批量前处理/开始] 样本数=2
+E         INFO [rawprep/批量前处理/进度] 样本=b；完成=2；总数=2；失败=0；未执行=0
+E         INFO [rawprep/批量前处理/结束] 耗时=0.019秒
+E         INFO [rawprep/统计/开始] 方法=reference；参数来源=/tmp/dojo-architecture-20260915/source/ai4e_contrib/application/datasets/shapenet_car/statistics.yaml
+E         INFO [rawprep/统计/结束] 耗时=0.001秒
+E         INFO [rawprep/数据清单/开始] 状态=physical；归一化=未执行
+E         INFO [rawprep/数据清单/结束] 耗时=0.000秒
+E         INFO [rawprep/阶段/结束] 耗时=0.028秒
+E         INFO [trainprep/阶段/开始] 
+E         INFO [trainprep/阶段/结束] 耗时=0.013秒
+E         INFO [train/阶段/开始] 
+E         /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+E           warnings.warn(
+E         INFO [train/训练/进度] 轮次=1；更新=1；损失=0.0；学习率=5e-05；耗时=0.01126224995823577；峰值内存=710737920；在线={'custom': 0.0}
+E         INFO [train/训练/进度] 轮次=2；更新=2；损失=0.0；学习率=5e-05；耗时=0.008067416958510876；峰值内存=710737920；在线={'custom': 0.0}
+E         INFO [train/阶段/结束] 耗时=0.771秒
+E         INFO [post/阶段/开始] 
+E         ERROR [post/阶段/失败] 样本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒
+E         ERROR 运行失败：后处理需要固定推理结果，不能重新运行模型
+E         INFO [运行/结束] 状态=失败；成功=2；失败=0；未执行=0；耗时=0.813秒
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...本=；原因=后处理需要固定推理结果，不能重新运行模型；耗时=0.000秒\nERROR 运行失败：后处理需要固定推理结果，不能重新运行模型\nINFO [运行/结束] 状态=失败；成功=2；失败=0；未执行=0；耗时=0.813秒\n").returncode
+
+tests/integration/test_recipe_extensions.py:228: AssertionError</failure></testcase><testcase classname="tests.integration.test_recipe_extensions" name="test_callable_reconstruction_and_custom_transform_contract" time="0.001" /><testcase classname="tests.integration.test_recipe_extensions" name="test_task_fork_preserves_local_extension" time="1.813" /><testcase classname="tests.integration.test_recipe_extensions" name="test_extension_comparison_is_scoped" time="0.002" /><testcase classname="tests.integration.test_recipe_extensions" name="test_field_step_removal_and_invalid_identity_state[remove_step]" time="1.726" /><testcase classname="tests.integration.test_recipe_extensions" name="test_field_step_removal_and_invalid_identity_state[identity]" time="1.723" /><testcase classname="tests.integration.test_recipe_extensions" name="test_field_step_removal_and_invalid_identity_state[state]" time="1.700" /><testcase classname="tests.integration.test_run_config_snapshot" name="test_generic_loader_and_snapshot_isolation[payload0]" time="0.006" /><testcase classname="tests.integration.test_run_config_snapshot" name="test_generic_loader_and_snapshot_isolation[payload1]" time="0.005" /><testcase classname="tests.integration.test_run_config_snapshot" name="test_discovered_source_is_report_not_config" time="0.125" /><testcase classname="tests.integration.test_task_assets" name="test_shared_reference_copy_and_change_detection" time="0.006" /><testcase classname="tests.integration.test_task_assets" name="test_copy_switches_and_execution_binding" time="0.062" /><testcase classname="tests.integration.test_task_configuration" name="test_preserve_configuration_and_task_record" time="0.019" /><testcase classname="tests.integration.test_task_configuration" name="test_replace_model_sections_removes_incompatible_old_tree" time="0.022" /><testcase classname="tests.integration.test_task_configuration" name="test_inspection_failure_keeps_keyerror_field_name" time="0.000" /><testcase classname="tests.integration.test_task_configuration" name="test_candidate_configuration_cannot_execute" time="0.017" /><testcase classname="tests.integration.test_task_configuration" name="test_export_model_preset_is_reusable_on_same_dataset" time="14.998" /><testcase classname="tests.integration.test_task_configuration" name="test_export_model_preset_rejects_empty_duplicate_and_stale" time="16.155" /><testcase classname="tests.integration.test_task_contracts" name="test_shared_identity_and_tampered_version" time="0.018" /><testcase classname="tests.integration.test_task_contracts" name="test_resume_uses_captured_code_and_keeps_version" time="1.148" /><testcase classname="tests.integration.test_task_contracts" name="test_cli_and_incompatible_quantity" time="0.384" /><testcase classname="tests.integration.test_task_contracts" name="test_explicit_crash_recovery_does_not_remove_registered_task" time="0.007" /><testcase classname="tests.integration.test_task_contracts" name="test_declared_missing_comparison_condition_is_not_available" time="0.288" /><testcase classname="tests.integration.test_task_documents" name="test_task_documents_and_entry_links" time="0.001" /><testcase classname="tests.integration.test_task_execution" name="test_execution_snapshot_version_identity_and_comparison" time="0.181" /><testcase classname="tests.integration.test_task_execution" name="test_failure_stop_unknown_and_incompatible" time="0.420" /><testcase classname="tests.integration.test_task_execution" name="test_script_start_failure_and_import_conflict" time="0.153" /><testcase classname="tests.integration.test_task_installation" name="test_wheel_install_outside_checkout" time="10.930" /><testcase classname="tests.integration.test_task_management" name="test_new_fork_version_tree_and_current_edit" time="0.033" /><testcase classname="tests.integration.test_task_management" name="test_concurrent_idempotency_and_failed_copy" time="0.021" /><testcase classname="tests.integration.test_task_management" name="test_path_gate_and_empty_entry" time="0.005" /><testcase classname="tests.integration.test_task_operation_provider" name="test_user_operation_runs_without_model_or_template_registration" time="0.095" /><testcase classname="tests.integration.test_task_operation_provider" name="test_missing_optional_operation_does_not_prevent_normal_run" time="0.152" /><testcase classname="tests.integration.test_task_operation_provider" name="test_explicit_empty_operations_do_not_restore_creation_defaults" time="0.017"><failure message="KeyError: 'directory'">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_explicit_empty_operations0')
+
+    def test_explicit_empty_operations_do_not_restore_creation_defaults(tmp_path):
+        """显式取消平台接入后，创建快照不能悄悄把操作重新启用。"""
+        from pathlib import Path
+    
+        source = recipe(tmp_path)
+        path = source / "task-entry.json"
+        entry = json.loads(path.read_text())
+        entry["operations"] = {"inspect": {"target": "user_adapter.inspect"}}
+        path.write_text(json.dumps(entry))
+        project = tmp_path / "project"
+        task.create_project(project)
+        item = task.new_task(project, "free", source=source)
+&gt;       copied = Path(item["directory"]) / "recipe"
+                      ^^^^^^^^^^^^^^^^^
+E       KeyError: 'directory'
+
+tests/integration/test_task_operation_provider.py:68: KeyError</failure></testcase><testcase classname="tests.integration.test_task_operation_provider" name="test_unknown_model_is_not_described_as_official_abupt" time="0.000" /><testcase classname="tests.integration.test_task_post_metrics" name="test_real_worker_multi_batch_export_and_immutable_inputs" time="6.979" /><testcase classname="tests.integration.test_task_post_metrics" name="test_revision_conflict_and_partial_field_failure" time="7.950" /><testcase classname="tests.integration.test_task_post_metrics" name="test_cancel_keeps_completed_rows_and_checks_changed_member" time="1.821" /><testcase classname="tests.integration.test_task_post_results" name="test_catalog_complete_and_noncolliding" time="1.793" /><testcase classname="tests.integration.test_task_post_results" name="test_missing_member_keeps_other_samples" time="3.576" /><testcase classname="tests.integration.test_task_post_results" name="test_corrupt_batch_state_keeps_other_batch" time="1.780" /><testcase classname="tests.integration.test_task_post_results" name="test_vector_header_and_missing_truth" time="5.352" /><testcase classname="tests.integration.test_task_recipe" name="test_formal_recipe_new_fork_train_post" time="8.605" /><testcase classname="tests.integration.test_train_checkpoint" name="test_snapshot_is_frozen_and_restores_rng" time="0.004" /><testcase classname="tests.integration.test_train_checkpoint" name="test_semantic_conflict_rejected_before_model_load[normalization]" time="0.002" /><testcase classname="tests.integration.test_train_checkpoint" name="test_semantic_conflict_rejected_before_model_load[data]" time="0.002" /><testcase classname="tests.integration.test_train_checkpoint" name="test_semantic_conflict_rejected_before_model_load[sampling]" time="0.002" /><testcase classname="tests.integration.test_train_checkpoint" name="test_semantic_conflict_rejected_before_model_load[source]" time="0.002" /><testcase classname="tests.integration.test_train_checkpoint" name="test_semantic_conflict_rejected_before_model_load[objectives]" time="0.002" /><testcase classname="tests.integration.test_train_checkpoint" name="test_ema_absent_reinitializes_from_model" time="0.002" /><testcase classname="tests.integration.test_train_checkpoint" name="test_ema_present_without_object_rejected" time="0.002" /><testcase classname="tests.integration.test_train_checkpoint" name="test_best_requires_strict_improvement" time="0.003" /><testcase classname="tests.integration.test_train_checkpoint" name="test_mps_checkpoint_replays_random_sequence" time="0.008" /><testcase classname="tests.integration.test_train_entry_init" name="test_gpu_maps_to_cuda_and_fails_when_unavailable" time="0.000" /><testcase classname="tests.integration.test_train_entry_init" name="test_recipe_train_creates_single_run_and_selects_abupt" time="0.157" /><testcase classname="tests.integration.test_train_loop" name="test_epoch_resume_and_updates" time="0.015" /><testcase classname="tests.integration.test_train_loop" name="test_loss_rejects_broadcast_and_weights" time="0.000" /><testcase classname="tests.integration.test_train_loop" name="test_checkpoint_failure_preserves_old" time="0.002" /><testcase classname="tests.integration.test_train_loop" name="test_training_bridge_preserves_effective_config" time="0.002" /><testcase classname="tests.integration.test_train_loop" name="test_precision_update_order_and_overflow_counters[False]" time="0.004" /><testcase classname="tests.integration.test_train_loop" name="test_precision_update_order_and_overflow_counters[True]" time="0.003" /><testcase classname="tests.integration.test_train_loop" name="test_initial_weights_freezing_and_two_weighted_losses" time="0.002" /><testcase classname="tests.integration.test_train_loop" name="test_device_and_clip_validation" time="0.000" /><testcase classname="tests.integration.test_train_loop" name="test_log_frequency_preserves_history_and_final_event" time="0.006" /><testcase classname="tests.integration.test_train_loop" name="test_disabled_evaluation_keeps_last_without_best" time="0.003" /><testcase classname="tests.integration.test_train_online_loss" name="test_online_window_averages_and_rejects_nonfinite" time="0.000" /><testcase classname="tests.integration.test_train_online_loss" name="test_accumulate_two_batches_then_epoch_flush" time="0.004" /><testcase classname="tests.integration.test_train_online_loss" name="test_flush_after_each_update_writes_items" time="0.003" /><testcase classname="tests.integration.test_train_online_loss" name="test_default_recipe_has_empty_update_interval_and_epoch_only_progress" time="0.015" /><testcase classname="tests.integration.test_train_online_loss" name="test_named_nonfinite_is_rejected" time="0.003" /><testcase classname="tests.integration.test_train_optim_align" name="test_optimizer_kinds_and_invalid_name" time="0.000" /><testcase classname="tests.integration.test_train_optim_align" name="test_warmup_cosine_rises_then_decays_and_resumes" time="0.001" /><testcase classname="tests.integration.test_train_optim_align" name="test_constant_scheduler_and_missing_total_updates" time="0.000" /><testcase classname="tests.integration.test_train_optim_align" name="test_accumulate_two_makes_one_effective_update" time="0.003" /><testcase classname="tests.integration.test_train_optim_align" name="test_ema_saved_on_tenth_epoch_not_on_last" time="0.014" /><testcase classname="tests.integration.test_train_optim_align" name="test_missing_and_extra_keys_warn_then_constraint_still_fails" time="0.000" /><testcase classname="tests.integration.test_train_recipe" name="test_prepare_uses_one_session_and_dry_run" time="0.141" /><testcase classname="tests.integration.test_train_recipe" name="test_materialized_roundtrip_and_frozen_record" time="0.131" /><testcase classname="tests.integration.test_train_recipe" name="test_materialization_failure_does_not_publish" time="0.120" /><testcase classname="tests.integration.test_train_recipe" name="test_real_recipe_fit_and_epoch_resume" time="13.415" /><testcase classname="tests.integration.test_train_recipe" name="test_script_probe_and_fit_check_have_no_training_artifacts" time="5.494" /><testcase classname="tests.integration.test_train_recipe" name="test_legacy_coordinate_method_still_prepares" time="0.127" /><testcase classname="tests.integration.test_train_recipe" name="test_real_recipe_read_failure_is_run_failure" time="2.782" /><testcase classname="tests.integration.test_train_resolved_config" name="test_partial_config_expands_defaults_and_writes_resolved" time="0.138" /><testcase classname="tests.integration.test_train_resolved_config" name="test_joint_validation_rejects_batch_and_sampling_conflict" time="0.000" /><testcase classname="tests.integration.test_trainprep_split" name="test_default_counts_use_original_lengths_and_zero_missing" time="0.000" /><testcase classname="tests.integration.test_trainprep_split" name="test_random_split_is_reproducible_and_original_keeps_members" time="0.000" /><testcase classname="tests.integration.test_trainprep_split" name="test_random_split_rejects_sum_mismatch_and_empty_train" time="0.000" /><testcase classname="tests.integration.test_trainprep_split" name="test_manifest_overlay_can_read_remapped_sample" time="0.003" /><testcase classname="tests.integration.test_trainprep_split" name="test_open_dataset_allows_train_only_manifest" time="0.001" /><testcase classname="tests.integration.test_trainprep_split" name="test_open_dataset_applies_random_split" time="0.002" /><testcase classname="tests.integration.test_trainprep_split" name="test_open_dataset_overlay_uses_stored_partitions" time="0.002" /><testcase classname="tests.integration.test_trainprep_split" name="test_open_dataset_rejects_empty_train_split" time="0.002" /><testcase classname="tests.integration.test_transolver_post" name="test_every_layer_and_decoded_block" time="0.011"><failure message="TypeError: 'int' object is not subscriptable">def test_every_layer_and_decoded_block():
+        """D1：独立原缓存网络逐层汇总，全部缓存及解码块通过固定容差。"""
+        ref = reference_module("Transolver_chunk_opt_matrix_mul_amortize.py")
+        parameters = {
+            "n_hidden": 16,
+            "n_layers": 2,
+            "n_head": 4,
+            "mlp_ratio": 2,
+            "slice_num": 4,
+            "space_dim": 12,
+            "fun_dim": 0,
+            "out_dim": 4,
+            "unified_pos": False,
+        }
+        torch.manual_seed(2)
+        model = construct(**parameters)
+        caching = ref.PhysicalStateCachingModel(**parameters).eval()
+        decoding = ref.FullMeshDecodingModel(**parameters).eval()
+        caching.load_state_dict(model.state_dict())
+        decoding.load_state_dict(model.state_dict())
+        chunks = [torch.randn(1, n, 12) for n in (9, 8, 8, 8)]
+        states = []
+        with torch.no_grad():
+            for layer in range(2):
+                num = den = None
+                for x in chunks:
+                    _, a, b = caching([x], states, layer, use_checkpoint=False)
+                    num = a if num is None else num + a
+                    den = b if den is None else den + b
+                states.append(num / (den[..., None] + 1e-5))
+            outputs = [decoding([x], states, use_checkpoint=False)[0] for x in chunks]
+        observed = []
+        component = SurfaceInference(model)
+&gt;       results = list(
+            component.predict(
+                lambda: ((i, {"features": x}) for i, x in enumerate(chunks)),
+                observer=lambda _, i, x: observed.append(x.detach().clone()),
+            )
+        )
+
+tests/integration/test_transolver_post.py:54: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py:40: in generator_context
+    response = gen.send(None)
+               ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;ai4e_contrib.ability.model.transolver3.inference.SurfaceInference object at 0x16a187f80&gt;
+chunks = &lt;function test_every_layer_and_decoded_block.&lt;locals&gt;.&lt;lambda&gt; at 0x16d52ff60&gt;
+observer = &lt;function test_every_layer_and_decoded_block.&lt;locals&gt;.&lt;lambda&gt; at 0x16d52f240&gt;
+query_chunk_size = None
+
+    @torch.no_grad()
+    def predict(self, chunks, *, observer=None, query_chunk_size=None):
+        """chunks 为可重新遍历的输入工厂，返回保留身份的归一化预测块。"""
+        cache = []
+        try:
+            for layer in range(self.layers):
+                numerator = denominator = None
+                for identity, inputs in chunks():
+                    tensor = inputs["features"].to(self.device)
+                    _, num, den = self.caching([tensor], cache, layer, use_checkpoint=False)
+                    numerator = num if numerator is None else numerator + num
+                    denominator = den if denominator is None else denominator + den
+                if numerator is None:
+                    raise ValueError("物理状态缓存没有输入块")
+                state = numerator / (denominator[..., None] + 1e-5)
+                cache.append(state)
+                if observer:
+                    observer("cache", layer, state)
+            for identity, inputs in chunks():
+                tensor = inputs["features"].to(self.device)
+                size = query_chunk_size if query_chunk_size is not None else tensor.shape[1]
+                if isinstance(size, bool) or not isinstance(size, int) or size &lt; 1:
+                    raise ValueError("查询块大小必须为正整数")
+                for start in range(0, tensor.shape[1], size):
+                    value = self.decoding([tensor[:, start:start+size]], cache, use_checkpoint=False)[0]
+&gt;                   yield identity[start:start+size], {"fields": value}
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E                   TypeError: 'int' object is not subscriptable
+
+/tmp/dojo-architecture-20260915/source/ai4e_contrib/ability/model/transolver3/inference.py:45: TypeError</failure></testcase><testcase classname="tests.integration.test_transolver_post" name="test_vtp_topology_and_fields" time="0.004" /><testcase classname="tests.integration.test_transolver_post" name="test_partial_delivery_and_missing_prediction" time="0.001" /><testcase classname="tests.integration.test_transolver_post" name="test_preflight_and_selection_collision" time="0.001" /><testcase classname="tests.integration.test_transolver_post" name="test_real_post_write_failure_and_retry" time="3.488"><failure message="AssertionError: INFO [运行/开始] 脚本=/Users/zonghui/work/new_code_project/AI4E_Dojo/tools/verification/transolver3/dojo.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_real_post_write_failure_a0/runs/2026-09-15T18-39-02_1227d7；生效配置=inputs/config.yaml&#10;  INFO [rawprep/阶段/开始] &#10;  INFO [rawprep/批量前处理/开始] 样本数=7&#10;  INFO [rawprep/批量前处理/进度] 样本=test/Sample002；完成=7；总数=7；失败=0；未执行=0&#10;  INFO [rawprep/批量前处理/结束] 耗时=0.051秒&#10;  INFO [rawprep/阶段/结束] 耗时=0.058秒&#10;  INFO [trainprep/阶段/开始] &#10;  INFO [trainprep/阶段/结束] 耗时=0.015秒&#10;  INFO [train/阶段/开始] &#10;  INFO [train/训练/进度] 轮次=1；更新=4；损失=1.0564307123422623；学习率=0.000505；耗时=0.013682666991371661；峰值内存=517570560&#10;  INFO [train/训练/进度] 轮次=2；更新=8；损失=0.8028525511423746；学习率=1e-05；耗时=0.010398708051070571；峰值内存=517570560&#10;  INFO [train/阶段/结束] 耗时=0.466秒&#10;  INFO [post/阶段/开始] &#10;  ERROR [post/predictions/失败] 样本=[{'sample_id': 'Sample001', 'index': 0, 'partition': 'test'}]；原因=slice(0, 6, None)&#10;  ERROR [post/阶段/失败] 样本=；原因=slice(0, 6, None)；耗时=1.026秒&#10;  ERROR 运行失败：slice(0, 6, None)&#10;  INFO [运行/结束] 状态=失败；成功=7；失败=0；未执行=0；耗时=1.573秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/Users/zonghui/work/n.../失败] 样本=；原因=slice(0, 6, None)；耗时=1.026秒\nERROR 运行失败：slice(0, 6, None)\nINFO [运行/结束] 状态=失败；成功=7；失败=0；未执行=0；耗时=1.573秒\n&quot;).returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_real_post_write_failure_a0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x16d5eae40&gt;
+
+    def test_real_post_write_failure_and_retry(tmp_path, monkeypatch):
+        """D4：真实HDF5写入失败保留首个交付，旧目录存在不能计入本次成功。"""
+        import copy
+        import os
+        import subprocess
+        import sys
+        from pathlib import Path
+    
+        from omegaconf import OmegaConf
+    
+        from ai4e_contrib.ability.model.transolver3 import component
+        from ai4e_contrib.application.datasets import nasa_crm
+        from ai4e_core.applications.aero_cfd.post import pointfields
+        from tests.transolver_assets import configuration
+    
+        cfg, path = configuration(tmp_path)
+        root = Path(__file__).resolve().parents[2]
+        result = subprocess.run(
+            [
+                sys.executable,
+                "-B",
+                str(root / "tools/verification/transolver3/dojo.py"),
+                "--config",
+                str(path),
+            ],
+            env={**os.environ, "OMP_NUM_THREADS": "1"},
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+&gt;       assert result.returncode == 0, result.stdout + result.stderr
+E       AssertionError: INFO [运行/开始] 脚本=/Users/zonghui/work/new_code_project/AI4E_Dojo/tools/verification/transolver3/dojo.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_real_post_write_failure_a0/runs/2026-09-15T18-39-02_1227d7；生效配置=inputs/config.yaml
+E         INFO [rawprep/阶段/开始] 
+E         INFO [rawprep/批量前处理/开始] 样本数=7
+E         INFO [rawprep/批量前处理/进度] 样本=test/Sample002；完成=7；总数=7；失败=0；未执行=0
+E         INFO [rawprep/批量前处理/结束] 耗时=0.051秒
+E         INFO [rawprep/阶段/结束] 耗时=0.058秒
+E         INFO [trainprep/阶段/开始] 
+E         INFO [trainprep/阶段/结束] 耗时=0.015秒
+E         INFO [train/阶段/开始] 
+E         INFO [train/训练/进度] 轮次=1；更新=4；损失=1.0564307123422623；学习率=0.000505；耗时=0.013682666991371661；峰值内存=517570560
+E         INFO [train/训练/进度] 轮次=2；更新=8；损失=0.8028525511423746；学习率=1e-05；耗时=0.010398708051070571；峰值内存=517570560
+E         INFO [train/阶段/结束] 耗时=0.466秒
+E         INFO [post/阶段/开始] 
+E         ERROR [post/predictions/失败] 样本=[{'sample_id': 'Sample001', 'index': 0, 'partition': 'test'}]；原因=slice(0, 6, None)
+E         ERROR [post/阶段/失败] 样本=；原因=slice(0, 6, None)；耗时=1.026秒
+E         ERROR 运行失败：slice(0, 6, None)
+E         INFO [运行/结束] 状态=失败；成功=7；失败=0；未执行=0；耗时=1.573秒
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/Users/zonghui/work/n.../失败] 样本=；原因=slice(0, 6, None)；耗时=1.026秒\nERROR 运行失败：slice(0, 6, None)\nINFO [运行/结束] 状态=失败；成功=7；失败=0；未执行=0；耗时=1.573秒\n").returncode
+
+tests/integration/test_transolver_post.py:178: AssertionError</failure></testcase><testcase classname="tests.integration.test_transolver_training" name="test_model_gradient_update[False]" time="0.009" /><testcase classname="tests.integration.test_transolver_training" name="test_model_gradient_update[True]" time="0.010" /><testcase classname="tests.integration.test_transolver_training" name="test_singleton_stride_fingerprint" time="0.000" /><testcase classname="tests.integration.test_transolver_training" name="test_resume_keeps_previous_best_when_validation_worsens" time="0.005" /><testcase classname="tests.integration.test_transolver_training" name="test_best_tie_policy_and_legacy_resume[False]" time="0.005" /><testcase classname="tests.integration.test_transolver_training" name="test_best_tie_policy_and_legacy_resume[True]" time="0.004" /><testcase classname="tests.integration.test_viz_installation" name="test_workbench_dependency_preflight" time="0.001" /><testcase classname="tests.integration.test_viz_installation" name="test_installed_wheel_has_resources_and_never_writes_installation" time="11.365" /><testcase classname="tests.integration.test_web_architecture" name="test_python_dependency_boundaries" time="0.386" /><testcase classname="tests.integration.test_web_architecture" name="test_microdomain_boundaries" time="0.044" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_four_cases_bind_with_revision_and_no_new_version[shapenet_car_abupt]" time="4.986" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_four_cases_bind_with_revision_and_no_new_version[shapenet_car_transolver3_surface]" time="4.945" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_four_cases_bind_with_revision_and_no_new_version[shapenet_car_transolver3_volume]" time="4.950" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_four_cases_bind_with_revision_and_no_new_version[nasa_crm_abupt]" time="5.321" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_four_cases_bind_with_revision_and_no_new_version[nasa_crm_transolver3]" time="5.282" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_shapenet_restart_fork_and_management_keep_binding" time="6.653" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_controlled_directory_rejects_escape_and_files[bad0]" time="3.362" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_controlled_directory_rejects_escape_and_files[bad1]" time="3.347" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_controlled_directory_rejects_escape_and_files[bad2]" time="3.353" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_controlled_directory_rejects_escape_and_files[bad3]" time="3.343" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_controlled_directory_rejects_escape_and_files[bad4]" time="3.337" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_nasa_requires_all_files_and_refresh_reports_missing" time="5.373" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_history_recipe_without_components_can_bind_directory" time="5.527" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_legacy_creation_accepts_bound_directory" time="3.662" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_binding_gate_prevents_preflight_and_execution[unbound]" time="3.545" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_binding_gate_prevents_preflight_and_execution[invalid]" time="5.615" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_selection_inside_allowed_root_but_outside_binding_rejected" time="12.748" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_legacy_bound_path_disappears_is_invalid" time="3.382" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_model_switch_preserves_controlled_dataset_binding[shapenet_car_abupt]" time="14.597" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_model_switch_preserves_controlled_dataset_binding[nasa_crm_abupt]" time="12.283" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_public_catalog_lists_complete_copies_and_binds_nasa" time="8.414" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_incomplete_nasa_copy_is_not_selectable" time="1.701" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_incompatible_public_dataset_rejected" time="3.342" /><testcase classname="tests.integration.test_web_dataset_binding" name="test_nasa_task_rejects_shapenet_model_preset" time="11.701" /><testcase classname="tests.integration.test_web_inference" name="test_catalog_hides_private_paths_and_merges_aliases" time="1.707" /><testcase classname="tests.integration.test_web_inference" name="test_result_uses_fixed_content_reference" time="1.740" /><testcase classname="tests.integration.test_web_inference" name="test_inference_cannot_bypass_fixed_batch" time="1.716" /><testcase classname="tests.integration.test_web_inference" name="test_user_recipe_still_requires_valid_fixed_inputs" time="1.686" /><testcase classname="tests.integration.test_web_post_metrics" name="test_job_protocol_hides_paths" time="1.717" /><testcase classname="tests.integration.test_web_post_results" name="test_result_catalog_does_not_list_files" time="1.709" /><testcase classname="tests.integration.test_web_post_results" name="test_result_files_list_and_download" time="1.703" /><testcase classname="tests.integration.test_web_post_results" name="test_listing_does_not_register_or_hide_siblings" time="1.811" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_register_visible_to_other_project" time="3.467" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_stage_inputs_keep_platform_name_not_run_duplicate" time="1.720" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_processed_datasets_list_newest_first" time="0.004" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_processed_datasets_missing_created_at_uses_mtime" time="0.003" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_processed_datasets_same_time_sorts_by_name" time="0.003" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_stage_inputs_platform_names_newest_first" time="1.749" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_describe_does_not_treat_dataset_id_as_saved_name" time="3.303" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_empty_name_rejects_execute" time="6.624" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_saved_name_passes_name_gate" time="12.556" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_same_name_different_digest_rejected" time="0.003" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_resolved_rawprep_and_workers_share_claim" time="0.000" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_vtkhdf_difference_explains_conflict" time="0.002" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_workers_do_not_change_processed_claim" time="0.003" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_same_claim_updates_pointer" time="0.002" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_name_conflict_rejects_execute" time="9.857" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_execute_reuses_name_when_only_workers_change" time="18.139" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_missing_manifest_is_unavailable" time="0.002" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_unavailable_dataset_cannot_be_selected" time="3.491" /><testcase classname="tests.integration.test_web_processed_datasets" name="test_resolved_formats_reject_empty_and_conflict" time="0.000" /><testcase classname="tests.integration.test_web_project_task" name="test_projects_tasks_configuration_restart" time="3.302"><failure message="AssertionError: {&quot;detail&quot;:[{&quot;type&quot;:&quot;extra_forbidden&quot;,&quot;loc&quot;:[&quot;body&quot;,&quot;processed_name_status&quot;],&quot;msg&quot;:&quot;Extra inputs are not permitted&quot;,&quot;input&quot;:{&quot;status&quot;:&quot;empty&quot;,&quot;message&quot;:&quot;正式执行前需要填写平台数据集名称。&quot;}}]}&#10;assert 422 == 200&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">platform = (&lt;starlette.testclient.TestClient object at 0x16b8dc710&gt;, 'dec57196e40c4b8f96f9818b189defbc', {'id': 'b0bb5b06e4224f7c...4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_projects_tasks_configurat0/raw')], web_dist=None))
+
+    def test_projects_tasks_configuration_restart(platform):
+        c, p, t, _, settings = platform
+        base = f"/api/v1/projects/{p}"
+        assert c.patch(base, json={"name": "renamed", "archived": True}).json()["archived"]
+        assert c.patch(base, json={"archived": False}).json()["name"] == "renamed"
+        cfg = c.get(base + f"/tasks/{t['id']}/rawprep").json()
+        cfg["rawprep"]["vtkhdf"] = True
+        saved = c.put(base + f"/tasks/{t['id']}/rawprep", json=cfg)
+&gt;       assert saved.status_code == 200, saved.text
+E       AssertionError: {"detail":[{"type":"extra_forbidden","loc":["body","processed_name_status"],"msg":"Extra inputs are not permitted","input":{"status":"empty","message":"正式执行前需要填写平台数据集名称。"}}]}
+E       assert 422 == 200
+E        +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code
+
+tests/integration/test_web_project_task.py:36: AssertionError</failure></testcase><testcase classname="tests.integration.test_web_project_task" name="test_unbound_template_create_does_not_weaken_execution" time="1.686" /><testcase classname="tests.integration.test_web_project_task" name="test_case_create_clears_template_manifest_placeholder" time="3.400" /><testcase classname="tests.integration.test_web_project_task" name="test_new_task_vtkhdf_follows_case_capability" time="18.660" /><testcase classname="tests.integration.test_web_rawprep" name="test_invalid_mapping_and_manual_count" time="3.275"><failure message="assert (422 == 400)&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">platform = (&lt;starlette.testclient.TestClient object at 0x3036c2d80&gt;, '8dd4b9fb343a4bc7a17613e5531a1fbd', {'id': '60d015bb07204689...4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_invalid_mapping_and_manua0/raw')], web_dist=None))
+
+    def test_invalid_mapping_and_manual_count(platform):
+        c, p, t, root, _ = platform
+        url = f"/api/v1/projects/{p}/tasks/{t['id']}/rawprep"
+        original = c.get(url).json()
+        mutations = [
+            ("fields", {"surface": {"renamed": {"components": 1}}}),
+            ("save_fields", ["custom_bundle"]),
+            ("geometry", []),
+            ("vtkhdf", "yes"),
+        ]
+        for key, value in mutations:
+            cfg = deepcopy(original)
+            cfg["rawprep"][key] = value
+            rejected = c.put(url, json=cfg)
+&gt;           assert rejected.status_code == 400 and "rawprep." in rejected.text
+E           assert (422 == 400)
+E            +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code
+
+tests/integration/test_web_rawprep.py:21: AssertionError</failure></testcase><testcase classname="tests.integration.test_web_rawprep_handoff" name="test_real_rawprep_to_existing_trainprep" time="5.480"><failure message="AssertionError: {&quot;detail&quot;:[{&quot;type&quot;:&quot;extra_forbidden&quot;,&quot;loc&quot;:[&quot;body&quot;,&quot;processed_name_status&quot;],&quot;msg&quot;:&quot;Extra inputs are not permitted&quot;,&quot;input&quot;:{&quot;status&quot;:&quot;empty&quot;,&quot;message&quot;:&quot;正式执行前需要填写平台数据集名称。&quot;}}]}&#10;assert 422 == 200&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">platform = (&lt;starlette.testclient.TestClient object at 0x303786d20&gt;, 'f3fa5cdfee094a05942e9c35090a2fa5', {'id': 'b960d551c65a4f6a...4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-258/test_real_rawprep_to_existing_0/raw')], web_dist=None))
+
+    def test_real_rawprep_to_existing_trainprep(platform):
+        c, p, t, root, _ = platform
+        files = copy_real(root)
+        url = f"/api/v1/projects/{p}/tasks/{t['id']}/rawprep"
+        bind = f"/api/v1/projects/{p}/tasks/{t['id']}/dataset"
+        current = c.get(bind).json()
+        bound = c.put(
+            bind,
+            json={
+                "expected_revision": current["revision"],
+                "sources": {"root": {"root": "data0", "path": ""}},
+            },
+        )
+        assert bound.status_code == 200, bound.text
+        cfg = c.get(url).json()
+        cfg["rawprep"]["vtkhdf"] = True
+        saved = c.put(url, json=cfg)
+&gt;       assert saved.status_code == 200, saved.text
+E       AssertionError: {"detail":[{"type":"extra_forbidden","loc":["body","processed_name_status"],"msg":"Extra inputs are not permitted","input":{"status":"empty","message":"正式执行前需要填写平台数据集名称。"}}]}
+E       assert 422 == 200
+E        +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code
+
+tests/integration/test_web_rawprep_handoff.py:46: AssertionError</failure></testcase><testcase classname="tests.integration.test_web_recipe_compatibility" name="test_user_recipe_changes_do_not_disable_platform[additional]" time="7.122" /><testcase classname="tests.integration.test_web_recipe_compatibility" name="test_user_recipe_changes_do_not_disable_platform[implementation]" time="7.069" /><testcase classname="tests.integration.test_web_recipe_compatibility" name="test_user_recipe_changes_do_not_disable_platform[format]" time="7.175" /><testcase classname="tests.integration.test_web_recipe_compatibility" name="test_stage_editor_preserves_existing_recipe_extensions" time="1.948" /><testcase classname="tests.integration.test_web_recipe_compatibility" name="test_legacy_loader_real_sample_executes_without_rewriting_task" time="21.366" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_browsing_never_completes_stages" time="1.883" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_check_revision_and_source_invalidation_preserve_history" time="1.902" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_errors_have_location_and_request_identity" time="1.858" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_trial_and_multistage_failure_do_not_claim_completion" time="0.001" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_stage_files_ignore_unlisted_siblings_and_reject_other_task" time="1.856" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_draft_manifest_revision_is_checked_before_listing" time="1.917" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_training_options_consume_declared_constraints" time="0.000" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_relative_binding_restores_from_task_configuration_directory" time="1.869" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_technical_inspection_error_is_not_shown_in_page" time="1.849" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_stage_save_atomically_persists_or_clears_controlled_bindings" time="1.862" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_manifest_extra_assets_and_zarr_are_atomic_entries" time="1.860" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_global_capabilities_do_not_claim_dataset_specific_fields" time="1.813" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_case_creation_snapshots_actual_example_scripts_and_entry" time="18.981" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_legacy_zarr_preview_pages_and_invalidates_cache" time="2.218" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_external_fixed_bindings_restore_and_report_missing_without_paths" time="1.913" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_template_manifest_placeholder_is_not_bound_source" time="1.892" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_existing_outside_root_manifest_stays_invalid" time="1.880" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_run_manifest_on_registered_root_is_listed" time="1.894" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_fixed_directory_archive_metadata_revision_and_escape" time="1.849" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_split_catalog_defaults_and_rejects_invalid_counts" time="0.000" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_field_matching_uses_model_roles_and_rejects_dimension_mismatch" time="0.000" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_trainprep_configuration_exposes_matching_and_rejects_bad_binding" time="3.770" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_registered_model_switch_replaces_defaults_and_preserves_identity[shapenet_car_abupt-transolver3]" time="18.993" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_registered_model_switch_replaces_defaults_and_preserves_identity[shapenet_car_transolver3_surface-abupt]" time="18.684" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_registered_model_switch_replaces_defaults_and_preserves_identity[nasa_crm_abupt-transolver3]" time="15.368" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_registered_model_switch_replaces_defaults_and_preserves_identity[nasa_crm_transolver3-abupt]" time="14.059" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_model_switch_rejects_cross_dataset_conflict_and_old_bindings" time="3.936" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_checkpoint_tags_are_not_binding_file_paths[last]" time="2.083" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_checkpoint_tags_are_not_binding_file_paths[best]" time="1.800" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_checkpoint_tags_are_not_binding_file_paths[latest]" time="1.791" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_model_switch_real_preparation_handoff[shapenet_car_abupt]" time="1.712"><skipped type="pytest.skip" message="真实模型换模专项通过 DOJO_MODEL_PICKER_REAL=1 显式运行">/Users/zonghui/work/new_code_project/AI4E_Dojo/tests/integration/test_web_stage_consistency.py:907: 真实模型换模专项通过 DOJO_MODEL_PICKER_REAL=1 显式运行</skipped></testcase><testcase classname="tests.integration.test_web_stage_consistency" name="test_model_switch_real_preparation_handoff[nasa_crm_abupt]" time="1.694"><skipped type="pytest.skip" message="真实模型换模专项通过 DOJO_MODEL_PICKER_REAL=1 显式运行">/Users/zonghui/work/new_code_project/AI4E_Dojo/tests/integration/test_web_stage_consistency.py:907: 真实模型换模专项通过 DOJO_MODEL_PICKER_REAL=1 显式运行</skipped></testcase><testcase classname="tests.integration.test_web_stage_consistency" name="test_shapenet_transolver_volume_variant_uses_volume_example" time="16.395" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_nasa_model_options_have_two_models_and_no_volume" time="7.012" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_saving_current_official_model_without_target_keeps_revision_tree" time="5.098" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_auto_trace_uses_formal_manifest_without_rewriting_bindings" time="6.595" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_auto_trace_prefers_recent_compatible_preparation" time="1.731" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_auto_trace_rejects_without_formal_manifest" time="6.550" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_auto_trace_falls_back_to_manifest_after_incompatible_switch" time="11.653" /><testcase classname="tests.integration.test_web_stage_consistency" name="test_train_execution_consumes_preparation_and_rejects_prepare_first" time="3.320" /></testsuite></testsuites>

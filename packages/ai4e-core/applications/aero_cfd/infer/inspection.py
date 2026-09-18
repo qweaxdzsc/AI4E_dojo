@@ -7,6 +7,7 @@ from pathlib import Path
 import torch
 
 from ai4e_core.abilities.data.source.manifest import ManifestIndex
+from ai4e_core.abilities.data.source.split import apply_declared_split, complete_split_buckets
 from ai4e_core.abilities.data.validate.fingerprint import fingerprint
 from ai4e_core.abilities.inference.randomness import preserve_randomness
 
@@ -17,7 +18,8 @@ def _inspect_inputs(path, *, preparation=None, config=None) -> dict:
     """返回 JSON 元信息及兼容性；来源缺失和语义冲突显式标记 invalid。
 
     config 接受已展开的用户配置或业务配置，不导入 recipe。无 config 时以
-    effective_config 为依据；本检查不执行模型，实际运行继续校验模型描述和数据内容。
+    effective_config 为依据。与检查点只比权重结构、数据规格、字段角色和采样方法，
+    不把模型页采样点数当成不兼容。本检查不执行模型，实际运行继续校验模型描述和数据内容。
     """
     result = {
         "path": str(Path(path).resolve()),
@@ -59,7 +61,7 @@ def _inspect_inputs(path, *, preparation=None, config=None) -> dict:
         record = json.loads(reference.read_text())
         digest = record.get("digest")
         payload = {k: v for k, v in record.items() if k != "digest"}
-        if record.get("version") == 1:
+        if record.get("version") == 1 or record.get("kind") == "physical_fields":
             actual = fingerprint(payload)
         else:
             from ai4e_core.applications.aero_cfd.trainprep.preparation import (
@@ -71,25 +73,33 @@ def _inspect_inputs(path, *, preparation=None, config=None) -> dict:
             raise ValueError("准备记录摘要不匹配")
         manifest = Path(record["manifest"])
         index = ManifestIndex(manifest)
+        if record.get("partitions"):
+            published = complete_split_buckets(record["partitions"])
+        else:
+            if record.get("split"):
+                apply_declared_split(index, {"trainprep": {"split": record["split"]}})
+            published = complete_split_buckets(index.partitions)
         result["preparation"] = {
             "path": str(reference.resolve()),
             "digest": digest,
             "manifest": str(manifest),
-            "partitions": index.partitions,
+            "partitions": published,
         }
         if contract.get("preparation") and contract["preparation"] != digest:
             raise ValueError("检查点与准备摘要不一致")
-        if record.get("version") == 1 and cfg:
-            declarations = {
-                key: cfg[key] for key in ("model", "trainprep", "sampling", "normalization")
-            }
-            declarations["component"] = record["declarations"]["component"]
-            if declarations != record["declarations"]:
-                raise ValueError("当前模型或准备声明与检查点不兼容")
         if frozen and config is not None:
-            for key in ("model", "trainprep", "sampling", "normalization"):
+            from ai4e_core.abilities.inference.rebuild import model_restore_contract
+            from ai4e_core.applications.aero_cfd.trainprep.preparation import sampling_methods
+
+            current_model = cfg.get("model") or {}
+            frozen_model = frozen.get("model") or {}
+            if model_restore_contract(current_model) != model_restore_contract(frozen_model):
+                raise ValueError("当前模型权重结构与检查点 effective_config 不兼容")
+            for key in ("trainprep", "normalization"):
                 if cfg.get(key) != frozen.get(key):
                     raise ValueError(f"当前 {key} 与检查点 effective_config 不兼容")
+            if sampling_methods(cfg.get("sampling")) != sampling_methods(frozen.get("sampling")):
+                raise ValueError("当前 sampling 与检查点 effective_config 不兼容")
             if cfg.get("components", {}).get("model") != frozen.get("components", {}).get("model"):
                 raise ValueError("当前模型组件与检查点 effective_config 不兼容")
         result["compatibility"] = {"status": "compatible", "reason": None}
@@ -152,14 +162,18 @@ def inspect_inputs(checkpoint, preparation, config, config_dir) -> dict:
             cfg = component.resolve(cfg, validate=False)
         cfg = resolve_paths(cfg, Path(config_dir) / "config.yaml")
         value = _inspect_inputs(checkpoint, preparation=preparation, config=cfg)
-        value["partitions"] = (value.get("preparation") or {}).get("partitions", {})
+        value["partitions"] = complete_split_buckets(
+            (value.get("preparation") or {}).get("partitions", {})
+        )
+        dataset = import_module(selected["dataset"]) if selected.get("dataset") else None
         if value["compatibility"]["status"] == "compatible":
-            dataset = import_module(selected["dataset"]) if selected.get("dataset") else None
             record = json.loads(Path(value["preparation"]["path"]).read_text())
             cfg["train"]["manifest"] = record["manifest"]
-            if record["version"] == 1 and (dataset is None or component is None):
-                raise ValueError("物理准备需要明确的数据和模型组件")
-            if record["version"] == 1:
+            if record.get("version") != 2:
+                raise ValueError(
+                    "preparation_requires_regeneration: 数据准备已改用现行配置方式，这份旧准备不能再训，请按现行数据准备重新生成。"
+                )
+            if record.get("kind") == "physical_fields":
                 from ai4e_core.applications.aero_cfd.trainprep.physical import consume
 
                 consume(cfg, dataset, component, value["preparation"]["path"])
@@ -172,27 +186,23 @@ def inspect_inputs(checkpoint, preparation, config, config_dir) -> dict:
                     prepare=component.prepare_inputs,
                     collate=component.collate,
                 )
-            else:
-                from ai4e_core.applications.aero_cfd.trainprep.preparation import (
-                    dataset_digest,
-                    declarations,
-                )
-
-                if (
-                    declarations(cfg) != record["declarations"]
-                    or dataset_digest(ManifestIndex(record["manifest"])) != record["dataset_digest"]
-                ):
-                    raise ValueError("旧锚点配置或数据与准备记录不一致")
         if value["compatibility"]["status"] == "compatible":
             from .catalog import describe_catalog
 
             value.update(describe_catalog(cfg, dataset_component=dataset))
+        else:
+            from .vtk_capability import describe_vtk_exports
+
+            value["vtk_exports"] = describe_vtk_exports(cfg, dataset_component=dataset)
         return value
     except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
+        from .vtk_capability import describe_vtk_exports
+
         return {
             "preparation": None,
             "partitions": {},
             "compatibility": {"status": "invalid", "reason": str(exc)},
+            "vtk_exports": describe_vtk_exports({}, dataset_component=None),
         }
 
 

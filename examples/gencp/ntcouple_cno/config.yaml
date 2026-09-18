@@ -1,0 +1,124 @@
+case: ntcouple_cno
+dataset:
+  name: ntcouple
+profile: scaled
+seed: 42
+run_root: /Users/zonghui/work/project_simulation/dojo_train/gencp/ntcouple_cno/dojo/runs
+data:
+  train_count: 256
+  val_count: 16
+fields:
+  neutron:
+    model:
+      backbone: cno
+      dataset_name: ntcouple
+      stage: neutron
+      x0_is_use_noise: true
+      in_dim: 3
+      out_dim: 1
+      in_size: 64
+      N_layers: 2
+      channel_multiplier: 4
+      N_res_neck: 1
+      latent_lift_proj_dim: 16
+    lr: 0.0001
+    eta_min: 1.0e-07
+    objective:
+      dataset: ntcouple
+      field: neutron
+      sigma: 0.0
+      clean_neutron: true
+      clean_solid: true
+  solid:
+    model:
+      backbone: cno
+      dataset_name: ntcouple
+      stage: solid
+      x0_is_use_noise: true
+      in_dim: 4
+      out_dim: 1
+      in_size: 64
+      N_layers: 2
+      channel_multiplier: 4
+      N_res_neck: 1
+      latent_lift_proj_dim: 16
+    lr: 0.0001
+    eta_min: 1.0e-07
+    objective:
+      dataset: ntcouple
+      field: solid
+      sigma: 0.0
+      clean_neutron: true
+      clean_solid: true
+  fluid:
+    model:
+      backbone: cno
+      dataset_name: ntcouple
+      stage: fluid
+      x0_is_use_noise: true
+      in_dim: 5
+      out_dim: 4
+      in_size: 64
+      N_layers: 2
+      channel_multiplier: 4
+      N_res_neck: 1
+      latent_lift_proj_dim: 16
+    lr: 0.0001
+    eta_min: 1.0e-07
+    objective:
+      dataset: ntcouple
+      field: fluid
+      sigma: 0.0
+      clean_neutron: true
+      clean_solid: true
+train:
+  updates: 1000
+  batch_size: 2
+  betas:
+  - 0.9
+  - 0.99
+  evaluate_every: 1000
+  single_points: 100
+  device: mps
+  seconds: 3600
+infer:
+  flow_steps: 100
+  seed: 43
+  device: mps
+  boundary: neutron_inpainting
+post:
+  plots: true
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - single
+  - infer
+  - post
+components:
+  model: ai4e_contrib.ability.model.gencp.adapters.construct
+  objective: ai4e_contrib.ability.constraint.gencp.objective.objective
+  neutron_condition: ai4e_contrib.ability.transform.gencp.conditions.neutron_condition
+  solid_condition: ai4e_contrib.ability.transform.gencp.conditions.solid_condition
+  fluid_condition: ai4e_contrib.ability.transform.gencp.conditions.fluid_condition
+data_root: /Users/zonghui/work/project_simulation/dojo_train/gencp/ntcouple_cno/dojo
+inputs:
+  rawprep:
+    source: /Users/zonghui/work/project_simulation/dojo_train/gencp/raw
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+    resume: null
+  infer:
+    preparation: null
+    checkpoint: null
+  single:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+rawprep: {}
+trainprep: {}
+model: {}

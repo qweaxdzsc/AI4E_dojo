@@ -12,7 +12,8 @@
 | --- | --- |
 | [`__init__.py`](../../../backend/modules/visPhysField/modules/dataOverview/__init__.py) | 二级包内部聚合 |
 | [`table.py`](../../../backend/modules/visPhysField/modules/dataOverview/table.py) | 二维表格数据组织 |
-| [`basicCharts.py`](../../../backend/modules/visPhysField/modules/dataOverview/basicCharts.py) | 散点、折线和柱状图数据规则 |
+| [`basicCharts.py`](../../../backend/modules/visPhysField/modules/dataOverview/basicCharts.py) | 散点、折线、柱状图与沿线弧长侧栏缩略图 |
+| [`lineChart.py`](../../../backend/modules/visPhysField/modules/dataOverview/lineChart.py) | Line Chart View 的 X/Y 轴、视口折线标记与 CSV |
 | [`multiDimensionalCloud.py`](../../../backend/modules/visPhysField/modules/dataOverview/multiDimensionalCloud.py) | 多维云图数据映射 |
 
 ## 前端文件

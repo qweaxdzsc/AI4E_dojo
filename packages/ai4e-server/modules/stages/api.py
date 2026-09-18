@@ -16,6 +16,8 @@ class ConfigurationEdit(BaseModel):
     model_config = ConfigDict(extra="forbid")
     expected_revision: str
     values: dict
+    edited_paths: list[list[str]] | None = None
+    removed_paths: list[list[str]] | None = None
     stage: str
     bindings: dict[str, dict | None] = {}
     target_case_id: str | None = None
@@ -56,6 +58,8 @@ def save(project: str, identity: str, body: ConfigurationEdit, request: Request)
         body.target_model,
         body.target_variant,
         body.target_preset,
+        body.edited_paths,
+        body.removed_paths,
     )
 
 
@@ -69,10 +73,25 @@ class ModelPresetCreate(BaseModel):
 
 @router.get("/model-options")
 def model_options(project: str, identity: str, request: Request):
-    """读取官方模型与同数据集用户预设。"""
+    """读取官方模型与同数据集用户预设目录，不描述全部候选。"""
     from ..capabilities import model_options as describe
 
     return describe(services(request), project, identity)
+
+
+@router.get("/model-option")
+def model_option(
+    project: str,
+    identity: str,
+    request: Request,
+    model: str | None = None,
+    variant: str | None = None,
+    preset: str | None = None,
+):
+    """点选后描述一份官方模型或预设的默认值与能力。"""
+    from ..capabilities import describe_model_option as describe
+
+    return describe(services(request), project, identity, model, variant, preset)
 
 
 @router.post("/model-presets")

@@ -68,6 +68,33 @@ def test_explicit_empty_and_false_not_replaced():
     }
 
 
+def test_user_formats_do_not_inherit_default_format():
+    profile = shapenet_car.describe_rawprep()
+    assert "format" not in profile["defaults"]
+    assert profile["defaults"]["formats"] == ["pt"]
+    cfg = resolve_rawprep(
+        {"components": {"dataset": shapenet_car.__name__}, "rawprep": {"formats": ["pt", "zarr"]}},
+        validate=True,
+    )
+    assert cfg["rawprep"]["formats"] == ["pt", "zarr"]
+    assert "format" not in cfg["rawprep"]
+    only_old = resolve_rawprep(
+        {"components": {"dataset": shapenet_car.__name__}, "rawprep": {"format": "zarr"}},
+        validate=True,
+    )
+    assert only_old["rawprep"]["format"] == "zarr"
+    assert "formats" not in only_old["rawprep"]
+    overwritten = resolve_rawprep(
+        {
+            "components": {"dataset": shapenet_car.__name__},
+            "rawprep": {"format": "pt", "formats": ["zarr"]},
+        },
+        validate=True,
+    )
+    assert overwritten["rawprep"]["formats"] == ["zarr"]
+    assert "format" not in overwritten["rawprep"]
+
+
 def test_empty_formats_rejected_and_dual_formats_recorded():
     profile = shapenet_car.describe_rawprep()
     raw = {**deepcopy(profile["defaults"]), "formats": []}

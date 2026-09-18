@@ -26,7 +26,7 @@ uv run python rawprep.py --config config.yaml --check
 
 默认 pipeline 依次执行 rawprep、trainprep、train、post。各脚本也可分别运行；train 默认实际拟合。rawprep 调用库既有 datapre 业务方法，文件名不约束库接口。trainprep 写出准备引用，冻结归一化和数据内容摘要，train 消费前校验；每次训练迭代仍动态采样。默认与官方 ShapeNet-Car 预设一致，保留未激活的特征投影参数，以保证初始化随机流一致。旧阶段名 `pre` 已移除，请改用 `rawprep`。
 
-配置只描述用户输入和实验选择：无需预填统计数值、准备摘要、将来的检查点或预测文件名。完整 pipeline 自动交接这些结果；独立运行 train/post 时，才用 `train.preparation` / `post.checkpoint` 指向已经存在的产物。`model.data_specs.output_dims` 是要预测什么的任务声明，不是要求填写未来预测值。
+配置只描述用户输入和实验选择：无需预填统计数值、准备摘要、将来的检查点或预测文件名。完整 pipeline 自动交接这些结果；独立运行 train/infer/post 时，分别用 `train.preparation`、`infer.checkpoint` 与 `infer.preparation`、`post.results` 指向已有产物。`model.data_specs.output_dims` 是要预测什么的任务声明，不是要求填写未来预测值。
 
 模型结构版本 3 修正了 RMSNorm、默认绝对位置编码、联合投影和初始化顺序。旧结构权重不能直接续训。逐阶段和完整参考训练证据见 [参考验收](../../.context/mvp/abupt-reference-acceptance.md)。
 
@@ -80,22 +80,16 @@ post 的 `post.random_stream` 默认 global；每次独立后处理从 `sampling
 
 多域 AB-UPT 使用结构版本 3：命名域、字段、局部特征、全局/几何条件由有序声明确定；固定布局多样本、无梯度推理缓存与分块查询已实现。输入对齐以锁定 Noether 实际处理器生成夹具为依据，不承诺网络数值、训练轨迹或精度等价。当前验证结果见 `.context/mvp/abupt-multidomain-acceptance.md`。
 
-新案例配置使用 `model.data_specs`、`model.supervision`、`trainprep`、`sampling.domains`。`post.py` 经现有会话执行：默认对 test 做锚点评估并保存预测，可选写出锚点点云，并按测试下标把预测画回原始网格。`post.checkpoint` 可空（同一 pipeline 下使用本次 `last`）或指向 `best`/`latest`/显式路径。默认只处理 `post.sample_indices=[0]`，查询块长为 `post.query_chunk_size=16384`。完整网格写在数据目录 `predictions/mesh_vtk/`，文件名为 `sample_XXXX_surface.vtp` / `sample_XXXX_volume.vtu`，不覆盖锚点目录。检查模式只核对接得上，不写网格。默认 pipeline 为 rawprep/trainprep/train/post；仅训练时可显式去掉 post。旧五键入口和旧模型检查点已移除。
+当前案例配置使用 `model.data_specs`、`model.supervision`、`trainprep` 和 `model.sampling.domains`。`infer.py` 消费准备与检查点，生成完整具名物理结果；`post.py` 只消费已经保存的结果。现有 pipeline 按 trainprep → train → infer → post 顺序交接；rawprep 独立执行或按需要加入阶段名单。
 
 ```bash
-uv run --all-packages --all-extras python recipes/aero_cfd/post.py --set post.checkpoint=/path/to/last.pt
+uv run python infer.py --set infer.checkpoint=/path/to/last.pt --set infer.preparation=/path/to/preparation.json
+uv run python post.py --set post.results=/path/to/physical-predictions.json --set post.analysis_enabled=true
 ```
 
-后处理同时保留按设计号的具名张量，并交付兼容 `sample_XXXX.pt` 张量包和 `vtk/sample_XXXX_{surface,volume}.vtp`。点云含独立顶点单元，无面或体连接；完整表面网格保留原始点/单元 ID，未引用顶点按面提取规则移除。实际全流程对照见 [端到端验收](../../.context/mvp/abupt-end-to-end-acceptance.md)。
+分析保存的图片、网格、采样和指标在 `paths.datasets.post`，运行记录由 writer 保存。`post.figures` 决定是否出图，空列表仅评价；切片、流线、剖面等参数在下方“脚本物理场分析”说明。失败保留已提交样本并发布 partial 清单，不把部分成功当作完整交付。再次分析默认拒绝覆盖，可选择新输出目录或明确设置 `post.overwrite_analysis=true`。
 
-
-后处理失败时，查看运行目录中的 `artifacts/post-progress.json`：评估、预测保存与网格查询分别列出状态、完成数和已提交路径。网格失败仍使整次运行失败，但已完成的锚点不会被抹去。只补网格时，在复制目录运行：
-
-```bash
-uv run --no-sync python post.py --set post.checkpoint=/已有运行/checkpoints/last.pt --set post.evaluate=false --set post.save_predictions=false --set post.export_vtk=false --set post.query=true
-```
-
-设备继续使用个人 config 中的选择；本命令不启动训练。默认禁止覆盖已有目标，若上次已提交部分网格，应先检查进度，再明确决定是否使用已有的 `post.overwrite` 选项。
+历史锚点预测、`sample_XXXX.pt` 与点云导出的证据见 [原端到端验收](../../.context/mvp/abupt-end-to-end-acceptance.md)，这些历史文件保持原样，不能当成当前 post 的执行说明。
 
 `feature_dim` 是布局声明；`trainprep.use_physics_features: false` 表示默认案例不输入物理特征。协议文件由运行生成，不是启动前要用户填写的内容。跨框架验证必须选择产物契约、同权重推理或独立训练目的，并检查实际数据、权重及几何/锚点输入；历史产物没有协议时只能确认有证据的契约，不能据此宣布数值等价。
 
@@ -127,7 +121,7 @@ run.launch 的 config_loader 接收案例加载函数；run 在执行前保存�
 
 ## 独立推理
 
-`infer.py` 显式配置恢复、预测、评价与保存。设置 `infer.checkpoint`、`infer.preparation`、`infer.samples` 后执行 `uv run python infer.py`；调用 pipeline 时选择包含 infer 的阶段名单。原生 post-only 需要固定结果；明确设置 `post.legacy_predict=true` 才进入历史预测兼容模式，页面不会自动开启。
+`infer.py` 显式配置恢复、预测、评价与保存。设置 `infer.checkpoint`、`infer.preparation`、`infer.samples` 后执行 `uv run python infer.py`；调用 pipeline 时选择包含 infer 的阶段名单。当前 post-only 需要固定结果；历史预测 API 保留兼容，新 post 不含模型调用。
 
 原生 infer 只解释 infer 参数；后处理以 `post.results` 或 `infer.results` 指向已经完成的 `physical-predictions.json`，不会再次预测。完整物理场五例交付同形预测与物理指标；旧锚点模板保留独立兼容结果，不冒充同一比较口径。进度为 `inference-progress.json`，所有运行文件由 writer 提交，数组写配置指定数据目录。
 
@@ -137,4 +131,18 @@ run.launch 的 config_loader 接收案例加载函数；run 在执行前保存�
 
 `infer.fields` 使用 `域:字段:分量`，默认全部真实输出；显式空列表拒绝。`infer.metrics` 默认相对L2、MAE、RMSE、Max Error、R²。选择向量的部分分量仅限制评价，保存保留完整向量。`save_predictions=false`时需关闭`export_vtk`，仍交付轻量指标；新`inference-results.json`与旧结果保持可读，新post不重跑模型。研究者可在物理输出后显式登记派生字段及选择，再配置评价和保存。
 
-普通用户逐场评价扩展示例见 `examples/recipe_extensions/inference_metrics/`。原生后处理缺少固定结果时拒绝；旧计算API保留，历史脚本按固定兼容指纹核验，不改写历史证据。
+普通用户逐场评价扩展示例见 `examples/recipe_extensions/inference_metrics/`。原生后处理缺少固定结果时拒绝；旧计算 API 保留；平台按公开操作声明调用，源码摘要仅作来源记录，不改写历史证据。
+
+## 脚本物理场分析
+
+安装 `ai4e-core[post]`。在已有固定推理结果上设置 `post.analysis_enabled: true`，`paths.datasets.post` 为独立输出根。`post.figures: []` 只算指标；选择 `surface/slice/clip/vectors/streamlines/contour/profile` 生成对应图片和网格。流线须设置 `streamline_seeds`，剖面须设置端点，等值面须设置值列表。
+
+`post.py` 的 `analyze_sample` 是可编辑流程正文，可插入步骤或替换绘图。训练中设置 `post.snapshot_every` 和 `post.snapshot_sample`；默认 0 不执行。数据按来源摘要及样本隔离，重复出图需选择新输出根或显式 `overwrite_analysis: true`。自定义函数和保存读回示例见 `examples/recipe_extensions/physical_visualization`。
+
+指标 JSON/CSV、剖面 CSV、PNG、VTP/VTU 和 manifest 均在数据目录。图形与原数值独立，原始结果只读；不需要启动 Web。
+
+## Task 项目共享交接
+
+通过 Task 托管时，原始处理正式产物归项目 shared，先填写 `dataset.processed_name`。新任务可绑定该名称后仅执行 trainprep/train/infer，无需重复 rawprep；同名重做必须在本次提交显式指定覆盖。独立运行 Python 脚本仍按原配置的输出路径执行。
+
+处理步骤仍在 rawprep.py 中可编辑。新增字段要完成声明、保存、共享清单读回和另一任务的字段绑定；采样和归一化不写回共享物理数据。扩展示例的 Task 入口声明共享输出与阶段输入，字段扩展通过两任务和仓库外 wheel 实跑验收。

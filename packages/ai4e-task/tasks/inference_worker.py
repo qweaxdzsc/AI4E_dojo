@@ -12,7 +12,7 @@ from ..templates.materialize import read_entry
 from .checkpoints import file_digest, freeze_checkpoint
 from .execution import start_captured_run, stop_run, submit_run
 from .inference import TERMINAL, _folder, list_inference_batches
-from .query import get_run, list_runs
+from .records import get_run, list_runs
 
 
 def _progress(run: dict) -> dict:
@@ -103,8 +103,7 @@ def coordinate(project: Path, task_id: str, identity: str) -> None:
                 write_json(folder / "request.json", request)
                 publish()
             code = folder / "code"
-            native = (code / "infer.py").is_file()
-            stage = "infer" if native else "post"
+            stage = "infer"
             entry = read_entry(code)
             declared = entry.get("inputs", {})
             for index, unit in enumerate(work):
@@ -115,28 +114,22 @@ def coordinate(project: Path, task_id: str, identity: str) -> None:
                     continue
                 params = {
                     **selection["options"],
-                    "checkpoint": checkpoint["fixed"]["path"],
                     "samples": unit["samples"],
                     "split": unit["split"],
                     **{k: selection[k] for k in ("fields", "metrics") if k in selection},
                 }
                 overrides = ["pipeline.stages=" + json.dumps([stage])]
                 overrides += [stage + "." + k + "=" + json.dumps(v) for k, v in params.items()]
-                overrides += ["train.preparation=" + json.dumps(checkpoint["preparation"]["path"])]
-                if native:
-                    overrides += [
-                        "infer.preparation=" + json.dumps(checkpoint["preparation"]["path"]),
-                        "infer.device=" + json.dumps(selection["device"]),
-                    ]
-                else:
-                    overrides += ["train.device=" + json.dumps(selection["device"])]
+                overrides += [
+                    "inputs.infer.preparation=" + json.dumps(checkpoint["preparation"]["path"]),
+                    "inputs.infer.checkpoint=" + json.dumps(checkpoint["fixed"]["path"]),
+                    "infer.device=" + json.dumps(selection["device"]),
+                ]
                 keys = sorted(
                     set(declared)
                     & {
-                        "train.preparation",
-                        "infer.preparation",
-                        "infer.checkpoint",
-                        "post.checkpoint",
+                        "inputs.infer.preparation",
+                        "inputs.infer.checkpoint",
                     }
                 )
                 run = submit_run(
@@ -153,7 +146,7 @@ def coordinate(project: Path, task_id: str, identity: str) -> None:
                         "batch_id": identity,
                         "device": selection["device"],
                         "checkpoint_revision": checkpoint["revision"],
-                        "execution_mode": "native" if native else "legacy_post",
+                        "execution_mode": "native",
                     },
                 )
                 value["children"].append(

@@ -73,6 +73,7 @@
 ## 对象工作台补充
 
 - `/api/phys/sessions/{id}/commands`：对象创建/参数应用/复制/重命名/删除、display、视图/布局/相机、Probe 与时间命令；浏览器不能通过命令传原始绑定。
+- `probe_visibility` 命令：传 `id`、`view` 与可选 `visible`/`label` 布尔值，仅改当前 Probe 的视图附件；`display` 的显隐也只改单对象，不传播父子。
 - `/api/phys/sessions/{id}/sources`：独立 Vis 的已登记资产追加。
 - `/internal/phys/sessions/{id}/sources`：可信宿主上下文追加，不经公共代理暴露。
 - 宿主消息 `source-list`、`source-append`、`session-open`：请求 ID 与来源窗口校验；重开由宿主重新绑定全部保存来源。

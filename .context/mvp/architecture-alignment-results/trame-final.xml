@@ -1,0 +1,8 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="50.781622999999996">
+<testsuite name="trame-responsiveness.spec.ts" timestamp="2026-09-15T10:57:54.005Z" hostname="" tests="2" failures="0" skipped="0" time="50.177" errors="0">
+<testcase name="真实原始处理 iframe：字段、独立显隐、切面草稿与应用响应" classname="trame-responsiveness.spec.ts" time="37.833">
+</testcase>
+<testcase name="真实后处理 iframe：导入、多视图、十次 Tab 切换与保存重开" classname="trame-responsiveness.spec.ts" time="12.344">
+</testcase>
+</testsuite>
+</testsuites>

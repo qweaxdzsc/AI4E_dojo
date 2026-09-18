@@ -6,7 +6,7 @@ name = "ai4e-viz"
 version = "0.1.0"
 description = "独立科学可视化应用、任务配置资产与静态表达"
 requires-python = ">=3.12"
-dependencies = ["ai4e-spec", "pyvista>=0.48", "matplotlib>=3.10", "torch>=2.0", "numpy>=2.0", "zarr>=3.1,<4", "h5py>=3.11"]
+dependencies = ["ai4e-spec", "pyvista>=0.48", "matplotlib>=3.10", "torch>=2.0", "numpy>=2.0", "zarr>=3.1,<4", "h5py>=3.11", "torchvista>=0.2.12,<0.3"]
 [tool.uv.sources]
 ai4e-spec = { workspace = true }
 [tool.hatch.build.targets.wheel]

@@ -7,6 +7,8 @@ import pytest
 import torch
 import yaml
 
+from ai4e_core.applications.aero_cfd.infer.configuration import DEFAULTS, OPTIONAL
+
 from tests.integration.test_cross_model_recipe import NAMES
 from tests.integration.test_recipe_explicit_equivalence import case
 from tests.integration.test_recipe_extensions import script
@@ -19,7 +21,28 @@ def test_native_infer_matches_old_post_and_consumes_results(tmp_path, name):
     cfg["run_root"] = str(tmp_path / "legacy-runs")
     cfg["paths"]["datasets"]["predictions"] = str(tmp_path / "legacy-predictions")
     (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
+    import shutil
+
+    reference = (
+        Path(__file__).resolve().parents[1] / "fixtures/recipe_before_explicit/physical_post.py"
+    )
+    shutil.copyfile(reference, folder / "reference_prediction.py")
+    original_post = (folder / "post.py").read_text()
+    (
+        folder / "post.py"
+    ).write_text("""from configuration import application_parameters, load_components
+from ai4e_core import run
+from reference_prediction import execute
+
+def post(cfg, trained=None):
+    component = load_components(cfg)
+    config = application_parameters(cfg)
+    if trained:
+        config['post']['checkpoint'] = trained['checkpoints']['last']
+    return execute(config, component.dataset, component.model, run.TrainingRun())
+""")
     completed = script(folder)
+    (folder / "post.py").write_text(original_post)
     assert completed.returncode == 0, completed.stdout + completed.stderr
     original = next(Path(cfg["run_root"]).iterdir())
     checkpoint = original / "checkpoints/last.pt"
@@ -36,7 +59,7 @@ def test_native_infer_matches_old_post_and_consumes_results(tmp_path, name):
     raw_prepared = inspect_inputs(checkpoint, preparation, cfg, folder)
     assert raw_prepared["compatibility"]["status"] == "compatible", raw_prepared
     cfg["infer"] = {
-        **{k: v for k, v in cfg["post"].items() if k != "legacy_predict"},
+        **{k: v for k, v in cfg["post"].items() if k in set(DEFAULTS) | OPTIONAL},
         "checkpoint": str(checkpoint),
         "preparation": str(preparation),
         "device": "cpu",
@@ -95,8 +118,10 @@ def test_anchor_template_has_independent_infer_and_fixed_post(tmp_path, mesh):
         "export_vtk": mesh,
     }
     import shutil
+
     shutil.copyfile(
-        Path(__file__).resolve().parents[2] / "examples/recipe_extensions/inference_metrics/metrics.py",
+        Path(__file__).resolve().parents[2]
+        / "examples/recipe_extensions/inference_metrics/metrics.py",
         folder / "user_metrics.py",
     )
     cfg.infer.sample_metric = {"target": "user_metrics.physical_metrics"}
@@ -112,9 +137,17 @@ def test_anchor_template_has_independent_infer_and_fixed_post(tmp_path, mesh):
     metadata = json.loads(manifest.read_text())
     assert set(metadata["domains"]) == {"surface"}
     if mesh:
-        assert set(metadata["meshes"]) == {"surface"}
+        assert "surface" in metadata["meshes"]
         assert (manifest.parent / metadata["meshes"]["surface"]["path"]).is_file()
         assert not (manifest.parent / "full_volume.vtu").exists()
+        records = [metadata["meshes"]["surface"], metadata["meshes"].get("surface_anchors") or {}]
+        fields = [name for record in records for name in (record.get("fields") or [])]
+        assert any(name.endswith(".prediction") or name in {"pred_pressure"} for name in fields)
+        assert any(name.endswith(".truth") or name in {"gt_pressure"} for name in fields)
+        assert metadata.get("vtk", {}).get("exported") is True
+    else:
+        assert metadata.get("vtk", {}).get("exported") is False
+        assert metadata.get("vtk", {}).get("reason")
     effective = yaml.safe_load((trained / "inputs/config.yaml").read_text())
     inputs = inspect_inputs(
         trained / "checkpoints/last.pt", trained / "artifacts/preparation.json", effective, folder

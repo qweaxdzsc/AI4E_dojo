@@ -56,7 +56,7 @@ test('真实CFD只评价、进程中断恢复、取消与任务隔离',async({pa
  await page.goto(url);const catalog=await (await request.get(base+'/checkpoints')).json();
  for(const id of c.checkpoint_ids){const cp=catalog.items.find((v:any)=>v.id===id);await page.getByRole('checkbox',{name:`选择检查点 ${cp.name} · ${cp.run_id}`,exact:true}).check();}
  for(const ref of c.sample_selection){await page.locator('[data-region="samples"]').getByRole('tab',{name:new RegExp(({train:'训练集',eval:'验证集',test:'测试集'} as any)[ref.split])}).click();await page.getByRole('checkbox',{name:'选择样本 '+ref.sample,exact:true}).check();}
- await page.getByRole('checkbox',{name:'保存数据',exact:true}).uncheck();await expect(page.getByRole('checkbox',{name:'导出网格',exact:true})).not.toBeChecked();await expect(page.getByRole('checkbox',{name:'导出网格',exact:true})).toBeDisabled();
+ await page.getByRole('checkbox',{name:'导出点云数据',exact:true}).uncheck();await page.getByRole('checkbox',{name:'导出VTK网格化数据',exact:true}).uncheck();
  await page.locator('[data-region="settings"] .ant-select').click();await page.locator('.ant-select-item-option').filter({hasText:'CPU'}).click();
  async function submit(){const p=page.waitForResponse(r=>r.url().endsWith('/inference/batches')&&r.request().method()==='POST');await page.getByRole('button',{name:'开始计算',exact:true}).click();const r=await p;expect(r.ok(),await r.text()).toBeTruthy();return (await r.json()).id as string;}
  async function state(id:string){return (await request.get(base+'/batches/'+id)).json();}
@@ -116,18 +116,24 @@ test('真实固定结果重算指标、Excel及预测张量下载',async({page,r
  const post=`/api/v1/projects/${c.project}/tasks/${c.task}/post`;
  let predictions=0;page.on('request',r=>{if(r.method()==='POST'&&r.url().endsWith('/inference/batches'))predictions++;});
  await page.goto(`/projects/${c.project}/tasks/${c.task}/post?batch=${batch}&tab=metrics`);
- await expect(page.getByRole('button',{name:'计算指标',exact:true})).toBeEnabled({timeout:90000});
- const submitted=page.waitForResponse(r=>r.url().endsWith('/post/metric-jobs')&&r.request().method()==='POST');
- await page.getByRole('button',{name:'计算指标',exact:true}).click();const response=await submitted;
- expect(response.ok(),await response.text()).toBeTruthy();const job=(await response.json()).id;
+ await expect(page.getByRole('tab',{name:'结果文件',exact:true})).toHaveAttribute('aria-selected','true');
+ await expect(page.getByRole('tab',{name:'指标',exact:true})).toHaveCount(0);
+ await expect(page.getByRole('button',{name:'计算指标',exact:true})).toHaveCount(0);
+ await expect(page.getByRole('button',{name:'批量加入三维物理场',exact:true})).toBeVisible({timeout:90000});
+ const catalog=await (await request.get(post+'/results')).json();
+ const items=catalog.items.filter((i:any)=>i.batch_id===batch&&i.evaluable);
+ const fields=[...new Set(items.flatMap((i:any)=>i.fields.filter((f:any)=>f.default).map((f:any)=>f.id)))];
+ const submitted=await request.post(post+'/metric-jobs',{data:{results:items.map((i:any)=>({id:i.id,revision:i.revision})),fields,metrics:['mae']}});
+ expect(submitted.ok(),await submitted.text()).toBeTruthy();const job=(await submitted.json()).id;
  let value:any;await expect.poll(async()=>{value=await (await request.get(post+'/metric-jobs/'+job)).json();return value.status;},{timeout:90000,intervals:[500]}).toBe('succeeded');
  expect(value.rows).toHaveLength(6);expect(new Set(value.rows.map((r:any)=>r.split)).size).toBe(3);
  for(const row of value.rows){const original=previous.results.items.find((i:any)=>i.run_id===row.run_id&&i.sample===row.sample);
  // 评价run与预测run分别记录；用checkpoint修订、分片和样本定位原固定值。
  const source=original||previous.results.items.find((i:any)=>i.checkpoint.revision===row.checkpoint.revision&&i.split===row.split&&i.sample===row.sample);
  expect(source).toBeTruthy();const metric=source.metric_records.find((r:any)=>r.field_id===row.field_id);expect(row.values.mae).toBeCloseTo(metric.values.mae,12);}
- await expect(page.locator('.post-metric-status')).toContainText('计算完成');
- await page.getByRole('button',{name:'导出 ▾',exact:true}).click();const pending=page.waitForEvent('download');await page.getByRole('menuitem',{name:'导出 Excel',exact:true}).click();await (await pending).saveAs(output+'/post-recalculated.xlsx');
+ const exported=await request.post(post+'/metric-jobs/'+job+'/exports',{data:{format:'xlsx'}});
+ expect(exported.ok(),await exported.text()).toBeTruthy();
+ writeFileSync(output+'/post-recalculated.xlsx',Buffer.from(await exported.body()));
  await page.goto(`/projects/${c.project}/tasks/${c.task}/infer`);await page.evaluate(({key,batch})=>sessionStorage.setItem(key,batch),{key:`dojo.infer.${c.project}.${c.task}`,batch});await page.reload();
  await page.locator('#stage-handoff summary').click();const row=page.locator('#stage-handoff tbody tr').filter({hasText:'.prediction.pt'}).first();
  const download=page.waitForEvent('download');await row.getByRole('link',{name:'下载',exact:true}).click();const file=await download;await file.saveAs(output+'/prediction-array.pt');expect(await file.failure()).toBeNull();

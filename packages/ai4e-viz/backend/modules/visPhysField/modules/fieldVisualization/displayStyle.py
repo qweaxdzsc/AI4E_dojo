@@ -1,4 +1,4 @@
-"""透明度、面/网格模式、光照和阴影业务规则。"""
+"""透明度、面/网格模式、对象光照开关；场景默认灯由 visEngine Light Kit 提供。"""
 
 from dataclasses import dataclass
 

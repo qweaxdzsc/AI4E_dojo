@@ -27,6 +27,7 @@ export interface Catalog {
 export interface Batch {
   id: string;
   name?: string;
+  created_at?: string;
   status: string;
   total?: number;
   completed?: number;
@@ -48,9 +49,11 @@ export interface Result {
   run_id: string;
   checkpoint: any;
   sample: string;
+  sample_id?: string;
   split?: string;
   files: ResultFile[];
   metrics: any;
+  vtk?: { exported: boolean; reason?: string | null; kind?: string; sample_id?: string };
 }
 export type { InferenceFieldDescription as Field, InferenceMetricDescription as Metric, InferenceStatistic as Statistic } from "../../infrastructure/contracts/platform.generated";
 import type { InferenceStatistic as Statistic } from "../../infrastructure/contracts/platform.generated";
@@ -72,6 +75,8 @@ export interface BatchRequest {
     evaluate: boolean;
     save_predictions: boolean;
     export_vtk: boolean;
+    export_pointcloud: boolean;
+    export_mesh: boolean;
     query_chunk_size: number;
   };
   idempotency_key: string;

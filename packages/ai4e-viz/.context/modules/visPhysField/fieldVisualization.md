@@ -16,8 +16,8 @@
 | [`vectorField.py`](../../../backend/modules/visPhysField/modules/fieldVisualization/vectorField.py) | 矢量图业务规则 |
 | [`cutAnalysis.py`](../../../backend/modules/visPhysField/modules/fieldVisualization/cutAnalysis.py) | 切面、流线、等值面和等高线分析；流线可另交种子网格 |
 | [`probe.py`](../../../backend/modules/visPhysField/modules/fieldVisualization/probe.py) | Probe 查询与取值规则 |
-| [`colorMapping.py`](../../../backend/modules/visPhysField/modules/fieldVisualization/colorMapping.py) | 色带、层数与范围配置 |
-| [`displayStyle.py`](../../../backend/modules/visPhysField/modules/fieldVisualization/displayStyle.py) | 透明度、面/网格、光照和阴影样式 |
+| [`colorMapping.py`](../../../backend/modules/visPhysField/modules/fieldVisualization/colorMapping.py) | 色带、层数与范围配置；自定义范围允许最小等于最大 |
+| [`displayStyle.py`](../../../backend/modules/visPhysField/modules/fieldVisualization/displayStyle.py) | 透明度、面/网格/Surface LIC、对象光照开关；场景灯由 visEngine Light Kit 提供 |
 | [`timeline.py`](../../../backend/modules/visPhysField/modules/fieldVisualization/timeline.py) | 时序播放命令与状态 |
 | [`timelineAnimation.py`](../../../backend/modules/visPhysField/modules/fieldVisualization/timelineAnimation.py) | Miller 时序拓扑复用和动画控制 |
 | [`animation.py`](../../../backend/modules/visPhysField/modules/fieldVisualization/animation.py) | 动画录制业务配置 |
@@ -31,4 +31,4 @@
 | [`hooks/useFieldView.js`](../../../frontend/src/modules/visPhysField/modules/fieldVisualization/hooks/useFieldView.js) | 通过一级 usePhysField 编排视图命令 |
 | [`components/ViewControls.jsx`](../../../frontend/src/modules/visPhysField/modules/fieldVisualization/components/ViewControls.jsx) | 当前视角和场显示控制面板 |
 
-测试：[`test_vis_phys_field.py`](../../../backend/tests/modules/test_vis_phys_field.py)、[`test_miller_animation.py`](../../../backend/tests/test_miller_animation.py)、前端契约与 Trame E2E。
+测试：[`test_vis_phys_field.py`](../../../backend/tests/modules/test_vis_phys_field.py)、[`test_miller_animation.py`](../../../backend/tests/test_miller_animation.py)、[`test_phys_display_settings.py`](../../../backend/tests/modules/test_phys_display_settings.py)、[`test_phys_filters.py`](../../../backend/tests/modules/test_phys_filters.py)、[`test_phys_interaction.py`](../../../backend/tests/modules/test_phys_interaction.py)、前端契约与 Trame E2E。一级工作台还负责 LIC 画法、皱折切面、流线线/圆管显示与 Probe 表，实现在 `rendering.py` / `scene.py` / `trameUI/`。流线草稿本期不提供拖种子手柄。LIC 换着色场后 mapper 使用新标量，方向向量不随着色场丢掉。

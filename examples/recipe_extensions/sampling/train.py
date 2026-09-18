@@ -8,15 +8,15 @@ from trainprep import trainprep
 
 from ai4e_core import run
 from ai4e_core.applications.aero_cfd.train import fitting
-from ai4e_core.run.training import TrainingRun
+from ai4e_core.run import TrainingRun
 
 
 def train(cfg, prepared=None):
     """缺少准备引用时显式调用同一准备阶段，不隐藏另一套准备链。"""
     components = load_components(cfg)
     session = TrainingRun()
-    config = application_parameters(cfg)
-    reference = prepared or cfg.train.get("preparation")
+    config = application_parameters(cfg, session=run.TrainingRun())
+    reference = prepared if prepared is not None else cfg.inputs.train.get("preparation")
     if session.dry_run or cfg.train.get("mode", "fit") in {"probe", "prepare"}:
         return fitting.check_or_prepare(
             config,
@@ -27,7 +27,7 @@ def train(cfg, prepared=None):
             public_config=cfg,
         )
     if reference is None:
-        reference = run.stage("trainprep", trainprep, cfg)
+        raise ValueError("train 需要显式 inputs.train.preparation；请先执行 trainprep")
     job = fitting.open_training(
         config,
         session,
@@ -38,11 +38,11 @@ def train(cfg, prepared=None):
         collate=components.model.collate,
         source=components.model.SOURCE,
     )
-    job = fitting.build_model(job, settings=cfg.model)
+    job = fitting.build_model(job, settings=config["model"])
     job = fitting.configure_objectives(job, settings=cfg.model.get("supervision"))
     job = fitting.configure_optimization(job, settings=cfg.train)
     job = fitting.configure_evaluation(job, settings=cfg.train)
-    job = fitting.configure_resume(job, checkpoint=cfg.train.get("resume"))
+    job = fitting.configure_resume(job, checkpoint=cfg.inputs.train.get("resume"))
     return fitting.execute_training(job)
 
 

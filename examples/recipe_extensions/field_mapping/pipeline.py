@@ -1,17 +1,18 @@
-"""四阶段流水线：显式交接 rawprep、trainprep、train 与 post 的结果。"""
+"""显式流水线：交接 rawprep、trainprep、train、infer 与固定结果 post。"""
 
 import sys
 
 sys.dont_write_bytecode = True
 
 from configuration import load_configuration
+from infer import infer
 from post import post
 from rawprep import rawprep
 from train import train
 from trainprep import trainprep
 
 from ai4e_core import run
-from ai4e_core.run.training import TrainingRun
+from ai4e_core.run import TrainingRun
 
 
 def pipeline(cfg):
@@ -35,6 +36,8 @@ def pipeline(cfg):
         prepared = run.stage("trainprep", trainprep, cfg, dataset)
     if "train" in names:
         result = run.stage("train", train, cfg, prepared)
+    if "infer" in names:
+        result = run.stage("infer", infer, cfg, result)
     if "post" in names:
         result = run.stage("post", post, cfg, result)
     return result if result is not None else prepared if prepared is not None else dataset

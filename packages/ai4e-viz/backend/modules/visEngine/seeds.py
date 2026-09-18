@@ -4,7 +4,6 @@ import math
 
 import vtk
 
-
 SEED_TYPES = ("line", "sphere", "plane", "surface")
 
 
@@ -78,9 +77,7 @@ def _plane_corners(origin, normal, width, height):
         normal[0] * tangent[1] - normal[1] * tangent[0],
     ]
     origin = _vector(origin, [0, 0, 0])
-    start = [
-        origin[i] - 0.5 * width * tangent[i] - 0.5 * height * bitangent[i] for i in range(3)
-    ]
+    start = [origin[i] - 0.5 * width * tangent[i] - 0.5 * height * bitangent[i] for i in range(3)]
     point1 = [start[i] + width * tangent[i] for i in range(3)]
     point2 = [start[i] + height * bitangent[i] for i in range(3)]
     return start, point1, point2
@@ -179,7 +176,7 @@ def sample_seed_points(mesh, count: int):
     count = max(1, min(1000, int(count)))
     points = vtk.vtkPoints()
     step = 1 if total <= count else total / count
-    taken = total if total <= count else count
+    taken = min(total, count)
     for index in range(taken):
         points.InsertNextPoint(source.GetPoint(min(total - 1, int(index * step))))
     poly = vtk.vtkPolyData()
@@ -207,9 +204,7 @@ def list_named_regions(mesh) -> list[dict]:
                 if not name or (association, array_name, name) in seen:
                     continue
                 seen.add((association, array_name, name))
-                regions.append(
-                    {"name": name, "association": association, "array": array_name}
-                )
+                regions.append({"name": name, "association": association, "array": array_name})
     return regions
 
 
@@ -270,6 +265,10 @@ def build_seed_source(params: dict, seed_mesh=None):
         source.SetRadius(max(0.0, float(params.get("seed_radius", 1))))
         source.SetNumberOfPoints(count)
         source.SetDistributionToShell()
+        # 使用独立固定序列，预览与正式积分必须得到同一组球面起点。
+        sequence = vtk.vtkMinimalStandardRandomSequence()
+        sequence.SetSeed(1)
+        source.SetRandomSequence(sequence)
         return _polydata_from_source(source)
     if kind == "plane":
         width = max(1e-6, float(params.get("seed_width", 1)))
@@ -282,7 +281,7 @@ def build_seed_source(params: dict, seed_mesh=None):
         )
         axis_u = [point1[i] - origin[i] for i in range(3)]
         axis_v = [point2[i] - origin[i] for i in range(3)]
-        columns = max(1, int(round(math.sqrt(count))))
+        columns = max(1, round(math.sqrt(count)))
         rows = max(1, math.ceil(count / columns))
         points = vtk.vtkPoints()
         verts = vtk.vtkCellArray()

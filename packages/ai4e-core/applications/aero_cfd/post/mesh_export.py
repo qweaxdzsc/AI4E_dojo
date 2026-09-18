@@ -7,6 +7,7 @@ from ai4e_core.abilities.data.save.arrays import atomic_path, save_json
 from ai4e_core.abilities.data.save.store import load_named_tensor
 from ai4e_core.abilities.postproc.comparison import attach_valid_mesh, surface
 from ai4e_core.abilities.postproc.coordinate_space import coordinate_space
+from ai4e_core.applications.aero_cfd.infer.vtk_export import sample_identity, stamp_mesh_identity
 
 
 def export_prediction_meshes(config, dataset_component, manifest_path, *, committed=None):
@@ -33,7 +34,9 @@ def export_prediction_meshes(config, dataset_component, manifest_path, *, commit
             for key in declaration["targets"].values()
             for suffix in (".prediction", ".truth")
         }
-        fields.update({d["field"]: read(d["field"]) for d in declaration.get("derived_fields", {}).values()})
+        fields.update(
+            {d["field"]: read(d["field"]) for d in declaration.get("derived_fields", {}).values()}
+        )
         original = dataset_component.comparison_mesh(
             config, metadata["identity"]["sample"], domain, points
         )
@@ -63,6 +66,8 @@ def export_prediction_meshes(config, dataset_component, manifest_path, *, commit
             writer.SetDataModeToAppended()
             if writer.Write() != 1 or not temporary.stat().st_size:
                 raise OSError(f"真实预测网格写出失败: {destination}")
+        identity = sample_identity(metadata, fallback=root.name)
+        stamp_mesh_identity(destination, identity)
         result[domain] = {
             "path": filename,
             "point_count": output.GetNumberOfPoints(),
@@ -74,7 +79,12 @@ def export_prediction_meshes(config, dataset_component, manifest_path, *, commit
             "coordinate_space": space,
             "entity_set": declaration.get("entity_set"),
             "topology": declaration.get("topology"),
-            "units": {**declaration.get("units", {}), **{name: d["unit"] for name, d in declaration.get("derived_fields", {}).items()}},
+            "sample_id": identity["sample_id"],
+            "source_sample_id": identity["source_sample_id"],
+            "units": {
+                **declaration.get("units", {}),
+                **{name: d["unit"] for name, d in declaration.get("derived_fields", {}).items()},
+            },
         }
         save_json(manifest_path, metadata)
         if committed:

@@ -126,6 +126,66 @@ class RunWriter:
         """
         self._write_json(self.run_dir / "summary.json", summary)
 
+    def record_asset(
+        self, name: str, path: str | Path, *, kind: str, stage: str,
+        dependencies=(), semantics: dict | None = None, bundle_root: str | Path | None = None,
+    ) -> Path:
+        """提交资产实际摘要及依赖摘要；同名更新只允许同一位置。"""
+        from ai4e_spec.artifacts.indexes import validate_asset_record
+
+        from .indexes import content_digest
+
+        source = Path(path).resolve()
+        refs = [str(Path(p).resolve()) for p in dependencies]
+        record = {
+            "name": name, "kind": kind, "stage": stage, "path": str(source),
+            "digest": content_digest(source), "dependencies": refs,
+            "dependency_digests": {p: content_digest(p) for p in refs},
+            "semantics": semantics or {},
+        }
+        if bundle_root is not None:
+            root = Path(bundle_root).resolve()
+            if not root.is_dir() or any(not Path(p).is_relative_to(root) for p in [str(source), *refs]):
+                raise ValueError("asset_bundle_members_outside_root")
+            # 发布者保证实际消费只使用包内相对引用；writer 不解释科学清单。
+            record["bundle"] = {"root": str(root), "digest": content_digest(root)}
+        validate_asset_record(record)
+        return self._update_index("assets", f"{stage}/{name}", record)
+
+    def record_metric(
+        self, name: str, value: float, *, stage: str, semantics: dict, assets,
+    ) -> Path:
+        """登记科学口径与真实来源，不从领域报告猜测指标位置。"""
+        from ai4e_spec.artifacts.indexes import validate_metric_record
+
+        from .indexes import content_digest
+
+        refs = [str(Path(p).resolve()) for p in assets]
+        record = {"name": name, "value": value, "stage": stage,
+                  "semantics": semantics, "assets": refs,
+                  "asset_digests": {p: content_digest(p) for p in refs}}
+        validate_metric_record(record)
+        # 拒绝不可序列化或非有限的嵌套语义，不使用 default=str 掩盖配置错误。
+        json.dumps(record, allow_nan=False)
+        return self._update_index("metrics", f"{stage}/{name}", record)
+
+    def _update_index(self, kind: str, key: str, record: dict) -> Path:
+        """唯一会话内增量原子提交公共索引。"""
+        from ai4e_spec.artifacts.indexes import INDEX_VERSION
+
+        folder = self.run_dir / "artifacts"
+        folder.mkdir(exist_ok=True)
+        target = folder / f"{kind}.json"
+        index = json.loads(target.read_text()) if target.exists() else {
+            "schema_version": INDEX_VERSION, "items": {},
+        }
+        old = index["items"].get(key)
+        if kind == "assets" and old and old["path"] != record["path"]:
+            raise ValueError(f"asset_name_conflict: {key}")
+        index["items"][key] = record
+        self._write_json(target, index)
+        return target
+
     def write_provenance(self, context: dict) -> None:
         """在计算前原子保存完整版本及来源；task 无需回写 run。"""
         self._write_json(self.run_dir / "lineage.json", context)
@@ -144,13 +204,14 @@ class RunWriter:
     def attach_log(self, logger: logging.Logger) -> logging.Handler:
         """创建并连接运行日志写入方，调用方负责在 finally 关闭。"""
         handler = logging.FileHandler(self.log_path, encoding="utf-8")
+        handler.setLevel(logging.INFO)
         handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
         logger.setLevel(logging.INFO)
         logger.addHandler(handler)
         return handler
 
     def attach_logs(self, logger: logging.Logger) -> list[logging.Handler]:
-        """按事件元信息筛选控制台摘要；能力详情和堆栈分别写入独占文件。"""
+        """按事件元信息筛选控制台摘要；默认不写 debug 循环原子。"""
 
         class Readable(logging.Formatter):
             def formatException(self, exc_info):
@@ -166,14 +227,18 @@ class RunWriter:
 
         class Console(logging.Filter):
             def filter(self, record):
+                if record.levelno >= logging.ERROR:
+                    return True
+                if record.levelno < logging.INFO:
+                    return False
                 return (
-                    record.levelno >= logging.ERROR
-                    or getattr(record, "operation", "")
+                    getattr(record, "operation", "")
                     in {"运行", "阶段", "数据集", "批量前处理", "统计", "数据清单"}
                     or getattr(record, "event_state", "") == "进度"
                 )
 
         detail = logging.FileHandler(self.log_path, encoding="utf-8")
+        detail.setLevel(logging.INFO)
         detail.setFormatter(Readable("%(asctime)s %(levelname)s %(message)s"))
         errors = logging.FileHandler(
             self.run_dir / "logs" / "errors.log", encoding="utf-8", delay=True
@@ -181,6 +246,7 @@ class RunWriter:
         errors.setLevel(logging.ERROR)
         errors.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(message)s"))
         console = logging.StreamHandler()
+        console.setLevel(logging.INFO)
         console.addFilter(Console())
         console.setFormatter(Readable("%(levelname)s %(message)s"))
         logger.setLevel(logging.INFO)
@@ -188,14 +254,22 @@ class RunWriter:
             logger.addHandler(handler)
         return [detail, errors, console]
 
-    def write_checkpoint(self, label: str, payload: dict) -> Path:
+    def write_checkpoint(self, label: str, payload: dict, *, namespace: str | None = None) -> Path:
         """原子提交状态字典检查点；失败时保留旧文件。"""
         import torch
 
         if label not in {"best", "latest", "last", "ema_latest"}:
             raise ValueError("未知检查点标签")
         folder = self.run_dir / "checkpoints"
-        folder.mkdir(exist_ok=True)
+        if namespace is not None:
+            import re
+
+            if not re.fullmatch(r"[A-Za-z0-9_-]+", namespace):
+                raise ValueError("检查点命名空间必须为单个字母数字标识")
+            folder = folder / namespace
+        if not folder.resolve().is_relative_to(self.run_dir.resolve()):
+            raise ValueError("检查点目录不能逃出运行目录")
+        folder.mkdir(parents=True, exist_ok=True)
         target = folder / f"{label}.pt"
         temporary = folder / f".{label}.{uuid4().hex}.tmp"
         try:
@@ -203,6 +277,10 @@ class RunWriter:
             temporary.replace(target)
         finally:
             temporary.unlink(missing_ok=True)
+        self.record_asset(
+            f"{namespace}/{label}" if namespace else label,
+            target, kind="checkpoint", stage="train",
+        )
         return target
 
 

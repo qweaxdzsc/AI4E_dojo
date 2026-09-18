@@ -22,7 +22,7 @@ def extension_case(tmp_path, name):
     original = yaml.safe_load((folder / "config.yaml").read_text())
     shutil.copytree(ROOT / "examples/recipe_extensions" / name, folder, dirs_exist_ok=True)
     config = yaml.safe_load((folder / "config.yaml").read_text())
-    for key in ("dataset", "data_root", "run_root"):
+    for key in ("dataset", "data_root", "run_root", "inputs"):
         config[key] = original[key]
     config["pipeline"]["stages"] = ["rawprep", "trainprep", "train"]
     config["model"]["parameters"].update(
@@ -46,7 +46,7 @@ def extension_case(tmp_path, name):
     )
     # 此夹具外侧四点到表面的距离全为 1，不能对常量拟合 zscore。
     config["trainprep"]["normalization"]["fields"]["volume_sdf"] = {"method": "identity"}
-    config["post"].update(evaluate=True, save_predictions=True, export_vtk=False)
+    config["infer"].update(samples=["b"], evaluate=True, save_predictions=True, export_vtk=False)
     (folder / "config.yaml").write_text(yaml.safe_dump(config, sort_keys=False))
     return folder, config
 
@@ -71,7 +71,8 @@ def test_field_extension_saved_normalized_and_trained(tmp_path, format):
     assert result.returncode == 0, result.stdout + result.stderr
     from ai4e_core.abilities.data.source.manifest import ManifestIndex
 
-    index = ManifestIndex(tmp_path / "data/manifest.json")
+    summary = json.loads(max((tmp_path / "records").glob("*/summary.json"), key=lambda p: p.stat().st_mtime_ns).read_text())
+    index = ManifestIndex(summary["reports"]["rawprep"]["manifest"])
     fields = index.read("train")
     torch.testing.assert_close(
         fields["volume_speed"], torch.linalg.vector_norm(fields["volume_velocity"], dim=-1)
@@ -79,7 +80,7 @@ def test_field_extension_saved_normalized_and_trained(tmp_path, format):
     manifest = index.manifest
     assert manifest["extensions"][0]["outputs"]["speed"]["state"] == "physical"
     assert (
-        yaml.safe_load((tmp_path / "data/train/statistics.yaml").read_text())["volume_speed_count"]
+        yaml.safe_load((index.path.parent / "train/statistics.yaml").read_text())["volume_speed_count"]
         > 0
     )
     directory = next((tmp_path / "records").iterdir())
@@ -121,17 +122,18 @@ assert not torch.equal(before["volume_velocity"], after["volume_velocity"])
     assert check_result.returncode == 0, check_result.stderr
     snapshot = yaml.safe_load((directory / "inputs/config.yaml").read_text())
     assert snapshot["rawprep"]["speed"] == cfg["rawprep"]["speed"]
-    cfg["post"]["checkpoint"] = str(directory / "checkpoints/last.pt")
-    cfg["post"]["query"] = False
+    cfg["inputs"]["infer"]["checkpoint"] = str(directory / "checkpoints/last.pt")
+    cfg["inputs"]["infer"]["preparation"] = str(directory / "artifacts/preparation.json")
+    cfg["infer"]["query"] = False
     (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
-    result = script(folder, "post.py")
+    result = script(folder, "infer.py")
     assert result.returncode == 0, result.stdout + result.stderr
 
 
 @pytest.mark.parametrize("injection", ["target", "direct"])
 def test_sampling_runs_during_each_training_epoch(tmp_path, injection):
     folder, cfg = extension_case(tmp_path, "sampling")
-    cfg["pipeline"]["stages"].append("post")
+    cfg["pipeline"]["stages"].extend(["infer", "post"])
     (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
     path = folder / "custom_abilities.py"
     source = path.read_text().replace(
@@ -158,7 +160,7 @@ def test_sampling_runs_during_each_training_epoch(tmp_path, injection):
     directory = next((tmp_path / "records").iterdir())
     record = json.loads((directory / "artifacts/preparation.json").read_text())
     assert record["components"]["prepare"]["name"] == "custom_abilities.reverse_geometry"
-    cfg["train"]["preparation"] = str(directory / "artifacts/preparation.json")
+    cfg["inputs"]["train"]["preparation"] = str(directory / "artifacts/preparation.json")
     path.write_text(source + "\n# implementation changed\n")
     (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
     result = script(folder, "train.py")
@@ -220,9 +222,12 @@ def constant_prediction(model, inputs):
         "target": "custom_abilities.Scale",
         "parameters": {"factor": 2.0},
     }
-    cfg["post"].update(query=False, evaluate=False)
-    cfg["post"]["prediction"] = {"target": "custom_abilities.constant_prediction", "parameters": {}}
-    cfg["pipeline"]["stages"].append("post")
+    cfg["infer"].update(query=False, evaluate=False)
+    cfg["infer"]["prediction"] = {
+        "target": "custom_abilities.constant_prediction",
+        "parameters": {},
+    }
+    cfg["pipeline"]["stages"].extend(["infer", "post"])
     (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
     result = script(folder)
     assert result.returncode == 0, result.stdout + result.stderr
@@ -234,10 +239,14 @@ def constant_prediction(model, inputs):
     assert history[0]["evaluation"]["loss"] == 7
     protocol = json.loads((directory / "artifacts/comparison-protocol.json").read_text())
     assert protocol["extensions"]["prediction"]["name"].endswith("constant_prediction")
+    assert not summary["reports"]["infer"]["metrics"]
     assert list((directory / "sources").glob("*.py"))
-    predictions = list((tmp_path / "data/predictions").rglob("*.pt"))
+    prediction_root = Path(summary["data_dir"]) / "infer/predictions"
+    predictions = list(prediction_root.rglob("*.pt"))
     assert predictions
-    payload = torch.load(tmp_path / "data/predictions/b/surface_pressure.pt", weights_only=True)
+    payload = torch.load(
+        prediction_root / "b/surface.pressure.prediction.pt", weights_only=True
+    )
     torch.testing.assert_close(payload, torch.ones_like(payload))
 
 
@@ -264,7 +273,9 @@ def test_callable_reconstruction_and_custom_transform_contract():
     )
     with pytest.raises(ValueError, match="签名"):
         resolve_operation({"target": target, "parameters": {"typo": 1}})
-    normalization.transforms["field"].transform = _MalformedTransform()
+    normalization = Normalization({"version": 2, "fields": {"field": {
+        "method": "custom", "target": __name__ + "._MalformedTransform", "parameters": {},
+    }}})
     with pytest.raises(ValueError, match="形状"):
         normalization.apply({"field": value})
 

@@ -1,6 +1,6 @@
 import { Alert, Button, Checkbox, Input, Select, Tag } from "antd";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { readLog, stop, subscribe } from "./api";
+import { get as getRun, readLog, stop, subscribe } from "./api";
 import "./executions.css";
 import {
   LOG_WINDOW,
@@ -96,6 +96,18 @@ export function ExecutionLog({
         if (ended) {
           stream.close();
           setConnection("运行已结束");
+          if (v.status === "failed") {
+            getRun(project, run)
+              .then((info: any) => {
+                const reason = String(info?.error || "").trim();
+                if (!reason) return;
+                const line = `[ERROR] ${reason}`;
+                setHistory((old) =>
+                  old?.includes(line) ? old : old ? old + "\n" + line : line,
+                );
+              })
+              .catch((e: any) => setError(e.message));
+          }
         }
       } catch {
         setError("日志响应格式无效，请重新打开此运行");

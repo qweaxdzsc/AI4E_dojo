@@ -3,7 +3,7 @@
 from pathlib import Path
 
 from ai4e_core.abilities.data.save.bundle import digest, file_digest, save_bundle, save_json
-from ai4e_core.base.events import event
+from ai4e_core.base.events import ATOMIC_LEVEL, event
 
 from .contracts import preparation_contract
 
@@ -25,7 +25,7 @@ def trainprep(cfg, *, dataset_component, model_component, session):
         prepared = model_component.prepare(dataset.read(record), cfg)
         relative = f"{record['split']}/{record['id']}.pt"
         save_bundle(root / relative, prepared)
-        event("物理准备", "样本完成", 样本=record["id"])
+        event("物理准备", "样本完成", level=ATOMIC_LEVEL, 样本=record["id"])
         return {
             "id": record["id"],
             "split": record["split"],
@@ -44,5 +44,7 @@ def trainprep(cfg, *, dataset_component, model_component, session):
         "samples": len(result["samples"]),
     }
     session.artifact("preparation.json", report)
+    session.record_asset("preparation", root / "preparation.json", kind="preparation",
+                         stage="trainprep", dependencies=[root])
     session.report(report, stage="trainprep")
     return report

@@ -27,6 +27,25 @@ def list_presets(service, project: str, dataset_key: str | None = None) -> list[
     return result
 
 
+def catalog_preset(record: dict) -> dict:
+    """列表用预设目录，只读已保存正文，不描述案例能力。"""
+    payload = record.get("preset") or {}
+    return {
+        "id": record["id"],
+        "name": payload.get("name") or record.get("name"),
+        "model_id": payload.get("model_id"),
+        "dataset_id": payload.get("dataset_id"),
+        "variant": payload.get("variant"),
+        "kind": PRESET_KIND,
+        "structure_version": {"id": "preset", "name": payload.get("name") or record.get("name")},
+        "component": payload.get("component"),
+        "model": deepcopy(payload.get("model") or {}),
+        "train": deepcopy(payload.get("train") or {}),
+        "trainprep": deepcopy(payload.get("trainprep") or {}),
+        "capabilities": {},
+    }
+
+
 def match_preset(config: dict, presets: list[dict]) -> str | None:
     """当前配置与某份预设的模型段一致时标出，不猜测。"""
     for item in presets:

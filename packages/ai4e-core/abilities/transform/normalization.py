@@ -11,6 +11,7 @@ from ai4e_core.base.config import operation_record, resolve_operation
 
 from .coordinate_normalization import CoordinateNormalization
 from .minmax import MinMax
+from .scale import Scale, resolve_scale
 from .standardization import Standardization
 
 
@@ -47,6 +48,21 @@ class CheckedTransform:
     def inverse(self, value):
         """恢复同形状物理字段。"""
         return self._call("inverse", value)
+
+
+class ComposedTransform:
+    """先执行归一化方法，再乘场上 scale；反变换相反。"""
+
+    def __init__(self, method, scale: Scale):
+        self.method = method
+        self.scale = scale
+
+    def apply(self, value, **kwargs):
+        result = self.method.apply(value, **kwargs) if kwargs else self.method.apply(value)
+        return self.scale.apply(result)
+
+    def inverse(self, value):
+        return self.method.inverse(self.scale.inverse(value))
 
 
 class Normalization:
@@ -87,7 +103,9 @@ class Normalization:
                 transform = CoordinateNormalization(**parameters, arithmetic=arithmetic)
             else:
                 raise ValueError(f"不支持的归一化方法: {declaration['method']}")
-            self.transforms[name] = transform
+            factor = resolve_scale(declaration)
+            self._record["fields"][name]["scale"] = factor
+            self.transforms[name] = ComposedTransform(transform, Scale(factor))
 
     @property
     def record(self) -> dict:

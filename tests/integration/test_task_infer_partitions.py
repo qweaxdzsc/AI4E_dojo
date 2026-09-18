@@ -12,16 +12,17 @@ from tests.integration.test_task_infer_batches import wait_batch
 
 def test_partition_failure_retry_and_evaluation_only(tmp_path, monkeypatch):
     """同名样本按分片保留，最后成功不得掩盖前一分片失败。"""
-    folder, cfg = case(tmp_path, "nasa_crm_transolver3")
+    folder, cfg = case(tmp_path, "nasa_crm_abupt")
+    # 平台批量推理消费现行 version=2 准备；保留案例专属 rawprep。
+    import shutil
+    for stage in ("trainprep.py", "train.py", "infer.py"):
+        shutil.copyfile(Path(__file__).resolve().parents[2] / "recipes/aero_cfd" / stage, folder / stage)
     cfg["pipeline"]["stages"] = ["trainprep", "train"]
     (folder / "config.yaml").write_text(yaml.safe_dump(cfg))
-    shutil.copyfile(
-        Path(__file__).parents[2] / "recipes/aero_cfd/task-entry.json", folder / "task-entry.json"
-    )
     project = tmp_path / "project"
     task.create_project(project)
     item = task.new_task(project, "分片验收", source=folder)
-    trained = task.submit_run(project, item["id"], input_keys=["train.manifest"])
+    trained = task.submit_run(project, item["id"], input_keys=["inputs.trainprep.dataset"])
     trained = task.wait_run(project, trained["id"], timeout=180)
     assert trained["status"] == "succeeded", task.read_log(project, trained["id"])
     cp = next(

@@ -48,6 +48,8 @@ def test_reference_statistics_match_shipped_file():
     box = bound.record["fields"]["surface_position"]["parameters"]
     assert box["minimum"] == raw["raw_pos_min"]
     assert box["maximum"] == raw["raw_pos_max"]
+    assert box["scale"] == 1.0
+    assert bound.record["fields"]["surface_position"]["scale"] == 1.0
     value = torch.tensor([[raw["surface_pressure_mean"][0]]], dtype=torch.float32)
     normalized = bound.transforms["surface_pressure"].apply(value)
     assert float(normalized) == pytest.approx(0.0, abs=1e-5)

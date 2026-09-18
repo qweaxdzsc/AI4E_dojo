@@ -6,14 +6,16 @@ import vtk
 
 from .sampling import pick_ray
 
-
-HANDLE_NAMES = ("plane", "axis_x", "axis_y", "axis_z", "rotate")
+HANDLE_NAMES = ("axis_x", "axis_y", "axis_z", "rotate_x", "rotate_y", "rotate_z")
 HANDLE_COLORS = {
-    "plane": (0.35, 0.62, 0.95),
+    "plane": (0.902, 0.91, 0.922),
+    "border": (0.97, 0.98, 1.0),
     "axis_x": (0.90, 0.22, 0.22),
     "axis_y": (0.20, 0.78, 0.32),
     "axis_z": (0.28, 0.48, 0.95),
-    "rotate": (0.95, 0.84, 0.22),
+    "rotate_x": (0.90, 0.30, 0.30),
+    "rotate_y": (0.28, 0.80, 0.42),
+    "rotate_z": (0.35, 0.58, 0.98),
 }
 AXIS_VECTORS = {
     "axis_x": (1.0, 0.0, 0.0),
@@ -82,7 +84,7 @@ def plane_widget_geometry(origin, normal, bounds):
     """按数据包围盒生成平面片、三轴手柄和旋转环。"""
     origin = _finite(origin)
     normal = _normalize(_finite(normal))
-    size = _extent(bounds) * 0.55
+    size = _extent(bounds) * 0.55 * 2.5
     tangent, bitangent = _tangents(normal)
     start = _add(origin, _add(_scale(tangent, -0.5 * size), _scale(bitangent, -0.5 * size)))
     plane = vtk.vtkPlaneSource()
@@ -93,22 +95,47 @@ def plane_widget_geometry(origin, normal, bounds):
     plane.SetYResolution(1)
     plane.Update()
     handles = {"plane": plane.GetOutput()}
-    axis_length = size * 0.45
+    edge = vtk.vtkFeatureEdges()
+    edge.SetInputData(plane.GetOutput())
+    edge.BoundaryEdgesOn()
+    edge.FeatureEdgesOff()
+    edge.ManifoldEdgesOff()
+    edge.NonManifoldEdgesOff()
+    edge.Update()
+    handles["border"] = edge.GetOutput()
+    # 操作区保持在中心，平面放大不扩大误命中的有效区域。
+    axis_length = size * 0.30
     for name, direction in AXIS_VECTORS.items():
-        line = vtk.vtkLineSource()
-        line.SetPoint1(origin)
-        line.SetPoint2(_add(origin, _scale(direction, axis_length)))
-        line.SetResolution(1)
-        line.Update()
-        handles[name] = line.GetOutput()
-    ring = vtk.vtkRegularPolygonSource()
-    ring.SetCenter(origin)
-    ring.SetNormal(normal)
-    ring.SetRadius(size * 0.32)
-    ring.SetNumberOfSides(48)
-    ring.SetGeneratePolygon(False)
-    ring.Update()
-    handles["rotate"] = ring.GetOutput()
+        arrow = vtk.vtkArrowSource()
+        arrow.SetShaftRadius(0.028)
+        arrow.SetTipRadius(0.08)
+        arrow.SetTipLength(0.18)
+        arrow.SetShaftResolution(16)
+        arrow.SetTipResolution(20)
+        transform = vtk.vtkTransform()
+        transform.Translate(origin)
+        if name == "axis_y":
+            transform.RotateZ(90)
+        elif name == "axis_z":
+            transform.RotateY(-90)
+        transform.Scale(axis_length, axis_length, axis_length)
+        shape = vtk.vtkTransformPolyDataFilter()
+        shape.SetInputConnection(arrow.GetOutputPort())
+        shape.SetTransform(transform)
+        shape.Update()
+        handles[name] = shape.GetOutput()
+        ring = vtk.vtkRegularPolygonSource()
+        ring.SetCenter(origin)
+        ring.SetNormal(direction)
+        ring.SetRadius(size * 0.22)
+        ring.SetNumberOfSides(96)
+        ring.SetGeneratePolygon(False)
+        tube = vtk.vtkTubeFilter()
+        tube.SetInputConnection(ring.GetOutputPort())
+        tube.SetRadius(size * 0.014)
+        tube.SetNumberOfSides(12)
+        tube.Update()
+        handles[name.replace("axis", "rotate")] = tube.GetOutput()
     return handles
 
 
@@ -157,24 +184,17 @@ def move_plane(origin, normal, handle, start_ray, end_ray):
         raise ValueError("invalid_plane_handle")
     if handle in AXIS_VECTORS:
         axis = AXIS_VECTORS[handle]
-        delta = _closest_on_axis(end_ray, origin, axis) - _closest_on_axis(
-            start_ray, origin, axis
-        )
+        delta = _closest_on_axis(end_ray, origin, axis) - _closest_on_axis(start_ray, origin, axis)
         return _add(origin, _scale(axis, delta)), normal
-    if handle == "plane":
-        delta = _closest_on_axis(end_ray, origin, normal) - _closest_on_axis(
-            start_ray, origin, normal
-        )
-        return _add(origin, _scale(normal, delta)), normal
-    start = _ray_plane(start_ray, origin, normal)
-    end = _ray_plane(end_ray, origin, normal)
+    axis = AXIS_VECTORS[handle.replace("rotate", "axis")]
+    start = _ray_plane(start_ray, origin, axis)
+    end = _ray_plane(end_ray, origin, axis)
     if start is None or end is None:
         return origin, normal
     first, second = _sub(start, origin), _sub(end, origin)
-    axis = _cross(first, second)
-    if sum(x * x for x in axis) < 1e-16:
+    if _dot(first, first) < 1e-16 or _dot(second, second) < 1e-16:
         return origin, normal
-    angle = math.atan2(math.sqrt(sum(x * x for x in axis)), _dot(first, second))
+    angle = math.atan2(_dot(axis, _cross(first, second)), _dot(first, second))
     return origin, _normalize(_rotate_vector(normal, axis, angle))
 
 
@@ -182,6 +202,8 @@ def pick_plane_handle(handles: dict, ray):
     """在手柄网格上选最近命中，未命中返回空。"""
     best, distance = None, None
     for name, mesh in handles.items():
+        if name not in HANDLE_NAMES:
+            continue
         hit = pick_ray(mesh, ray, "cell")
         if not hit.get("valid"):
             continue

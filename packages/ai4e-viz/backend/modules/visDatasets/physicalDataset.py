@@ -1,6 +1,7 @@
 """完整网格、显式点云和时间数据读取；不使用预览抽稀结果计算。"""
 
 import xml.etree.ElementTree as ET
+from copy import deepcopy
 from pathlib import Path
 
 from modules.dataAssets import resolve_external
@@ -74,7 +75,11 @@ def load_physical(source: dict, bindings: list[dict], time: float | None = None)
 
 
 def describe_physical(mesh) -> dict:
-    """保留 point/cell 归属与分量数。"""
+    """按 VTK 修改时间复用画像，返回副本避免表单污染后续读取。"""
+    stamp = mesh.GetMTime()
+    cached = getattr(mesh, "_vis_profile", None)
+    if cached is not None and cached[0] == stamp:
+        return deepcopy(cached[1])
     fields = []
     for association, arrays in [("point", mesh.GetPointData()), ("cell", mesh.GetCellData())]:
         for i in range(arrays.GetNumberOfArrays()):
@@ -88,7 +93,7 @@ def describe_physical(mesh) -> dict:
                         "range": list(a.GetRange(-1)),
                     }
                 )
-    return {
+    profile = {
         "points": mesh.GetNumberOfPoints(),
         "cells": mesh.GetNumberOfCells(),
         "bounds": list(mesh.GetBounds()),
@@ -97,6 +102,8 @@ def describe_physical(mesh) -> dict:
         ),
         "fields": fields,
     }
+    mesh._vis_profile = (stamp, profile)
+    return deepcopy(profile)
 
 
 def list_named_blocks(path, reader: str | None = None) -> list[dict]:
@@ -109,7 +116,6 @@ def list_named_blocks(path, reader: str | None = None) -> list[dict]:
     from pathlib import Path
 
     import vtk
-
     from ai4e_viz.inspect.mesh import _read
 
     mesh = _read(Path(path), reader)

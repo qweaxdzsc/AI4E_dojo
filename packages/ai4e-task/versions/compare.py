@@ -85,57 +85,28 @@ def _select(value, path: list):
 
 
 def _metrics(project: str | Path, run: dict) -> dict:
-    # 量声明与代码快照绑定，不能使用后来被编辑的工作目录声明。
-    if not run.get("code_path"):
-        return {}
-    entry_file = Path(project) / run["code_path"] / "task-entry.json"
-    if not entry_file.exists():
-        return {}
-    entry = read_json(entry_file)
-    from omegaconf import OmegaConf
+    from ai4e_spec.artifacts.indexes import INDEX_VERSION, validate_metric_record
 
-    config_path = Path(run["run_dir"]) / "inputs/config.yaml"
-    config = (
-        OmegaConf.to_container(OmegaConf.load(config_path), resolve=True)
-        if config_path.exists()
-        else {}
-    )
+    directory = Path(run["run_dir"])
+    path = directory / "artifacts/metrics.json"
+    if not path.is_file():
+        return {}
+    index = read_json(path)
+    if index.get("schema_version") != INDEX_VERSION:
+        raise ValueError("unsupported_metric_index")
     result = {}
-    for item in entry.get("metrics", []):
-        semantics = dict(item["quantity"])
-        semantics["dataset_digests"] = sorted(
-            {
-                a["digest"]
-                for a in run.get("lineage", {}).get("assets", {}).values()
-                if a.get("kind") == "dataset"
-            }
-        )
-        for key, selector in item.get("quantity_config", {}).items():
-            try:
-                semantics[key] = _select(config, selector)
-            except (KeyError, IndexError, TypeError):
-                semantics[key] = None
+    for key, item in index["items"].items():
         try:
-            value = _select(run.get("summary", {}), item["path"])
-        except (KeyError, IndexError, TypeError):
-            value = None
-        valid = (
-            isinstance(value, (float, int)) and not isinstance(value, bool) and math.isfinite(value)
-        )
-        required = {"field", "domain", "unit", "split", "statistic"}
-        status = (
-            "available"
-            if valid
-            and required <= semantics.keys()
-            and all(semantics.get(k) is not None for k in item.get("quantity_config", {}))
-            and all(semantics[k] is not None for k in required)
-            else "missing"
-        )
-        result[item["name"]] = {
-            "value": value if valid else None,
-            "quantity": semantics,
-            "status": status,
-        }
+            validate_metric_record(item)
+            from ai4e_core.run.indexes import content_digest
+
+            for source in item["assets"]:
+                if item.get("asset_digests", {}).get(source) != content_digest(source):
+                    raise ValueError("metric_source_changed")
+        except (TypeError, ValueError, OSError):
+            result[key] = {"value": None, "quantity": item.get("semantics", {}), "status": "missing"}
+            continue
+        result[key] = {"value": item["value"], "quantity": item["semantics"], "status": "available"}
     return result
 
 

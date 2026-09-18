@@ -12,7 +12,7 @@ test('真实汽车案例页面配置与正式产物交接',async({page,request},
   await expect(page.locator('.workbench-steps .topstep')).toHaveCount(8);
   const layout=await page.evaluate(()=>({sidebar:document.querySelector('.ant-layout-sider')?.getBoundingClientRect().toJSON(),header:document.querySelector('.ant-layout-header')?.getBoundingClientRect().toJSON(),steps:document.querySelector('.workbench-steps')?.getBoundingClientRect().toJSON()}));
   expect(layout.sidebar.width).toBe(235);expect(layout.header.height).toBe(61);expect(layout.steps.x).toBeGreaterThanOrEqual(234);measurements.push({step,...layout});
-  if(step===2||step===3){const input=page.getByRole('combobox',{name:'train.manifest',exact:true});await input.click();await page.locator('.ant-select-item-option').first().click();await expect(input.locator('..')).not.toContainText('选择正式运行产物');}
+  if(step===2||step===3){const input=page.getByRole('combobox',{name:'inputs.trainprep.dataset',exact:true});await input.click();await page.locator('.ant-select-item-option').first().click();await expect(input.locator('..')).not.toContainText('选择正式运行产物');}
   if(step===2||step===4)await expect(page.locator('.execution-log')).not.toContainText('[post/阶段/开始]');
   if(step===3){await expect(page.locator('.execution-log')).toHaveCount(0);await expect(page.getByText(/固定等权 MSE/)).toBeVisible();await expect(page.getByText('隐藏层宽度',{exact:true})).toBeVisible();}
   if(step===4){const batch=page.locator('.configuration-field').filter({has:page.locator('label',{hasText:'批次大小'})}).getByRole('spinbutton');await expect(batch).toBeDisabled();const epochs=page.locator('.configuration-field').filter({has:page.locator('label',{hasText:'训练轮数'})}).getByRole('spinbutton');const old=await epochs.inputValue();await epochs.fill(old);await epochs.press('ArrowUp');await page.getByRole('button',{name:'保存配置',exact:true}).click();await expect(page.getByText('配置已保存，未创建新版本')).toBeVisible();await epochs.fill(old);await page.getByRole('button',{name:'保存配置',exact:true}).click();}
@@ -158,9 +158,9 @@ test('快速保存与进行中按钮状态不会滞留',async({page,request})=>{
  await page.route('**/configuration',async route=>{if(route.request().method()!=='PUT')return route.continue();const response=await route.fetch();expect(response.ok()).toBeTruthy();reached();await held;await route.fulfill({response})},{times:1});
  await epochs.press('ArrowUp');await save.click();await responseReady;
  await expect(save).toBeDisabled();await expect(check).toBeDisabled();await expect(save).toHaveAttribute('aria-busy','true');await expect(save).toHaveAccessibleName('保存配置');release();
- await expect(save).toHaveAttribute('aria-busy','false');await expect(check).toBeEnabled();
+  await expect(save).toHaveAttribute('aria-busy','false');await expect(check).toBeEnabled();
  for(let i=0;i<3;i++){
   await epochs.press('ArrowUp');await expect(save).toBeEnabled();const response=page.waitForResponse(r=>r.request().method()==='PUT'&&r.url().endsWith('/configuration'));await save.click();expect((await response).ok()).toBeTruthy();
-  await expect(save).toHaveAttribute('aria-busy','false');await expect(save).toBeDisabled();await expect(check).toBeEnabled();await expect(save.getByRole('img',{name:'loading'})).toHaveCount(0);await expect(save).not.toHaveClass(/ant-btn-loading/);
+  await expect(save).toHaveAttribute('aria-busy','false');await expect(save).toBeEnabled();await expect(check).toBeEnabled();await expect(save.getByRole('img',{name:'loading'})).toHaveCount(0);await expect(save).not.toHaveClass(/ant-btn-loading/);
  }
 });

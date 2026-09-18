@@ -33,7 +33,8 @@ def evaluate_arrays(prediction, truth, *, component="scalar", mask=None, metrics
     difference = p - t
     squared = float(np.square(difference).sum())
     norm = float(np.square(t).sum())
-    variance = float(np.square(t - t.mean()).sum())
+    # 恒定浮点数组的 mean 可能有舍入误差，不能把该误差当成真实方差。
+    variance = 0.0 if np.ptp(t) == 0 else float(np.square(t - t.mean()).sum())
     absolute = float(np.abs(difference).sum())
     truth_absolute = float(np.abs(t).sum())
     threshold = 1e-12 * float(np.abs(t).max())

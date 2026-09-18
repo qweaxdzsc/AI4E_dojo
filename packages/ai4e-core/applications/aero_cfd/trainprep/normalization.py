@@ -6,6 +6,7 @@ from pathlib import Path
 
 from ai4e_core.abilities.data.stats.load import load_statistics
 from ai4e_core.abilities.transform.normalization import Normalization
+from ai4e_core.abilities.transform.scale import resolve_scale
 
 
 def bind_normalization(config: dict, manifest: dict, index=None) -> Normalization:
@@ -14,6 +15,13 @@ def bind_normalization(config: dict, manifest: dict, index=None) -> Normalizatio
     if not declaration.get("execute"):
         raise ValueError("prepare/fit 物理数据需要 normalization.execute=true")
     source = declaration.get("statistics") or manifest.get("statistics", {}).get("path")
+    if (
+        source
+        and not Path(source).is_absolute()
+        and not declaration.get("statistics")
+        and index is not None
+    ):
+        source = str(index.path.parent / source)
     stats = load_statistics(source) if source else {}
     fields = {}
     for name, item in declaration.get("fields", {}).items():
@@ -40,15 +48,41 @@ def bind_normalization(config: dict, manifest: dict, index=None) -> Normalizatio
             parameters = {
                 "minimum": low.tolist(),
                 "maximum": high.tolist(),
-                "scale": item.get("scale", 1.0),
+                "scale": 1.0,
             }
         elif method == "coordinate":
             keys = item.get("statistics_keys", {"minimum": "raw_pos_min", "maximum": "raw_pos_max"})
-            parameters = {k: stats[v] for k, v in keys.items() if k not in supplied}
-            parameters.update(scale=1000.0, check_range=True, tolerance=1e-6)
+            if source is None and index is not None and not supplied:
+                low = high = None
+                for row in range(len(index.partitions.get("train", []))):
+                    values = index.read("train", row, fields=[name])[name]
+                    lo, hi = float(values.min()), float(values.max())
+                    low = lo if low is None else min(low, lo)
+                    high = hi if high is None else max(high, hi)
+                if low is None:
+                    raise ValueError("统一坐标需要非空训练分片或明确统计文件")
+                parameters = {"minimum": [low], "maximum": [high]}
+            else:
+                parameters = {k: stats[v] for k, v in keys.items() if k not in supplied}
+            parameters.update(scale=1.0, check_range=source is not None, tolerance=1e-6)
         elif method == "zscore":
             keys = item.get("statistics_keys", {"mean": name + "_mean", "std": name + "_std"})
-            parameters = {k: stats[v] for k, v in keys.items() if k not in supplied}
+            if source is None and index is not None and not supplied:
+                from ai4e_core.abilities.data.stats.population import PopulationMoments
+
+                moments = None
+                for row in range(len(index.partitions.get("train", []))):
+                    values = index.read("train", row, fields=[name])[name]
+                    values = values.numpy().reshape(len(values), -1)
+                    if moments is None:
+                        moments = PopulationMoments(values.shape[1])
+                    moments.update(values)
+                if moments is None:
+                    raise ValueError("Z-score 需要非空训练分片或明确统计文件")
+                fitted = moments.finalize()
+                parameters = {key: fitted[key] for key in ("mean", "std")}
+            else:
+                parameters = {k: stats[v] for k, v in keys.items() if k not in supplied}
         else:
             raise ValueError("不支持的变换方法")
         parameters.update(supplied)
@@ -56,6 +90,7 @@ def bind_normalization(config: dict, manifest: dict, index=None) -> Normalizatio
             "method": method,
             "parameters": parameters,
             "scope": item.get("scope", "point"),
+            "scale": resolve_scale(item),
         }
         if method == "custom":
             fields[name]["target"] = item["target"]
@@ -86,6 +121,8 @@ def validate_frozen(config: dict, normalization: Normalization) -> None:
             raise ValueError("配置与冻结变换实现冲突")
         if declaration.get("scope", "point") != frozen.get("scope", "point"):
             raise ValueError("配置与冻结变换字段空间冲突")
+        if resolve_scale(declaration) != resolve_scale(frozen):
+            raise ValueError("配置与冻结变换系数冲突")
         for key, value in declaration.get("parameters", {}).items():
             if value != frozen["parameters"].get(key):
                 raise ValueError("配置与冻结变换参数冲突")

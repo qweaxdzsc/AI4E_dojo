@@ -3,7 +3,7 @@
 from copy import deepcopy
 from uuid import uuid4
 
-from modules.visTaskManage import balanced_layout
+from modules.visTaskManage import balanced_layout, normalize_physical_spec
 
 
 def seed_surface_id(node):
@@ -66,6 +66,25 @@ def execute(scene, command):
         )
         scene.show_plane_widget(origin, normal, bounds, command.get("view"))
         return {"origin": origin, "normal": normal}
+    if op == "plot_over_line":
+        from modules.visEngine import sample_line
+
+        mesh = scene.datasets.get(command["input"])
+        if mesh is None:
+            raise ValueError("plot_over_line_input_missing")
+        rows = sample_line(
+            mesh,
+            command["point1"],
+            command["point2"],
+            int(command.get("resolution", 1000)),
+            command.get("fields"),
+        )
+        scene.last_extraction = {"kind": "plot_over_line", "rows": rows}
+        return {"rows": rows}
+    if op == "probe_visibility":
+        return scene.set_probe_visibility(
+            command["id"], command["view"], command.get("visible"), command.get("label")
+        )
     if op not in {
         "object_create",
         "object_update",
@@ -84,7 +103,9 @@ def execute(scene, command):
         "source_remove",
     }:
         return None
-    if op == "display" and not any(key in command for key in ("field", "color", "style")):
+    if op == "display" and not any(
+        key in command for key in ("field", "color", "style", "helpers")
+    ):
         view = command["view"]
         identity = command["id"]
         layer = next(
@@ -97,7 +118,8 @@ def execute(scene, command):
         )
         if layer is not None and layer["id"] in scene.actors:
             return scene.set_layer_visibility(layer["id"], command.get("visible", True))
-    spec = scene.snapshot()["spec"]
+    # 显示更新不需要重算画像或来源摘要；公开响应仍由场景返回完整快照。
+    spec = deepcopy(scene.spec) if op == "display" else scene.snapshot()["spec"]
     objects = spec["pipeline"] + spec.get("probes", [])
     identity = command.get("id")
     node = next((n for n in objects if n["id"] == identity), None)
@@ -121,6 +143,8 @@ def execute(scene, command):
             spec["probes"].append(node)
         else:
             node.update(type=command["type"], parameters=deepcopy(command.get("parameters", {})))
+            if command.get("chart"):
+                node["chart"] = deepcopy(command["chart"])
             spec["pipeline"].append(node)
             spec["layers"].append(
                 {
@@ -128,6 +152,7 @@ def execute(scene, command):
                     "input": identity,
                     "view": command.get("view", spec["views"][0]["id"]),
                     "visible": True,
+                    **deepcopy(command.get("display", {})),
                 }
             )
     elif op in ("object_update", "probe_update", "object_rename", "object_copy"):
@@ -139,6 +164,12 @@ def execute(scene, command):
             node["name"] = str(command["name"]).strip()
         elif op == "object_update":
             node["parameters"] = deepcopy(command["parameters"])
+            if "chart" in command:
+                node["chart"] = deepcopy(command["chart"])
+            if "display" in command:
+                for layer in spec["layers"]:
+                    if layer["input"] == identity and layer["view"] == command["view"]:
+                        layer.update(deepcopy(command["display"]))
         elif op == "probe_update":
             for key in ("position", "fields", "views"):
                 if key in command:
@@ -162,15 +193,20 @@ def execute(scene, command):
         spec["layers"] = [n for n in spec["layers"] if n["input"] not in affected]
         if op == "source_remove":
             spec["sources"] = [s for s in spec["sources"] if s["id"] != identity]
+        return scene.remove_objects(spec, affected)
     elif op == "display":
         view = command["view"]
+        view_record = next((item for item in spec["views"] if item["id"] == view), {})
+        node = next((item for item in spec["pipeline"] if item["id"] == identity), None)
+        if view_record.get("type") == "line_chart" and (node or {}).get("type") != "plot_over_line":
+            raise ValueError("line_chart_only_plot_over_line")
         layer = next(
             (l for l in spec["layers"] if l["input"] == identity and l["view"] == view), None
         )
         if layer is None:
             layer = {"id": uuid4().hex, "input": identity, "view": view, "visible": True}
             spec["layers"].append(layer)
-        for key in ("field", "color", "style", "visible"):
+        for key in ("field", "color", "style", "visible", "helpers"):
             if key in command:
                 layer[key] = deepcopy(command[key])
         return scene.update_display(spec, layer["id"])
@@ -179,12 +215,35 @@ def execute(scene, command):
             raise ValueError("maximum_four_views")
         current = command["view"]
         new_id = max(v["id"] for v in spec["views"]) + 1
-        view = deepcopy(next(v for v in spec["views"] if v["id"] == current))
-        view.update(id=new_id, name=f"RenderView{new_id + 1}")
+        view_type = command.get("view_type") or "render"
+        if view_type not in ("render", "line_chart"):
+            raise ValueError("invalid_view_type")
+        current_view = next(v for v in spec["views"] if v["id"] == current)
+        if view_type == "line_chart":
+            view = {
+                "id": new_id,
+                "name": f"LineChartView{new_id + 1}",
+                "type": "line_chart",
+                "background": deepcopy(current_view.get("background", [1, 1, 1])),
+                "chart": {
+                    "source": command.get("source") or "",
+                    "x_array": command.get("x_array") or "arc_length",
+                    "y_arrays": list(command.get("y_arrays") or []),
+                },
+            }
+        else:
+            render_src = next(
+                (item for item in spec["views"] if item.get("type", "render") == "render"),
+                current_view,
+            )
+            view = deepcopy(render_src)
+            view.update(id=new_id, name=f"RenderView{new_id + 1}", type="render")
+            view.pop("chart", None)
+            source_view = render_src["id"]
+            for layer in list(spec["layers"]):
+                if layer["view"] == source_view:
+                    spec["layers"].append({**deepcopy(layer), "id": uuid4().hex, "view": new_id})
         spec["views"].append(view)
-        for layer in list(spec["layers"]):
-            if layer["view"] == current:
-                spec["layers"].append({**deepcopy(layer), "id": uuid4().hex, "view": new_id})
         for probe in spec["probes"]:
             probe.setdefault("views", {})[str(new_id)] = deepcopy(
                 probe.get("views", {}).get(str(current), {"visible": True})
@@ -214,9 +273,15 @@ def execute(scene, command):
             {
                 k: v
                 for k, v in command["settings"].items()
-                if k in ("name", "axes", "shadows", "background")
+                if k in ("name", "axes", "shadows", "background", "type", "chart")
             }
         )
+        if set(command["settings"]) == {"background"}:
+            spec = normalize_physical_spec(spec)
+            index = next(i for i, v in enumerate(spec["views"]) if v["id"] == command["view"])
+            scene.renderers[index].SetBackground(view["background"])
+            scene.spec = spec
+            return scene.snapshot()
     elif op == "link_views":
         spec["link_groups"] = [{"views": command["views"]}] if command.get("views") else []
     return scene.apply(spec)

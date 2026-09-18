@@ -94,15 +94,19 @@ function writeNormalization(
   name: string,
   method: string,
   unified: boolean,
+  extra: Record<string, unknown> = {},
 ) {
+  const field = {
+    ...values.normalization.fields[name],
+    ...extra,
+    method: unified ? "coordinate" : method,
+  };
+  delete field.unified_space;
   onChange("normalization", {
     ...values.normalization,
     fields: {
       ...values.normalization.fields,
-      [name]: {
-        ...values.normalization.fields[name],
-        method: unified ? "coordinate" : method,
-      },
+      [name]: field,
     },
   });
 }
@@ -162,9 +166,9 @@ export function PreparationPanel({
   onExecute,
   onCheck,
   onSave,
+  onLoadCombo,
   busy,
   dirty,
-  run,
   resultRun,
   inputAsset,
   datasetName,
@@ -180,6 +184,7 @@ export function PreparationPanel({
   onExecute: () => void;
   onCheck: () => void;
   onSave: () => void;
+  onLoadCombo?: (caseId: string) => void;
   busy: boolean;
   dirty: boolean;
   run?: string;
@@ -262,11 +267,11 @@ export function PreparationPanel({
             task={task}
             role={view === "datasets" ? "inputs" : "preparation"}
             asset={view === "datasets" ? inputAsset : undefined}
-            run={view === "results" ? run : undefined}
+            run={view === "results" ? resultRun : undefined}
             emptyHint={
               view === "datasets"
                 ? emptyHint
-                : run
+                : resultRun
                   ? undefined
                   : "准备运行完成后在此查看产物"
             }
@@ -277,11 +282,26 @@ export function PreparationPanel({
         <div className="prep-head">
           <div className="prep-head-title">
             <h2>处理方法</h2>
-            <Button onClick={onSave} disabled={!dirty} loading={busy}>
+            <Button onClick={onSave} disabled={busy} loading={busy}>
               保存配置
             </Button>
           </div>
           <small>左侧是模型输入，右侧是数据集字段；同域且张量形状相容才可匹配。</small>
+          {capabilities?.preparation_combos?.options?.length ? (
+            <label className="prep-combo">
+              数据集-模型组合
+              <Select
+                aria-label="数据准备组合"
+                value={capabilities.preparation_combos.current_id || undefined}
+                disabled={busy}
+                options={capabilities.preparation_combos.options.map((item: any) => ({
+                  value: item.id,
+                  label: item.name,
+                }))}
+                onChange={(id) => onLoadCombo?.(id)}
+              />
+            </label>
+          ) : null}
         </div>
         <div className="prep-methods">
           <section className="prep-section">
@@ -439,7 +459,7 @@ export function PreparationPanel({
                       : `三个分片数量之和必须等于全部样本 ${splitTotal}。`}
                   </p>
                 ) : (
-                  <p className="prep-note">test / eval 可为 0。归一化只拟合训练分片。</p>
+                  <p className="prep-note">test / eval 可为 0。数据转换只拟合训练分片。</p>
                 )}
               </div>
             )}
@@ -447,9 +467,9 @@ export function PreparationPanel({
           <section className="prep-section">
             <div className="section-title">
               <button type="button" className="headingtoggle" onClick={() => setCollapsed((old) => ({ ...old, norm: !old.norm }))}>
-                {collapsed.norm ? "›" : "⌄"} 归一化与转换
+                {collapsed.norm ? "›" : "⌄"} 数据转换
               </button>
-              <small>统计仅由训练分片拟合，均值、方差、极值不可手工填写。</small>
+              <small>先归一化，再乘 scale；统计仅由训练分片拟合，均值、方差、极值不可手工填写。</small>
             </div>
             {collapsed.norm ? null : <Table
               size="small"
@@ -464,6 +484,7 @@ export function PreparationPanel({
                     <Select
                       aria-label={"归一化方法 " + r.name}
                       value={r.method === "coordinate" ? "minmax" : r.method}
+                      disabled={Boolean(unifiedSpace(r))}
                       options={["identity", "zscore", "minmax"].map((v) => ({
                         value: v,
                         label: v === "identity" ? "恒等" : v === "zscore" ? "标准化" : "最小最大",
@@ -487,6 +508,26 @@ export function PreparationPanel({
                           r.name,
                           r.method === "coordinate" ? "minmax" : r.method,
                           e.target.checked,
+                        )
+                      }
+                    />
+                  ),
+                },
+                {
+                  title: "scale",
+                  render: (_, r) => (
+                    <InputNumber
+                      aria-label={"scale " + r.name}
+                      value={r.scale ?? 1}
+                      min={Number.MIN_VALUE}
+                      onChange={(value) =>
+                        writeNormalization(
+                          onChange,
+                          values,
+                          r.name,
+                          r.method === "coordinate" ? "minmax" : r.method,
+                          unifiedSpace(r),
+                          { scale: value == null ? 1 : value },
                         )
                       }
                     />

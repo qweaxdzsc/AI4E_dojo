@@ -1,4 +1,4 @@
-"""Probe 当前值与时间曲线。"""
+"""Probe 当前值与时间曲线；线段提取表，折线主图在视口。"""
 
 from trame.widgets import html
 from trame.widgets import vuetify as v
@@ -6,14 +6,22 @@ from trame.widgets import vuetify as v
 
 def extraction_panel(ui):
     """提取结果即时显示，文件只由显式导出生成。"""
-    with html.Div(v_if="kind === 'probe'", classes="pa-2"):
-        v.VBtn("当前数值", small=True, text=True, click=ui.query)
+    with html.Div(v_if="kind === 'probe' || kind === 'plot_over_line'", classes="pa-2"):
+        v.VBtn("当前数值", v_if="kind === 'probe'", small=True, text=True, click=ui.query)
         v.VBtn(
             "时间曲线",
+            v_if="kind === 'probe'",
             small=True,
             text=True,
             click=lambda: ui.query("temporal"),
             disabled=("!time_values.length",),
+        )
+        v.VBtn(
+            "重新取样",
+            v_if="kind === 'plot_over_line'",
+            small=True,
+            text=True,
+            click=ui.query_line,
         )
         v.VBtn("导出 CSV", small=True, text=True, click=ui.export_probe)
         html.Div(v_html=("query_curve",))

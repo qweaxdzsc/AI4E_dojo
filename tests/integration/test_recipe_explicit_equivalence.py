@@ -18,7 +18,7 @@ def case(tmp_path, name):
     folder = tmp_path / "case"
     if name.startswith("shapenet"):
         fixture, _ = setup_case(tmp_path / "fixture")
-        source = yaml.safe_load((fixture / "config.yaml").read_text())["dataset"]
+        source = yaml.safe_load((fixture / "config.yaml").read_text())["inputs"]["rawprep"]
     else:
         raw = tmp_path / "raw"
         raw.mkdir()
@@ -32,7 +32,9 @@ def case(tmp_path, name):
         }
     shutil.copytree(ROOT / "examples/aero_cfd" / name, folder)
     cfg = yaml.safe_load((folder / "config.yaml").read_text())
-    cfg["dataset"].update(source)
+    if name.startswith("shapenet"):
+        cfg["dataset"]["partitions"] = {"train": ["a"], "test": ["b"]}
+    cfg["inputs"]["rawprep"].update({("source" if k == "root" else k): v for k, v in source.items()})
     cfg["data_root"] = str(tmp_path / "data")
     cfg["run_root"] = str(tmp_path / "data-runs")
     cfg["pipeline"]["stages"] = ["rawprep"]
@@ -53,14 +55,16 @@ def case(tmp_path, name):
     else:
         cfg["model"]["parameters"].update(n_hidden=16, n_layers=2, n_head=4, slice_num=4)
         cfg["model"]["sampling"].update(chunk_count=1, stride=4)
-    cfg["post"]["legacy_predict"] = True  # 仅本数值对照夹具显式运行历史post。
-    cfg["post"].update(
+    cfg["infer"].update(
+        device="cpu",
         samples=["b"] if name.startswith("shapenet") else ["Sample001", "Sample002"],
         export_vtk=False,
     )
     (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
     result = script(folder, "rawprep.py")
     assert result.returncode == 0, result.stdout + result.stderr
+    summary = json.loads(max((tmp_path / "data-runs").glob("*/summary.json"), key=lambda p: p.stat().st_mtime_ns).read_text())
+    cfg["inputs"]["trainprep"]["dataset"] = summary["reports"]["rawprep"]["manifest"]
     return folder, cfg
 
 
@@ -88,10 +92,12 @@ TrainingRun.checkpoint = checkpoint
 def pipeline(cfg):
     component = load_components(cfg)
     values = OmegaConf.create(application_parameters(cfg))
+    values.post.update(values.infer)
     session = TrainingRun()
     common = dict(dataset_component=component.dataset, model_component=component.model, session=session)
     prepared = run.stage("trainprep", lambda _: baseline_workflow.trainprep(values, **common), cfg)
     trained = run.stage("train", lambda _: baseline_workflow.train(values, prepared, **common), cfg)
+    values.post.checkpoint = trained["checkpoints"]["last"]
     return run.stage("post", lambda _: baseline_post.execute(OmegaConf.to_container(values, resolve=True), component.dataset, component.model, session), cfg)
 if __name__ == "__main__":
     raise SystemExit(run.launch(pipeline, script=__file__, config_loader=load_configuration))
@@ -100,8 +106,14 @@ if __name__ == "__main__":
     config["pipeline"]["stages"] = ["trainprep", "train", "post"]
     directories = []
     for mode in ("baseline", "explicit"):
+        config["pipeline"]["stages"] = (
+            ["trainprep", "train", "post"]
+            if mode == "baseline"
+            else ["trainprep", "train", "infer", "post"]
+        )
+        config["infer"]["device"] = "cpu"
         config["run_root"] = str(tmp_path / (mode + "-runs"))
-        config["paths"]["datasets"]["predictions"] = str(tmp_path / (mode + "-predictions"))
+        config["data_root"] = str(tmp_path / (mode + "-data"))
         (folder / "config.yaml").write_text(yaml.safe_dump(config, sort_keys=False))
         result = script(folder, "baseline.py" if mode == "baseline" else "pipeline.py")
         assert result.returncode == 0, result.stdout + result.stderr
@@ -134,7 +146,8 @@ if __name__ == "__main__":
                 atol=0,
             )
     # 旧源码产生的中途检查点由新显式训练消费，计划总预算仍为两轮。
-    config["train"]["resume"] = str(tmp_path / "baseline-epoch1.pt")
+    config["inputs"]["train"]["resume"] = str(tmp_path / "baseline-epoch1.pt")
+    config["inputs"]["train"]["preparation"] = str(directories[0] / "artifacts/preparation.json")
     config["run_root"] = str(tmp_path / "resumed-runs")
     (folder / "config.yaml").write_text(yaml.safe_dump(config, sort_keys=False))
     result = script(folder, "train.py")

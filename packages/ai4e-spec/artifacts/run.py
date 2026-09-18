@@ -18,6 +18,7 @@ class RunContext:
     assets: dict = field(default_factory=dict)
     resumed_from: str | None = None
     schema_version: int = 1
+    stage_outputs: dict[str, str] = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         """转换为可独立保存的运行溯源记录。"""

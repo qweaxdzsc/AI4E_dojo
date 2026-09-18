@@ -99,6 +99,20 @@ def test_wheel_install_outside_checkout(tmp_path):
 
     source = recipe(tmp_path)
     runnable = invoke("new", "runnable", "--project", project, "--from", source)
+    subprocess.run(
+        [str(python), "-c", """import sys
+import ai4e_task as task
+project, identity = sys.argv[1:]
+original = task.read_configuration(project, identity)
+config = original["config"]
+config["platform_probe"] = {"removed": True}
+saved = task.replace_configuration(project, identity, config, revision=original["revision"])
+config.pop("platform_probe")
+saved = task.replace_configuration(project, identity, config, revision=saved["revision"])
+assert "platform_probe" not in task.read_configuration(project, identity)["config"]
+""", str(project), runnable["id"]],
+        cwd=tmp_path, env=clean, check=True, capture_output=True, text=True,
+    )
     completed = invoke("run", runnable["id"], "--project", project, "--wait", "--timeout", "30")
     assert completed["status"] == "succeeded", completed
     assert completed["lineage"]["version_id"] == runnable["version_id"]
@@ -117,8 +131,11 @@ def test_wheel_install_outside_checkout(tmp_path):
         check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
-    assert (tmp_path / "extension/data/train/a/volume_speed.pt").is_file()
-    assert list((tmp_path / "extension/records").glob("*/checkpoints/last.pt"))
+    summaries = list((tmp_path / "extension/records").glob("*/summary.json"))
+    summary = json.loads(summaries[-1].read_text())
+    physical = Path(summary["reports"]["rawprep"]["manifest"]).parent
+    assert (physical / "train/a/volume_speed.pt").is_file()
+    assert (summaries[-1].parent / "checkpoints/last.pt").is_file()
 
     subprocess.run(
         [str(python), "-m", "ai4e_task", "--help"],

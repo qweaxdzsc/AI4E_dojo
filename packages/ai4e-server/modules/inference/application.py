@@ -4,6 +4,7 @@ from pathlib import Path
 
 import ai4e_task as task
 
+from ..stages.application import _migrate_official_scripts
 from ..visualization import register
 from . import domain
 
@@ -28,8 +29,13 @@ def checkpoints(service, project: str, identity: str) -> dict:
 
 def samples(service, project: str, identity: str, checkpoint_id: str) -> dict:
     """仅使用检查点对应准备中声明的分片样本。"""
-    value = task.inference_samples(service.project(project), identity, checkpoint_id)
-    return {
+    try:
+        value = task.inference_samples(service.project(project), identity, checkpoint_id)
+    except FileNotFoundError as exc:
+        raise ValueError(
+            "inference_preparation_missing: 检查点关联的准备或样本文件不存在，请确认数据准备仍可用"
+        ) from exc
+    result = {
         "partitions": value.get("partitions", {}),
         "selection_supported": value.get("selection_supported", True),
         "fields": value.get("fields", []),
@@ -37,6 +43,9 @@ def samples(service, project: str, identity: str, checkpoint_id: str) -> dict:
         "compatibility": value.get("compatibility"),
         "preparation": {k: (value.get("preparation") or {}).get(k) for k in ("digest", "revision")},
     }
+    if "vtk_exports" in value:
+        result["vtk_exports"] = value["vtk_exports"]
+    return result
 
 
 def check(service, project: str, identity: str, request: dict) -> dict:
@@ -44,6 +53,7 @@ def check(service, project: str, identity: str, request: dict) -> dict:
     from ..capabilities.aero_cfd import require_profile
 
     require_profile(service, project, identity)
+    _migrate_official_scripts(service, service.project(project), identity)
     value = task.check_inference(service.project(project), identity, request)
     return {
         "request": value["request"],
@@ -58,6 +68,7 @@ def submit(service, project: str, identity: str, request: dict) -> dict:
     from ..capabilities.aero_cfd import require_profile
 
     require_profile(service, project, identity)
+    _migrate_official_scripts(service, service.project(project), identity)
     return domain.batch(task.submit_inference(service.project(project), identity, request))
 
 

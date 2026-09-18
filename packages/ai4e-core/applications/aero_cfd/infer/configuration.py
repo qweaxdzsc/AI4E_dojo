@@ -4,6 +4,36 @@ from copy import deepcopy
 
 from ai4e_core.base.config import plain
 
+try:
+    from ai4e_spec.artifacts.inference import apply_export_aliases
+except ImportError:  # 契约包尚未重装时，脚本入口仍须能导入
+
+    def apply_export_aliases(settings: dict, incoming: dict | None = None) -> dict:
+        """与契约包同一规则：未拆新键时旧键同时开关二者。"""
+        incoming = incoming if isinstance(incoming, dict) else settings
+
+        def present(key: str) -> bool:
+            return key in incoming and incoming[key] is not None
+
+        split = present("export_pointcloud") or present("export_mesh")
+        if not split:
+            vtk = settings.get("export_vtk")
+            value = True if vtk is None else bool(vtk)
+            settings["export_pointcloud"] = value
+            settings["export_mesh"] = value
+        else:
+            if present("export_pointcloud"):
+                settings["export_pointcloud"] = bool(incoming["export_pointcloud"])
+            else:
+                settings["export_pointcloud"] = True
+            if present("export_mesh"):
+                settings["export_mesh"] = bool(incoming["export_mesh"])
+            else:
+                vtk = incoming.get("export_vtk", settings.get("export_vtk"))
+                settings["export_mesh"] = True if vtk is None else bool(vtk)
+        settings["export_vtk"] = bool(settings["export_mesh"])
+        return settings
+
 DEFAULTS = {
     "checkpoint": None,
     "preparation": None,
@@ -14,6 +44,8 @@ DEFAULTS = {
     "evaluate": True,
     "save_predictions": True,
     "export_vtk": True,
+    "export_pointcloud": True,
+    "export_mesh": True,
 }
 OPTIONAL = {
     "prediction",
@@ -39,7 +71,9 @@ def resolve_infer(config: dict) -> dict:
     unknown = set(settings) - set(DEFAULTS) - OPTIONAL
     if unknown:
         raise ValueError(f"未知 infer 参数: {sorted(unknown)}")
-    settings = {**deepcopy(DEFAULTS), **settings}
+    incoming = dict(settings)
+    settings = {**deepcopy(DEFAULTS), **incoming}
+    apply_export_aliases(settings, incoming)
     for key in ("fields", "metrics"):
         if key in settings and settings[key] is not None:
             values = settings[key]
@@ -60,11 +94,13 @@ def resolve_infer(config: dict) -> dict:
     size = settings["query_chunk_size"]
     if isinstance(size, bool) or not isinstance(size, int) or size < 1:
         raise ValueError("infer.query_chunk_size 必须为正整数")
-    for key in ("evaluate", "save_predictions", "export_vtk"):
+    for key in ("evaluate", "save_predictions", "export_vtk", "export_pointcloud", "export_mesh"):
         if not isinstance(settings[key], bool):
             raise TypeError(f"infer.{key} 必须为布尔值")
-    if settings["export_vtk"] and not settings["save_predictions"]:
-        raise ValueError("导出网格需要保存预测")
+    if (settings["export_pointcloud"] or settings["export_mesh"]) and not settings[
+        "save_predictions"
+    ]:
+        raise ValueError("导出点云或 VTK 网格化数据需要保存预测")
     if not settings["evaluate"] and not settings["save_predictions"]:
         raise ValueError("推理至少需要评价或保存预测")
     if not isinstance(settings["device"], str) or not settings["device"]:
@@ -80,6 +116,8 @@ def inference_parameters(config: dict) -> dict:
     cfg.setdefault("train", {})["device"] = cfg["infer"]["device"]
     if cfg["infer"]["preparation"]:
         cfg["train"]["preparation"] = cfg["infer"]["preparation"]
+        # 独立推理的数据身份由选定准备固定，不消费别的阶段遗留的清单路径。
+        cfg["train"]["manifest"] = None
     return cfg
 
 
@@ -87,6 +125,10 @@ def public_to_business(config: dict) -> dict:
     """将已展开的 checkpoint 用户配置还原为业务声明，供只读检查使用。"""
     cfg = plain(config)
     if "rawprep" in cfg:
+        # 公共树把加载路径移入 inputs；未选初始权重仍是领域缺省 None。
+        cfg.setdefault("model", {}).setdefault(
+            "initial_weights", cfg.get("inputs", {}).get("train", {}).get("initial_weights")
+        )
         cfg.update(cfg.pop("rawprep"))
         prep = cfg.setdefault("trainprep", {})
         if "normalization" in prep:

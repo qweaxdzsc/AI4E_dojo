@@ -1,0 +1,38 @@
+{'task': 'f540a1f563f8419ba2adf8dbe47e1cb4', 'training': '3a5583c26bb94961994a0e03a3236334', 'inference': '72f929b0583f4af8a0a72ff63711ef28', 'shared': '/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/shared/datasets/shapenet_car4/content/manifest.json', 'train_samples': ['param1/1dc58be25e1b6e5675cad724c63e222e'], 'test_samples': ['param0/100715345ee54d7ae38b52b4ee9d36a3'], 'epochs': 1, 'device': 'cpu', 'raw_grid': 'unavailable', 'isolated_original_data': '/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/9c1dac251856411d9091d8d1cc60bc3e/data/50b04c2d16de4d25b9603eceba7d2790', 'prediction': '/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/f540a1f563f8419ba2adf8dbe47e1cb4/runs/72f929b0583f4af8a0a72ff63711ef28/artifacts/inference-results.json'}
+{'task': 'e0086a31a4b04da0a466c295c44d6cd6', 'training': 'f8c82d66786345f4b0f701cd252f3f57', 'inference': '3f85f1940cba41c0b4ef24c4095c356a', 'shared': '/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/shared/datasets/shapenet_car4/content/manifest.json', 'train_samples': ['param1/1dc58be25e1b6e5675cad724c63e222e'], 'test_samples': ['param0/100715345ee54d7ae38b52b4ee9d36a3'], 'epochs': 1, 'device': 'cpu', 'raw_grid': 'unavailable', 'isolated_original_data': '/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/9c1dac251856411d9091d8d1cc60bc3e/data/50b04c2d16de4d25b9603eceba7d2790', 'prediction': '/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/e0086a31a4b04da0a466c295c44d6cd6/runs/3f85f1940cba41c0b4ef24c4095c356a/artifacts/inference-results.json'}
+[
+  {
+    "task": "f540a1f563f8419ba2adf8dbe47e1cb4",
+    "training": "3a5583c26bb94961994a0e03a3236334",
+    "inference": "72f929b0583f4af8a0a72ff63711ef28",
+    "shared": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/shared/datasets/shapenet_car4/content/manifest.json",
+    "train_samples": [
+      "param1/1dc58be25e1b6e5675cad724c63e222e"
+    ],
+    "test_samples": [
+      "param0/100715345ee54d7ae38b52b4ee9d36a3"
+    ],
+    "epochs": 1,
+    "device": "cpu",
+    "raw_grid": "unavailable",
+    "isolated_original_data": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/9c1dac251856411d9091d8d1cc60bc3e/data/50b04c2d16de4d25b9603eceba7d2790",
+    "prediction": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/f540a1f563f8419ba2adf8dbe47e1cb4/runs/72f929b0583f4af8a0a72ff63711ef28/artifacts/inference-results.json"
+  },
+  {
+    "task": "e0086a31a4b04da0a466c295c44d6cd6",
+    "training": "f8c82d66786345f4b0f701cd252f3f57",
+    "inference": "3f85f1940cba41c0b4ef24c4095c356a",
+    "shared": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/shared/datasets/shapenet_car4/content/manifest.json",
+    "train_samples": [
+      "param1/1dc58be25e1b6e5675cad724c63e222e"
+    ],
+    "test_samples": [
+      "param0/100715345ee54d7ae38b52b4ee9d36a3"
+    ],
+    "epochs": 1,
+    "device": "cpu",
+    "raw_grid": "unavailable",
+    "isolated_original_data": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/9c1dac251856411d9091d8d1cc60bc3e/data/50b04c2d16de4d25b9603eceba7d2790",
+    "prediction": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/e0086a31a4b04da0a466c295c44d6cd6/runs/3f85f1940cba41c0b4ef24c4095c356a/artifacts/inference-results.json"
+  }
+]

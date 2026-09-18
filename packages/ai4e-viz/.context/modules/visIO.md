@@ -44,3 +44,5 @@
 - `frontend/src/modules/visIO/index.js`：独立应用交互与调用适配。
 - `frontend/src/modules/visIO/model.js`：独立应用交互与调用适配。
 - `frontend/src/modules/visIO/module.js`：独立应用交互与调用适配。
+
+2026-09-16 显示设置：对应模块 PRD 已更新色标/范围/背景、矢量采样或透明输出职责。专项测试 `backend/tests/modules/test_phys_display_settings.py`；前端透明表单 `frontend/src/test/transparentExport.test.jsx`，真实入口 `tests/integration/viz_interaction_browser.cjs`（Dojo 根）。

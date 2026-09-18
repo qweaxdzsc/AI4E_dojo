@@ -17,12 +17,16 @@ export interface Compare {
 export interface ConfigEdit {
   revision: string;
   rawprep: Record<string, unknown>;
+  edited_paths?: ((string)[])[] | null;
+  removed_paths?: ((string)[])[] | null;
   processed_name?: string | null;
   profile?: Record<string, unknown> | null;
 }
 export interface ConfigurationEdit {
   expected_revision: string;
   values: Record<string, unknown>;
+  edited_paths?: ((string)[])[] | null;
+  removed_paths?: ((string)[])[] | null;
   stage: string;
   bindings?: Record<string, Record<string, unknown> | null>;
   target_case_id?: string | null;
@@ -70,6 +74,8 @@ export interface InferenceOptionsRequest {
   evaluate?: boolean;
   save_predictions?: boolean;
   export_vtk?: boolean;
+  export_pointcloud?: boolean;
+  export_mesh?: boolean;
   query_chunk_size?: number;
 }
 export interface MetricRequest {
@@ -119,6 +125,7 @@ export interface Selection {
   idempotency_key?: string | null;
   sample_scope?: Record<string, unknown> | null;
   catalog_revision?: string | null;
+  overwrite_processed_name?: boolean;
 }
 export interface StageOperation {
   expected_revision: string;

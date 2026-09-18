@@ -35,8 +35,13 @@ def comparison_mesh(config: dict, sample: str, domain: str, points):
 
     from ai4e_core.abilities.data.source.adapter.vtk import load
 
+    dataset = config.get("dataset") if isinstance(config.get("dataset"), dict) else {}
+    raw = (config.get("inputs") or {}).get("rawprep") if isinstance(config.get("inputs"), dict) else {}
+    root = dataset.get("root") or (raw.get("source") if isinstance(raw, dict) else None)
+    if not root:
+        raise FileNotFoundError("缺少原始数据根（dataset.root 或 inputs.rawprep.source）")
     filenames = {"surface": "quadpress_smpl.vtk", "volume": "hexvelo_smpl.vtk"}
-    return load(Path(config["dataset"]["root"]) / sample / filenames[domain])
+    return load(Path(root) / sample / filenames[domain])
 
 
 def comparison_metadata(config, sample, domain):
@@ -46,7 +51,10 @@ def comparison_metadata(config, sample, domain):
     from ai4e_core.abilities.data.validate.fingerprint import file_fingerprint, fingerprint
 
     filename = "quadpress_smpl.vtk" if domain == "surface" else "hexvelo_smpl.vtk"
-    path = Path(config["dataset"]["root"]) / sample["identity"]["sample"] / filename
+    dataset = config.get("dataset") if isinstance(config.get("dataset"), dict) else {}
+    raw = (config.get("inputs") or {}).get("rawprep") if isinstance(config.get("inputs"), dict) else {}
+    root = dataset.get("root") or (raw.get("source") if isinstance(raw, dict) else None)
+    path = Path(root) / sample["identity"]["sample"] / filename if root else Path()
     units = {}
     units.update(config["dataset"].get("field_units", {}))
     if not path.is_file():

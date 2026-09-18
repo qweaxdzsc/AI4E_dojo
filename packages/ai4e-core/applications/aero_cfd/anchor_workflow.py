@@ -3,9 +3,8 @@
 from omegaconf import OmegaConf
 
 from ai4e_core.applications.aero_cfd import rawprep as pre
-from ai4e_core.applications.aero_cfd.post.stage import run as post_run
+from ai4e_core.applications.aero_cfd.infer.anchor_stage import run as post_run
 from ai4e_core.applications.aero_cfd.train import fitting
-from ai4e_core.applications.aero_cfd.train.resolve import apply_resolved
 from ai4e_core.applications.aero_cfd.trainprep import preparation
 from ai4e_core.applications.aero_cfd.trainprep.dataset import probe
 
@@ -36,7 +35,7 @@ def datapre(cfg, *, dataset_component, model_component, executor, session):
 
 def trainprep(cfg, dataset=None, *, dataset_component, model_component, session):
     """独立或在 pipeline 中交付可重复消费的准备引用。"""
-    config = apply_resolved(OmegaConf.to_container(cfg, resolve=True))
+    config = model_component.resolve(OmegaConf.to_container(cfg, resolve=True))
     data = preparation.open_dataset(config, dataset)
     data = preparation.prepare_fields(data)
     data = preparation.freeze_normalization(data)
@@ -49,7 +48,7 @@ def trainprep(cfg, dataset=None, *, dataset_component, model_component, session)
 
 def train(cfg, prepared=None, *, dataset_component, model_component, session):
     """已有准备结果优先；直接训练已有数据时自动执行同一准备链。"""
-    config = apply_resolved(OmegaConf.to_container(cfg, resolve=True))
+    config = model_component.resolve(OmegaConf.to_container(cfg, resolve=True))
     mode = config["train"].get("mode", "fit")
     reference = prepared or config["train"].get("preparation")
     if session.dry_run and reference:

@@ -14,16 +14,17 @@ from .descriptor import describe_rawprep
 
 
 def inspect_dataset(config: dict) -> dict:
-    """检查所选样本依赖；目录预览容忍缺件，执行预检报告全部缺项。"""
+    """检查所选样本依赖；有 sample_scope 时输入宇宙是官方分片，不吃任务里的子集。"""
     import vtk
     from vtk.util.numpy_support import vtk_to_numpy
 
     settings = config["dataset"]
+    scoped = config.get("sample_scope") is not None
     data = open_dataset(
         root=settings["root"],
         manifest=settings.get("manifest"),
-        samples=settings.get("samples", "all"),
-        partition=settings.get("partition", "official"),
+        samples="all" if scoped else settings.get("samples", "all"),
+        partition="official" if scoped else settings.get("partition", "official"),
         check_exists=False,
     )
     partitions = choose_samples(data.partitions, config.get("sample_scope"))
@@ -138,4 +139,5 @@ def inspect_dataset(config: dict) -> dict:
         "inspection": {"scope": "all" if full else "representatives", "checked_samples": checked},
         "capabilities": {"formats": ["pt", "zarr"], "domains": list(selected)},
         "profile": describe_rawprep(config),
+        "sample_universe": "bound_dataset" if scoped else "task_declaration",
     }

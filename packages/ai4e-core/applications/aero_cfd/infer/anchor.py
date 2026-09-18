@@ -1,30 +1,17 @@
 """旧双域锚点模板的独立推理适配；保留评价与保存各自的随机流。"""
 
 from ai4e_core.abilities.data.validate.fingerprint import fingerprint
-from ai4e_core.applications.aero_cfd.post import stage as legacy
+from ai4e_core.applications.aero_cfd.infer import anchor_stage as steps
+from ai4e_core.applications.aero_cfd.infer.vtk_export import (
+    VTK_DISABLED,
+    VTK_FULL_KIND,
+    VTK_NO_PREDICTION,
+    merge_full_mesh_record,
+    skip_vtk,
+    write_anchor_prediction_vtk,
+)
 
 from .configuration import inference_parameters
-
-
-class InferenceSession:
-    """旧步骤的运行交接改写为独立 infer，文件仍由原 writer 提交。"""
-
-    native_inference = True
-
-    def __init__(self, session):
-        self.session = session
-
-    def __getattr__(self, name):
-        return getattr(self.session, name)
-
-    def report(self, value, *, stage="post"):
-        self.session.report({**value, "mode": "infer"}, stage="infer")
-
-    def artifact(self, name, value):
-        if name == "post-progress.json":
-            name = "inference-progress.json"
-            value = {**value, "mode": "infer"}
-        return self.session.artifact(name, value)
 
 
 def open_inference(config, *, model_component, session, dataset_component=None, trained=None):
@@ -32,16 +19,14 @@ def open_inference(config, *, model_component, session, dataset_component=None, 
     cfg = inference_parameters(config)
     if not cfg["infer"]["samples"]:
         raise ValueError("infer.samples 需要明确的样本名单")
-    job = legacy.open_post(
-        cfg, model_component=model_component, session=InferenceSession(session), trained=trained
-    )
+    job = steps.open_post(cfg, model_component=model_component, session=session, trained=trained)
     job.dataset_component = dataset_component
     return job
 
 
-configure_restore = legacy.configure_restore
-configure_prediction = legacy.configure_prediction
-configure_physical_output = legacy.configure_physical_output
+configure_restore = steps.configure_restore
+configure_prediction = steps.configure_prediction
+configure_physical_output = steps.configure_physical_output
 
 
 def configure_evaluation(job, *, settings=None, operation=None, sample_operation=None):
@@ -66,27 +51,45 @@ def configure_evaluation(job, *, settings=None, operation=None, sample_operation
             "target": record["name"],
             "parameters": record["parameters"],
         }
-    return legacy.configure_evaluation(job, settings=value)
+    return steps.configure_evaluation(job, settings=value)
 
 
-configure_save = legacy.configure_save
+configure_save = steps.configure_save
 
 
 def configure_mesh_export(job, *, settings=None):
-    """原生导出开关控制完整网格，旧 post 的独立 query 语义不受影响。"""
+    """网格化导出走完整查询或来源回贴；没有可还原拓扑时不登记网格步骤。"""
+    from ai4e_core.applications.aero_cfd.infer.configuration import apply_export_aliases
+    from ai4e_core.applications.aero_cfd.infer.vtk_capability import describe_vtk_exports
     from ai4e_core.base.config import plain
 
-    value = plain(settings or job.config["infer"])
-    value["query"] = value.get("export_vtk", True) and value.get("query", True)
-    return legacy.configure_mesh_export(job, settings=value)
+    value = apply_export_aliases(plain(settings or job.config["infer"]))
+    capability = describe_vtk_exports(
+        job.config, dataset_component=getattr(job, "dataset_component", None)
+    )
+    mesh_on = bool(value.get("export_mesh", value.get("export_vtk", True)))
+    if mesh_on and not capability["mesh"]["available"]:
+        job.mesh_skip_reason = capability["mesh"]["reason"]
+        value["export_mesh"] = False
+        value["export_vtk"] = False
+        mesh_on = False
+    sources = capability["mesh"].get("sources") or []
+    value["query"] = mesh_on and "source_vtk" in sources and value.get("query", True)
+    value["export_mesh"] = mesh_on
+    value["export_vtk"] = mesh_on
+    job.vtk_exports = capability
+    job.config["infer"].update(value)
+    if isinstance(job.config.get("post"), dict):
+        job.config["post"].update(value)
+    return steps.configure_mesh_export(job, settings=value)
 
 
-check_report = legacy.check_report
+check_report = steps.check_report
 
 
 def execute(job):
     """执行原有锚点流并发布统一索引，不把数组写入索引。"""
-    result = legacy.execute(job)
+    result = steps.execute(job)
     protocol = {
         "version": 1,
         "checkpoint": str(job.restored["checkpoint"]),
@@ -120,13 +123,32 @@ def execute(job):
                     source = Path(mesh[domain])
                     if source.parent != path.parent:
                         raise ValueError("原生网格必须位于本样本结果目录")
-                    metadata.setdefault("meshes", {})[domain] = {
-                        "path": source.name,
-                        "entity_set": "full_source_mesh",
-                        "association": "point",
-                        "fields": ["pred_pressure"] if domain == "surface" else ["pred_velocity"],
-                        "point_count": mesh["points"][domain],
-                    }
+                    fields = mesh.get("fields", {}).get(
+                        domain,
+                        ["pred_pressure", "gt_pressure"]
+                        if domain == "surface"
+                        else ["pred_velocity", "gt_velocity"],
+                    )
+                    merge_full_mesh_record(
+                        metadata,
+                        domain,
+                        {
+                            "path": source.name,
+                            "entity_set": "full_source_mesh",
+                            "kind": mesh.get("kind", VTK_FULL_KIND),
+                            "association": "point",
+                            "fields": fields,
+                            "point_count": mesh["points"][domain],
+                            "sample_id": mesh.get("sample_id"),
+                            "source_sample_id": mesh.get("source_sample_id", mesh.get("sample_id")),
+                        },
+                    )
+            if mesh:
+                metadata.setdefault("vtk", {})["full_mesh"] = {
+                    "exported": True,
+                    "kind": VTK_FULL_KIND,
+                    "sample_id": mesh.get("sample_id"),
+                }
         save_json(path, metadata)
     modern = result.get("inference_protocol")
     if modern:
@@ -143,8 +165,11 @@ def execute(job):
     }
     job.session.artifact("physical-predictions.json", report)
     if modern:
-        job.session.artifact("inference-results.json", {**report, "version": 2})
-    job.session.report(report)
+        path = job.session.artifact("inference-results.json", {**report, "version": 2})
+        from .indexing import register_results
+
+        register_results(job.session, path, report)
+    job.session.report(report, stage="infer")
     return report
 
 
@@ -160,6 +185,7 @@ def configure_selection(job, *, fields=None):
 
 def run_selected_batches(config, restored, batches, *, predict, progress, protocol):
     """原生锚点推理一次预测后评价和保存，旧 post 保留原两次遍历。"""
+    import json
     from pathlib import Path
     from time import perf_counter
     from types import SimpleNamespace
@@ -280,7 +306,23 @@ def run_selected_batches(config, restored, batches, *, predict, progress, protoc
                 )
                 value["manifest"] = str(dest / "manifest.json")
                 progress.committed(value["manifest"])
+                if settings.get("export_pointcloud", settings.get("export_vtk", True)):
+                    write_anchor_prediction_vtk(
+                        value["manifest"],
+                        overwrite=settings.get("overwrite", False),
+                        committed=progress.committed,
+                    )
+                elif not settings.get("export_mesh", settings.get("export_vtk", True)):
+                    skip_vtk(value["manifest"], VTK_DISABLED, channel="pointcloud")
+                    skip_vtk(value["manifest"], VTK_DISABLED, channel="mesh")
+                saved = json.loads(Path(value["manifest"]).read_text())
+                value["vtk"] = saved.get("vtk")
                 timing["save"] = perf_counter() - started
+            if (
+                settings.get("export_pointcloud", settings.get("export_vtk", True))
+                or settings.get("export_mesh", settings.get("export_vtk", True))
+            ) and not value.get("manifest"):
+                value["vtk"] = {"exported": False, "reason": VTK_NO_PREDICTION}
             value["evidence"] = fingerprint(
                 {
                     k: value[k]
@@ -295,5 +337,5 @@ def run_selected_batches(config, restored, batches, *, predict, progress, protoc
     return {
         "results": results,
         "predictions": results,
-        "evaluation": {"metrics": all_metrics.finalize()},
+        "evaluation": {"metrics": all_metrics.finalize() if settings["evaluate"] else {}},
     }

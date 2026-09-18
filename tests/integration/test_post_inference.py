@@ -12,13 +12,27 @@ from omegaconf import OmegaConf
 
 from ai4e_core.abilities.inference.rebuild import rebuild
 from ai4e_core.abilities.postproc.export.pointcloud import write_pointcloud
+from ai4e_core.applications.aero_cfd.infer.configuration import DEFAULTS, OPTIONAL
 from tests.integration.test_dataset_recipe import public_config
 from tests.integration.test_train_recipe import _fit_config, prepared_case
 
 
 def _run_script(folder, cfg, *, entry="train.py", extra=(), timeout=180):
     """运行复制脚本并读取本次唯一新运行的摘要。"""
-    OmegaConf.save(public_config(cfg), folder / "config.yaml")
+    if entry == "post.py":
+        import shutil
+
+        fixture = Path(__file__).resolve().parents[1] / "fixtures/numeric_anchor_infer.py"
+        shutil.copyfile(fixture, folder / "numeric_infer.py")
+        entry = "numeric_infer.py"
+    public = public_config(cfg)
+    if entry == "train.py" and cfg.train.get("mode", "fit") == "fit" and not cfg.train.get("preparation"):
+        # 本夹具显式执行准备再训练；独立 train 的缺引用错误由新入口测试覆盖。
+        entry = "pipeline.py"
+        public.pipeline.stages = ["trainprep", "train"]
+    elif entry == "pipeline.py" and "train" in public.pipeline.stages and "trainprep" not in public.pipeline.stages and not cfg.train.get("preparation"):
+        public.pipeline.stages = ["trainprep", *public.pipeline.stages]
+    OmegaConf.save(public, folder / "config.yaml")
     root = Path(cfg.run_root)
     before = set(root.iterdir()) if root.exists() else set()
     result = subprocess.run(
@@ -36,7 +50,6 @@ def _run_script(folder, cfg, *, entry="train.py", extra=(), timeout=180):
 
 
 def _fit_then_post_config(cfg):
-    cfg.post.legacy_predict = True  # 显式选择历史post数值对照入口。
     _fit_config(cfg)
     cfg.train.max_epochs = 1
     cfg.post.query = False
@@ -142,13 +155,22 @@ def test_anchor_eval_save_and_pointcloud(tmp_path):
 def test_missing_checkpoint_uses_current_run_last(tmp_path):
     folder, cfg = prepared_case(tmp_path)
     _fit_then_post_config(cfg)
-    cfg.pipeline.stages = ["train", "post"]
-    cfg.post.checkpoint = None
+    cfg.pipeline.stages = ["train", "infer", "post"]
+    cfg.infer = {
+        **{k: v for k, v in cfg.post.items() if k in set(DEFAULTS) | OPTIONAL},
+        "samples": ["b"],
+        "device": "cpu",
+        "checkpoint": None,
+    }
     result, directory, summary = _run_script(folder, cfg, entry="pipeline.py")
     assert result.returncode == 0, result.stderr
     report = summary["reports"]["post"]
-    assert Path(report["checkpoint"]) == directory / "checkpoints/last.pt"
-    assert report["predictions"]
+    from ai4e_core.abilities.data.validate.fingerprint import file_fingerprint
+
+    assert summary["reports"]["infer"]["protocol"]["weights"] == file_fingerprint(
+        directory / "checkpoints/last.pt"
+    )
+    assert report["results"]
 
 
 def test_semantic_conflict_writes_no_predictions(tmp_path):
@@ -206,9 +228,9 @@ def test_post_metrics_match_shared_evaluate(tmp_path):
     from ai4e_contrib.ability.model.abupt.model import construct, predict
     from ai4e_contrib.ability.model.abupt.sampling import prepare_inputs
     from ai4e_core import run as core_run
+    from ai4e_core.applications.aero_cfd.infer.anchor_evaluation import evaluate_model
+    from ai4e_core.applications.aero_cfd.infer.anchor_stage import restore_model
     from ai4e_core.applications.aero_cfd.model.objectives import objectives
-    from ai4e_core.applications.aero_cfd.post.evaluation import evaluate_model
-    from ai4e_core.applications.aero_cfd.post.stage import restore_model
     from ai4e_core.applications.aero_cfd.trainprep.dataset import iter_partition_batches
     from ai4e_core.run.training import TrainingRun
 

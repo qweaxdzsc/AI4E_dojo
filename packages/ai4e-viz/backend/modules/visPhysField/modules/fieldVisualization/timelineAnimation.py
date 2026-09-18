@@ -8,6 +8,8 @@ import numpy as np
 import vtk
 from vtk.util import numpy_support
 
+from modules.visEngine import apply_paraview_light_kit
+
 
 class MillerFieldAnimation:
     """保持拓扑与相机稳定，只替换每帧标量缓冲区。"""
@@ -86,6 +88,7 @@ class MillerFieldAnimation:
         renderer = vtk.vtkRenderer()
         renderer.SetBackground(0.055, 0.075, 0.105)
         renderer.AddActor(actor)
+        apply_paraview_light_kit(renderer)
         camera = renderer.GetActiveCamera()
         camera.SetPosition(5.8, -6.2, 3.8)
         camera.SetFocalPoint(0.0, 0.0, 0.0)

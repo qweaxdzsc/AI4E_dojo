@@ -1,0 +1,18 @@
+{
+  "attempts": [
+    {
+      "attempt": "migration-execution-v2",
+      "seconds": 107.23229416704271,
+      "passed": 0,
+      "failed": 9
+    },
+    {
+      "attempt": "migration-execution-v3",
+      "seconds": 178.64015516720247,
+      "passed": 9,
+      "failed": 0
+    }
+  ],
+  "seconds": 285.8724493342452,
+  "note": "Original-data small migration validation; failed attempts retained; not paper training"
+}

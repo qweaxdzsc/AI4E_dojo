@@ -1,16 +1,9 @@
-"""外流训练默认展开与联合校验。"""
+"""外流通用训练控制默认值；模型布局由贡献侧连接解释。"""
 
 from copy import deepcopy
 
 from ai4e_core.abilities.constraint.compare import METHODS
-
-MODEL_DEFAULTS = {
-    "dim": 192,
-    "geometry_depth": 6,
-    "num_heads": 3,
-    "blocks": "pscscscscsc",
-    "radius": 9.0,
-}
+from ai4e_core.abilities.eval.metrics import selected_metrics
 
 POST_DEFAULTS = {
     "random_stream": "global",
@@ -46,8 +39,16 @@ TRAIN_DEFAULTS = {
     "snapshot": True,
     "save_on_interrupt": True,
     "evaluation_split": "test",
+    "training_split": "train",
+    "export_predictions": False,
+    "export_vtk": False,
+    "export_split": "test",
     "log_every": 1,
     "log_every_updates": None,
+    "loss_x_axis": "epoch",
+    "validation_unit": "epoch",
+    "evaluation_aggregate": True,
+    "evaluation_fields": [],
     "stability": False,
 }
 
@@ -55,16 +56,6 @@ TRAIN_DEFAULTS = {
 def expand_defaults(config: dict) -> dict:
     """补齐模型、优化、调度、检查点与损失默认值；``gpu`` 映到 ``cuda``，设备默认 ``auto``。"""
     result = deepcopy(config)
-    model = result.setdefault("model", {})
-    parameters = model.setdefault("parameters", {})
-    for key, value in MODEL_DEFAULTS.items():
-        parameters.setdefault(key, value)
-    model.setdefault("initial_weights", None)
-    model.setdefault("freeze", [])
-    if model.get("data_specs"):
-        parameters.setdefault(
-            "num_domain_decoder_blocks", {d: 12 for d in model["data_specs"]["domains"]}
-        )
     train = result.setdefault("train", {})
     for key, value in TRAIN_DEFAULTS.items():
         train.setdefault(key, deepcopy(value) if isinstance(value, list) else value)
@@ -79,26 +70,37 @@ def expand_defaults(config: dict) -> dict:
 def validate_joint(config: dict) -> None:
     """字段、输出、采样预算和批次限制任一不合则拒绝启动。"""
     train = config.get("train") or {}
+    if "evaluation_metrics" in train:
+        selected_metrics(train["evaluation_metrics"])
+    if train.get("loss_x_axis", "epoch") not in {"epoch", "updates"}:
+        raise ValueError("loss_x_axis 必须为 epoch 或 updates")
+    if train.get("validation_unit", "epoch") not in {"epoch", "updates"}:
+        raise ValueError("validation_unit 必须为 epoch 或 updates")
+    if not isinstance(train.get("evaluation_fields", []), list):
+        raise TypeError("evaluation_fields 必须为列表")
+    if int(train.get("validation_interval", 1)) < 1:
+        raise ValueError("验证间隔必须为正")
     if int(train.get("batch_size", 1)) < 1:
         raise ValueError("批次必须为正")
     if int(train.get("num_workers", 0)) != 0:
-        raise ValueError("本期 AB-UPT 仅支持零读取子进程")
+        raise ValueError("本训练装配仅支持零读取子进程")
     if int(train.get("accumulate", 1)) < 1:
         raise ValueError("梯度累积步必须为正")
     if int(train.get("test_repeat", 10)) < 1:
         raise ValueError("test_repeat 必须为正")
+    if train.get("export_vtk") and not train.get("export_predictions"):
+        raise ValueError("写出网格需要同时打开写出预测")
+    split = train.get("export_split", "test")
+    if not isinstance(split, str) or not split:
+        raise ValueError("训练写出分片不能为空")
+    training_split = train.get("training_split", "train")
+    if training_split == "validation":
+        training_split = "eval"
+    if training_split not in {"train", "test", "eval"}:
+        raise ValueError("训练切片必须是 train、test 或 eval")
     interval = train.get("log_every_updates")
     if interval not in (None, "") and int(interval) < 1:
         raise ValueError("日志更新间隔必须为正")
-    sampling = config.get("sampling") or {}
-    geometry = int((sampling.get("geometry") or {}).get("max_points") or 0)
-    supernodes = int((sampling.get("supernodes") or {}).get("num_points") or 0)
-    if supernodes and geometry and supernodes > geometry:
-        raise ValueError("超节点预算超过几何点数")
-    heads = int((config.get("model") or {}).get("parameters", {}).get("num_heads") or 0)
-    dim = int((config.get("model") or {}).get("parameters", {}).get("dim") or 0)
-    if heads and dim and dim % heads != 0:
-        raise ValueError("模型宽度必须能被头数整除")
     optimizer = str(train.get("optimizer", "lion")).lower()
     if optimizer not in {"adam", "adamw", "lion"}:
         raise ValueError(f"未知优化器种类: {train.get('optimizer')}")

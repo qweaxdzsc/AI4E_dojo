@@ -9,7 +9,7 @@ from ..storage.files import copy_content, write_json
 from ..storage.layout import inside
 from ..storage.records import fetch, listing, put
 from ..storage.snapshots import digest, inventory
-from ..tasks.assets import describe_asset, validate_asset
+from ..tasks.assets import copy_bundle, describe_asset, indexed_asset, validate_asset
 from .project import open_project
 
 
@@ -22,6 +22,7 @@ def register_shared(
     copy: bool = False,
     provenance: dict | None = None,
     dependencies: list[dict] | None = None,
+    bundle: dict | None = None,
 ) -> dict:
     """按资产名登记或复制共享内容；目标存在时拒绝覆盖。"""
     open_project(project)
@@ -30,8 +31,14 @@ def register_shared(
     value = describe_asset(Path(source), kind=kind, source=provenance)
     value["name"] = name
     value["dependencies"] = dependencies or []
+    if bundle is not None:
+        value["bundle"] = bundle
+        validate_asset(project, value)
     for dep in value["dependencies"]:
         validate_asset(project, dep)
+    if copy and value["dependencies"] and not bundle:
+        # 不猜测领域清单中的引用位置；复制主文件不能冒充可迁移的完整资产。
+        raise ValueError("asset_copy_not_portable: publish a self-contained bundle or use reference")
     stage = project / ".dojo" / f"asset-{uuid4().hex}.tmp"
     published = False
     try:
@@ -39,7 +46,9 @@ def register_shared(
             if target.exists():
                 raise FileExistsError(target)
             stage.mkdir()
-            if copy:
+            if copy and bundle:
+                value = copy_bundle(project, value, stage / "content", target / "content")
+            elif copy:
                 src = Path(source).resolve()
                 dest = stage / "content" / src.name if src.is_file() else stage / "content"
                 copy_content(src, dest)
@@ -85,13 +94,39 @@ def share_run_asset(
     run = get_run(project, run_id)
     source = Path(path).resolve()
     roots = [Path(run["run_dir"]).resolve(), Path(run["data_dir"]).resolve()]
+    from .datasets import run_physical_manifest
+
+    physical = run_physical_manifest(project, run)
+    if physical is not None:
+        roots.append(physical.parent.resolve())
     if not any(source.is_relative_to(r) for r in roots):
         raise ValueError("asset_not_owned_by_run")
+    from ai4e_core.run.indexes import validate_asset_content
+
+    from ..storage.files import read_json
+
+    dependencies = []
+    bundle = None
+    index = Path(run["run_dir"]) / "artifacts/assets.json"
+    if index.is_file():
+        matches = [item for item in read_json(index)["items"].values()
+                   if Path(item["path"]).resolve() == source]
+        for item in matches:
+            validate_asset_content(item)
+            if item["kind"] != kind:
+                raise ValueError("asset_kind_conflict")
+            for dependency in item["dependencies"]:
+                dependencies.append(describe_asset(Path(dependency), kind="other"))
+            candidate = indexed_asset(item, provenance={"run_id": run_id})
+            if candidate.get("bundle"):
+                bundle = candidate["bundle"]
     return register_shared(
         project,
         name,
         source,
         kind=kind,
         copy=copy,
+        dependencies=dependencies,
+        bundle=bundle,
         provenance={"run_id": run_id, "task_id": run["task_id"], "version_id": run["version_id"]},
     )

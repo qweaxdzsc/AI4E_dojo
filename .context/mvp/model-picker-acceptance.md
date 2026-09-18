@@ -2,13 +2,17 @@
 
 实施与验收日期：2026-09-14。已完成本切片，日常平台已重启加载新接口。
 
+2026-09-17 显示性能：正式 8000 上 `configuration?stage=model` 约 27ms，`stage-inputs` 约 0.13s，进页慢在 `model-options` 对每个官方模型/变体启动 `describe_case`（实测约 13.6s）。列表现改为只读 YAML 目录，点选再描述；前端配置先出、下拉独立转圈，同任务短时复用。训练设置 1.56s 不能当成模型页已经够快。圈定 `test_web_stage_consistency.py`、`e2e/model-picker.spec.ts`。服务源码变更须重装 `ai4e-server` 后正式 8000 才生效。
+
+2026-09-18 完成态与文案：模型页「保存配置」在已读且未忙碌时可用，未改参数也可保存并记下完成。下拉改为「已导出的模型配置」「当前参数来源」，按钮改为「导出模型配置」。检查或结构跟踪不再冒充完成。圈定 `test_web_stage_consistency.py`、`e2e/model-picker.spec.ts`、`e2e/stage-consistency.spec.ts`。2026-09-18 11:20 正式 5173→8000 对照任务 `测试0918`（`f8f89f8037b34026ae778116f441a3f6`）已冒烟：退出工作台再进入七步仍打勾；「保存配置」未改参数可点，保存后仍可用；旧「结构版本 / 我保存的模型 / 导出模型」文案已换成上述标签并见帮助。Web 源码已由 5173 读到。`ai4e-server`/`ai4e-task` 源码已改（保存只认 `source=save` 或历史 `settings-check:` 记录；后来的 unknown 不盖掉已成功），正式 8000 仍是旧安装副本，新语义须当次授权重装并重启 8000 后才生效。
+
 ## 行为与边界
 
 - 模型页第一项选择同数据集登记模型，参数草稿和能力一起刷新；当前结构只有案例默认档，不虚构版本。采样跟随当前模型字段：AB-UPT 为点/锚点/查询，Transolver-3 为种子/步长/分块，步长只读，切片数量在主干参数；损失不可配时仍展示固定项。换模不沿用上一模型采样字段。模型设置不展示权重加载。圈定 `test_model_sampling_capability_follows_component`、换模回读与 `model-picker`/`stage-consistency` 页面断言。
 - 显式换模完整替换模型、训练和准备段，模型组件从登记案例取得；普通保存保留未编辑字段和用户扩展。
 - 全部训练默认重置，物理清单、原数据绑定、原始处理配置、数据/运行目录与研究版本保持。
 - 旧准备与权重选择解除，历史文件与创建来源保留；旧准备不能用于新模型。物理清单缺目标字段时仍拒绝准备。
-- 清单/准备输入与相关告警放在右侧，模型页不显示检查点告警。last/best/latest 保持运行时标签语义。结构跟踪消费现行 version=2 准备记录，与训练同一条读盘链；旧物理接口不再对现行准备抛 `KeyError('dataset')`。
+- 清单/准备输入与相关告警放在右侧，模型页不显示检查点告警。last/best/latest 保持运行时标签语义。结构跟踪消费现行 version=2 准备记录，与训练同一条读盘链；旧物理接口不再对现行准备抛 `KeyError('dataset')`。正式网络图按宽度适配初始缩放并使用压缩模块视图，避免整图缩成细线。
 - 保存失败不提交后续操作；选项失败可重试，任务切换后的迟到响应不覆盖新任务。
 
 ## 圈定验证
@@ -55,3 +59,11 @@ Python 使用 `uv run pytest`，可加 `--no-sync` 保留已核验安装环境�
 同步 AGENTS、总索引、Web/Server/Task 模块索引、相应 PRD、Task 开发规则及生成的请求契约。task 候选描述是 describe_case 的只读配置覆盖，不能用于执行；核心算法与案例脚本未修改。
 
 日常服务重启前已核对无进行中的研究运行或辅助检查；使用原 root、template、三组授权 data-root 和 8000 端口启动新进程。既有项目与任务未改写，浏览器刷新即可调用新模型选项接口。
+
+## 两档结构图（2026-09-18）
+
+源码已改：viz `inspect/model_graph.py` 按官方两档参数出页；网络公开编码器/几何块/物理块/解码/读出时，`inspect/stage_display.py` 先收成阶段盒再出图，对应选中的 E/F，不再把正式 `predict` 收成一个 `network` 盒或画出 `isfinite`。检查进程取出网络后引用 viz；页面两按钮切换，生成/载入时视窗只留加载样式。历史单图不显示假切换。圈定 `test_algorithm_platform_contract.py`、`test_viz_model_graph.py`、`test_web_stage_consistency.py`、`e2e/model-inspection.spec.ts`。
+
+2026-09-18 15:07–15:12 用户当次授权后重装 `ai4e-viz`（`uv sync --group dev --group visualization --reinstall-package ai4e-viz`），只重启正式 8000。入口 `http://127.0.0.1:5173` → `http://127.0.0.1:8000`。旧 8000 PID **89076**，新 8000 PID **5784**，5173 仍为 **23629**。安装副本与源码摘要一致：`model_graph.py` `88e88db579431334`，`stage_display.py` `5a76470d53f7d788`。对照任务 `测试0918` 重新生成：操作 `07037ccd07654995a8b6b871b70fb0f9` 成功；点生成时视窗 `aria-busy=true`、文案「正在生成模型结构…」、占位三块、iframe 已卸掉；默认阶段主干 **17** 节点，盒名为 encoder / geometry_blocks / embed / physics_blocks / decoder_* / readout_*，与选中 E 一致；切阶段压缩块仍见这些阶段盒和 REPEAT 12x/5x，无 `isfinite`。证据 `/Users/zonghui/work/project_simulation/dojo_train/model-picker/official-20260918-ef-fix/`。
+
+2026-09-18 11:48–11:51 用户当次授权后重装 `ai4e-viz`/`ai4e-task`/`ai4e-server`/`ai4e-core`（`uv sync --group dev --group visualization --reinstall-package …`），只重启正式 8000。入口 `http://127.0.0.1:5173` → `http://127.0.0.1:8000`。旧 8000 PID **34128**，新 8000 PID **61841**，5173 仍为 **23629**。安装副本与源码摘要一致：`model_graph.py` `3c64f9cd682d3695`，`inspection_worker.py` `b191b8053eacff47`，`aero_cfd/inspection.py` `aa7ef286ecd4d0da`，`visualization/application.py` `75151a2b024eb32d`。对照任务 `测试0918`（`179ed1fe447b415b8870c45b6a89a296` / `f8f89f8037b34026ae778116f441a3f6`）模型设置：点生成后视窗 `aria-busy=true`、文案「正在生成模型结构…」、占位三块、iframe 已卸掉；成功操作 `e3920602a19e479995e836f2be467862`，默认阶段主干 8 节点，切阶段压缩块 65 节点，全程只有一次 `POST /model-inspections`。证据 `/Users/zonghui/work/project_simulation/dojo_train/model-picker/official-20260918-two-views/`。经验检索 receipt `receipt_2caf60778b6a411f9eb8d13f1715cfaa`，无覆盖本发布的已批准技术条目。

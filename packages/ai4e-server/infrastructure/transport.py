@@ -30,16 +30,27 @@ def error_payload(detail: str, request_id: str) -> dict:
     messages = {
         "configuration_revision_conflict": "配置已被修改，请刷新后重试，当前草稿尚未提交。",
         "stage_input_required": "请先选择此阶段需要的输入。",
+        "train_requires_preparation": "训练设置只消费已有准备完成的数据，请先完成数据准备。",
         "idempotency_conflict": "重复提交的内容不同，请核对当前操作。",
         "path_outside_root": "所选文件不在可访问范围内。",
-        "processed_dataset_name_conflict": "该平台数据集名称已被不同处理声明占用，请换一个名称。并行线程不改变数据身份。",
+        "shared_dataset_exists": "同名项目共享数据集已存在，请确认是否覆盖。",
+        "shared_dataset_busy": "该共享数据集正在处理，请等待当前运行结束。",
+        "shared_dataset_unavailable": "共享数据集当前不可用，请检查原始处理结果。",
+        "processed_dataset_name_conflict": "该平台数据集名称已存在。未确认覆盖时不能提交。",
+        "preparation_requires_regeneration": (
+            "数据准备已改用现行配置方式，这份旧准备不能再训，请按现行数据准备重新生成。"
+        ),
+        "inference_batch_not_found": "推理批次不存在或已被清理，请重新选择历史批次。",
     }
+    message = messages.get(code, detail)
+    if location and code in messages:
+        message = message.rstrip("。") + "：" + location
     return {
         "detail": detail,
         "error": {
             "code": code,
             "location": location or None,
-            "message": messages.get(code, detail),
+            "message": message,
             "request_id": request_id,
         },
     }

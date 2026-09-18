@@ -20,12 +20,13 @@ export interface ArtifactNode {
   children?: ArtifactNode[];
   file?: ArtifactTreeFile;
 }
-function ensureDir(nodes: ArtifactNode[], path: string, name: string): ArtifactNode {
-  let node = nodes.find((item) => item.path === path && !item.file);
+function ensureDir(nodes: ArtifactNode[], path: string, name: string, file?: ArtifactTreeFile): ArtifactNode {
+  let node = nodes.find((item) => item.path === path && (!item.file || !!item.file.directory));
   if (!node) {
-    node = { key: "dir:" + path, name, path, children: [] };
+    node = { key: file?.id || "dir:" + path, name, path, children: [] };
     nodes.push(node);
   }
+  if (file?.directory) node.file = file;
   return node;
 }
 /** 搜索保留祖先，目录身份不受分页或展开状态影响。 */
@@ -44,7 +45,7 @@ export function artifactTree(files: ArtifactTreeFile[], query = ""): ArtifactNod
         nodes.push({ key: file.id, name, path, file });
         return;
       }
-      const node = ensureDir(nodes, path, name);
+      const node = ensureDir(nodes, path, last && file.name ? file.name : name, last ? file : undefined);
       nodes = node.children!;
     });
   }
@@ -55,11 +56,8 @@ export function selectableFiles(
   node: ArtifactNode,
   accept: (file: ArtifactTreeFile) => boolean = (file) => !!file.visualizable && !file.directory,
 ): ArtifactTreeFile[] {
-  return node.file
-    ? accept(node.file)
-      ? [node.file]
-      : []
-    : (node.children || []).flatMap((child) => selectableFiles(child, accept));
+  if (node.file && !node.file.directory) return accept(node.file) ? [node.file] : [];
+  return (node.children || []).flatMap((child) => selectableFiles(child, accept));
 }
 /** 已展开路径：至少有一条更深的子项。 */
 export function loadedDirectories(files: ArtifactTreeFile[]): string[] {

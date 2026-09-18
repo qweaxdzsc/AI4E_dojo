@@ -56,6 +56,18 @@ export function InferenceResults({
         y = b.display[sort];
       return x == null ? 1 : y == null ? -1 : x - y;
     });
+  const vtkSkipReasons = (vtk: any) => {
+    if (!vtk) return [];
+    const reasons: string[] = [];
+    if (vtk.pointcloud && vtk.pointcloud.exported === false)
+      reasons.push(vtk.pointcloud.reason || "该次推理未写出点云");
+    if (vtk.mesh && vtk.mesh.exported === false)
+      reasons.push(vtk.mesh.reason || "该次推理未写出网格化");
+    if (!reasons.length && vtk.exported === false)
+      reasons.push(vtk.reason || "该次推理未写出点云或网格化");
+    return reasons;
+  };
+  const missingVtk = value.items.filter((r) => vtkSkipReasons(r.vtk).length > 0);
   const checkpointName = (r: any) =>
     typeof r.checkpoint === "string"
       ? r.checkpoint
@@ -75,6 +87,17 @@ export function InferenceResults({
               <Empty description="尚无已提交结果文件" />
             ) : (
               <div className="infer-table-scroll">
+                {missingVtk.length > 0 && (
+                  <Alert
+                    type="warning"
+                    showIcon
+                    style={{ marginBottom: 12 }}
+                    message="有样本未写出点云或网格化"
+                    description={missingVtk
+                      .map((r) => `${r.sample_id || r.sample}：${vtkSkipReasons(r.vtk).join("；")}`)
+                      .join("；")}
+                  />
+                )}
                 <table className="infer-table">
                   <thead>
                     <tr>
@@ -123,7 +146,7 @@ export function InferenceResults({
           },
           {
             key: "metrics",
-            label: "指标比较",
+            label: "聚合",
             children: (
               <>
                 <div className="infer-tools">

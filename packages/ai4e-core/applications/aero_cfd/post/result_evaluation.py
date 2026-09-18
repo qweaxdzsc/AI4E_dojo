@@ -3,7 +3,7 @@
 import csv
 import hashlib
 import json
-import logging
+from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -12,13 +12,86 @@ import numpy as np
 from ai4e_core.abilities.data.save.arrays import atomic_path, save_json
 from ai4e_core.abilities.eval.result_metrics import METRICS, evaluate_arrays
 from ai4e_core.applications.aero_cfd.infer.results import read_sample
-from ai4e_core.run import RunWriter
 
 
 def metric_catalog():
     """返回固定结果可重算的评价指标。"""
     from ai4e_core.abilities.eval.catalog import metric_catalog as catalog
+
     return [m for m in catalog() if m["scope"] == "field"]
+
+
+def evaluate_fields(
+    sample: dict,
+    *,
+    selections: list[str] | None,
+    metrics: list[str] | None = None,
+    operation: Callable | None = None,
+) -> list[dict]:
+    """评价已经绑定的内存字段；与文件评价复用同一数值能力。"""
+    from ai4e_core.abilities.eval.region_statistics import region_statistics
+
+    from .field_binding import select_field
+
+    rows = []
+    arrays = sample["fields"]
+    if not selections:
+        selections = [
+            f"{domain}:{name}:"
+            + ("scalar" if arrays[key + ".prediction"].shape[1] == 1 else "magnitude")
+            for domain, declaration in sample["metadata"]["domains"].items()
+            for name, key in declaration["targets"].items()
+        ]
+    for selection in selections:
+        domain, declaration, key, component = select_field(sample, selection)
+        truth = arrays.get(key + ".truth")
+        row = {
+            "id": selection,
+            "domain": domain,
+            "field": key,
+            "component": component,
+            "unit": declaration.get("units", {}).get(selection.split(":")[1]),
+            "region": "whole",
+            "algorithm": "physical-metrics-v2",
+        }
+        prediction = arrays[key + ".prediction"]
+        if component == "magnitude":
+            values = np.linalg.norm(prediction.astype(np.float64), axis=1)
+        else:
+            index = 0 if component == "scalar" and prediction.shape[1] == 1 else int(component)
+            if not 0 <= index < prediction.shape[1]:
+                raise ValueError("分量选择不合法")
+            values = prediction[:, index]
+        row["statistics"] = {
+            **region_statistics(
+                values,
+                mask=arrays[declaration["validity"]] if declaration.get("validity") else None,
+            ),
+            "field": key + ".prediction",
+            "component": component,
+            "unit": row["unit"],
+        }
+        if truth is None:
+            row.update(
+                values={},
+                status="unavailable",
+                reason="没有真值",
+                count=row["statistics"]["count"],
+                excluded=row["statistics"]["excluded"],
+            )
+        else:
+            row.update(
+                (operation or evaluate_arrays)(
+                    arrays[key + ".prediction"],
+                    truth,
+                    component=component,
+                    mask=arrays[declaration["validity"]] if declaration.get("validity") else None,
+                    metrics=metrics,
+                )
+            )
+            row["status"] = "succeeded"
+        rows.append(row)
+    return rows
 
 
 def describe_result_fields(manifests):
@@ -117,104 +190,70 @@ def evaluate_result(item, selections, metrics):
     return rows
 
 
-def run_evaluation(job, *, publish, canceled):
-    """在独立评价运行中逐样本计算；writer写运行，save写数据。"""
-    directory = Path(job["run_dir"])
-    directory.mkdir(parents=True, exist_ok=False)
-    (directory / "inputs").mkdir()
-    (directory / "logs").mkdir()
-    writer = RunWriter(directory)
-    writer.write_inputs(None, job["request"])
-    writer.write_provenance({k: job[k] for k in ("run_id", "task_id", "version_id")})
-    logger = logging.getLogger("dojo.post.metrics." + job["id"])
-    handler = writer.attach_log(logger)
-    rows, status = [], "running"
-    try:
-        for item in job["inputs"]:
-            if canceled():
-                status = "canceled"
-                break
-            logger.info("[post/指标/开始] %s", item["sample"])
-            try:
-                current = evaluate_result(item, job["request"]["fields"], job["request"]["metrics"])
-            except Exception as exc:  # noqa: BLE001 - 单个坏结果返回失败行，不中断其他样本。
-                current = [
-                    {
-                        "id": item["id"] + ":" + f["id"],
-                        "field_id": f["id"],
-                        "result_id": item["id"],
-                        "batch_id": item["batch_id"],
-                        "run_id": item["run_id"],
-                        "sample": item["sample"],
-            "split": item.get("split", "unknown"),
-            "algorithm": "physical-metrics-v2",
-                        "checkpoint": item["checkpoint"],
-                        "field": f["field"],
-                        "domain": f["domain"],
-                        "component": f["component"],
-                        "status": "failed",
-                        "error": str(exc),
-                        "values": {},
-                        "calculated_at": datetime.now(UTC).isoformat(),
-                    }
-                    for f in job["request"]["fields"]
-                ]
+def run_evaluation(job, *, runtime):
+    """计算固定结果；运行外围由调用方注入，数据逐样本追加以保留部分交付。"""
+    destination = Path(job["data_dir"])
+    destination.mkdir(parents=True, exist_ok=True)
+    rows, failed = [], 0
+
+    def process(item):
+        runtime.logger.info("[post/指标/开始] %s", item["sample"])
+        try:
+            return evaluate_result(item, job["request"]["fields"], job["request"]["metrics"])
+        except Exception as exc:  # noqa: BLE001 - 单个坏结果保留失败行，继续其它样本。
+            return [
+                {
+                    "id": item["id"] + ":" + field["id"],
+                    "field_id": field["id"],
+                    "result_id": item["id"],
+                    "batch_id": item["batch_id"],
+                    "run_id": item["run_id"],
+                    "sample": item["sample"],
+                    "split": item.get("split", "unknown"),
+                    "algorithm": "physical-metrics-v2",
+                    "checkpoint": item["checkpoint"],
+                    "field": field["field"],
+                    "domain": field["domain"],
+                    "component": field["component"],
+                    "status": "failed",
+                    "error": str(exc),
+                    "values": {},
+                    "calculated_at": datetime.now(UTC).isoformat(),
+                }
+                for field in job["request"]["fields"]
+            ]
+
+    # 一行是一份完整样本结果；强制结束产生的最后半行由读端忽略。
+    with (destination / "metrics.jsonl").open("x", encoding="utf-8") as journal:
+        for current in runtime.execute_samples(job["inputs"], process):
+            journal.write(json.dumps(current, ensure_ascii=False) + "\n")
+            journal.flush()
             rows.extend(current)
-            record = {
-                "version": 1,
-                "algorithm": "physical-metrics-v1",
-                "rows": rows,
-                "status": "running",
-            }
-            save_json(Path(job["data_dir"]) / "metrics.json", record)
-            writer.write_artifact(
-                "post-metrics.json", {"status": "running", "completed": len(rows)}
-            )
-            publish({"completed": len(rows), "failed": sum(r["status"] == "failed" for r in rows)})
-        if status != "canceled":
-            status = (
-                "canceled"
-                if canceled()
-                else "partial"
-                if any(r["status"] == "failed" for r in rows)
-                else "succeeded"
-            )
-        record = {
+            failed += sum(row["status"] == "failed" for row in current)
+            runtime.artifact("post-metrics.json", {"status": "running", "completed": len(rows)})
+            runtime.publish({"completed": len(rows), "failed": failed})
+    status = "canceled" if runtime.canceled() else "partial" if failed else "succeeded"
+    save_json(
+        destination / "metrics.json",
+        {
             "version": 1,
             "algorithm": "physical-metrics-v1",
             "rows": rows,
             "status": status,
             "selection": job["request"],
             "calculated_at": datetime.now(UTC).isoformat(),
-        }
-        save_json(Path(job["data_dir"]) / "metrics.json", record)
-        writer.write_artifact(
-            "post-metrics.json",
-            {
-                "status": status,
-                "completed": len(rows),
-                "path": str(Path(job["data_dir"]) / "metrics.json"),
-            },
-        )
-        writer.write_summary(
-            {
-                "failed": status != "succeeded",
-                "reports": {"post": {"status": status}},
-                "run_dir": str(directory),
-            }
-        )
-        logger.info("[post/指标/结束] %s", status)
-        return {
+        },
+    )
+    runtime.artifact(
+        "post-metrics.json",
+        {
             "status": status,
             "completed": len(rows),
-            "failed": sum(r["status"] == "failed" for r in rows),
-        }
-    except BaseException as exc:
-        writer.write_summary({"failed": True, "error": str(exc), "reports": {}})
-        raise
-    finally:
-        logger.removeHandler(handler)
-        handler.close()
+            "path": str(destination / "metrics.json"),
+        },
+    )
+    runtime.logger.info("[post/指标/结束] %s", status)
+    return {"status": status, "completed": len(rows), "failed": failed}
 
 
 def export_evaluation(record, path, *, format, row_ids=None):
@@ -228,6 +267,7 @@ def export_evaluation(record, path, *, format, row_ids=None):
         save_json(path, {**record, "rows": rows})
     elif format == "xlsx":
         from ai4e_core.abilities.report import export_tables
+
         export_tables(path, {"指标": [{**r, **r["values"]} for r in rows]}, format="xlsx")
     elif format == "csv":
         names = [

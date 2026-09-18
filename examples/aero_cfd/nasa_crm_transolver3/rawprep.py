@@ -1,4 +1,4 @@
-"""NASA 原始处理：来源读取、物理字段、校验、容器与事务发布。"""
+"""原始处理：登记单样本步骤，再统一执行和发布。"""
 
 import sys
 
@@ -6,25 +6,40 @@ sys.dont_write_bytecode = True
 from configuration import application_parameters, load_components, load_configuration
 
 from ai4e_core import run
-from ai4e_core.applications.aero_cfd.rawprep import physical as pre
-from ai4e_core.run.training import TrainingRun
+from ai4e_core.applications.aero_cfd import rawprep as pre
 
 
 def rawprep(cfg):
-    """NASA 无体场，保留来源的完整表面字段与实体身份。"""
-    component = load_components(cfg).dataset
-    source = pre.open_source(application_parameters(cfg), component=component)
-    data = pre.read(source)
-    data = pre.extract_fields(data, component=component)
-    data = pre.validate_fields(data)
-    data = pre.select_fields(
-        data,
-        source=source,
-        extraction=cfg.rawprep.get("extraction"),
-        format=cfg.rawprep.get("format", "pt"),
+    """交付本次成功处理的数据清单，检查模式不发布数据。"""
+    config = application_parameters(cfg, session=run.TrainingRun())
+    components = load_components(cfg)
+    source = pre.open_source(component=components.dataset, settings=config["dataset"])
+
+    # 仅登记；每个样本在 run.execute 中才读取和计算。
+    data = pre.read(source, sources=cfg.rawprep.sources)
+    data = pre.extract_fields(
+        data, fields=cfg.rawprep.fields, extraction=cfg.rawprep.get("extraction")
     )
-    results = run.execute(data, save=pre.save_strategy(source), output=cfg.paths.datasets)
-    return pre.publish_dataset(results, source=source, session=TrainingRun())
+    data = pre.derive_geometry(data, features=cfg.rawprep.geometry)
+    data = pre.select_fields(
+        data, fields=cfg.rawprep.save_fields, extraction=cfg.rawprep.get("extraction")
+    )
+    data = pre.validate_fields(data)
+    data = pre.filter_points(data, filters=cfg.rawprep.filters)
+    data = pre.validate_fields(data)
+    data = pre.encode(
+        data,
+        **(
+            {"formats": list(cfg.rawprep.formats)}
+            if "formats" in cfg.rawprep
+            else {"format": cfg.rawprep.get("format", "pt")}
+        ),
+        vtkhdf=cfg.rawprep.vtkhdf,
+    )
+
+    results = run.execute(data, save=pre.save_sample, output=config["paths"]["datasets"])
+    statistics = pre.compute_statistics(results, settings=cfg.rawprep.statistics)
+    return pre.publish_dataset(results, statistics=statistics, session=run.TrainingRun())
 
 
 if __name__ == "__main__":

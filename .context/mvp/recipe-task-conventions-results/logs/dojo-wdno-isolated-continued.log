@@ -1,0 +1,58 @@
+............s.s..F..                                                     [100%]
+=================================== FAILURES ===================================
+____________________ test_timeout_stops_actual_task_worker _____________________
+
+tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-505/test_timeout_stops_actual_task0')
+
+    def test_timeout_stops_actual_task_worker(tmp_path):
+        import ai4e_task as task
+    
+        from tools.verification.wdno.task_replay import wait_task
+    
+        code = tmp_path / "slow-recipe"
+        cfg = fixture(code)
+        cfg["pipeline"]["stages"] = ["rawprep"]
+        (code / "pipeline.py").write_text("""import time
+    from configuration import load_configuration
+    from ai4e_core import run
+    
+    def slow(cfg):
+        time.sleep(30)
+    
+    def pipeline(cfg):
+        return run.stage("rawprep", slow, cfg)
+    
+    if __name__ == "__main__":
+        raise SystemExit(run.launch(pipeline, script=__file__, config_loader=load_configuration))
+    """)
+        project = tmp_path / "stop-project"
+        task.create_project(project)
+        current = task.new_task(project, "slow-wdno-test", source=code, configuration=cfg)
+        record = task.submit_run(project, current["id"])
+        with pytest.raises(TimeoutError):
+>           wait_task(project, record["id"], timeout=0.1)
+
+tests/integration/test_wdno_task.py:217: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+project = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-505/test_timeout_stops_actual_task0/stop-project')
+run_id = '4c8b6e5ddc3c4d95a4904ef4e9a01410', timeout = 0.1
+
+    def wait_task(project, run_id, *, timeout=180):
+        """验收进程中断/超时时，通过公开API收尾独立会话中的Task worker。"""
+        try:
+            done = task.wait_run(project, run_id, timeout=timeout, interval=0.1)
+            if done["status"] not in {"succeeded", "failed", "stopped"}:
+                raise TimeoutError("Task验收等待未完成")
+            return done
+        except BaseException:
+            # Task worker独立于预算监督的进程组，不能只结束验收父进程。
+            stopped = task.stop_run(project, run_id, timeout=10)
+            if stopped["status"] not in {"succeeded", "failed", "stopped"}:
+>               raise RuntimeError("Task停止尚未确认，不能把本次验收记作收尾") from None
+E               RuntimeError: Task停止尚未确认，不能把本次验收记作收尾
+
+tools/verification/wdno/task_replay.py:77: RuntimeError
+=========================== short test summary info ============================
+FAILED tests/integration/test_wdno_task.py::test_timeout_stops_actual_task_worker
+1 failed, 17 passed, 2 skipped in 48.87s

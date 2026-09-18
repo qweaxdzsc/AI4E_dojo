@@ -10,6 +10,18 @@ from ..storage.snapshots import digest, inventory
 KINDS = {"dataset", "preparation", "checkpoint", "model_preset", "other"}
 
 
+def data_inventory(path: str | Path) -> dict[str, str]:
+    """数据允许只读文件链接，内容身份随目标改变；代码快照仍拒绝链接。"""
+    from ai4e_core.run.indexes import file_inventory
+
+    path = Path(path)
+    if path.is_dir():
+        for member in path.rglob("*"):
+            if member.is_symlink() and (not member.exists() or member.is_dir()):
+                raise ValueError(f"dataset_link_unavailable_or_directory: {member}")
+    return file_inventory(path)
+
+
 def asset_path(project: str | Path, record: dict) -> Path:
     """项目内引用随项目移动，外部引用保持显式绝对路径。"""
     value = record["path"]
@@ -18,11 +30,17 @@ def asset_path(project: str | Path, record: dict) -> Path:
 
 def validate_asset(project: str | Path, record: dict) -> Path:
     """核对实际内容摘要，缺失或改变时拒绝继续。"""
+    if record.get("shared_dataset") and record.get("status") != "available":
+        raise ValueError("shared_dataset_unavailable")
     path = asset_path(project, record)
-    if digest(inventory(path)) != record["digest"]:
+    if digest(data_inventory(path)) != record["digest"]:
         raise ValueError(f"asset_changed: {record['id']}")
     for dependency in record.get("dependencies", []):
         validate_asset(project, dependency)
+    if record.get("bundle"):
+        root = validate_asset(project, record["bundle"])
+        if not path.resolve().is_relative_to(root.resolve()):
+            raise ValueError("asset_bundle_members_outside_root")
     return path
 
 
@@ -35,10 +53,53 @@ def describe_asset(path: Path, *, kind: str, source: dict | None = None) -> dict
         "kind": kind,
         "path": str(path.resolve()),
         "external": True,
-        "digest": digest(inventory(path)),
+        "digest": digest(data_inventory(path)),
         "source": source or {},
         "dependencies": [],
     }
+
+
+def copy_bundle(project, original: dict, destination: Path, final: Path) -> dict:
+    """整体复制发布者声明的相对引用目录；只重定位管理引用，不改科学文件。"""
+    source = validate_asset(project, original)
+    bundle = original["bundle"]
+    root = validate_asset(project, bundle).resolve()
+    if not root.is_dir():
+        raise ValueError("asset_bundle_directory_required")
+    copy_content(root, destination)
+    if digest(inventory(destination)) != bundle["digest"]:
+        raise ValueError("asset_copy_changed")
+
+    def relocate(record):
+        path = asset_path(project, record).resolve()
+        if not path.is_relative_to(root):
+            raise ValueError("asset_bundle_members_outside_root")
+        return {
+            **record, "external": False,
+            "path": str((final / path.relative_to(root)).relative_to(Path(project).resolve())),
+            "dependencies": [relocate(dep) for dep in record.get("dependencies", [])],
+        }
+
+    value = relocate(original)
+    value["bundle"] = relocate(bundle)
+    assert source.resolve().is_relative_to(root)
+    return value
+
+
+def indexed_asset(item: dict, *, provenance: dict) -> dict:
+    """公共索引转成管理引用，保留依赖闭包与可便携目录声明。"""
+    from ai4e_core.run.indexes import validate_asset_content
+
+    validate_asset_content(item)
+    record = describe_asset(Path(item["path"]), kind=item["kind"], source=provenance)
+    record["dependencies"] = [describe_asset(Path(p), kind="other", source=provenance)
+                              for p in item["dependencies"]]
+    record["semantics"] = item.get("semantics", {})
+    if item.get("bundle"):
+        record["bundle"] = describe_asset(Path(item["bundle"]["root"]), kind="other", source=provenance)
+    record["portable"] = bool(record.get("bundle")) or (
+        not record["dependencies"] and Path(item["path"]).suffix != ".json")
+    return record
 
 
 def capture_inputs(
@@ -59,12 +120,19 @@ def capture_inputs(
     result = {}
     for key, kind in entry.get("inputs", {}).items():
         value = OmegaConf.select(cfg, key)
-        if not isinstance(value, str) or value in {"official", "last", "best", "latest"}:
+        if not isinstance(value, str):
             continue
         path = Path(value).expanduser()
         if not path.is_absolute():
             path = (recipe / entry["config"]).parent / path
         old = (inherited or {}).get(key)
+        from ..storage.shared_datasets import resolve_reference
+
+        current = resolve_reference(project, path)
+        if current is not None:
+            if current.get("status") != "available":
+                raise ValueError("shared_dataset_unavailable")
+            old = current
         if old is None:
             old = next(
                 (a for a in (shared or []) if asset_path(project, a).resolve() == path.resolve()),
@@ -93,11 +161,28 @@ def copy_assets(
         if original["kind"] not in kinds:
             result[key] = original
             continue
+        if original.get("dependencies") and not original.get("shared_dataset") and not original.get("bundle"):
+            raise ValueError("asset_copy_not_portable: use reference fork")
+        if original.get("portable") is False:
+            raise ValueError("asset_copy_not_portable: use reference fork")
         folder = inside(stage / "assets", key)
         folder.mkdir(parents=True)
+        if original.get("bundle"):
+            value = copy_bundle(project, original, folder / "content",
+                                final / folder.relative_to(stage) / "content")
+            value.update(id=uuid4().hex, source={"asset_id": original["id"], **original.get("source", {})})
+            write_json(folder / "asset.json", value)
+            result[key] = value
+            continue
         target = folder / "content" / source.name if source.is_file() else folder / "content"
-        copy_content(source, target)
-        if digest(inventory(target)) != original["digest"]:
+        shared_copy = original.get("shared_dataset") and original["kind"] == "dataset"
+        if shared_copy:
+            from ..projects.dataset_migration import copy_physical_dataset
+
+            copy_physical_dataset(source, target.parent)
+        else:
+            copy_content(source, target)
+        if not shared_copy and digest(inventory(target)) != original["digest"]:
             raise ValueError("asset_copy_changed")
         relative = target.relative_to(stage)
         value = {
@@ -107,6 +192,24 @@ def copy_assets(
             "path": str((final / relative).relative_to(Path(project).resolve())),
             "source": {"asset_id": original["id"], **original.get("source", {})},
         }
+        if shared_copy:
+            value.pop("shared_dataset", None)
+            value.pop("consumer_binding", None)
+            value["digest"] = digest(inventory(target))
+            value["dependencies"] = [
+                {
+                    "id": uuid4().hex,
+                    "kind": "dataset",
+                    "external": False,
+                    "path": str(
+                        (final / target.parent.relative_to(stage)).relative_to(
+                            Path(project).resolve()
+                        )
+                    ),
+                    "digest": digest(inventory(target.parent)),
+                    "dependencies": [],
+                }
+            ]
         write_json(folder / "asset.json", value)
         result[key] = value
     return result
@@ -114,27 +217,24 @@ def copy_assets(
 
 def collect_run_assets(project: str | Path, run: dict, kinds: set[str]) -> dict:
     """依据捕获入口的产物声明收集父运行输出；复制不自动绑定训练输入。"""
-    from ..templates.materialize import read_entry
+    from ai4e_spec.artifacts.indexes import INDEX_VERSION
+
+    from ..storage.files import read_json
 
     root = Path(project).resolve()
-    entry = read_entry(root / run["code_path"])
     directory = root / run["run_path"]
+    path = directory / "artifacts/assets.json"
+    if not path.is_file():
+        return {}
+    index = read_json(path)
+    if index.get("schema_version") != INDEX_VERSION:
+        raise ValueError("unsupported_asset_index")
     result = {}
     provenance = {"run_id": run["id"], "task_id": run["task_id"], "version_id": run["version_id"]}
-    for kind, patterns in entry.get("produced_assets", {}).items():
-        if kind not in kinds:
+    for key, item in index["items"].items():
+        if item["kind"] not in kinds:
             continue
-        for pattern in patterns:
-            inside(directory, pattern)
-            for file in sorted(directory.glob(pattern)):
-                if not file.resolve().is_relative_to(directory.resolve()):
-                    raise ValueError("asset_output_escape")
-                record = describe_asset(file, kind=kind, source=provenance)
-                # 准备记录引用原运行的数据；复制准备 JSON 不意味着迁移了这些依赖。
-                data = root / run["data_path"]
-                if kind == "preparation" and data.exists():
-                    record["dependencies"] = [
-                        describe_asset(data, kind="dataset", source=provenance)
-                    ]
-                result[f"run-{run['id']}-{kind}-{file.name}"] = record
+        record = indexed_asset(item, provenance=provenance)
+        safe_key = key.replace("/", "-")
+        result[f"run-{run['id']}-{safe_key}"] = record
     return result

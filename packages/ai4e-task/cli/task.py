@@ -45,6 +45,7 @@ def register(commands, common) -> None:
     p.add_argument("--set", action="append", default=[])
     p.add_argument("--key")
     p.add_argument("--wait", action="store_true")
+    p.add_argument("--overwrite", action="store_true")
     p.add_argument("--timeout", type=float, default=60)
     p.set_defaults(action=_run)
     for name, function in [
@@ -83,5 +84,11 @@ def register(commands, common) -> None:
 
 def _run(args) -> dict:
     """可选择等待运行，保持提交与执行结果的区别。"""
-    value = submit_run(args.project, args.task_id, overrides=args.set, idempotency_key=args.key)
+    value = submit_run(
+        args.project,
+        args.task_id,
+        overrides=args.set,
+        idempotency_key=args.key,
+        overwrite=args.overwrite,
+    )
     return wait_run(args.project, value["id"], timeout=args.timeout) if args.wait else value

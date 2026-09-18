@@ -11,6 +11,7 @@ from ai4e_core.base.events import event
 
 from .checkpoint import capture, restore, restore_selection
 from .diagnostics import parameter_count, peak_memory
+from .execution import execute
 from .online import OnlineLoss
 from .optimization import update
 
@@ -72,6 +73,13 @@ def fit(
         if config.get("resume") and config.get("restore_history")
         else []
     )
+    curves = (
+        deepcopy(state.get("curves", {}))
+        if config.get("resume") and config.get("restore_history")
+        else {}
+    )
+    curves.setdefault("loss", [])
+    curves.setdefault("learning_rate", [])
     selected = (
         restore_selection(state, config["resume"], best_on_equal=config.get("best_on_equal", False))
         if preserve_selection and config.get("resume")
@@ -79,7 +87,8 @@ def fit(
     )
     scheduler_unit = config.get("scheduler_unit", "update")
     validation_interval = int(config.get("validation_interval", 1))
-    if scheduler_unit not in {"update", "epoch"} or validation_interval < 1:
+    validation_unit = config.get("validation_unit", "epoch")
+    if scheduler_unit not in {"update", "epoch"} or validation_unit not in {"update", "epoch"} or validation_interval < 1:
         raise ValueError("调度单位或验证间隔不合法")
     stop = {"value": False}
     previous = _install_signals(stop, bool(config.get("save_on_interrupt", True)))
@@ -112,6 +121,7 @@ def fit(
             )
             if config.get("restore_history"):
                 recovery["history"] = list(history)
+                recovery["curves"] = deepcopy(curves)
             if preserve_selection:
                 recovery["selection"] = selected
             model.train()
@@ -119,8 +129,10 @@ def fit(
             losses = []
             error_sum, element_count = 0.0, 0
             window = OnlineLoss()
-            for index, batch in enumerate(_complete_groups(batches(epoch), accumulate)):
-                result, advanced = update(
+            epoch_window = OnlineLoss()
+
+            def advance(index, batch):
+                return update(
                     model,
                     optimizer,
                     step,
@@ -137,15 +149,27 @@ def fit(
                     accum_index=index,
                     stability=bool(config.get("stability")),
                 )
+
+            for completed in execute(
+                _complete_groups(batches(epoch), accumulate), advance, start=updates
+            ):
+                result, advanced = completed.result, completed.advanced
                 window.record(result)
+                epoch_window.record(result)
                 losses.append(float(result["loss"].detach()))
                 if config.get("loss_reduction") == "elements":
                     error_sum += float(result["squared_error"])
                     element_count += int(result["element_count"])
                 if advanced:
-                    updates += 1
+                    updates = completed.updates
                     if ema:
                         ema.update(model)
+                    curves["loss"].append(
+                        {"epoch": epoch + 1, "updates": updates, "value": float(result["loss"].detach())}
+                    )
+                    curves["learning_rate"].append(
+                        {"epoch": epoch + 1, "updates": updates, "value": float(optimizer.param_groups[0]["lr"])}
+                    )
                     for callback in callbacks:
                         callback("update", epoch=epoch + 1, updates=updates, result=result)
                     if update_interval and updates % update_interval == 0:
@@ -161,8 +185,9 @@ def fit(
                 raise ValueError("训练分片为空")
             if scheduler is not None and scheduler_unit == "epoch":
                 scheduler.step()
+            validation_value = updates if validation_unit == "updates" else epoch
             should_evaluate = config.get("evaluation_enabled", True) and (
-                epoch % validation_interval == 0 or epoch + 1 == epochs
+                validation_value % validation_interval == 0 or epoch + 1 == epochs
             )
             evaluation = evaluate() if should_evaluate else None
             if evaluation is not None and not math.isfinite(evaluation["loss"]):
@@ -191,8 +216,18 @@ def fit(
                 record["test_repeat"] = repeat
             history.append(record)
             leftover = None if window.empty() else window.flush()
-            if leftover:
-                record["online"] = leftover
+            # 更新日志会清空自己的窗口；页面报告始终保留完整轮次平均。
+            record["online"] = epoch_window.flush()
+            _publish_training_report(
+                run,
+                {
+                    "epochs": epoch + 1,
+                    "updates": updates,
+                    "best": best if math.isfinite(best) else None,
+                    "history": list(history),
+                    "curves": deepcopy(curves),
+                },
+            )
             if (epoch + 1) % log_every == 0 or epoch + 1 == epochs:
                 extra = {}
                 memory = peak_memory(device)
@@ -231,6 +266,7 @@ def fit(
                 callback("epoch", epoch=epoch + 1, updates=updates, result=record)
             if config.get("restore_history"):
                 payload["history"] = list(history)
+                payload["curves"] = deepcopy(curves)
             if preserve_selection:
                 if improved:
                     selected = deepcopy(payload)
@@ -261,7 +297,19 @@ def fit(
         raise
     finally:
         _restore_signals(previous)
-    return {"epochs": epochs, "updates": updates, "best": best, "history": history}
+    return {"epochs": epochs, "updates": updates, "best": best, "history": history, "curves": curves}
+
+
+def _publish_training_report(run, report: dict) -> None:
+    """每个轮次覆盖训练报告，检查模式不写。"""
+    if getattr(run, "dry_run", False):
+        return
+    artifact = getattr(run, "artifact", None)
+    if callable(artifact):
+        artifact("training.json", report)
+    publish = getattr(run, "report", None)
+    if callable(publish):
+        publish(report)
 
 
 def _update_interval(config) -> int | None:

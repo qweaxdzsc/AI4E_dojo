@@ -1,7 +1,16 @@
+import { configurationEdits } from "../../infrastructure/configuration/edits";
+import {
+  bindingOptionKey,
+  preparedDatasetLabel,
+  uniqueManifestChoices,
+  unavailableBindingItems,
+} from "./inputChoices";
+/** 工作台公开页面：组合领域面板，保留配置与执行交接。 */
+import { useModelSelection } from "./useModelSelection";
 import { ActionButton as Button } from "../../infrastructure/components/ActionButton";
 import { Alert, Select, Space, Spin } from "antd";
 import { useEffect, useRef, useState } from "react";
-import { ExecutionLog, TrainingMonitor, listRuns } from "../executions";
+import { ExecutionLog, listRuns } from "../executions";
 import { PreparationPanel } from "../trainprep";
 import { ModelPanel } from "../models";
 import { TrainingPanel } from "../training";
@@ -12,41 +21,43 @@ import {
   runStage,
   traceModel,
   stageInputs,
+  invalidateStageInputs,
+  invalidateModelOptions,
   modelAssetUrl,
   pollOperation,
-  modelOptions,
   exportModelPreset,
 } from "./api";
 
-/** 同一清单只作为一条选项；平台名称优先并按登记时间倒序，避免与任务历史共用 asset_id 导致点一项选中多项。 */
-function bindingOptionKey(item: any) {
-  return [
-    item.origin || "run",
-    item.ref?.asset_id,
-    item.processed_name || item.run_id || "",
-    item.name,
-  ].join(":");
+function selectedBindings(items: any[]) {
+  const selected: Record<string, any> = {};
+  for (const item of items)
+    if (item.selected && item.ref) selected[item.binding] = item.ref;
+  return selected;
 }
 
-function choiceTime(item: any) {
-  return String(item.created_at || "");
-}
-
-function byNewest(left: any, right: any) {
-  return choiceTime(right).localeCompare(choiceTime(left)) || String(left.name || "").localeCompare(String(right.name || ""));
-}
-
-function uniqueManifestChoices(items: any[]) {
-  const valid = items.filter((item) => item.ref && item.compatibility?.status !== "invalid");
-  const platform = valid.filter((item) => item.origin === "platform").slice().sort(byNewest);
-  const used = new Set(platform.map((item) => item.ref.asset_id));
-  return [
-    ...platform,
-    ...valid
-      .filter((item) => item.origin !== "platform" && !used.has(item.ref.asset_id))
-      .slice()
-      .sort(byNewest),
-  ];
+function runsForStage(stage: string, rows: any[]) {
+  const candidates =
+    stage === "model"
+      ? []
+      : rows.filter((x: any) =>
+          (x.stages || Object.keys(x.summary?.reports || {})).includes(stage),
+        );
+  const latest = [...candidates].sort((a, b) =>
+    String(b.created_at || b.created || "").localeCompare(
+      String(a.created_at || a.created || ""),
+    ),
+  )[0]?.id;
+  const resultRun =
+    stage === "trainprep"
+      ? candidates
+          .filter((x: any) => (x.operation_mode || "execute") === "execute")
+          .sort((a: any, b: any) =>
+            String(b.created_at || b.created || "").localeCompare(
+              String(a.created_at || a.created || ""),
+            ),
+          )[0]?.id
+      : undefined;
+  return { candidates, latest, resultRun };
 }
 
 /** 相同草稿不受对象键插入顺序影响，刷新后仍能恢复同一次提交。 */
@@ -65,10 +76,12 @@ export function StageWorkbench({
   project,
   task,
   stage,
+  onStarted,
 }: {
   project: string;
   task: string;
   stage: string;
+  onStarted?: (runId: string) => void;
 }) {
   const [cfg, setCfg] = useState<any>(),
     [values, setValues] = useState<any>(),
@@ -85,95 +98,50 @@ export function StageWorkbench({
     [dirty, setDirty] = useState(false),
     [progress, setProgress] = useState<any>(),
     [resultRun, setResultRun] = useState<string>();
-  const [models, setModels] = useState<any>(),
-    [modelError, setModelError] = useState(""),
-    [modelsLoading, setModelsLoading] = useState(false),
-    [selectedCase, setSelectedCase] = useState<string>(),
-    [selectedVariant, setSelectedVariant] = useState<string>(),
-    [selectedPreset, setSelectedPreset] = useState<string>(),
-    [targetSwitch, setTargetSwitch] = useState<{
-      model?: string;
-      variant?: string;
-      preset?: string;
-    }>(),
-    [exportBusy, setExportBusy] = useState(false);
-  const modelRequest = useRef(0);
-  async function loadModels() {
-    const request = ++modelRequest.current;
-    setModelsLoading(true);
-    setModelError("");
-    try {
-      const result = await modelOptions(project, task);
-      if (request !== modelRequest.current) return;
-      setModels(result);
-      setSelectedCase(result.current_model_id || undefined);
-      setSelectedVariant(result.current_variant || undefined);
-      setSelectedPreset(result.current_preset_id || undefined);
-    } catch (e: any) {
-      if (request === modelRequest.current) setModelError(e.message);
-    } finally {
-      if (request === modelRequest.current) setModelsLoading(false);
-    }
-  }
-  useEffect(() => {
-    setModels(undefined);
-    setSelectedCase(undefined);
-    setSelectedVariant(undefined);
-    setSelectedPreset(undefined);
-    setTargetSwitch(undefined);
-    setModelError("");
-    if (stage === "model") void loadModels();
-    return () => {
-      modelRequest.current++;
-    };
-  }, [project, task, stage]);
-  function applyOption(option: any, extra: { model?: string; variant?: string; preset?: string } = {}) {
+  const gate = useRef(false);
+  const editBaseline = useRef<any>({});
+  const [targetSwitch, setTargetSwitch] = useState<{
+    model?: string;
+    variant?: string;
+    preset?: string;
+  }>();
+  const [exportBusy, setExportBusy] = useState(false);
+  const [pageCombo, setPageCombo] = useState<string>();
+  const [trainMode, setTrainMode] = useState<"restart" | "continue">("restart");
+  const [resumeRef, setResumeRef] = useState<any>();
+  const {
+    models,
+    modelError,
+    modelsLoading,
+    selectedCase,
+    selectedVariant,
+    selectedPreset,
+    loadModels,
+    chooseModel,
+    chooseVariant,
+    choosePreset,
+  } = useModelSelection(project, task, stage, gate, applyOption, () =>
+    setTargetSwitch(undefined),
+  );
+  function applyOption(
+    option: any,
+    extra: { model?: string; variant?: string; preset?: string } = {},
+  ) {
     setValues(structuredClone(option.model));
     setCfg((old: any) => ({ ...old, capabilities: option.capabilities }));
     setDirty(true);
+    setPageCombo(undefined);
     setTrace(undefined);
     setTraceStale(false);
     setError("");
-    setMessage(
-      "模型已切换；保存后请重新准备数据，训练设置将恢复为目标默认值",
-    );
+    setMessage("模型已切换；保存后请重新准备数据，训练设置将恢复为目标默认值");
     setTargetSwitch({
-      model: extra.preset ? undefined : extra.model || option.model_id || option.id,
+      model: extra.preset
+        ? undefined
+        : extra.model || option.model_id || option.id,
       variant: extra.variant,
       preset: extra.preset,
     });
-  }
-  function chooseModel(id: string) {
-    if (gate.current || (id === selectedCase && !selectedPreset)) return;
-    const option = models?.options?.find((item: any) => item.id === id);
-    if (!option) return;
-    const variant = option.variants?.[0]?.id;
-    setSelectedCase(id);
-    setSelectedVariant(variant);
-    setSelectedPreset(undefined);
-    applyOption(option.variant_defaults?.[variant] || option, { model: id, variant });
-  }
-  function chooseVariant(id: string) {
-    if (gate.current || id === selectedVariant) return;
-    const option = models?.options?.find((item: any) => item.id === selectedCase);
-    const defaults = option?.variant_defaults?.[id] || option;
-    if (!defaults) return;
-    setSelectedVariant(id);
-    setSelectedPreset(undefined);
-    applyOption(defaults, { model: selectedCase, variant: id });
-  }
-  function choosePreset(id?: string) {
-    if (gate.current) return;
-    if (!id) {
-      setSelectedPreset(undefined);
-      return;
-    }
-    const option = models?.presets?.find((item: any) => item.id === id);
-    if (!option) return;
-    setSelectedCase(option.model_id);
-    setSelectedVariant(option.variant || undefined);
-    setSelectedPreset(id);
-    applyOption(option, { preset: id, variant: option.variant || undefined });
   }
   async function exportPreset(name: string) {
     if (gate.current || !cfg) return;
@@ -191,15 +159,18 @@ export function StageWorkbench({
           values,
           bindingEdits,
           targetSwitch,
+          configurationEdits(editBaseline.current, values),
         );
         revision = result.revision;
         setCfg({ ...cfg, revision });
         setValues(result.config?.[cfg.stage] ?? values);
+        editBaseline.current = structuredClone(result.config?.[cfg.stage] ?? values);
         setDirty(false);
         setBindingEdits({});
         setTargetSwitch(undefined);
       }
       await exportModelPreset(project, task, revision, name);
+      invalidateModelOptions(project, task);
       await loadModels();
       setMessage("模型配置已导出");
     } catch (e: any) {
@@ -209,8 +180,7 @@ export function StageWorkbench({
       setExportBusy(false);
     }
   }
-  const gate = useRef(false),
-    generation = useRef(0);
+  const generation = useRef(0);
   const storageKey = `dojo.stage-submit:${project}:${task}:${stage}`;
   useEffect(() => {
     const token = ++generation.current;
@@ -220,53 +190,52 @@ export function StageWorkbench({
     setBindings({});
     setBindingEdits({});
     setDirty(false);
+    setPageCombo(undefined);
+    setTrainMode("restart");
+    setResumeRef(undefined);
     setTrace(undefined);
     setTraceStale(false);
     gate.current = false;
     setBusy(false);
-    Promise.all([
-      readStage(project, task, stage === "execution" ? "train" : stage),
-      stageInputs(project, task),
-      listRuns(project, task),
-    ])
-      .then(([c, i, r]) => {
+    /** 配置先渲染；产物与运行名单并行补齐，慢列表不能挡住切步。 */
+    readStage(project, task, stage)
+      .then((c) => {
         if (token !== generation.current) return;
         setCfg(c);
         setValues(c.values);
-        setInputs(i);
-        const selected: Record<string, any> = {};
-        for (const item of i)
-          if (item.selected && item.ref) selected[item.binding] = item.ref;
-        setBindings(selected);
-        const expected = stage === "execution" ? "train" : stage;
-        const candidates =
-          stage === "model"
-            ? []
-            : r.filter((x: any) =>
-                (x.stages || Object.keys(x.summary?.reports || {})).includes(
-                  expected,
-                ),
-              );
-        setRuns(candidates);
-        const latest = [...candidates].sort((a, b) =>
-          String(b.created_at || b.created || "").localeCompare(
-            String(a.created_at || a.created || ""),
-          ),
-        )[0]?.id;
-        setRun(latest);
-        setResultRun(
-          stage === "trainprep"
-            ? candidates
-                .filter((x: any) => (x.operation_mode || "execute") === "execute")
-                .sort((a: any, b: any) =>
-                  String(b.created_at || b.created || "").localeCompare(
-                    String(a.created_at || a.created || ""),
-                  ),
-                )[0]?.id
-            : undefined,
-        );
+        editBaseline.current = structuredClone(c.values);
       })
-      .catch((e) => token === generation.current && setError(e.message));
+      .catch((e) => {
+        if (token !== generation.current) return;
+        setError(e instanceof Error ? e.message : String(e));
+      });
+    stageInputs(project, task)
+      .then((items) => {
+        if (token !== generation.current) return;
+        setInputs(items);
+        setBindings(selectedBindings(items));
+      })
+      .catch((e) => {
+        if (token !== generation.current) return;
+        setError(e instanceof Error ? e.message : String(e));
+      });
+    if (stage === "model") {
+      setRuns([]);
+      setRun(undefined);
+      setResultRun(undefined);
+    } else
+      listRuns(project, task)
+        .then((rows) => {
+          if (token !== generation.current) return;
+          const listed = runsForStage(stage, rows);
+          setRuns(listed.candidates);
+          setRun(listed.latest);
+          setResultRun(listed.resultRun);
+        })
+        .catch((e) => {
+          if (token !== generation.current) return;
+          setError(e instanceof Error ? e.message : String(e));
+        });
     return () => {
       generation.current++;
     };
@@ -311,7 +280,8 @@ export function StageWorkbench({
       let revision = cfg.revision,
         effectiveValues = values;
       let effectiveBindings = bindings;
-      if (dirty) {
+      const persistSettings = dirty || mode === "save";
+      if (persistSettings) {
         const result = await saveStage(
           project,
           task,
@@ -320,6 +290,7 @@ export function StageWorkbench({
           values,
           bindingEdits,
           targetSwitch,
+          configurationEdits(editBaseline.current, values),
         );
         revision = result.revision;
         effectiveValues = result.config?.[cfg.stage] ?? values;
@@ -327,11 +298,14 @@ export function StageWorkbench({
         if (current()) {
           setCfg({ ...cfg, revision });
           setValues(effectiveValues);
+          editBaseline.current = structuredClone(effectiveValues);
           setDirty(false);
           setBindingEdits({});
           setTargetSwitch(undefined);
           setMessage("配置已保存，未创建新版本");
         }
+        invalidateStageInputs(project, task);
+        if (cfg.stage === "model") invalidateModelOptions(project, task);
         const [fresh, freshInputs] = await Promise.all([
           readStage(project, task, cfg.stage),
           stageInputs(project, task),
@@ -346,21 +320,36 @@ export function StageWorkbench({
         if (current()) {
           setCfg(fresh);
           setValues(effectiveValues);
+          editBaseline.current = structuredClone(effectiveValues);
           setInputs(freshInputs);
           setBindings(effectiveBindings);
         }
       }
       const allowed =
         cfg.stage === "post"
-          ? ["train.preparation", "post.checkpoint"]
+          ? ["inputs.post.results"]
           : cfg.stage === "trainprep"
-            ? ["train.manifest", "trainprep.normalization.statistics"]
-            : ["train.manifest", "train.preparation"];
-      effectiveBindings = Object.fromEntries(
-        Object.entries(effectiveBindings).filter(([key]) =>
-          allowed.includes(key),
-        ),
-      );
+            ? ["inputs.trainprep.dataset", "inputs.trainprep.statistics"]
+            : cfg.stage === "train"
+              ? mode === "execute"
+                ? trainMode === "continue"
+                  ? ["inputs.train.preparation", "inputs.train.resume"]
+                  : ["inputs.train.preparation"]
+                : []
+              : ["inputs.trainprep.dataset", "inputs.train.preparation"];
+      if (cfg.stage === "train" && mode === "execute") {
+        const preparation =
+          effectiveBindings["inputs.train.preparation"] || bindings["inputs.train.preparation"];
+        effectiveBindings = {};
+        if (preparation) effectiveBindings["inputs.train.preparation"] = preparation;
+        if (trainMode === "continue" && resumeRef)
+          effectiveBindings["inputs.train.resume"] = resumeRef;
+      } else
+        effectiveBindings = Object.fromEntries(
+          Object.entries(effectiveBindings).filter(([key]) =>
+            allowed.includes(key),
+          ),
+        );
       if (mode === "save") {
         if (current()) setMessage("配置已保存，未创建新版本");
         window.dispatchEvent(
@@ -409,7 +398,7 @@ export function StageWorkbench({
           cfg.stage,
           revision,
           mode,
-          { prepare_first: stage === "execution", bindings: effectiveBindings },
+          { bindings: effectiveBindings },
           pending.key,
           accepted,
         );
@@ -424,6 +413,7 @@ export function StageWorkbench({
         if (mode === "execute") setResultRun(result.id);
         setRuns((old) => [...old.filter((r) => r.id !== result.id), result]);
         setMessage("运行已提交");
+        if (cfg.stage === "train" && mode === "execute") onStarted?.(result.id);
       } else if (result.valid === false) {
         setError(
           "配置与交接检查未通过：" + JSON.stringify(result.errors || result),
@@ -448,11 +438,68 @@ export function StageWorkbench({
       }
     }
   }
+  async function loadCombo(caseId: string) {
+    if (gate.current || !cfg) return;
+    gate.current = true;
+    setBusy(true);
+    setError("");
+    const token = generation.current;
+    const current = () => token === generation.current;
+    try {
+      const result = await saveStage(
+        project,
+        task,
+        cfg.stage,
+        cfg.revision,
+        values,
+        bindingEdits,
+        { case: caseId },
+        configurationEdits(editBaseline.current, values),
+      );
+      invalidateStageInputs(project, task);
+      if (cfg.stage === "model") invalidateModelOptions(project, task);
+      const [fresh, freshInputs] = await Promise.all([
+        readStage(project, task, cfg.stage),
+        stageInputs(project, task),
+      ]);
+      if (fresh.revision !== result.revision) throw new Error("configuration_revision_conflict");
+      if (!current()) return;
+      setCfg(fresh);
+      setValues(fresh.values);
+      editBaseline.current = structuredClone(fresh.values);
+      setInputs(freshInputs);
+      setBindings(
+        Object.fromEntries(
+          freshInputs
+            .filter((item: any) => item.selected && item.ref)
+            .map((item: any) => [item.binding, item.ref]),
+        ),
+      );
+      setBindingEdits({});
+      setDirty(false);
+      setPageCombo(caseId);
+      if (cfg.stage === "trainprep") setTargetSwitch(undefined);
+      setMessage(
+        cfg.stage === "trainprep"
+          ? "已加载官方数据准备组合"
+          : "已加载官方配置，仅覆盖本页参数",
+      );
+      window.dispatchEvent(new CustomEvent("dojo:task-updated", { detail: { project, task } }));
+    } catch (e: any) {
+      if (current()) setError(e.message);
+    } finally {
+      if (current()) {
+        gate.current = false;
+        setBusy(false);
+      }
+    }
+  }
   if (!cfg) return error ? <Alert type="error" message={error} /> : <Spin />;
   const bindingNames: Record<string, string> = {
-    "train.manifest": stage === "trainprep" ? "平台数据集" : "物理数据清单",
-    "train.preparation": "准备记录",
-    "post.checkpoint": "模型检查点",
+    "inputs.trainprep.dataset": stage === "trainprep" ? "平台数据集" : "物理数据清单",
+    "inputs.train.preparation": "已准备完成的数据集",
+    "inputs.infer.checkpoint": "模型检查点",
+    "inputs.post.results": "固定推理结果",
   };
   const bindingReasons: Record<string, string> = {
     path_outside_root: "所选文件不在可访问范围内。",
@@ -463,42 +510,44 @@ export function StageWorkbench({
   };
   const bindingKeys =
     stage === "trainprep"
-      ? ["train.manifest"]
+      ? ["inputs.trainprep.dataset"]
       : stage === "post"
-        ? ["train.preparation", "post.checkpoint"]
-        : stage === "model"
+        ? ["inputs.post.results"]
+        : stage === "model" || stage === "train"
           ? []
-          : ["train.manifest", "train.preparation"];
+          : ["inputs.trainprep.dataset", "inputs.train.preparation"];
   const choices = (binding: string) => {
     const items = inputs.filter((item) => item.ref && item.binding === binding);
-    return binding === "train.manifest" ? uniqueManifestChoices(items) : items;
+    return binding === "inputs.trainprep.dataset" ? uniqueManifestChoices(items) : items;
   };
   const selectedChoice = (binding: string) => {
     const ref = bindings[binding];
     if (!ref) return undefined;
     const items = choices(binding);
     return (
-      items.find((item) => item.selected && item.ref.asset_id === ref.asset_id) ||
-      items.find((item) => item.origin === "platform" && item.ref.asset_id === ref.asset_id) ||
+      items.find(
+        (item) => item.selected && item.ref.asset_id === ref.asset_id,
+      ) ||
+      items.find(
+        (item) =>
+          item.origin === "platform" && item.ref.asset_id === ref.asset_id,
+      ) ||
       items.find((item) => item.ref.asset_id === ref.asset_id)
     );
   };
-  const selectedDataset = selectedChoice("train.manifest");
+  const selectedDataset = selectedChoice("inputs.trainprep.dataset");
   const bindingPanel = (
     <div className="input-bindings" id="stage-handoff">
-      {inputs
-        .filter(
-          (i) =>
-            bindingKeys.includes(i.binding) &&
-            !i.ref &&
-            i.compatibility?.status === "invalid",
-        )
-        .map((i) => (
+      {unavailableBindingItems(inputs, bindingKeys).map((i) => (
           <Alert
             key={i.binding}
             type="error"
-            message={(bindingNames[i.binding] || i.binding) + "：已绑定来源不可用"}
-            description={bindingReasons[i.compatibility.reason] || i.compatibility.reason}
+            message={
+              (bindingNames[i.binding] || i.binding) + "：已绑定来源不可用"
+            }
+            description={
+              bindingReasons[i.compatibility.reason] || i.compatibility.reason
+            }
           />
         ))}
       {traceStale && (
@@ -517,19 +566,25 @@ export function StageWorkbench({
             style={{ width: "100%", marginBottom: 8 }}
             placeholder={
               choices(binding).length
-                ? binding === "train.manifest"
+                ? binding === "inputs.trainprep.dataset"
                   ? `有 ${choices(binding).length} 个平台数据集，请选择`
                   : `有 ${choices(binding).length} 个正式产物，请选择`
-                : binding === "train.manifest"
+                : binding === "inputs.trainprep.dataset"
                   ? "选择平台数据集"
                   : "选择正式运行产物"
             }
-            value={selectedChoice(binding) ? bindingOptionKey(selectedChoice(binding)) : undefined}
+            value={
+              selectedChoice(binding)
+                ? bindingOptionKey(selectedChoice(binding))
+                : undefined
+            }
             options={choices(binding).map((i) => ({
               value: bindingOptionKey(i),
               label:
-                i.origin === "platform"
-                  ? i.processed_name || i.name
+                binding === "inputs.train.preparation"
+                  ? preparedDatasetLabel(i)
+                  : i.origin === "platform"
+                  ? i.source_project_name ? `${i.processed_name || i.name} · ${i.source_project_name}` : i.processed_name || i.name
                   : (i.run_id?.slice(0, 8) || "本任务历史") +
                     " / " +
                     i.name +
@@ -541,7 +596,9 @@ export function StageWorkbench({
             onChange={(value) =>
               bind(
                 binding,
-                choices(binding).find((item) => bindingOptionKey(item) === value)?.ref,
+                choices(binding).find(
+                  (item) => bindingOptionKey(item) === value,
+                )?.ref,
               )
             }
           />
@@ -566,10 +623,10 @@ export function StageWorkbench({
           task={task}
           run={run}
           resultRun={resultRun}
-          inputAsset={bindings["train.manifest"]}
+          inputAsset={bindings["inputs.trainprep.dataset"]}
           datasetName={selectedDataset?.processed_name || selectedDataset?.name}
           emptyHint={
-            choices("train.manifest").length && !bindings["train.manifest"]
+            choices("inputs.trainprep.dataset").length && !bindings["inputs.trainprep.dataset"]
               ? "请从上方选择平台数据集"
               : undefined
           }
@@ -580,6 +637,7 @@ export function StageWorkbench({
           onExecute={() => action("execute")}
           onCheck={() => action("check")}
           onSave={() => action("save")}
+          onLoadCombo={loadCombo}
           busy={busy}
           dirty={dirty}
           capabilities={cfg.capabilities}
@@ -588,7 +646,9 @@ export function StageWorkbench({
         <ModelPanel
           modelOptions={models?.options || []}
           presets={models?.presets || []}
-          selectedCase={selectedCase}
+          selectedCase={
+            selectedCase || cfg.capabilities?.official_combos?.current_model_id
+          }
           selectedVariant={selectedVariant}
           selectedPreset={selectedPreset}
           onModelChange={chooseModel}
@@ -602,8 +662,20 @@ export function StageWorkbench({
           capabilities={cfg.capabilities}
           values={values}
           onChange={change}
+          officialCombos={(cfg.capabilities?.official_combos?.options || []).filter(
+            (item: any) =>
+              item.model_id ===
+              (selectedCase || cfg.capabilities?.official_combos?.current_model_id),
+          )}
+          selectedCombo={pageCombo}
+          comboLocked={Boolean(targetSwitch)}
+          onLoadCombo={loadCombo}
           trace={trace}
-          traceUrl={trace ? modelAssetUrl(project, trace) : undefined}
+          graphUrl={
+            trace
+              ? (member?: string) => modelAssetUrl(project, trace, member)
+              : undefined
+          }
           onTrace={() => action("trace")}
           busy={busy}
           canTrace={
@@ -616,20 +688,45 @@ export function StageWorkbench({
           capabilities={cfg.capabilities}
           values={values}
           onChange={change}
+          officialCombos={(cfg.capabilities?.official_combos?.options || []).filter(
+            (item: any) =>
+              item.model_id === cfg.capabilities?.official_combos?.current_model_id,
+          )}
+          selectedCombo={pageCombo}
+          onLoadCombo={loadCombo}
           onCheck={() => action("check")}
           onSave={() => action("save")}
-          busy={busy}
-        />
-      ) : stage === "execution" ? (
-        <TrainingMonitor
-          project={project}
-          run={run}
-          runs={runs}
-          onRun={setRun}
-          inputs={inputs}
-          onInput={(ref) => bind("train.manifest", ref)}
           onStart={() => action("execute")}
           busy={busy}
+          preparations={inputs.filter(
+            (item: any) =>
+              item.ref &&
+              item.binding === "inputs.train.preparation" &&
+              item.compatibility?.status !== "invalid",
+          )}
+          selectedPreparation={inputs.find(
+            (item: any) =>
+              item.ref &&
+              item.binding === "inputs.train.preparation" &&
+              item.ref.asset_id === bindings["inputs.train.preparation"]?.asset_id,
+          )}
+          onPreparation={(ref) => bind("inputs.train.preparation", ref)}
+          checkpoints={inputs.filter(
+            (item: any) =>
+              item.ref &&
+              item.binding === "inputs.infer.checkpoint" &&
+              item.compatibility?.status !== "invalid",
+          )}
+          selectedCheckpoint={inputs.find(
+            (item: any) =>
+              item.ref && item.ref.asset_id === resumeRef?.asset_id,
+          )}
+          onCheckpoint={setResumeRef}
+          trainMode={trainMode}
+          onTrainMode={(mode) => {
+            setTrainMode(mode);
+            if (mode === "restart") setResumeRef(undefined);
+          }}
         />
       ) : (
         <PostWorkspace
@@ -669,7 +766,7 @@ export function StageWorkbench({
             <Button
               type="primary"
               onClick={() => action("save")}
-              disabled={!dirty}
+              disabled={busy}
               loading={busy}
             >
               保存配置
@@ -677,7 +774,7 @@ export function StageWorkbench({
           </Space>
         )}
       </div>
-      {stage !== "execution" && stage !== "model" && (
+      {stage !== "model" && stage !== "train" && (
         <ExecutionLog
           project={project}
           run={run}

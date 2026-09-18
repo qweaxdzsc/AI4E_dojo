@@ -167,6 +167,20 @@ def _save_scene(project, identity, body, request, update):
     return service.store.put("scene", identity, value)
 
 
+@router.get('/tasks/{task_id}/visualizations/sources')
+def visualizable_sources(
+    project: str,
+    task_id: str,
+    request: Request,
+    root: str | None = None,
+    path: str = "",
+):
+    """列出任务产物、共享数据集和已挂数据根中的可视化网格。"""
+    from .bindings import list_visualizable_sources
+
+    return list_visualizable_sources(services(request), project, task_id, root, path)
+
+
 @router.get('/tasks/{task_id}/visualizations')
 def task_visualizations(project: str, task_id: str, request: Request):
     """列出任务保存的可视化配置资产。"""

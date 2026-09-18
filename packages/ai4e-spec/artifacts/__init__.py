@@ -22,10 +22,28 @@ from .platform import RawprepDescriptor, DatasetDescriptor
 
 __all__ += ["RawprepDescriptor", "DatasetDescriptor"]
 
-from .inference import InferenceCheckpointRef, InferenceRequest, InferenceResultRef
+from .inference import (
+    InferenceCheckpointRef,
+    InferenceFieldDescription,
+    InferenceMetricDescription,
+    InferenceRequest,
+    InferenceResultRef,
+    InferenceSampleSelection,
+    InferenceStatistic,
+    InferenceVtkExportCapability,
+    InferenceVtkExports,
+    apply_export_aliases,
+)
 
-__all__ += ["InferenceCheckpointRef", "InferenceRequest", "InferenceResultRef"]
-
-from .inference import InferenceSampleSelection, InferenceFieldDescription, InferenceMetricDescription, InferenceStatistic
-
-__all__ += ["InferenceSampleSelection", "InferenceFieldDescription", "InferenceMetricDescription", "InferenceStatistic"]
+__all__ += [
+    "InferenceCheckpointRef",
+    "InferenceFieldDescription",
+    "InferenceMetricDescription",
+    "InferenceRequest",
+    "InferenceResultRef",
+    "InferenceSampleSelection",
+    "InferenceStatistic",
+    "InferenceVtkExportCapability",
+    "InferenceVtkExports",
+    "apply_export_aliases",
+]

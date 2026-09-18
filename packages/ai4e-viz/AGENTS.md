@@ -26,6 +26,8 @@ npm run --prefix packages/ai4e-viz/frontend build
 uv run ai4e-vis --context /absolute/path/context.json
 ```
 
+Dojo 根上不要用只含 `dev`、不含 visualization / `ai4e-viz[workbench]` 的 `uv sync` 覆盖环境，否则官方 8000 拉后处理会 `vis_service_start_failed`。改 viz 源码后才需要 `--reinstall-package ai4e-viz`：安装副本是 force-include，8000 不读 `packages/`。纪律见根 `AGENTS.md`「注意事项」。
+
 `run_project.py` 保留旧三服务启动兼容；新安装入口为 `ai4e-vis`。可信 context JSON 包含任务 scope、固定来源 sources 与运行 bindings。无 context 可浏览旧示例；保存不回退到代码目录。详细迁移见 `docs/migration/dojo-integration.md`。
 
 ## 代码编写与修改的强制规范
@@ -65,4 +67,24 @@ npm run --prefix packages/ai4e-viz/frontend build
 
 ## 三维对象工作台
 
-物理配置版本 2：导入创建纯色基础显示，计算字段与着色字段分离；计算 Apply，显示增量更新。流线可选线段、球体、平面或命名面起点，应用后显示不可拖的种子；切面与剖切选中时用可视平面三向拖动和轴对齐，拖动只预览、应用才切开。Trame 拥有完整 UI，宿主负责来源授权和资产表单。对象、相机及本地序列化身份保持稳定；不能用裸内存地址作为跨更新的对象身份。验收参见 Dojo `.context/mvp/phys-workbench-acceptance.md`，本地/远程浏览器和 Linux 阴影分别记录。
+物理配置版本 2：导入创建纯色基础显示，计算字段与着色字段分离；属性计算与显示 Apply，顶部快捷操作增量更新。流线可选线段、球体、平面或命名面起点，本期暂时不做拖种子，可用「显示种子」隐藏；显示可选线或圆管并调节粗细与圆管面数；本地坐标轴在轨道过程中实时跟随；切面与剖切选中时用可视平面三向拖动和轴对齐，拖动只预览、应用才切开。Trame 拥有完整 UI，宿主负责来源授权和资产表单。对象、相机及本地序列化身份保持稳定；不能用裸内存地址作为跨更新的对象身份。验收参见 Dojo `.context/mvp/phys-workbench-acceptance.md`，本地/远程浏览器和 Linux 阴影分别记录。
+
+三维响应与独立显隐（2026-09-15）：眼睛只控制单对象当前视图；来源分组无总开关，父子计算与删除依赖保持。首次草稿必须同步平面手柄，连点不重复同步。普通移动不发计算 RPC；透明度不重建着色数组。新增真实 Trame State 回归 `test_phys_display_updates.py`，禁止用字典替身证明状态 API 正确；宿主验收必须从 Dojo Web 点击 iframe 并检查实际画面，入口为根 `e2e/trame-responsiveness.spec.ts`。
+
+
+三维交互与对象隔离（2026-09-16）：新对象计算和显示草稿一起提交；辅助平面独立显隐，三轴平移与三轴旋转仅命中手柄启动；删除局部清理不重建背景和相机。种子和Probe有候选预览，等高线支持自动分层，同标量等值面保留生成标量。添加辅助平面后旋转/平移/缩放不得被旧相机拉回。圈定 `test_phys_interaction.py`、`test_phys_objects.py`、`test_phys_display_updates.py`、`test_phys_filters.py`、配置/存储用例与 `viz_interaction_browser.cjs`；最终范围见根 `.context/mvp/phys-workbench-acceptance.md`，正式8000/5173不自动更新。
+
+着色与显示设置（2026-09-16）：属性计算/显示均应用后生效，顶部快捷操作只提交自身字段；映射器更新必须显式替换输入，不能以标量可见或色标变化代替模型像素验收。色标、范围和背景可保存，透明PNG/序列读回校验alpha。圈定 `test_phys_display_settings.py`、显示/对象/过滤器/配置/存储用例及真实本地、远程与宿主浏览器；源码、隔离安装、正式发布分别记录，正式8000/5173不自动更新。
+
+三维工作台十一项增强（2026-09-17）：LIC 按需远程窗口、皱折/三角化、种子显隐与草稿手柄、目录内网格导入、等值滑条、色标相等、Probe 表、线段提取。圈定 `test_phys_display_settings.py`、`test_phys_filters.py`、`test_phys_interaction.py`、`test_phys_views.py`、`test_phys_objects.py`、`test_phys_plot_over_line.py` 与前端 `interaction.test.js`。正式 8000/5173 须当次同意。
+
+Probe 点选拾取（2026-09-17）：属性区可见开/关，开着点模型出球、应用出表，关着不拾取；切到其他工具开关回到关。圈定 `test_phys_interaction.py`。正式 8000/5173 须当次重装并重启后才能冒烟。
+
+工作台色标、Probe 与视图联动（2026-09-17）：色标入口在属性「显示设置」图标，弹层带对象名和「应用」，只写当前选中对象；Probe 点选只留一个开关；加号菜单贴按钮；点窗切活跃并刷新左侧眼睛；折线图树只列线段提取；去掉取样物理量。相机联动开启后覆盖当前全部窗口，不要求共同坐标空间。圈定 `test_phys_display_settings.py`、`test_phys_interaction.py`、`test_phys_display_updates.py`、`test_phys_plot_over_line.py`、`test_phys_views.py` 与前端 `interaction.test.js`。色标下移后须再重装并换 Vis 才能在正式入口看到。证据见根 `.context/mvp/phys-workbench-acceptance.md`。
+
+Surface LIC 远程交接防崩（2026-09-17）：选 LIC 先出远程静帧再开拖转；无向量、建图或第一帧失败只提示并回退，不切半套远程。圈定 `test_phys_display_settings.py`、`test_phys_display_updates.py`、`test_phys_views.py` 与前端 `interaction.test.js`。18:42 已重装并换 Vis，正式后处理三维页点 LIC 后会话仍在，缺向量只提示。证据见根 `.context/mvp/phys-workbench-acceptance.md`。
+
+
+## 正式发布与宿主 Web 冒烟（硬规则）
+
+宿主消费链的 Vis 改动：未重装 `ai4e-viz`、未回收正式 8000 的旧 Vis 子进程时，正式 Web 验收不了；Agent 必须自己在用户 5173→8000 冒烟，隔离口与「待发布」不算完成。未授权不得擅自重装/重启正式入口，必须当场申请。完整条文只在根 `AGENTS.md`「发布与正式 Web 冒烟验收」。

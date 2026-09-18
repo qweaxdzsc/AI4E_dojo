@@ -1,10 +1,13 @@
 """阶段日志的切换、心跳继承、异常恢复与写入分流验收。"""
 
+import logging
 import threading
 
 import pytest
+import torch
 
 from ai4e_core import run
+from ai4e_core.abilities.data.save.store import load_named_tensor
 from ai4e_core.base import events
 from tests.integration.test_dataset_recipe import setup_case
 
@@ -37,6 +40,7 @@ def test_recipe_phases_and_console_summaries(tmp_path, capsys):
         for state in ("开始", "结果", "结束"):
             assert f"[{phase}/字段提取/{state}]" in log
             assert f"[{phase}/字段提取/{state}]" not in console
+        assert "[张量读取/" not in log
         assert f"[{phase}] 提交警告：保留备份" in log
         assert f"[{phase}/{phase}/" not in log
         assert f"[{phase}/运行/" not in log
@@ -108,6 +112,66 @@ def test_heartbeat_inherits_phase_and_sample(caplog, monkeypatch):
     assert "[train/慢能力/运行中]" in caplog.text
     assert "%" not in caplog.text
     assert events.PHASE.get() == ""
+
+
+def test_run_log_omits_loop_tensor_reads(tmp_path, capsys):
+    folder, cfg = setup_case(tmp_path)
+    path = tmp_path / "one.pt"
+    torch.save(torch.ones(2), path)
+
+    def stage(cfg):
+        for _ in range(3):
+            load_named_tensor(path)
+
+    assert run.run_recipe(cfg, stages={"rawprep": stage}, script=folder / "rawprep.py") == 0
+    record = next((tmp_path / "records").iterdir())
+    log = (record / "logs/run.log").read_text()
+    console = capsys.readouterr().err
+    assert "[rawprep/阶段/开始]" in log
+    assert "[rawprep/阶段/结束]" in log
+    assert "张量读取" not in log
+    assert "张量读取" not in console
+
+
+def test_traced_loop_reads_stay_debug(tmp_path, caplog):
+    path = tmp_path / "sample.pt"
+    torch.save(torch.ones(2), path)
+    with caplog.at_level(logging.INFO, logger=events.LOGGER.name):
+        for _ in range(3):
+            load_named_tensor(path)
+    assert not any(getattr(record, "operation", "") == "张量读取" for record in caplog.records)
+
+    caplog.clear()
+    with caplog.at_level(logging.DEBUG, logger=events.LOGGER.name):
+        load_named_tensor(path)
+    traced = [record for record in caplog.records if getattr(record, "operation", "") == "张量读取"]
+    assert {record.event_state for record in traced} == {"开始", "结果", "结束"}
+    assert all(record.levelno == logging.DEBUG for record in traced)
+
+    caplog.clear()
+    with (
+        caplog.at_level(logging.INFO, logger=events.LOGGER.name),
+        pytest.raises((FileNotFoundError, RuntimeError, OSError)),
+    ):
+        load_named_tensor(tmp_path / "missing.pt")
+    failed = [record for record in caplog.records if getattr(record, "event_state", "") == "失败"]
+    assert failed and all(record.levelno >= logging.ERROR for record in failed)
+
+
+def test_debug_operation_skips_heartbeat(monkeypatch):
+    pulses = []
+    original = events.event
+
+    def observe(name, state, /, **details):
+        original(name, state, **details)
+        if state == "运行中":
+            pulses.append(state)
+
+    monkeypatch.setattr(events, "event", observe)
+    monkeypatch.setattr(events, "INTERVAL", 0.01)
+    with events.operation("循环读取", level=logging.DEBUG):
+        threading.Event().wait(0.05)
+    assert pulses == []
 
 
 def test_nested_phase_restores_outer_context():

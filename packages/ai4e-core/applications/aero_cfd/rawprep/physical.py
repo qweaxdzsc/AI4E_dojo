@@ -163,6 +163,8 @@ def publish_dataset(results, *, source, session):
         "manifest": str(path),
         "split_counts": {key: len(values) for key, values in source.raw.partitions.items()},
     }
+    session.record_asset("dataset", path, kind="dataset", stage="rawprep",
+                         dependencies=[path.parent])
     session.report(report, stage="rawprep")
     return report
 

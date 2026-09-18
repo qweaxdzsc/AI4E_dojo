@@ -1,0 +1,12 @@
+[project]
+name = "safediffcon-kstar-reference"
+version = "0.1.0"
+requires-python = ">=3.9,<3.10"
+dependencies = [
+  "tensorflow-macos==2.13.1; sys_platform == 'darwin' and platform_machine == 'arm64'",
+  "tensorflow==2.13.1; sys_platform != 'darwin' or platform_machine != 'arm64'",
+  "keras==2.13.1", "numpy==1.22.4", "scipy==1.7.3", "matplotlib==3.5.1", "tqdm",
+]
+
+[tool.uv]
+package = false

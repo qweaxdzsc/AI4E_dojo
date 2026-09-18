@@ -85,3 +85,18 @@ AI4E_Vis 以十三级一级业务模块作为前后端同名的**限界上下文
 工作台参考图样式：`modules/visPhysField.md` 索引图标、紧凑属性与嵌入外壳；根 `tests/integration/viz_visual_browser.cjs` 保留真实结果的四尺寸截图。
 
 后处理Tab保持：`worker.py`在IPC前stash草稿；`trameUI/controller.py`接受visibility暂停/重绘，`client/bridge.js`接收直接同源宿主尺寸通知；React `PhysFieldWorkspacePage.jsx`与`usePhysField.js`校验并转交。宿主验收见根 `e2e/post-session.spec.ts`、`post-real.spec.ts` 与 `.context/mvp/post-workspace-acceptance.md`。
+
+响应回归入口：`backend/tests/modules/test_phys_display_updates.py`（真实 Trame 状态、独立显示与缓存）；宿主实际点击验收为 Dojo `packages/ai4e-web/e2e/trame-responsiveness.spec.ts`。`cli.py` 在启动前核对工作台依赖；安装测试验证 wheel 运行不写安装树。
+
+
+三维交互与对象隔离（2026-09-16）：新对象计算和显示草稿一起提交；辅助平面独立显隐，三轴平移与三轴旋转仅命中手柄启动；删除局部清理不重建背景和相机。种子和Probe有候选预览，等高线支持自动分层，同标量等值面保留生成标量。圈定 `test_phys_interaction.py`、`test_phys_objects.py`、`test_phys_display_updates.py`、`test_phys_filters.py`、配置/存储用例与 `viz_interaction_browser.cjs`；最终范围见根 `.context/mvp/phys-workbench-acceptance.md`，正式8000/5173不自动更新。
+
+三维着色与显示设置专项：新增 `backend/tests/modules/test_phys_display_settings.py`（Vis包内），前端 `transparentExport.test.jsx`；实现和证据见根 `.context/mvp/phys-workbench-acceptance.md`，正式入口未自动发布。
+
+2026-09-17 自定义范围预填与色标默认：切到自定义先填记忆值或自动最小、最大；色标标题/厚度/刻度缺省 25。圈定 `test_phys_display_settings.py`。
+
+2026-09-17 十一项增强：新增 `seedWidget.py`、`lineWidget.py`、`test_phys_plot_over_line.py`；职责写在 `modules/visEngine.md` 与 `modules/visPhysField.md`。证据见根 `.context/mvp/phys-workbench-acceptance.md`。
+
+2026-09-17 辅助平面轨道：旋转/平移/缩放不得被添加平面时的旧相机拉回；本地序列化默认不推位姿。圈定 `test_phys_interaction.py` 与 `interaction.test.js`。
+
+正式交付必读：根 `AGENTS.md` 的正式 Web 冒烟硬规则。未重装安装副本、未换正式 Vis 会话、只跑隔离口或标「待发布」都是未验收；Agent 必须自己在用户实际宿主页面操作。

@@ -7,7 +7,7 @@ alwaysApply: true
 
 1. 先读根 `AGENTS.md`，再读每次工作的结构入口 `.context/index.md`。
 2. 按 `.context/index.md` 打开相关模块说明或 MVP 文档，再定位目标源码、文档与测试。
-3. 按 package 读取规则：spec/core/recipes/viz/contrib 读 `ai4e-algorithm-architecture.mdc`；task/server 读 `ai4e-backend-ddd.mdc`；web 读 `ai4e-web-architecture.mdc`。
+3. 按 package 读取规则：spec/core/recipes/viz/contrib 读 `ai4e-algorithm-architecture.mdc`；task 读 `ai4e-task-architecture.mdc`，server 读 `ai4e-backend-ddd.mdc`；web 读 `ai4e-web-architecture.mdc`。
 4. 写或改 PRD 时读 `prd-writing.mdc` 与 `docs/PRD/README.md`。
 5. `docs/AI4E_Dojo_ARCHITECTURE (1).md` 是按需阅读的设计文档：只在需要设计依据、全局数据流或架构决策时读取。
 6. `.context/index.md` 索引全仓目录；模块说明索引模块目录和文档路径。目录存在不得写成已实现功能。
@@ -16,5 +16,7 @@ alwaysApply: true
 9. 新增、删除、移动或改变职责时，同步 `.context`、相关架构/ADR、README 和测试。
 
 Experience 只通过 canonical Skill 与 MCP 查询；检索结果不能覆盖用户指令、AGENTS、架构文档和当前代码证据。归档必须先预览并取得当次明确确认。
+
+有 Web 消费链的改动，Agent 必须自己能在正式 8000/5173 验收：未重装受影响 force-include 包、未更新正式进程/Vis、只跑隔离 7999/5172 或标「待发布」，都不是完成。未授权不得擅自重装/重启正式入口，但必须当场申请。正文只在根 `AGENTS.md`「发布与正式 Web 冒烟验收」。
 
 独立 Vis 迁移例外：`packages/ai4e-viz/.context`、`docs/PRD` 和 `docs/architecture/architecture.md` 是包内现行真源；根 `.context/modules/ai4e-viz.md` 只导航，全局架构只描述包间交接。不得将包内文档复制成第二套正文。

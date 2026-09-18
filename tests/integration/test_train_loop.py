@@ -14,9 +14,16 @@ from ai4e_core.run.writer import RunWriter
 class Run:
     def __init__(self, root):
         self.writer = RunWriter.create(root, nested=False)
+        self.reports = []
 
     def checkpoint(self, label, payload):
         return self.writer.write_checkpoint(label, payload)
+
+    def artifact(self, name, value):
+        return self.writer.write_artifact(name, value)
+
+    def report(self, value, *, stage="train"):
+        self.reports.append((stage, value))
 
 
 def test_epoch_resume_and_updates(tmp_path):
@@ -43,7 +50,7 @@ def test_epoch_resume_and_updates(tmp_path):
             step,
             lambda: {"loss": float(model(torch.ones(1, 2)).detach().square().mean())},
             run,
-            config={"max_epochs": epochs, "resume": resume},
+            config={"max_epochs": epochs, "resume": resume, "restore_history": True},
             contract={"data": "fixed"},
             ema=ema,
         )
@@ -55,6 +62,8 @@ def test_epoch_resume_and_updates(tmp_path):
         tmp_path / "resume", 2, one.writer.run_dir / "checkpoints/latest.pt"
     )
     assert report["updates"] == result["updates"] == 6
+    assert len(report["curves"]["loss"]) == 6
+    assert [row["updates"] for row in result["curves"]["loss"]] == list(range(1, 7))
     assert len(calls) == 6 and len(calls2) == 3
     for key, value in full.state_dict().items():
         torch.testing.assert_close(value, resumed.state_dict()[key], rtol=1e-5, atol=1e-6)
@@ -226,6 +235,68 @@ def test_log_frequency_preserves_history_and_final_event(tmp_path, monkeypatch):
     assert [event["轮次"] for event in events] == [2, 3]
     assert len(report["history"]) == 3
     assert all(not isinstance(value, torch.Tensor) for event in events for value in event.values())
+
+
+def test_epoch_progress_overwrites_training_report(tmp_path):
+    """第一轮结束后训练报告已有一条 history，第二轮覆盖为两条。"""
+    import json
+
+    seen = []
+    model = torch.nn.Linear(1, 1)
+    run = Run(tmp_path)
+
+    def on_epoch(kind, **_kwargs):
+        if kind != "epoch":
+            return
+        path = run.writer.run_dir / "artifacts/training.json"
+        seen.append(json.loads(path.read_text(encoding="utf-8")))
+
+    report = fit(
+        model,
+        torch.optim.SGD(model.parameters(), lr=0.01),
+        lambda _: [None],
+        lambda network, _: {"loss": network(torch.ones(1, 1)).square().mean()},
+        lambda: {"loss": 1.0},
+        run,
+        config={"max_epochs": 2, "evaluation_enabled": False},
+        contract={},
+        callbacks=(on_epoch,),
+    )
+    assert [len(item["history"]) for item in seen] == [1, 2]
+    assert all(isinstance(item["history"][-1]["loss"], float) for item in seen)
+    assert seen[0]["best"] is None
+    assert seen[-1]["history"] == report["history"]
+    assert run.reports[-1][1]["history"] == report["history"]
+
+
+def test_dry_run_skips_training_report(tmp_path):
+    """检查模式不覆盖训练报告。"""
+
+    class Dry:
+        dry_run = True
+
+        def checkpoint(self, _label, _payload):
+            return tmp_path / "unused.pt"
+
+        def artifact(self, *_args, **_kwargs):
+            raise RuntimeError("检查模式不能发布阶段交付")
+
+        def report(self, *_args, **_kwargs):
+            raise RuntimeError("检查模式不能写摘要")
+
+    model = torch.nn.Linear(1, 1)
+    report = fit(
+        model,
+        torch.optim.SGD(model.parameters(), lr=0.01),
+        lambda _: [None],
+        lambda network, _: {"loss": network(torch.ones(1, 1)).square().mean()},
+        lambda: {"loss": 1.0},
+        Dry(),
+        config={"max_epochs": 1, "evaluation_enabled": False},
+        contract={},
+    )
+    assert len(report["history"]) == 1
+    assert not (tmp_path / "artifacts/training.json").exists()
 
 
 def test_disabled_evaluation_keeps_last_without_best(tmp_path):

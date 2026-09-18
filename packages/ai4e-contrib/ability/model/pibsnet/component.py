@@ -10,6 +10,7 @@ from ai4e_contrib.ability.constraint.equations import (
     convection_diffusion,
     diffusion,
 )
+from ai4e_contrib.application.parametric_pde import pibsnet as preparation_adapter
 from ai4e_core.abilities.constraint.physical import boundary_residual, residual_loss
 from ai4e_core.abilities.sampling.physical import grid_points, periodic_points, sample_points
 
@@ -266,3 +267,6 @@ def step(model, prepared, config):
         )["u"]
         add(f"periodic/{name}", left - right, constraints["periodic_boundary_conditions"])
     return {"loss": sum(weighted), "losses": losses}
+
+
+preparation_parameters = preparation_adapter.preparation_parameters

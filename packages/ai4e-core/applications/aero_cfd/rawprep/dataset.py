@@ -9,7 +9,7 @@ from uuid import uuid4
 from omegaconf import OmegaConf
 
 from ai4e_core.applications.base.dataset import Dataset
-from ai4e_core.base.events import LOGGER, event, operation
+from ai4e_core.base.events import ATOMIC_LEVEL, LOGGER, event, operation
 
 from .derive import derive_geometry as derive_one
 from .read import dataread
@@ -156,6 +156,7 @@ def filter_points(data, *, filters):
             event(
                 "筛选",
                 "结果",
+                level=ATOMIC_LEVEL,
                 组=key,
                 筛选前=before[key],
                 保留=group["count"],
@@ -171,7 +172,9 @@ def to_tensors(data: Dataset, *, vtkhdf: bool = False) -> Dataset:
     return data.then("张量编码", lambda ctx: {**tensorize(ctx), "vtkhdf": vtkhdf})
 
 
-def encode(data: Dataset, *, format: str | None = None, formats=None, vtkhdf: bool = False) -> Dataset:
+def encode(
+    data: Dataset, *, format: str | None = None, formats=None, vtkhdf: bool = False
+) -> Dataset:
     """登记编码与容器选择；保存策略仍负责实际提交。"""
     from dataclasses import replace
 
@@ -182,9 +185,7 @@ def encode(data: Dataset, *, format: str | None = None, formats=None, vtkhdf: bo
     )
     primary = primary_format(selected)
     output = deepcopy(data.options["output"])
-    stems = {
-        key: str(Path(value).with_suffix("")) for key, value in output["filemap"].items()
-    }
+    stems = {key: str(Path(value).with_suffix("")) for key, value in output["filemap"].items()}
     output["formats"] = selected
     output["format_filemaps"] = {
         item: {key: stem + "." + item for key, stem in stems.items()} for item in selected
@@ -221,6 +222,7 @@ def save_sample(ctx: dict, *, output: dict) -> dict:
     event(
         "样本提交",
         "结果",
+        level=ATOMIC_LEVEL,
         目标=result["path"],
         文件数=len(result["names"]),
         状态="已提交" if result["written"] else "预检通过，未写数据",
@@ -247,7 +249,7 @@ class StatisticsResult:
     manifest: dict
 
 
-def publish_dataset(results: dict, *, statistics: StatisticsResult | None = None) -> dict:
+def publish_dataset(results: dict, *, statistics: StatisticsResult | None = None, session=None) -> dict:
     """准备本次清单；统计成功后才发布完整 manifest。"""
     if statistics is not None:
         if statistics.results is not results or results["failed"]:
@@ -256,6 +258,13 @@ def publish_dataset(results: dict, *, statistics: StatisticsResult | None = None
         if not results["dry_run"]:
             with operation("数据清单", 状态="physical", 归一化="未执行"):
                 _atomic_json(Path(results["output"]["root"]) / "manifest.json", statistics.manifest)
+            if session is not None:
+                path = Path(results["output"]["root"]) / "manifest.json"
+                session.record_asset("dataset", path, kind="dataset", stage="rawprep",
+                                     dependencies=[path.parent])
+                session.report({"manifest": str(path), "split_counts": {
+                    name: len(samples) for name, samples in statistics.manifest["partitions"].items()
+                }}, stage="rawprep")
         return result
     dataset = results["dataset"]
     result = {
@@ -306,6 +315,7 @@ def compute_statistics(dataset: dict, spec=None, *, settings=None):
     reference = None
     if mode == "reference":
         reference = source.metadata["reference_statistics"]
+        target = Path(dataset["output"]["root"]) / "dependencies/reference-statistics.yaml"
     if mode != "none":
         train = list(source.partitions.get("train", ()))
         if mode == "fit" and not train:
@@ -334,9 +344,16 @@ def compute_statistics(dataset: dict, spec=None, *, settings=None):
         )
         with operation("统计", **details):
             resolve_statistics(ctx, stats=stats)
+        if reference and not dataset["dry_run"]:
+            # 物理数据应脱离安装目录仍可消费；在清单发布前冻结参考统计，
+            # 避免连续流程的准备已捕获摘要后再次改写清单。
+            import shutil
+
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(reference, target)
         dataset["manifest"]["statistics"] = {
             "mode": mode,
-            "path": reference or str(target),
+            "path": str(target),
             "state": "physical",
             "samples": train if mode == "fit" else None,
         }
@@ -378,6 +395,8 @@ def _preflight(data, output, *, flags, settings):
         if "train" not in roots:
             raise ValueError("统计拟合需要 train 分片")
         meta.append(roots["train"] / "statistics.yaml")
+    elif statistics.get("mode") == "reference":
+        meta.append(root / "dependencies/reference-statistics.yaml")
     for path in meta:
         if path.exists() and not flags["overwrite"]:
             raise FileExistsError(f"产物已存在: {path}")

@@ -19,9 +19,9 @@ def partition_for(config):
     import yaml
 
     dataset = config.get("dataset", {})
-    if dataset.get("manifest") is not None:
+    if config.get("inputs", {}).get("rawprep", {}).get("manifest") is not None:
         raise ValueError("dataset.manifest: 当前页面映射仅支持默认 ShapeNet-Car manifest")
-    partition = dataset.get("partition", "official")
+    partition = dataset.get("partitions", "official")
     if partition == "official":
         path = distribution("ai4e-contrib").locate_file(
             "ai4e_contrib/application/datasets/shapenet_car/partition.yaml"
@@ -46,56 +46,10 @@ def partition_for(config):
 
 
 def require_profile(service, project, identity):
-    """校验已登记脚本的处理语义，兼容格式整理和已审定的旧默认加载入口。"""
+    """确认任务已接入页面描述操作；不限制用户脚本或新增能力文件。"""
     from pathlib import Path
 
     import ai4e_task as task
 
-    from .recipe_profile import compatible_file
-
     record = task.get_task(service.project(project), identity)
-    folder = Path(record["directory"]) / "recipe"
-    if record.get("entry", {}).get("platform_case"):
-        from ..tasks.templates import case_files
-
-        files = case_files(service, record["entry"]["platform_case"])
-    else:
-        source = service.settings.template
-        files = {
-            str(path.relative_to(source)): path.read_bytes()
-            for path in source.rglob("*")
-            if path.is_file() and "__pycache__" not in path.parts
-        }
-    expected = {name for name in files if Path(name).suffix == ".py" or name == "task-entry.json"}
-    actual = {
-        str(path.relative_to(folder))
-        for path in folder.rglob("*")
-        if path.is_file()
-        and "__pycache__" not in path.parts
-        and (path.suffix == ".py" or path.name == "task-entry.json")
-    }
-    import json
-
-    from .recipe_profile import compatible_legacy, compatible_native
-
-    if compatible_legacy(
-        folder,
-        actual,
-        service.settings.template / "legacy-profile.json",
-        record.get("entry", {}).get("platform_case"),
-        json.loads(files["task-entry.json"]).get("components"),
-    ):
-        return
-    if compatible_native(folder, actual, service.settings.template / "inference-profile.json",
-                         record.get("entry", {}).get("platform_case"), json.loads(files["task-entry.json"]).get("components")):
-        return
-    changed = sorted(expected ^ actual)
-    for name in sorted(expected & actual):
-        target = folder / name
-        if not compatible_file(name, files[name], target.read_bytes()):
-            changed.append(name)
-    if changed:
-        raise ValueError(
-            "recipe_profile_changed: 以下文件的处理逻辑或入口与已支持版本不同，需要核对页面配置映射："
-            + ", ".join(sorted(changed))
-        )
+    task.operation_target(Path(record["directory"]) / "recipe", "inspect")

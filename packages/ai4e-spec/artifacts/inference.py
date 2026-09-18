@@ -5,6 +5,36 @@ from dataclasses import asdict, dataclass, field
 from typing import Any
 
 
+def apply_export_aliases(settings: dict, incoming: dict | None = None) -> dict:
+    """旧 ``export_vtk`` 未拆新键时同时开关点云和网格化；拆开后只表示网格化。
+
+    请求里值为 ``None`` 的新键视为未写，避免 HTTP 默认值把旧请求当成已拆开。
+    """
+    incoming = incoming if isinstance(incoming, dict) else settings
+
+    def present(key: str) -> bool:
+        return key in incoming and incoming[key] is not None
+
+    split = present("export_pointcloud") or present("export_mesh")
+    if not split:
+        vtk = settings.get("export_vtk")
+        value = True if vtk is None else bool(vtk)
+        settings["export_pointcloud"] = value
+        settings["export_mesh"] = value
+    else:
+        if present("export_pointcloud"):
+            settings["export_pointcloud"] = bool(incoming["export_pointcloud"])
+        else:
+            settings["export_pointcloud"] = True
+        if present("export_mesh"):
+            settings["export_mesh"] = bool(incoming["export_mesh"])
+        else:
+            vtk = incoming.get("export_vtk", settings.get("export_vtk"))
+            settings["export_mesh"] = True if vtk is None else bool(vtk)
+    settings["export_vtk"] = bool(settings["export_mesh"])
+    return settings
+
+
 @dataclass(frozen=True)
 class InferenceCheckpointRef:
     """用户实际选中的训练检查点及内容修订。"""
@@ -90,16 +120,33 @@ class InferenceRequest:
         if not isinstance(value.get("options", {}), dict):
             raise ValueError("invalid_inference_options")  # noqa: TRY004 - HTTP 业务校验统一错误
         options = dict(value.get("options", {}))
-        if set(options) - {"evaluate", "save_predictions", "export_vtk", "query_chunk_size"}:
+        allowed = {
+            "evaluate",
+            "save_predictions",
+            "export_vtk",
+            "export_pointcloud",
+            "export_mesh",
+            "query_chunk_size",
+        }
+        if set(options) - allowed:
             raise ValueError("unsupported_inference_option")
-        for key in ("evaluate", "save_predictions", "export_vtk"):
+        apply_export_aliases(options)
+        for key in (
+            "evaluate",
+            "save_predictions",
+            "export_vtk",
+            "export_pointcloud",
+            "export_mesh",
+        ):
             options.setdefault(key, True)
             if not isinstance(options[key], bool):
                 raise ValueError("invalid_inference_option: " + key)  # noqa: TRY004 - HTTP 业务校验统一错误
         size = options.setdefault("query_chunk_size", 16384)
         if not isinstance(size, int) or isinstance(size, bool) or size < 1:
             raise ValueError("invalid_query_chunk_size")
-        if options["export_vtk"] and not options["save_predictions"]:
+        if (options["export_pointcloud"] or options["export_mesh"]) and not options[
+            "save_predictions"
+        ]:
             raise ValueError("mesh_requires_saved_predictions")
         if not options["evaluate"] and not options["save_predictions"]:
             raise ValueError("inference_output_required")
@@ -180,6 +227,23 @@ class InferenceMetricDescription(TypedDict):
     unit_rule: str
     scope: str
     default: bool
+
+
+class InferenceVtkExportCapability(TypedDict):
+    """点云或网格化是否可写；网格化不可用时带原因。"""
+
+    available: bool
+    include_truth: bool
+    reason: NotRequired[str | None]
+    structured: NotRequired[bool]
+    sources: NotRequired[list[str]]
+
+
+class InferenceVtkExports(TypedDict):
+    """样本目录里的 VTK 导出能力，供页面置灰，不由网页猜测。"""
+
+    pointcloud: InferenceVtkExportCapability
+    mesh: InferenceVtkExportCapability
 
 
 class InferenceStatistic(TypedDict):

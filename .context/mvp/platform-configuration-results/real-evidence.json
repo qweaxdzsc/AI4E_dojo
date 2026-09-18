@@ -1,0 +1,37 @@
+[
+  {
+    "case": "shapenet_car_abupt",
+    "checkpoint": "/Users/zonghui/work/project_simulation/dojo_train/platform-configuration-20260916-real6/test_real_five_case_configurat0/shapenet_car_abupt/pipeline-runs/2026-09-16T12-03-36_73f55f/checkpoints/last.pt",
+    "predictions": "/Users/zonghui/work/project_simulation/dojo_train/platform-configuration-20260916-real6/test_real_five_case_configurat0/shapenet_car_abupt/pipeline-runs/2026-09-16T12-03-36_73f55f/artifacts/physical-predictions.json",
+    "epochs": 1,
+    "device": "cpu"
+  },
+  {
+    "case": "nasa_crm_transolver3",
+    "checkpoint": "/Users/zonghui/work/project_simulation/dojo_train/platform-configuration-20260916-real6/test_real_five_case_configurat0/nasa_crm_transolver3/pipeline-runs/2026-09-16T12-03-46_cd2d9c/checkpoints/last.pt",
+    "predictions": "/Users/zonghui/work/project_simulation/dojo_train/platform-configuration-20260916-real6/test_real_five_case_configurat0/nasa_crm_transolver3/pipeline-runs/2026-09-16T12-03-46_cd2d9c/artifacts/physical-predictions.json",
+    "epochs": 1,
+    "device": "cpu"
+  },
+  {
+    "case": "nasa_crm_abupt",
+    "checkpoint": "/Users/zonghui/work/project_simulation/dojo_train/platform-configuration-20260916-real6/test_real_five_case_configurat0/nasa_crm_abupt/pipeline-runs/2026-09-16T12-03-55_6fe8d4/checkpoints/last.pt",
+    "predictions": "/Users/zonghui/work/project_simulation/dojo_train/platform-configuration-20260916-real6/test_real_five_case_configurat0/nasa_crm_abupt/pipeline-runs/2026-09-16T12-03-55_6fe8d4/artifacts/physical-predictions.json",
+    "epochs": 1,
+    "device": "cpu"
+  },
+  {
+    "case": "shapenet_car_transolver3_surface",
+    "checkpoint": "/Users/zonghui/work/project_simulation/dojo_train/platform-configuration-20260916-real6/test_real_five_case_configurat0/shapenet_car_transolver3_surface/pipeline-runs/2026-09-16T12-04-04_40ad69/checkpoints/last.pt",
+    "predictions": "/Users/zonghui/work/project_simulation/dojo_train/platform-configuration-20260916-real6/test_real_five_case_configurat0/shapenet_car_transolver3_surface/pipeline-runs/2026-09-16T12-04-04_40ad69/artifacts/physical-predictions.json",
+    "epochs": 1,
+    "device": "cpu"
+  },
+  {
+    "case": "shapenet_car_transolver3_volume",
+    "checkpoint": "/Users/zonghui/work/project_simulation/dojo_train/platform-configuration-20260916-real6/test_real_five_case_configurat0/shapenet_car_transolver3_volume/pipeline-runs/2026-09-16T12-04-11_4d764c/checkpoints/last.pt",
+    "predictions": "/Users/zonghui/work/project_simulation/dojo_train/platform-configuration-20260916-real6/test_real_five_case_configurat0/shapenet_car_transolver3_volume/pipeline-runs/2026-09-16T12-04-11_4d764c/artifacts/physical-predictions.json",
+    "epochs": 1,
+    "device": "cpu"
+  }
+]

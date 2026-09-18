@@ -14,8 +14,9 @@ from ..storage.files import read_json, write_json
 from ..storage.layout import inside, task_dir
 from ..storage.records import fetch, get, listing, put, remember, replay
 from ..storage.snapshots import digest
+from .operations import operation_target
 from .post_results import freeze_result_item, post_results
-from .query import get_task
+from .records import get_task
 
 TERMINAL = {"succeeded", "partial", "failed", "canceled", "interrupted"}
 
@@ -82,6 +83,7 @@ def submit_post_metrics(project, task_id, request):
     now = datetime.now(UTC).isoformat()
     job = {
         "id": identity,
+        "target": operation_target(root / "recipe", "evaluate"),
         "task_id": task_id,
         "version_id": task["version_id"],
         "run_id": run_id,
@@ -130,6 +132,7 @@ def submit_post_metrics(project, task_id, request):
                     task_id,
                     identity,
                 ],
+                cwd=root / "recipe",
                 stdout=log,
                 stderr=log,
                 stdin=subprocess.DEVNULL,
@@ -177,6 +180,12 @@ def read_post_metrics(project, task_id, identity):
             job = fetch(project, "post_metric_job", identity)
     path = Path(job["data_dir"]) / "metrics.json"
     result = read_json(path) if path.exists() else {"rows": []}
+    journal = path.with_suffix(".jsonl")
+    if not path.exists() and journal.exists():
+        with journal.open(encoding="utf-8") as stream:
+            for line in stream:
+                if line.endswith("\n"):
+                    result["rows"].extend(json.loads(line))
     return {**job, "rows": result["rows"]}
 
 
@@ -211,6 +220,7 @@ def export_post_metrics(project, task_id, identity, request):
     name = "export-" + uuid4().hex + "." + format
     path = Path(job["data_dir"]) / name
     payload = {
+        "target": operation_target(task_dir(project, task_id) / "recipe", "export"),
         "record": str(Path(job["data_dir"]) / "metrics.json"),
         "path": str(path),
         "format": format,
@@ -218,6 +228,7 @@ def export_post_metrics(project, task_id, identity, request):
     }
     result = subprocess.run(
         [sys.executable, "-m", "ai4e_task.tasks.post_metrics_worker", "--export"],
+        cwd=task_dir(project, task_id) / "recipe",
         input=json.dumps(payload),
         capture_output=True,
         text=True,

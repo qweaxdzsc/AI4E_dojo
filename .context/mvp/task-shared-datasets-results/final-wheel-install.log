@@ -1,0 +1,9 @@
+Processing /tmp/dojo-shared-final-wheels/ai4e_contrib-0.1.0-py3-none-any.whl
+Processing /tmp/dojo-shared-final-wheels/ai4e_core-0.1.0-py3-none-any.whl
+Processing /tmp/dojo-shared-final-wheels/ai4e_server-0.1.0-py3-none-any.whl
+Processing /tmp/dojo-shared-final-wheels/ai4e_spec-0.1.0-py3-none-any.whl
+Processing /tmp/dojo-shared-final-wheels/ai4e_task-0.1.0-py3-none-any.whl
+Processing /tmp/dojo-shared-final-wheels/ai4e_viz-0.1.0-py3-none-any.whl
+Installing collected packages: ai4e-viz, ai4e-task, ai4e-spec, ai4e-server, ai4e-core, ai4e-contrib
+
+Successfully installed ai4e-contrib-0.1.0 ai4e-core-0.1.0 ai4e-server-0.1.0 ai4e-spec-0.1.0 ai4e-task-0.1.0 ai4e-viz-0.1.0

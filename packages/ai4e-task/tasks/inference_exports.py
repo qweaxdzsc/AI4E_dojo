@@ -8,7 +8,7 @@ from ..storage.files import write_json
 from ..storage.layout import task_dir
 from .checkpoints import file_digest, inspect_inference
 from .inference_results import inference_results
-from .query import get_task
+from .records import get_task
 
 
 def export_inference(project, task_id, batch_id, request):

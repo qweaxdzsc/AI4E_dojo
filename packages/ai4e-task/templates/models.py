@@ -1,12 +1,17 @@
-"""用户执行入口的显式文件与路径绑定。"""
+"""从公共 recipe 结构投影的内部查询类型。"""
 
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 
 class Entry(TypedDict):
-    """outputs 是配置键到 data_dir/run_root 模板，inputs 是配置键到资产类型。"""
+    """输出绑定任务或已声明共享目录；阶段输入决定本次捕获的资产范围。"""
 
+    shared_outputs: NotRequired[dict[str, dict[str, str]]]
+    stage_inputs: NotRequired[dict[str, list[dict[str, str]]]]
     script: str
     config: str
     inputs: dict[str, str]
     outputs: dict[str, str]
+    convention_version: int
+    components: NotRequired[dict[str, str]]
+    resume_key: NotRequired[str]

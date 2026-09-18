@@ -36,5 +36,6 @@ bypass-selection = true
 "tools" = "ai4e_core/tools"
 
 [project.optional-dependencies]
+post = ["pyvista>=0.49,<0.50", "matplotlib>=3.10"]
 modeling = ["einops>=0.8"]
 hdf5 = ["h5py>=3.11"]

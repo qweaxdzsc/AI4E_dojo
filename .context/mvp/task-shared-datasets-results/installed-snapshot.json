@@ -1,0 +1,19 @@
+{
+  "installed_roots": {
+    "ai4e-core": "/private/tmp/dojo-shared-final-env/lib/python3.12/site-packages/ai4e_core",
+    "ai4e-task": "/private/tmp/dojo-shared-final-env/lib/python3.12/site-packages/ai4e_task",
+    "ai4e-server": "/private/tmp/dojo-shared-final-env/lib/python3.12/site-packages/ai4e_server",
+    "ai4e-contrib": "/private/tmp/dojo-shared-final-env/lib/python3.12/site-packages/ai4e_contrib"
+  },
+  "source_differences": [
+    "packages/ai4e-server/modules/stages/configuration.py"
+  ],
+  "wheels": {
+    "ai4e_spec-0.1.0-py3-none-any.whl": "21e07b2b4dc9091af1de883592d2ded2deea8ce4117f5713a3a1665e4ff251c3",
+    "ai4e_server-0.1.0-py3-none-any.whl": "cf63606a633c8fb40da37260fb97c08dec24c6fa75cefc191a34fee9a7f7aea5",
+    "ai4e_contrib-0.1.0-py3-none-any.whl": "cb6a800612d8a6ac1b82bb518ba416f978d4ad8e481063543183056e2c15dfaf",
+    "ai4e_task-0.1.0-py3-none-any.whl": "63589a2e40d21dcf39dddc1568babe779ed4254260a27e80425049a8d89a1496",
+    "ai4e_core-0.1.0-py3-none-any.whl": "524d1810aaa3f7ee4439e4be1cabcea74ef1061eff95918f275c787a0b958270",
+    "ai4e_viz-0.1.0-py3-none-any.whl": "af5f0a3a52cc64fb3b7ee64f14cfd48e2eb1889cd3add9c00b9cc89319186167"
+  }
+}

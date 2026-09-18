@@ -1,8 +1,29 @@
 """同一场景的显示对象和导出注记，保持计算字段与着色字段独立。"""
 
 import math
+from contextlib import contextmanager
 
 import vtk
+
+# 本地 VTK.js 相机由客户端轨道维护；只有服务端主动改视角才推位姿。
+# 见 https://discourse.vtk.org/t/update-camera-in-trame-vtklocalview/15979
+_CAMERA_POSE_PUSH_DEPTH = 0
+
+
+@contextmanager
+def camera_pose_push():
+    """允许本次本地序列化带上相机位姿；嵌套调用共用同一开关。"""
+    global _CAMERA_POSE_PUSH_DEPTH
+    _CAMERA_POSE_PUSH_DEPTH += 1
+    try:
+        yield
+    finally:
+        _CAMERA_POSE_PUSH_DEPTH -= 1
+
+
+def camera_pose_push_enabled() -> bool:
+    """当前是否允许把服务端相机位姿写进本地场景。"""
+    return _CAMERA_POSE_PUSH_DEPTH > 0
 
 from .modules.fieldVisualization.colorMapping import build_color_mapping
 from .modules.fieldVisualization.scalarCloud import prepare_scalar
@@ -41,26 +62,118 @@ def build_plane_handle_actor(mesh, name):
     actor = vtk.vtkActor()
     actor.SetMapper(mapper)
     actor.GetProperty().SetColor(HANDLE_COLORS[name])
-    actor.GetProperty().SetOpacity(0.35 if name == "plane" else 1)
+    actor.GetProperty().SetOpacity(0.28 if name == "plane" else 1)
     actor.GetProperty().SetLineWidth(3 if name.startswith("axis") or name == "rotate" else 1)
-    actor.GetProperty().SetRepresentationToWireframe()
+    actor.GetProperty().SetRepresentationToSurface()
+    actor.GetProperty().LightingOff()
+    actor.PickableOff()
+    if name == "border":
+        actor.GetProperty().SetLineWidth(2)
     if name == "plane":
         actor.GetProperty().SetRepresentationToSurface()
-        actor.GetProperty().SetOpacity(0.22)
+        actor.GetProperty().SetOpacity(0.28)
     actor.SetUseBounds(False)
     actor._plane_handle = name
     return actor
 
 
+def _point_vector(mesh, field):
+    """Surface LIC 只接受三维点向量。"""
+    if mesh is None or not field or field.get("association", "point") != "point":
+        return None
+    array = mesh.GetPointData().GetArray(field.get("name", ""))
+    if array is None or array.GetNumberOfComponents() != 3:
+        return None
+    return array
+
+
+def first_point_vector(mesh):
+    """网格上第一个三维点向量，供旧修订或缺声明时回退。"""
+    if mesh is None:
+        return None
+    data = mesh.GetPointData()
+    for index in range(data.GetNumberOfArrays()):
+        array = data.GetArray(index)
+        if array is not None and array.GetNumberOfComponents() == 3 and array.GetName():
+            return array
+    return None
+
+
+def resolve_lic_vectors(mesh, layer):
+    """LIC 方向：已声明向量，否则着色场若是点向量，再否则网格上第一个点向量。"""
+    declared = ((layer or {}).get("style") or {}).get("lic") or {}
+    array = _point_vector(mesh, declared.get("vectors"))
+    if array is not None:
+        return array
+    array = _point_vector(mesh, (layer or {}).get("field"))
+    if array is not None:
+        return array
+    return first_point_vector(mesh)
+
+
+def _ensure_point_vectors(mesh, vectors):
+    """抽表面后可能丢掉原向量，着色副本也要保留同一方向场。"""
+    data = mesh.GetPointData()
+    if data.GetArray(vectors.GetName()) is None:
+        copied = vectors.NewInstance()
+        copied.DeepCopy(vectors)
+        copied.SetName(vectors.GetName())
+        data.AddArray(copied)
+    data.SetActiveVectors(vectors.GetName())
+
+
+def _surface_mesh(mesh):
+    """LIC 映射器只要表面，体网格先抽表面。"""
+    if mesh.IsA("vtkPolyData"):
+        return mesh
+    surface = vtk.vtkDataSetSurfaceFilter()
+    surface.SetInputData(mesh)
+    surface.Update()
+    return surface.GetOutput()
+
+
+def _apply_lic(mapper, style):
+    """按 ParaView 常用项配置表面 LIC，缺省与旧修订兼容。"""
+    interface = mapper.GetLICInterface()
+    settings = style.get("lic") or {}
+    steps = int(settings.get("number_of_steps", 40))
+    if not 1 <= steps <= 400:
+        raise ValueError("invalid_lic_steps")
+    step = float(settings.get("step_size", 0.25))
+    if not math.isfinite(step) or not 0 < step <= 10:
+        raise ValueError("invalid_lic_step_size")
+    intensity = float(settings.get("intensity", 0.8))
+    if not math.isfinite(intensity) or not 0 <= intensity <= 1:
+        raise ValueError("invalid_lic_intensity")
+    interface.SetNumberOfSteps(steps)
+    interface.SetStepSize(step)
+    interface.SetEnhancedLIC(bool(settings.get("enhanced_lic", True)))
+    contrast = {"off": 0, "lic": 1, "color": 2, "both": 3}.get(
+        str(settings.get("enhance_contrast", "both")), 3
+    )
+    interface.SetEnhanceContrast(contrast)
+    interface.SetColorMode(0 if settings.get("color_mode", "blend") == "blend" else 1)
+    interface.SetLICIntensity(intensity)
+
+
 def build_display(mesh, layer):
     """完整验证显示参数后创建候选显示对象，失败不影响旧画面。"""
+    style = layer.get("style", {})
+    if style.get("mode") == "surface_lic":
+        return build_lic_display(mesh, layer)
     mapper = vtk.vtkDataSetMapper()
     mapper.ScalarVisibilityOff()
     field = layer.get("field")
     legend = None
     if field:
         mesh = prepare_scalar(mesh, field)
-        if field.get("association", "point") == "cell":
+        contour_field = getattr(mesh, "_vis_contour_field", None)
+        same_contour = contour_field == {
+            "name": field.get("name"),
+            "association": field.get("association", "point"),
+            "component": field.get("component", "magnitude"),
+        }
+        if field.get("association", "point") == "cell" and not same_contour:
             mapper.SetScalarModeToUseCellFieldData()
             data = mesh.GetCellData()
         else:
@@ -69,7 +182,15 @@ def build_display(mesh, layer):
         mapper.SelectColorArray("__vis_scalar")
         mapper.ScalarVisibilityOn()
         lut, limits, bands = build_color_mapping(
-            data.GetArray("__vis_scalar"), layer.get("color", {})
+            data.GetArray("__vis_scalar"),
+            (
+                {
+                    **layer.get("color", {}),
+                    "range": layer.get("color", {}).get("range") or mesh._vis_contour_range,
+                }
+                if same_contour
+                else layer.get("color", {})
+            ),
         )
         mapper.SetLookupTable(lut)
         mapper.SetScalarRange(limits)
@@ -78,6 +199,7 @@ def build_display(mesh, layer):
             legend.SetLookupTable(lut)
             title = field["name"] + (f" ({field['unit']})" if field.get("unit") else "")
             legend.SetTitle(title)
+            legend._vis_style = dict(layer.get("color", {}).get("legend_style", {}))
             legend.SetNumberOfLabels(min(6, bands))
             legend.SetPosition(0.025, 0.30)
             legend.SetWidth(0.10)
@@ -86,35 +208,136 @@ def build_display(mesh, layer):
             legend.SetMaximumWidthInPixels(130)
             legend.SetBarRatio(0.22)
             legend.SetTextPositionToSucceedScalarBar()
-            legend.GetLabelTextProperty().SetFontSize(12)
-            legend.GetTitleTextProperty().SetFontSize(14)
+            style = legend._vis_style
+            legend.GetLabelTextProperty().SetFontSize(int(style.get("label_font_size", 25)))
+            legend.GetTitleTextProperty().SetFontSize(int(style.get("title_font_size", 25)))
             for prop in (legend.GetLabelTextProperty(), legend.GetTitleTextProperty()):
                 prop.SetFontFamilyToArial()
                 prop.ItalicOff()
                 prop.BoldOff()
                 prop.ShadowOff()
+    display_style = layer.get("style", {})
+    stream = display_style.get("streamline") if isinstance(display_style, dict) else None
+    if (stream or {}).get("shape") == "tube":
+        from modules.visEngine import style_streamline_mesh
+
+        mesh = style_streamline_mesh(mesh, display_style)
     mapper.SetInputData(mesh)
     actor = vtk.vtkActor()
     actor.SetMapper(mapper)
     actor.SetVisibility(layer.get("visible", True))
-    style = layer.get("style", {})
+    actor.SetProperty(display_property(layer.get("style", {})))
+    actor._legend = legend
+    return actor, legend
+
+
+def copy_display_mapper(target, source, layer=None):
+    """ShallowCopy 后补齐标量与 LIC 着色，避免换场后 mapper 仍走纯色。"""
+    target.SetScalarVisibility(source.GetScalarVisibility())
+    target.SetScalarMode(source.GetScalarMode())
+    target.SetColorMode(source.GetColorMode())
+    name = source.GetArrayName()
+    if name:
+        target.SelectColorArray(name)
+    lut = source.GetLookupTable()
+    if lut is not None:
+        target.SetLookupTable(lut)
+    target.SetScalarRange(source.GetScalarRange())
+    if layer and (layer.get("style") or {}).get("mode") == "surface_lic" and hasattr(
+        target, "GetLICInterface"
+    ):
+        _apply_lic(target, layer.get("style", {}))
+
+
+def build_lic_display(mesh, layer):
+    """Surface LIC：方向用点向量，着色跟随当前物理量；缺向量拒绝。"""
+    vectors = resolve_lic_vectors(mesh, layer)
+    if vectors is None:
+        raise ValueError("请选择三维点向量场才能使用 Surface LIC")
+    surface = _surface_mesh(mesh)
+    _ensure_point_vectors(surface, vectors)
+    mapper = vtk.vtkSurfaceLICMapper()
+    field = layer.get("field")
+    legend = None
+    if field:
+        colored = prepare_scalar(surface, {**field, "component": field.get("component", "magnitude")})
+        _ensure_point_vectors(colored, vectors)
+        contour_field = getattr(colored, "_vis_contour_field", None)
+        same_contour = contour_field == {
+            "name": field.get("name"),
+            "association": field.get("association", "point"),
+            "component": field.get("component", "magnitude"),
+        }
+        if field.get("association", "point") == "cell" and not same_contour:
+            mapper.SetScalarModeToUseCellFieldData()
+            data = colored.GetCellData()
+        else:
+            mapper.SetScalarModeToUsePointFieldData()
+            data = colored.GetPointData()
+        array = data.GetArray("__vis_scalar")
+        if array is not None:
+            mapper.SelectColorArray("__vis_scalar")
+            mapper.SetColorModeToMapScalars()
+            mapper.ScalarVisibilityOn()
+            lut, limits, bands = build_color_mapping(
+                array,
+                (
+                    {
+                        **layer.get("color", {}),
+                        "range": layer.get("color", {}).get("range") or colored._vis_contour_range,
+                    }
+                    if same_contour
+                    else layer.get("color", {})
+                ),
+            )
+            mapper.SetLookupTable(lut)
+            mapper.SetScalarRange(limits)
+            if layer.get("color", {}).get("legend", True) and layer.get("visible", True):
+                legend = vtk.vtkScalarBarActor()
+                legend.SetLookupTable(lut)
+                title = field["name"] + (f" ({field['unit']})" if field.get("unit") else "")
+                legend.SetTitle(title)
+                legend._vis_style = dict(layer.get("color", {}).get("legend_style", {}))
+                legend.SetNumberOfLabels(min(6, bands))
+        mapper.SetInputData(colored)
+    else:
+        mapper.SetInputData(surface)
+        mapper.ScalarVisibilityOff()
+    _apply_lic(mapper, layer.get("style", {}))
+    actor = vtk.vtkActor()
+    actor.SetMapper(mapper)
+    actor.SetVisibility(layer.get("visible", True))
+    actor.SetProperty(display_property({**layer.get("style", {}), "mode": "surface"}))
+    actor._legend = legend
+    return actor, legend
+
+
+def display_property(style):
+    """先验证并构造属性；失败不修改现有 actor 或 mapper。"""
     opacity = float(style.get("opacity", 1))
     if not math.isfinite(opacity) or not 0 <= opacity <= 1:
         raise ValueError("opacity_out_of_range")
-    prop = actor.GetProperty()
+    prop = vtk.vtkProperty()
     prop.SetOpacity(opacity)
     prop.SetColor(style.get("color", [0.8, 0.83, 0.9]))
     prop.SetLighting(style.get("lighting", True))
     prop.SetSpecular(float(style.get("specular", 0.2)))
+    stream = style.get("streamline") if isinstance(style.get("streamline"), dict) else {}
+    if stream.get("shape", "line") == "line" and "thickness" in stream:
+        width = float(stream["thickness"])
+    else:
+        width = float(style.get("line_width", 1))
+    if not math.isfinite(width) or not 0 < width <= 20:
+        raise ValueError("invalid_line_width")
+    prop.SetLineWidth(width)
     mode = style.get("mode", "surface")
     if mode == "wireframe":
         prop.SetRepresentationToWireframe()
     elif mode == "surface_edges":
         prop.EdgeVisibilityOn()
-    elif mode != "surface":
+    elif mode not in ("surface", "surface_lic"):
         raise ValueError("invalid_display_mode")
-    actor._legend = legend
-    return actor, legend
+    return prop
 
 
 def arrange_legends(renderer):
@@ -126,10 +349,38 @@ def arrange_legends(renderer):
         prop = props.GetNextProp()
         if prop.IsA("vtkScalarBarActor") and prop.GetVisibility():
             legends.append(prop)
-    slot = min(0.65, 0.85 / max(1, len(legends)))
+    width, height = renderer.GetSize()
+    width, height = max(width, 1), max(height, 1)
     for index, legend in enumerate(legends):
-        legend.SetPosition(0.025, 0.94 - (index + 1) * slot + 0.05)
-        legend.SetHeight(slot - 0.05)
+        style = getattr(legend, "_vis_style", {})
+        horizontal = style.get("orientation", "vertical") == "horizontal"
+        length = float(style.get("length", 0.6))
+        thickness = float(style.get("thickness", 25))
+        position = style.get("position", "right")
+        # 自动位置分配槽位；自定义位置不被自动避让覆盖。
+        if position != "custom":
+            length = min(length, 0.8 / max(1, len(legends)) - 0.03)
+        w, h = (
+            (length, max(0.08, thickness / height * 3))
+            if horizontal
+            else (max(0.08, thickness / width * 5), length)
+        )
+        positions = {
+            "right": (1 - w - 0.025, 0.92 - h - index * 0.8 / max(1, len(legends)) - 0.03),
+            "left": (0.025, 0.92 - h - index * 0.8 / max(1, len(legends)) - 0.03),
+            "top": (0.12 + index * 0.8 / max(1, len(legends)), 1 - h - 0.07),
+            "bottom": (0.12 + index * 0.8 / max(1, len(legends)), 0.04),
+        }
+        x, y = positions.get(position, (style.get("x", 0.8), style.get("y", 0.2)))
+        legend.SetOrientationToHorizontal() if horizontal else legend.SetOrientationToVertical()
+        legend.SetPosition(min(float(x), 1 - w - 0.01), min(float(y), 1 - h - 0.01))
+        legend.SetWidth(w)
+        legend.SetHeight(h)
+        legend.SetMaximumWidthInPixels(width)
+        legend.SetMaximumHeightInPixels(height)
+        legend.SetBarRatio(min(0.8, thickness / (h * height if horizontal else w * width)))
+        legend.GetTitleTextProperty().SetFontSize(int(style.get("title_font_size", 25)))
+        legend.GetLabelTextProperty().SetFontSize(int(style.get("label_font_size", 25)))
 
 
 def text_actor(text, position, scale, camera):
@@ -227,6 +478,7 @@ def add_annotations(scene):
 
     scene.decorations = []
     scene.probe_rows = {}
+    scene.probe_actors = {}
     scene.window.SetNumberOfLayers(3)
     for index, renderer in enumerate(scene.renderers):
         if not renderer.GetDraw():
@@ -247,8 +499,6 @@ def add_annotations(scene):
         scene.decorations.append(annotation)
         for probe in scene.spec.get("probes", []):
             visible = probe.get("views", {}).get(str(view["id"]), {}).get("visible", False)
-            if not visible:
-                continue
             mesh = scene.datasets.get(probe["input"])
             row = (
                 sample_positions(mesh, [probe["position"]])[0]
@@ -258,12 +508,9 @@ def add_annotations(scene):
             scene.probe_rows[probe["id"]] = row
             values = row.get("fields") or row.get("values") or {}
             selected = probe.get("fields") or list(values)
-            labels = [
-                probe.get("name", probe["id"]),
-                "XYZ: " + ", ".join(f"{v:.4g}" for v in probe["position"]),
-            ]
+            labels = []
             if not row["valid"]:
-                labels.append("missing frame" if mesh is None else "outside domain")
+                labels.append("状态    缺帧" if mesh is None else "状态    域外")
             else:
                 for key in selected:
                     value = values.get(key)
@@ -274,23 +521,26 @@ def add_annotations(scene):
                         value = (
                             value[0] if len(value) == 1 else ", ".join(f"{x:.4g}" for x in value)
                         )
-                    labels.append(
-                        f"{label}: {value:.5g}"
+                    text = (
+                        f"{value:.5g}"
                         if isinstance(value, (int, float))
-                        else f"{label}: {value if value is not None else 'missing field'}"
+                        else (value if value is not None else "缺失")
                     )
+                    labels.append(f"{label:<8} {text}")
+            if not labels:
+                labels.append("无选中物理量")
             sphere = vtk.vtkSphereSource()
             sphere.SetCenter(probe["position"])
-            sphere.SetRadius(pixel_scale(renderer, probe["position"], 3))
+            sphere.SetRadius(pixel_scale(renderer, probe["position"], 5))
             mapper = vtk.vtkPolyDataMapper()
             mapper.SetInputConnection(sphere.GetOutputPort())
             actor = vtk.vtkActor()
             actor.SetMapper(mapper)
-            actor.GetProperty().SetColor(1, 0.8, 0.2)
+            actor.GetProperty().SetColor(0.25, 0.60, 1.0)
             actor.SetUseBounds(False)
             annotation.AddActor(actor)
-            if not probe.get("views", {}).get(str(view["id"]), {}).get("label", True):
-                continue
+            parts = {"marker": [actor], "labels": []}
+            scene.probe_actors[(probe["id"], view["id"])] = parts
             camera = renderer.GetActiveCamera()
             rotation = vtk.vtkMatrix4x4()
             rotation.DeepCopy(camera.GetViewTransformMatrix())
@@ -334,6 +584,11 @@ def add_annotations(scene):
             line.GetProperty().SetColor(1, 1, 1)
             line.SetUseBounds(False)
             annotation.AddActor(line)
+            parts["labels"] = [background, text, line]
+            label_visible = probe.get("views", {}).get(str(view["id"]), {}).get("label", True)
+            actor.SetVisibility(visible)
+            for item in parts["labels"]:
+                item.SetVisibility(visible and label_visible)
         current = scene.spec.get("time", {}).get("value")
         text = (
             f"t = {current:g}   ({scene.times.index(current) + 1}/{len(scene.times)})"
@@ -428,8 +683,14 @@ def install_local_serializers():
                 module.reference_id = object_identity
 
     def serialize_camera(parent, camera, identity, context, depth):
-        """使用官方相机序列化并补充缺失的投影参数。"""
+        """保留相机身份；默认不写轨道位姿，避免 hover/refresh 覆盖客户端。"""
         value = camera_serializer(parent, camera, identity, context, depth)
+        if not camera_pose_push_enabled():
+            # 官方 serializer 每次都带 position/focalPoint/viewUp/clippingRange。
+            # VtkLocalView.update 会把这份服务端快照推给 vtk.js；辅助平面悬停
+            # 若夹带添加平面时的旧位姿，旋转/平移/缩放会概率性被拉回。
+            value["properties"] = {}
+            return value
         value["properties"].update(
             parallelProjection=bool(camera.GetParallelProjection()),
             parallelScale=camera.GetParallelScale(),
@@ -443,9 +704,35 @@ def install_local_serializers():
 
     def serialize_renderer(parent, renderer, identity, context, depth):
         """传递视图最大化时的绘制状态，隐藏视图不参与本地渲染。"""
+        # 官方序列化在只剩相机时返回空，导致最后对象隐藏/删除后客户端撤下背景。
+        # 先保留公开依赖清单，空场景也要发送移除旧资产的调用和同一相机身份。
+        old_props = list(context.get_last_dependency_list(f"{identity}-props"))
+        old_lights = list(context.get_last_dependency_list(f"{identity}-lights"))
         value = renderer_serializer(parent, renderer, identity, context, depth)
-        if value:
-            value["properties"]["draw"] = bool(renderer.GetDraw())
+        if value is None:
+            from trame_vtk.modules.vtk.serializers.registry import class_name
+
+            camera = renderer.GetActiveCamera()
+            camera_id = utils.reference_id(camera)
+            value = {
+                "parent": utils.reference_id(parent),
+                "id": identity,
+                "type": class_name(renderer),
+                "properties": {
+                    "background": renderer.GetBackground(),
+                    "background2": renderer.GetBackground2(),
+                    "viewport": renderer.GetViewport(),
+                    "layer": renderer.GetLayer(),
+                    "preserveColorBuffer": bool(renderer.GetPreserveColorBuffer()),
+                    "preserveDepthBuffer": bool(renderer.GetPreserveDepthBuffer()),
+                    "interactive": bool(renderer.GetInteractive()),
+                },
+                "dependencies": [serialize_camera(renderer, camera, camera_id, context, depth + 1)],
+                "calls": [["setActiveCamera", [utils.wrap_id(camera_id)]]]
+                + [["removeViewProp", [utils.wrap_id(key)]] for key in old_props]
+                + [["removeLight", [utils.wrap_id(key)]] for key in old_lights],
+            }
+        value["properties"]["draw"] = bool(renderer.GetDraw())
         return value
 
     for name in ("vtkRenderer", "vtkOpenGLRenderer"):

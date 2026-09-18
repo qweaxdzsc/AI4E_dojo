@@ -7,7 +7,7 @@ from copy import deepcopy
 import vtk
 
 from modules.visDatasets import describe_physical, load_physical
-from modules.visEngine import entity
+from modules.visEngine import apply_paraview_light_kit, entity
 from modules.visTaskManage import layout_rectangles, normalize_physical_spec, validate_file_spec
 
 
@@ -33,6 +33,21 @@ def default_spec(sources: list[dict]) -> dict:
 
 
 from .modules.fieldVisualization.view import camera_spec, set_camera
+
+
+def camera_link_unit_notice(sources: list[dict]) -> str:
+    """已声明坐标单位不一致时提示，不阻止全体窗口共用相机。"""
+    units: set[str] = set()
+    for source in sources:
+        space = source.get("coordinate_space")
+        if not isinstance(space, dict):
+            continue
+        unit = str(space.get("unit") or "").strip()
+        if unit:
+            units.add(unit)
+    if len(units) > 1:
+        return "相机已联动；来源单位不一致：" + "、".join(sorted(units))
+    return ""
 
 
 class Scene:
@@ -64,6 +79,7 @@ class Scene:
         self.seed_actors = {}
         self.plane_widget_actors = []
         self.plane_widget_handles = {}
+        self.camera_link_notice = ""
         self.apply(spec)
 
     def apply(self, spec: dict) -> dict:
@@ -155,7 +171,11 @@ class Scene:
                     from modules.visEngine import apply_filter
 
                     mesh = apply_filter(mesh, {"type": "surface"})
-                result = operation(mesh, node, seed_mesh) if node["type"] != "glyph" else operation(mesh, node)
+                result = (
+                    operation(mesh, node, seed_mesh)
+                    if node["type"] != "glyph"
+                    else operation(mesh, node)
+                )
             datasets[node["id"]] = result
             staged_cache[node["id"]] = (key, result, mesh)
         renderers, actors = [], {}
@@ -177,6 +197,8 @@ class Scene:
             if view_id not in view_indices:
                 raise ValueError("layer_view_missing")
             view = view_indices[view_id]
+            if views[view].get("type", "render") == "line_chart":
+                continue
             actor, legend = self.build_display(datasets[layer["input"]], layer)
             renderers[view].AddActor(actor)
             if legend:
@@ -199,22 +221,15 @@ class Scene:
                 from modules.visEngine import enable_shadows
 
                 enable_shadows(renderer)
+        # 相机联动覆盖当前全部窗口；缺共同坐标空间 ID 不再拒绝，单位不一致只提示。
+        self.camera_link_notice = ""
         for group in spec.get("link_groups", []):
             ids = group.get("views", [])
             if not ids or any(i not in view_indices for i in ids):
                 raise ValueError("invalid_camera_link")
-            spaces = {s.get("coordinate_space") for s in spec["sources"]}
-            same_source = (
-                len(
-                    {
-                        json.dumps([s["ref"], s.get("block"), s.get("part")], sort_keys=True)
-                        for s in spec["sources"]
-                    }
-                )
-                == 1
-            )
-            if not same_source and (None in spaces or len(spaces) != 1):
-                raise ValueError("camera_link_requires_common_coordinate_space")
+            notice = camera_link_unit_notice(spec.get("sources") or [])
+            if notice:
+                self.camera_link_notice = notice
             for i in ids[1:]:
                 renderers[view_indices[i]].SetActiveCamera(
                     renderers[view_indices[ids[0]]].GetActiveCamera()
@@ -238,7 +253,9 @@ class Scene:
             self.camera_pool[i].DeepCopy(candidate.GetActiveCamera())
             renderer.SetActiveCamera(self.camera_pool[i])
             renderer.SetPass(candidate.GetPass())
-            renderer.SetDraw(True)
+            renderer.SetDraw(views[i].get("type", "render") != "line_chart")
+            # 持久渲染器不拷贝候选灯；每次提交按 ParaView 默认套件补灯。
+            apply_paraview_light_kit(renderer)
             props = candidate.GetViewProps()
             props.InitTraversal()
             for _ in range(props.GetNumberOfItems()):
@@ -293,6 +310,135 @@ class Scene:
         for renderer in self.renderers:
             arrange_legends(renderer)
         add_annotations(self)
+        # 重排文字会清空注记层；恢复已有手柄，不能让窗口缩放使操作轴消失。
+        for actor in self.plane_widget_actors:
+            if actor._plane_handle.startswith(("axis_", "rotate_")):
+                index = next(
+                    (
+                        i
+                        for i, v in enumerate(self.spec["views"])
+                        if v["id"] == getattr(self, "plane_view_id", None)
+                    ),
+                    None,
+                )
+                if index is not None:
+                    self.annotation_pool[index].AddActor(actor)
+
+        for actor in getattr(self, "preview_actors", []):
+            for index, view in enumerate(self.spec["views"]):
+                if view["id"] == getattr(self, "preview_view_id", None):
+                    self.annotation_pool[index].AddActor(actor)
+
+    def remove_objects(self, spec, affected):
+        """验证删除声明后只撤下相关显示，保留窗口、相机及其他映射身份。"""
+        spec = normalize_physical_spec(validate_file_spec(spec))
+        for layer in self.spec["layers"]:
+            if layer["input"] not in affected:
+                continue
+            renderer = self.renderers[
+                next(i for i, v in enumerate(self.spec["views"]) if v["id"] == layer["view"])
+            ]
+            actor = self.actors.pop(layer["id"], None)
+            if actor is not None:
+                renderer.RemoveActor(actor)
+                if getattr(actor, "_legend", None):
+                    renderer.RemoveViewProp(actor._legend)
+            for actor in self.seed_actors.pop(layer["id"], []):
+                renderer.RemoveActor(actor)
+        for key in list(self.probe_actors):
+            if key[0] in affected:
+                parts = self.probe_actors.pop(key)
+                for actors in parts.values():
+                    for actor in actors if isinstance(actors, list) else [actors]:
+                        for renderer in self.decorations:
+                            renderer.RemoveViewProp(actor)
+                self.probe_rows.pop(key[0], None)
+        self.clear_plane_widget()
+        self.show_selection(None)
+        self.clear_preview()
+        self.datasets = {k: v for k, v in self.datasets.items() if k not in affected}
+        self.filter_cache = {k: v for k, v in self.filter_cache.items() if k not in affected}
+        self.missing = [k for k in self.missing if k not in affected]
+        if any(source["id"] in affected for source in self.spec["sources"]):
+            self.mesh_cache.clear()
+            self.geometries.clear()
+        if not spec["sources"]:
+            self.times = []
+        self.spec = spec
+        from .rendering import arrange_legends
+
+        for renderer in self.renderers:
+            arrange_legends(renderer)
+        return self.snapshot()
+
+    def show_selection(self, identity, view_id=None):
+        """以独立轮廓强调当前资产，绝不覆盖物理量映射。"""
+        previous = getattr(self, "selection_actor", None)
+        if previous is not None:
+            for renderer in self.renderers:
+                renderer.RemoveActor(previous)
+        self.selection_actor = None
+        layer = next(
+            (
+                l
+                for l in self.spec["layers"]
+                if l["input"] == identity and l["view"] == view_id and l.get("visible", True)
+            ),
+            None,
+        )
+        if not layer or identity not in self.datasets:
+            return
+        outline = vtk.vtkOutlineFilter()
+        outline.SetInputData(self.datasets[identity])
+        mapper = vtk.vtkPolyDataMapper()
+        mapper.SetInputConnection(outline.GetOutputPort())
+        actor = vtk.vtkActor()
+        actor.SetMapper(mapper)
+        actor.GetProperty().SetColor(1, 0.81, 0.36)
+        actor.GetProperty().SetLineWidth(2)
+        actor.GetProperty().LightingOff()
+        actor.SetUseBounds(False)
+        actor.PickableOff()
+        self.renderers[
+            next(i for i, v in enumerate(self.spec["views"]) if v["id"] == view_id)
+        ].AddActor(actor)
+        self.selection_actor = actor
+
+    def clear_preview(self):
+        """释放会话临时附件；不影响正式种子或探针。"""
+        for actor in getattr(self, "preview_actors", []):
+            for renderer in self.renderers + self.decorations:
+                renderer.RemoveActor(actor)
+        self.preview_actors = []
+
+    def show_preview(self, mesh, view_id, *, point=False, samples=None):
+        """候选种子与探针共用不可拾取的轻量附件。"""
+        from .rendering import build_seed_actor
+
+        actor = build_seed_actor(mesh)
+        if point:
+            actor.GetProperty().SetRepresentationToSurface()
+        actor.GetProperty().LightingOff()
+        self.clear_preview()
+        self.preview_view_id = view_id
+        # 编辑候选位于注记层，体网格内部的种子仍清晰可见。
+        renderer = self.annotation_pool[
+            next(i for i, v in enumerate(self.spec["views"]) if v["id"] == view_id)
+        ]
+        renderer.AddActor(actor)
+        self.preview_actors = [actor]
+        if samples is not None:
+            points = vtk.vtkPolyData()
+            points.SetPoints(samples.GetPoints())
+            vertices = vtk.vtkCellArray()
+            for index in range(points.GetNumberOfPoints()):
+                vertices.InsertNextCell(1)
+                vertices.InsertCellPoint(index)
+            points.SetVerts(vertices)
+            dots = build_seed_actor(points)
+            dots.GetProperty().LightingOff()
+            renderer.AddActor(dots)
+            self.preview_actors.append(dots)
 
     def update_display(self, spec, layer_id):
         """只更换显示数据和属性，不执行上游过滤器，不重置相机。"""
@@ -300,6 +446,26 @@ class Scene:
         layer = next(l for l in spec["layers"] if l["id"] == layer_id)
         if layer["input"] in self.missing:
             self.spec = spec
+            return self.snapshot()
+        old_layer = next((l for l in self.spec["layers"] if l["id"] == layer_id), {})
+        actor = self.actors.get(layer_id)
+        if (
+            actor is not None
+            and old_layer.get("field") == layer.get("field")
+            and old_layer.get("color") == layer.get("color")
+            and (old_layer.get("style") or {}).get("mode")
+            == (layer.get("style") or {}).get("mode")
+            and (old_layer.get("style") or {}).get("lic")
+            == (layer.get("style") or {}).get("lic")
+            and (old_layer.get("style") or {}).get("streamline")
+            == (layer.get("style") or {}).get("streamline")
+        ):
+            from .rendering import display_property
+
+            prop = display_property(layer.get("style", {}))
+            actor.SetProperty(prop)
+            self.spec = spec
+            self.set_layer_visibility(layer_id, layer.get("visible", True))
             return self.snapshot()
         candidate, legend = self.build_display(self.datasets[layer["input"]], layer)
         renderer = self.renderers[
@@ -309,7 +475,15 @@ class Scene:
         if actor:
             if getattr(actor, "_legend", None):
                 renderer.RemoveViewProp(actor._legend)
-            actor.SetMapper(candidate.GetMapper())
+            if actor.GetMapper().GetClassName() != candidate.GetMapper().GetClassName():
+                actor.SetMapper(candidate.GetMapper())
+            else:
+                # 保持客户端 mapper 身份，字段选择只替换其输入与映射设置。
+                from .rendering import copy_display_mapper
+
+                actor.GetMapper().ShallowCopy(candidate.GetMapper())
+                actor.GetMapper().SetInputData(candidate.GetMapper().GetInput())
+                copy_display_mapper(actor.GetMapper(), candidate.GetMapper(), layer)
             actor.SetProperty(candidate.GetProperty())
             actor.SetVisibility(candidate.GetVisibility())
             actor._legend = legend
@@ -322,8 +496,9 @@ class Scene:
         from .rendering import arrange_legends
 
         arrange_legends(renderer)
-        for actor in self.seed_actors.get(layer_id, []):
-            actor.SetVisibility(candidate.GetVisibility())
+        for seed in self.seed_actors.get(layer_id, []):
+            seed.SetVisibility(candidate.GetVisibility())
+        # 建图成功后才提交层声明；LIC 失败时调用方回退上一画面，不留半成品层。
         self.spec = spec
         return self.snapshot()
 
@@ -338,9 +513,35 @@ class Scene:
             legend = getattr(actor, "_legend", None)
             if legend is not None:
                 legend.SetVisibility(enabled and layer.get("color", {}).get("legend", True))
+        seeds_visible = layer.get("helpers", {}).get("seeds_visible", True)
         for seed in self.seed_actors.get(layer_id, []):
-            seed.SetVisibility(enabled)
+            seed.SetVisibility(enabled and bool(seeds_visible))
         return {"id": layer_id, "visible": enabled}
+
+    def uses_surface_lic(self):
+        """当前可见层是否含 Surface LIC，用于同一会话切换远程出图。"""
+        return any(
+            (layer.get("style") or {}).get("mode") == "surface_lic" and layer.get("visible", True)
+            for layer in self.spec.get("layers", [])
+        )
+
+    def set_probe_visibility(self, identity, view_id, visible=None, label=None):
+        """只更新所属视图的 Probe 附件，不重新采样或应用计算管线。"""
+        probe = next(p for p in self.spec["probes"] if p["id"] == identity)
+        if view_id not in [v["id"] for v in self.spec["views"]]:
+            raise ValueError("view_missing")
+        settings = probe.setdefault("views", {}).setdefault(str(view_id), {})
+        if visible is not None:
+            settings["visible"] = bool(visible)
+        if label is not None:
+            settings["label"] = bool(label)
+        parts = self.probe_actors.get((identity, view_id), {})
+        enabled = settings.get("visible", False)
+        for actor in parts.get("marker", []):
+            actor.SetVisibility(enabled)
+        for actor in parts.get("labels", []):
+            actor.SetVisibility(enabled and settings.get("label", True))
+        return {"id": identity, "view": view_id, **settings}
 
     def root_source_id(self, spec, identity):
         """沿处理链回到原始来源，命名块仍从同一授权文件读取。"""
@@ -380,6 +581,7 @@ class Scene:
             from pathlib import Path
 
             from ai4e_viz.inspect.mesh import read_mesh
+
             from modules.dataAssets import resolve_external
 
             source = next(
@@ -398,7 +600,9 @@ class Scene:
         self.seed_actors = {}
         self.clear_plane_widget()
         for layer in self.spec.get("layers", []):
-            node = next((n for n in self.spec.get("pipeline", []) if n["id"] == layer["input"]), None)
+            node = next(
+                (n for n in self.spec.get("pipeline", []) if n["id"] == layer["input"]), None
+            )
             if not node or node["type"] != "streamline":
                 continue
             view = next(i for i, v in enumerate(self.spec["views"]) if v["id"] == layer["view"])
@@ -407,7 +611,10 @@ class Scene:
                 self.resolve_seed_mesh(node, self.datasets, self.spec),
             )
             actor = build_seed_actor(preview)
-            actor.SetVisibility(layer.get("visible", True))
+            visible = layer.get("visible", True) and layer.get("helpers", {}).get(
+                "seeds_visible", True
+            )
+            actor.SetVisibility(visible)
             self.renderers[view].AddActor(actor)
             self.seed_actors.setdefault(layer["id"], []).append(actor)
 
@@ -437,7 +644,7 @@ class Scene:
 
             try:
                 binding = resolve_external(source, self.bindings)
-            except Exception:  # noqa: BLE001 - 缺绑定只少一项，不阻断其他表面。
+            except Exception:  # noqa: BLE001, S112 - 缺绑定只少一项，不阻断其他表面。
                 continue
             for item in list_named_surfaces(
                 binding.get("path"),
@@ -450,29 +657,53 @@ class Scene:
                 seen.add(item["value"])
         return items
 
-    def show_plane_widget(self, origin, normal, bounds, view_id=None):
-        """选中切面时挂可视平面，不写配置、不切开。"""
+    def show_plane_widget(self, origin, normal, bounds, view_id=None, handles=None):
+        """选中切面或草稿种子/线段时挂手柄，不写配置、不计算。"""
         from modules.visEngine import plane_widget_geometry
 
         from .rendering import build_plane_handle_actor
 
-        self.clear_plane_widget()
         if not self.renderers:
             return
         view_id = self.spec["views"][0]["id"] if view_id is None else view_id
         renderer = self.renderers[
             next(i for i, v in enumerate(self.spec["views"]) if v["id"] == view_id)
         ]
-        self.plane_widget_handles = plane_widget_geometry(origin, normal, bounds)
-        for name, mesh in self.plane_widget_handles.items():
-            actor = build_plane_handle_actor(mesh, name)
-            renderer.AddActor(actor)
+        handles = handles if handles is not None else plane_widget_geometry(origin, normal, bounds)
+        actors = [build_plane_handle_actor(mesh, name) for name, mesh in handles.items()]
+        # 参数或构造失败时保留上次有效手柄，与正式切面结果一起继续可用。
+        self.clear_plane_widget()
+        self.plane_widget_handles = handles
+        self.plane_view_id = view_id
+        self.plane_hit_geometry = {}
+        for name, mesh in handles.items():
+            if not name.startswith(("axis_", "rotate_")):
+                continue
+            triangles = vtk.vtkTriangleFilter()
+            triangles.SetInputData(mesh)
+            triangles.Update()
+            poly = triangles.GetOutput()
+            values = []
+            for index in range(poly.GetNumberOfCells()):
+                cell = poly.GetCell(index)
+                if cell.GetNumberOfPoints() == 3:
+                    for j in range(3):
+                        values.extend(poly.GetPoint(cell.GetPointId(j)))
+            self.plane_hit_geometry[name] = values
+        overlay = self.annotation_pool[
+            next(i for i, v in enumerate(self.spec["views"]) if v["id"] == view_id)
+        ]
+        for actor in actors:
+            # 手柄位于注记层，模型遮挡不会让用户看不到已命中的操作轴。
+            (
+                overlay if actor._plane_handle.startswith(("axis_", "rotate_")) else renderer
+            ).AddActor(actor)
             self.plane_widget_actors.append(actor)
 
     def clear_plane_widget(self):
         """取消选中或重建场景时撤下平面附件。"""
         for actor in self.plane_widget_actors:
-            for renderer in self.renderers:
+            for renderer in self.renderers + self.decorations:
                 renderer.RemoveActor(actor)
         self.plane_widget_actors = []
         self.plane_widget_handles = {}
@@ -508,6 +739,7 @@ class Scene:
                     "handles": sorted(self.plane_widget_handles),
                 },
             },
+            "camera_link_notice": self.camera_link_notice,
         }
 
     def command(self, command: dict) -> dict:

@@ -46,11 +46,22 @@ def train(cfg, prepared=None, *, dataset_component, model_component, session):
 
 def post(cfg, *, dataset_component, model_component, session):
     """兼容历史完整物理预测。"""
-    from ai4e_core.applications.aero_cfd.post.physical import execute
+    from ai4e_core.applications.aero_cfd.infer import stage as steps
 
-    return execute(
-        model_component.resolve(OmegaConf.to_container(cfg, resolve=True)),
-        dataset_component,
-        model_component,
-        session,
+    config = model_component.resolve(OmegaConf.to_container(cfg, resolve=True))
+    # 历史调用显式使用 post 参数；只在兼容边界转换，现代 post 不执行预测。
+    config["infer"] = dict(config["post"])
+    job = steps.open_inference(
+        config,
+        dataset_component=dataset_component,
+        model_component=model_component,
+        session=session,
     )
+    job.phase = "post"
+    job = steps.configure_restore(job)
+    job = steps.configure_prediction(job)
+    job = steps.configure_physical_output(job)
+    job = steps.configure_evaluation(job)
+    job = steps.configure_save(job, output=config["paths"]["datasets"]["predictions"])
+    job = steps.configure_mesh_export(job)
+    return steps.execute(job)

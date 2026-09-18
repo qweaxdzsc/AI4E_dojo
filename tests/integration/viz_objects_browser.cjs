@@ -31,7 +31,7 @@ const context=process.env.VIS_CONTEXT||JSON.parse(fs.readFileSync(root+'/context
   await xyz(f,'法向（无量纲）',[1,0,0]);await f.getByRole('button',{name:'应用',exact:true}).click();
   await expect.poll(async()=>((await command({operation:'snapshot'})).attachments.plane_widget||{}).visible).toBe(true);
   const handles=((await command({operation:'snapshot'})).attachments.plane_widget.handles||[]);
-  for(const name of ['plane','axis_x','axis_y','axis_z','rotate'])expect(handles).toContain(name);
+  for(const name of ['plane','axis_x','axis_y','axis_z','rotate_x','rotate_y','rotate_z'])expect(handles).toContain(name);
   const appliedSlice=(await command({operation:'snapshot'})).spec.pipeline.find(n=>n.type==='slice');
   const appliedMesh=(await command({operation:'snapshot'})).datasets[appliedSlice.id];
   await f.getByRole('button',{name:'对齐Y方向',exact:true}).click();
@@ -45,7 +45,7 @@ const context=process.env.VIS_CONTEXT||JSON.parse(fs.readFileSync(root+'/context
   expect((await command({operation:'snapshot'})).spec.pipeline.find(n=>n.type==='slice').parameters.origin).toEqual(appliedSlice.parameters.origin);
   expect((await command({operation:'snapshot'})).datasets[appliedSlice.id]).toEqual(appliedMesh);
   const ox=dragged.origin[0],oy=dragged.origin[1],oz=dragged.origin[2];
-  const rotated=await command({operation:'plane_drag',handle:'rotate',origin:dragged.origin,normal:[0,1,0],start:[[ox+1,oy+1,oz],[ox+1,oy-1,oz]],end:[[ox,oy+1,oz+1],[ox,oy-1,oz+1]],input:appliedSlice.input,view:0});
+  const rotated=await command({operation:'plane_drag',handle:'rotate_x',origin:dragged.origin,normal:[0,1,0],start:[[ox+1,oy+1,oz],[ox-1,oy+1,oz]],end:[[ox+1,oy,oz+1],[ox-1,oy,oz+1]],input:appliedSlice.input,view:0});
   if(Math.abs(rotated.normal[1]-1)<1e-5)throw new Error('rotate did not change normal');
   expect((await command({operation:'snapshot'})).spec.pipeline.find(n=>n.type==='slice').parameters.normal).toEqual(appliedSlice.parameters.normal);
   await xyz(f,'原点',dragged.origin);await xyz(f,'法向（无量纲）',rotated.normal);

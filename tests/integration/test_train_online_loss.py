@@ -125,3 +125,29 @@ def test_named_nonfinite_is_rejected(tmp_path):
             config={"max_epochs": 1},
             contract={},
         )
+
+
+@pytest.mark.parametrize("interval", [None, 1, 2, 3])
+def test_epoch_report_keeps_all_online_batches_regardless_of_log_flush(tmp_path, interval):
+    """页面消费整轮分项；更新日志冲刷不能清空或截短报告统计。"""
+    import json
+
+    model = torch.nn.Linear(1, 1)
+    run = Run(tmp_path)
+    batches = [
+        {"x": torch.ones(1, 1), "loss": torch.tensor(loss), "part": torch.tensor(part)}
+        for loss, part in [(2.0, 8.0), (4.0, 2.0), (6.0, 5.0)]
+    ]
+    fit(
+        model,
+        torch.optim.SGD(model.parameters(), lr=0.1),
+        lambda _: batches,
+        _step,
+        lambda: pytest.fail("关闭评估不得消费测试集"),
+        run,
+        config={"max_epochs": 1, "evaluation_enabled": False, "log_every_updates": interval},
+        contract={},
+    )
+    record = json.loads((run.writer.run_dir / "artifacts/training.json").read_text())
+    assert record["history"][0]["online"] == {"loss": 4.0, "p": 5.0}
+    assert record["history"][0]["evaluation"] is None

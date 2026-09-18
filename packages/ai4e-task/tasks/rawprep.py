@@ -6,7 +6,7 @@ from pathlib import Path
 
 from .configuration import read_configuration, save_configuration
 from .inspections import inspect_task
-from .query import get_task
+from .records import get_task
 
 
 def describe_rawprep(project, task_id):
@@ -14,7 +14,14 @@ def describe_rawprep(project, task_id):
     captured = read_configuration(project, task_id)
     value = deepcopy(_describe(str(project), task_id, captured["revision"]))
     name = (captured["config"].get("dataset") or {}).get("processed_name")
-    return {"revision": captured["revision"], **value, "processed_name": name or ""}
+    from ..projects.datasets import describe_shared_name
+
+    return {
+        "revision": captured["revision"],
+        **value,
+        "processed_name": name or "",
+        "processed_name_status": describe_shared_name(project, name or ""),
+    }
 
 
 @lru_cache(maxsize=128)
@@ -69,6 +76,8 @@ def expand_rawprep_defaults(recipe):
     recipe = Path(recipe)
     entry = read_entry(recipe)
     if not entry:
+        return
+    if not entry.get("components", {}).get("application"):
         return
     path = recipe / entry["config"]
     config = OmegaConf.to_container(OmegaConf.load(path), resolve=False)

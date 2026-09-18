@@ -34,7 +34,9 @@ def test_evaluation_is_per_sample_and_shared_with_post():
 
     import numpy as np
 
-    from ai4e_core.applications.aero_cfd.post.evaluation import evaluate_model as post_evaluate
+    from ai4e_core.applications.aero_cfd.infer.anchor_evaluation import (
+        evaluate_model as post_evaluate,
+    )
 
     model = torch.nn.Linear(1, 1)
     normalization = Normalization(
@@ -101,3 +103,148 @@ def test_evaluation_is_per_sample_and_shared_with_post():
     assert other["loss"] == pytest.approx(result["loss"])
     assert other["losses"] == pytest.approx(result["losses"])
     assert other["metrics"] == result["metrics"]
+
+
+@pytest.mark.parametrize("names", [["mae"], ["mse", "relative_l2"], []])
+def test_selected_metrics_are_calculated_and_loss_is_preserved(names):
+    """反归一化后只交付所选项，清空仍计算用于选优的评估损失。"""
+    normalization = Normalization(
+        {
+            "version": 1,
+            "fields": {"p": {"method": "zscore", "parameters": {"mean": [0], "std": [2]}}},
+        }
+    )
+    model = torch.nn.Linear(1, 1)
+    batch = {
+        "inputs": {"p": torch.tensor([[[2.0], [4.0]]])},
+        "targets": {"p": torch.tensor([[[1.0], [2.0]]])},
+    }
+    result = evaluate(
+        model,
+        [batch],
+        lambda _, x: x,
+        [{"name": "p", "prediction": "p", "target": "p"}],
+        normalization,
+        metric_names=names,
+    )
+    assert result["loss"] == 2.5
+    assert set(result["metrics"]) == {"p/" + name for name in names}
+    expected = {"mse": 10.0, "mae": 3.0, "relative_l2": 1.0}
+    for name in names:
+        assert result["metrics"]["p/" + name]["value"] == pytest.approx(expected[name])
+
+
+@pytest.mark.parametrize("names", [["unknown"], ["mse", "mse"], "mae", [3]])
+def test_invalid_metric_selection_is_rejected_before_prediction(names):
+    with pytest.raises(ValueError, match="评估指标"):
+        evaluate(
+            torch.nn.Linear(1, 1),
+            [],
+            lambda *_: pytest.fail("不应前向"),
+            [],
+            None,
+            metric_names=names,
+        )
+    from ai4e_core.applications.aero_cfd.train.resolve import validate_joint
+
+    with pytest.raises(ValueError, match="评估指标"):
+        validate_joint({"train": {"evaluation_metrics": names}})
+
+
+@pytest.mark.parametrize("names", [["mae"], []])
+def test_training_configuration_hands_selected_metrics_to_real_fit(tmp_path, monkeypatch, names):
+    """平台保存、训练装配、真实更新与训练报告交接同一指标选择。"""
+    import json
+    from types import SimpleNamespace
+
+    from ai4e_server.modules.stages import compose_configuration
+
+    from ai4e_core.applications.aero_cfd.train import fitting
+    from tests.integration.test_train_loop import Run
+
+    config = compose_configuration(
+        {
+            "train": {
+                "evaluation_enabled": True,
+                "max_epochs": 3,
+                "batch_size": 1,
+                "validation_interval": 2,
+                "evaluation_split": "test",
+                "test_repeat": 1,
+            },
+            "sampling": {},
+            "trainprep": {},
+        },
+        "train",
+        {"evaluation_metrics": names},
+        edited_paths=[["evaluation_metrics"]],
+    )
+    batch = {"inputs": {"p": torch.ones(1, 2, 1)}, "targets": {"p": torch.ones(1, 2, 1) * 2}}
+    calls = []
+
+    def batches(index, partition, **kwargs):
+        calls.append(partition)
+        yield batch
+
+    monkeypatch.setattr(fitting, "iter_partition_batches", batches)
+    monkeypatch.setattr(
+        fitting, "describe_model", lambda *_: {"model_version": 1, "input_layout": {}}
+    )
+    model = torch.nn.Linear(1, 1)
+    data = SimpleNamespace(
+        index=SimpleNamespace(
+            manifest={"state": "physical"}, partitions={"train": ["s"], "test": ["t"]}
+        ),
+        normalization=Normalization(
+            {
+                "version": 1,
+                "fields": {"p": {"method": "zscore", "parameters": {"mean": [0], "std": [1]}}},
+            }
+        ),
+        physical_prepare=None,
+        prepare=None,
+        collate=None,
+    )
+    run = Run(tmp_path)
+    run.run_dir = run.writer.run_dir
+    job = fitting.TrainingJob(
+        config, run, data, torch.nn.Linear, lambda network, x: {"p": network(x["p"])}, "fixture"
+    )
+    job.model, job.device = model, torch.device("cpu")
+    job.terms = [{"name": "p", "prediction": "p", "target": "p"}]
+    job.optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
+    fitting.configure_evaluation(job)
+    result = fitting.execute_training(job)
+    assert result["updates"] == 3
+    history = json.loads((run.run_dir / "artifacts/training.json").read_text())["history"]
+    assert history[1]["evaluation"] is None
+    for row in [history[0], history[2]]:
+        assert set(row["evaluation"]["metrics"]) == {"p/" + name for name in names}
+        assert row["learning_rate"] == 0.1
+    assert calls.count("test") == 2
+    job.config["train"].update(max_epochs=4, evaluation_metrics=["mse"])
+    fitting.configure_evaluation(job)
+    fitting.configure_resume(job, checkpoint=str(run.run_dir / "checkpoints/last.pt"))
+    resumed = fitting.execute_training(job)
+    assert resumed["updates"] == 4
+    assert set(resumed["history"][-1]["evaluation"]["metrics"]) == {"p/mse"}
+    job.data.index.partitions["test"] = []
+    with pytest.raises(ValueError, match="评估分片 test 为空"):
+        fitting.configure_evaluation(job)
+
+
+def test_training_metric_capability_is_owned_by_algorithm():
+    from types import SimpleNamespace
+
+    from ai4e_server.modules.stages.application import _capability_options
+
+    from ai4e_core.applications.aero_cfd.inspection import parameter_capabilities
+
+    caps = parameter_capabilities({"train": {"evaluation_enabled": False}}, SimpleNamespace())
+    described = _capability_options({"capabilities": caps})
+    assert described["evaluation_metrics"]["default"] == ["mse", "mae", "relative_l2"]
+    assert [item["value"] for item in described["evaluation_metrics"]["options"]] == [
+        "mse",
+        "mae",
+        "relative_l2",
+    ]

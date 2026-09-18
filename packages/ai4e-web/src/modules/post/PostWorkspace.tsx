@@ -1,7 +1,7 @@
 import type {ReactNode} from 'react';
 import {PostResultsWorkspace} from './PostResultsWorkspace';
 
-/** 历史阶段入口保留调用签名，统一进入任务级三个后处理页签。 */
+/** 历史阶段入口保留调用签名，统一进入任务级后处理页签（结果文件 / 三维）。 */
 export function PostWorkspace({project,task,run}: {
   project:string; task:string; run?:string; runs?:any[];
   onRun?:(id:string)=>void; values:any; onChange:(key:string,value:any)=>void;

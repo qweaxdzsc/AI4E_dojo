@@ -1,0 +1,35 @@
+{
+  "time": "2026-09-17T18:41+08:00",
+  "entry": {
+    "web": "http://127.0.0.1:5173",
+    "api": "http://127.0.0.1:8000"
+  },
+  "project": "7142b2dc062e4808a1686795076b8028",
+  "task": "9c1dac251856411d9091d8d1cc60bc3e",
+  "step": 3,
+  "server_pid": 95113,
+  "reinstall": "uv sync --group dev --group visualization --reinstall-package ai4e-core --reinstall-package ai4e-contrib",
+  "operations": [
+    {
+      "id": "2f7dd819b6354f51b9658df380d1f75b",
+      "graph_nodes": 71,
+      "graph_view": "compressed_modules",
+      "parameter_count": 18634180
+    },
+    {
+      "id": "5df40292f1f24e05b98981d4046d7bbf",
+      "html_bytes": 2921789
+    }
+  ],
+  "old_operation": {
+    "id": "45fff476186a4fd99bcc7c832882648f",
+    "html_bytes": 4334355,
+    "node_type": 2682
+  },
+  "page": {
+    "loading_text": "正在生成中等体量模型结构…",
+    "result_text": "71 个模块节点",
+    "generate_ms": 36003
+  },
+  "circled_tests": "13 passed after reinstall"
+}

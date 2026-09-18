@@ -4,7 +4,8 @@ from pathlib import Path
 
 import torch
 
-from tests.integration.test_train_recipe import _fit_config, _run_script, prepared_case
+from tests.integration.test_post_inference import _run_script
+from tests.integration.test_train_recipe import _fit_config, prepared_case
 
 
 def test_new_recipe_defaults():
@@ -20,7 +21,7 @@ def test_new_recipe_defaults():
         assert cfg.sampling.domains[d].query.num_points == 0
     assert cfg.trainprep.use_physics_features is False
     assert cfg.model.parameters.require_features is False
-    assert list(cfg.pipeline.stages) == ["rawprep", "trainprep", "train", "post"]
+    assert list(cfg.pipeline.stages) == ["rawprep", "trainprep", "train", "infer", "post"]
     assert "preparation" not in cfg.train
     assert cfg.post.checkpoint is None
     from omegaconf import OmegaConf
@@ -42,7 +43,7 @@ def test_prepared_query_derives_output_mapping(tmp_path):
     from ai4e_contrib.ability.model.abupt.inference import InferenceContext
     from ai4e_contrib.ability.model.abupt.model import construct
     from ai4e_contrib.ability.model.abupt.sampling import prepare_inputs
-    from ai4e_core.applications.aero_cfd.post.inference import query_prepared
+    from ai4e_core.applications.aero_cfd.infer.query import query_prepared
 
     _, cfg = prepared_case(tmp_path)
     _fit_config(cfg)
@@ -110,6 +111,8 @@ def test_batch_two_recipe_resume(tmp_path):
     result, full_dir, _ = _run_script(folder, cfg)
     assert result.returncode == 0, result.stderr
     full = torch.load(full_dir / "checkpoints/last.pt", weights_only=False)
+    # 重复训练消费已冻结准备，避免重新物化同名归一化数据。
+    cfg.train.preparation = str(full_dir / "artifacts/preparation.json")
     cfg.train.max_epochs = 1
     result, one_dir, _ = _run_script(folder, cfg)
     assert result.returncode == 0, result.stderr

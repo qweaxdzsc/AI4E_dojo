@@ -22,7 +22,7 @@ from ai4e_core.base.config import operation_record, plain, resolve_operation
 
 
 @dataclass
-class PostSample:
+class InferenceSample:
     """一个样本的预测交接；不把整个测试集张量保存在作业中。"""
 
     name: str
@@ -38,7 +38,7 @@ class PostSample:
 
 
 @dataclass
-class PhysicalPost:
+class PhysicalInference:
     """步骤只由 recipe 登记；执行器不另建固定业务顺序。"""
 
     config: dict
@@ -57,14 +57,13 @@ class PhysicalPost:
     overall: object = field(default_factory=PhysicalMetrics)
     extensions: dict = field(default_factory=dict)
     restore: bool = False
-    phase: str = "post"
+    phase: str = "infer"
 
 
-def open_post(config, *, dataset_component, model_component, session, trained=None):
+def open_inference(config, *, dataset_component, model_component, session, trained=None):
     """解析检查点和准备引用并验证来源；不构建模型或执行预测。"""
     config = deepcopy(config)
-    config.pop("infer", None)  # 历史入口只解释 post，不读取新推理选择。
-    post = config["post"]
+    post = config["infer"]
     value = post.get("checkpoint", "last")
     if trained is not None:
         if trained.get("mode", "").endswith("_check") or "checkpoints" not in trained:
@@ -90,7 +89,7 @@ def open_post(config, *, dataset_component, model_component, session, trained=No
         or not set(samples) <= set(data.view.partitions.get(split, []))
     ):
         raise ValueError("评价样本名单为空、重复或不属于指定分片")
-    return PhysicalPost(
+    return PhysicalInference(
         config, dataset_component, model_component, session, checkpoint, data, samples, split
     )
 
@@ -112,7 +111,7 @@ def _register(job, name, operation):
 
 def configure_prediction(job, *, settings=None, operation=None):
     """注入 model/sample/config/normalization → 物理预测映射。"""
-    selection = plain(settings or job.config["post"]).get("prediction", {})
+    selection = plain(settings or job.config["infer"]).get("prediction", {})
     predict = resolve_operation(
         selection, default=job.model_component.predict_sample, operation=operation
     )
@@ -188,7 +187,7 @@ def configure_physical_output(job, *, operation=None):
 
 def configure_evaluation(job, *, settings=None, operation=None, sample_operation=None):
     """登记逐样本及总体物理指标；指标工厂可通过配置或对象替换。"""
-    settings = plain(settings or job.config["post"])
+    settings = plain(settings or job.config["infer"])
     if not settings.get("evaluate", True):
         return job
     selection = settings.get("metric", {})
@@ -234,7 +233,7 @@ def configure_evaluation(job, *, settings=None, operation=None, sample_operation
 
 def configure_save(job, *, output, settings=None):
     """登记物理张量及单样本清单事务保存。"""
-    settings = plain(settings or job.config["post"])
+    settings = plain(settings or job.config["infer"])
     if not settings.get("save_predictions", True):
         return job
     root = Path(output)
@@ -300,19 +299,42 @@ def configure_save(job, *, output, settings=None):
 
 
 def configure_mesh_export(job, *, settings=None):
-    """登记已保存预测的网格回贴，不跨网格自动插值。"""
-    settings = plain(settings or job.config["post"])
-    if not settings.get("export_vtk", False):
-        return job
+    """登记已保存预测的网格回贴；关闭或失败时把原因写进清单，不静默缺文件。"""
+    settings = plain(settings or job.config["infer"])
+    from ai4e_core.applications.aero_cfd.infer.vtk_export import VTK_DISABLED, skip_vtk
+
+    enabled = bool(settings.get("export_mesh", settings.get("export_vtk", True)))
+    if enabled:
+        from ai4e_core.applications.aero_cfd.infer.vtk_capability import describe_vtk_exports
+
+        capability = describe_vtk_exports(
+            job.config, dataset_component=getattr(job, "dataset_component", None)
+        )
+        if not capability["mesh"]["available"]:
+            enabled = False
+            skip_reason = capability["mesh"]["reason"]
+        else:
+            skip_reason = VTK_DISABLED
+    else:
+        skip_reason = VTK_DISABLED
 
     def apply(item):
         from ai4e_core.applications.aero_cfd.post.mesh_export import export_prediction_meshes
 
         if item.manifest is None:
-            raise ValueError("网格回贴需要先保存预测清单")
-        item.meshes = export_prediction_meshes(
-            job.config, job.dataset_component, item.manifest, committed=job.progress.committed
-        )
+            if enabled:
+                raise ValueError("网格回贴需要先保存预测清单")
+            return item
+        if not enabled:
+            skip_vtk(item.manifest, skip_reason, channel="mesh")
+            return item
+        try:
+            item.meshes = export_prediction_meshes(
+                job.config, job.dataset_component, item.manifest, committed=job.progress.committed
+            )
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            skip_vtk(item.manifest, str(exc), channel="mesh")
+            raise
         return item
 
     return _register(job, "mesh", apply)
@@ -363,7 +385,7 @@ def _execute(job, dataset_component=None, model_component=None, session=None):
     """执行登记顺序；保留旧 config/component/session 入口作为兼容包装。"""
     if isinstance(job, dict):
         config = job
-        job = open_post(
+        job = open_inference(
             config,
             dataset_component=dataset_component,
             model_component=model_component,
@@ -414,7 +436,7 @@ def _execute(job, dataset_component=None, model_component=None, session=None):
         "model": job.model_component.SOURCE,
         "samples": job.samples,
         "split": job.split,
-        "settings": job.config["post"],
+        "settings": job.config["infer"],
         "execution": {"device": str(job.device), "precision": "fp32"},
     }
     if job.extensions:
@@ -440,7 +462,7 @@ def _execute(job, dataset_component=None, model_component=None, session=None):
             torch.manual_seed(job.config["sampling"]["seed"])
 
             def process(name):
-                item = PostSample(
+                item = InferenceSample(
                     name,
                     job.data.view.read(job.split, job.data.view.partitions[job.split].index(name)),
                 )
@@ -483,14 +505,7 @@ def _execute(job, dataset_component=None, model_component=None, session=None):
             job.progress.report["completed"] = 0
             job.progress.publish()
             # 同一检查点的样本顺序和随机流不变，循环归公共运行执行器。
-            from ai4e_core.applications.base import Stage
-            from ai4e_core.run import execute_many
-
-            def one(context):
-                context["result"] = process(context["sample"])
-                return context
-
-            execute_many(job.samples, Stage(job.phase, [one]), context={})
+            job.session.execute_samples(job.samples, process, stage=job.phase)
         report = {
             "version": 1,
             "status": "succeeded",
@@ -501,7 +516,9 @@ def _execute(job, dataset_component=None, model_component=None, session=None):
         report["timings"] = {"restore": restore_seconds}
         job.session.artifact("physical-predictions.json", report)
         if job.phase == "infer":
-            job.session.artifact("inference-results.json", {**report, "version": 2})
+            path = job.session.artifact("inference-results.json", {**report, "version": 2})
+            from .indexing import register_results
+            register_results(job.session, path, report)
         job.progress.finish()
         job.session.report(report, stage=job.phase)
         return report
@@ -520,10 +537,10 @@ def execute(job, dataset_component=None, model_component=None, session=None):
         with preserve_randomness():
             return _execute(job, dataset_component, model_component, session)
     except BaseException as exc:
-        if isinstance(job, PhysicalPost) and not job.session.dry_run and job.progress is None:
+        if isinstance(job, PhysicalInference) and not job.session.dry_run and job.progress is None:
             progress = PostProgress(job.session, {"restore": True}, phase=job.phase)
             progress.finish(exc)
         raise
     finally:
-        if isinstance(job, PhysicalPost):
+        if isinstance(job, PhysicalInference):
             job.model = None

@@ -2,32 +2,62 @@
 
 from pathlib import Path
 
-from .query import list_runs
+from .records import list_runs
 
 
 def list_stage_artifacts(project, task_id: str, roots: dict | None = None) -> list[dict]:
-    """列出成功正式运行的可交接产物；可见根内文件即可，不猜测缺失文件。"""
+    """列出成功正式产物及终止运行已提交的恢复权重，不整文件核验。
+
+    切步名单只回答还有没有、能不能列。字节是否仍是当初那份留给恢复训练、
+    提交推理和读取准备；列举时再打检查点会把切步卡在半分钟。
+    """
+    from ..projects.datasets import run_physical_manifest
+
     result = []
     visible = {"project": Path(project).resolve()}
     if roots:
         visible.update({name: Path(root).resolve() for name, root in roots.items()})
     for run in list_runs(project, task_id):
-        if run["status"] != "succeeded" or run.get("operation_mode", "execute") != "execute":
+        if run["status"] not in {"succeeded", "stopped", "failed"} or run.get(
+            "operation_mode", "execute"
+        ) != "execute":
             continue
-        preferred = Path(run["run_dir"]) / "artifacts/inference-results.json"
-        if not preferred.is_file():
-            preferred = Path(run["run_dir"]) / "artifacts/physical-predictions.json"
-        targets = [
-            ("train.manifest", Path(run["data_dir"]) / "manifest.json"),
-            ("train.preparation", Path(run["run_dir"]) / "artifacts/preparation.json"),
-            ("post.results", preferred),
-        ]
-        targets += [
-            ("post.checkpoint", p)
-            for p in sorted((Path(run["run_dir"]) / "checkpoints").glob("*.pt"))
-        ]
+        recovery_only = run["status"] != "succeeded"
+        from ..storage.files import read_json
+        from ai4e_spec.artifacts.indexes import INDEX_VERSION, validate_asset_record
+
+        index_path = Path(run["run_dir"]) / "artifacts/assets.json"
+        targets = []
+        if index_path.is_file():
+            index = read_json(index_path)
+            if index.get("schema_version") != INDEX_VERSION:
+                continue
+            for item in index.get("items", {}).values():
+                try:
+                    validate_asset_record(item)
+                    path = Path(item["path"])
+                except (ValueError, TypeError, OSError):
+                    continue
+                if item["kind"] == "checkpoint":
+                    bindings = ["inputs.train.resume"]
+                    if not recovery_only:
+                        bindings.insert(0, "inputs.infer.checkpoint")
+                elif recovery_only:
+                    continue
+                elif item["kind"] == "preparation":
+                    bindings = ["inputs.train.preparation", "inputs.infer.preparation"]
+                elif item["kind"] == "dataset":
+                    bindings = ["inputs.trainprep.dataset"]
+                elif item["stage"] == "infer" and item["name"] == "results":
+                    bindings = ["inputs.post.results"]
+                else:
+                    bindings = []
+                targets.extend((binding, path) for binding in bindings)
+        shared = None if recovery_only else run_physical_manifest(project, run)
+        if shared is not None and not any(p == shared for _, p in targets):
+            targets.append(("inputs.trainprep.dataset", shared))
         for binding, path in targets:
-            if not path.is_file():
+            if path is None or not path.is_file():
                 continue
             resolved = path.resolve()
             match = next(

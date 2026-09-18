@@ -1,0 +1,131 @@
+SIM103 Return the negated condition directly
+  --> packages/ai4e-server/modules/capabilities/trace_source.py:70:5
+   |
+68 |       if declarations.get("component") and declarations.get("component") != current["component"]:
+69 |           return False
+70 | /     if declarations.get("model") and declarations["model"] != current["model"]:
+71 | |         return False
+72 | |     return True
+   | |_______________^
+help: Inline condition
+
+SIM102 Use a single `if` statement instead of nested `if` statements
+   --> packages/ai4e-server/modules/stages/application.py:700:9
+    |
+698 |                   return
+699 |           rel = "" if target == directory else str(target.relative_to(directory))
+700 | /         if query:
+701 | |             if is_dir or (
+702 | |                 query.casefold() not in target.name.casefold()
+703 | |                 and query.casefold() not in rel.casefold()
+704 | |             ):
+    | |______________^
+705 |                   return
+706 |           result[str(target)] = _stage_row(target, directory, root, root_id, role, run_id, is_dir)
+    |
+help: Combine `if` statements using `and`
+
+B023 Function definition does not bind loop variable `source`
+  --> packages/ai4e-task/storage/shared_datasets.py:56:67
+   |
+54 |             return record
+55 |         def external(value):
+56 |             return {**value, "external": True, "path": str(inside(source, value["path"])),
+   |                                                                   ^^^^^^
+57 |                     "dependencies": [external(item) for item in value.get("dependencies", [])]}
+58 |         return {**external(record), "shared_project": str(source)}
+   |
+
+BLE001 Do not catch blind exception: `BaseException`
+  --> packages/ai4e-task/tasks/worker.py:70:20
+   |
+68 |             try:
+69 |                 finish(project, plans, context["run_id"], succeeded=status == "succeeded")
+70 |             except BaseException as exc:
+   |                    ^^^^^^^^^^^^^
+71 |                 status, error = "failed", f"shared_dataset_publish_failed: {exc}"
+72 |                 finish(project, plans, context["run_id"], succeeded=False)
+   |
+
+PLW1510 `subprocess.run` without explicit `check` argument
+  --> tests/integration/test_task_shared_dataset_installation.py:62:14
+   |
+60 | print(json.dumps({"producer":first["id"],"consumer":second["id"],"inference":third["id"],"shared":shared["manifest_path"]}))
+61 | ''')
+62 |     result = subprocess.run([str(python), str(script), str(tmp_path/'project'), str(source)], cwd=tmp_path, env=clean, capture_output=…
+   |              ^^^^^^^^^^^^^^
+63 |     assert result.returncode == 0, result.stdout + result.stderr
+64 |     assert 'shared' in json.loads(result.stdout.strip().splitlines()[-1])
+   |
+help: Add explicit `check=False`
+
+PLW1510 `subprocess.run` without explicit `check` argument
+  --> tests/integration/test_task_shared_dataset_overwrite.py:20:16
+   |
+18 |     run_success(project, item)
+19 |     command = [sys.executable, '-m', 'ai4e_task', 'run', item['id'], '--project', str(project)]
+20 |     rejected = subprocess.run(command, capture_output=True, text=True)
+   |                ^^^^^^^^^^^^^^
+21 |     assert rejected.returncode != 0
+22 |     result = subprocess.run(command + ['--overwrite'], capture_output=True, text=True)
+   |
+help: Add explicit `check=False`
+
+PLW1510 `subprocess.run` without explicit `check` argument
+  --> tests/integration/test_task_shared_dataset_overwrite.py:22:14
+   |
+20 |     rejected = subprocess.run(command, capture_output=True, text=True)
+21 |     assert rejected.returncode != 0
+22 |     result = subprocess.run(command + ['--overwrite'], capture_output=True, text=True)
+   |              ^^^^^^^^^^^^^^
+23 |     assert result.returncode == 0, result.stderr
+24 |     run = task.wait_run(project, json.loads(result.stdout)['id'])
+   |
+help: Add explicit `check=False`
+
+PLW1510 `subprocess.run` without explicit `check` argument
+  --> tests/integration/test_task_shared_dataset_overwrite.py:26:12
+   |
+24 |     run = task.wait_run(project, json.loads(result.stdout)['id'])
+25 |     assert run['status'] == 'succeeded', run
+26 |     assert subprocess.run(command, capture_output=True).returncode != 0
+   |            ^^^^^^^^^^^^^^
+help: Add explicit `check=False`
+
+UP031 Use format specifiers instead of percent format
+  --> tests/integration/test_web_processed_datasets.py:13:21
+   |
+11 | def _manifest(path: Path, payload: str = "sample") -> Path:
+12 |     path.parent.mkdir(parents=True, exist_ok=True)
+13 |     path.write_text('{"version": 1, "state": "physical", "payload": "%s"}' % payload)
+   |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+14 |     return path
+   |
+help: Replace with format specifiers
+
+RUF059 Unpacked variable `settings` is never used
+   --> tests/integration/test_web_processed_datasets.py:602:22
+    |
+600 |     from tests.integration.test_task_shared_execution import run_success, shared_recipe
+601 |
+602 |     client, base, _, settings = binding_platform
+    |                      ^^^^^^^^
+603 |     (tmp_path / 'offline').mkdir()
+604 |     source = shared_recipe(tmp_path / 'offline')
+    |
+help: Prefix it with an underscore or any other dummy variable pattern
+
+F841 Local variable `data` is assigned to but never used
+  --> tests/integration/test_web_rawprep_handoff.py:79:5
+   |
+77 |     assert len(task.get_lineage(project)) == 1
+78 |     manifest = task.run_physical_manifest(project, result)
+79 |     data = manifest.parent
+   |     ^^^^
+80 |     assert manifest.is_file()
+81 |     from ai4e_core.applications.aero_cfd.trainprep.dataset import (
+   |
+help: Remove assignment to unused variable `data`
+
+Found 21 errors (10 fixed, 11 remaining).
+No fixes available (5 hidden fixes can be enabled with the `--unsafe-fixes` option).

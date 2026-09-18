@@ -247,8 +247,8 @@ test("多检查点批次、刷新恢复、固定结果、指标与失败重试�
   await expect(
     page.getByText("批次已提交，关闭页面不会停止计算"),
   ).toBeVisible();
+  expect(state.submitted[0].name).toMatch(/^infer-\d{8}-\d{6}$/);
   expect(state.submitted[0]).toMatchObject({
-    name: "批量推理",
     expected_revision: "config-r1",
     checkpoints: [
       { id: "best", revision: "hash-best" },
@@ -263,7 +263,7 @@ test("多检查点批次、刷新恢复、固定结果、指标与失败重试�
   await page.locator("#stage-handoff summary").click();
   await expect(page.getByRole("button", { name: "在后处理中打开" })).toBeVisible();
   expect(state.posts).toBe(1);
-  await page.getByRole("tab", { name: "指标比较" }).click();
+  await page.getByRole("tab", { name: "聚合" }).click();
   await expect(page.getByText("0.25", { exact: true })).toBeVisible();
   await page.getByRole("tab", { name: "结果文件" }).click();
   await page.getByRole("button", { name: "在后处理中打开" }).click();

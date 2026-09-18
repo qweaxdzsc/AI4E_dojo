@@ -1,13 +1,13 @@
 # 后处理工作台验收（2026-09-15）
 
-本切片实施任务级“指标 / 结果文件 / 三维物理场可视化”。保留九步平台外壳、历史推理结果和已存在工作区改动，不重新执行模型推理。长期功能正文见 Web、core abilities/applications、task tasks/storage 和 server modules 的现行 PRD；本文只记录验收范围及证据。
+现行后处理只展示「结果文件 / 三维物理场可视化」，默认结果文件；旧 `tab=metrics` 落到结果文件。指标表与图表在推理页，后处理不再设指标页签。2026-09-18：三维页相对原 820px 至少加高 40%（阶段窗口 ≥1148px）并尽量铺满剩余视口，宿主去掉「打开已保存配置」下拉；重开配置仍走工作台文件菜单。正式 5173→8000 对照任务「测试0918」三维页实测阶段 1148px、iframe 1086px、无宿主下拉。证据 `official-20260918-post-vis-taller.png`。圈定 `e2e/post-session.spec.ts`。下文 2026-09-15 至 09-17 的三页签证据按当时范围保留。长期功能正文见 Web、core abilities/applications、task tasks/storage 和 server modules 的现行 PRD；本文只记录验收范围及证据。
 
 ## 布局交互
 
 - 默认指标页；批次、样本和物理量筛选属于指标页，结果文件默认覆盖任务全部批次。
 - 结果文件使用共享树形表和可拖动的左右预览区；原始处理产物树使用同一组件。窄容器保留列宽并横向滚动，操作不被裁掉。
 - 历史 `PostWorkspace` 保留原调用签名，转入统一三页签，不再显示独立图表导航。
-- `post-workspace.spec.ts` 在1440/1920验证三个Tab、选择互不干扰；`post-session.spec.ts` 验证三维页 820px 滚动窗口、宿主 iframe 贴合且整页不锁死滚动。文件与会话浏览器测试另行验证。原始处理三条回归与预览弹窗一条通过。
+- `post-workspace.spec.ts` 在1440/1920验证现行两个Tab、选择互不干扰；`post-session.spec.ts` 验证三维页至少 1148px、宿主无「打开已保存配置」、iframe 贴合且整页不锁死滚动。文件与会话浏览器测试另行验证。原始处理三条回归与预览弹窗一条通过。
 
 ## 指标计算与导出
 
@@ -117,3 +117,70 @@ npm run --prefix packages/ai4e-web test:e2e -- post-ui.spec.ts post-files.spec.t
 - `live-post-1440.png`、`live-browser.json`：日常5173页面三个Tab及接口复查，空任务保持真实空态。
 
 本轮只优化页面布局和相关交互，没有重算算法定义，没有扩展Linux阴影或生产精度验收；不声明与参考图逐像素一致。
+
+## 结果文件纳入训练数据产物（2026-09-17）
+
+产品要求结果文件不只消费推理批次。`list_post_result_files` 同时列出训练运行文件夹（「训练运行 ·」加 run 短号）和未挂批次的独立推理；有写出时按层展开任务 `data_dir` 的 `infer` / `post` / `predictions` / `meshes` / `analysis` / `exports`。无写出仍保留该 run 并说明没有预测或网格，失败开训不冒充有结果。评价指标目录仍只解析已提交清单；无清单的训练产物只出现在结果文件。检查点、日志、`rawprep` / `trainprep` 准备副本不进入此树。完全没有训练运行和推理结果时说明「暂无训练运行或推理固定结果」。
+
+圈定 `tests/integration/test_task_post_results.py`、`tests/integration/test_web_post_results.py`、`packages/ai4e-web/e2e/post-files.spec.ts`。训练设置另提供写出预测/网格/分片，默认关闭；打开并成功结束后才会在该训练 `data_dir/infer/` 出现场文件。
+
+正式 8000/5173 冒烟（2026-09-17 19:41–20:05，用户当次授权）：已按规定重装 `ai4e-core`/`ai4e-task`/`ai4e-server` 并重启 8000（Python PID **99745**）。安装 `post_results.py` `da1a1dca01a182fd`。首页任务成功训练 `3a5933a4c48c4a3ea3ad501800b3157d` 仍无场文件；`GET …/post/results?view=files` 返回 0 条。5173 结果文件页「共 0 个文件」，空态为「暂无推理固定结果或训练运行写出的预测、网格、导出文件」，未列出检查点/日志/准备目录。训练设置「训练结束写出」：写出预测关、写出网格禁用、分片测试集，`evaluation_enabled` 值仍为 false。证据：`/Users/zonghui/work/project_simulation/dojo_train/post-workspace-acceptance/official-20260917-2002-training-export.png`、`official-20260917-2003-post-files.png`、同目录复制的 `official-20260917-2005-smoke.json`。未开写出重训，故无训练场文件进入结果树。
+
+训练 run 必须可见（2026-09-17 续）：上一版只列有写出产物的训练 run，关写出开关或失败开训会整段消失。现改为始终列出「训练运行 ·」加 run 短号；有预测/网格按层展开，没有则说明空态，失败开训写「开训失败」不冒充有结果。正式 5173（22:53，8000 未重装）结果文件页已见本任务五条训练 run：`e14ce795`、`7fe91b30`、`e9fbb4be`、`cc0a4fe2`、`7f80018e`，以及「批量推理 · f0213b8b」。展开成功且关写出的 `e14ce795` 为「没有写出预测或网格」；失败 `7fe91b30` 为「没有预测或网格（开训失败）」。证据：`official-20260917-2253-post-files.png`、`official-20260917-2253-post-files-expand.png`、`official-20260917-2253-post-files-failed-stopped.png`。正式 `GET …/post/results?view=files` 仍只回推理批次，须重装 `ai4e-task` 并重启 8000 后接口才原生列出训练 run。
+
+切步产物名单（2026-09-17 续）：`list_stage_artifacts` 不再在列举时整文件核验检查点；正式入口此前 `GET …/stage-inputs` 约 32 秒。须重装 `ai4e-task` 并重启 8000 后再核耗时。相机联动源码已放宽，正式须另重装 `ai4e-viz` 并换 Vis。
+
+正式 8000/5173 冒烟（2026-09-17 20:46–20:54，用户当次授权重装重启）：`uv sync --group dev --group visualization --reinstall-package ai4e-task --reinstall-package ai4e-viz` 后正式 8000 PID **6975**、Vis **7457** 端口 50759，5173 仍为 **23629**。安装 `artifacts.py` `1c61e2a540e15862`、`scene.py` `bf008c274581c4df` 与源码一致。`GET …/stage-inputs` 21 条 **0.18s / 0.13s**。训练设置页约 1.56s 见到写出开关。后处理结果文件「批量推理 · 0bdc98ce」下可见 100 个 `full_surface.vtp`。三维页新会话 `fc293cff…` 建 RenderView2 后打开相机联动，无共同坐标空间报错。证据：`/Users/zonghui/work/project_simulation/dojo_train/inference-ui-acceptance/official-20260917-2054-smoke.json`。未新跑 887 样本，张量日志降级本轮未验证。
+
+## 批次身份与指标聚合口径（2026-09-17）
+
+后处理批次下拉不再只显示「批量推理」：有 `created_at` 时格式化为 `infer-YYYYMMDD-HHMMSS`（本地墙钟，精确到秒）；自定义名称保留。指标页标题、状态、空态和详情写明「按检查点聚合」。只改 web 源码，未改 task/server 默认名，未重装 8000。圈定 `e2e/post-workspace.spec.ts`（4 项）、`e2e/inference.spec.ts`（6 项）、`e2e/post-ui.spec.ts`（2 项）。结果文件树仍用服务端存储前缀，旧批次目录可能仍带「批量推理 · 短号」。
+
+正式 5173 源码冒烟（2026-09-17，未重启 8000）：`http://127.0.0.1:5173/projects/32cdee6900924df096838663a4a70a05/tasks/beab7b5ab1414787b8cc6a288e6db0cc/post`。目录接口该批次仍名「批量推理」、`created_at=2026-09-17T12:57:37Z`；指标与结果文件下拉均显示 `infer-20260917-205737`，无「批量推理」。指标表标题/状态/空态含「按检查点聚合」。截图 `official-20260917-2248-metrics-batch.png`。
+
+## 推理 VTK 与平台数据集对照（2026-09-17）
+
+对照任务 `beab7b5ab1414787b8cc6a288e6db0cc` 已有推理批次请求 `export_vtk:false`，样本目录只有 PT/清单、没有 VTK。源码现默认写出锚点 VTK（场名 `.prediction`/`.truth`），完整网格另走查询；用户关闭导出时写入清单 `vtk.reason` 并在推理页/结果树展示。缺拓扑或点数对不上则该样本失败，清单先写原因，整批不冒充全部成功。结果文件树增加「平台数据集 ·」加名称，与训练 run、推理批次并列，样本 ID 用 `param1/<设计号>`。历史缺 VTK 批次不回写文件，须重跑推理才有网格。
+
+圈定源码验收（2026-09-17，`PYTHONPATH` 覆盖当前包源码，未重装 `.venv`）：
+
+- pytest：`test_web_rawprep.py`、`test_web_dataset_binding.py`、`test_web_rawprep_handoff.py`、`test_web_stage_consistency.py`、`test_trainprep_consume.py`、`test_infer_inspect_contract.py`、`test_web_post_results.py`、`test_task_post_results.py`、`test_post_mesh.py`、`test_infer_vtk_identity.py`，**133 passed / 2 skipped**。
+- 其中 `test_missing_raw_surface_rejects` 曾因历史锚点路径把缺表面网格记成跳过且整次成功而失败；`infer/anchor_stage.py` 记下原因后重新抛出，该项已过。
+- e2e：`rawprep-consistency.spec.ts`、`model-picker.spec.ts`、`post-files.spec.ts`、`post-workspace.spec.ts`、`inference.spec.ts`，**29 passed**。
+
+正式 5173→8000 冒烟（2026-09-17 23:44–23:50，用户当次授权）：`uv sync --group dev --group visualization --reinstall-package ai4e-core --reinstall-package ai4e-server --reinstall-package ai4e-contrib --reinstall-package ai4e-task` 后只重启正式 8000。入口 `http://127.0.0.1:5173` → `http://127.0.0.1:8000`，对照任务 `32cdee6900924df096838663a4a70a05` / `beab7b5ab1414787b8cc6a288e6db0cc`。新 8000 PID **33633**，5173 仍为 **23629**。安装摘要与源码一致：`post_results.py` `7bec3f2c920c9ed6`，`anchor_stage.py` `015db74cdd7e07a8`，`vtk_export.py` `0409d8eb6b1c6e46`，`inspection.py` `837e06583d49a50a`。
+
+逐页：
+
+- 原始处理「全部」：处理样本 **889**（来自绑定数据集），来源文件 1778，`sample_universe=bound_dataset`。
+- 数据准备处理结果：可见 `normalize` 与 `preparation.json`，展开含 train/test 归一化副本。
+- 模型设置：已保存参数 192/6/3 与几何 3586 先出；`model-options` 0.107s；正式检查 `b8462e49` 约 6s 成功，无点数冲突。
+- 推理：红条「当前模型权重结构与检查点 effective_config 不兼容」；导出网格默认勾选。未新跑推理。
+- 后处理：指标下拉 `infer-20260917-205737`，文案「按检查点聚合」。结果文件并列「平台数据集 · shapenet_car2」「平台数据集 · training_execution_real_cfd」、五条「训练运行 ·」与历史「批量推理 · f0213b8b」。平台数据集展开样本 `param1/<设计号>`。历史推理样本见「未写出VTK：该次推理未导出网格」。
+
+新默认网格未验证：现有检查点与当前大结构不对，未提交新推理；历史关网格批次不回写。步骤条把训练运行显示成成功、标题写「流程已完成」，与已知 last-rowid 诊断一致，本轮不改。
+
+证据：`/Users/zonghui/work/project_simulation/dojo_train/post-workspace-acceptance/official-20260917-2348/`（`official-smoke.json`、`api-smoke.json`、`model-check.json` 与五页截图）。
+
+复测（2026-09-18 00:22–00:28）：安装副本仍与源码一致，8000 仍为 PID **33633**，未再重装或重启。接口 catalog 889 / `bound_dataset`，准备文件 `normalize`+`preparation.json`，推理样本仍报权重结构不兼容，结果树仍列平台数据集、五条训练运行、历史推理批次及「未写出VTK」。页面再点：原始处理 889、准备处理结果、模型「配置与交接检查通过」（3586 点数未挡）、推理红条、后处理三根与跳过说明、指标「按检查点聚合」。证据 `official-20260918-0022/`。
+
+原始处理 VTKHDF 默认勾选（2026-09-18）：对照任务当时保存为关，已写回 `rawprep.vtkhdf: true`；页面缺键按清单/案例默认勾选。正式 `5173` 原始处理页复测 VTKHDF 已勾选，8000 仍为 PID **33633**，未重装或重启。圈定 `e2e/rawprep-consistency.spec.ts` 7 passed。证据 `official-20260918-vtkhdf/`。
+
+## 隐藏后处理指标页签（2026-09-18）
+
+推理页已有指标表格/图表，后处理不再展示重复的「指标」页签。
+
+- UI：`PostResultsWorkspace` 只留结果文件、三维物理场可视化；默认结果文件。`PostMetricsPanel` 与评价 API 保留，不作为页签渲染。
+- 深链接：`tab=metrics` 或未知 tab 落到结果文件，不空白、不报错；`tab=visualization` 仍进三维。
+- 圈定：`packages/ai4e-web/e2e/post-workspace.spec.ts`、`post-files.spec.ts`、`post-ui.spec.ts`、`post-session.spec.ts`；回归 `tests/integration/test_task_post_results.py`、`test_web_post_results.py`。评价接口用例不改。
+- 只改 web 源码，正式 5173 读源码即可冒烟，未重装/重启 8000。
+- 正式 5173→8000 冒烟（2026-09-18）：任务 `测试0918`（`179ed1fe447b415b8870c45b6a89a296` / `f8f89f8037b34026ae778116f441a3f6`）。默认只有结果文件与三维，无指标页签/计算按钮；切到三维再切回仍是两页签；`?tab=metrics` 落到结果文件；推理深链接 `batch=726c91ae…&run=fd7da8f3…&sample=param0/100715345ee54d7ae38b52b4ee9d36a3` 仍定位固定来源。推理页指标区与表格仍在。证据 `/Users/zonghui/work/project_simulation/dojo_train/post-workspace-acceptance/official-20260918-hide-metrics/`。
+
+## 正式后处理与 VTK 一致性冒烟（2026-09-18，用户授权）
+
+- 正式 API 8000 已按规则重装相关 force-include 包并重启为 PID **34563**；5173 保持用户进程。
+- 后处理结果文件页只显示一个训练绑定平台数据集：`平台数据集 · shapenet_car4`，并列训练运行 `08bbe33e` 与推理批次 `infer-20260918-132824 · c9a60689`；没有“固定结果文件与后处理交接”容器。
+- 三维物理场工作台在正式页面成功建立 Vis/Trame 会话；外层容器高度已调整为约 714px。当前未选择具体文件时显示 0 点/0 单元属于空选择状态，不是 Vis 启动失败。
+- 真实 `surface.vtp`（3586 点、3584 单元）含 `surface.pressure.prediction`、`surface.pressure.truth` 两个独立字段；通过原始点 ID 对齐后两字段分别与对应 PT 完全一致，prediction/truth 最大差值 104.5523529。此前“云图一样”的原因不是 prediction 未写入，而是查看时没有选中具体结果资产/字段，或使用了未按字段身份切换的显示状态。
+- 数值、资产修订、字段和 manifest filemap 证据：`/Users/zonghui/work/project_simulation/dojo_train/formal-20260918-consistency/vtk-identity.json`。
+- 后续健康检查返回 `{"status":"ok"}`；正式服务当前 PID 为 **48179**，发布冒烟时 PID **34563** 的证据仍对应同一正式 root 和入口。

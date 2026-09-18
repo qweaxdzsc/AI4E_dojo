@@ -3,3 +3,7 @@
 from .application import stage_summary
 
 __all__ = ["stage_summary"]
+
+from .configuration import compose_configuration
+
+__all__ += ["compose_configuration"]

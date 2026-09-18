@@ -11,7 +11,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, required=True)
     args = parser.parse_args()
-    from ai4e_core.run.training import TrainingRun
+    from ai4e_core.run import TrainingRun
 
     original = TrainingRun.checkpoint
 

@@ -160,11 +160,11 @@ def test_fixed_view_export_across_time(scene, tmp_path, monkeypatch):
     original = producer.capture
     seen = []
 
-    def capture(value, path, width, height):
+    def capture(value, path, width, height, transparent=False):
         """检查真实输出时刻的活动渲染器并仍执行 PNG 生成。"""
         seen.append([r.GetDraw() for r in value.renderers])
         assert value.renderers[1].GetViewport() == (0, 0, 1, 1)
-        return original(value, path, width, height)
+        return original(value, path, width, height, transparent)
 
     monkeypatch.setattr(producer, "capture", capture)
     files = producer.produce(
@@ -207,23 +207,14 @@ def test_chain_and_transaction(scene):
 
 def test_begin_slice_twice_keeps_one_draft(scene):
     """连点切面只保留一份未应用草稿，输入仍是已导入对象。"""
+    from uuid import uuid4
+
     from modules.visPhysField.trameUI.controller import Workbench
+    from trame.app import get_server
 
-    class State(dict):
-        def __getattr__(self, name):
-            return self[name]
-
-        def __setattr__(self, name, value):
-            self[name] = value
-
-        def __enter__(self):
-            return self
-
-        def __exit__(self, *_):
-            return False
-
-    workbench = Workbench(type("Server", (), {"state": State()})(), scene)
-    workbench.view = type("View", (), {"update": staticmethod(lambda: pytest.fail("创建草稿不应重推整屏"))})()
+    workbench = Workbench(get_server(name=uuid4().hex, client_type="vue2"), scene)
+    updates = []
+    workbench.view = type("View", (), {"update": staticmethod(lambda: updates.append(True))})()
     parent = scene.spec["pipeline"][0]["id"]
     workbench.begin("slice")
     first = workbench.server.state.selected
@@ -231,6 +222,7 @@ def test_begin_slice_twice_keeps_one_draft(scene):
     workbench.begin("slice")
     assert workbench.server.state.selected == first
     assert len([d for d in workbench.drafts.values() if d["node"].get("type") == "slice"]) == 1
+    assert len(updates) == 1  # 首次必须推送手柄，重复点击不重复同步。
     workbench.begin("clip")
     clip = workbench.server.state.selected
     assert clip != first
@@ -261,20 +253,11 @@ def test_hide_base_display_does_not_rebuild_mesh(scene, monkeypatch):
     actor = scene.actors[layer_id]
     mapper = actor.GetMapper()
 
-    class State(dict):
-        def __getattr__(self, name):
-            return self[name]
+    from uuid import uuid4
 
-        def __setattr__(self, name, value):
-            self[name] = value
+    from trame.app import get_server
 
-        def __enter__(self):
-            return self
-
-        def __exit__(self, *_):
-            return False
-
-    workbench = Workbench(type("Server", (), {"state": State(tree_nodes=[])})(), scene)
+    workbench = Workbench(get_server(name=uuid4().hex, client_type="vue2"), scene)
     workbench.refresh(update_view=False)
     reads = {"n": 0}
     builds = {"n": 0}
@@ -569,7 +552,7 @@ def test_plane_widget_preview_requires_apply(scene):
         "axis_x",
         "axis_y",
         "axis_z",
-        "rotate",
+        "rotate_x", "rotate_y", "rotate_z",
     }
     scene.clear_plane_widget()
     assert not scene.snapshot()["attachments"]["plane_widget"]["visible"]
@@ -613,10 +596,10 @@ def test_named_block_seed_from_authorized_file(tmp_path):
     """带名称的二维块可作为种子；无名块不出现。"""
     from pathlib import Path
 
-    from modules.visDatasets import list_named_blocks
     from modules.dataAssets import source_fingerprint
-    from modules.visPhysField.scene import Scene
+    from modules.visDatasets import list_named_blocks
     from modules.visPhysField import default_spec
+    from modules.visPhysField.scene import Scene
 
     volume = vtk.vtkImageData()
     volume.SetDimensions(4, 4, 4)
@@ -678,8 +661,7 @@ def test_named_block_seed_from_authorized_file(tmp_path):
 def test_named_blocks_cache_same_file(tmp_path, monkeypatch):
     """同一文件的命名块清单只读盘一次，内容变化后才重新列出。"""
     from ai4e_viz.inspect import mesh as mesh_mod
-    from modules.visDatasets import list_named_blocks
-    from modules.visDatasets import physicalDataset
+    from modules.visDatasets import list_named_blocks, physicalDataset
 
     volume = vtk.vtkImageData()
     volume.SetDimensions(3, 3, 3)

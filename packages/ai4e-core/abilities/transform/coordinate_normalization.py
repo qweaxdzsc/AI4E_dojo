@@ -9,11 +9,11 @@ from .minmax import MinMax
 
 @dataclass(frozen=True)
 class CoordinateNormalization(MinMax):
-    """将共享物理边界映射到非居中的零至 scale 区间。"""
+    """将共享物理边界映射到非居中的零至一区间；附加放大在场 scale。"""
 
     minimum: tuple[float, ...]
     maximum: tuple[float, ...]
-    scale: float = 1000.0
+    scale: float = 1.0
     check_range: bool = True
     tolerance: float = 1e-6
     arithmetic: str = "shift_scale"

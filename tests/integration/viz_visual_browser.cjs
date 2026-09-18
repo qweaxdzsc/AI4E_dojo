@@ -25,8 +25,9 @@ const fs=require('node:fs');
   await f.getByRole('button',{name:'色标',exact:true}).click();
   await f.locator('.phys-tree').getByText('切面 1',{exact:true}).click();
   await f.locator('.phys-property-scroll').evaluate(el=>el.scrollTop=0);
+  await expect(f.getByText('显示辅助平面',{exact:true})).toBeVisible();
   for(const width of [1672,1440,1920,900]){
-   await page.setViewportSize({width,height:width===1920?1080:940});await page.waitForTimeout(900);
+   await page.setViewportSize({width,height:width===1920?1080:width===1440?900:941});await page.waitForTimeout(900);
    const m=await f.locator('.phys-workbench').evaluate(el=>{const rect=selector=>{const r=el.querySelector(selector).getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height}};return {width:el.clientWidth,creation:rect('.phys-creation'),sidebar:rect('.phys-sidebar'),viewbar:rect('.phys-viewbar'),viewport:rect('.phys-viewport'),properties:rect('.phys-property-scroll'),overflow:el.scrollWidth>el.clientWidth,icons:[...el.querySelectorAll('.phys-analysis-main .phys-icon')].filter(i=>i.complete && i.naturalWidth>0).length}});
     expect(m.overflow).toBe(false);expect(m.creation.height).toBeLessThanOrEqual(82);expect(m.viewbar.height).toBeLessThanOrEqual(70);expect(m.viewport.height).toBeGreaterThan(520);expect(m.properties.height).toBeGreaterThan(300);expect(m.properties.height).toBeLessThanOrEqual(480);expect(m.icons).toBe(7);
    if(width>1100){expect(m.sidebar.width/width).toBeGreaterThan(.21);expect(m.sidebar.width/width).toBeLessThan(.26)}

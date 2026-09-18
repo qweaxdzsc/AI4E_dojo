@@ -181,7 +181,7 @@ class AnchoredBranchedUPT(nn.Module):
         geometry = self.encoder(input_pos=position, supernode_idx=indices, batch_idx=batches)
         for block in self.geometry_blocks:
             if condition is None:
-                result, _ = block.forward_domains(
+                result, _ = block(
                     {"geometry": geometry},
                     {"geometry": frequencies},
                     {"geometry": geometry.shape[1]},
@@ -322,7 +322,7 @@ class AnchoredBranchedUPT(nn.Module):
         physics_cache, decoder_cache = [], {}
         for i, (kind, block) in enumerate(zip(self.block_types, self.blocks, strict=True)):
             if condition is None:
-                x, layer = block.forward_domains(
+                x, layer = block(
                     x,
                     frequencies,
                     anchor_sizes,
@@ -365,7 +365,7 @@ class AnchoredBranchedUPT(nn.Module):
             layers = []
             for i, block in enumerate(self.decoders[domain]):
                 if condition is None:
-                    result, layer = block.forward_domains(
+                    result, layer = block(
                         {domain: value},
                         {domain: frequencies[domain]},
                         {domain: anchor_sizes[domain]},

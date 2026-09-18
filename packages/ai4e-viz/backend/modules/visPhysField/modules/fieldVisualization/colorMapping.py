@@ -20,8 +20,9 @@ def build_color_mapping(array, color: dict):
     limits = color.get("range") or list(array.GetRange())
     if len(limits) != 2 or not all(math.isfinite(x) for x in limits) or limits[0] > limits[1]:
         raise ValueError("invalid_color_range")
-    if limits[0] == limits[1]:
-        limits = [limits[0], limits[0] + 1e-12]
+    if limits[1] - limits[0] <= 1e-12 * max(1.0, abs(limits[0]), abs(limits[1])):
+        padding = max(abs(limits[0]) * 1e-6, 1e-12)
+        limits = [limits[0] - padding, limits[0] + padding]
     from matplotlib import colormaps
 
     preset = color.get("preset", "viridis")

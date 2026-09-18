@@ -47,3 +47,5 @@
 
 - `frontend/src/app/StorageScopeProvider.jsx`：会话级目标任务上下文，图表与物理工作区共用。
 - `frontend/src/infrastructure/embed/communicator.js`：核对消息来源、frame身份并清理监听。
+
+- `src/test/interaction.test.js`：加载 Trame 原生交互脚本验证多视口指针事件归属；不把业务状态搬入 React。

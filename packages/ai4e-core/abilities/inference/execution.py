@@ -20,3 +20,16 @@ def inference_execution(model, *, preserve_rng: bool = True) -> Iterator[None]:
     finally:
         for module, mode in modes.items():
             module.training = mode
+
+
+@contextmanager
+def inference_group(models, *, preserve_rng: bool = True):
+    """整个模型组共用一次随机上下文；成功、异常时恢复全部子模块模式。"""
+    from contextlib import ExitStack
+
+    with ExitStack() as stack:
+        if preserve_rng:
+            stack.enter_context(preserve_randomness())
+        for model in models:
+            stack.enter_context(inference_execution(model, preserve_rng=False))
+        yield

@@ -59,7 +59,10 @@ def describe_fields(config: dict, *, dataset_component=None) -> list[dict]:
 
 def describe_catalog(config, *, dataset_component=None) -> dict:
     """共享目录供预检和管理端消费。"""
+    from ai4e_core.applications.aero_cfd.infer.vtk_capability import describe_vtk_exports
+
     return {
         "fields": describe_fields(config, dataset_component=dataset_component),
         "metrics": metric_catalog(),
+        "vtk_exports": describe_vtk_exports(config, dataset_component=dataset_component),
     }

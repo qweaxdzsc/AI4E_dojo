@@ -17,7 +17,7 @@ def test_shared_identity_and_tampered_version(tmp_path):
     source = recipe(tmp_path)
     shared = task.register_shared(project, "datasets/demo", tmp_path / "raw", kind="dataset")
     first = task.new_task(project, "root", source=source)
-    assert first["assets"]["dataset.root"]["id"] == shared["id"]
+    assert first["assets"]["inputs.test.dataset"]["id"] == shared["id"]
     snapshot = project / "tasks" / first["id"] / ".dojo/snapshots/creation/config.yaml"
     snapshot.write_text("tampered: true")
     with pytest.raises(ValueError, match="snapshot_changed"):
@@ -31,14 +31,10 @@ def test_resume_uses_captured_code_and_keeps_version(tmp_path):
     script = source / "pipeline.py"
     script.write_text(
         script.read_text().replace(
-            'TrainingRun().report({"score": float(cfg.score)})',
-            'TrainingRun().checkpoint("latest", {"score": float(cfg.score)})\n    TrainingRun().report({"score": float(cfg.score)})',
+            'session.report({"score": float(cfg.score)})',
+            'TrainingRun().checkpoint("latest", {"score": float(cfg.score)})\n    session.report({"score": float(cfg.score)})',
         )
     )
-    entry = json.loads((source / "task-entry.json").read_text())
-    entry["resume_key"] = "train.resume"
-    entry["inputs"]["train.resume"] = "checkpoint"
-    (source / "task-entry.json").write_text(json.dumps(entry))
     first = task.new_task(project, "root", source=source)
     a = task.submit_run(project, first["id"])
     a = task.wait_run(project, a["id"])
@@ -77,14 +73,12 @@ def test_cli_and_incompatible_quantity(tmp_path):
     first = json.loads(result.stdout)
     a = task.submit_run(project, first["id"])
     a = task.wait_run(project, a["id"])
-    entry_path = project / "tasks" / first["id"] / "recipe/task-entry.json"
-    entry = json.loads(entry_path.read_text())
-    entry["metrics"][0]["quantity"]["unit"] = "Pa"
-    entry_path.write_text(json.dumps(entry))
+    script = project / "tasks" / first["id"] / "recipe/pipeline.py"
+    script.write_text(script.read_text().replace('"unit": "1"', '"unit": "Pa"'))
     b = task.submit_run(project, first["id"])
     b = task.wait_run(project, b["id"])
     assert (
-        task.compare_runs(project, a["id"], b["id"])["metrics"]["score"]["status"] == "incompatible"
+        task.compare_runs(project, a["id"], b["id"])["metrics"]["test/score"]["status"] == "incompatible"
     )
     assert len(task.get_lineage(project)) == 1
 
@@ -105,12 +99,14 @@ def test_declared_missing_comparison_condition_is_not_available(tmp_path):
     project = tmp_path / "p"
     task.create_project(project)
     source = recipe(tmp_path)
-    entry_path = source / "task-entry.json"
-    entry = json.loads(entry_path.read_text())
-    entry["metrics"][0]["quantity_config"] = {"sampling": ["trainprep", "sampling"]}
-    entry_path.write_text(json.dumps(entry))
+    # 未交付指标索引时，不用运行报告中的 score 冒充可比指标。
+    script = source / "pipeline.py"
+    text = script.read_text()
+    begin = text.index('    session.record_metric(')
+    end = text.index('\n\nif __name__', begin)
+    script.write_text(text[:begin] + text[end:])
     first = task.new_task(project, "missing-sampling", source=source)
     a = task.wait_run(project, task.submit_run(project, first["id"])["id"])
     b = task.wait_run(project, task.submit_run(project, first["id"])["id"])
     assert a["status"] == b["status"] == "succeeded"
-    assert task.compare_runs(project, a["id"], b["id"])["metrics"]["score"]["status"] == "missing"
+    assert task.compare_runs(project, a["id"], b["id"])["metrics"] == {}

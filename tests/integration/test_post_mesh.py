@@ -22,8 +22,8 @@ from ai4e_core.abilities.postproc.export.mesh import (
 )
 from ai4e_core.abilities.training.batch import to_device
 from ai4e_core.abilities.transform.coordinate_normalization import CoordinateNormalization
-from ai4e_core.applications.aero_cfd.post.mesh import prepare_fixed_inputs
-from ai4e_core.applications.aero_cfd.post.stage import restore_model
+from ai4e_core.applications.aero_cfd.infer.anchor_stage import restore_model
+from ai4e_core.applications.aero_cfd.infer.mesh import prepare_fixed_inputs
 from ai4e_core.applications.aero_cfd.train.resolve import apply_resolved
 from ai4e_core.applications.aero_cfd.trainprep.dataset import prepare_partition_sample
 from tests.integration.test_post_inference import _fit_then_post_config, _run_script
@@ -78,7 +78,7 @@ def test_coordinate_apply_can_skip_range_check():
     relaxed = transform.apply(outbound, check_range=False)
     same = CoordinateNormalization((0.0,), (1.0,), check_range=False).apply(outbound)
     torch.testing.assert_close(relaxed, same)
-    torch.testing.assert_close(relaxed[0, 0], torch.tensor(2000.0))
+    torch.testing.assert_close(relaxed[0, 0], torch.tensor(2.0))
 
 
 def test_full_mesh_query_writes_aligned_fields(tmp_path):

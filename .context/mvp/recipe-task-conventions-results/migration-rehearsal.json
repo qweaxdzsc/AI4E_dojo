@@ -1,0 +1,276 @@
+[
+  {
+    "project": "4753032f34914c339c311ea02cd4bcb5",
+    "task": "f9fca9f6c4414c17abae50f8713fd86b",
+    "original": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/4753032f34914c339c311ea02cd4bcb5/tasks/f9fca9f6c4414c17abae50f8713fd86b/recipe",
+    "before": {
+      "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+      "config.yaml": "dd9a35138e4d76b16df63dcacea6a7452f063638043b7fb5d70963f19fb8ffd9",
+      "configuration.py": "208575b085113900295223ebd5d494d48736844d73fa8ffd711ab840ae1f2017",
+      "pipeline.py": "c64f4315397f1e793ff236ffd27bc09623036847b4913e783d051458daa9def1",
+      "post.py": "2961ecd2bda5e6af01f0ba0b37ff584ad3399ea851b96409e901b5a78b3af05e",
+      "rawprep.py": "1d0999b7df6ed0e03e5ab39cc148c037d2bd9f38cae163bdf30f149ca1ba87a3",
+      "task-entry.json": "2f4bd88ca5c48edf47cec2237cd824b65ef5d1a1ec28bb105875021ee6578bc2",
+      "train.py": "3956237eca1242570db4b74e67156b3453e2c0ea28e839677a1be1de67f5cd91",
+      "trainprep.py": "f4874081717ab2a9bda0399aa111ec9dc6a69b4ff0a7f1049b8ce04987302052"
+    },
+    "training_observation": "kept disabled as original",
+    "status": "configuration_checked",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "pipeline.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-rehearsal/4753032f34914c339c311ea02cd4bcb5/f9fca9f6c4414c17abae50f8713fd86b/migration",
+    "requires_new_preparation": true,
+    "rollback": "byte_exact"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "5efda0a77ae94017a439a95da98b0df3",
+    "original": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/5efda0a77ae94017a439a95da98b0df3/recipe",
+    "before": {
+      "README.md": "d08c3d0c041007e649acf5f92d3bfff6ea09cbf412c59a81578fd48e2a95d4f4",
+      "config.yaml": "3be3dcbee4903c4dc9df9238070f0ae4dd75ca49f4e48330c59bb9945f88ac39",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "post.py": "b578c52e862b27ecd4a670d34336a6fd6cbf6a4f65942ce311a9a839e7da5e71",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "762f759b753fcebbb79d5a816970e287a888189c52b43ad9b03e1c399959a688",
+      "train.py": "5775d4f10dfd6353cf6b6df7c6a2345c6b6760878bbc87a92bcdd639324c25e9",
+      "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+    },
+    "status": "configuration_checked",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-rehearsal/f644f908bfde4eb4a5bea65ad97e457a/5efda0a77ae94017a439a95da98b0df3/migration",
+    "requires_new_preparation": true,
+    "rollback": "byte_exact"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "885aa4bad4c04f3da12441c0bd19a787",
+    "original": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/885aa4bad4c04f3da12441c0bd19a787/recipe",
+    "before": {
+      "README.md": "d08c3d0c041007e649acf5f92d3bfff6ea09cbf412c59a81578fd48e2a95d4f4",
+      "config.yaml": "3be3dcbee4903c4dc9df9238070f0ae4dd75ca49f4e48330c59bb9945f88ac39",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "post.py": "b578c52e862b27ecd4a670d34336a6fd6cbf6a4f65942ce311a9a839e7da5e71",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "762f759b753fcebbb79d5a816970e287a888189c52b43ad9b03e1c399959a688",
+      "train.py": "4b39c04f807cf6293196c2bb99b31946744541fa683021af0798238f1f444089",
+      "trainprep.py": "2e32fed9ddffa4d76d16776320646f5b1ebaa6958e18d5f38c9547bf9cc1dca8"
+    },
+    "status": "configuration_checked",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-rehearsal/f644f908bfde4eb4a5bea65ad97e457a/885aa4bad4c04f3da12441c0bd19a787/migration",
+    "requires_new_preparation": true,
+    "rollback": "byte_exact"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "9a9de296d0cd4d7398cd4b95de710264",
+    "original": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/9a9de296d0cd4d7398cd4b95de710264/recipe",
+    "before": {
+      "README.md": "d08c3d0c041007e649acf5f92d3bfff6ea09cbf412c59a81578fd48e2a95d4f4",
+      "config.yaml": "2cf96e793d3c96cc5ab9e42a735dfe6e8d02373664625ee60bc5395506f42693",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "post.py": "b578c52e862b27ecd4a670d34336a6fd6cbf6a4f65942ce311a9a839e7da5e71",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "762f759b753fcebbb79d5a816970e287a888189c52b43ad9b03e1c399959a688",
+      "train.py": "5775d4f10dfd6353cf6b6df7c6a2345c6b6760878bbc87a92bcdd639324c25e9",
+      "trainprep.py": "2e32fed9ddffa4d76d16776320646f5b1ebaa6958e18d5f38c9547bf9cc1dca8"
+    },
+    "status": "configuration_checked",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-rehearsal/f644f908bfde4eb4a5bea65ad97e457a/9a9de296d0cd4d7398cd4b95de710264/migration",
+    "requires_new_preparation": true,
+    "rollback": "byte_exact"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "9bb3729b7001425fa380adc9044c13ab",
+    "original": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/9bb3729b7001425fa380adc9044c13ab/recipe",
+    "before": {
+      "README.md": "d08c3d0c041007e649acf5f92d3bfff6ea09cbf412c59a81578fd48e2a95d4f4",
+      "config.yaml": "3be3dcbee4903c4dc9df9238070f0ae4dd75ca49f4e48330c59bb9945f88ac39",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "post.py": "b578c52e862b27ecd4a670d34336a6fd6cbf6a4f65942ce311a9a839e7da5e71",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "762f759b753fcebbb79d5a816970e287a888189c52b43ad9b03e1c399959a688",
+      "train.py": "9fbfda72c584fd7ae5fb297f8ed10d92d434162563258aa6a2d6a5f647819e06",
+      "trainprep.py": "2e32fed9ddffa4d76d16776320646f5b1ebaa6958e18d5f38c9547bf9cc1dca8"
+    },
+    "status": "configuration_checked",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-rehearsal/f644f908bfde4eb4a5bea65ad97e457a/9bb3729b7001425fa380adc9044c13ab/migration",
+    "requires_new_preparation": true,
+    "rollback": "byte_exact"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "9c1dac251856411d9091d8d1cc60bc3e",
+    "original": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/9c1dac251856411d9091d8d1cc60bc3e/recipe",
+    "before": {
+      "README.md": "9cef2dfdbc8d3c046ad56453b93b37746b7f912e012fa8bae1f07f2bea747a71",
+      "__pycache__/configuration.cpython-312.pyc": "f92d6905792d1fb7200bbcd72efc00dadc4b026a7694ac7e4768ad13be5a7584",
+      "__pycache__/pipeline.cpython-312.pyc": "ee4f70733eb30d3a6c63f783e499b827ca18d438eea1ea93320fdd8b9a0660f1",
+      "config.yaml": "358388c5782a10cab07b9e7bc0f000fbc4bd18906fece9dfc5230709f0285285",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "8ec280823e51e938d3239f775591f4025c1a3b59f69a8500fd90fa9058b172e7",
+      "pipeline.py": "151bbeaff76480c644a8d0a64ec0f2218fd80829b3e93d6aa7b1b95322654c8a",
+      "post.py": "229feb36cb17d4bfddedb9747a0dcc2752ff52eb5c3496bf424540dae8352bc0",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "65de1a4584f5101e8ddb826f56fedb2424270aba2d1e86f111296d1bc7fa232f",
+      "train.py": "bd65ce30d49afb8827827019db40a076c9ec556c4a90de9e58de73bef182772c",
+      "trainprep.py": "2e32fed9ddffa4d76d16776320646f5b1ebaa6958e18d5f38c9547bf9cc1dca8"
+    },
+    "training_observation": "kept disabled as original",
+    "status": "configuration_checked",
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-rehearsal/f644f908bfde4eb4a5bea65ad97e457a/9c1dac251856411d9091d8d1cc60bc3e/migration-v2",
+    "rollback": "byte_exact"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "da62c1c8f4114146a3b3b13a3967a114",
+    "original": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/da62c1c8f4114146a3b3b13a3967a114/recipe",
+    "before": {
+      "README.md": "d08c3d0c041007e649acf5f92d3bfff6ea09cbf412c59a81578fd48e2a95d4f4",
+      "config.yaml": "3be3dcbee4903c4dc9df9238070f0ae4dd75ca49f4e48330c59bb9945f88ac39",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "post.py": "b578c52e862b27ecd4a670d34336a6fd6cbf6a4f65942ce311a9a839e7da5e71",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "762f759b753fcebbb79d5a816970e287a888189c52b43ad9b03e1c399959a688",
+      "train.py": "5775d4f10dfd6353cf6b6df7c6a2345c6b6760878bbc87a92bcdd639324c25e9",
+      "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+    },
+    "status": "configuration_checked",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-rehearsal/f644f908bfde4eb4a5bea65ad97e457a/da62c1c8f4114146a3b3b13a3967a114/migration",
+    "requires_new_preparation": true,
+    "rollback": "byte_exact"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "e0086a31a4b04da0a466c295c44d6cd6",
+    "original": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/e0086a31a4b04da0a466c295c44d6cd6/recipe",
+    "before": {
+      "README.md": "d08c3d0c041007e649acf5f92d3bfff6ea09cbf412c59a81578fd48e2a95d4f4",
+      "config.yaml": "3be3dcbee4903c4dc9df9238070f0ae4dd75ca49f4e48330c59bb9945f88ac39",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "pipeline.py": "07a410bcfb0c94cb51fe2c0a84671d2a4c3550bfacfaec766d0fc470c3ba8811",
+      "post.py": "b578c52e862b27ecd4a670d34336a6fd6cbf6a4f65942ce311a9a839e7da5e71",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "762f759b753fcebbb79d5a816970e287a888189c52b43ad9b03e1c399959a688",
+      "train.py": "5775d4f10dfd6353cf6b6df7c6a2345c6b6760878bbc87a92bcdd639324c25e9",
+      "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+    },
+    "preserved_hook": "original audit hook prefix",
+    "status": "configuration_checked",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-rehearsal/f644f908bfde4eb4a5bea65ad97e457a/e0086a31a4b04da0a466c295c44d6cd6/migration",
+    "requires_new_preparation": true,
+    "rollback": "byte_exact"
+  },
+  {
+    "project": "f644f908bfde4eb4a5bea65ad97e457a",
+    "task": "f540a1f563f8419ba2adf8dbe47e1cb4",
+    "original": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/f540a1f563f8419ba2adf8dbe47e1cb4/recipe",
+    "before": {
+      "README.md": "d08c3d0c041007e649acf5f92d3bfff6ea09cbf412c59a81578fd48e2a95d4f4",
+      "config.yaml": "3be3dcbee4903c4dc9df9238070f0ae4dd75ca49f4e48330c59bb9945f88ac39",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "pipeline.py": "07a410bcfb0c94cb51fe2c0a84671d2a4c3550bfacfaec766d0fc470c3ba8811",
+      "post.py": "b578c52e862b27ecd4a670d34336a6fd6cbf6a4f65942ce311a9a839e7da5e71",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "762f759b753fcebbb79d5a816970e287a888189c52b43ad9b03e1c399959a688",
+      "train.py": "5775d4f10dfd6353cf6b6df7c6a2345c6b6760878bbc87a92bcdd639324c25e9",
+      "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+    },
+    "preserved_hook": "original audit hook prefix",
+    "status": "configuration_checked",
+    "changes": [
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "post.py",
+      "rawprep.py",
+      "task-entry.json",
+      "train.py",
+      "trainprep.py"
+    ],
+    "bundle": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-rehearsal/f644f908bfde4eb4a5bea65ad97e457a/f540a1f563f8419ba2adf8dbe47e1cb4/migration",
+    "requires_new_preparation": true,
+    "rollback": "byte_exact"
+  }
+]

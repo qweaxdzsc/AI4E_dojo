@@ -96,7 +96,29 @@ class DomainBlock(nn.Module):
         ).unbind(0)
         return rope(k, freqs=frequencies), v
 
-    def forward(self, x, frequencies, kv, condition):
+    def forward(
+        self,
+        x,
+        frequencies=None,
+        kv=None,
+        condition=None,
+        *,
+        kind=None,
+        geometry=None,
+        geometry_frequencies=None,
+        cache=None,
+    ):
+        """模块入口：字典走多域路径，张量走单域注意力，供 TorchVista 收成模块盒。"""
+        if isinstance(x, dict):
+            return self.forward_domains(
+                x,
+                frequencies,
+                kv,
+                kind=kind,
+                geometry=geometry,
+                geometry_frequencies=geometry_frequencies,
+                cache=cache,
+            )
         q = rope(self.heads_view(self.q(self.mod_q(self.norm_q(x), condition))), freqs=frequencies)
         value = F.scaled_dot_product_attention(q, *kv).transpose(1, 2).flatten(2)
         x = x + self.proj(value)

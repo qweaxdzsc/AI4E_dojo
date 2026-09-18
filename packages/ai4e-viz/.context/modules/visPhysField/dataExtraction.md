@@ -23,4 +23,4 @@
 | [`hooks/useDataExtraction.js`](../../../frontend/src/modules/visPhysField/modules/dataExtraction/hooks/useDataExtraction.js) | 通过一级 API/Provider 编排提取命令 |
 | [`components/DataExtractionPanel.jsx`](../../../frontend/src/modules/visPhysField/modules/dataExtraction/components/DataExtractionPanel.jsx) | 数据提取参数与结果面板 |
 
-测试：[`test_vis_phys_field.py`](../../../backend/tests/modules/test_vis_phys_field.py)、前端契约与 Trame E2E。
+测试：[`test_vis_phys_field.py`](../../../backend/tests/modules/test_vis_phys_field.py)、[`test_phys_plot_over_line.py`](../../../backend/tests/modules/test_phys_plot_over_line.py)、前端契约与 Trame E2E。工作台线段提取走一级 `commands.py` 的 `plot_over_line`、`extractionPanel.py` 与视口 Line Chart View。

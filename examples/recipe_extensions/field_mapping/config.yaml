@@ -1,30 +1,15 @@
 dataset:
-  root: /shared/raw/shapenet_car
-  manifest: null
   samples: all
-  partition: official
+  partitions: official
 pipeline:
   stages:
   - rawprep
   - trainprep
   - train
+  - infer
   - post
-# 本次生成的数据根目录；各分片/归一化/预测路径仍可独立覆盖。
 data_root: /shared/datasets/recipe_field_mapping
-# 运行配置、日志、检查点和报告目录；与输入和数据输出分开。
 run_root: /shared/runs/recipe_field_mapping
-paths:
-  datasets:
-    root: ${data_root}
-    train: ${data_root}/train
-    eval: ${data_root}/eval
-    test: ${data_root}/test
-    normalize:
-      root: ${data_root}/normalize
-      train: ${paths.datasets.normalize.root}/train
-      eval: ${paths.datasets.normalize.root}/eval
-      test: ${paths.datasets.normalize.root}/test
-    predictions: ${data_root}/predictions
 snapshot_modules:
 - ai4e_spec
 - ai4e_contrib
@@ -35,11 +20,9 @@ rawprep:
   fields:
     surface:
       pressure:
-        # 可安装模块全限定路径；按对应 example 的公开输入契约选择数据与模型。
         components: 1
     volume:
       velocity:
-        # 可安装模块全限定路径；按对应 example 的公开输入契约选择数据与模型。
         components: 3
   geometry:
   - nearest_vertex
@@ -74,7 +57,6 @@ rawprep:
     position_fields:
     - surface_position
     - volume_position
-  # 同时保留网格关联输出；false 仅按声明保存张量。
   vtkhdf: false
   speed:
     inputs:
@@ -83,7 +65,6 @@ rawprep:
       speed:
         name: volume_speed
         entity_like: volume.velocity
-        # 可安装模块全限定路径；按对应 example 的公开输入契约选择数据与模型。
         components: 1
         unit_from: volume.velocity
         state: physical
@@ -128,7 +109,6 @@ trainprep:
         method: identity
       volume_speed:
         method: zscore
-    # false 只冻结变换并按需应用；true 另写归一化数据，不覆盖物理数据。
     materialize: false
 model:
   parameters:
@@ -136,13 +116,11 @@ model:
     geometry_depth: 6
     num_heads: 3
     blocks: pscscscscsc
-    # 模型输入坐标空间的邻域半径；随冻结坐标变换定义，不猜测物理单位。
     radius: 9.0
     require_features: true
     num_domain_decoder_blocks:
       surface: 12
       volume: 12
-  initial_weights: null
   freeze: []
   data_specs:
     position_dim: 3
@@ -170,12 +148,9 @@ model:
     normalization: volume_velocity
     weight: 1.0
     loss: mse
-  # 训练准备登记的在线采样预算；实际取样发生在每轮读取样本时。
   sampling:
-    # global 沿共享随机流；independent 使用声明的独立采样流。
     random_stream: global
     pipeline_seed: null
-    # 可复现抽样与初始化种子；不保证不同设备之间逐值一致。
     seed: 42
     train_randomness: per_epoch
     evaluation_randomness: fixed
@@ -209,18 +184,13 @@ model:
           insufficient: error
 train:
   mode: fit
-  # 训练总轮数；恢复时仍表示总预算，不是追加轮数。
   max_epochs: 2
-  # 每次更新读取的样本数；当前物理五例固定为 1。
   batch_size: 1
-  # auto 按 CUDA/MPS/CPU 选择；点名设备不可用时失败。
   device: auto
   precision: fp32
   num_workers: 0
   optimizer: lion
-  # 优化器初始学习率；调度按下方预算逐步调整。
   learning_rate: 5.0e-05
-  # 参数衰减系数；实际参数分组策略由训练配置决定。
   weight_decay: 0.05
   betas:
   - 0.9
@@ -237,25 +207,60 @@ train:
   snapshot: true
   save_on_interrupt: true
   evaluation_split: test
-  # null 从头训练；已有完整检查点路径可恢复模型、优化器及随机状态。
-  resume: null
   log_every: 1
   log_every_updates: null
 post:
-  # global 沿共享随机流；independent 使用声明的独立采样流。
   random_stream: global
   split: test
   evaluate: true
   save_predictions: true
   export_vtk: true
-  # 新特征仅在已保存实体上有声明；任意网格查询须另外提供该特征。
   query: false
   sample_indices:
   - 0
-  # 完整网格查询单次处理的点数，控制峰值内存，不改变原实体身份。
   query_chunk_size: 16384
   overwrite: false
-# 可安装模块全限定路径；按对应 example 的公开输入契约选择数据与模型。
 components:
   dataset: ai4e_contrib.application.datasets.shapenet_car
   model: ai4e_contrib.ability.model.abupt.component
+  application: ai4e_contrib.application.aero_cfd.operations
+infer:
+  fields: null
+  metrics:
+  - relative_l2
+  - mae
+  - rmse
+  - max_abs_error
+  - r2
+  random_stream: global
+  split: test
+  evaluate: true
+  save_predictions: true
+  export_vtk: true
+  query: true
+  sample_indices:
+  - 0
+  query_chunk_size: 16384
+  overwrite: false
+  device: cpu
+  samples: []
+inputs:
+  rawprep:
+    source: /shared/raw/shapenet_car
+    manifest: null
+    train_h5: null
+    test_h5: null
+    connectivity_h5: null
+  trainprep:
+    partition: null
+    dataset: null
+    statistics: null
+  train:
+    preparation: null
+    resume: null
+    initial_weights: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null

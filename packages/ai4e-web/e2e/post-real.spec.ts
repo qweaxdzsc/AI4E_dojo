@@ -2,16 +2,15 @@ import {test,expect} from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
 const context=process.env.DOJO_POST_CONTEXT;
-test('真实CFD：目录、指标导出、追加与十次Tab保持',async({page,request})=>{
+test('真实CFD：目录、追加与十次Tab保持',async({page,request})=>{
  test.skip(!context,'需要已有CFD推理上下文；缺少时不声明真实验收');test.setTimeout(240000);
  const c=JSON.parse(fs.readFileSync(context!,'utf8')),base=`/api/v1/projects/${c.project}/tasks/${c.task}/post`,out=process.env.DOJO_POST_EVIDENCE!;
  fs.mkdirSync(out,{recursive:true});const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  const catalog=await (await request.get(base+'/results')).json();expect(catalog.items.length).toBeGreaterThanOrEqual(8);expect(catalog.batches.length).toBeGreaterThanOrEqual(2);
  await page.setViewportSize({width:1920,height:1080});await page.goto(`/projects/${c.project}/tasks/${c.task}/post`);
- await page.getByRole('button',{name:'计算指标',exact:true}).click();await expect(page.getByText(/计算完成 \d+\/\d+/)).toBeVisible({timeout:60000});
- await page.screenshot({path:path.join(out,'metrics-1920.png'),fullPage:true});
- await page.getByRole('button',{name:'导出 ▾'}).click();const downloaded=page.waitForEvent('download');await page.getByText('导出 CSV',{exact:true}).click();const download=await downloaded;await download.saveAs(path.join(out,'metrics.csv'));expect(fs.readFileSync(path.join(out,'metrics.csv'),'utf8')).toContain('relative_l2');
- await page.getByRole('tab',{name:'结果文件',exact:true}).click();await expect(page.locator('.artifact-file-table')).toBeVisible();
+ await expect(page.getByRole('tab',{name:'结果文件',exact:true})).toHaveAttribute('aria-selected','true');
+ await expect(page.getByRole('tab',{name:'指标',exact:true})).toHaveCount(0);
+ await expect(page.locator('.artifact-file-table')).toBeVisible();
  const meshes=catalog.files.filter((f:any)=>f.visualizable);expect(meshes.length).toBeGreaterThanOrEqual(2);
  await page.getByLabel('搜索结果文件').fill(meshes[0].name);await page.getByRole('button',{name:'预览 '+meshes[0].name,exact:true}).first().click();await expect(page.locator('.post-preview-canvas canvas')).toBeVisible({timeout:60000});
  await expect(page.locator('.post-result-tree .ant-spin-spinning')).toHaveCount(0);
@@ -28,14 +27,14 @@ test('真实CFD：目录、指标导出、追加与十次Tab保持',async({page,
  const cmd=async(command:any)=>{const response=await request.post(`/vis/api/phys/sessions/${sessionId}/commands`,{data:{context_id:params.get('context'),command}});expect(response.ok(),await response.text()).toBeTruthy();return response.json();};
  await inner.getByRole('button',{name:'切面',exact:true}).click();await inner.getByRole('textbox',{name:'原点 X',exact:true}).fill('0.125');await inner.getByRole('textbox',{name:'原点 X',exact:true}).press('Tab');
  await cmd({operation:'camera',direction:'+x'});const before=await cmd({operation:'snapshot'});expect(before.spec.sources).toHaveLength(1);
- for(let i=0;i<10;i++){await page.getByRole('tab',{name:'指标',exact:true}).click();await page.getByRole('tab',{name:'结果文件',exact:true}).click();await page.getByRole('tab',{name:'三维物理场可视化',exact:true}).click();}
+ for(let i=0;i<10;i++){await page.getByRole('tab',{name:'结果文件',exact:true}).click();await page.getByRole('tab',{name:'三维物理场可视化',exact:true}).click();}
  expect(await page.locator('.phys-host').getAttribute('data-session-id')).toBe(sessionId);expect(await frame.getAttribute('src')).toBe(src);const after=await cmd({operation:'snapshot'});expect(after.spec.views).toEqual(before.spec.views);expect(after.spec.pipeline).toEqual(before.spec.pipeline);
  await page.getByRole('tab',{name:'结果文件',exact:true}).click();await page.getByLabel('搜索结果文件').fill(meshes[1].name);const row=page.locator('.artifact-file-table tr').filter({has:page.getByRole('button',{name:'预览 '+meshes[1].name,exact:true})});await row.last().getByRole('button',{name:'可视化',exact:true}).click();await expect(page.locator('.phys-host iframe')).toBeVisible();const appended=await cmd({operation:'snapshot'});expect(appended.spec.sources.length).toBeGreaterThanOrEqual(2);expect(appended.spec.views[0].camera).toEqual(before.spec.views[0].camera);
  await expect(inner.getByRole('textbox',{name:'原点 X',exact:true})).toHaveValue('0.125');
  await page.screenshot({path:path.join(out,'trame-1440.png'),fullPage:true});
  // 隐藏页面后仍须收到周期心跳，不能依赖Tab点击来延长会话。
  const heartbeat=page.waitForResponse(r=>r.url().includes(`/sessions/${sessionId}/heartbeat`)&&r.ok(),{timeout:45000});
- await page.getByRole('tab',{name:'指标',exact:true}).click();await heartbeat;
+ await page.getByRole('tab',{name:'结果文件',exact:true}).click();await heartbeat;
  await page.getByRole('tab',{name:'三维物理场可视化',exact:true}).click();
  await expect(inner.getByRole('textbox',{name:'原点 X',exact:true})).toHaveValue('0.125');
  await inner.getByRole('button',{name:'文件',exact:true}).click();await inner.getByText('保存配置',{exact:true}).click();

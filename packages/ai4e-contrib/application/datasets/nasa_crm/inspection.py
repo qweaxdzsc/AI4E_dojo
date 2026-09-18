@@ -18,8 +18,12 @@ from .physical import physical_fields
 
 
 def inspect_dataset(config: dict) -> dict:
-    """检查真实 HDF5 字段与样本依赖，不读取整库数组。"""
-    raw = RawDataset(config["dataset"])
+    """检查真实 HDF5 字段与样本依赖；有 sample_scope 时用数据集自身分片。"""
+    settings = dict(config["dataset"])
+    scoped = config.get("sample_scope") is not None
+    if scoped:
+        settings["samples"] = "all"
+    raw = RawDataset(settings)
     partitions = choose_samples(raw.partitions, config.get("sample_scope"))
     topology = Path(config["dataset"]["connectivity_h5"])
     sources = [
@@ -130,4 +134,5 @@ def inspect_dataset(config: dict) -> dict:
         "inspection": {"scope": "all" if full else "representatives", "checked_samples": checked},
         "capabilities": {"formats": ["pt", "zarr"], "domains": ["surface"]},
         "profile": profile,
+        "sample_universe": "bound_dataset" if scoped else "task_declaration",
     }

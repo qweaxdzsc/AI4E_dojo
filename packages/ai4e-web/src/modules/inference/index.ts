@@ -7,4 +7,5 @@ export {
   source as inferenceSource,
 } from "./api";
 export { statusLabel as inferenceStatusLabel } from "./model";
+export { defaultInferenceBatchName, inferenceBatchLabel } from "./batchName";
 export type { Batch, Results, ResultFile } from "./model";

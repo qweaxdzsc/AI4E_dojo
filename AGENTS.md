@@ -1,78 +1,36 @@
-推理工作台升级（2026-09-15，两道专项验收通过）：跨分片选择按检查点×分片串行，权重单次固定；步骤状态以完整批次为准。物理量分量评价且保留完整向量；有效实体mask、轻量指标、九项评价、样本等权统计与CSV/XLSX贯通。新post只读固定结果，旧post兼容与模板指纹保留。1672×941关键区域最大误差2px（门槛4px），1440/1920、2000样本及状态截图通过；真实CFD两权重三分片、只评价/取消/中断/部分失败重试、固定数组重算、下载读回和Trame经正式8000/5173入口验收。CPU小模型2/1轮仅验证工程交接，不代表生产精度。文件—测试映射、实跑证据、两个未启用的真实换模用例及GPU范围见 `.context/mvp/inference-ui-acceptance.md`。
-
-平台数据集与数据准备页对齐（2026-09-15）：原始处理执行前填写 `dataset.processed_name`，页面预填来源标识不算已写入，检查/试跑/正式执行前才写入配置；正式成功后在工作区 `datasets/<name>/dataset.json` 登记名称、清单路径与摘要，张量仍留在产生它的任务数据目录；同名同摘要复用，同名不同内容拒绝，路径丢失或摘要变化标不可用；声明指纹不含 `rawprep.workers`，改并行线程可复用同名，真冲突返回中文说明。数据准备按平台名称选择并写入既有 `train.manifest`，同一清单只列一条且平台名称优先，不与任务历史重复可选；下拉按登记时间倒序，不自动勾最新；左栏复用产物树，右栏进度与叠加日志与原始处理同一套。原始处理不按 train/test 分片，只处理全部或指定样本；划分由数据准备完成。执行配置可改并行线程，写入 `rawprep.workers`，缺省 1、范围 1–64，每个线程处理不同样本。执行配置四个按钮点下后立刻带动同一条进度、日志状态和说明；操作说明只在开始时打一行普通日志，不钉在底部。执行日志默认只显示最近 500 行，更早行留在内存并向上滚动展开，自动滚动开关必须能停住或钉住最新行。PT/Zarr 可同时写出，旧 `rawprep.format` 单格式仍有效；VTKHDF 仅能力允许时显示，三个 ShapeNet 官方案例写 `rawprep.vtkhdf: true` 故新任务默认勾选，NASA 未接入不强开，已保存关闭不自动改写。归一化方法与统一空间分列，旧 `method: coordinate` 读成最小最大+统一空间且写出仍用原方法名。准备页可重划 train/test/eval：样本池为当前清单已处理的全部样本，默认显示原分片数量（缺的为 0），三者之和须等于总数，训练至少 1 个，test/eval 可为 0；抽取为保持原划分或随机，种子写入准备记录。官方 `partition.yaml` 原样保留，不重算张量；新划分是这次准备产物。无 `trainprep.split` 时保持物理清单原划分，只要求 train 非空，评估分片可空。圈定 `test_web_processed_datasets.py`（含倒序、缺时间回退、同清单去重）、`test_web_dataset_binding.py`、`test_web_rawprep.py`、`test_web_rawprep_handoff.py`、`test_web_stage_consistency.py`、`test_web_project_task.py`、`test_aero_cfd_documents.py`、`test_dataset_rawprep_descriptor.py`、`test_rawprep_manifest_configuration.py`、`test_rawprep_workers.py`、`test_recipe_configuration.py`、`test_train_recipe.py`、`test_trainprep_split.py`、`test_task_contracts.py` 与 `e2e/rawprep-consistency.spec.ts`、`e2e/execution-log.spec.ts`、`e2e/execution-monitor.spec.ts`、`e2e/stage-consistency.spec.ts`、`e2e/rawprep.spec.ts`。真实大数据交接仍按现有 `DOJO_*` 环境显式跑，缺数据 skip 不算平台资源验收通过。
-
-文件树按需加载（2026-09-15）：原始数据、数据准备和后处理结果文件共用同一棵树表。首次只列当前一层，点开再取子项；列举不哈希、不登记，预览/下载/加入三维时才按受控路径登记。后处理指标目录与文件树分开，默认指标页不拉结果树。圈定 `test_web_stage_consistency.py`、`test_web_post_results.py`、`test_task_post_results.py`、`test_task_post_metrics.py`、`test_web_dataset_binding.py` 与 `e2e/stage-files.spec.ts`、`post-files.spec.ts`、`post-ui.spec.ts`、`post-workspace.spec.ts`、`rawprep-consistency.spec.ts`。
-
-后处理三页签切片（2026-09-15）：默认指标、结果文件、三维物理场可视化。指标从固定预测/真值重算，core eval负责数值、post负责绑定，task管理独立评价运行，writer独占运行报告；评价数据和显式导出在任务data/post。文件树复用files公开组件，按层打开。三维会话按任务持有，Tab切换只隐藏，追加按固定来源去重，离开页面才回收；刷新仍需保存配置重开。轨道回写相机不重读网格、不整屏刷新；命名块按路径与修改时间缓存。连点切面只留一份未应用草稿，不嵌套、不重推整屏。对象树显隐只改已有 actor，不重建映射。不重跑推理、不新增任务版本。当前验收范围见 `.context/mvp/post-workspace-acceptance.md`。
-
-工作台步骤色与清单交接（2026-09-15）：已完成且非当前步骤用任务成功绿，当前步骤保持蓝；案例模板清单占位不当成已绑定失效来源，正式产物可落在项目、任务目录或已登记数据根；有正式清单未选择时提示先选且主执行不可用，不自动勾最新；摘要未返回前不闪「未运行」；数据准备执行日志与原始处理同一套完整面板。圈定 `test_web_stage_consistency.py`、`test_web_project_task.py`、`test_task_contracts.py` 与 `e2e/stage-consistency.spec.ts`、`task-dataset-binding.spec.ts`。
-
-独立推理实施完成（2026-09-14）：原子能力保留 `abilities/inference`，业务步骤位于 `applications/aero_cfd/infer`，外流新 recipe 显式串联 train → infer → post；新 post 只消费固定推理结果，旧 post 和36份已核验旧模板保持兼容，未知改动不自动放行。Task 固定checkpoint完整字节，同任务推理串行，输出各归子运行/数据目录，不创建任务版本。Web九步使用稳定slug，旧数字6→post、7→report保持。CORE38项、任务/服务/契约18项、旧profile11项、实际wheel和真实CPU 2份权重×2辆CFD车的下载/Trame交接通过；正式8000已更新，5173实际入口已核验。CPU小模型训练预算1样本、2/1轮，不代表生产精度；完整分项证据和跳过边界见 `.context/mvp/inference-acceptance.md`。以下历史验收保留当时范围。
-
-模型目录与导出（2026-09-15）：模型页只列 AB-UPT 与 Transolver-3；换官方模型按当前数据集套对应 example 默认值，ShapeNet 的 Transolver-3 另选表面/体场。导出只存项目内同数据集配置预设，不含权重。生成结构由后台取最近相容准备或正式清单，现行 version=2 准备按训练同一条消费链跟踪，模型页不再勾这两项，不回写训练绑定。新建任务案例名为「模型 · 数据集」，含体场起步项。模型采样跟随当前模型自己的字段：AB-UPT 为点/锚点/查询，Transolver-3 为种子/步长/分块/随机流，步长只读；切片数量在主干参数。损失不可配时仍展示固定 MSE 与目标行。换模整段替换，无采样键才隐藏。模型设置不展示权重加载。圈定 `test_web_stage_consistency.py`、`test_algorithm_platform_contract.py::test_model_sampling_capability_follows_component`、`test_task_configuration.py`、`test_web_dataset_binding.py`、`test_web_project_task.py`、`test_web_recipe_compatibility.py` 与 `model-picker`/`stage-consistency`/`task-dataset-binding`/`model-inspection` 浏览器用例。真实换模仍用 `DOJO_MODEL_PICKER_REAL=1`，证据见 `.context/mvp/model-picker-acceptance.md`。
-
-PI-BSNet 原案例迁移（2026-09-14，Neumann/Advection完整验收通过）：保留原参数导数、初始化与损失算术；实际Dojo分别5000轮/5000更新、2000轮/200000更新，平均相对L2为1.881%和10.427%。与同环境原函数全部权重、每轮损失和40个测试场逐值一致。75项圈定测试通过，含完整产物、恢复和真实wheel安装；梯形保留十实例，另外两例原算法切换范围待用户确认。入口tools/verification/pibsnet/source_dojo.py，报告工具source_migration_report.py，证据见.context/mvp/pibsnet-acceptance.md。
-
-PI-BSNet Neumann/Advection 独立六组测试（2026-09-14，完整预算完成）：用户批准同时测试源码与物理导数解释，Neumann交叉整轮/逐实例更新；完整预算后再决定迁移，本轮不改Dojo算法。入口 `tools/verification/pibsnet/neumann_advection_trials.py`；圈定 `test_pibsnet_neumann_advection_trials.py`，进度与未决项见 `.context/mvp/pibsnet-acceptance.md`。
-
-PI-BSNet梯形迁移（2026-09-14）：用户选定10实例、100×20×20、3000轮/PDE权重0.001，保留原Euler与参数样条数值行为。唯一梯形案例替换旧完整映射变体；旧数据/准备/检查点拒绝续用。Neumann/Advection本轮只审查，冲突须先确认。圈定 `test_pibsnet_trapezoid_alignment.py`、`test_pibsnet_trapezoid_acceptance.py`、生成/数值/训练/准备/安装/文档和post相关用例；正式结果见 `.context/mvp/pibsnet-acceptance.md`，不以单步对齐代替完整精度。
-
-历史 Web / Server 首期切片（被后续并行扩展范围取代）：React/TypeScript/Vite/Ant Design 与 FastAPI 已按 ADR 0004 初始化。仅原始处理开放真实执行，服务通过 task 原 submit_run 使用既有 recipe；该历史切片未改 recipe/core/contrib；当前批准范围以以下并行实施段为准。task 增加配置与管理公开操作；创建模板允许未绑定输入，执行仍严格检查。viz 增加独立文件预览进程，与原有静态比较共存。实际验收与未交付边界见 `.context/mvp/web-rawprep-acceptance.md`，不能用工程构建替代端到端验收。
-
-整合交互原型：`docs/prototypes/dojo-web-integrated.html`。沿用旧平台框架，内嵌第 2–7 步独立页面；项目页与第 1、8 步保留。单文件离线可打开，阶段配置按任务保留于当前会话，刷新重置；无真实计算或后端交接。验收：`tests/integration/web_integrated_browser.cjs`。
-
-交叉模型实施（2026-09-10）：唯一 aero_cfd recipe 的五个独立 example 使用共享物理工作流；物理 PT、模型准备和完整预测分开交接。NASA 无体场，单表面 AB-UPT 配置不能含跨域块。本期五组正式单轮实跑、固定五样本全点评价及报告已交付；范围与工具限制见 `.context/mvp/cross-model-acceptance.md`。圈定新增用例：test_physical_dataset_contract.py、test_model_preparation_contract.py、test_cross_model_recipe.py、test_cross_model_training.py、test_cross_model_comparison.py、test_comparison_visualization.py、test_cross_model_acceptance.py；同时覆盖原数据、模型、训练与 post 相关回归。viz 只依赖 spec，比较数据独立于运行目录。
-
 # AI4E_Dojo 开发入口
 
-PI-BSNet 论文参数差异验证（2026-09-14）：独立工具只按用户确认修改 Burgers 正对流/MSE、梯形10/50实例及100×20×20控制点、0.001物理权重，不改Dojo算法。样条、初边界和数据算子未决差异必须披露，不将参数验证称为完整论文复现。圈定 `test_pibsnet_paper_parameters.py`、`test_pibsnet_documents.py`；完整训练进度与证据见 `.context/mvp/pibsnet-acceptance.md`。
+历史进度原文见 [.context/history/development-updates-20260917.md](.context/history/development-updates-20260917.md)。研究任务先从 [.context/tasks/research.md](.context/tasks/research.md) 按需阅读；本页保留当前规则与授权边界。
 
-PI-BSNet 接入（2026-09-11，实施中）：参数化 PDE 共享模板和五个独立数据生成入口已加入。方程为 contrib 普通 PyTorch 函数，模型自带样条导数，core 不反向导入 contrib。物理约束已进入本专项，历史“物理约束未进”仅描述旧验收范围。正式训练、原仓库对照和未完成项见 `.context/mvp/pibsnet-acceptance.md`；不得以短训替代五案例精度验收。本期不改 Web/Server。
+当前仓库：七个正式包，外流 CFD、参数化 PDE、耦合物理场、控制轨迹与时空预测五类应用；可安装 AB-UPT、Transolver-3、PI-BSNet、GenCP（CNO/SiT-FNO）、SafeDiffCon 和 WDNO（基础预测缩小预算）。平台只开放已登记外流案例，生成式 PDE 走 Python。缺失产品功能不因架构整理自动实施。
 
-当前整合平台验收（2026-09-10）：整合 HTML 为唯一布局基准。已接入项目管理与第 2–7 步、双表面数据集/双模型、PT/Zarr、统一 Min-Max、模型采样迁移、真实 TorchVista、有限 VTK 管线。四组合完整目标网络短训及真实产物交接通过；最终浏览器18项通过，主面板尺寸对照通过，不承诺全部状态逐像素一致或生产精度。报告和批量未开放。三组分别负责算法、可视化、平台，主 Agent 维护公共契约及集成验收；实际规模、失败修复与证据见 `.context/mvp/web-integrated-acceptance.md`。
+历史数值验收按 `.context/mvp/` 原记录保留，当前入口不复制历史进度。全局架构唯一正文为 `docs/AI4E_Dojo_ARCHITECTURE (1).md`，本轮源码—功能—文档—测试核对及最终结果见 `.context/mvp/architecture-alignment-acceptance.md`。
 
-可视化入口：浏览器 visualization 微领域统一复用于文件、后处理与比较；server 通过独立 viz 进程读文件/转换，viz 不导入模型或 core。检查与预览支持 VTK 家族、HDF5/H5、PT、NPY 与 Zarr。模型跟踪走 task 独立检查与 core 公开门面。相机联动默认关闭，不做跨网格自动插值。统计参数不可手填，色标显示范围与归一化统计分开。
+## 注意事项
 
-首页入口验收纠正：阶段深链接和主面板尺寸测试不能证明首页可用。项目管理按整合原型提供卡片与进入项目，任务表明确进入工作台，侧栏整行可点且按路由高亮。新增 `packages/ai4e-web/e2e/home-entry.spec.ts` 从首页真实点击、创建任务、刷新/继续及归档失效验证；首页单独对照 1440/1920 两个视口。
+默认禁止 `uv sync`。不要为跑测试、改普通源码或“保险起见”重装环境。测试一律 `uv run --no-sync pytest <相关路径>`。
 
-案例驱动演进（2026-09-10）：优先接入新模型、数据集和科研案例，在真实研究中发现需求并打磨框架；不将框架比较中的优化建议自动视为实施任务或案例接入前置条件。能力比较与按案例触发的升级参考见 `docs/ai4s-framework-comparison.md`，文档验收入口为 `tests/integration/test_framework_comparison_document.py`。
+只有这两种情况才允许 sync / `--reinstall-package`：
 
-历史五段配置切片（入口写法已由显式步骤设计取代）：recipe 的 configuration.py 负责分组、默认展开和参数提取；rawprep.py 调用库原 datapre 方法。run 接收 config_loader 并冻结用户配置，业务参数不得覆盖快照，数据来源写 reports.dataset。相关新增测试为 test_recipe_configuration.py、test_run_config_snapshot.py、test_verification_config.py；范围与结果见 `.context/mvp/config-regroup-acceptance.md`。
+1. 刚改了 hatch `force-include` 包（spec / core / contrib / task / server / viz）。官方 8000 读的是 `.venv` 安装副本，不是 `packages/` 源码。
+2. 当前环境已确认被不含 visualization 的 sync 卸掉了工作台依赖（后处理报 `vis_service_start_failed`，缺 `trame` / `pandas`）。会话已 200、页面却是 Connection error，是 8000 缺 WebSocket 库（`uvicorn[standard]` / `websockets`），不是 Vis 没启动；包已在环境里时只重启 8000，不要再 sync。
 
-Transolver-3 双模型数值验收（2026-09-10）：共享 recipe 按组件选择锚点或逐点外流装配，NASA 身份为来源/分片/样本。真实 MPS 正式网络完整两轮、恢复、44 测试样本全部输出与参考逐元素对标通过，最大误差 0；参考恢复 RNG 设备交接修正已披露。旧公开配置兼容政策仍待确认，不宣称整体计划全部完成。范围、源码快照与证据见 `.context/mvp/transolver3-acceptance.md`。本切片相关用例：`uv run pytest tests/integration/test_aero_cfd_examples.py tests/integration/test_nasa_crm_data.py tests/integration/test_transolver_training.py tests/integration/test_transolver_post.py tests/integration/test_transolver_reference.py tests/integration/test_aero_cfd_documents.py`；新增选优恢复与通用归一化须联验既有 checkpoint、优化、post 与比较协议用例。
+允许重装时必须写成 `uv sync --group dev --group visualization --reinstall-package <包>`。禁止只跑 `uv sync --group dev` 或裸 `uv sync --reinstall-package …`：uv 按当前指定组对齐环境，会卸掉 Trame 工作台，官方 8000 再拉后处理就会失败。`dev` 已含 `ai4e-viz[workbench]`，默认组含 `dev` 与 `visualization`，不要再拆开。
 
-原始数据处理细节原型：`docs/prototypes/dojo-rawprep-detail.html`，文件浏览与字段输出计划分离，仅 UI 示意。相关检查：`uv run pytest tests/integration/test_web_design_documents.py` 与 `tests/integration/rawprep_detail_browser.cjs`（本地 Playwright）。
+正式 `8000` / `5173` 由用户控制。未获当次明确同意，不得对其 `uv sync --reinstall-package`、杀进程或重启。8000 无热重载，装新包后旧 Vis 子进程仍是旧代码，要等用户同意再重启 8000 或只回收其 Vis；只刷新 5173 不够。有 Web 消费链时，Agent 必须自己在用户实际 8000/5173 做正式冒烟；隔离 `7999` / `5172` 只能并行核对，不能替代。未重装受影响 force-include 包、未更新正式进程/Vis 会话时，正式 Web **验收不了**，工作停在未完成，必须当时申请授权，不得把「待发布」当交付结束。切步产物名单只确认文件还在与受控路径，不在列举时整文件核验检查点；恢复训练和提交推理仍核内容修订。
 
-原型 v3 按用户 UI 图调整，并映射 aero_cfd application/recipe：原始处理三栏、模板配置、执行范围和产物交接。仅 HTML 演示，仍保留已确认八步；不接后端、不执行真实计算。
+## 组件自由与稳定公开边界
 
-Task 本地切片（2026-09-09）：六类功能目录、项目、new/fork 正式版本、模板、shared/私有资产、本地执行及比较；运行归 tasks/<task_id>。实现与验收入口见 `.context/mvp/task-acceptance.md`。new/fork 才新增版本；编辑和 run 不新增版本，无草稿/发布/冻结流程。task 不使用 DDD。源码树与安装副本可能不同，验收须核对加载位置。
-
-
-框架正确性修正（2026-09-09）：设备为参数，沿用同一套训练与后处理；输入错误分项定位，样本/批次身份随异常保留。post-progress.json 记录评估、预测、网格各自状态及部分交付，失败不冒充完整成功。训练/后处理自动记录比较协议；缺证据的历史产物只可做契约核验。相关新增用例为 tests/integration/test_framework_correctness.py 与 test_comparison_protocol.py；与既有后处理、训练恢复及日志用例一起验收。实跑与边界见 .context/mvp/framework-correctness-acceptance.md。
-
-
-MPS 个人实验验收（2026-09-09）：复制 recipe 修改种子、学习率、权重衰减和锚点预算，889 样本、正式网络两轮、100 测试预测与两辆完整网格已全流程跑通。修复网格查询设备交接、MPS 随机状态保存/隔离及过时的旋转 CPU 回退。Noether MPS 重复训练自身不精确复现；严格数值一致尚未通过，不能沿用 CPU 对齐结论。详见 `.context/mvp/abupt-end-to-end-acceptance.md`。本切片相关测试：`uv run pytest tests/integration/test_train_checkpoint.py tests/integration/test_post_reference.py tests/integration/test_post_mesh.py tests/integration/test_post_inference.py tests/integration/test_model_evaluation.py tests/integration/test_abupt_recipe.py tests/integration/test_reference_arithmetic.py`；MPS 用例须在能访问真实 Apple GPU 的环境执行，skip 不算硬件验收。
-
-
-可点击线框原型：`docs/prototypes/dojo-web-wireframe.html`（左侧仅两个一级入口，项目六 Tab 位于主视区），仅示意项目六 Tab、八步工作台及比较／报告跳转；使用内存样例数据，无后端、无真实计算，刷新重置，不代表前端技术栈已选定。
-
-Web 平台设计草案（2026-09-09）：产品入口为项目管理与八步任务工作台；项目内含任务管理、版本树、版本比较、项目报告、文件管理和批量运行。产品稿见 `docs/PRD/ai4e-web/src/PRD.md`，Web / Server 架构 v2 见唯一架构文档第 19 节。一个任务对应一个版本，分别展示版本、来源、基线版本；运行尝试可多次，只有 new/fork 创建正式版本；工作目录可编辑，运行保留快照但不增加版本。task 保留研究管理与执行职责。上述为历史设计定位；当前栈与实现状态见 ADR 0004、0005 及整合平台验收。DOE、报告与批量仍不可据设计声明交付。
-
-当前端到端验收（2026-09-09）：默认 recipe 为 rawprep → trainprep → train → post。冻结变换组合、点场整理与分块查询归 abilities；aero_cfd application 负责业务绑定。独立 post 默认从配置种子沿 global 流采样，隔离锚点/网格两路；兼容张量包、点云与表面原始身份已对齐。实跑规模、数值证据及范围见 `.context/mvp/abupt-end-to-end-acceptance.md`。
-
-
-
-当前训练对齐切片：用户入口为 rawprep → trainprep → train。准备交付冻结数据摘要、归一化记录和采样/拼批声明；训练消费前校验。模型结构版本 3 修正 RMSNorm、绝对位置编码器、联合投影与初始化顺序，版本 2 权重不支持直接续训。完整官方等价性必须以 `.context/mvp/abupt-reference-acceptance.md` 的实际证据为准，不能用旧小模型验收替代。
-
-多域 AB-UPT 使用结构版本 3：命名域、字段、局部特征、全局/几何条件由有序声明确定；固定布局多样本、无梯度推理缓存与分块查询已实现。输入对齐以锁定 Noether 实际处理器生成夹具为依据，不承诺网络数值、训练轨迹或精度等价。当前验证结果见 `.context/mvp/abupt-multidomain-acceptance.md`。
-
-
-当前实施状态（2026-09-08）：已交付五类业务、归一化与采样、正式 AB-UPT、训练评估与轮次恢复、可选归一化物化及 VTKHDF/PT 关联、监督比较方法、训练闭环剩余对齐，以及 post 锚点推理（只恢复权重、test 集评估、逐样本保存、可选锚点点云）与完整网格回贴。训练设备默认按 CUDA/MPS/CPU 选择，找不到加速器时警告后回退 CPU；MPS 默认两轮复制案例已实测，范围与结果见 `.context/mvp/framework-correctness-acceptance.md`。物理约束未进。验收范围、逐项用例与执行结果以 `.context/mvp/abupt-acceptance.md` 为准；云图、报告及生产规模训练不在本期验收范围。
-
-AI4E_Dojo 是 AI4S/Engineering AI 研究框架。仓库已建立 uv workspace；另已交付普通 recipes、contrib 数据集适配、Dataset 按需执行、产物 manifest 和能力日志。除数据源下载、路径读取、VTK 家族/NPY 统一 VTK 内存适配、字段提取、有效点 mask、几何派生（点到最近顶点 / 点到网格表面 / 表面法向）、重合点标记与点数校验、具名场张量落盘与按对照表读回、外流 pre 单样本/批量编排与统计量、外流 train 选定 AB-UPT / 打开官方分片 / 按对照表读盘，并支持显式准备和正式训练、最小 Stage/Pipeline、run 开车与写入，以及 aero_cfd 案例前处理与训练准备入口、监督比较方法（均方误差、平均绝对误差、Huber、相对 L2）外，其余目录存在不代表功能已经实现。物理约束未进。
+- 不建立全仓统一组件协议。普通函数/对象自行定义输入输出，recipe 或局部连接负责转换，application 负责领域绑定；只有选用特定业务步骤才承担其实际调用约定。
+- 稳定门面为 `ai4e_core.run` 的 launch、stage、TrainingRun、execute_operation、managed_run。配置加载器显式传入，不在通用运行器解释外流、模型或 PDE 参数。可选 configuration_adapter 仅在显式托管上下文生效，退出恢复。
+- 不读取框架私有会话字典或跨层内部实现。新官方模板的配置转换及模型专属参数归 contrib/application；自由研究脚本不需要使用官方配置树。
+- 平台操作按任务声明调用；源码摘要用于来源记录，新增能力文件或编辑连接不以模板全文/AST 不同拒绝。缺 operations 的旧副本只复用创建来源已有声明，显式空声明不回填；不迁移历史任务目录。
+- 新外流 infer 负责预测，post 只读固定结果；历史公开导入保留薄门面，计算实现在 infer。组件中间值不强制 Artifact 化。
+- 改内部实现须运行固定用户源码基线及安装测试；不得同步修改基线摘要来通过测试。真正公开接口变更逐项记录参数、返回值、异常及迁移范围。
 
 ## 工作入口与阅读顺序
+
+模型集成使用仓库 skill [dojo-integrate-model](.agents/skills/dojo-integrate-model/SKILL.md)，完整标准见 [模型集成目标与验收原则](docs/model-integration-goals.md)。Codex 可调用 `$dojo-integrate-model`；其他 Agent 可直接阅读同一 SKILL.md。先阅读 Dojo 框架、模型原仓库与论文，数据集、明确指标、对应源码三项齐备才考虑集成；原代码按论文设置复现通过后才正式迁移。已有记录按证据续接，技能调用不扩大本次授权范围。 阶段交付按 skill 追加[改进日志](.context/model-integration-learning.md)，区分事实错误与流程候选；后续更新遵循 skill 的三个部分，不把个案方法自动变成通用要求。
 
 每次工作按以下顺序阅读，当前用户指令优先级最高：
 
@@ -95,17 +53,19 @@ PRD 是模块功能的长期文档，须记录现行行为、设计原因、使�
 
 ## 修改与验收纪律
 
-每次改动只针对本仓库，并遵守下面三条。未同时做到，不得视为完成。
+每次改动只针对本仓库，并遵守下面四条。未同时做到，不得视为完成。
 
 1. **上下游整条链一起看。** 改一处必须想清谁提供输入、谁消费输出、中间交接什么、失败时谁感知。至少核对：调用方、被调用方、契约/配置、缓存或产物、文档读者。不得只改局部、默认上下游自己适应。
 2. **同一改动必须带齐这些更新。** `AGENTS.md`（入口、边界或验收纪律受影响时）、`.context`、相关 PRD（按 `docs/PRD/README.md` 的模块目录补；没有则补上受影响模块的 PRD，不得只改代码）、以及测试用例。目录或职责变了还要按上面的索引维护纪律改模块索引。
-3. **用相关测试验收，不跑全仓冒充验收。** 先圈定本次改动影响到的用例并跑通，才算验收。不要用全量测试代替「先圈相关用例」。尚无对应测试则先补再跑。用 `uv run pytest <相关路径>`。未跑通相关用例不得验收。
+3. **用相关测试验收，不跑全仓冒充验收。** 先圈定本次改动影响到的用例并跑通，才算验收。不要用全量测试代替「先圈相关用例」。尚无对应测试则先补再跑。用 `uv run --no-sync pytest <相关路径>`，不要先 sync。未跑通相关用例不得验收。
+4. **有 Web 消费链则必须自己能在正式入口验收。** 源码测过、隔离 7999/5172 过了、标「待发布」都不算完成。官方 8000 读 `.venv` 安装副本；未按规定重装受影响 force-include 包并更新正式进程/Vis 时，正式 Web 根本验收不了。未获当次同意仍不得擅自重装/重启 8000/5173，但必须当时申请授权，工作停在未验收。细则见下文「发布与正式 Web 冒烟验收」。
 
 **重点：改配置树必须走完整交接链，不得只改案例 YAML 和眼前几个装配文件。** 漏核下游会引入静默误判，不是“改完眼前再补”。至少核到这三组：
 
 1. **加载与默认注入。** 配置加载、相对路径、从其他目录启动、`--set`、独立脚本和程序调用入口都要读新树；所有模型的默认采样/归一化必须写进新位置，禁止再注入旧顶层键。旧键拒绝须覆盖配置文件、`--set`、脚本和程序入口，并测新旧键同时存在。内部装配键（如 rawprep 的 `pre:`）与已废弃的案例阶段名不是一回事，禁止误拒绝。
 2. **对照与选择器。** 对照工具与 task 比较选择器必须指向新路径。已声明的比较条件取不到值就是不可比，禁止填 `None` 或空对象后仍判相同。缺键禁止 `get(..., {})` 静默回到默认种子或预算。对照脚本若加载案例模块、调用阶段函数，必须一起改，不能只改阶段字符串。
-3. **用户配置 ≠ 冻结产物。** 用户配置可以拒绝旧格式；历史准备产物能否消费、要不要重新准备、旧检查点能否续训，必须分开定义。冻结声明按业务语义提取，不得把收组后的整段配置直接当作准备一致性、续训或数值比较条件。已有历史证据文件保留原样。验收必须覆盖准备消费、轮次恢复、独立 post、归一化物化、task 资产与指标比较、其他模型工作流，以及实际 wheel 安装后的复制 recipe；不能只用几个 recipe 脚本测试代替。
+3. **用户配置 ≠ 冻结产物。** 用户配置可以拒绝旧格式；历史准备产物只判断能否导入平台使用（可读、现行 `version=2`、摘要完整），不得在选中后再拿冻结声明去挡当前平台或 core 参数。计算按当前平台页面与 core 模板组配置，冻结记录只提供清单、统计和物化场；字段角色、数据规格、采样方法、模型字典或组件来源不同也不能因此拒绝跟踪、开训或推理。模型页采样预算（几何 `max_points`、超节点点数、域锚点点数）不属于准备冻结：新 `preparation.json` 的 `declarations` 不得写入这些键。随机种子和训练批次同样不参与导入判断。`version=1` 旧物理准备仍须按现行数据准备重新生成；检查点仍核权重结构，dim/blocks 对不上拒绝恢复该检查点。每一步只校验自己的输入，不得用后一步默认值卡当前步。已有历史证据文件保留原样。验收必须覆盖准备导入、轮次恢复、独立 post、归一化物化、task 资产与指标比较、其他模型工作流，以及实际 wheel 安装后的复制 recipe；不能只用几个 recipe 脚本测试代替。
+4. **原始处理输入 / 处理配置 / 输出分开。** 输入是绑定数据集及其官方或自身分片，不因某次任务执行改写。页面只保存可见处理配置（字段、格式、workers、processed_name、全部或指定样本）。当次 run 或发布的样本名单只属于该次输出/历史，不得写回绑定源或下次 catalog/execute。`samples=all` 且页面未指定样本时读官方/自身分片，不吃任务里看不见的 `dataset.partitions` 子集。平台提交 ShapeNet 等非 NASA 案例时运行覆盖写 `unsplit`：产物不按官方 train/test 落盘，切分只在数据准备划分。准备记录固定带 train/test/eval 三个切片（空切片人数为 0）；训练设置选已准备数据集后再选其中切片，默认训练集；推理样本目录读这些切片，不回退源清单官方分片。`unsplit` 与 `official` 一样是分片模式名，配置加载不得把它展开成文件路径。页面上没有的键保存时不得改写。2026-09-18 正式 `5173→8000` 对照任务冒烟见 `.context/mvp/preparation-import-acceptance.md`。
 
 本切片相关验收入口：
 
@@ -118,11 +78,11 @@ uv run pytest tests/integration/test_train_formal_two_epoch.py
 
 ## 技术基线
 
-- Python 基线为 3.12；根 `pyproject.toml` 管理 uv workspace，成员为 `ai4e-spec`、`ai4e-core`、`ai4e-contrib`、`ai4e-task`。
+- Python 基线为 3.12；根 `pyproject.toml` 管理 uv workspace，成员以根 workspace 清单为准，含 spec/core/contrib/task/server/viz；Web 由 npm 管理。
 - `packages/` 下每个包只保留一层物理目录；根 `pyproject.toml` 必须把连字符目录显式映射为下划线 Python 导入名（如 `packages/ai4e-core/` → `ai4e_core`），不得重新创建内部同名目录。
 - 所有 Python、pytest、ruff、mypy 和 Sphinx 命令必须使用 `uv run`。
 - `ai4e-web` 使用 ADR 0004 已确定的 React/TypeScript/Vite/Ant Design；依赖只进入 package.json 与 package-lock.json。
-- 依赖只允许进入各生态的唯一清单；本阶段不得创建临时依赖文件。
+- 依赖只允许进入各生态的唯一清单；本阶段不得创建临时依赖文件。环境与 `uv sync` 纪律见上文「注意事项」。
 
 ## 包依赖边界
 
@@ -177,7 +137,7 @@ recipes      task        viz
 
 ## 验证纪律
 
-单次改动的验收以「修改与验收纪律」第 3 条为准：只跑相关用例。下面是仓库门禁，不是每次改动都要跑完全部：
+单次改动的验收以「修改与验收纪律」第 3 条为准：先圈定相关用例；架构全仓对齐需复跑全部新增/修改测试并集及必要回归，最终代码变更后重新跑受影响集合。skip、失败、缺环境不能计为通过。下面是仓库门禁，不是每次改动都要跑完全部：
 
 ```bash
 uv run pytest
@@ -203,9 +163,9 @@ Recipe 是研究者可阅读、可编辑、可扩展的流程正文。打开阶�
 - `ai4e-contrib/application/datasets` 提供可安装的 manifest/adapter，recipe 可 import 或复制修改；core 不依赖 contrib。
 - `${...}` 插值展开后按配置文件解析路径；数据根、各分片、normalize 路径和运行根独立可配。
 - 原始 manifest 描述来源；产物 manifest 描述本次成功交付。统计默认仅用本次完整训练分片。覆盖开始撤下旧完整清单；部分失败不得继续发布完整清单。
-- recipe 阶段日志使用 `[阶段/能力/事件]`（如 `[datapre/数据集/选择结果]`）；运行入口设置并恢复阶段上下文，原子能力不感知 recipe，后台心跳显式继承阶段与样本身份。阶段边界使用 `[datapre/阶段/开始]`；整体运行及无阶段的独立调用不强加阶段前缀。writer 统一写入并按事件元信息筛选控制台摘要。
+- recipe 阶段日志使用 `[阶段/能力/事件]`（如 `[rawprep/数据集/选择结果]`）；运行入口设置并恢复阶段上下文，原子能力不感知 recipe，后台心跳显式继承阶段与样本身份。阶段边界使用 `[rawprep/阶段/开始]`；整体运行及无阶段的独立调用不强加阶段前缀。循环原子默认 debug，整轮只保留阶段/批量摘要与稀疏进度；失败仍为错误。writer 统一写入并按事件元信息筛选控制台摘要，默认不写 debug。
 - inputs 只保存一份最终生效 config.yaml；日志包含能力/工作流开始结束与长任务进度，不倾倒配置、数组和整批结果。
-- 归一化正反变换、冻结记录与可选物化已实现；prepare/fit 对物理输入必须显式 execute=true。正式网络小规模拟合与恢复已验收，复制案例短训与恢复已验收，生产规模训练不在本期范围。训练设备默认 `auto`，无加速器时警告后继续用 CPU，MPS 的邻域检索和复数旋转显式经 CPU。
+- 归一化正反变换、冻结记录与可选物化已实现；prepare/fit 对物理输入必须显式 execute=true。正式网络小规模拟合与恢复已验收，复制案例短训与恢复已验收，生产规模训练不在本期范围。训练设备默认 `auto`，无加速器时警告后继续用 CPU，MPS 的邻域检索显式经 CPU，复数旋转保持原设备。
 - PRD 增加 `docs/PRD/recipes/{案例}/PRD.md` 作为非安装模板集合的对应位置。
 
 ## Task 本地切片验收
@@ -233,6 +193,14 @@ npm run --prefix packages/ai4e-web test:e2e
 
 用户指定后续训练相关文件统一放在 `/Users/zonghui/work/project_simulation/`；Dojo 使用其下 `dojo_train/`。新建实验时显式将运行、检查点、预测、比较报告及本次产生的数据/准备产物写入 `dojo_train/<实验名>/`，相关工具缓存也放在 dojo_train 下，不再新建到 `/private/tmp`。使用明确的 run_root、数据输出与缓存路径实现，不将本机绝对路径硬编码进可移植框架默认值。已有输入数据与历史冻结记录不批量改写；旧 tmp 位置的兼容符号链接仅用于历史引用，新配置直接使用真实目录。
 
+## 本机正式入口与 Agent 测试端口（2026-09-16）
+
+`8000`（API）与 `5173`（Vite）由用户自己启动、停止和重启，供用户并行测试。Agent 不得 kill、重启、改绑或占用这两个端口；未获当次明确同意，也不得对正在使用的正式环境执行会打断服务的 `uv sync --reinstall-package`。用户未说「重启 8000 / 5173」时，即使改了 Python 包也不自动重启正式入口。没有授权时正式冒烟做不了，交付只能停在未验收，必须当场申请，不能默认为结束。
+
+Agent 需要本机另起服务核对时只用 `7999`（API）和 `5172`（前端），独立进程、独立端口，不代理、不覆盖正式入口。前端 HMR 只作用于用户自己的 5173；8000 无热重载，装新包或重装 force-include 包不会更新已运行的正式进程，旧 Vis 子进程仍是旧代码。正式入口的后处理依赖纪律见上文「注意事项」。
+
+圈定 pytest / e2e 默认仍用夹具，不依赖 8000/5173。隔离 7999/5172 的证据只证明隔离入口，**不能替代** Agent 自己在正式 8000/5173 上的冒烟。有 Web 消费链时，验收步骤就是在用户实际入口操作，不是占用端口写隔离记录后收工。
+
 
 整合平台圈定验证：主 Agent 使用 `uv run pytest tests/integration/test_web_integrated_pipeline.py tests/integration/test_web_platform_operations.py tests/integration/test_web_project_task.py tests/integration/test_web_research_records.py tests/integration/test_web_runtime.py tests/integration/test_web_architecture.py tests/integration/test_web_design_documents.py tests/integration/test_task_configuration.py tests/integration/test_task_execution.py tests/integration/test_task_contracts.py`。文件交接另圈 `test_web_rawprep.py`、`test_web_recipe_compatibility.py`、`test_web_rawprep_handoff.py`、`test_viz_file_preview.py`、`test_viz_pipeline.py`、`test_viz_extended.py`。真实四组合、模型大小、样本预算与浏览器证据统一见整合验收记录；不以少样本正式网络短训声明生产规模精度。
 
@@ -241,6 +209,14 @@ npm run --prefix packages/ai4e-web test:e2e
 PI-BSNet 文献参数验证：参考配置不得额外加入原目标没有的初值/周期罚项；完整 PDE 网格包含初边界。论文优先、源码补缺，不调参掩盖精度失败。新增圈定 `test_pibsnet_physical_reference.py`、`test_pibsnet_reference_protocol.py`，当前 Neumann 精度失败及正式运行见 `.context/mvp/pibsnet-acceptance.md`。
 
 平台一致性切片（2026-09-14，圈定验收通过）：任务表与工作台共用真实阶段摘要；检查、试跑、执行和结构生成先保存修订，固定绑定保存在原配置。阶段文件限定清单/运行，PT/Zarr互斥、VTKHDF独立附加；导航不推断完成。数据准备字段按模型 `data_specs` 与物理清单下拉匹配并校验张量形状。圈定 `test_web_stage_consistency.py`、`test_web_platform_operations.py`、`test_web_binding_real.py`、`test_web_rawprep_handoff.py` 与受影响项目、配置、运行、资产、架构及文档测试；浏览器圈定 `stage-consistency`、`stage-files`、`rawprep-consistency`、`prototype-consistency`、`execution-monitor` 及首页/任务绑定回归。当前证据见 `.context/mvp/web-integrated-results/ui-consistency/`，夹具不算真实数值交接。
+
+模型设置进页（2026-09-17）：已保存参数随配置先出，不必等候选列表；`model-options` 只读官方 YAML 与预设目录，点选再描述目标默认值与能力，同任务短时复用。不把结构跟踪或全量核验准备产物当作列出下拉的前提。圈定 `test_web_stage_consistency.py`、`packages/ai4e-web/e2e/model-picker.spec.ts`。改 `ai4e-server` 后须重装该包，正式 8000 才出快目录。
+
+模型设置两档结构图（2026-09-18）：可视化模块按官方 TorchVista 参数一次写出阶段主干与阶段压缩块；网络公开编码器/几何块/物理块/解码/读出时，先按这些子模块收成阶段盒再出图，不跟踪正式 predict 里的校验算子。检查进程在案例检查取出网络后引用 viz 出图，core 不写 HTML、不设看图参数。页面两按钮切换已发布档，生成或载入时视窗只显示加载样式；历史单图不假切换。圈定 `tests/integration/test_algorithm_platform_contract.py`、`tests/integration/test_viz_model_graph.py`、`packages/ai4e-web/e2e/model-inspection.spec.ts`。2026-09-18 15:08 按当次授权重装 `ai4e-viz` 并只重启 8000（PID **5784**，5173 未动）；对照任务重新生成后阶段主干 17 节点与 E 一致，阶段压缩块见 encoder/物理块与 REPEAT，无 isfinite。证据 `.context/mvp/model-picker-acceptance.md`。
+
+推理 VTK 与后处理对照（2026-09-17）：平台推理默认写出 VTK（锚点场名 `.prediction`/`.truth`，完整网格 `pred_`/`gt_`）；用户关闭导出须在清单、日志和页面写明原因。缺拓扑或点数对不上则该样本失败，原因进清单，整批不冒充全部成功。后处理结果文件并列平台数据集、训练 run 与推理批次，样本 ID 用 `param1/<设计号>`。圈定 `test_infer_vtk_identity.py`、`test_infer_stage.py`、`test_task_post_results.py`、`test_post_mesh.py`、`e2e/post-files.spec.ts`。正式 8000 须重装 `ai4e-core`/`ai4e-server`/`ai4e-contrib`/`ai4e-task` 并重启后才生效。源码圈定 133 项通过、2 项跳过，e2e 29 项通过。2026-09-17 23:50 已按当次授权重装并只重启 8000（PID 33633，5173 未动）；对照任务五页冒烟通过：全部 889、准备可见归一化副本、模型参数先出且点数不挡检查、推理仍报权重结构、后处理三根与「未写出VTK」。新默认网格因结构不对未新跑，历史关网格批次不回写。证据 `.context/mvp/post-workspace-acceptance.md`。
+
+推理点云与网格化导出拆分（2026-09-18）：ability 只提供通用 VTK 写出与拓扑种类；application 按数据集适配 VTK/VTKHDF/连接关系，并判断网格化能否还原；recipe 只调用 application。页面两项为「导出点云数据」「导出VTK网格化数据」，默认勾选且含真值。置灰只认来源文件名或已绑定连接关系路径，不认空槽位或原始处理 VTKHDF 输出开关。样本接口必须带 `vtk_exports`，服务列样本不得丢掉；页面缺该字段按不可用。旧键/新键只在契约包解释一份，HTTP 未写的新键不得先填成开。圈定 `tests/integration/test_infer_vtk_exports.py`、`test_web_inference.py`、`test_infer_compatibility.py`、`test_infer_vtk_identity.py`、`test_infer_stage.py`、`packages/ai4e-web/e2e/inference-layout.spec.ts`。正式 8000 须重装 `ai4e-spec`/`ai4e-core`/`ai4e-server` 并只重启 8000 后才验收。
 
 
 ## 独立可视化应用迁移（2026-09-14）
@@ -255,14 +231,55 @@ Vis迁移验收（2026-09-14）：原393份治理/源码/资源按清单迁入�
 
 ## 数据集声明驱动原始处理（2026-09-14）
 
-历史任务兼容：页面映射比较代码语法与已核验版本；格式/注释不阻断，已知旧配置加载入口消费完整有效默认值。逻辑/入口变化继续拒绝并列出文件。圈定 `test_web_recipe_compatibility.py`、`test_web_rawprep.py`、`test_web_architecture.py`，旧任务脚本与创建快照不自动替换。
+历史任务兼容：页面映射比较代码语法与已核验版本；格式/注释不阻断，已知旧配置加载入口消费完整有效默认值。逻辑/入口变化继续拒绝并列出文件。冻结任务未声明 `operations.inspect` 时回落现行平台检查入口，不改写 `task-entry.json`。圈定 `test_web_recipe_compatibility.py`、`test_web_rawprep.py`、`test_web_architecture.py`，旧任务脚本与创建快照不自动替换。
 
 ShapeNet-Car/NASA 的 manifest 提供默认处理参数、字段与绑定槽位；Web 展示生效配置并按样本执行，文件浏览不再决定新入口的执行范围。描述和校验经 task 独立检查，server 不导入数据集；旧文件请求、容器和历史产物分别兼容。新输出为逐场张量且清单记录实际布局，缺失字段不能冒充可训练。验收见 `.context/mvp/manifest-rawprep-acceptance.md`；圈定新 descriptor/configuration/catalog/selection 用例及真实 `test_manifest_rawprep_real.py`、`manifest-rawprep-real.spec.ts`，同时回归 recipe、扩展、安装、配置、绑定、物理读盘与恢复。真实数据用例不接受 skip 作为通过。
 
-三维对象工作台（2026-09-14）：Trame 基于用户确认布局重构；导入自动创建纯色基础显示，着色是对象属性，不预建压力/温度节点。计算参数应用后生效，显示设置即时更新；物理配置版本 2 的旧版适配不重写历史修订。流线可选线段/球体/平面/命名面起点，应用后显示不可拖的种子；切面与剖切选中时用可视平面三向拖动和轴对齐，拖动只预览、应用才切开。验收入口为 `.context/mvp/phys-workbench-acceptance.md`、`test_phys_objects.py`、`viz_objects_browser.cjs`，不以旧界面浏览器记录替代新工作台验收。 真实 ShapeNet/NASA 表面结果补充验收与裁剪面/Probe/CSV 修复见同一记录；新增入口 `viz_real_results_browser.cjs`，不以静态表面结果声明生产体场时序或并发性能。
+三维对象工作台（2026-09-14）：Trame 基于用户确认布局重构；导入自动创建纯色基础显示，着色是对象属性，不预建压力/温度节点。计算参数应用后生效，显示设置即时更新；物理配置版本 2 的旧版适配不重写历史修订。流线可选线段/球体/平面/命名面起点，本期暂时不做拖种子，应用后可用「显示种子」隐藏；显示可选线或圆管；切面与剖切选中时用可视平面三向拖动和轴对齐，拖动只预览、应用才切开。验收入口为 `.context/mvp/phys-workbench-acceptance.md`、`test_phys_objects.py`、`viz_objects_browser.cjs`，不以旧界面浏览器记录替代新工作台验收。 真实 ShapeNet/NASA 表面结果补充验收与裁剪面/Probe/CSV 修复见同一记录；新增入口 `viz_real_results_browser.cjs`，不以静态表面结果声明生产体场时序或并发性能。
 
 三维参考图样式校正：圈定 `tests/integration/viz_visual_browser.cjs` 的真实四尺寸截图，并联验 `viz_objects_browser.cjs`、`viz_real_results_browser.cjs`；视觉与物理计算分别验收，记录见 `.context/mvp/phys-workbench-acceptance.md`。
 
 Web服务响应错误回归：`packages/ai4e-web/e2e/http-errors.spec.ts` 圈定空代理响应、网络断开、业务detail、无效成功正文与204；不得用空数组掩盖服务失败。恢复原平台后另以真实项目列表验证。
 
-平台默认三维入口修正（2026-09-14）：网格文件预览和后处理直接打开 Trame，已有旧场景显式兼容。任务上下文自动带入，未选结果允许空工作台内导入；关闭预览和平台路由退出释放所属会话，迟到响应也须回收。网格预览弹窗默认加高，可放大到视口全屏；放大后对象树、属性和三维窗口须露出，属性框可滚动。后处理三维页保持 820px 独立滚动窗口，嵌套 iframe 贴合该窗口，不能只剩工具条和白底，页面可向下滚动。原始处理字段提取按每个 `.pt` 一张卡片，对话框只勾选一个物理量或坐标；再点执行立刻清掉完成态和进度条，日志同页叠加。圈定 `packages/ai4e-web/e2e/trame-entry.spec.ts`、`preview-dialog.spec.ts`、`rawprep.spec.ts`、`rawprep-consistency.spec.ts`、`manifest-rawprep-real.spec.ts`、`http-errors.spec.ts` 与 `tests/integration/test_viz_host_bindings.py`；真实项目/任务环境变量缺失导致 skip 不算实际入口验收。证据见 `.context/mvp/phys-workbench-acceptance.md`。
+平台默认三维入口修正（2026-09-14）：网格文件预览和后处理直接打开 Trame，已有旧场景显式兼容。任务上下文自动带入，未选结果允许空工作台内导入；关闭预览和平台路由退出释放所属会话，迟到响应也须回收。网格预览弹窗默认加高，可放大到视口全屏；放大后对象树、属性和三维窗口须露出，属性框可滚动。后处理三维页相对原 820px 至少加高 40% 并尽量铺满剩余视口，嵌套 iframe 贴合该窗口，不能只剩工具条和白底，页面可向下滚动。宿主不再放「打开已保存配置」下拉。原始处理字段提取按每个 `.pt` 一张卡片，对话框只勾选一个物理量或坐标；再点执行立刻清掉完成态和进度条，日志同页叠加。圈定 `packages/ai4e-web/e2e/trame-entry.spec.ts`、`preview-dialog.spec.ts`、`rawprep.spec.ts`、`rawprep-consistency.spec.ts`、`manifest-rawprep-real.spec.ts`、`http-errors.spec.ts` 与 `tests/integration/test_viz_host_bindings.py`；真实项目/任务环境变量缺失导致 skip 不算实际入口验收。证据见 `.context/mvp/phys-workbench-acceptance.md`。
+
+案例驱动的架构比较参考：`docs/ai4s-framework-comparison.md`；比较建议仍须由真实案例需求触发，不能当成已交付能力。
+
+## GenCP 代码接入（2026-09-16，缩小验收完成）
+
+新增 core coupled_physics 领域、contrib GenCP 模型/条件能力及可复制 recipe，不涉及平台登记。每场独立训练、writer namespace 检查点、固定权重组与异形时空数组交接；旧检查点默认路径兼容。三套数据×两骨干各场 1,000 次更新通过缩小对照，含准备/重试和共享验证预留的最长组合 113.42 分钟；107 项相关测试通过，含实际 wheel 外部复制、条件替换、派生输出和单场重训重新组合。不能把缩小实验工程一致称论文复现。圈定 `test_gencp*.py`、能力文档、训练/检查点、推理随机状态、固定用户 API 和实际安装；证据与未验边界见 `.context/mvp/gencp-acceptance.md`。
+
+
+工作台色标、Probe 与视图联动（2026-09-17）：色标入口在属性「显示设置」图标，弹层带对象名和「应用」，只写当前选中对象；Probe 点选只留一个开关；加号菜单贴按钮；点窗切活跃并刷新左侧眼睛；折线图树只列线段提取；去掉取样物理量。圈定 `test_phys_display_settings.py`、`test_phys_interaction.py`、`test_phys_display_updates.py`、`test_phys_plot_over_line.py`、`test_phys_views.py` 与前端 `interaction.test.js`。色标下移后须再重装并换 Vis 才能在正式入口看到。证据见 `.context/mvp/phys-workbench-acceptance.md`。
+
+Surface LIC 远程交接防崩（2026-09-17）：选 Surface LIC 先出远程静帧再开拖转；无向量、建图或第一帧失败只提示并回退，不切半套远程、不弄死会话。圈定 `test_phys_display_settings.py`、`test_phys_display_updates.py`、`test_phys_views.py` 与前端 `interaction.test.js`。18:42 已重装并换 Vis，正式后处理三维页点 LIC 后会话仍在，缺向量只提示。证据见 `.context/mvp/phys-workbench-acceptance.md`。
+
+Probe 点选拾取可见开关（2026-09-17）：Probe 属性「点选拾取」开/关；开着点模型出球、应用出表，关着不拾取。切到其他工具开关回到关。圈定 `test_phys_interaction.py`。已重装 `ai4e-viz`，正式 8000/5173 须用户重启后才能冒烟。
+
+三维工作台十二项优化（2026-09-17）：切面命中才锁相机且不挡缩放，色标入口改到右上角弹窗，矢量只留固定/物理量两档，等高线界面无自定义等值。圈定 `test_phys_display_settings.py`、`test_phys_filters.py`、`test_phys_interaction.py`、`test_phys_views.py` 与前端 `interaction.test.js`。正式8000/5173不自动更新。
+
+三维工作台十一项增强（2026-09-17）：Surface LIC 仅该项走服务端出图；切面默认皱折、可选三角化，剖切提供皱折；流线本期暂时不做拖种子、应用后用「显示种子」隐藏，显示可选线或圆管；本地坐标轴在轨道中实时跟转；导入在任务产物/共享数据/数据根内选网格；等值滑条可越界手填；色标允许最小等于最大；Probe 即刻出球、应用后出表；分析图标缩小并增加线段提取。圈定 `test_phys_display_settings.py`、`test_phys_filters.py`、`test_phys_interaction.py`、`test_phys_views.py`、`test_phys_objects.py`、`test_phys_plot_over_line.py`、`test_viz_host_bindings.py` 与前端 `interaction.test.js`。正式 8000/5173 须当次同意。证据见 `.context/mvp/phys-workbench-acceptance.md`。
+
+三维交互与对象隔离（2026-09-16）：新对象计算和显示草稿一起提交；辅助平面独立显隐，三轴平移与三轴旋转仅命中手柄启动；删除局部清理不重建背景和相机。种子和Probe有候选预览，等高线支持自动分层，同标量等值面保留生成标量。圈定 `test_phys_interaction.py`、`test_phys_objects.py`、`test_phys_display_updates.py`、`test_phys_filters.py`、配置/存储用例与 `viz_interaction_browser.cjs`；最终范围见根 `.context/mvp/phys-workbench-acceptance.md`，正式8000/5173不自动更新。
+
+着色与显示设置（2026-09-16）：属性计算/显示均应用后生效，顶部快捷操作只提交自身字段；映射器更新必须显式替换输入，不能以标量可见或色标变化代替模型像素验收。色标、范围和背景可保存，透明PNG/序列读回校验alpha。圈定 `test_phys_display_settings.py`、显示/对象/过滤器/配置/存储用例及真实本地、远程与宿主浏览器；源码、隔离安装、正式发布分别记录，正式8000/5173不自动更新。
+
+
+## 发布与正式 Web 冒烟验收（硬规则）
+
+- 每份实施计划必须把「发布到实际使用入口」与「Agent 自己做正式 Web 冒烟」写成两项独立硬验收，写明目标地址、受影响功能、发布方式、回退方式与证据位置。纯文档或没有 Web 消费链的改动可写不适用，但须说明理由；有 Web 消费链的后端、Vis 改动不能免。
+- Agent 必须自己在用户实际 5173→8000 做正式冒烟。源码测过、隔离 7999/5172 过了、接口 200、构建成功、隔离截图、标「待发布」都**不是**验收完成。
+- 官方 8000 读 `.venv` 安装副本，不是 `packages/`。未对受影响 force-include 包执行规定的 `uv sync --group dev --group visualization --reinstall-package <包>`，正式 Web **验收不了**。8000 无热重载；改 `ai4e-viz` 还须回收/重启后旧 Vis 子进程才换新代码。只刷新 5173 不够。
+- 开始先确认用户实际入口、安装路径和运行版本；交付前逐层核对源码/构建 → 安装副本 → 运行进程/旧会话 → 浏览器加载资源。源码、隔离安装与正式生效分别记录，不能互相替代。
+- 获得授权并完成发布后，Agent 从用户实际 Web 入口进入受影响页面、实际操作每项改动、核对可见结果及错误反馈；涉及保存则保存后重开，涉及导出则下载读回。
+- 验收记录须含时间、入口 URL、部署版本或文件摘要、运行进程/会话身份、逐项操作和结果、截图及必要日志；每项明确通过、失败或未验证。不得沿用旧版本截图证明新版生效。
+- 正式 8000/5173 的安装、重启或会话回收仍须本次用户授权；已有明确授权不重复询问。此规则本身不构成今后发布的长期授权。没有授权时先完成可审阅发布准备，**当时就申请授权**；在重装+进程/Vis 更新+Agent 正式冒烟完成之前，状态只能是未验收。「待发布」只描述卡在授权或发布，**不得当作可以结束的交付**。
+- 用户反馈「没有生效」时，优先检查实际入口、安装版本、旧进程、会话及浏览器资源，先定位运行链路，再决定是否继续改代码。
+
+
+## 共享训练执行与研究导航（实施中）
+
+研究任务走 `.context/tasks/research.md`，模型接入仍走已有集成技能。轮次/更新入口默认兼容，局部策略不接管保存与数据流；共享重构不批量改写 Recipe/Example。逐个核验受影响入口，按独立训练语义圈定实跑，不逐例重复完整长训。每轮结束发布进行中训练报告、在线分项/测试评估分列和关闭评估仍有曲线的现行行为须保持。圈定 `test_training_execution`、`test_training_strategy_extensions`、原训练/模型恢复、固定公开基线、安装复制、导航文档与实际执行监控；源码、安装和正式入口分别记录于 `.context/mvp/training-execution-acceptance.md`，本轮最终去重256项通过、3项跳过，真实历史WDNO恢复另有逐值对照；用户已授权并更新 core/contrib、重启8000；正式页面开训、实时曲线/在线分项/测试评估与停止已实测。2026-09-18 08:41 按当次授权重装 `ai4e-core` 并只重启 8000（PID **34128**，5173 未动）；对照任务开训写出预测通过，run `b3d788acfa8a4392bb355229ff3647c9` 成功，不再走旧物理准备接口。停止运行的恢复候选修正已通过7项检查，追加 task 发布仍待当次授权，固定目标页面恢复未验收，整体未收口。
+
+
+训练指标与曲线（2026-09-18）：现行外流训练设置可选实际计算的 MSE／MAE／相对 L2；未声明兼容原三项、清空只保留评估 Loss。运行页新增 Loss／更新步／学习率页签及空配置入口。圈定 `test_model_evaluation.py`、`test_train_loop.py`、`test_train_online_loss.py`、`test_train_recipe.py`、`test_public_api_stability.py`、`test_web_configuration_composition.py` 与 `e2e/execution-monitor.spec.ts`、`e2e/stage-consistency.spec.ts`。正式发布须当次授权更新 core/server 并重启8000；状态见 `.context/mvp/training-metrics-ui-acceptance.md`。

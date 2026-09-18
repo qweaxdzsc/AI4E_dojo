@@ -1,0 +1,681 @@
+{
+  "project": "9d9e81667ecd4094963565388ed0f85c",
+  "task": "2cd40c24eec64557b2a3aaa890f17bd5",
+  "target": "nasa_crm_transolver3",
+  "platform_root": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform",
+  "data_roots": [
+    "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/raw",
+    "/Users/zonghui/work/datasets/NASA"
+  ],
+  "revision": "6838efa74ca084aa75d7c54e6bcb2c99158aef49d624bfafa2383103aadfcf0b",
+  "raw": {
+    "id": "7d36fd53ef8b4868b2a0fcf5dab668a2",
+    "task_id": "2cd40c24eec64557b2a3aaa890f17bd5",
+    "version_id": "e4f8c6f1b277403db8300653f87884e8",
+    "status": "succeeded",
+    "created_at": "2026-09-15T11:16:54.764888+00:00",
+    "run_path": "tasks/2cd40c24eec64557b2a3aaa890f17bd5/runs/7d36fd53ef8b4868b2a0fcf5dab668a2",
+    "data_path": "tasks/2cd40c24eec64557b2a3aaa890f17bd5/data/7d36fd53ef8b4868b2a0fcf5dab668a2",
+    "code_path": "tasks/2cd40c24eec64557b2a3aaa890f17bd5/.dojo/executions/7d36fd53ef8b4868b2a0fcf5dab668a2/code",
+    "request_path": "tasks/2cd40c24eec64557b2a3aaa890f17bd5/.dojo/executions/7d36fd53ef8b4868b2a0fcf5dab668a2/request.json",
+    "pid": 34819,
+    "resumed_from": null,
+    "operation_mode": "execute",
+    "stages": [
+      "rawprep"
+    ],
+    "source_snapshot": {
+      "files": {
+        "README.md": "4551e529b22d6edd81ea43e33564b27a7ea1e70de99a75c6e977829f21a82214",
+        "config.yaml": "0a524d31c8ab10762b95b4f61f84c650dfa5cbfc810a5771b2790ddd887b49b8",
+        "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+        "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+        "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+        "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+        "rawprep.py": "479f21af44b9ab1ba2980525f9426223b6913f89a8c146c48633e632ea5216a7",
+        "task-entry.json": "caeea5a7ce75d293e432d737146ce52c0a40f578f7012074f01cf0f6112e20ac",
+        "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+        "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+      },
+      "digest": "3fbe5145cbc99df7069b591658eee70c6ccca27875a9672975fbe9eb995bd9e7"
+    },
+    "code_digest": "187c331d2fbcb7ffd869f091db49cdf7f33c8c934cdda2bbda9f840efd98e90a",
+    "metadata": {},
+    "error": null,
+    "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/runs/7d36fd53ef8b4868b2a0fcf5dab668a2",
+    "data_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/data/7d36fd53ef8b4868b2a0fcf5dab668a2",
+    "summary": {
+      "total": 10,
+      "attempted": 10,
+      "success": 10,
+      "unexecuted": 0,
+      "failed": false,
+      "failed_count": 0,
+      "failures": [],
+      "dry_run": false,
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/runs/7d36fd53ef8b4868b2a0fcf5dab668a2",
+      "reports": {
+        "dataset": {
+          "manifest": "/Users/zonghui/work/datasets/NASA",
+          "definition": {
+            "manifest_path": "/Users/zonghui/work/datasets/NASA",
+            "description": {
+              "schema_version": 1,
+              "fields": {
+                "coordinates": [
+                  "CoordinateX",
+                  "CoordinateY",
+                  "CoordinateZ"
+                ],
+                "normals": [
+                  "NormalX",
+                  "NormalY",
+                  "NormalZ"
+                ],
+                "conditions": [
+                  "Mach",
+                  "AlphaMean",
+                  "aileronInboard",
+                  "aileronOutboard",
+                  "htp",
+                  "elevator"
+                ],
+                "labels": [
+                  "PressureCoefficient",
+                  "cfx",
+                  "cfy",
+                  "cfz"
+                ],
+                "area": "Surface"
+              },
+              "input_fields": [
+                "CoordinateX",
+                "CoordinateY",
+                "CoordinateZ",
+                "NormalX",
+                "NormalY",
+                "NormalZ",
+                "Mach",
+                "AlphaMean",
+                "aileronInboard",
+                "aileronOutboard",
+                "htp",
+                "elevator"
+              ],
+              "input_dim": 12,
+              "out_dim": 4,
+              "chunk_count": 20,
+              "point_count": 454404,
+              "split_seed": 42,
+              "validation_fraction": 0.2,
+              "splits": {
+                "train": [
+                  "Sample002",
+                  "Sample004",
+                  "Sample006",
+                  "Sample007",
+                  "Sample008",
+                  "Sample009",
+                  "Sample010",
+                  "Sample011"
+                ],
+                "validation": [
+                  "Sample001"
+                ],
+                "test": [
+                  "Sample001"
+                ]
+              },
+              "sources": {
+                "training": {
+                  "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM 2/trainingData_NASA-CRM.h5",
+                  "size_bytes": 2099900656,
+                  "mtime_ns": 1745361932000000000,
+                  "sample_count": 105,
+                  "point_count": 454404
+                },
+                "test": {
+                  "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM/testData_NASA-CRM.h5",
+                  "size_bytes": 879958232,
+                  "mtime_ns": 1745361926000000000,
+                  "sample_count": 44,
+                  "point_count": 454404
+                }
+              }
+            }
+          },
+          "partitions": {
+            "train": [
+              "train/Sample002",
+              "train/Sample004",
+              "train/Sample006",
+              "train/Sample007",
+              "train/Sample008",
+              "train/Sample009",
+              "train/Sample010",
+              "train/Sample011"
+            ],
+            "validation": [
+              "validation/Sample001"
+            ],
+            "test": [
+              "test/Sample001"
+            ]
+          }
+        },
+        "rawprep": {
+          "manifest": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/data/7d36fd53ef8b4868b2a0fcf5dab668a2/manifest.json",
+          "split_counts": {
+            "train": 8,
+            "validation": 1,
+            "test": 1
+          }
+        }
+      }
+    },
+    "lineage": {
+      "project_id": "9d9e81667ecd4094963565388ed0f85c",
+      "task_id": "2cd40c24eec64557b2a3aaa890f17bd5",
+      "version_id": "e4f8c6f1b277403db8300653f87884e8",
+      "run_id": "7d36fd53ef8b4868b2a0fcf5dab668a2",
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/runs/7d36fd53ef8b4868b2a0fcf5dab668a2",
+      "data_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/data/7d36fd53ef8b4868b2a0fcf5dab668a2",
+      "code_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/.dojo/executions/7d36fd53ef8b4868b2a0fcf5dab668a2/code",
+      "version": {
+        "id": "e4f8c6f1b277403db8300653f87884e8",
+        "task_id": "2cd40c24eec64557b2a3aaa890f17bd5",
+        "created_at": "2026-09-15T11:16:42.608618+00:00",
+        "parent_version_id": null,
+        "baseline_version_id": null,
+        "snapshot": {
+          "files": {
+            "README.md": "4551e529b22d6edd81ea43e33564b27a7ea1e70de99a75c6e977829f21a82214",
+            "config.yaml": "226c90daf3bc805b152c5ec62eee0ca0cba8b73c9716a2ae369d731ba01c9b92",
+            "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+            "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+            "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+            "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+            "rawprep.py": "479f21af44b9ab1ba2980525f9426223b6913f89a8c146c48633e632ea5216a7",
+            "task-entry.json": "caeea5a7ce75d293e432d737146ce52c0a40f578f7012074f01cf0f6112e20ac",
+            "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+            "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          },
+          "digest": "333059a6775b549f1b18ce73c0000db24c99478961bd988c6c9d20fb2d98fd7b"
+        },
+        "source_snapshot": {
+          "files": {
+            "README.md": "4551e529b22d6edd81ea43e33564b27a7ea1e70de99a75c6e977829f21a82214",
+            "config.yaml": "bb8240436905f7751d27c97a266fa8f759979284cf63a7722413dac48bf8f978",
+            "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+            "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+            "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+            "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+            "rawprep.py": "479f21af44b9ab1ba2980525f9426223b6913f89a8c146c48633e632ea5216a7",
+            "task-entry.json": "caeea5a7ce75d293e432d737146ce52c0a40f578f7012074f01cf0f6112e20ac",
+            "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+            "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          },
+          "digest": "921682731e7e7763327b1e78d0def7432dc51fda2326b5d0c2e86386a0408d95"
+        },
+        "source": {
+          "kind": "template",
+          "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/case-templates/nasa_crm_abupt-2138478bb0695a64fa4a531dcc4a4fdca057d70e9e22e7060718b3412d55ba39",
+          "run_id": null
+        },
+        "assets": {},
+        "copied_outputs": {},
+        "changes": [
+          {
+            "path": "README.md",
+            "before": null,
+            "after": "4551e529b22d6edd81ea43e33564b27a7ea1e70de99a75c6e977829f21a82214"
+          },
+          {
+            "path": "config.yaml",
+            "before": null,
+            "after": "226c90daf3bc805b152c5ec62eee0ca0cba8b73c9716a2ae369d731ba01c9b92"
+          },
+          {
+            "path": "configuration.py",
+            "before": null,
+            "after": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0"
+          },
+          {
+            "path": "infer.py",
+            "before": null,
+            "after": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62"
+          },
+          {
+            "path": "pipeline.py",
+            "before": null,
+            "after": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8"
+          },
+          {
+            "path": "post.py",
+            "before": null,
+            "after": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2"
+          },
+          {
+            "path": "rawprep.py",
+            "before": null,
+            "after": "479f21af44b9ab1ba2980525f9426223b6913f89a8c146c48633e632ea5216a7"
+          },
+          {
+            "path": "task-entry.json",
+            "before": null,
+            "after": "caeea5a7ce75d293e432d737146ce52c0a40f578f7012074f01cf0f6112e20ac"
+          },
+          {
+            "path": "train.py",
+            "before": null,
+            "after": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0"
+          },
+          {
+            "path": "trainprep.py",
+            "before": null,
+            "after": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          }
+        ]
+      },
+      "assets": {
+        "dataset.connectivity_h5": {
+          "id": "657c16e33d3644ada8233ee058dacd4a",
+          "kind": "dataset",
+          "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM/connectivity_NASA-CRM.h5",
+          "external": true,
+          "digest": "f922fd9d69c719903789796a7e0071f8e773aebfd94332991a17ff81c3a49fe5",
+          "source": {},
+          "dependencies": []
+        },
+        "dataset.root": {
+          "id": "1ca3a3a7e1134b8f905117003b9c6fdc",
+          "kind": "dataset",
+          "path": "/Users/zonghui/work/datasets/NASA",
+          "external": true,
+          "digest": "ed745b8da078d38d8a4b3bc7ae77489996ed1b7bdb07631b6616b6b4aab7a3ac",
+          "source": {},
+          "dependencies": []
+        },
+        "dataset.test_h5": {
+          "id": "70a1a183cfa44a38a01e1baab445f20d",
+          "kind": "dataset",
+          "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM/testData_NASA-CRM.h5",
+          "external": true,
+          "digest": "70d7f6c996393bcb22004e3b6529ebd573fd11dab0cdf2ac3c94cd16765c42ba",
+          "source": {},
+          "dependencies": []
+        },
+        "dataset.train_h5": {
+          "id": "1de4d3bde8c1442e99828bb37a19e9e9",
+          "kind": "dataset",
+          "path": "/Users/zonghui/work/datasets/NASA/Case 4 - NASA CRM 2/trainingData_NASA-CRM.h5",
+          "external": true,
+          "digest": "3b76af45b83d34778c80d4fd2dedbc94e4127bca2c4d0463dd663f9b6eb1ed4b",
+          "source": {},
+          "dependencies": []
+        }
+      },
+      "resumed_from": null,
+      "schema_version": 1
+    }
+  },
+  "old_preparation": {
+    "id": "0a2cc8a6887f4ffa99507dff3732a2e0",
+    "task_id": "2cd40c24eec64557b2a3aaa890f17bd5",
+    "version_id": "e4f8c6f1b277403db8300653f87884e8",
+    "status": "succeeded",
+    "created_at": "2026-09-15T11:16:59.239381+00:00",
+    "run_path": "tasks/2cd40c24eec64557b2a3aaa890f17bd5/runs/0a2cc8a6887f4ffa99507dff3732a2e0",
+    "data_path": "tasks/2cd40c24eec64557b2a3aaa890f17bd5/data/0a2cc8a6887f4ffa99507dff3732a2e0",
+    "code_path": "tasks/2cd40c24eec64557b2a3aaa890f17bd5/.dojo/executions/0a2cc8a6887f4ffa99507dff3732a2e0/code",
+    "request_path": "tasks/2cd40c24eec64557b2a3aaa890f17bd5/.dojo/executions/0a2cc8a6887f4ffa99507dff3732a2e0/request.json",
+    "pid": 34894,
+    "resumed_from": null,
+    "operation_mode": "execute",
+    "stages": [
+      "trainprep"
+    ],
+    "source_snapshot": {
+      "files": {
+        "README.md": "4551e529b22d6edd81ea43e33564b27a7ea1e70de99a75c6e977829f21a82214",
+        "config.yaml": "f599f6125d7538dc0234d8adabe02b424bab0a9b3b6782d872f7b0b39637b79c",
+        "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+        "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+        "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+        "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+        "rawprep.py": "479f21af44b9ab1ba2980525f9426223b6913f89a8c146c48633e632ea5216a7",
+        "task-entry.json": "caeea5a7ce75d293e432d737146ce52c0a40f578f7012074f01cf0f6112e20ac",
+        "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+        "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+      },
+      "digest": "d30da92309cb48b4f685abd2d9f57e1a6ce748fbe82d959e30d8926160f9842b"
+    },
+    "code_digest": "6c9ce292dd2f49b3cb166d4236405e4c754ac08653d8d68e1b8d7fe4f4eb576d",
+    "metadata": {},
+    "error": null,
+    "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/runs/0a2cc8a6887f4ffa99507dff3732a2e0",
+    "data_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/data/0a2cc8a6887f4ffa99507dff3732a2e0",
+    "summary": {
+      "total": 0,
+      "attempted": 0,
+      "success": 0,
+      "unexecuted": 0,
+      "failed": false,
+      "failed_count": 0,
+      "failures": [],
+      "dry_run": false,
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/runs/0a2cc8a6887f4ffa99507dff3732a2e0",
+      "reports": {
+        "trainprep": {
+          "preparation": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/runs/0a2cc8a6887f4ffa99507dff3732a2e0/artifacts/preparation.json",
+          "split_counts": {
+            "test": 1,
+            "train": 8,
+            "validation": 1
+          }
+        }
+      }
+    },
+    "lineage": {
+      "project_id": "9d9e81667ecd4094963565388ed0f85c",
+      "task_id": "2cd40c24eec64557b2a3aaa890f17bd5",
+      "version_id": "e4f8c6f1b277403db8300653f87884e8",
+      "run_id": "0a2cc8a6887f4ffa99507dff3732a2e0",
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/runs/0a2cc8a6887f4ffa99507dff3732a2e0",
+      "data_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/data/0a2cc8a6887f4ffa99507dff3732a2e0",
+      "code_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/.dojo/executions/0a2cc8a6887f4ffa99507dff3732a2e0/code",
+      "version": {
+        "id": "e4f8c6f1b277403db8300653f87884e8",
+        "task_id": "2cd40c24eec64557b2a3aaa890f17bd5",
+        "created_at": "2026-09-15T11:16:42.608618+00:00",
+        "parent_version_id": null,
+        "baseline_version_id": null,
+        "snapshot": {
+          "files": {
+            "README.md": "4551e529b22d6edd81ea43e33564b27a7ea1e70de99a75c6e977829f21a82214",
+            "config.yaml": "226c90daf3bc805b152c5ec62eee0ca0cba8b73c9716a2ae369d731ba01c9b92",
+            "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+            "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+            "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+            "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+            "rawprep.py": "479f21af44b9ab1ba2980525f9426223b6913f89a8c146c48633e632ea5216a7",
+            "task-entry.json": "caeea5a7ce75d293e432d737146ce52c0a40f578f7012074f01cf0f6112e20ac",
+            "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+            "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          },
+          "digest": "333059a6775b549f1b18ce73c0000db24c99478961bd988c6c9d20fb2d98fd7b"
+        },
+        "source_snapshot": {
+          "files": {
+            "README.md": "4551e529b22d6edd81ea43e33564b27a7ea1e70de99a75c6e977829f21a82214",
+            "config.yaml": "bb8240436905f7751d27c97a266fa8f759979284cf63a7722413dac48bf8f978",
+            "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+            "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+            "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+            "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+            "rawprep.py": "479f21af44b9ab1ba2980525f9426223b6913f89a8c146c48633e632ea5216a7",
+            "task-entry.json": "caeea5a7ce75d293e432d737146ce52c0a40f578f7012074f01cf0f6112e20ac",
+            "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+            "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          },
+          "digest": "921682731e7e7763327b1e78d0def7432dc51fda2326b5d0c2e86386a0408d95"
+        },
+        "source": {
+          "kind": "template",
+          "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/case-templates/nasa_crm_abupt-2138478bb0695a64fa4a531dcc4a4fdca057d70e9e22e7060718b3412d55ba39",
+          "run_id": null
+        },
+        "assets": {},
+        "copied_outputs": {},
+        "changes": [
+          {
+            "path": "README.md",
+            "before": null,
+            "after": "4551e529b22d6edd81ea43e33564b27a7ea1e70de99a75c6e977829f21a82214"
+          },
+          {
+            "path": "config.yaml",
+            "before": null,
+            "after": "226c90daf3bc805b152c5ec62eee0ca0cba8b73c9716a2ae369d731ba01c9b92"
+          },
+          {
+            "path": "configuration.py",
+            "before": null,
+            "after": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0"
+          },
+          {
+            "path": "infer.py",
+            "before": null,
+            "after": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62"
+          },
+          {
+            "path": "pipeline.py",
+            "before": null,
+            "after": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8"
+          },
+          {
+            "path": "post.py",
+            "before": null,
+            "after": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2"
+          },
+          {
+            "path": "rawprep.py",
+            "before": null,
+            "after": "479f21af44b9ab1ba2980525f9426223b6913f89a8c146c48633e632ea5216a7"
+          },
+          {
+            "path": "task-entry.json",
+            "before": null,
+            "after": "caeea5a7ce75d293e432d737146ce52c0a40f578f7012074f01cf0f6112e20ac"
+          },
+          {
+            "path": "train.py",
+            "before": null,
+            "after": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0"
+          },
+          {
+            "path": "trainprep.py",
+            "before": null,
+            "after": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          }
+        ]
+      },
+      "assets": {
+        "train.manifest": {
+          "id": "070cf3f3e0a84ce1ad119f6c6326c557",
+          "kind": "dataset",
+          "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/data/7d36fd53ef8b4868b2a0fcf5dab668a2/manifest.json",
+          "external": true,
+          "digest": "148c5c5b64040f842e092fe41233a005cdd703d4cf35fd8fdc6ed93723cd3fc8",
+          "source": {},
+          "dependencies": []
+        }
+      },
+      "resumed_from": null,
+      "schema_version": 1
+    }
+  },
+  "new_preparation": {
+    "id": "04795cd1db2c43fba2bf33e7f143e212",
+    "task_id": "2cd40c24eec64557b2a3aaa890f17bd5",
+    "version_id": "e4f8c6f1b277403db8300653f87884e8",
+    "status": "succeeded",
+    "created_at": "2026-09-15T11:17:16.463938+00:00",
+    "run_path": "tasks/2cd40c24eec64557b2a3aaa890f17bd5/runs/04795cd1db2c43fba2bf33e7f143e212",
+    "data_path": "tasks/2cd40c24eec64557b2a3aaa890f17bd5/data/04795cd1db2c43fba2bf33e7f143e212",
+    "code_path": "tasks/2cd40c24eec64557b2a3aaa890f17bd5/.dojo/executions/04795cd1db2c43fba2bf33e7f143e212/code",
+    "request_path": "tasks/2cd40c24eec64557b2a3aaa890f17bd5/.dojo/executions/04795cd1db2c43fba2bf33e7f143e212/request.json",
+    "pid": 35221,
+    "resumed_from": null,
+    "operation_mode": "execute",
+    "stages": [
+      "trainprep"
+    ],
+    "source_snapshot": {
+      "files": {
+        "README.md": "4551e529b22d6edd81ea43e33564b27a7ea1e70de99a75c6e977829f21a82214",
+        "config.yaml": "d95de0a8ec7abbfeda963560e6aa6026d3ecbd5832fd381d7e4eddf8de3eb5c1",
+        "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+        "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+        "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+        "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+        "rawprep.py": "479f21af44b9ab1ba2980525f9426223b6913f89a8c146c48633e632ea5216a7",
+        "task-entry.json": "caeea5a7ce75d293e432d737146ce52c0a40f578f7012074f01cf0f6112e20ac",
+        "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+        "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+      },
+      "digest": "1f331eb9fc53c36262f18db78d1217cc17ee2f0642beadb1e1ca2b1d9c3a31d4"
+    },
+    "code_digest": "27ec93e6589a122a4eef713e3a6f5901a02e94e4a4a13595f01a05e6a0b66bd1",
+    "metadata": {},
+    "error": null,
+    "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/runs/04795cd1db2c43fba2bf33e7f143e212",
+    "data_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/data/04795cd1db2c43fba2bf33e7f143e212",
+    "summary": {
+      "total": 0,
+      "attempted": 0,
+      "success": 0,
+      "unexecuted": 0,
+      "failed": false,
+      "failed_count": 0,
+      "failures": [],
+      "dry_run": false,
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/runs/04795cd1db2c43fba2bf33e7f143e212",
+      "reports": {
+        "trainprep": {
+          "preparation": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/runs/04795cd1db2c43fba2bf33e7f143e212/artifacts/preparation.json",
+          "split_counts": {
+            "test": 1,
+            "train": 8,
+            "validation": 1
+          }
+        }
+      }
+    },
+    "lineage": {
+      "project_id": "9d9e81667ecd4094963565388ed0f85c",
+      "task_id": "2cd40c24eec64557b2a3aaa890f17bd5",
+      "version_id": "e4f8c6f1b277403db8300653f87884e8",
+      "run_id": "04795cd1db2c43fba2bf33e7f143e212",
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/runs/04795cd1db2c43fba2bf33e7f143e212",
+      "data_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/data/04795cd1db2c43fba2bf33e7f143e212",
+      "code_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/.dojo/executions/04795cd1db2c43fba2bf33e7f143e212/code",
+      "version": {
+        "id": "e4f8c6f1b277403db8300653f87884e8",
+        "task_id": "2cd40c24eec64557b2a3aaa890f17bd5",
+        "created_at": "2026-09-15T11:16:42.608618+00:00",
+        "parent_version_id": null,
+        "baseline_version_id": null,
+        "snapshot": {
+          "files": {
+            "README.md": "4551e529b22d6edd81ea43e33564b27a7ea1e70de99a75c6e977829f21a82214",
+            "config.yaml": "226c90daf3bc805b152c5ec62eee0ca0cba8b73c9716a2ae369d731ba01c9b92",
+            "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+            "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+            "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+            "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+            "rawprep.py": "479f21af44b9ab1ba2980525f9426223b6913f89a8c146c48633e632ea5216a7",
+            "task-entry.json": "caeea5a7ce75d293e432d737146ce52c0a40f578f7012074f01cf0f6112e20ac",
+            "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+            "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          },
+          "digest": "333059a6775b549f1b18ce73c0000db24c99478961bd988c6c9d20fb2d98fd7b"
+        },
+        "source_snapshot": {
+          "files": {
+            "README.md": "4551e529b22d6edd81ea43e33564b27a7ea1e70de99a75c6e977829f21a82214",
+            "config.yaml": "bb8240436905f7751d27c97a266fa8f759979284cf63a7722413dac48bf8f978",
+            "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+            "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+            "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+            "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+            "rawprep.py": "479f21af44b9ab1ba2980525f9426223b6913f89a8c146c48633e632ea5216a7",
+            "task-entry.json": "caeea5a7ce75d293e432d737146ce52c0a40f578f7012074f01cf0f6112e20ac",
+            "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+            "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          },
+          "digest": "921682731e7e7763327b1e78d0def7432dc51fda2326b5d0c2e86386a0408d95"
+        },
+        "source": {
+          "kind": "template",
+          "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/case-templates/nasa_crm_abupt-2138478bb0695a64fa4a531dcc4a4fdca057d70e9e22e7060718b3412d55ba39",
+          "run_id": null
+        },
+        "assets": {},
+        "copied_outputs": {},
+        "changes": [
+          {
+            "path": "README.md",
+            "before": null,
+            "after": "4551e529b22d6edd81ea43e33564b27a7ea1e70de99a75c6e977829f21a82214"
+          },
+          {
+            "path": "config.yaml",
+            "before": null,
+            "after": "226c90daf3bc805b152c5ec62eee0ca0cba8b73c9716a2ae369d731ba01c9b92"
+          },
+          {
+            "path": "configuration.py",
+            "before": null,
+            "after": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0"
+          },
+          {
+            "path": "infer.py",
+            "before": null,
+            "after": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62"
+          },
+          {
+            "path": "pipeline.py",
+            "before": null,
+            "after": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8"
+          },
+          {
+            "path": "post.py",
+            "before": null,
+            "after": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2"
+          },
+          {
+            "path": "rawprep.py",
+            "before": null,
+            "after": "479f21af44b9ab1ba2980525f9426223b6913f89a8c146c48633e632ea5216a7"
+          },
+          {
+            "path": "task-entry.json",
+            "before": null,
+            "after": "caeea5a7ce75d293e432d737146ce52c0a40f578f7012074f01cf0f6112e20ac"
+          },
+          {
+            "path": "train.py",
+            "before": null,
+            "after": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0"
+          },
+          {
+            "path": "trainprep.py",
+            "before": null,
+            "after": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          }
+        ]
+      },
+      "assets": {
+        "train.manifest": {
+          "id": "b87af089c59e4c4fbaa0edcb5a8f437f",
+          "kind": "dataset",
+          "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/data/7d36fd53ef8b4868b2a0fcf5dab668a2/manifest.json",
+          "external": true,
+          "digest": "148c5c5b64040f842e092fe41233a005cdd703d4cf35fd8fdc6ed93723cd3fc8",
+          "source": {},
+          "dependencies": []
+        }
+      },
+      "resumed_from": null,
+      "schema_version": 1
+    }
+  },
+  "manifest": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/data/7d36fd53ef8b4868b2a0fcf5dab668a2/manifest.json",
+  "prepared": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara1/platform/projects/e930bd94f3e648df9a6dbe06f1c4687f/tasks/2cd40c24eec64557b2a3aaa890f17bd5/runs/04795cd1db2c43fba2bf33e7f143e212/artifacts/preparation.json",
+  "split_counts": {
+    "test": 1,
+    "train": 8,
+    "validation": 1
+  }
+}

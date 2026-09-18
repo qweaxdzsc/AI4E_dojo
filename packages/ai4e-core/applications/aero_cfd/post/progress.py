@@ -31,12 +31,14 @@ class PostProgress:
         self.current = None
 
     def publish(self):
-        """先更新最终摘要的内存副本，再原子写出最后一次可恢复进度。"""
-        value = deepcopy(self.report)
+        """会话负责快照隔离；避免在业务层重复深拷贝完整账本。"""
+        value = self.report
         self.run.report(value, stage=self.phase)
         if self.protocol is not None:
             self.run.artifact("comparison-protocol.json", self.protocol)
-        self.run.artifact("inference-progress.json" if self.phase == "infer" else "post-progress.json", value)
+        self.run.artifact(
+            "inference-progress.json" if self.phase == "infer" else "post-progress.json", value
+        )
 
     @contextmanager
     def operation(self, name):

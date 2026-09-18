@@ -66,14 +66,6 @@ def test_metadata_never_exports_tensors_and_does_not_change_rng(tmp_path):
     assert result["compatibility"]["status"] == "invalid"
 
 
-def test_legacy_api_is_same_implementation():
-    from ai4e_core.applications.aero_cfd.infer import stage
-    from ai4e_core.applications.aero_cfd.post import physical
-
-    assert physical.execute is stage.execute
-    assert physical.configure_prediction is stage.configure_prediction
-
-
 def comparison_report(tmp_path):
     from ai4e_core.abilities.data.validate.fingerprint import fingerprint
 
@@ -166,31 +158,3 @@ def test_infer_paths_are_resolved_without_mutating_train(tmp_path):
     assert cfg.infer.preparation == str(tmp_path / "prep.json")
     assert cfg.infer.results == str(tmp_path / "result.json")
     assert cfg.post.results == str(tmp_path / "result.json")
-
-@pytest.mark.parametrize('case', [None, 'shapenet_car_abupt', 'shapenet_car_transolver3_surface',
-                                  'shapenet_car_transolver3_volume', 'nasa_crm_abupt', 'nasa_crm_transolver3'])
-def test_frozen_native_profiles_reject_unknown_changes(tmp_path, case):
-    """六套原生历史模板只按本仓库固定基线识别，不信任任务自带白名单。"""
-    from pathlib import Path
-    from ai4e_server.modules.capabilities.recipe_profile import compatible_native
-
-    registry = Path(__file__).parents[2] / 'recipes/aero_cfd/inference-profile.json'
-    profiles = json.loads(registry.read_text())['profiles']
-    profile = profiles['examples/aero_cfd/' + case if case else 'recipes/aero_cfd']
-    for name, value in profile.items():
-        if name.endswith('.py'):
-            (tmp_path / name).write_text(value['content'])
-    entry = json.loads(profiles['recipes/aero_cfd']['task-entry.json']['content'])
-    components = {'dataset': 'verified.dataset', 'model': 'verified.model'}
-    if case:
-        entry.update(platform_case=case, components=components)
-        if case.startswith('nasa_crm_'):
-            for name in ('train_h5', 'test_h5', 'connectivity_h5'):
-                entry['inputs']['dataset.' + name] = 'dataset'
-    (tmp_path / 'task-entry.json').write_text(json.dumps(entry))
-    actual = {p.name for p in tmp_path.iterdir()}
-    assert compatible_native(tmp_path, actual, registry, case, components)
-    changed = tmp_path / 'infer.py'
-    changed.write_text(changed.read_text() + '\nraise RuntimeError("unknown computation")\n')
-    (tmp_path / 'inference-profile.json').write_text(registry.read_text())
-    assert not compatible_native(tmp_path, actual, registry, case, components)

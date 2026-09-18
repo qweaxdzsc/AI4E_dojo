@@ -1,0 +1,5 @@
+
+> ai4e-web@0.1.0 check:architecture
+> node scripts/check-boundaries.mjs
+
+微领域公开门面检查通过

@@ -13,7 +13,7 @@ async function enterProject(page:any,name:string,id:string){
   await expect(page).toHaveURL(new RegExp(`/projects/${id}/tasks$`));
 }
 async function openTaskList(page:any,project:string){
-  if(!new RegExp(`/projects/${project}/tasks$`).test(page.url()))await page.getByRole('link',{name:'返回任务管理',exact:true}).click();
+  if(!new RegExp(`/projects/${project}/tasks$`).test(page.url()))await page.goto(`/projects/${project}/tasks`);
   await expect(page).toHaveURL(new RegExp(`/projects/${project}/tasks$`));
 }
 
@@ -40,8 +40,8 @@ test('五案例简洁创建、工作台绑定与派生继承',async({page,reques
    await binding.getByRole('button',{name:new RegExp(label)}).click();
    const saved=page.waitForResponse(r=>r.url().endsWith(`/tasks/${t}/dataset`)&&r.request().method()==='PUT');await binding.getByRole('button',{name:'保存数据绑定',exact:true}).click();const saveResponse=await saved;expect(saveResponse.ok()).toBeTruthy();const before=await saveResponse.json();expect(before.status).toBe('valid');expect(before.dataset_id).toBe(c.dataset_id);
    await page.getByText('数据绑定已保存',{exact:false}).waitFor({timeout:3000}).catch(()=>{});await page.reload();await expect(page.getByRole('button',{name:'配置数据来源',exact:true})).toHaveText('修改绑定');await expect(page.getByRole('searchbox',{name:'搜索绑定文件',exact:true})).toBeVisible();const after=await(await request.get(`${api}/projects/${p}/tasks/${t}/dataset`)).json();expect(after.sources).toEqual(before.sources);expect(after.status).toBe('valid');expect(after.dataset_id).toBe(c.dataset_id);
-   if(c.dataset_id==='nasa_crm'){expect(Object.keys(after.sources)).toHaveLength(3);await expect(page.locator('.bound-dataset-files').getByRole('checkbox')).toHaveCount(3);await expect(page.locator('.bound-dataset-files').getByRole('checkbox').first()).not.toBeChecked()}
-   await page.locator('.bound-dataset-files').getByRole('tab',{name:'处理结果',exact:true}).click();await expect(page.getByText('请选择固定输入或运行',{exact:true})).toBeVisible();
+   if(c.dataset_id==='nasa_crm'){expect(Object.keys(after.sources)).toHaveLength(3);await expect(page.locator('.bound-dataset-files .artifact-file-table tbody').getByRole('checkbox')).toHaveCount(3);await expect(page.locator('.bound-dataset-files .artifact-file-table tbody').getByRole('checkbox').first()).not.toBeChecked()}
+   await page.locator('.bound-dataset-files').getByRole('tab',{name:'处理结果',exact:true}).click();await expect(page.locator('.bound-dataset-files').getByRole('combobox',{name:'平台数据集',exact:true})).toBeVisible();await expect(page.getByText(/有 \d+ 个平台数据集，请选择|请选择固定输入或运行/)).toBeVisible();
   }
   const source=ids[0],before=await(await request.get(`${api}/projects/${p}/tasks/${source}/configuration`)).json();await openTaskList(page,p);const row=page.locator('.tasktable tbody tr').filter({has:page.locator(`a.enter-workbench[href="/projects/${p}/tasks/${source}/rawprep"]`)});await row.getByRole('button',{name:/更多操作$/}).click();await page.getByRole('menuitem',{name:'派生任务',exact:true}).click();const dialog=page.getByRole('dialog',{name:'派生任务',exact:true});await expect(dialog.getByRole('combobox')).toHaveCount(0);await dialog.getByLabel('任务名称',{exact:true}).fill('继承绑定案例');const forked=page.waitForResponse(r=>r.url().endsWith(`/tasks/${source}/fork`)&&r.request().method()==='POST');await dialog.getByRole('button',{name:'派生并进入原始处理',exact:true}).click();const child=await(await forked).json();await expect(page).toHaveURL(new RegExp(`/tasks/${child.id}/(1|rawprep)$`));const inherited=await(await request.get(`${api}/projects/${p}/tasks/${child.id}/configuration`)).json();expect(inherited.config.components).toEqual(before.config.components);expect(inherited.config.dataset).toEqual(before.config.dataset);
  }finally{await request.patch(`${api}/projects/${p}`,{data:{archived:true}})}

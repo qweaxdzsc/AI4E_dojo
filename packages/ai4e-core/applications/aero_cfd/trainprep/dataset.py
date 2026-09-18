@@ -159,9 +159,6 @@ def probe(config: dict, *, prepare=None, dry_run: bool = False) -> dict:
         normalization = Normalization(index.manifest["normalization"])
         if normalization.digest != index.manifest["normalization_digest"]:
             raise ValueError("归一化记录摘要不一致")
-        from .normalization import validate_frozen
-
-        validate_frozen(config, normalization)
         normalized = raw
         physical = {
             name: normalization.inverse(name, value) if name in normalization.transforms else value

@@ -1,5 +1,6 @@
+import { configurationEdits } from "../../infrastructure/configuration/edits";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Alert, Checkbox, Input, InputNumber, Select, Spin, Space } from "antd";
+import { Alert, Checkbox, Input, InputNumber, Modal, Select, Spin, Space } from "antd";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ActionButton as Button } from "../../infrastructure/components/ActionButton";
 import { ExecutionLog, listRuns } from "../executions";
@@ -13,6 +14,8 @@ import {
   execute,
   trial,
   datasetCatalog,
+  invalidateDatasetCatalog,
+  invalidateStageInputs,
   type DatasetBinding,
 } from "./api";
 import "./rawprep-workbench.css";
@@ -56,6 +59,7 @@ export function RawprepWorkbench({
   project: string;
   task: string;
 }) {
+  const editBaseline = useRef<any>({});
   const [cfg, setCfg] = useState<any>(),
     [profile, setProfile] = useState<any>(),
     [binding, setBinding] = useState<DatasetBinding>(),
@@ -78,15 +82,34 @@ export function RawprepWorkbench({
     [processedName, setProcessedName] = useState("");
   const submitting = useRef(false),
     generation = useRef(0),
+    loadGeneration = useRef(0),
     requestKey = useRef(crypto.randomUUID());
   useEffect(() => {
-    let live = true;
-    Promise.all([read(project, task), listRuns(project, task)])
-      .then(([c, r]: any) => {
-        if (!live) return;
+    const token = ++loadGeneration.current;
+    setCfg(undefined);
+    setProfile(undefined);
+    setCatalog(undefined);
+    setError("");
+    setNotice("");
+    setRun(undefined);
+    setResultRun(undefined);
+    setProgress(undefined);
+    /** 配置先渲染三栏；运行名单并行补齐，不能挡住切步。 */
+    read(project, task)
+      .then((c: any) => {
+        if (token !== loadGeneration.current) return;
         setCfg(c);
+        editBaseline.current = structuredClone(c.rawprep);
         setProfile(c.profile);
         setProcessedName(c.processed_name || c.profile?.dataset_id || "");
+      })
+      .catch((e) => {
+        if (token !== loadGeneration.current) return;
+        setError(e.message);
+      });
+    listRuns(project, task)
+      .then((r: any) => {
+        if (token !== loadGeneration.current) return;
         setRun(r.filter((v: any) => v.stages?.includes("rawprep")).at(-1)?.id);
         setResultRun(
           r
@@ -98,9 +121,9 @@ export function RawprepWorkbench({
             .at(-1)?.id,
         );
       })
-      .catch((e) => setError(e.message));
+      .catch(() => {});
     return () => {
-      live = false;
+      loadGeneration.current++;
     };
   }, [project, task]);
   useEffect(() => {
@@ -123,9 +146,11 @@ export function RawprepWorkbench({
         read(project, task)
           .then((c: any) => {
             setCfg(c);
+        editBaseline.current = structuredClone(c.rawprep);
             setProfile(c.profile);
             setProcessedName((old) => old || c.processed_name || c.profile?.dataset_id || "");
             setDirty(false);
+            invalidateDatasetCatalog(project, task);
             setNotice("数据绑定已保存，正在解析样本与字段");
           })
           .catch((e) => setError(e.message));
@@ -330,6 +355,7 @@ export function RawprepWorkbench({
     );
   }
   async function persist(force = false) {
+    if (!cfg || !raw) return cfg;
     if (
       !force &&
       !dirty &&
@@ -340,9 +366,11 @@ export function RawprepWorkbench({
     const current: any = await save(project, task, {
       revision: cfg.revision,
       rawprep: raw,
+      ...configurationEdits(editBaseline.current, raw),
       ...(name ? { processed_name: name } : {}),
     });
     setCfg(current);
+    editBaseline.current = structuredClone(current.rawprep);
     if (current.processed_name) setProcessedName(current.processed_name);
     setDirty(false);
     return current;
@@ -366,9 +394,11 @@ export function RawprepWorkbench({
     }
   }
   useEffect(() => {
-    if (cfg?.revision && binding?.status === "valid")
-      refreshCatalog(cfg.revision);
+    if (!cfg?.revision || binding?.status !== "valid") return;
+    /** 让左栏目录请求先发出，避免同步检查进程占住正式入口。 */
+    const timer = window.setTimeout(() => refreshCatalog(cfg.revision), 0);
     return () => {
+      window.clearTimeout(timer);
       generation.current++;
     };
   }, [cfg?.revision, binding?.revision, binding?.status]);
@@ -384,7 +414,10 @@ export function RawprepWorkbench({
   function finishAction(kind: ActionKind, status: "succeeded" | "failed", detail: string) {
     const copy = ACTION_COPY[kind];
     const label = status === "succeeded" ? copy.done : copy.fail;
-    setActivity({ status: label, text: `[INFO] ${detail}` });
+    setActivity({
+      status: label,
+      text: `[${status === "succeeded" ? "INFO" : "ERROR"}] ${detail}`,
+    });
     setProgress((old: any) => ({
       ...(old || {}),
       status,
@@ -394,14 +427,28 @@ export function RawprepWorkbench({
     if (status === "succeeded") setNotice(detail);
     else setError(detail);
   }
+  /** 名称已存在时确认真实物理覆盖；取消不提交。 */
+  async function confirmOverwrite(detail: string) {
+    return await new Promise<boolean>((resolve) => {
+      Modal.confirm({
+        title: "覆盖已有共享数据集？",
+        content: detail,
+        okText: "覆盖并执行",
+        cancelText: "取消",
+        onOk: () => resolve(true),
+        onCancel: () => resolve(false),
+      });
+    });
+  }
   async function action(kind: ActionKind | "save") {
-    if (submitting.current) return;
+    if (submitting.current || !cfg || !raw) return;
     submitting.current = true;
     setBusy(true);
-    if (kind !== "save") beginAction(kind);
-    else {
+    if (kind === "save") {
       setError("");
       setNotice("");
+    } else if (kind !== "execute") {
+      beginAction(kind);
     }
     try {
       const current = await persist(true);
@@ -409,7 +456,21 @@ export function RawprepWorkbench({
         setNotice("配置已保存，未创建新版本");
         return;
       }
+      let overwrite = false;
+      if (kind === "execute") {
+        const status = current.processed_name_status?.status;
+        if (status === "conflict" || status === "reuse") {
+          const ok = await confirmOverwrite(
+            current.processed_name_status.message ||
+              `名称 ${processedName.trim()} 已存在。继续将用这次结果覆盖同名共享数据。`,
+          );
+          if (!ok) return;
+          overwrite = true;
+        }
+        beginAction(kind);
+      }
       if (kind === "refresh") {
+        invalidateDatasetCatalog(project, task);
         await refreshCatalog(current.revision);
         finishAction(kind, "succeeded", "已按当前配置刷新样本与字段");
         return;
@@ -432,6 +493,7 @@ export function RawprepWorkbench({
         catalog_revision: selectedCatalog.revision,
         idempotency_key: requestKey.current,
       };
+      if (overwrite) body.overwrite_processed_name = true;
       if (kind === "check") {
         const result: any = await check(project, task, body);
         finishAction(
@@ -440,11 +502,14 @@ export function RawprepWorkbench({
           `校验通过：${result.sample_count} 个完整样本，${result.file_count} 个依赖文件`,
         );
       } else {
-        const result: any = await (kind === "trial" ? trial : execute)(
-          project,
-          task,
-          body,
-        );
+        let result: any;
+        try {
+          result = await (kind === "trial" ? trial : execute)(project, task, body);
+        } catch (error: any) {
+          if (kind !== "execute" || error.code !== "shared_dataset_exists" || overwrite) throw error;
+          if (!(await confirmOverwrite(error.message))) return;
+          result = await execute(project, task, { ...body, overwrite_processed_name: true });
+        }
         setRun(result.id);
         setResultRun(result.id);
         setProgress({ status: result.status || "running", text: "", kind });
@@ -463,10 +528,8 @@ export function RawprepWorkbench({
       submitting.current = false;
     }
   }
-  if (!cfg || !profile)
-    return error ? <Alert type="error" message={error} /> : <Spin />;
-  const available = profile.outputs
-    .filter((o: any) => raw.sources.includes(o.domain))
+  const available = (profile?.outputs || [])
+    .filter((o: any) => raw?.sources?.includes(o.domain))
     .map((o: any) => {
       const actual = catalog?.fields?.find(
         (f: any) => f.field_id === o.raw_field || f.name === o.name,
@@ -494,7 +557,7 @@ export function RawprepWorkbench({
             binding={binding}
             onBinding={receiveBinding}
             onSelection={selection}
-            beforeSave={async () => (await persist()).revision}
+            beforeSave={cfg ? async () => (await persist()).revision : undefined}
             disabled={busy}
             run={resultRun}
             refresh={resultTick}
@@ -505,7 +568,7 @@ export function RawprepWorkbench({
             <b>处理设置</b>
             <Space>
               <Button
-                disabled={busy}
+                disabled={busy || !profile}
                 onClick={() => {
                   change(structuredClone(profile.defaults));
                   setNotice("已恢复案例默认，请保存配置");
@@ -513,12 +576,19 @@ export function RawprepWorkbench({
               >
                 恢复案例默认
               </Button>
-              <Button disabled={!dirty || busy} onClick={() => action("save")}>
+              <Button disabled={busy || !cfg} onClick={() => action("save")}>
                 保存配置
               </Button>
             </Space>
           </div>
           <div className="settings-body">
+            {error && !raw && <Alert type="error" message={error} />}
+            {!raw || !profile ? (
+              <div className="settings-pending" aria-busy="true" aria-label="处理设置加载中">
+                <Spin size="small" />
+              </div>
+            ) : (
+            <>
             <div className="processing-group setting">
               <h3>01　字段提取与保存</h3>
               <p>只配置从源文件提取的物理量或坐标；法向、SDF 等几何结果在下方派生项命名。</p>
@@ -744,7 +814,7 @@ export function RawprepWorkbench({
               {profile.vtkhdf && (
                 <p>
                   <Checkbox
-                    checked={raw.vtkhdf}
+                    checked={vtkhdfChecked(raw, profile)}
                     onChange={(e) =>
                       change({ ...raw, vtkhdf: e.target.checked })
                     }
@@ -789,6 +859,8 @@ export function RawprepWorkbench({
                 </small>
               </p>
             </div>
+            </>
+            )}
           </div>
         </section>
         <section className="execution-panel">
@@ -797,12 +869,12 @@ export function RawprepWorkbench({
             <small>按数据集声明的样本名单处理，自动解析配套文件。</small>
           </div>
           <div className="executionbox">
-            <label htmlFor="processed-dataset-name">平台数据集名称</label>
+            <label htmlFor="processed-dataset-name">共享数据集名称</label>
             <Input
               id="processed-dataset-name"
-              aria-label="平台数据集名称"
+              aria-label="共享数据集名称"
               value={processedName}
-              disabled={busy}
+              disabled={busy || !raw}
               placeholder="例如 shapenet_car 或 NASA_CRM"
               onChange={(e) => {
                 setProcessedName(e.target.value);
@@ -811,7 +883,13 @@ export function RawprepWorkbench({
                 requestKey.current = crypto.randomUUID();
               }}
             />
-            <small>正式执行成功后，其他项目的数据准备可按此名称选用。</small>
+            <small>
+              {(cfg?.processed_name_status?.status === "conflict" ||
+                cfg?.processed_name_status?.status === "reuse") &&
+              processedName.trim() === (cfg.processed_name || "")
+                ? cfg.processed_name_status.message
+                : "正式结果保存到项目共享目录。名称已存在时会询问是否覆盖物理数据。"}
+            </small>
             <h3>执行范围</h3>
             <Select
               aria-label="执行范围"
@@ -846,9 +924,19 @@ export function RawprepWorkbench({
             <small>不按 train/test 划分；分片在数据准备里选择。</small>
             <p>
               处理样本：<b>{sampleCount}</b> 个
+              {catalog && (
+                <>
+                  （
+                  {scopeMode === "samples"
+                    ? "来自指定样本，只影响这次执行"
+                    : "来自绑定数据集"}
+                  ）
+                </>
+              )}
             </p>
             <p>
-              来源文件：{catalog?.sources?.length || 0} 个（按样本共享依赖）
+              来源文件：{catalog?.sources?.length || 0}{" "}
+              个（按样本共享依赖，不是样本量）
             </p>
             <div className="runrow">
               <span>并行线程</span>
@@ -857,8 +945,8 @@ export function RawprepWorkbench({
                 min={1}
                 max={64}
                 precision={0}
-                value={Number.isInteger(raw.workers) ? raw.workers : 1}
-                disabled={busy}
+                value={Number.isInteger(raw?.workers) ? raw.workers : 1}
+                disabled={busy || !raw}
                 onChange={(value) => {
                   const workers =
                     Number.isInteger(value) && Number(value) >= 1
@@ -870,11 +958,13 @@ export function RawprepWorkbench({
               <span>个</span>
             </div>
             <small>每个线程处理不同样本；1 为顺序执行。</small>
+            {catalogBusy && <small>正在解析样本名单，尚未开始处理。</small>}
             <Button
               block
               type="primary"
               disabled={
                 busy ||
+                !raw ||
                 catalogBusy ||
                 binding?.status !== "valid" ||
                 !usableScope ||
@@ -888,7 +978,7 @@ export function RawprepWorkbench({
             </Button>
             <Button
               block
-              disabled={busy || binding?.status !== "valid"}
+              disabled={busy || !raw || binding?.status !== "valid"}
               loading={busy && activeAction === "refresh"}
               onClick={() => action("refresh")}
             >
@@ -896,7 +986,7 @@ export function RawprepWorkbench({
             </Button>
             <Button
               block
-              disabled={busy || !usableScope || binding?.status !== "valid"}
+              disabled={busy || !raw || !usableScope || binding?.status !== "valid"}
               loading={busy && activeAction === "check"}
               onClick={() => action("check")}
             >
@@ -904,7 +994,7 @@ export function RawprepWorkbench({
             </Button>
             <Button
               block
-              disabled={busy || !usableScope || binding?.status !== "valid"}
+              disabled={busy || !raw || !usableScope || binding?.status !== "valid"}
               loading={busy && activeAction === "trial"}
               onClick={() => action("trial")}
             >
@@ -928,7 +1018,7 @@ export function RawprepWorkbench({
         accumulate
         activity={activity}
         onSnapshot={(value) => {
-          if (run !== resultRun) return;
+          if (!value || run !== resultRun) return;
           setProgress((old: any) => ({ ...value, kind: old?.kind || activeAction }));
           if (["succeeded", "failed", "stopped"].includes(value?.status)) {
             const kind = (activeAction || "execute") as ActionKind;
@@ -941,21 +1031,25 @@ export function RawprepWorkbench({
                     ? "已停止"
                     : copy.fail,
             });
-            if (value.status === "succeeded") setResultTick((n) => n + 1);
+            if (value.status === "succeeded") {
+              invalidateStageInputs(project, task);
+              invalidateDatasetCatalog(project, task);
+              setResultTick((n) => n + 1);
+            }
           }
         }}
       />
-      {entryEdit !== undefined && (
+      {entryEdit !== undefined && profile && (
         <FieldExtractionEditor
           project={project}
           task={task}
           root={
             root ||
-            binding?.sources[binding?.binding_schema?.root_key || "root"]?.root ||
+            binding?.sources?.[binding?.binding_schema?.root_key || "root"]?.root ||
             ""
           }
           basePath={
-            binding?.sources[binding?.binding_schema?.root_key || "root"]?.path ||
+            binding?.sources?.[binding?.binding_schema?.root_key || "root"]?.path ||
             ""
           }
           files={files}
@@ -983,6 +1077,14 @@ function selectedFormats(raw: any): string[] {
   return raw?.format ? [raw.format] : ["pt"];
 }
 
+/** 已接入时缺键按案例/清单默认勾选；显式关闭仍保持关。 */
+function vtkhdfChecked(raw: any, profile: any): boolean {
+  if (!profile?.vtkhdf) return false;
+  if (typeof raw?.vtkhdf === "boolean") return raw.vtkhdf;
+  if (typeof profile?.defaults?.vtkhdf === "boolean") return profile.defaults.vtkhdf;
+  return true;
+}
+
 function parseSampleProgress(text = "") {
   const matches = [
     ...text.matchAll(/\[(?:[^\]]+\/)?批量前处理\/进度\][^\n]*完成=(\d+)[^\n]*总数=(\d+)/g),
@@ -998,7 +1100,8 @@ function RawprepProgress({
   snapshot?: { status?: string; text?: string; kind?: ActionKind };
 }) {
   const counts = parseSampleProgress(snapshot?.text);
-  const status = snapshot?.status || "running";
+  const status = snapshot?.status;
+  if (!status) return null;
   const kind = snapshot?.kind || "execute";
   const copy = ACTION_COPY[kind];
   const finished = ["succeeded", "failed", "stopped"].includes(status);

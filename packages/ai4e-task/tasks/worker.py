@@ -22,7 +22,29 @@ def main(request_path: str) -> int:
     signal.signal(signal.SIGTERM, interrupted)
     write_json(folder / "started.json", {"pid": os.getpid(), "run_id": context["run_id"]})
     status, error = "failed", None
+    project = payload.get("project")
+    plans = payload.get("shared_outputs", [])
     try:
+        if project:
+            from ..storage.shared_datasets import resolve_reference
+            from .assets import validate_asset
+
+            for asset in context.get("assets", {}).values():
+                if asset.get("shared_dataset"):
+                    from .assets import asset_path
+
+                    current = resolve_reference(project, asset_path(project, asset))
+                    if (
+                        not current
+                        or current["status"] != "available"
+                        or current["source"] != asset["source"]
+                    ):
+                        raise ValueError("shared_dataset_changed_before_execution")
+                    validate_asset(project, asset)
+        if plans:
+            from ..storage.shared_datasets import begin
+
+            begin(project, plans, context)
         from ai4e_core.run import managed_run
         from ai4e_spec.artifacts import RunContext
 
@@ -31,15 +53,27 @@ def main(request_path: str) -> int:
         sys.path.insert(0, str(code))
         os.chdir(code)
         sys.argv = [str(code / entry["script"]), "--config", str(code / entry["config"])]
-        with managed_run(RunContext.from_dict(context)):
+        if payload.get("overwrite"):
+            sys.argv.append("--overwrite")
+        with managed_run(RunContext.from_dict(context), allow_unmanaged=True):
             runpy.run_path(str(code / entry["script"]), run_name="__main__")
         summary = read_json(Path(context["run_dir"]) / "summary.json")
-        status = "failed" if summary.get("failed", True) else "succeeded"
+        status = "failed" if (
+            summary.get("failed", True) or summary.get("research_status") == "incomplete"
+        ) else "succeeded"
     except BaseException as exc:  # noqa: BLE001 - worker 必须记录用户退出和信号
         error = f"{type(exc).__name__}: {exc}"
     finally:
         if (folder / "stop.json").exists():
             status = "stopped"
+        if plans:
+            from ..storage.shared_datasets import finish
+
+            try:
+                finish(project, plans, context["run_id"], succeeded=status == "succeeded")
+            except BaseException as exc:  # noqa: BLE001 - 发布中断也须留下失败收据
+                status, error = "failed", f"shared_dataset_publish_failed: {exc}"
+                finish(project, plans, context["run_id"], succeeded=False)
         write_json(
             folder / "finished.json",
             {"run_id": context["run_id"], "status": status, "error": error},

@@ -11,14 +11,16 @@ from uuid import uuid4
 from ..storage.files import read_json, write_json
 from ..storage.layout import inside, task_dir
 from .configuration import read_configuration
-from .query import get_run, get_task, list_runs
+from .records import get_run, get_task, list_runs
 
 
-def inspect_inference(operation: str, **payload) -> object:
+def inspect_inference(
+    operation: str, *, provider="ai4e_core.applications.aero_cfd.infer.inspect_artifacts", **payload
+) -> object:
     """隔离推理元信息与兼容检查，标准输出只接收 JSON。"""
     result = subprocess.run(
         [sys.executable, "-m", "ai4e_task.tasks.inference_inspection"],
-        input=json.dumps({"operation": operation, **payload}),
+        input=json.dumps({"operation": operation, **payload, "target": provider}),
         capture_output=True,
         text=True,
         timeout=300,
@@ -60,7 +62,7 @@ def _preparation(run: dict, metadata: dict) -> Path | None:
     if own.is_file():
         return own
     cfg = metadata.get("effective_config") or {}
-    candidate = (cfg.get("train") or {}).get("preparation")
+    candidate = (cfg.get("inputs", {}).get("train") or {}).get("preparation")
     if not candidate:
         return None
     path = Path(candidate)
@@ -153,25 +155,38 @@ def list_inference_checkpoints(project: str | Path, task_id: str) -> list[dict]:
 
 def inference_samples(project: str | Path, task_id: str, checkpoint_id: str) -> dict:
     """按检查点关联的冻结准备读取真实分片，兼容检查由业务层负责。"""
-    candidates = list_inference_checkpoints(project, task_id)
-    selected = next((v for v in candidates if v["id"] == checkpoint_id), None)
-    if selected is None:
-        raise ValueError("checkpoint_not_found")
-    if selected["compatibility"]["status"] != "compatible":
-        raise ValueError(selected["compatibility"]["reason"])
-    value = inspect_inference(
-        "inputs",
-        arguments={
-            "checkpoint": selected["path"],
-            "preparation": selected["preparation"]["path"],
-            "config": read_configuration(project, task_id)["config"],
-            "config_dir": str(task_dir(project, task_id) / "recipe"),
-        },
-    )
+    try:
+        candidates = list_inference_checkpoints(project, task_id)
+        selected = next((v for v in candidates if v["id"] == checkpoint_id), None)
+        if selected is None:
+            raise ValueError("checkpoint_not_found")
+        if selected["compatibility"]["status"] != "compatible":
+            raise ValueError(selected["compatibility"]["reason"])
+        value = inspect_inference(
+            "inputs",
+            provider=_inference_provider(project, task_id),
+            arguments={
+                "checkpoint": selected["path"],
+                "preparation": selected["preparation"]["path"],
+                "config": read_configuration(project, task_id)["config"],
+                "config_dir": str(task_dir(project, task_id) / "recipe"),
+            },
+        )
+    except FileNotFoundError as exc:
+        raise ValueError(
+            "inference_preparation_missing: 检查点关联的准备或样本文件不存在，请确认数据准备仍可用"
+        ) from exc
     return {
-        **value, "preparation": selected["preparation"],
+        **value,
+        "preparation": selected["preparation"],
         "selection_supported": (task_dir(project, task_id) / "recipe/infer.py").is_file(),
     }
+
+
+def _inference_provider(project, task_id):
+    """使用任务声明的领域连接解释配置，不在Task转换领域参数。"""
+    from .operations import operation_target
+    return operation_target(task_dir(project, task_id) / "recipe", "infer")
 
 
 def freeze_checkpoint(project: str | Path, task_id: str, identity: str, revision: str) -> dict:

@@ -12,6 +12,7 @@ PATHS = {
     "isosurface": '<circle cx="12" cy="13" r="8" fill="currentColor" fill-opacity=".5"/><circle cx="22" cy="15" r="7" fill="currentColor" fill-opacity=".7"/><circle cx="15" cy="23" r="6" fill="currentColor" fill-opacity=".9"/>',
     "contour": '<circle cx="16" cy="16" r="12"/><circle cx="16" cy="16" r="8"/><circle cx="16" cy="16" r="4"/>',
     "probe": '<path d="M16 29s9-11 9-18a9 9 0 0 0-18 0c0 7 9 18 9 18z" fill="currentColor" fill-opacity=".1"/><circle cx="16" cy="11" r="3"/>',
+    "plot_over_line": '<path d="M4 24 12 8l8 12 8-16"/><circle cx="4" cy="24" r="2"/><circle cx="28" cy="4" r="2"/>',
     "select": '<path d="m7 3 20 15-10 1-5 10z" fill="currentColor" stroke-width="1"/>',
     "rotate": '<circle cx="16" cy="16" r="9"/><path d="M16 2v7m0 14v7M2 16h7m14 0h7m-2-8-4 1 1-4"/>',
     "pan": '<path d="M10 16V7a2 2 0 0 1 4 0v8-11a2 2 0 0 1 4 0v11-9a2 2 0 0 1 4 0v10-5a2 2 0 0 1 4 0v10c0 11-13 11-17 5l-5-8c-2-4 3-5 6-2z"/>',

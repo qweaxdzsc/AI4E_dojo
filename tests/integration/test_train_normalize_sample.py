@@ -95,9 +95,9 @@ def test_coordinate_tolerance_disable_and_gradient():
     result = transform.apply(x)
     assert result[0, 0] < 0
     result.sum().backward()
-    torch.testing.assert_close(x.grad, torch.full_like(x, 1000))
+    torch.testing.assert_close(x.grad, torch.full_like(x, 1))
     unchecked = CoordinateNormalization((0.0,), (1.0,), check_range=False)
-    assert unchecked.apply(torch.tensor([[2.0, 0.0, 0.0]]))[0, 0] == 2000
+    assert unchecked.apply(torch.tensor([[2.0, 0.0, 0.0]]))[0, 0] == 2
     with pytest.raises(ValueError):
         CoordinateNormalization((0.0,), (0.0,))
     with pytest.raises(ValueError):

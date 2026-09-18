@@ -1,13 +1,33 @@
-# 复制模板后绑定自己的独立数据集；默认选择 Neumann 扩散。
 case: neumann_diffusion
 dataset:
-  manifest: ../datasets/manifest.json
+  name: neumann_diffusion
 run_root: ../runs
 trainprep:
   execute: true
-  output: ../prepared
 train:
   execute: true
   device: auto
-post:
-  output: ../predictions
+post: {}
+data_root: ../data
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - infer
+  - post
+inputs:
+  rawprep:
+    manifest: ../datasets/manifest.json
+  trainprep:
+    dataset: ../datasets/manifest.json
+  train:
+    dataset: ../datasets/manifest.json
+    preparation: null
+    resume: null
+  infer:
+    dataset: ../datasets/manifest.json
+    preparation: null
+    checkpoint: null
+  post:
+    results: null

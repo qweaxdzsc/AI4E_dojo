@@ -41,7 +41,12 @@ class SurfaceInference:
                 if isinstance(size, bool) or not isinstance(size, int) or size < 1:
                     raise ValueError("查询块大小必须为正整数")
                 for start in range(0, tensor.shape[1], size):
-                    value = self.decoding([tensor[:, start:start+size]], cache, use_checkpoint=False)[0]
-                    yield identity[start:start+size], {"fields": value}
+                    value = self.decoding(
+                        [tensor[:, start : start + size]], cache, use_checkpoint=False
+                    )[0]
+                    selected = (
+                        identity if query_chunk_size is None else identity[start : start + size]
+                    )
+                    yield selected, {"fields": value}
         finally:
             cache.clear()

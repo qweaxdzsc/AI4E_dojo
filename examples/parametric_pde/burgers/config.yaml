@@ -1,13 +1,33 @@
-# 正式网络/预算由共享 recipe 按 case 展开；路径相对本文件。
 case: burgers
 dataset:
-  manifest: ../../../../../project_simulation/dojo_train/pibsnet/burgers/datasets/manifest.json
+  name: burgers
 run_root: ../../../../../project_simulation/dojo_train/pibsnet/burgers/runs
 trainprep:
   execute: true
-  output: ../../../../../project_simulation/dojo_train/pibsnet/burgers/prepared_paper_v3
 train:
   execute: true
   device: auto
-post:
-  output: ../../../../../project_simulation/dojo_train/pibsnet/burgers/predictions_paper_v3
+post: {}
+data_root: ../data
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - infer
+  - post
+inputs:
+  rawprep:
+    manifest: ../../../../../project_simulation/dojo_train/pibsnet/burgers/datasets/manifest.json
+  trainprep:
+    dataset: ../../../../../project_simulation/dojo_train/pibsnet/burgers/datasets/manifest.json
+  train:
+    dataset: ../../../../../project_simulation/dojo_train/pibsnet/burgers/datasets/manifest.json
+    preparation: null
+    resume: null
+  infer:
+    dataset: ../../../../../project_simulation/dojo_train/pibsnet/burgers/datasets/manifest.json
+    preparation: null
+    checkpoint: null
+  post:
+    results: null

@@ -1,0 +1,191 @@
+[
+  {
+    "task": "f9fca9f6c4414c17abae50f8713fd86b",
+    "matched": [
+      "best",
+      "contract",
+      "cuda_rng",
+      "ema",
+      "epoch",
+      "model",
+      "mps_rng",
+      "numpy_rng",
+      "optimizer",
+      "python_rng",
+      "scaler",
+      "scheduler",
+      "torch_rng",
+      "updates",
+      "version"
+    ],
+    "status": "exact"
+  },
+  {
+    "task": "5efda0a77ae94017a439a95da98b0df3",
+    "matched": [
+      "best",
+      "contract",
+      "cuda_rng",
+      "ema",
+      "epoch",
+      "model",
+      "mps_rng",
+      "numpy_rng",
+      "optimizer",
+      "python_rng",
+      "scaler",
+      "scheduler",
+      "torch_rng",
+      "updates",
+      "version"
+    ],
+    "status": "exact"
+  },
+  {
+    "task": "885aa4bad4c04f3da12441c0bd19a787",
+    "matched": [
+      "best",
+      "contract",
+      "cuda_rng",
+      "ema",
+      "epoch",
+      "model",
+      "mps_rng",
+      "numpy_rng",
+      "optimizer",
+      "python_rng",
+      "scaler",
+      "scheduler",
+      "torch_rng",
+      "updates",
+      "version"
+    ],
+    "status": "exact"
+  },
+  {
+    "task": "9a9de296d0cd4d7398cd4b95de710264",
+    "matched": [
+      "best",
+      "contract",
+      "cuda_rng",
+      "ema",
+      "epoch",
+      "model",
+      "mps_rng",
+      "numpy_rng",
+      "optimizer",
+      "python_rng",
+      "scaler",
+      "scheduler",
+      "torch_rng",
+      "updates",
+      "version"
+    ],
+    "status": "exact"
+  },
+  {
+    "task": "9bb3729b7001425fa380adc9044c13ab",
+    "matched": [
+      "best",
+      "contract",
+      "cuda_rng",
+      "ema",
+      "epoch",
+      "model",
+      "mps_rng",
+      "numpy_rng",
+      "optimizer",
+      "python_rng",
+      "scaler",
+      "scheduler",
+      "torch_rng",
+      "updates",
+      "version"
+    ],
+    "status": "exact"
+  },
+  {
+    "task": "9c1dac251856411d9091d8d1cc60bc3e",
+    "matched": [
+      "best",
+      "contract",
+      "cuda_rng",
+      "ema",
+      "epoch",
+      "model",
+      "mps_rng",
+      "numpy_rng",
+      "optimizer",
+      "python_rng",
+      "scaler",
+      "scheduler",
+      "torch_rng",
+      "updates",
+      "version"
+    ],
+    "status": "exact"
+  },
+  {
+    "task": "da62c1c8f4114146a3b3b13a3967a114",
+    "matched": [
+      "best",
+      "contract",
+      "cuda_rng",
+      "ema",
+      "epoch",
+      "model",
+      "mps_rng",
+      "numpy_rng",
+      "optimizer",
+      "python_rng",
+      "scaler",
+      "scheduler",
+      "torch_rng",
+      "updates",
+      "version"
+    ],
+    "status": "exact"
+  },
+  {
+    "task": "e0086a31a4b04da0a466c295c44d6cd6",
+    "matched": [
+      "best",
+      "contract",
+      "cuda_rng",
+      "ema",
+      "epoch",
+      "model",
+      "mps_rng",
+      "numpy_rng",
+      "optimizer",
+      "python_rng",
+      "scaler",
+      "scheduler",
+      "torch_rng",
+      "updates",
+      "version"
+    ],
+    "status": "exact"
+  },
+  {
+    "task": "f540a1f563f8419ba2adf8dbe47e1cb4",
+    "matched": [
+      "best",
+      "contract",
+      "cuda_rng",
+      "ema",
+      "epoch",
+      "model",
+      "mps_rng",
+      "numpy_rng",
+      "optimizer",
+      "python_rng",
+      "scaler",
+      "scheduler",
+      "torch_rng",
+      "updates",
+      "version"
+    ],
+    "status": "exact"
+  }
+]

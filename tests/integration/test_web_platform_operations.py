@@ -143,6 +143,7 @@ def test_registered_cases_created_before_version_snapshot(platform):
     assert {item["id"] for item in available} == {
         "shapenet_car_abupt",
         "shapenet_car_transolver3_surface",
+        "shapenet_car_transolver3_volume",
         "nasa_crm_abupt",
         "nasa_crm_transolver3",
     }
@@ -210,17 +211,12 @@ def test_sampling_save_migrates_old_single_key(platform):
 
 def test_stage_input_capture_preserves_strict_downstream(tmp_path):
     """原始阶段不要求尚未产出的下游清单，下游消费仍严格。"""
-    import json
-
     import ai4e_task as task
     import pytest
 
     from tests.integration.test_task_management import recipe
 
     template = recipe(tmp_path)
-    entry = json.loads((template / "task-entry.json").read_text())
-    entry["inputs"]["downstream.manifest"] = "dataset"
-    (template / "task-entry.json").write_text(json.dumps(entry))
     root = tmp_path / "p"
     task.create_project(root, name="stage inputs")
     created = task.new_task(root, "sample", source=template)
@@ -228,13 +224,12 @@ def test_stage_input_capture_preserves_strict_downstream(tmp_path):
     task.save_configuration(
         root,
         created["id"],
-        {"downstream": {"manifest": str(tmp_path / "not_yet_produced.json")}},
+        {"inputs": {"train": {"dataset": str(tmp_path / "not_yet_produced.json")}}},
         revision=cfg["revision"],
     )
     with pytest.raises(FileNotFoundError):
-        task.submit_run(root, created["id"])
-    known = [key for key in entry["inputs"] if key != "downstream.manifest"]
-    result = task.wait_run(root, task.submit_run(root, created["id"], input_keys=known)["id"])
+        task.submit_run(root, created["id"], overrides=["pipeline.stages=[train]"])
+    result = task.wait_run(root, task.submit_run(root, created["id"])["id"])
     assert result["status"] == "succeeded", result
 
 

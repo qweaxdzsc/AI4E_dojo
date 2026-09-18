@@ -83,10 +83,26 @@ def _preparation_version(reference) -> int:
     raise ValueError("train.preparation: 不支持的准备记录版本")
 
 
-def _consume_current_preparation(config, model, reference):
+def _require_current_preparation(reference) -> None:
+    """公开检查只认现行 version=2，旧物理准备必须重新生成。"""
+    if _preparation_version(reference) != 2:
+        raise ValueError(
+            "preparation_requires_regeneration: 数据准备已改用现行配置方式，这份旧准备不能再训，请按现行数据准备重新生成。"
+        )
+
+
+def _consume_current_preparation(config, model, reference, dataset=None):
     """按训练同一条现行准备链恢复，不走旧物理 version=1 接口。"""
     from .trainprep import preparation as prep
 
+    _require_current_preparation(reference)
+    record = json.loads(Path(_preparation_path(reference)).read_text())
+    if record.get("kind") == "physical_fields":
+        from .trainprep.physical import consume
+
+        if dataset is None:
+            raise ValueError("物理场准备需要所选数据组件")
+        return consume(config, dataset, model, reference)
     return prep.consume(
         config,
         reference,
@@ -96,35 +112,46 @@ def _consume_current_preparation(config, model, reference):
 
 
 def _trace_batch(config, dataset, model, reference):
-    """用与训练相同的准备版本组织一个真实样本批次，供 TorchVista 跟踪。"""
-    if reference and _preparation_version(reference) == 2:
-        from .trainprep.dataset import prepare_partition_sample
+    """准备只提供可读清单与场；前向批次按当前模型页采样组织。"""
+    from .trainprep.dataset import prepare_partition_sample
 
-        data = _consume_current_preparation(config, model, reference)
-        item = prepare_partition_sample(
-            data.index,
-            "train",
-            0,
-            prepare=data.prepare,
-            normalization=data.normalization,
-            physical_prepare=data.physical_prepare,
-            normalized_input=data.index.manifest["state"] == "normalized",
-            sampling=config["sampling"],
-            config=config,
-            evaluation=True,
+    _require_current_preparation(reference)
+    data = _consume_current_preparation(config, model, reference, dataset)
+    if data.record.get("kind") == "physical_fields":
+        probe = next(
+            (name for name in ("train", "test", "eval") if data.view.partitions.get(name)),
+            None,
         )
-        batch = data.collate([item])
-        return batch, {
-            "identity": {"sample": data.index.partitions["train"][0], "index": 0},
-            "preparation": data.record["digest"],
-        }
-    from .trainprep.physical import open_preparation
-
-    view, normalization, record = open_preparation(config, dataset, model, reference)
-    sample = view.read("train", 0)
-    return model.prepare_sample(sample, config, normalization, evaluation=True), {
-        "identity": sample["identity"],
-        "preparation": record["digest"],
+        if probe is None:
+            raise ValueError("准备切片全部为空")
+        sample = data.view.read(probe, 0)
+        batch = data.prepare(sample, data.config, data.normalization, evaluation=True)
+        return batch, {"identity": sample["identity"], "preparation": data.record["digest"]}
+    split = str((config.get("train") or {}).get("training_split") or "train")
+    if split == "validation":
+        split = "eval"
+    for name in (split, "train", "test", "eval"):
+        if data.index.partitions.get(name):
+            split = name
+            break
+    else:
+        raise ValueError("准备切片全部为空")
+    item = prepare_partition_sample(
+        data.index,
+        split,
+        0,
+        prepare=data.prepare,
+        normalization=data.normalization,
+        physical_prepare=data.physical_prepare,
+        normalized_input=data.index.manifest["state"] == "normalized",
+        sampling=config["sampling"],
+        config=config,
+        evaluation=True,
+    )
+    batch = data.collate([item])
+    return batch, {
+        "identity": {"sample": data.index.partitions[split][0], "index": 0},
+        "preparation": data.record["digest"],
     }
 
 
@@ -148,8 +175,14 @@ def parameter_capabilities(config, model):
         constraints.setdefault(
             "scheduler", {"allowed": ["constant", "none", "warmup_cosine", "cosine"]}
         )
+    from ai4e_core.abilities.eval.metrics import METRIC_NAMES
+
     descriptors = {}
-    for key, value in config.get("train", {}).items():
+    train = dict(config.get("train") or {})
+    train.setdefault("export_predictions", False)
+    train.setdefault("export_vtk", False)
+    train.setdefault("export_split", "test")
+    for key, value in train.items():
         item = {
             "type": "boolean"
             if isinstance(value, bool)
@@ -163,8 +196,19 @@ def parameter_capabilities(config, model):
             "readOnly": key in {"manifest", "preparation", "resume"},
         }
         item.update(constraints.get(key, {}))
+        if key == "loss_x_axis":
+            item.setdefault("allowed", ["epoch", "updates"])
+        if key == "validation_unit":
+            item.setdefault("allowed", ["epoch", "updates"])
+        if key == "export_split":
+            item.setdefault("allowed", ["train", "test", "eval", "validation"])
         descriptors[key] = item
     losses = deepcopy(getattr(model, "PLATFORM_LOSSES", {"configurable": False}))
+    evaluation_fields = []
+    for domain, binding in ((config.get("trainprep") or {}).get("domains") or {}).items():
+        for name, field in (binding.get("targets") or {}).items():
+            value = str(field)
+            evaluation_fields.append({"value": value, "label": f"{domain}/{name}"})
     if not losses.get("configurable") and not (config.get("model") or {}).get("supervision"):
         terms = []
         for domain, binding in ((config.get("trainprep") or {}).get("domains") or {}).items():
@@ -180,6 +224,20 @@ def parameter_capabilities(config, model):
         if terms:
             losses["terms"] = terms
     return {
+        "evaluation_metrics": {
+            "options": [
+                {
+                    "value": name,
+                    "label": {"mse": "MSE", "mae": "MAE", "relative_l2": "相对 L2"}[name],
+                }
+                for name in METRIC_NAMES
+            ],
+            "default": list(METRIC_NAMES),
+        },
+        "evaluation_fields": {
+            "options": evaluation_fields,
+            "default": [item["value"] for item in evaluation_fields],
+        },
         "training_constraints": constraints,
         "parameter_descriptors": descriptors,
         "losses": losses,
@@ -188,7 +246,7 @@ def parameter_capabilities(config, model):
 
 
 def execute(request: dict) -> dict:
-    """执行 describe_case/inspect_dataset/validate_configuration/trace_model/compare_fields。"""
+    """执行 describe_case/inspect_dataset/validate_configuration/trace_model/compare_fields。trace_model 只取样组网。"""
     operation = request["operation"]
     if operation == "compare_fields":
         from ai4e_core.abilities.postproc.difference import compare_files
@@ -218,9 +276,12 @@ def execute(request: dict) -> dict:
             profile["defaults"] = merge_defaults(profile["defaults"], initial)
         resolved = resolve_rawprep(source)["rawprep"]
         if request.get("selection", {}).get("preserve_expressions"):
-            from .rawprep.descriptor import merge_defaults
+            from .rawprep.descriptor import merge_defaults, reconcile_format_keys
 
-            resolved = merge_defaults(profile["defaults"], request["config"].get("rawprep", {}))
+            declared = request["config"].get("rawprep") or {}
+            resolved = reconcile_format_keys(
+                profile["defaults"], declared, merge_defaults(profile["defaults"], declared)
+            )
         name = (source.get("dataset") or {}).get("processed_name")
         return {"profile": profile, "rawprep": resolved, "processed_name": name or ""}
     if operation == "validate_rawprep":
@@ -278,7 +339,6 @@ def execute(request: dict) -> dict:
         stage = selection.get("stage")
         requirements = {
             "trainprep": [("train", "manifest")],
-            "train": [("train", "preparation")],
             "post": [("train", "preparation"), ("post", "checkpoint")],
         }
         for section, key in requirements.get(stage, []):
@@ -292,39 +352,42 @@ def execute(request: dict) -> dict:
                 "sample_count": len(descriptor["samples"]),
             }
             return result
-        reference = resolved.get("train", {}).get("preparation")
-        if reference or resolved.get("train", {}).get("manifest"):
-            if reference and _preparation_version(reference) == 2:
-                data = _consume_current_preparation(resolved, model, reference)
-                result["readiness"] = {
-                    "preparation_compatible": True,
-                    "digest": data.record["digest"],
-                }
-            else:
-                from .trainprep.physical import open_preparation
-
-                _, _, record = open_preparation(resolved, dataset, model, reference)
-                result["readiness"] = {
-                    "preparation_compatible": True,
-                    "digest": record["digest"],
-                }
+        if stage == "trainprep":
+            # 准备只验绑定清单等本步输入，不用当前模型页采样去比对旧准备。
+            return result
+        reference = (resolved.get("inputs") or {}).get("train", {}).get("preparation") or (
+            resolved.get("train") or {}
+        ).get("preparation")
+        if reference:
+            data = _consume_current_preparation(resolved, model, reference, dataset)
+            result["readiness"] = {
+                "preparation_compatible": True,
+                "digest": data.record["digest"],
+            }
         return result
     if operation == "trace_model":
-        from ai4e_core.abilities.modeling.inspection import trace
-
         train = config.get("train") or {}
-        if not train.get("preparation") and not train.get("manifest"):
-            raise ValueError("train.manifest: 模型跟踪需要已有物理数据清单或准备记录")
-        batch, source = _trace_batch(config, dataset, model, train.get("preparation"))
-        network = model.construct(**model.training_parameters(config)).cpu().eval()
-        return trace(
-            network,
-            batch["inputs"],
-            Path(request["output_dir"]),
-            revision=fingerprint(config),
-            predict=model.predict,
-            input_source=source,
+        reference = (config.get("inputs") or {}).get("train", {}).get("preparation") or train.get(
+            "preparation"
         )
+        manifest = (config.get("inputs") or {}).get("trainprep", {}).get("dataset") or train.get(
+            "manifest"
+        )
+        if not reference and not manifest:
+            raise ValueError("train.manifest: 模型跟踪需要已有物理数据清单或准备记录")
+        if not reference:
+            raise ValueError(
+                "preparation_requires_regeneration: 结构跟踪需要现行数据准备记录，请按现行数据准备重新生成。"
+            )
+        batch, source = _trace_batch(config, dataset, model, reference)
+        network = model.construct(**model.training_parameters(config)).cpu().eval()
+        return {
+            "network": network,
+            "inputs": batch["inputs"],
+            "revision": fingerprint(config),
+            "input_source": source,
+            "predict": model.predict,
+        }
     raise ValueError(f"未知检查操作: {operation}")
 
 

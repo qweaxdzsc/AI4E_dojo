@@ -1,0 +1,16 @@
+{
+  "ai4e-task": {
+    "installed": "/tmp/dojo-shared-final-env/lib/python3.12/site-packages/ai4e_task",
+    "source_differences": [
+      "packages/ai4e-task/templates/models.py"
+    ]
+  },
+  "ai4e-server": {
+    "installed": "/private/tmp/dojo-shared-link-env/lib/python3.12/site-packages/ai4e_server",
+    "source_differences": []
+  },
+  "note": "Task templates/models.py 仅更新中文Docstring；server补充wheel与最终源码逐文件一致。",
+  "configuration_wheels": {
+    "ai4e_server-0.1.0-py3-none-any.whl": "9fd0edde8169a88a1db4c537313808082e76f2e703fe63f485dd8a5942c71a9a"
+  }
+}

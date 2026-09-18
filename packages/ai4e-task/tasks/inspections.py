@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 from .configuration import read_configuration
-from .query import get_task
+from .records import get_task
 
 
 def inspect_task(
@@ -35,15 +35,18 @@ def inspect_task(
         cfg = OmegaConf.create(captured["config"])
         for key, value in selection["bindings"].items():
             if key not in {
-                "train.manifest",
-                "train.preparation",
-                "post.checkpoint",
-                "trainprep.normalization.statistics",
+                "inputs.trainprep.dataset",
+                "inputs.train.preparation",
+                "inputs.infer.checkpoint",
+                "inputs.trainprep.statistics",
             }:
                 raise ValueError("unsupported_inspection_binding")
             OmegaConf.update(cfg, key, value, force_add=True)
         captured["config"] = OmegaConf.to_container(cfg, resolve=False)
+    from .operations import operation_target
+
     request = {
+        "target": operation_target(recipe, "inspect"),
         "operation": operation,
         "config": captured["config"],
         "output_dir": output_dir,

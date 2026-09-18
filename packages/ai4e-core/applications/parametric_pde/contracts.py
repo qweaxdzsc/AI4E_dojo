@@ -34,25 +34,12 @@ def source_identity(component):
 
 def preparation_contract(cfg, dataset, model_component):
     """提取影响物理点集和模型准备的语义，不包含训练权重或轮次。"""
-    model = cfg["model"]
     contract = {
         "schema": 1,
         "case": cfg["case"],
         "data": dataset.manifest["content_id"],
         "model_component": source_identity(model_component),
-        "model": {
-            k: model[k]
-            for k in (
-                "control_points",
-                "degree",
-                "hard_initial",
-                "sampling",
-                "boundary_conditions",
-                "initial_conditions",
-                "periodic_boundary_conditions",
-            )
-        },
-        "boundary_enforcement": model["constraints"]["boundary_conditions"]["enforcement"],
+        **model_component.preparation_parameters(cfg),
     }
 
     # 函数目标/自定义采样的路径未变但源码改变时，冻结点集也必须重建。

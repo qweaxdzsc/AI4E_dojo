@@ -16,6 +16,7 @@ def recipe(tmp_path):
     raw.mkdir()
     (raw / "sample.txt").write_text("input")
     (source / "pipeline.py").write_text("""from ai4e_core import run
+from ai4e_core.base.config import load_config
 from ai4e_core.run.training import TrainingRun
 import time
 
@@ -23,18 +24,23 @@ def execute(cfg):
     time.sleep(float(cfg.delay))
     if cfg.fail:
         raise ValueError("requested failure")
-    TrainingRun().report({"score": float(cfg.score)})
+    session = TrainingRun()
+    session.report({"score": float(cfg.score)})
+    path = session.output_dir("test") / "score.txt"
+    path.write_text(str(cfg.score))
+    session.record_asset("score", path, kind="other", stage="test")
+    session.record_metric("score", float(cfg.score), stage="test", assets=[path], semantics={
+        "field": "pressure", "unit": "1", "split": "test", "statistic": "mean", "data_identity": "sample"})
 
 if __name__ == "__main__":
-    raise SystemExit(run.launch({"test": execute}, script=__file__))
+    raise SystemExit(run.launch({"test": execute}, script=__file__, config_loader=load_config))
 """)
     OmegaConf.save(
         OmegaConf.create(
             {
-                "dataset": {"root": str(raw)},
+                "inputs": {"test": {"dataset": str(raw)}},
                 "data_root": str(tmp_path / "out"),
                 "run_root": str(tmp_path / "old-runs"),
-                "paths": {"datasets": {"root": "${data_root}"}},
                 "pipeline": {"stages": ["test"]},
                 "score": 2.0,
                 "delay": 0.0,
@@ -43,30 +49,6 @@ if __name__ == "__main__":
         ),
         source / "config.yaml",
     )
-    entry = {
-        "script": "pipeline.py",
-        "config": "config.yaml",
-        "inputs": {"dataset.root": "dataset"},
-        "outputs": {
-            "run_root": "{run_root}",
-            "data_root": "{data_dir}",
-            "paths.datasets.root": "{data_dir}",
-        },
-        "metrics": [
-            {
-                "name": "score",
-                "path": ["reports", "train", "score"],
-                "quantity": {
-                    "field": "pressure",
-                    "domain": "surface",
-                    "unit": "1",
-                    "split": "test",
-                    "statistic": "mean",
-                },
-            }
-        ],
-    }
-    (source / "task-entry.json").write_text(json.dumps(entry))
     return source
 
 
@@ -127,7 +109,7 @@ def test_path_gate_and_empty_entry(tmp_path):
     project = tmp_path / "p"
     task.create_project(project)
     first = task.new_task(project, "empty")
-    with pytest.raises(ValueError, match="entry_required"):
+    with pytest.raises(ValueError, match="configuration_unavailable"):
         task.submit_run(project, first["id"])
     with pytest.raises(ValueError):
         task.register_shared(project, "../escape", tmp_path, copy=False)

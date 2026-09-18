@@ -1,0 +1,10 @@
+
+> ai4e-web@0.1.0 test:e2e
+> playwright test e2e/stage-consistency.spec.ts --grep 训练设置只选
+
+
+Running 1 test using 1 worker
+
+  ✓  1 e2e/stage-consistency.spec.ts:211:1 › 训练设置只选已准备数据集即可开训，提交不含准备步骤 (1.9s)
+
+  1 passed (3.2s)

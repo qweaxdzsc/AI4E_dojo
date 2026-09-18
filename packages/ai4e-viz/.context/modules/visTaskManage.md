@@ -64,4 +64,9 @@
 
 ## 对象工作台新增文件
 
-- `backend/modules/visTaskManage/physicalSpec.py`：物理工作台配置版本转换与布局规则；新增窗口按 1 全幅、2 横排、3 上二下一、4 田字格排列；历史文件始终保持原样。流线缺起点类型按线段读取，命名面对象引用必须已在管线中且无环。`view_overlay_frames` 把布局矩形换成窗体左上角标签位置。
+- `backend/modules/visTaskManage/physicalSpec.py`：物理工作台配置版本转换与布局规则；新增窗口按 1 全幅、2 横排、3 上二下一、4 田字格排列；历史文件始终保持原样。流线缺起点类型按线段读取，命名面对象引用必须已在管线中且无环。`view_overlay_frames` 把布局矩形换成窗体左上角标签位置，并带上缺省为三维渲染的 `view_type`。`probe_pick_enabled` 读可选点选键，缺键视为关且不回写。校验色标最小不大于最大、LIC 显示块与可选 `lic.vectors`、切面/剖切皱折与三角化、`seeds_visible`、线段提取对象以及视口 `render` / `line_chart`；旧修订缺键按默认读取。
+
+
+`physicalSpec.py`：等高线自动分层参数和辅助平面显隐校验，兼容旧值列表。
+
+2026-09-16 显示设置：对应模块 PRD 已更新色标/范围/背景、矢量采样或透明输出职责。专项测试 `backend/tests/modules/test_phys_display_settings.py`；前端透明表单 `frontend/src/test/transparentExport.test.jsx`，真实入口 `tests/integration/viz_interaction_browser.cjs`（Dojo 根）。

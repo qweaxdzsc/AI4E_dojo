@@ -7,6 +7,8 @@
 .training-layout .ant-card-body{padding:7px 12px}
 .training-layout h3{font-size:12px;border-top:1px solid #e3edff;padding-top:7px;margin:7px 0}
 .training-layout h3:first-child{border:0;margin-top:0}
+.training-layout .train-combo{display:grid;grid-template-columns:120px minmax(0,1fr);gap:8px;align-items:center;margin-bottom:8px;font-size:12px}
+.training-layout .train-combo + h3{border:0;margin-top:0}
 .training-layout .configuration-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 28px}
 .training-layout .configuration-field{display:grid;grid-template-columns:minmax(75px,1fr) minmax(50px,1fr);align-items:center;gap:8px;min-height:28px;margin:0}
 .training-layout .configuration-field>label{font-size:11px;overflow-wrap:anywhere}
@@ -17,5 +19,6 @@
 .training-layout p{font-size:10px;color:#7d91b8;margin:7px 0}
 .training-layout .diagnostic-options{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
 .training-layout .ant-checkbox-wrapper{font-size:11px}
+.training-layout .handoff-hint{margin-left:8px;color:#8a4b16;font-size:11px}
 @container(max-width:1200px){.training-layout{height:auto;min-height:656px}.training-layout .configuration-grid{gap:7px 15px}}
 @container(max-width:1200px){.training-layout{height:695.5px}}

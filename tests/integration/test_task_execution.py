@@ -36,7 +36,7 @@ def test_execution_snapshot_version_identity_and_comparison(tmp_path):
     assert Path(a["run_dir"]).parent == project / "tasks" / first["id"] / "runs"
     assert Path(a["data_dir"]).parent == project / "tasks" / first["id"] / "data"
     result = task.compare_runs(project, a["id"], b["id"], save=True)
-    assert result["metrics"]["score"]["status"] == "available"
+    assert result["metrics"]["test/score"]["status"] == "available"
     assert result["files"]
     assert task.import_run(project, a["run_dir"])["id"] == a["id"]
     assert task.submit_run(project, first["id"], idempotency_key="run-one")["id"] == a["id"]
@@ -80,3 +80,84 @@ def test_script_start_failure_and_import_conflict(tmp_path):
     (conflicting / "summary.json").write_text(json.dumps({"failed": False}))
     with pytest.raises(ValueError, match="run_content_conflict"):
         task.import_run(other, conflicting)
+
+
+def _legacy_aero_recipe(tmp_path):
+    """旧官方外流入口：声明 ShapeNet，但不写 configuration_adapter，且拒 workers。"""
+    source = tmp_path / "legacy-aero"
+    source.mkdir()
+    raw = tmp_path / "legacy-raw"
+    raw.mkdir()
+    (raw / "sample.txt").write_text("input")
+    (source / "configuration.py").write_text(
+        """from ai4e_core.base.config import load_config
+from omegaconf import OmegaConf
+
+def load_configuration(path, overrides=None):
+    cfg = load_config(path, overrides)
+    raw = OmegaConf.to_container(OmegaConf.create(cfg), resolve=True).get("rawprep") or {}
+    if "workers" in raw:
+        raise ValueError(f"未知 rawprep 配置: {sorted(['workers'])}")
+    return cfg
+"""
+    )
+    (source / "pipeline.py").write_text(
+        """from configuration import load_configuration
+from ai4e_core import run
+from ai4e_core.run.training import TrainingRun
+
+def execute(cfg):
+    TrainingRun().report({"ok": 1, "workers": cfg.rawprep.get("workers")})
+
+if __name__ == "__main__":
+    raise SystemExit(run.launch({"test": execute}, script=__file__, config_loader=load_configuration))
+"""
+    )
+    OmegaConf.save(
+        OmegaConf.create(
+            {
+                "dataset": {"root": str(raw)},
+                "data_root": str(tmp_path / "legacy-out"),
+                "run_root": str(tmp_path / "legacy-runs"),
+                "paths": {"datasets": {"root": "${data_root}"}},
+                "pipeline": {"stages": ["test"]},
+                "rawprep": {"workers": 10},
+                "score": 1.0,
+                "delay": 0.0,
+                "fail": False,
+            }
+        ),
+        source / "config.yaml",
+    )
+    (source / "task-entry.json").write_text(
+        json.dumps(
+            {
+                "script": "pipeline.py",
+                "config": "config.yaml",
+                "components": {
+                    "dataset": "ai4e_contrib.application.datasets.shapenet_car",
+                    "model": "ai4e_contrib.ability.model.abupt.component",
+                },
+                "platform_case": "shapenet_car_abupt",
+                "inputs": {"dataset.root": "dataset"},
+                "outputs": {
+                    "run_root": "{run_root}",
+                    "data_root": "{data_dir}",
+                    "paths.datasets.root": "{data_dir}",
+                },
+            }
+        )
+    )
+    return source
+
+
+def test_legacy_descriptor_cannot_change_loader_behavior(tmp_path):
+    """不因旧描述或官方身份静默改写用户加载器。"""
+    project = tmp_path / "legacy-project"
+    task.create_project(project)
+    item = task.new_task(project, "legacy", source=_legacy_aero_recipe(tmp_path))
+    run = task.wait_run(project, task.submit_run(project, item["id"])["id"])
+    assert run["status"] == "failed"
+    assert "未知 rawprep 配置" in run["error"]
+    request = json.loads((project / run["request_path"]).read_text())
+    assert "configuration_adapter" not in request["entry"]

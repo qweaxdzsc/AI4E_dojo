@@ -33,7 +33,7 @@ test('页面单场提取到真实处理和产物预览',async({page,request},inf
  await page.locator('.ant-select-item-option').filter({hasText:'1dc58be25e1b6e5675cad724c63e222e'}).click();
  await page.keyboard.press('Escape');
  await page.getByRole('button',{name:'执行',exact:true}).click();await expect(page.locator('.execution-log').getByText('succeeded',{exact:true})).toBeVisible({timeout:90000});
- const refs=await(await request.get(`${api}/projects/${p.id}/tasks/${t.id}/stage-inputs`)).json();expect(refs.some((r:any)=>r.binding==='train.manifest')).toBeTruthy();
+ const refs=await(await request.get(`${api}/projects/${p.id}/tasks/${t.id}/stage-inputs`)).json();expect(refs.some((r:any)=>r.binding==='inputs.trainprep.dataset')).toBeTruthy();
  const listed=await(await request.get(`${api}/datasets`)).json();
  expect(listed.some((item:any)=>String(item.name||'').startsWith('field_extract_'))).toBeTruthy();
  await page.getByRole('button',{name:'quadpress_smpl.vtk',exact:true}).click();await expect(page.getByRole('dialog')).toBeVisible();

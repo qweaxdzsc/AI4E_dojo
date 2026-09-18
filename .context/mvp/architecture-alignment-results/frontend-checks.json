@@ -1,0 +1,17 @@
+{
+  "web-architecture-final.log": {
+    "sha256": "997a317e55403942fe3ebf02e0205b2cc63abd1f245a6dab43ce25f81797bce7"
+  },
+  "web-build-final.log": {
+    "sha256": "cfca5068d11f58dfd7ffb4c4ecfda0a8233bf838f754022c430825f32ee0edba"
+  },
+  "vis-architecture-final.log": {
+    "sha256": "b293ab8a217a83af92910a6d96a4103d45aae337c2ce0e131f15ed0ed5462218"
+  },
+  "vis-build-final.log": {
+    "sha256": "8455754abe546e470ebce4b1dc8ab9728e0d2f8d1f541713f9a20258b027427f"
+  },
+  "vis-frontend-tests.log": {
+    "sha256": "5e5cc8288d255fd0c538f476e45c2e98efbeb668b91bc3ff3b5e2ea8f404a9dd"
+  }
+}

@@ -10,7 +10,7 @@ MANAGED = ContextVar("ai4e_managed_run", default=None)
 
 
 @contextmanager
-def managed_run(context: RunContext):
+def managed_run(context: RunContext, *, allow_unmanaged: bool = False):
     """writer 提前落溯源，覆盖配置解析及启动失败；退出必须有真实会话摘要。"""
     from .writer import RunWriter
 
@@ -33,7 +33,17 @@ def managed_run(context: RunContext):
     token = MANAGED.set(state)
     try:
         writer.write_code_snapshot([context.code_dir])
-        yield writer
+        try:
+            yield writer
+        except SystemExit as exc:
+            if exc.code not in (None, 0):
+                raise
+        if not state["claimed"] and allow_unmanaged:
+            writer.write_summary({
+                "failed": False, "research_status": "unavailable",
+                "reports": {}, "run_dir": str(directory),
+            })
+            return
         if not state["claimed"] or not (directory / "summary.json").exists():
             raise RuntimeError("entry_did_not_complete_core_session")
     except BaseException as exc:

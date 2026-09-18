@@ -1,4 +1,10 @@
 # ai4e-spec 模块索引
+## 当前职责与本轮变更
+
+标准库交接类型；components 为局部消费者约定，data 为检查描述，artifacts 为持久化与跨进程格式。
+
+- 本轮文件与回归清单：`.context/mvp/architecture-alignment-acceptance.md`。
+
 
 ## 模块边界
 
@@ -49,7 +55,7 @@
 - `components/dataset.py`：数据视图和内容摘要协议。
 - `components/model.py`：模型组件及构造器描述回调。
 
-验收状态与相关测试见 `.context/mvp/transolver3-acceptance.md`，正式规模数值对标已通过，旧公开配置兼容政策仍待确认。
+历史数值对标及其范围见 `.context/mvp/transolver3-acceptance.md`；当前公开入口和兼容边界见 `.context/mvp/architecture-alignment-acceptance.md`，不迁移历史任务。
 
 ## 物理数据跨模型实验
 
@@ -84,7 +90,7 @@ artifacts/platform.py 增加 RawprepDescriptor 与检查范围、缺项及原生
 
 ## 独立推理交接
 
-- `artifacts/inference.py`：`InferenceCheckpointRef` 固定权重身份与修订；`InferenceRequest` 声明配置修订、多检查点、有序样本、分片、设备、输出选择和幂等身份；`InferenceResultRef` 固定任务/批次/运行/权重修订/样本。
+- `artifacts/inference.py`：`InferenceCheckpointRef` 固定权重身份与修订；`InferenceRequest` 声明配置修订、多检查点、有序样本、分片、设备、输出选择和幂等身份。`apply_export_aliases` 是旧键/新键的唯一解释：未拆新键时旧 `export_vtk` 同时开关点云和网格化，拆开后只表示网格化；值为空的新键视为未写。样本目录形状含 `vtk_exports`。`InferenceResultRef` 固定任务/批次/运行/权重修订/样本。
 - `artifacts/__init__.py`：公开上述标准库类型。配置字节、模型、数组和任意机器路径不进入这些契约；结果成员仍经固定资产引用读取。
 - `docs/PRD/ai4e-spec/artifacts/PRD.md` 第三章：来源与选择的长期使用约定；`.context/mvp/inference-acceptance.md`：圈定测试和当前未验收边界。
 

@@ -1,0 +1,144 @@
+............................F....F......F..........                      [100%]
+=================================== FAILURES ===================================
+______________________ test_name_conflict_rejects_execute ______________________
+
+binding_platform = (<starlette.testclient.TestClient object at 0x15da74620>, '/api/v1/projects/18b56f18b837470aba1128a3fcb1055a', PosixPa...4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-306/test_name_conflict_rejects_exe0/raw')], web_dist=None))
+
+    def test_name_conflict_rejects_execute(binding_platform):
+        client, base, _, settings = binding_platform
+        created = create(client, base, "shapenet_car_abupt")
+        project = Path(client.app.state.services.project(base.rsplit("/", 1)[-1]))
+        (project / "shared/datasets/shapenet_car").mkdir(parents=True)
+        (project / "shared/datasets/shapenet_car/occupied").write_text("occupied")
+        occupied = _manifest(settings.root / "occupied" / "manifest.json", "other")
+        task.register_processed_dataset(
+            settings.root,
+            "shapenet_car",
+            manifest_path=occupied,
+            digest=task.manifest_digest(occupied),
+            claim={"fingerprint": "foreign"},
+        )
+        url = base + "/tasks/" + created["id"]
+        initial = client.get(url + "/dataset").json()
+        bound = client.put(
+            url + "/dataset",
+            json={"expected_revision": initial["revision"], "sources": sources("shapenet_car_abupt")},
+        )
+        assert bound.status_code == 200, bound.text
+        cfg = client.get(url + "/rawprep").json()
+        saved = client.put(
+            url + "/rawprep",
+            json={
+                "revision": cfg["revision"],
+                "rawprep": cfg["rawprep"],
+                "processed_name": "shapenet_car",
+            },
+        )
+        assert saved.status_code == 200, saved.text
+        rejected = client.post(
+            url + "/rawprep/execute",
+            json={"revision": saved.json()["revision"], "sample_scope": {"mode": "all", "values": []}},
+        )
+        assert rejected.status_code == 409
+        assert "shared_dataset_exists" in rejected.text
+>       assert "未确认覆盖" in rejected.json()["error"]["message"]
+E       AssertionError: assert '未确认覆盖' in '同名项目共享数据集已存在，请确认是否覆盖：shapenet_car'
+
+tests/integration/test_web_processed_datasets.py:487: AssertionError
+_________ test_task_offline_shared_publication_and_cross_project_names _________
+
+binding_platform = (<starlette.testclient.TestClient object at 0x15e57e060>, '/api/v1/projects/9037b64228a24a6cadb064217dc18b7b', PosixPa...4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-306/test_task_offline_shared_publi0/raw')], web_dist=None))
+tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-306/test_task_offline_shared_publi0')
+
+    def test_task_offline_shared_publication_and_cross_project_names(binding_platform, tmp_path):
+        """Task 不调用服务发布；服务后查询自动登记，同名不同项目互不占用。"""
+        from tests.integration.test_task_shared_execution import shared_recipe, run_success
+    
+        client, base, _, settings = binding_platform
+>       source = shared_recipe(tmp_path / 'offline')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_web_processed_datasets.py:603: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_task_shared_execution.py:14: in shared_recipe
+    source = recipe(tmp_path)
+             ^^^^^^^^^^^^^^^^
+tests/integration/test_task_management.py:14: in recipe
+    source.mkdir()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-306/test_task_offline_shared_publi0/offline/template')
+mode = 511, parents = False, exist_ok = False
+
+    def mkdir(self, mode=0o777, parents=False, exist_ok=False):
+        """
+        Create a new directory at this given path.
+        """
+        try:
+>           os.mkdir(self, mode)
+E           FileNotFoundError: [Errno 2] No such file or directory: '/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-306/test_task_offline_shared_publi0/offline/template'
+
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/pathlib.py:1311: FileNotFoundError
+____________________ test_formal_recipe_new_fork_train_post ____________________
+
+tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-306/test_formal_recipe_new_fork_tr0')
+
+    def test_formal_recipe_new_fork_train_post(tmp_path):
+        source, cfg = setup_case(tmp_path)
+        _fit_config(cfg)
+        cfg.statistics.mode = "reference"
+        cfg.dataset.processed_name = "shared_physical"
+        cfg.normalization.execute = True
+        cfg.train.device = "cpu"
+        cfg.train.max_epochs = 1
+        cfg.train.test_repeat = 1
+        cfg.sampling.supernodes.num_points = 2
+        cfg.sampling.domains.surface.anchor.num_points = 2
+        cfg.sampling.domains.volume.anchor.num_points = 1
+        cfg.pipeline.stages = ["datapre", "trainprep", "train", "infer", "post"]
+        cfg.post.sample_indices = [0]
+        cfg.infer = {"samples": ["b"], "split": "test", "device": "cpu"}
+        OmegaConf.save(public_config(cfg), source / "config.yaml")
+        project = tmp_path / "study"
+        task.create_project(project)
+        first = task.new_task(project, "baseline", source=source)
+        a = task.submit_run(project, first["id"])
+        a = task.wait_run(project, a["id"], timeout=90)
+        assert a["status"] == "succeeded", a
+        assert (Path(a["run_dir"]) / "checkpoints/last.pt").is_file()
+        assert "post" in a["summary"]["reports"]
+        assert "infer" in a["summary"]["reports"]
+        child = task.fork_task(
+            project, first["id"], copy_datasets=True, copy_preparation=True, copy_checkpoints=True
+        )
+        assert {a["kind"] for a in child["copied_outputs"].values()} == {"preparation", "checkpoint"}
+        assert all(asset["source"]["run_id"] == a["id"] for asset in child["copied_outputs"].values())
+        b = task.submit_run(project, child["id"], overrides=["train.learning_rate=0.0002", "dataset.processed_name=derived_physical"])
+        b = task.wait_run(project, b["id"], timeout=90)
+        assert b["status"] == "succeeded", b
+        assert Path(a["data_dir"]) != Path(b["data_dir"])
+        assert len(task.get_lineage(project)) == 2
+        assert len(task.list_runs(project)) == 2
+        comparison = task.compare_runs(project, a["id"], b["id"], save=True)
+        assert comparison["metrics"]
+>       assert all(x["status"] == "available" for x in comparison["metrics"].values()), comparison
+E       AssertionError: {'id': 'f90c37b0bcd8409b89e151d9b5f5d00a', 'kind': 'runs', 'left': 'ef6ee5de84b54ba2a1798bfdddbb45f9', 'right': '36302b9fef7045b3a91c473ac712c1f8', ...}
+E       assert False
+E        +  where False = all(<generator object test_formal_recipe_new_fork_train_post.<locals>.<genexpr> at 0x15e7d3ed0>)
+
+tests/integration/test_task_recipe.py:50: AssertionError
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+.venv/lib/python3.12/site-packages/starlette/testclient.py:53
+  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/starlette/testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/integration/test_web_processed_datasets.py::test_name_conflict_rejects_execute
+FAILED tests/integration/test_web_processed_datasets.py::test_task_offline_shared_publication_and_cross_project_names
+FAILED tests/integration/test_task_recipe.py::test_formal_recipe_new_fork_train_post
+3 failed, 48 passed, 2 warnings in 218.32s (0:03:38)

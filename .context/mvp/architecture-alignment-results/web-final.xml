@@ -1,0 +1,88 @@
+<testsuites id="" name="" tests="34" failures="0" skipped="0" errors="0" time="116.388735">
+<testsuite name="execution-monitor.spec.ts" timestamp="2026-09-15T10:54:07.512Z" hostname="" tests="1" failures="0" skipped="0" time="2.082" errors="0">
+<testcase name="真实坐标绘图不将不规则 epoch 等距排列，单点仍可见" classname="execution-monitor.spec.ts" time="2.082">
+</testcase>
+</testsuite>
+<testsuite name="inference-results.spec.ts" timestamp="2026-09-15T10:54:07.512Z" hostname="" tests="3" failures="0" skipped="0" time="9.568" errors="0">
+<testcase name="独立表格和坐标配置、聚合多选、样本身份及导出一致" classname="inference-results.spec.ts" time="3.459">
+</testcase>
+<testcase name="无结果时也可打开两个配置弹窗并明确禁用应用" classname="inference-results.spec.ts" time="0.514">
+</testcase>
+<testcase name="多个物理量指标成对选列、坐标多选及取消草稿" classname="inference-results.spec.ts" time="5.595">
+</testcase>
+</testsuite>
+<testsuite name="model-picker.spec.ts" timestamp="2026-09-15T10:54:07.512Z" hostname="" tests="7" failures="0" skipped="0" time="8.599" errors="0">
+<testcase name="shapenet_car 同数据集切换、编辑保存、刷新与告警分区" classname="model-picker.spec.ts" time="2.307">
+</testcase>
+<testcase name="nasa_crm 同数据集切换、编辑保存、刷新与告警分区" classname="model-picker.spec.ts" time="2.312">
+</testcase>
+<testcase name="ShapeNet 可改选体场变体" classname="model-picker.spec.ts" time="1.143">
+</testcase>
+<testcase name="导出当前模型配置" classname="model-picker.spec.ts" time="0.36">
+</testcase>
+<testcase name="换模保存冲突保留草稿，不启动检查" classname="model-picker.spec.ts" time="0.872">
+</testcase>
+<testcase name="选项加载失败可重试，原参数不丢失" classname="model-picker.spec.ts" time="0.794">
+</testcase>
+<testcase name="迟到模型选项不覆盖新任务" classname="model-picker.spec.ts" time="0.811">
+</testcase>
+</testsuite>
+<testsuite name="post-files.spec.ts" timestamp="2026-09-15T10:54:07.512Z" hostname="" tests="2" failures="0" skipped="0" time="1.253" errors="0">
+<testcase name="搜索保留祖先、预览独立、批量追加" classname="post-files.spec.ts" time="0.625">
+</testcase>
+<testcase name="未展开时搜索命中祖先，换批次只带筛选重取当前层" classname="post-files.spec.ts" time="0.628">
+</testcase>
+</testsuite>
+<testsuite name="post-session.spec.ts" timestamp="2026-09-15T10:54:07.512Z" hostname="" tests="4" failures="0" skipped="0" time="3.856" errors="0">
+<testcase name="反复切换Tab保持iframe文档且退出回收" classname="post-session.spec.ts" time="1.695">
+</testcase>
+<testcase name="三维页占满剩余视口且宿主iframe贴合" classname="post-session.spec.ts" time="0.413">
+</testcase>
+<testcase name="显式重开替换iframe文档，同页hash地址不复用旧接管状态" classname="post-session.spec.ts" time="0.557">
+</testcase>
+<testcase name="会话满员后自动重试并挂上iframe" classname="post-session.spec.ts" time="1.191">
+</testcase>
+</testsuite>
+<testsuite name="post-ui.spec.ts" timestamp="2026-09-15T10:54:07.512Z" hostname="" tests="2" failures="0" skipped="0" time="1.674" errors="0">
+<testcase name="参考图布局与浮层 1440" classname="post-ui.spec.ts" time="0.823">
+</testcase>
+<testcase name="参考图布局与浮层 1920" classname="post-ui.spec.ts" time="0.851">
+</testcase>
+</testsuite>
+<testsuite name="post-workspace.spec.ts" timestamp="2026-09-15T10:54:07.512Z" hostname="" tests="3" failures="0" skipped="0" time="1.853" errors="0">
+<testcase name="三个Tab与指标布局 1440" classname="post-workspace.spec.ts" time="0.576">
+</testcase>
+<testcase name="三个Tab与指标布局 1920" classname="post-workspace.spec.ts" time="0.585">
+</testcase>
+<testcase name="同名样本按分片独立选择" classname="post-workspace.spec.ts" time="0.692">
+</testcase>
+</testsuite>
+<testsuite name="stage-consistency.spec.ts" timestamp="2026-09-15T10:54:07.512Z" hostname="" tests="9" failures="0" skipped="0" time="4.434" errors="0">
+<testcase name="阶段检查先保存，冲突不提交，响应丢失重用请求键" classname="stage-consistency.spec.ts" time="0.5">
+</testcase>
+<testcase name="浏览后处理不勾选前序步骤，已选输入按selected恢复" classname="stage-consistency.spec.ts" time="0.516">
+</testcase>
+<testcase name="平台数据集同一清单只选一条，按登记时间倒序且不与历史项联动" classname="stage-consistency.spec.ts" time="0.5">
+</testcase>
+<testcase name="数据准备字段按模型角色下拉匹配并标出张量形状不符" classname="stage-consistency.spec.ts" time="0.378">
+</testcase>
+<testcase name="数据准备分片显示原人数且数量之和须等于全部样本" classname="stage-consistency.spec.ts" time="0.383">
+</testcase>
+<testcase name="已完成步骤为绿当前为蓝，失效清单用人话，准备日志完整" classname="stage-consistency.spec.ts" time="0.409">
+</testcase>
+<testcase name="数据准备有正式清单时提示先选，不自动勾最新" classname="stage-consistency.spec.ts" time="0.398">
+</testcase>
+<testcase name="数据准备树表列与再执行清进度日志叠加" classname="stage-consistency.spec.ts" time="0.494">
+</testcase>
+<testcase name="训练运行只选准备记录，未选不可执行，提交不含准备步骤" classname="stage-consistency.spec.ts" time="0.856">
+</testcase>
+</testsuite>
+<testsuite name="task-dataset-binding.spec.ts" timestamp="2026-09-15T10:54:07.512Z" hostname="" tests="3" failures="0" skipped="0" time="82.086" errors="0">
+<testcase name="五案例简洁创建、工作台绑定与派生继承" classname="task-dataset-binding.spec.ts" time="67.782">
+</testcase>
+<testcase name="新建弹窗校验、案例重试与约定尺寸" classname="task-dataset-binding.spec.ts" time="4.215">
+</testcase>
+<testcase name="任务表在1440和1920下与原型关键尺寸相差不超过1px" classname="task-dataset-binding.spec.ts" time="10.089">
+</testcase>
+</testsuite>
+</testsuites>

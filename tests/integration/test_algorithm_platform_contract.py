@@ -11,6 +11,7 @@ from ai4e_core.abilities.data.source.manifest import ManifestIndex
 from ai4e_core.abilities.postproc.difference import difference
 from ai4e_core.abilities.transform.coordinate_normalization import CoordinateNormalization
 from ai4e_core.abilities.transform.minmax import MinMax
+from ai4e_core.abilities.transform.normalization import Normalization
 from ai4e_core.applications.aero_cfd.inspection import normalize_config
 
 
@@ -72,6 +73,30 @@ def test_minmax_constant_and_coordinate_compatibility():
     assert torch.equal(old.inverse(old.apply(value)), new.inverse(new.apply(value)))
 
 
+def test_field_scale_applies_after_coordinate_minmax():
+    record = {
+        "version": 2,
+        "fields": {
+            "x": {
+                "method": "coordinate",
+                "parameters": {"minimum": [0.0], "maximum": [4.0]},
+                "scale": 1000,
+            }
+        },
+    }
+    transform = Normalization(record).transforms["x"]
+    value = torch.tensor([[0.0, 2.0, 4.0]])
+    assert torch.equal(transform.apply(value), torch.tensor([[0.0, 500.0, 1000.0]]))
+    torch.testing.assert_close(transform.inverse(transform.apply(value)), value)
+    with pytest.raises(ValueError, match="scale"):
+        Normalization(
+            {
+                "version": 2,
+                "fields": {"x": {"method": "identity", "parameters": {}, "scale": 0}},
+            }
+        )
+
+
 def test_sampling_single_legacy_and_new_keys():
     old = {"trainprep": {"sampling": {"seed": 12}}}
     new = {"model": {"sampling": {"seed": 12}}}
@@ -104,6 +129,18 @@ def test_difference_rejects_equal_count_different_identity():
             difference(left, invalid)
 
 
+def test_fit_graph_viewport_uses_width_not_entire_graph():
+    from ai4e_core.abilities.modeling.inspection import fit_graph_viewport
+
+    html = (
+        "const scale = Math.min(width / graphWidth, height / graphHeight) * 0.9;\n"
+        "height / 2 - (minY + graphHeight / 2) * scale"
+    )
+    fitted = fit_graph_viewport(html)
+    assert "height / graphHeight" not in fitted
+    assert "24 - minY * scale" in fitted
+
+
 def test_real_torchvista_forward(tmp_path):
     from ai4e_core.abilities.modeling.inspection import trace
 
@@ -117,7 +154,75 @@ def test_real_torchvista_forward(tmp_path):
     )
     assert result["status"] == "succeeded"
     assert result["parameter_count"] == 21
-    assert "html" in (tmp_path / "model.html").read_text().lower()
+    assert result["graph_view"] == "compressed_modules"
+    assert result["graph_nodes"] < 40
+    html = (tmp_path / "model.html").read_text()
+    assert "html" in html.lower()
+    assert "const show_modular_view = true;" in html
+    assert "Math.min(1, (width * 0.92) / Math.max(graphWidth, 1))" in html
+
+
+def test_trace_keeps_domain_blocks_as_medium_module_graph(tmp_path):
+    from ai4e_core.abilities.modeling.inspection import trace
+
+    class DomainLike(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.up = torch.nn.Linear(4, 8)
+            self.down = torch.nn.Linear(8, 4)
+
+        def forward(self, x, frequencies=None, kv=None, condition=None, *, kind=None):
+            if isinstance(x, dict):
+                return self.forward_domains(x, frequencies, kv, kind=kind)
+            return self.down(torch.relu(self.up(x)))
+
+        def forward_domains(self, values, frequencies, anchors, *, kind):
+            tensor = torch.cat(list(values.values()), dim=0)
+            for _ in range(6):
+                tensor = torch.nn.functional.gelu(tensor + tensor.tanh())
+            tensor = self.forward(tensor)
+            return {name: tensor for name in values}, {}
+
+    class Stack(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.blocks = torch.nn.ModuleList([DomainLike() for _ in range(4)])
+
+        def forward(self, values):
+            current = {"surface": values}
+            for block in self.blocks:
+                current, _ = block(current, {}, {}, kind="s")
+            return current["surface"]
+
+    result = trace(
+        Stack(),
+        torch.ones(2, 4),
+        tmp_path,
+        revision="r-domain",
+        input_source={"sample": "domain-blocks"},
+        predict=lambda model, values: model(values),
+    )
+    assert result["graph_view"] == "compressed_modules"
+    assert result["graph_nodes"] < 80
+
+
+def test_trace_official_abupt_stays_medium_module_graph(tmp_path):
+    from ai4e_contrib.ability.model.abupt.model import predict
+    from ai4e_core.abilities.modeling.inspection import trace
+    from tests.integration.test_abupt_multidomain import inputs, make_model
+
+    model = make_model()
+    result = trace(
+        model,
+        inputs(),
+        tmp_path,
+        revision="r-abupt",
+        input_source={"sample": "tiny-abupt"},
+        predict=predict,
+    )
+    assert result["status"] == "succeeded"
+    assert result["graph_view"] == "compressed_modules"
+    assert result["graph_nodes"] < 250
 
 
 def test_extraction_keeps_point_and_cell_members_separate(tmp_path):
@@ -205,7 +310,7 @@ def test_sampling_change_invalidates_frozen_preparation(tmp_path):
     view = physical_fixture(tmp_path)
     config = {
         "model": {},
-        "sampling": {"seed": 1},
+        "sampling": {"seed": 1, "geometry": {"method": "uniform", "max_points": 64}},
         "trainprep": {"domains": {"surface": {"position": "pos", "targets": {"p": "p"}}}},
         "normalization": {"execute": True, "fields": {"pos": {"method": "identity"}}},
     }
@@ -214,9 +319,14 @@ def test_sampling_change_invalidates_frozen_preparation(tmp_path):
     _, _, record = open_preparation(config, dataset, model)
     path = tmp_path / "preparation.json"
     path.write_text(json.dumps(record))
+    assert "max_points" not in record["declarations"]["sampling"].get("geometry", {})
     config["sampling"]["seed"] = 2
-    with pytest.raises(ValueError, match="变化"):
-        open_preparation(config, dataset, model, path)
+    config["sampling"]["geometry"]["max_points"] = 3586
+    open_preparation(config, dataset, model, path)
+    config["sampling"]["geometry"]["method"] = "fps"
+    view, _, imported = open_preparation(config, dataset, model, path)
+    assert imported["version"] == record["version"]
+    assert view is not None
 
 
 def test_failed_trace_does_not_publish_partial_asset(tmp_path):
@@ -230,6 +340,124 @@ def test_failed_trace_does_not_publish_partial_asset(tmp_path):
         trace(Broken(), torch.ones(1, 3), tmp_path, revision="r", input_source={})
     assert not (tmp_path / "model.html").exists()
     assert not (tmp_path / "model-inspection.json").exists()
+
+
+def test_case_inspect_trace_prepares_network_without_html(tmp_path, monkeypatch):
+    """外流检查只取样组网，不写 HTML、不导入 TorchVista。"""
+    from pathlib import Path
+    from types import SimpleNamespace
+
+    from ai4e_core.applications.aero_cfd.inspection import execute
+
+    source = (
+        Path(__file__).resolve().parents[2]
+        / "packages/ai4e-core/applications/aero_cfd/inspection.py"
+    )
+    text = source.read_text(encoding="utf-8")
+    assert "torchvista" not in text
+    assert "model.html" not in text
+    assert "from ai4e_core.abilities.modeling.inspection import trace" not in text
+
+    network = torch.nn.Linear(3, 1)
+    model = SimpleNamespace(
+        resolve=lambda cfg, validate=False: cfg,
+        SOURCE="abupt",
+        construct=lambda **_kwargs: network,
+        training_parameters=lambda cfg: {},
+        predict=lambda inner, values: inner(values),
+        prepare_inputs=lambda *args, **kwargs: None,
+        prepare_sample=lambda *args, **kwargs: None,
+        collate=lambda items: items[0],
+    )
+    monkeypatch.setattr(
+        "ai4e_core.applications.aero_cfd.inspection._components",
+        lambda _cfg: (SimpleNamespace(), model),
+    )
+    monkeypatch.setattr(
+        "ai4e_core.applications.aero_cfd.rawprep.descriptor.dataset_component",
+        lambda _source: SimpleNamespace(),
+    )
+    monkeypatch.setattr(
+        "ai4e_core.applications.aero_cfd.rawprep.descriptor.resolve_rawprep",
+        lambda value: value,
+    )
+    monkeypatch.setattr(
+        "ai4e_core.applications.aero_cfd.inspection._trace_batch",
+        lambda *_args, **_kwargs: ({"inputs": torch.ones(2, 3)}, {"sample": "prepared"}),
+    )
+    output = tmp_path / "trace"
+    result = execute(
+        {
+            "operation": "trace_model",
+            "config": {
+                "components": {"model": "m", "dataset": "d"},
+                "train": {"preparation": str(tmp_path / "prep.json")},
+            },
+            "output_dir": str(output),
+        }
+    )
+    assert result["network"] is network
+    assert torch.equal(result["inputs"], torch.ones(2, 3))
+    assert result["input_source"] == {"sample": "prepared"}
+    assert list(output.glob("*.html")) == []
+    assert not (output / "model-inspection.json").exists()
+
+
+def test_platform_views_export_both_html_or_neither(tmp_path, monkeypatch):
+    from ai4e_viz.inspect.model_graph import export_platform_views
+
+    model = torch.nn.Sequential(torch.nn.Linear(3, 4), torch.nn.Tanh(), torch.nn.Linear(4, 1))
+    result = export_platform_views(
+        model,
+        torch.ones(2, 3),
+        tmp_path,
+        revision="r-views",
+        input_source={"sample": "platform-views"},
+    )
+    assert result["default_view"] == "stage_trunk"
+    assert set(result["views"]) == {"stage_trunk", "stage_blocks"}
+    assert (tmp_path / "model.stage-trunk.html").is_file()
+    assert (tmp_path / "model.stage-blocks.html").is_file()
+    assert (
+        "Math.min(1, (width * 0.92) / Math.max(graphWidth, 1))"
+        in (tmp_path / "model.stage-trunk.html").read_text()
+    )
+
+    def fail_second(*_args, **_kwargs):
+        raise RuntimeError("second view failed")
+
+    broken = tmp_path / "broken"
+    monkeypatch.setattr("ai4e_viz.inspect.model_graph._export_one", fail_second)
+    with pytest.raises(RuntimeError, match="second view failed"):
+        export_platform_views(
+            model,
+            torch.ones(2, 3),
+            broken,
+            revision="r-fail",
+            input_source={"sample": "fail"},
+        )
+    assert list(broken.glob("*.html")) == []
+    assert not (broken / "model-inspection.json").exists()
+
+
+def test_inspection_worker_exports_prepared_network_via_viz(tmp_path):
+    from ai4e_task.tasks.inspection_worker import render_inspection
+
+    model = torch.nn.Sequential(torch.nn.Linear(3, 4), torch.nn.Tanh(), torch.nn.Linear(4, 1))
+    result = render_inspection(
+        {"operation": "trace_model", "output_dir": str(tmp_path)},
+        lambda _request: {
+            "network": model,
+            "inputs": torch.ones(2, 3),
+            "revision": "r-worker",
+            "input_source": {"sample": "worker"},
+        },
+    )
+    assert result["status"] == "succeeded"
+    assert result["views"]["stage_trunk"]["member"] == "model.stage-trunk.html"
+    assert result["views"]["stage_blocks"]["member"] == "model.stage-blocks.html"
+    assert (tmp_path / "model.stage-trunk.html").is_file()
+    assert (tmp_path / "model.stage-blocks.html").is_file()
 
 
 def test_physical_grouped_output_preserves_sample_identity(tmp_path):
@@ -269,14 +497,14 @@ def test_coordinate_exact_legacy_arithmetic(arithmetic, dtype):
     transform = CoordinateNormalization((-3.0,), (4.5,), arithmetic=arithmetic)
     lo, hi = value.new_tensor([-3.0]), value.new_tensor([4.5])
     old = (
-        (value - lo) * (1000.0 / (hi - lo))
+        (value - lo) * (1.0 / (hi - lo))
         if arithmetic == "shift_scale"
-        else (value - lo) / (hi - lo) * 1000.0
+        else (value - lo) / (hi - lo) * 1.0
     )
     inverse = (
-        old * (1.0 / (1000.0 / (hi - lo))) + lo
+        old * (1.0 / (1.0 / (hi - lo))) + lo
         if arithmetic == "shift_scale"
-        else old / 1000.0 * (hi - lo) + lo
+        else old / 1.0 * (hi - lo) + lo
     )
     assert torch.equal(transform.apply(value), old)
     assert torch.equal(transform.inverse(old), inverse)
@@ -385,8 +613,8 @@ def test_preparation_rejects_selected_different_manifest(tmp_path):
     alternate = tmp_path / "other-manifest.json"
     alternate.write_text("{}")
     cfg["train"] = {"manifest": str(alternate)}
-    with pytest.raises(ValueError, match="清单与冻结准备"):
-        open_preparation(cfg, dataset, model, prep)
+    _, _, imported = open_preparation(cfg, dataset, model, prep)
+    assert imported["manifest"] == record["manifest"]
 
 
 def test_physical_prepare_rejects_version2_record(tmp_path):
@@ -421,6 +649,16 @@ def test_physical_prepare_rejects_version2_record(tmp_path):
         open_preparation(config, dataset, model, path)
 
 
+def test_trace_model_rejects_version1_preparation(tmp_path):
+    """公开跟踪不再分流到旧物理接口，旧准备要求重新生成。"""
+    from ai4e_core.applications.aero_cfd.inspection import _trace_batch
+
+    prep = tmp_path / "preparation.json"
+    prep.write_text(json.dumps({"version": 1, "dataset": "legacy"}))
+    with pytest.raises(ValueError, match="preparation_requires_regeneration"):
+        _trace_batch({"sampling": {}}, object(), object(), str(prep))
+
+
 def test_trace_model_uses_version2_preparation(tmp_path, monkeypatch):
     """结构跟踪对现行准备走训练同一条 consume，不再打开旧物理接口。"""
     from types import SimpleNamespace
@@ -447,6 +685,116 @@ def test_trace_model_uses_version2_preparation(tmp_path, monkeypatch):
     assert called["reference"] == str(prep)
 
 
+def test_trace_and_model_check_use_current_sampling_not_prep_counts(tmp_path, monkeypatch):
+    """旧准备 64 点不能挡住当前模型页 3586 点的检查和结构跟踪。"""
+    from pathlib import Path
+    from types import SimpleNamespace
+
+    from ai4e_core.applications.aero_cfd.inspection import (
+        _consume_current_preparation,
+        _trace_batch,
+        execute,
+    )
+    from ai4e_core.applications.aero_cfd.trainprep.preparation import (
+        declarations,
+        digest,
+        frozen_contract,
+    )
+    from tests.integration.test_trainprep_consume import _config, _declared
+
+    frozen = _declared()
+    payload = {
+        "version": 2,
+        "manifest": str(tmp_path / "manifest.json"),
+        "dataset_digest": "unused",
+        "normalization": {},
+        "normalization_digest": "unused",
+        "declarations": frozen,
+        "external_inputs": {},
+        "components": {
+            "prepare": {"name": "prepare", "sha256": "a"},
+            "collate": {"name": "collate", "sha256": "b"},
+        },
+        "split_counts": {"train": 1},
+        "partitions": {"train": ["s"]},
+        "split": {},
+    }
+    payload["digest"] = digest(payload)
+    prep = tmp_path / "preparation.json"
+    prep.write_text(json.dumps(payload))
+    current = deepcopy(frozen)
+    current["sampling"]["geometry"]["max_points"] = 3586
+    current["sampling"]["supernodes"]["num_points"] = 512
+    current["sampling"]["domains"]["surface"]["anchor"]["num_points"] = 256
+    config = _config(current)
+    config["sampling"] = current["sampling"]
+    assert frozen_contract(frozen) == frozen_contract(declarations(config))
+
+    seen = {}
+
+    def consume(cfg, reference, *, prepare, collate):
+        record = json.loads(Path(reference).read_text())
+        assert frozen_contract(record["declarations"]) == frozen_contract(declarations(cfg))
+        seen["max_points"] = cfg["sampling"]["geometry"]["max_points"]
+        return SimpleNamespace(
+            record={"digest": record["digest"]},
+            prepare=prepare,
+            collate=lambda items: {"inputs": items[0], "sampling": cfg["sampling"]},
+            index=SimpleNamespace(partitions={"train": ["s"]}, manifest={"state": "physical"}),
+            physical_prepare=None,
+            normalization=None,
+        )
+
+    monkeypatch.setattr("ai4e_core.applications.aero_cfd.trainprep.preparation.consume", consume)
+    monkeypatch.setattr(
+        "ai4e_core.applications.aero_cfd.trainprep.dataset.prepare_partition_sample",
+        lambda *_args, **kwargs: {"sampling": kwargs["sampling"]},
+    )
+    model = SimpleNamespace(
+        prepare_inputs=lambda *args, **kwargs: None,
+        prepare_sample=lambda *args, **kwargs: None,
+        collate=lambda items: items[0],
+        resolve=lambda cfg, validate=False: cfg,
+        SOURCE="abupt",
+        construct=lambda **_kwargs: SimpleNamespace(cpu=lambda: SimpleNamespace(eval=lambda: None)),
+        training_parameters=lambda cfg: {},
+        predict=None,
+    )
+    data = _consume_current_preparation(config, model, str(prep))
+    assert data.record["digest"] == payload["digest"]
+    assert seen["max_points"] == 3586
+    batch, source = _trace_batch(config, object(), model, str(prep))
+    assert batch["sampling"]["geometry"]["max_points"] == 3586
+    assert source["preparation"] == payload["digest"]
+
+    monkeypatch.setattr(
+        "ai4e_core.applications.aero_cfd.inspection._components",
+        lambda _cfg: (SimpleNamespace(), model),
+    )
+    monkeypatch.setattr(
+        "ai4e_core.applications.aero_cfd.rawprep.descriptor.dataset_component",
+        lambda _source: SimpleNamespace(),
+    )
+    monkeypatch.setattr(
+        "ai4e_core.applications.aero_cfd.rawprep.descriptor.resolve_rawprep",
+        lambda source: source,
+    )
+    checked = execute(
+        {
+            "operation": "validate_configuration",
+            "config": {
+                **config,
+                "components": {"model": "m", "dataset": "d"},
+                "train": {**config["train"], "preparation": str(prep)},
+            },
+            "selection": {"stage": "model"},
+            "output_dir": str(tmp_path / "check"),
+        }
+    )
+    assert checked["valid"] is True
+    assert checked["readiness"]["digest"] == payload["digest"]
+
+
 def test_trace_model_requires_physical_manifest():
     from pathlib import Path
 
@@ -469,6 +817,22 @@ def test_trace_model_requires_physical_manifest():
                 "component_provider": "ai4e_contrib.application.aero_cfd",
             }
         )
+
+
+def test_contrib_inspect_keeps_historical_dataset_root():
+    """历史任务仍带 dataset.root 时，平台检查不因键迁移拒绝描述。"""
+    from pathlib import Path
+
+    import yaml
+
+    from ai4e_contrib.application.aero_cfd.operations import inspect
+
+    config = yaml.safe_load(
+        (Path(__file__).resolve().parents[2] / "recipes/aero_cfd/config.yaml").read_text()
+    )
+    config.setdefault("dataset", {})["root"] = "/tmp/legacy-dataset"
+    result = inspect({"operation": "describe_case", "config": config})
+    assert result["capabilities"]["sampling"]["configurable"] is True
 
 
 def test_declared_legacy_provider_and_actual_training_capabilities():
@@ -497,13 +861,15 @@ def test_declared_legacy_provider_and_actual_training_capabilities():
     )
     result = execute({"operation": "describe_case", "config": config})
     caps = result["capabilities"]
-    assert caps["training_constraints"]["evaluation_enabled"]["allowed"] == [False]
+    assert caps["training_constraints"]["evaluation_split"]["allowed"] == ["validation"]
     assert caps["training_constraints"]["optimizer"]["allowed"] == ["adamw"]
-    assert caps["losses"] == {
+    assert {k: caps["losses"][k] for k in ("configurable", "fixed", "reason")} == {
         "configurable": False,
         "fixed": "mse",
         "reason": "参考点场等权标准化逐元素均方误差",
     }
+    assert [term["target"] for term in caps["losses"]["terms"]] == ["surface_cp", "surface_cf"]
+    assert all(term["loss"] == "mse" and term["weight"] == 1 for term in caps["losses"]["terms"])
     assert "scheduler_unit" in caps["parameter_descriptors"]
     assert "min_lr_ratio" in caps["parameter_descriptors"]
 

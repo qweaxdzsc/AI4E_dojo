@@ -1,0 +1,6 @@
+input_path: points.json
+output_path: ../data/features.json
+run_root: ../runs
+radius: 2
+pipeline:
+  stages: [features]

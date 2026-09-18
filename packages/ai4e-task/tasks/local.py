@@ -52,8 +52,10 @@ def alive(pid: int | None, request: Path) -> bool:
     )
 
 
-def terminate(pid: int, request: Path) -> None:
+def terminate(pid: int, request: Path):
     """再次核验后请求进程组停止，不自动强杀。"""
     if not alive(pid, request):
         raise RuntimeError("process_identity_unconfirmed")
+    child = CHILDREN.get(str(request))
     os.killpg(pid, signal.SIGTERM)
+    return child

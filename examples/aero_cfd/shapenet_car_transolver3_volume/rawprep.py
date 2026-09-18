@@ -3,7 +3,7 @@
 import sys
 
 sys.dont_write_bytecode = True
-from configuration import load_components, load_configuration
+from configuration import application_parameters, load_components, load_configuration
 
 from ai4e_core import run
 from ai4e_core.applications.aero_cfd import rawprep as pre
@@ -11,8 +11,9 @@ from ai4e_core.applications.aero_cfd import rawprep as pre
 
 def rawprep(cfg):
     """交付本次成功处理的数据清单，检查模式不发布数据。"""
+    config = application_parameters(cfg, session=run.TrainingRun())
     components = load_components(cfg)
-    source = pre.open_source(component=components.dataset, settings=cfg.dataset)
+    source = pre.open_source(component=components.dataset, settings=config["dataset"])
 
     # 仅登记；每个样本在 run.execute 中才读取和计算。
     data = pre.read(source, sources=cfg.rawprep.sources)
@@ -26,11 +27,19 @@ def rawprep(cfg):
     data = pre.validate_fields(data)
     data = pre.filter_points(data, filters=cfg.rawprep.filters)
     data = pre.validate_fields(data)
-    data = pre.encode(data, format=cfg.rawprep.get("format", "pt"), vtkhdf=cfg.rawprep.vtkhdf)
+    data = pre.encode(
+        data,
+        **(
+            {"formats": list(cfg.rawprep.formats)}
+            if "formats" in cfg.rawprep
+            else {"format": cfg.rawprep.get("format", "pt")}
+        ),
+        vtkhdf=cfg.rawprep.vtkhdf,
+    )
 
-    results = run.execute(data, save=pre.save_sample, output=cfg.paths.datasets)
+    results = run.execute(data, save=pre.save_sample, output=config["paths"]["datasets"])
     statistics = pre.compute_statistics(results, settings=cfg.rawprep.statistics)
-    return pre.publish_dataset(results, statistics=statistics)
+    return pre.publish_dataset(results, statistics=statistics, session=run.TrainingRun())
 
 
 if __name__ == "__main__":

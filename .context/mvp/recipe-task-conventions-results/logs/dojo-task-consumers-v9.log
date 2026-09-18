@@ -1,0 +1,1183 @@
+FF....                                                                   [100%]
+=================================== FAILURES ===================================
+_______________ test_two_checkpoints_two_samples_real_execution ________________
+
+tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x159e45040>
+
+    def test_two_checkpoints_two_samples_real_execution(tmp_path, monkeypatch):
+        folder, cfg = case(tmp_path, "nasa_crm_abupt")
+        # 平台批量推理消费现行 version=2 准备；保留案例专属 rawprep。
+        import shutil
+        for stage in ("trainprep.py", "train.py"):
+            shutil.copyfile(Path(__file__).resolve().parents[2] / "recipes/aero_cfd" / stage, folder / stage)
+        cfg["pipeline"]["stages"] = ["trainprep", "train"]
+        (folder / "config.yaml").write_text(yaml.safe_dump(cfg))
+        import shutil
+    
+        project = tmp_path / "project"
+        task.create_project(project)
+        item = task.new_task(project, "infer-test", source=folder)
+        first = task.submit_run(project, item["id"], input_keys=["inputs.trainprep.dataset"])
+        first = task.wait_run(project, first["id"], timeout=180)
+>       assert first["status"] == "succeeded", task.read_log(project, first["id"])
+E       AssertionError: 2026-09-17 15:29:21,417 INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/project/tasks/ef153461c37e477b911a18c6ca2f5df7/.dojo/executions/149f370e861c439a9bc3f9b7b5f4502a/code/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/project/tasks/ef153461c37e477b911a18c6ca2f5df7/runs/149f370e861c439a9bc3f9b7b5f4502a；生效配置=inputs/config.yaml
+E         2026-09-17 15:29:21,417 INFO [trainprep/阶段/开始] 
+E         2026-09-17 15:29:21,427 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/conditions.pt
+E         2026-09-17 15:29:21,429 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,429 INFO [trainprep/张量读取/结束] 耗时=0.002秒
+E         2026-09-17 15:29:21,429 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/global_targets.pt
+E         2026-09-17 15:29:21,429 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,429 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,429 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_area.pt
+E         2026-09-17 15:29:21,429 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,429 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,429 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_cf.pt
+E         2026-09-17 15:29:21,430 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,430 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,430 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_cp.pt
+E         2026-09-17 15:29:21,430 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,430 INFO [trainprep/张量读取/结束] 耗时=0.001秒
+E         2026-09-17 15:29:21,431 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_ids.pt
+E         2026-09-17 15:29:21,431 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,431 INFO [trainprep/张量读取/结束] 耗时=0.001秒
+E         2026-09-17 15:29:21,432 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_normals.pt
+E         2026-09-17 15:29:21,432 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,432 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,432 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_position.pt
+E         2026-09-17 15:29:21,433 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,433 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,433 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/conditions.pt
+E         2026-09-17 15:29:21,433 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,433 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,433 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/global_targets.pt
+E         2026-09-17 15:29:21,433 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,433 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,434 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_area.pt
+E         2026-09-17 15:29:21,434 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,434 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,434 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_cf.pt
+E         2026-09-17 15:29:21,434 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,434 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,434 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_cp.pt
+E         2026-09-17 15:29:21,434 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,434 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,434 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_ids.pt
+E         2026-09-17 15:29:21,435 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,435 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,435 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_normals.pt
+E         2026-09-17 15:29:21,435 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,435 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,435 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_position.pt
+E         2026-09-17 15:29:21,435 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,435 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,435 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/conditions.pt
+E         2026-09-17 15:29:21,436 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,436 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,436 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/global_targets.pt
+E         2026-09-17 15:29:21,436 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,436 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,436 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_area.pt
+E         2026-09-17 15:29:21,436 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,436 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,436 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_cf.pt
+E         2026-09-17 15:29:21,437 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,437 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,437 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_cp.pt
+E         2026-09-17 15:29:21,437 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,437 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,437 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_ids.pt
+E         2026-09-17 15:29:21,437 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,437 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,437 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_normals.pt
+E         2026-09-17 15:29:21,437 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,437 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,437 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_position.pt
+E         2026-09-17 15:29:21,438 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,438 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,438 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/conditions.pt
+E         2026-09-17 15:29:21,438 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,438 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,438 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/global_targets.pt
+E         2026-09-17 15:29:21,438 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,438 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,438 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_area.pt
+E         2026-09-17 15:29:21,439 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,439 INFO [trainprep/张量读取/结束] 耗时=0.001秒
+E         2026-09-17 15:29:21,439 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_cf.pt
+E         2026-09-17 15:29:21,440 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,440 INFO [trainprep/张量读取/结束] 耗时=0.001秒
+E         2026-09-17 15:29:21,440 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_cp.pt
+E         2026-09-17 15:29:21,440 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,440 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,440 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_ids.pt
+E         2026-09-17 15:29:21,441 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,441 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,441 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_normals.pt
+E         2026-09-17 15:29:21,441 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,441 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,441 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_position.pt
+E         2026-09-17 15:29:21,441 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,441 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,442 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/conditions.pt
+E         2026-09-17 15:29:21,442 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,442 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,442 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/global_targets.pt
+E         2026-09-17 15:29:21,442 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,442 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,442 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_area.pt
+E         2026-09-17 15:29:21,442 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,442 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,442 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_cf.pt
+E         2026-09-17 15:29:21,442 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,443 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,443 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_cp.pt
+E         2026-09-17 15:29:21,443 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,443 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,443 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_ids.pt
+E         2026-09-17 15:29:21,443 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,443 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,443 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_normals.pt
+E         2026-09-17 15:29:21,443 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,443 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,443 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_position.pt
+E         2026-09-17 15:29:21,444 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,444 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,444 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/conditions.pt
+E         2026-09-17 15:29:21,444 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,444 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,444 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/global_targets.pt
+E         2026-09-17 15:29:21,444 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,444 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,444 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_area.pt
+E         2026-09-17 15:29:21,445 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,445 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,445 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_cf.pt
+E         2026-09-17 15:29:21,445 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,445 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,445 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_cp.pt
+E         2026-09-17 15:29:21,445 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,445 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,445 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_ids.pt
+E         2026-09-17 15:29:21,445 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,445 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,445 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_normals.pt
+E         2026-09-17 15:29:21,445 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,445 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,445 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_position.pt
+E         2026-09-17 15:29:21,446 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,446 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,446 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/conditions.pt
+E         2026-09-17 15:29:21,446 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,446 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,446 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/global_targets.pt
+E         2026-09-17 15:29:21,446 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,446 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,446 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_area.pt
+E         2026-09-17 15:29:21,446 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,446 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,447 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_cf.pt
+E         2026-09-17 15:29:21,447 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,447 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,447 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_cp.pt
+E         2026-09-17 15:29:21,447 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,447 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,447 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_ids.pt
+E         2026-09-17 15:29:21,448 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,448 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,448 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_normals.pt
+E         2026-09-17 15:29:21,448 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,448 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,448 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_position.pt
+E         2026-09-17 15:29:21,449 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,449 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,449 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/conditions.pt
+E         2026-09-17 15:29:21,449 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,449 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,449 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/global_targets.pt
+E         2026-09-17 15:29:21,449 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,449 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,449 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_area.pt
+E         2026-09-17 15:29:21,449 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,449 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,450 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_cf.pt
+E         2026-09-17 15:29:21,450 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,450 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,450 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_cp.pt
+E         2026-09-17 15:29:21,450 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,450 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,450 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_ids.pt
+E         2026-09-17 15:29:21,450 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,450 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,450 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_normals.pt
+E         2026-09-17 15:29:21,450 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,450 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,450 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_position.pt
+E         2026-09-17 15:29:21,451 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,451 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,451 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/conditions.pt
+E         2026-09-17 15:29:21,451 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,451 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,451 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/global_targets.pt
+E         2026-09-17 15:29:21,451 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,451 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,451 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_area.pt
+E         2026-09-17 15:29:21,451 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,451 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,451 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_cf.pt
+E         2026-09-17 15:29:21,452 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,452 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,452 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_cp.pt
+E         2026-09-17 15:29:21,452 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,452 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,452 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_ids.pt
+E         2026-09-17 15:29:21,452 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,452 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,452 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_normals.pt
+E         2026-09-17 15:29:21,452 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,452 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,452 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_position.pt
+E         2026-09-17 15:29:21,453 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,453 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,453 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/conditions.pt
+E         2026-09-17 15:29:21,453 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,453 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,453 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/global_targets.pt
+E         2026-09-17 15:29:21,453 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,453 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,453 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_area.pt
+E         2026-09-17 15:29:21,453 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,453 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,453 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_cf.pt
+E         2026-09-17 15:29:21,453 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,453 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,454 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_cp.pt
+E         2026-09-17 15:29:21,454 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,454 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,454 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_ids.pt
+E         2026-09-17 15:29:21,454 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,454 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,454 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_normals.pt
+E         2026-09-17 15:29:21,454 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,454 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,454 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_position.pt
+E         2026-09-17 15:29:21,454 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,454 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,454 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/conditions.pt
+E         2026-09-17 15:29:21,455 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,455 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,455 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/global_targets.pt
+E         2026-09-17 15:29:21,455 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,455 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,455 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_area.pt
+E         2026-09-17 15:29:21,455 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,455 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,455 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_cf.pt
+E         2026-09-17 15:29:21,456 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,456 INFO [trainprep/张量读取/结束] 耗时=0.001秒
+E         2026-09-17 15:29:21,456 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_cp.pt
+E         2026-09-17 15:29:21,457 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,457 INFO [trainprep/张量读取/结束] 耗时=0.001秒
+E         2026-09-17 15:29:21,457 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_ids.pt
+E         2026-09-17 15:29:21,457 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,457 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,457 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_normals.pt
+E         2026-09-17 15:29:21,457 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,457 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,457 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_position.pt
+E         2026-09-17 15:29:21,457 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,458 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,458 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/conditions.pt
+E         2026-09-17 15:29:21,458 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,458 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,458 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/global_targets.pt
+E         2026-09-17 15:29:21,458 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,458 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,458 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_area.pt
+E         2026-09-17 15:29:21,458 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,458 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,458 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_cf.pt
+E         2026-09-17 15:29:21,459 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,459 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,459 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_cp.pt
+E         2026-09-17 15:29:21,459 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,459 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,459 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_ids.pt
+E         2026-09-17 15:29:21,459 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,459 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,459 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_normals.pt
+E         2026-09-17 15:29:21,459 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,459 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,459 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_position.pt
+E         2026-09-17 15:29:21,459 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,459 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,460 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/conditions.pt
+E         2026-09-17 15:29:21,460 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,460 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,460 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/global_targets.pt
+E         2026-09-17 15:29:21,460 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,460 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,460 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_area.pt
+E         2026-09-17 15:29:21,460 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,460 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,460 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_cf.pt
+E         2026-09-17 15:29:21,460 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,461 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,461 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_cp.pt
+E         2026-09-17 15:29:21,461 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,461 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,461 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_ids.pt
+E         2026-09-17 15:29:21,461 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,461 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,461 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_normals.pt
+E         2026-09-17 15:29:21,461 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,461 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,461 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_position.pt
+E         2026-09-17 15:29:21,461 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,461 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,462 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/conditions.pt
+E         2026-09-17 15:29:21,462 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,462 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,462 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/global_targets.pt
+E         2026-09-17 15:29:21,462 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,462 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,462 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_area.pt
+E         2026-09-17 15:29:21,462 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,462 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,462 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_cf.pt
+E         2026-09-17 15:29:21,462 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,462 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,462 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_cp.pt
+E         2026-09-17 15:29:21,463 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,463 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,463 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_ids.pt
+E         2026-09-17 15:29:21,463 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,463 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,463 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_normals.pt
+E         2026-09-17 15:29:21,463 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,463 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,463 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_position.pt
+E         2026-09-17 15:29:21,463 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,463 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,463 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/conditions.pt
+E         2026-09-17 15:29:21,464 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,464 INFO [trainprep/张量读取/结束] 耗时=0.001秒
+E         2026-09-17 15:29:21,464 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/global_targets.pt
+E         2026-09-17 15:29:21,465 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,465 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,465 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_area.pt
+E         2026-09-17 15:29:21,465 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,465 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,465 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_cf.pt
+E         2026-09-17 15:29:21,465 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,465 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,465 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_cp.pt
+E         2026-09-17 15:29:21,465 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,465 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,466 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_ids.pt
+E         2026-09-17 15:29:21,466 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,466 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,466 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_normals.pt
+E         2026-09-17 15:29:21,466 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,466 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,466 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_position.pt
+E         2026-09-17 15:29:21,466 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,466 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,466 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/conditions.pt
+E         2026-09-17 15:29:21,466 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,466 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,466 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/global_targets.pt
+E         2026-09-17 15:29:21,467 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,467 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,467 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_area.pt
+E         2026-09-17 15:29:21,467 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,467 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,467 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_cf.pt
+E         2026-09-17 15:29:21,467 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,467 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,467 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_cp.pt
+E         2026-09-17 15:29:21,467 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,467 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,467 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_ids.pt
+E         2026-09-17 15:29:21,468 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,468 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,468 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_normals.pt
+E         2026-09-17 15:29:21,468 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,468 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,468 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_position.pt
+E         2026-09-17 15:29:21,468 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,468 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:21,469 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample001/conditions.pt
+E         2026-09-17 15:29:21,469 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,469 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,469 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample001/global_targets.pt
+E         2026-09-17 15:29:21,469 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,469 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,469 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample001/surface_area.pt
+E         2026-09-17 15:29:21,470 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,470 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,470 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample001/surface_cf.pt
+E         2026-09-17 15:29:21,470 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,470 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,470 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample001/surface_cp.pt
+E         2026-09-17 15:29:21,470 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,470 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,470 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample001/surface_ids.pt
+E         2026-09-17 15:29:21,471 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,471 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,471 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample001/surface_normals.pt
+E         2026-09-17 15:29:21,471 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,471 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,471 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample001/surface_position.pt
+E         2026-09-17 15:29:21,471 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,471 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,472 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample002/conditions.pt
+E         2026-09-17 15:29:21,473 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,473 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.001秒
+E         2026-09-17 15:29:21,473 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample002/global_targets.pt
+E         2026-09-17 15:29:21,474 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,474 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.001秒
+E         2026-09-17 15:29:21,474 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample002/surface_area.pt
+E         2026-09-17 15:29:21,474 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,474 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:21,474 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample002/surface_cf.pt
+E         2026-09-17 15:29:21,474 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,474 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:21,474 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample002/surface_cp.pt
+E         2026-09-17 15:29:21,475 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,475 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:21,475 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample002/surface_ids.pt
+E         2026-09-17 15:29:21,475 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,475 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:21,475 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample002/surface_normals.pt
+E         2026-09-17 15:29:21,475 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,475 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:21,475 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/test/Sample002/surface_position.pt
+E         2026-09-17 15:29:21,475 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,476 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:21,476 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/conditions.pt
+E         2026-09-17 15:29:21,476 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,476 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,476 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/global_targets.pt
+E         2026-09-17 15:29:21,476 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,476 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,476 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_area.pt
+E         2026-09-17 15:29:21,477 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,477 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,477 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_cf.pt
+E         2026-09-17 15:29:21,477 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,477 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,477 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_cp.pt
+E         2026-09-17 15:29:21,477 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,477 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,477 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_ids.pt
+E         2026-09-17 15:29:21,477 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,477 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,477 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_normals.pt
+E         2026-09-17 15:29:21,477 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,477 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,477 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample001/surface_position.pt
+E         2026-09-17 15:29:21,478 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,478 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,478 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/conditions.pt
+E         2026-09-17 15:29:21,478 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,478 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:21,478 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/global_targets.pt
+E         2026-09-17 15:29:21,478 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,478 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:21,478 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_area.pt
+E         2026-09-17 15:29:21,479 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,479 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:21,479 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_cf.pt
+E         2026-09-17 15:29:21,479 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,479 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:21,479 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_cp.pt
+E         2026-09-17 15:29:21,479 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,479 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:21,479 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_ids.pt
+E         2026-09-17 15:29:21,479 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,479 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:21,479 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_normals.pt
+E         2026-09-17 15:29:21,479 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,480 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:21,480 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample002/surface_position.pt
+E         2026-09-17 15:29:21,480 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,480 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:21,480 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/conditions.pt
+E         2026-09-17 15:29:21,481 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,481 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.001秒
+E         2026-09-17 15:29:21,481 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/global_targets.pt
+E         2026-09-17 15:29:21,481 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,482 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.000秒
+E         2026-09-17 15:29:21,482 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_area.pt
+E         2026-09-17 15:29:21,482 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,482 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.000秒
+E         2026-09-17 15:29:21,482 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_cf.pt
+E         2026-09-17 15:29:21,482 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,482 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.000秒
+E         2026-09-17 15:29:21,482 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_cp.pt
+E         2026-09-17 15:29:21,482 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,482 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.000秒
+E         2026-09-17 15:29:21,482 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_ids.pt
+E         2026-09-17 15:29:21,482 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,482 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.000秒
+E         2026-09-17 15:29:21,482 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_normals.pt
+E         2026-09-17 15:29:21,483 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,483 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.000秒
+E         2026-09-17 15:29:21,483 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample003/surface_position.pt
+E         2026-09-17 15:29:21,483 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,483 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.000秒
+E         2026-09-17 15:29:21,483 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/conditions.pt
+E         2026-09-17 15:29:21,484 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,484 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:21,484 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/global_targets.pt
+E         2026-09-17 15:29:21,484 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,484 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:21,484 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_area.pt
+E         2026-09-17 15:29:21,484 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,484 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:21,484 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_cf.pt
+E         2026-09-17 15:29:21,484 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,484 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:21,484 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_cp.pt
+E         2026-09-17 15:29:21,485 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,485 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:21,485 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_ids.pt
+E         2026-09-17 15:29:21,485 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,485 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:21,485 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_normals.pt
+E         2026-09-17 15:29:21,485 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,485 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:21,485 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/train/Sample004/surface_position.pt
+E         2026-09-17 15:29:21,485 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,485 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:21,486 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/validation/Sample005/conditions.pt
+E         2026-09-17 15:29:21,486 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:21,486 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,486 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/validation/Sample005/global_targets.pt
+E         2026-09-17 15:29:21,486 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:21,486 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,486 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/validation/Sample005/surface_area.pt
+E         2026-09-17 15:29:21,487 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,487 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,487 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/validation/Sample005/surface_cf.pt
+E         2026-09-17 15:29:21,487 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,487 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,487 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/validation/Sample005/surface_cp.pt
+E         2026-09-17 15:29:21,487 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:21,487 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,487 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/validation/Sample005/surface_ids.pt
+E         2026-09-17 15:29:21,487 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:21,487 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,487 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/validation/Sample005/surface_normals.pt
+E         2026-09-17 15:29:21,488 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,488 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,488 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/data/2026-09-17T15-29-11_0b42af/rawprep/validation/Sample005/surface_position.pt
+E         2026-09-17 15:29:21,488 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:21,488 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:21,492 INFO [trainprep/统计参数提交/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_two_checkpoints_two_sampl0/project/tasks/ef153461c37e477b911a18c6ca2f5df7/data/149f370e861c439a9bc3f9b7b5f4502a/trainprep/normalize/cea691fd5d706fad6316846d9b111392b498dcccab5728c8704699f61ddb2940/normalization.yaml
+E         2026-09-17 15:29:21,493 INFO [trainprep/统计参数提交/结束] 耗时=0.001秒
+E         2026-09-17 15:29:21,501 INFO [trainprep/阶段/结束] 耗时=0.083秒
+E         2026-09-17 15:29:21,501 INFO [train/阶段/开始] 
+E         2026-09-17 15:29:21,511 ERROR [train/阶段/失败] 样本=；原因=同一样本在多个原分片中且记录不一致: Sample001；耗时=0.010秒
+E         2026-09-17 15:29:21,511 ERROR 运行失败：同一样本在多个原分片中且记录不一致: Sample001
+E         2026-09-17 15:29:21,513 INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.096秒
+E         
+E       assert 'failed' == 'succeeded'
+E         
+E         - succeeded
+E         + failed
+
+tests/integration/test_task_infer_batches.py:39: AssertionError
+_______________ test_partition_failure_retry_and_evaluation_only _______________
+
+tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x15a4a5be0>
+
+    def test_partition_failure_retry_and_evaluation_only(tmp_path, monkeypatch):
+        """同名样本按分片保留，最后成功不得掩盖前一分片失败。"""
+        folder, cfg = case(tmp_path, "nasa_crm_abupt")
+        # 平台批量推理消费现行 version=2 准备；保留案例专属 rawprep。
+        import shutil
+        for stage in ("trainprep.py", "train.py"):
+            shutil.copyfile(Path(__file__).resolve().parents[2] / "recipes/aero_cfd" / stage, folder / stage)
+        cfg["pipeline"]["stages"] = ["trainprep", "train"]
+        (folder / "config.yaml").write_text(yaml.safe_dump(cfg))
+        project = tmp_path / "project"
+        task.create_project(project)
+        item = task.new_task(project, "分片验收", source=folder)
+        trained = task.submit_run(project, item["id"], input_keys=["inputs.trainprep.dataset"])
+        trained = task.wait_run(project, trained["id"], timeout=180)
+>       assert trained["status"] == "succeeded", task.read_log(project, trained["id"])
+E       AssertionError: 2026-09-17 15:29:34,118 INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/project/tasks/797a603c5ac0490ebacb23d08402e744/.dojo/executions/d113984389364af4b633eb90a4400d1d/code/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/project/tasks/797a603c5ac0490ebacb23d08402e744/runs/d113984389364af4b633eb90a4400d1d；生效配置=inputs/config.yaml
+E         2026-09-17 15:29:34,118 INFO [trainprep/阶段/开始] 
+E         2026-09-17 15:29:34,127 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/conditions.pt
+E         2026-09-17 15:29:34,129 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,129 INFO [trainprep/张量读取/结束] 耗时=0.002秒
+E         2026-09-17 15:29:34,129 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/global_targets.pt
+E         2026-09-17 15:29:34,130 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,130 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,130 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_area.pt
+E         2026-09-17 15:29:34,130 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,130 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,130 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_cf.pt
+E         2026-09-17 15:29:34,130 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,130 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,130 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_cp.pt
+E         2026-09-17 15:29:34,131 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,131 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,131 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_ids.pt
+E         2026-09-17 15:29:34,131 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,131 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,131 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_normals.pt
+E         2026-09-17 15:29:34,131 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,131 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,131 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_position.pt
+E         2026-09-17 15:29:34,132 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,132 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,132 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/conditions.pt
+E         2026-09-17 15:29:34,132 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,132 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,132 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/global_targets.pt
+E         2026-09-17 15:29:34,132 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,132 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,132 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_area.pt
+E         2026-09-17 15:29:34,133 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,133 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,133 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_cf.pt
+E         2026-09-17 15:29:34,133 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,133 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,133 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_cp.pt
+E         2026-09-17 15:29:34,133 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,133 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,133 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_ids.pt
+E         2026-09-17 15:29:34,133 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,133 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,133 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_normals.pt
+E         2026-09-17 15:29:34,134 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,134 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,134 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_position.pt
+E         2026-09-17 15:29:34,134 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,134 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,134 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/conditions.pt
+E         2026-09-17 15:29:34,134 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,134 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,134 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/global_targets.pt
+E         2026-09-17 15:29:34,135 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,135 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,135 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_area.pt
+E         2026-09-17 15:29:34,135 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,135 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,135 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_cf.pt
+E         2026-09-17 15:29:34,135 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,135 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,135 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_cp.pt
+E         2026-09-17 15:29:34,135 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,135 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,135 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_ids.pt
+E         2026-09-17 15:29:34,136 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,136 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,136 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_normals.pt
+E         2026-09-17 15:29:34,136 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,136 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,137 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_position.pt
+E         2026-09-17 15:29:34,137 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,137 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,137 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/conditions.pt
+E         2026-09-17 15:29:34,138 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,138 INFO [trainprep/张量读取/结束] 耗时=0.001秒
+E         2026-09-17 15:29:34,138 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/global_targets.pt
+E         2026-09-17 15:29:34,138 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,138 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,138 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_area.pt
+E         2026-09-17 15:29:34,138 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,138 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,138 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_cf.pt
+E         2026-09-17 15:29:34,139 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,139 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,139 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_cp.pt
+E         2026-09-17 15:29:34,139 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,139 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,139 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_ids.pt
+E         2026-09-17 15:29:34,139 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,139 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,139 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_normals.pt
+E         2026-09-17 15:29:34,139 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,139 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,139 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_position.pt
+E         2026-09-17 15:29:34,140 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,140 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,140 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/conditions.pt
+E         2026-09-17 15:29:34,140 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,140 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,140 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/global_targets.pt
+E         2026-09-17 15:29:34,140 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,140 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,140 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_area.pt
+E         2026-09-17 15:29:34,140 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,140 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,140 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_cf.pt
+E         2026-09-17 15:29:34,141 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,141 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,141 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_cp.pt
+E         2026-09-17 15:29:34,141 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,141 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,141 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_ids.pt
+E         2026-09-17 15:29:34,141 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,141 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,141 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_normals.pt
+E         2026-09-17 15:29:34,141 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,141 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,141 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_position.pt
+E         2026-09-17 15:29:34,141 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,141 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,141 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/conditions.pt
+E         2026-09-17 15:29:34,142 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,142 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,142 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/global_targets.pt
+E         2026-09-17 15:29:34,142 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,142 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,142 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_area.pt
+E         2026-09-17 15:29:34,142 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,142 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,142 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_cf.pt
+E         2026-09-17 15:29:34,142 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,142 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,142 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_cp.pt
+E         2026-09-17 15:29:34,142 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,142 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,143 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_ids.pt
+E         2026-09-17 15:29:34,143 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,143 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,143 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_normals.pt
+E         2026-09-17 15:29:34,143 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,143 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,143 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_position.pt
+E         2026-09-17 15:29:34,143 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,143 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,143 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/conditions.pt
+E         2026-09-17 15:29:34,143 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,143 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,143 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/global_targets.pt
+E         2026-09-17 15:29:34,144 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,144 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,144 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_area.pt
+E         2026-09-17 15:29:34,144 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,144 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,144 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_cf.pt
+E         2026-09-17 15:29:34,144 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,144 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,144 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_cp.pt
+E         2026-09-17 15:29:34,144 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,144 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,144 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_ids.pt
+E         2026-09-17 15:29:34,145 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,145 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,145 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_normals.pt
+E         2026-09-17 15:29:34,145 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,145 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,145 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_position.pt
+E         2026-09-17 15:29:34,145 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,145 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,145 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/conditions.pt
+E         2026-09-17 15:29:34,146 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,146 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,146 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/global_targets.pt
+E         2026-09-17 15:29:34,146 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,146 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,146 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_area.pt
+E         2026-09-17 15:29:34,146 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,146 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,146 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_cf.pt
+E         2026-09-17 15:29:34,146 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,146 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,146 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_cp.pt
+E         2026-09-17 15:29:34,147 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,147 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,147 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_ids.pt
+E         2026-09-17 15:29:34,147 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,147 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,147 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_normals.pt
+E         2026-09-17 15:29:34,147 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,147 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,147 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_position.pt
+E         2026-09-17 15:29:34,147 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,147 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,147 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/conditions.pt
+E         2026-09-17 15:29:34,148 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,148 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,148 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/global_targets.pt
+E         2026-09-17 15:29:34,148 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,148 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,148 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_area.pt
+E         2026-09-17 15:29:34,148 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,148 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,148 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_cf.pt
+E         2026-09-17 15:29:34,148 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,148 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,148 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_cp.pt
+E         2026-09-17 15:29:34,149 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,149 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,149 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_ids.pt
+E         2026-09-17 15:29:34,149 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,149 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,149 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_normals.pt
+E         2026-09-17 15:29:34,149 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,149 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,149 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_position.pt
+E         2026-09-17 15:29:34,149 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,149 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,149 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/conditions.pt
+E         2026-09-17 15:29:34,149 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,149 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,149 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/global_targets.pt
+E         2026-09-17 15:29:34,150 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,150 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,150 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_area.pt
+E         2026-09-17 15:29:34,150 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,150 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,150 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_cf.pt
+E         2026-09-17 15:29:34,150 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,150 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,150 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_cp.pt
+E         2026-09-17 15:29:34,150 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,150 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,150 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_ids.pt
+E         2026-09-17 15:29:34,150 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,150 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,150 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_normals.pt
+E         2026-09-17 15:29:34,151 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,151 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,151 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_position.pt
+E         2026-09-17 15:29:34,151 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,151 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,151 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/conditions.pt
+E         2026-09-17 15:29:34,151 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,151 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,151 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/global_targets.pt
+E         2026-09-17 15:29:34,151 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,151 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,151 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_area.pt
+E         2026-09-17 15:29:34,151 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,151 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,151 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_cf.pt
+E         2026-09-17 15:29:34,152 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,152 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,152 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_cp.pt
+E         2026-09-17 15:29:34,152 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,152 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,152 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_ids.pt
+E         2026-09-17 15:29:34,152 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,152 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,152 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_normals.pt
+E         2026-09-17 15:29:34,152 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,152 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,152 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_position.pt
+E         2026-09-17 15:29:34,152 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,152 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,153 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/conditions.pt
+E         2026-09-17 15:29:34,153 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,153 INFO [trainprep/张量读取/结束] 耗时=0.001秒
+E         2026-09-17 15:29:34,153 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/global_targets.pt
+E         2026-09-17 15:29:34,154 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,154 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,154 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_area.pt
+E         2026-09-17 15:29:34,154 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,154 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,154 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_cf.pt
+E         2026-09-17 15:29:34,154 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,154 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,154 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_cp.pt
+E         2026-09-17 15:29:34,154 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,154 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,154 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_ids.pt
+E         2026-09-17 15:29:34,154 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,154 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,154 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_normals.pt
+E         2026-09-17 15:29:34,155 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,155 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,155 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_position.pt
+E         2026-09-17 15:29:34,155 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,155 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,155 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/conditions.pt
+E         2026-09-17 15:29:34,155 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,155 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,155 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/global_targets.pt
+E         2026-09-17 15:29:34,155 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,155 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,155 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_area.pt
+E         2026-09-17 15:29:34,156 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,156 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,156 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_cf.pt
+E         2026-09-17 15:29:34,156 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,156 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,156 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_cp.pt
+E         2026-09-17 15:29:34,156 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,156 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,156 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_ids.pt
+E         2026-09-17 15:29:34,156 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,156 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,156 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_normals.pt
+E         2026-09-17 15:29:34,156 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,156 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,157 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_position.pt
+E         2026-09-17 15:29:34,157 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,157 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,157 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/conditions.pt
+E         2026-09-17 15:29:34,157 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,157 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,157 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/global_targets.pt
+E         2026-09-17 15:29:34,157 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,157 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,157 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_area.pt
+E         2026-09-17 15:29:34,157 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_cf.pt
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_cp.pt
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_ids.pt
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_normals.pt
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_position.pt
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,158 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,159 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/conditions.pt
+E         2026-09-17 15:29:34,159 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,159 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,159 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/global_targets.pt
+E         2026-09-17 15:29:34,159 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,159 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,159 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_area.pt
+E         2026-09-17 15:29:34,159 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,159 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,159 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_cf.pt
+E         2026-09-17 15:29:34,159 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,159 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,159 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_cp.pt
+E         2026-09-17 15:29:34,160 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,160 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,160 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_ids.pt
+E         2026-09-17 15:29:34,160 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,160 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,160 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_normals.pt
+E         2026-09-17 15:29:34,160 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,160 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,160 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_position.pt
+E         2026-09-17 15:29:34,160 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,160 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,160 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/conditions.pt
+E         2026-09-17 15:29:34,161 INFO [trainprep/张量读取/结果] 形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,161 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,161 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/global_targets.pt
+E         2026-09-17 15:29:34,161 INFO [trainprep/张量读取/结果] 形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,161 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,161 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_area.pt
+E         2026-09-17 15:29:34,162 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,162 INFO [trainprep/张量读取/结束] 耗时=0.001秒
+E         2026-09-17 15:29:34,162 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_cf.pt
+E         2026-09-17 15:29:34,162 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,162 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,162 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_cp.pt
+E         2026-09-17 15:29:34,162 INFO [trainprep/张量读取/结果] 形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,162 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,162 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_ids.pt
+E         2026-09-17 15:29:34,162 INFO [trainprep/张量读取/结果] 形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,162 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,162 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_normals.pt
+E         2026-09-17 15:29:34,163 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,163 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,163 INFO [trainprep/张量读取/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_position.pt
+E         2026-09-17 15:29:34,163 INFO [trainprep/张量读取/结果] 形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,163 INFO [trainprep/张量读取/结束] 耗时=0.000秒
+E         2026-09-17 15:29:34,164 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample001/conditions.pt
+E         2026-09-17 15:29:34,164 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,164 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,164 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample001/global_targets.pt
+E         2026-09-17 15:29:34,164 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,164 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,164 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample001/surface_area.pt
+E         2026-09-17 15:29:34,164 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,164 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,165 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample001/surface_cf.pt
+E         2026-09-17 15:29:34,165 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,165 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,165 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample001/surface_cp.pt
+E         2026-09-17 15:29:34,165 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,165 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,165 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample001/surface_ids.pt
+E         2026-09-17 15:29:34,165 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,165 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,165 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample001/surface_normals.pt
+E         2026-09-17 15:29:34,165 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,165 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,166 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample001/surface_position.pt
+E         2026-09-17 15:29:34,166 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,166 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,166 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample002/conditions.pt
+E         2026-09-17 15:29:34,167 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,167 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,167 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample002/global_targets.pt
+E         2026-09-17 15:29:34,167 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,167 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,167 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample002/surface_area.pt
+E         2026-09-17 15:29:34,167 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,167 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,167 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample002/surface_cf.pt
+E         2026-09-17 15:29:34,167 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,167 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,167 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample002/surface_cp.pt
+E         2026-09-17 15:29:34,167 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,167 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,168 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample002/surface_ids.pt
+E         2026-09-17 15:29:34,168 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,168 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,168 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample002/surface_normals.pt
+E         2026-09-17 15:29:34,168 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,168 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,168 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/test/Sample002/surface_position.pt
+E         2026-09-17 15:29:34,168 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,168 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,169 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/conditions.pt
+E         2026-09-17 15:29:34,169 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,169 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,169 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/global_targets.pt
+E         2026-09-17 15:29:34,169 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,169 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,169 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_area.pt
+E         2026-09-17 15:29:34,170 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,170 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.001秒
+E         2026-09-17 15:29:34,171 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_cf.pt
+E         2026-09-17 15:29:34,171 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,171 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,171 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_cp.pt
+E         2026-09-17 15:29:34,171 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,171 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,171 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_ids.pt
+E         2026-09-17 15:29:34,171 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,171 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,171 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_normals.pt
+E         2026-09-17 15:29:34,172 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,172 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,172 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample001', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample001/surface_position.pt
+E         2026-09-17 15:29:34,172 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample001', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,172 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample001', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,172 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/conditions.pt
+E         2026-09-17 15:29:34,172 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,172 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,173 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/global_targets.pt
+E         2026-09-17 15:29:34,173 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,173 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,173 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_area.pt
+E         2026-09-17 15:29:34,173 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,173 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,173 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_cf.pt
+E         2026-09-17 15:29:34,173 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,173 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,173 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_cp.pt
+E         2026-09-17 15:29:34,173 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,173 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,173 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_ids.pt
+E         2026-09-17 15:29:34,174 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,174 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,174 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_normals.pt
+E         2026-09-17 15:29:34,174 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,174 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,174 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample002', 'index': 1}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample002/surface_position.pt
+E         2026-09-17 15:29:34,174 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample002', 'index': 1}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,174 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample002', 'index': 1}]；耗时=0.000秒
+E         2026-09-17 15:29:34,174 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/conditions.pt
+E         2026-09-17 15:29:34,174 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,174 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.000秒
+E         2026-09-17 15:29:34,174 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/global_targets.pt
+E         2026-09-17 15:29:34,175 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,175 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.000秒
+E         2026-09-17 15:29:34,175 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_area.pt
+E         2026-09-17 15:29:34,175 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,175 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.000秒
+E         2026-09-17 15:29:34,175 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_cf.pt
+E         2026-09-17 15:29:34,175 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,175 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.000秒
+E         2026-09-17 15:29:34,175 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_cp.pt
+E         2026-09-17 15:29:34,175 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,175 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.000秒
+E         2026-09-17 15:29:34,175 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_ids.pt
+E         2026-09-17 15:29:34,175 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,175 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.000秒
+E         2026-09-17 15:29:34,175 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_normals.pt
+E         2026-09-17 15:29:34,176 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,176 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.000秒
+E         2026-09-17 15:29:34,176 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample003', 'index': 2}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample003/surface_position.pt
+E         2026-09-17 15:29:34,176 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample003', 'index': 2}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,176 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample003', 'index': 2}]；耗时=0.000秒
+E         2026-09-17 15:29:34,176 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/conditions.pt
+E         2026-09-17 15:29:34,176 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,176 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:34,176 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/global_targets.pt
+E         2026-09-17 15:29:34,177 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,177 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:34,177 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_area.pt
+E         2026-09-17 15:29:34,177 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,177 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:34,177 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_cf.pt
+E         2026-09-17 15:29:34,177 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,177 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:34,177 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_cp.pt
+E         2026-09-17 15:29:34,177 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,177 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:34,177 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_ids.pt
+E         2026-09-17 15:29:34,177 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,177 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:34,177 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_normals.pt
+E         2026-09-17 15:29:34,178 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,178 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:34,178 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample004', 'index': 3}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/train/Sample004/surface_position.pt
+E         2026-09-17 15:29:34,178 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample004', 'index': 3}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,178 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample004', 'index': 3}]；耗时=0.000秒
+E         2026-09-17 15:29:34,178 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/validation/Sample005/conditions.pt
+E         2026-09-17 15:29:34,179 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(1, 6)；类型=torch.float32
+E         2026-09-17 15:29:34,179 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,179 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/validation/Sample005/global_targets.pt
+E         2026-09-17 15:29:34,179 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(1, 3)；类型=torch.float64
+E         2026-09-17 15:29:34,179 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,179 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/validation/Sample005/surface_area.pt
+E         2026-09-17 15:29:34,180 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,180 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,180 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/validation/Sample005/surface_cf.pt
+E         2026-09-17 15:29:34,180 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,180 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,180 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/validation/Sample005/surface_cp.pt
+E         2026-09-17 15:29:34,180 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(32, 1)；类型=torch.float32
+E         2026-09-17 15:29:34,180 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,180 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/validation/Sample005/surface_ids.pt
+E         2026-09-17 15:29:34,180 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(32,)；类型=torch.int64
+E         2026-09-17 15:29:34,180 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,180 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/validation/Sample005/surface_normals.pt
+E         2026-09-17 15:29:34,181 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,181 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,181 INFO [trainprep/张量读取/开始] 样本=[{'sample_id': 'Sample005', 'index': 0}]；来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/data/2026-09-17T15-29-25_f61e9e/rawprep/validation/Sample005/surface_position.pt
+E         2026-09-17 15:29:34,181 INFO [trainprep/张量读取/结果] 样本=[{'sample_id': 'Sample005', 'index': 0}]；形状=(32, 3)；类型=torch.float32
+E         2026-09-17 15:29:34,181 INFO [trainprep/张量读取/结束] 样本=[{'sample_id': 'Sample005', 'index': 0}]；耗时=0.000秒
+E         2026-09-17 15:29:34,183 INFO [trainprep/统计参数提交/开始] 来源=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-509/test_partition_failure_retry_a0/project/tasks/797a603c5ac0490ebacb23d08402e744/data/d113984389364af4b633eb90a4400d1d/trainprep/normalize/cea691fd5d706fad6316846d9b111392b498dcccab5728c8704699f61ddb2940/normalization.yaml
+E         2026-09-17 15:29:34,184 INFO [trainprep/统计参数提交/结束] 耗时=0.001秒
+E         2026-09-17 15:29:34,191 INFO [trainprep/阶段/结束] 耗时=0.072秒
+E         2026-09-17 15:29:34,191 INFO [train/阶段/开始] 
+E         2026-09-17 15:29:34,200 ERROR [train/阶段/失败] 样本=；原因=同一样本在多个原分片中且记录不一致: Sample001；耗时=0.009秒
+E         2026-09-17 15:29:34,200 ERROR 运行失败：同一样本在多个原分片中且记录不一致: Sample001
+E         2026-09-17 15:29:34,202 INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.084秒
+E         
+E       assert 'failed' == 'succeeded'
+E         
+E         - succeeded
+E         + failed
+
+tests/integration/test_task_infer_partitions.py:27: AssertionError
+=========================== short test summary info ============================
+FAILED tests/integration/test_task_infer_batches.py::test_two_checkpoints_two_samples_real_execution
+FAILED tests/integration/test_task_infer_partitions.py::test_partition_failure_retry_and_evaluation_only
+2 failed, 4 passed in 31.35s

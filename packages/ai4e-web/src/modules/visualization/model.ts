@@ -18,9 +18,19 @@ export function sameCoordinateSource(a:Source|undefined,b:Source|undefined):bool
  if(!a||!b||!a.project_id||!a.asset_id||!a.revision||!b.project_id||!b.asset_id||!b.revision)return false;
  return a.project_id===b.project_id&&a.asset_id===b.asset_id&&a.revision===b.revision&&(a.member??null)===(b.member??null)&&(a.block??null)===(b.block??null);
 }
-/** 跨源仅消费显示清单绑定的显式坐标声明；场单位和相同包围盒都不是证据。 */
-export function cameraSourcesCompatible(a:Source|undefined,b:Source|undefined,displayA?:Display,displayB?:Display):boolean{
- if(sameCoordinateSource(a,b))return true;
- const proof=(source:Source|undefined,display:Display|undefined)=>{const space=display?.coordinate_space;if(!source||!space||space.evidence!=='source-declaration'||!space.id?.trim()||!space.unit?.trim()||!space.source_refs?.some(ref=>sameCoordinateSource(source,ref)))return null;return space;};
- const left=proof(a,displayA),right=proof(b,displayB);return !!left&&!!right&&left.id===right.id&&left.unit===right.unit;
+/** 读取显示清单里绑定本次来源的坐标声明；缺声明返回空，不猜单位。 */
+function declaredCoordinateSpace(source:Source|undefined,display:Display|undefined){
+ const space=display?.coordinate_space;
+ if(!source||!space||space.evidence!=='source-declaration'||!space.id?.trim()||!space.unit?.trim()||!space.source_refs?.some(ref=>sameCoordinateSource(source,ref)))return null;
+ return space;
+}
+/** 相机联动对当前全部窗口生效，不要求共同坐标空间。 */
+export function cameraSourcesCompatible(_a?:Source,_b?:Source,_displayA?:Display,_displayB?:Display):boolean{
+ return true;
+}
+/** 已声明单位不一致时提示，不阻止联动。 */
+export function cameraLinkUnitNotice(a:Source|undefined,b:Source|undefined,displayA?:Display,displayB?:Display):string{
+ const left=declaredCoordinateSpace(a,displayA),right=declaredCoordinateSpace(b,displayB);
+ if(left&&right&&left.unit!==right.unit)return `相机已联动；来源单位不一致：${left.unit}、${right.unit}`;
+ return '';
 }

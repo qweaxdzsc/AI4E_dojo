@@ -1,0 +1,31 @@
+
+> ai4e-web@0.1.0 test:e2e
+> playwright test e2e/shared-datasets.spec.ts e2e/rawprep-consistency.spec.ts e2e/stage-consistency.spec.ts e2e/stage-files.spec.ts e2e/model-inspection.spec.ts --output=/Users/zonghui/work/new_code_project/AI4E_Dojo/.context/mvp/task-shared-datasets-results/browser-artifacts
+
+
+Running 21 tests using 1 worker
+
+  ✓   1 e2e/model-inspection.spec.ts:5:1 › 正式模型检查操作到沙箱图形渲染 (6.3s)
+  -   2 e2e/model-inspection.spec.ts:79:3 › shapenet_car_abupt 换模后真实准备到模型结构
+  -   3 e2e/model-inspection.spec.ts:79:3 › nasa_crm_abupt 换模后真实准备到模型结构
+  ✓   4 e2e/rawprep-consistency.spec.ts:8:1 › 公开数据集绑定取消、结果树预览下载与正式进度 (1.7s)
+  ✓   5 e2e/rawprep-consistency.spec.ts:91:1 › 刷新后仍显示最近一次正式执行终态 (375ms)
+  ✓   6 e2e/rawprep-consistency.spec.ts:116:1 › 再执行立刻清进度且日志叠加 (519ms)
+  ✓   7 e2e/rawprep-consistency.spec.ts:159:1 › 处理结果可选择已登记平台数据集且不自动勾最新 (555ms)
+  ✓   8 e2e/rawprep-consistency.spec.ts:188:1 › 同名已存在时询问覆盖并带标记提交 (679ms)
+  ✓   9 e2e/shared-datasets.spec.ts:4:3 › 共享覆盖取消及单次确认 已有名称 (1.1s)
+  ✓  10 e2e/shared-datasets.spec.ts:4:3 › 共享覆盖取消及单次确认 提交时冲突 (980ms)
+  ✓  11 e2e/shared-datasets.spec.ts:111:1 › 真实服务离线共享可见与文件浏览 (4.8s)
+  ✓  12 e2e/stage-consistency.spec.ts:3:1 › 阶段检查先保存，冲突不提交，响应丢失重用请求键 (521ms)
+  ✓  13 e2e/stage-consistency.spec.ts:20:1 › 浏览后处理不勾选前序步骤，已选输入按selected恢复 (553ms)
+  ✓  14 e2e/stage-consistency.spec.ts:37:1 › 平台数据集同一清单只选一条，按登记时间倒序且不与历史项联动 (528ms)
+  ✓  15 e2e/stage-consistency.spec.ts:62:1 › 数据准备字段按模型角色下拉匹配并标出张量形状不符 (409ms)
+  ✓  16 e2e/stage-consistency.spec.ts:84:1 › 数据准备分片显示原人数且数量之和须等于全部样本 (433ms)
+  ✓  17 e2e/stage-consistency.spec.ts:112:1 › 已完成步骤为绿当前为蓝，失效清单用人话，准备日志完整 (468ms)
+  ✓  18 e2e/stage-consistency.spec.ts:139:1 › 数据准备有正式清单时提示先选，不自动勾最新 (436ms)
+  ✓  19 e2e/stage-consistency.spec.ts:165:1 › 数据准备树表列与再执行清进度日志叠加 (567ms)
+  ✓  20 e2e/stage-consistency.spec.ts:207:1 › 训练运行只选准备记录，未选不可执行，提交不含准备步骤 (882ms)
+  ✓  21 e2e/stage-files.spec.ts:3:1 › 阶段文件无来源不回退，切换范围只请求固定来源 (478ms)
+
+  2 skipped
+  19 passed (23.6s)

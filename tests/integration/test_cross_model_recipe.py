@@ -20,12 +20,16 @@ def test_five_independent_examples():
         config = yaml.safe_load((folder / "config.yaml").read_text())
         assert "workflow" not in config["components"]
         assert config["train"]["max_epochs"] == 1 and not config["train"]["evaluation_enabled"]
-        assert len(config["post"]["samples"]) == 5 and config["post"]["checkpoint"] == "last"
+        assert (
+            len(config["infer"]["samples"]) == 5 and config["inputs"]["infer"]["checkpoint"] is None
+        )
         assert "instances" not in config["model"]
-        for filename in ("rawprep.py", "trainprep.py", "train.py", "post.py"):
+        for filename in ("rawprep.py", "trainprep.py", "train.py", "infer.py"):
             source = (folder / filename).read_text()
             assert "selected.workflow" not in source
             assert "load_components" in source
+        assert "open_results" in (folder / "post.py").read_text()
+        assert "legacy_predict" not in (folder / "post.py").read_text()
         # 共享交接与配置保持一致；领域步骤允许明确的来源/模型差异。
         for filename in ("configuration.py", "pipeline.py"):
             assert (ROOT / "recipes/aero_cfd" / filename).read_bytes() == (
@@ -36,7 +40,7 @@ def test_five_independent_examples():
 
 
 def test_copied_generic_pipeline_and_independent_post(tmp_path):
-    """NASA 物理 PT 的真实四阶段入口，独立 post 使用同一冻结准备。"""
+    """NASA 物理 PT 的真实五阶段入口，独立 post 使用同一固定结果。"""
     import json
     import os
     import shutil
@@ -52,16 +56,17 @@ def test_copied_generic_pipeline_and_independent_post(tmp_path):
     write_source(raw / "train.h5", 5, 80, offset=0)
     write_source(raw / "test.h5", 2, 80, offset=100)
     config = yaml.safe_load((folder / "config.yaml").read_text())
-    config["dataset"].update(
-        root=str(raw), train_h5=str(raw / "train.h5"), test_h5=str(raw / "test.h5")
+    config["inputs"]["rawprep"].update(
+        source=str(raw), train_h5=str(raw / "train.h5"), test_h5=str(raw / "test.h5")
     )
+    config["inputs"]["trainprep"]["dataset"] = None
     config["data_root"] = str(tmp_path / "data")
     config["run_root"] = str(tmp_path / "runs")
-    config["pipeline"]["stages"] = ["rawprep", "trainprep", "train", "post"]
+    config["pipeline"]["stages"] = ["rawprep", "trainprep", "train", "infer", "post"]
     config["model"]["parameters"].update(n_hidden=16, n_layers=2, n_head=4, slice_num=4)
     config["train"].update(device="cpu")
-    config["post"]["export_vtk"] = False  # 合成 HDF5 不提供真实拓扑。
-    config["post"]["samples"] = ["Sample001", "Sample002"]
+    config["infer"]["export_vtk"] = False  # 合成 HDF5 不提供真实拓扑。
+    config["infer"]["samples"] = ["Sample001", "Sample002"]
     config["model"]["sampling"]["chunk_count"] = 4
     (folder / "config.yaml").write_text(yaml.safe_dump(config, sort_keys=False))
     result = subprocess.run(
@@ -78,15 +83,16 @@ def test_copied_generic_pipeline_and_independent_post(tmp_path):
     assert report["metrics"]["surface.cp"]["count"] == 160
     assert len(report["results"]) == 2
     assert not list(tmp_path.rglob("*.vtp")) and not list(tmp_path.rglob("*.vtu"))
-    # 独立后处理不覆盖先前输出，使用独立产物路径。
+    # 固定结果已交付，即使权重不再存在，独立 post 仍应可读且不生成预测。
+    (run / "checkpoints/last.pt").unlink()
     result = subprocess.run(
         [
             sys.executable,
             str(folder / "post.py"),
             "--set",
-            "post.checkpoint=" + str(run / "checkpoints/last.pt"),
+            "inputs.post.results=" + str(run / "artifacts/physical-predictions.json"),
             "--set",
-            "paths.datasets.predictions=" + str(tmp_path / "other_predictions"),
+            "data_root=" + str(tmp_path / "other_predictions"),
         ],
         cwd=tmp_path,
         capture_output=True,
@@ -95,3 +101,4 @@ def test_copied_generic_pipeline_and_independent_post(tmp_path):
         check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
+    assert not (tmp_path / "other_predictions").exists()

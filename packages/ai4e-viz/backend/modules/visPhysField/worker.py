@@ -12,14 +12,13 @@ def run(connection, bindings: list, spec: dict, port: int, secret: str) -> None:
         from .trameUI.layout import build_ui
 
         scene = Scene(bindings, spec)
-        if spec.get("renderer") == "remote":
-            import vtk
+        import vtk
 
-            # 远程浏览器发送交互事件，服务端窗口必须拥有真实 interactor。
-            interactor = vtk.vtkRenderWindowInteractor()
-            interactor.SetRenderWindow(scene.window)
-            interactor.SetInteractorStyle(vtk.vtkInteractorStyleTrackballCamera())
-            interactor.Initialize()
+        # LIC 会在同一会话切到远程出图，窗口始终准备好 interactor。
+        interactor = vtk.vtkRenderWindowInteractor()
+        interactor.SetRenderWindow(scene.window)
+        interactor.SetInteractorStyle(vtk.vtkInteractorStyleTrackballCamera())
+        interactor.Initialize()
         server = get_server(client_type="vue2")
         server.cli.set_defaults(authKey=secret)
         ui = build_ui(server, scene)
@@ -31,9 +30,26 @@ def run(connection, bindings: list, spec: dict, port: int, secret: str) -> None:
                     request = connection.recv()
                     try:
                         ui.stash()
-                        result = (ui.visibility(request["body"].get("visible"))
-                                  if request["body"]["operation"] == "visibility"
-                                  else scene.command(request["body"]))
+                        affected = set()
+                        if request["body"]["operation"] in {"object_delete", "source_remove"}:
+                            affected = ui.descendants(request["body"]["id"])
+                            while any(
+                                d["node"].get("input") in affected and k not in affected
+                                for k, d in ui.drafts.items()
+                            ):
+                                affected.update(
+                                    k
+                                    for k, d in ui.drafts.items()
+                                    if d["node"].get("input") in affected
+                                )
+                        result = (
+                            ui.visibility(request["body"].get("visible"))
+                            if request["body"]["operation"] == "visibility"
+                            else scene.command(request["body"])
+                        )
+                        if affected:
+                            ui.drafts = {k: d for k, d in ui.drafts.items() if k not in affected}
+                            ui.plane_release()
                         if request["body"]["operation"] not in {"snapshot", "visibility"}:
                             ids = [v["id"] for v in scene.spec["views"]]
                             if server.state.active_view not in ids:

@@ -29,11 +29,13 @@ export async function request<T = any>(
     const fallback = r.status >= 500
       ? `Dojo 后端服务暂不可用（HTTP ${r.status}），请确认服务已启动后重试。`
       : `请求失败（HTTP ${r.status}），请重试。`;
-    throw new Error(mapped
+    const error = new Error(mapped
       ? mapped
       : typeof detail === "string" && detail
       ? detail
       : detail != null ? JSON.stringify(detail) : fallback);
+    Object.assign(error, { code: value?.error?.code, status: r.status });
+    throw error;
   }
   if (value === undefined)
     throw new Error("Dojo 后端返回了空响应或无效数据，请刷新重试。");

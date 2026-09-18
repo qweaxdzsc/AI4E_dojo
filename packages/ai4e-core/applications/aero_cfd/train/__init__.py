@@ -25,3 +25,8 @@ __all__ = [
 from ai4e_core.applications.aero_cfd.trainprep.dataset import open_manifest_sample
 
 __all__ += ["open_manifest_sample"]
+
+from .resolve import apply_resolved as resolve_training
+from .export import export_training_fields
+
+__all__ += ["resolve_training", "export_training_fields"]

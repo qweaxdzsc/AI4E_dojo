@@ -13,6 +13,7 @@ def test_formal_recipe_new_fork_train_post(tmp_path):
     source, cfg = setup_case(tmp_path)
     _fit_config(cfg)
     cfg.statistics.mode = "reference"
+    cfg.dataset.processed_name = "shared_physical"
     cfg.normalization.execute = True
     cfg.train.device = "cpu"
     cfg.train.max_epochs = 1
@@ -38,7 +39,11 @@ def test_formal_recipe_new_fork_train_post(tmp_path):
     )
     assert {a["kind"] for a in child["copied_outputs"].values()} == {"preparation", "checkpoint"}
     assert all(asset["source"]["run_id"] == a["id"] for asset in child["copied_outputs"].values())
-    b = task.submit_run(project, child["id"], overrides=["train.learning_rate=0.0002"])
+    b = task.submit_run(
+        project,
+        child["id"],
+        overrides=["train.learning_rate=0.0002", "dataset.processed_name=derived_physical"],
+    )
     b = task.wait_run(project, b["id"], timeout=90)
     assert b["status"] == "succeeded", b
     assert Path(a["data_dir"]) != Path(b["data_dir"])
@@ -46,7 +51,9 @@ def test_formal_recipe_new_fork_train_post(tmp_path):
     assert len(task.list_runs(project)) == 2
     comparison = task.compare_runs(project, a["id"], b["id"], save=True)
     assert comparison["metrics"]
-    assert all(x["status"] == "available" for x in comparison["metrics"].values()), comparison
+    # 两次独立处理包含不同来源清单/网格容器字节，不再只按原始输入宣称等价。
+    assert all(x["status"] == "incompatible" for x in comparison["metrics"].values()), comparison
+    assert a["shared_publications"] != b["shared_publications"]
     shared = task.share_run_asset(
         project,
         b["id"],

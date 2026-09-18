@@ -1,0 +1,11 @@
+{
+  "script": "pipeline.py",
+  "config": "config.yaml",
+  "inputs": {
+    "input_path": "dataset"
+  },
+  "outputs": {
+    "run_root": "{run_root}",
+    "output_path": "{data_dir}/features.json"
+  }
+}

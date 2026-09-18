@@ -1,18 +1,21 @@
 """阶段规则：允许阶段、只读统计、输入选择与试跑门禁，不依赖 HTTP 或存储。"""
 
+import json
+import math
+from copy import deepcopy
 from dataclasses import dataclass, field
 
 STAGES = {"rawprep", "trainprep", "model", "train", "infer", "post"}
 CHECKPOINT_TAGS = {"last", "best", "latest"}
 MODEL_REPLACEMENT_SECTIONS = ("model", "train", "trainprep")
 ALLOWED_BINDINGS = {
-    "train.manifest",
-    "train.preparation",
-    "post.checkpoint",
-    "infer.checkpoint",
-    "infer.preparation",
-    "post.results",
-    "trainprep.normalization.statistics",
+    "inputs.trainprep.dataset",
+    "inputs.train.preparation",
+    "inputs.train.resume",
+    "inputs.infer.checkpoint",
+    "inputs.infer.preparation",
+    "inputs.post.results",
+    "inputs.trainprep.statistics",
 }
 
 
@@ -61,23 +64,23 @@ def execution_stages(stage, mode, selection):
         raise ValueError("inference_requires_fixed_batch: 请通过推理批次固定检查点后执行")
     if mode not in {"trial", "execute"} or stage == "model":
         raise ValueError("unsupported_stage_operation")
+    if stage == "train" and selection.get("prepare_first"):
+        raise ValueError("train_requires_preparation: 训练设置只消费已有准备完成的数据")
     if mode == "trial" and not selection.get("samples"):
         raise ValueError("trial_samples_required")
     if "samples" in selection and not selection["samples"]:
         raise ValueError("empty_sample_selection")
-    return (
-        ["trainprep", "train"] if stage == "train" and selection.get("prepare_first") else [stage]
-    )
+    return [stage]
 
 
 def required_inputs(stage, stages):
     """阶段消费的上游业务产物。"""
     return (
-        ["train.manifest"]
+        ["inputs.trainprep.dataset"]
         if "trainprep" in stages
-        else ["train.preparation"]
+        else ["inputs.train.preparation"]
         if stage == "train"
-        else ["train.preparation", "post.checkpoint"]
+        else ["inputs.post.results"]
         if stage == "post"
         else []
     )
@@ -85,20 +88,26 @@ def required_inputs(stage, stages):
 
 def selected_input_keys(stages, declared):
     """仅捕获当前执行链所需输入，未来阶段产物不提前索取。"""
-    needed = set()
-    if "rawprep" in stages:
-        needed.update(key for key in declared if key.startswith("dataset."))
-    if "trainprep" in stages:
-        if "rawprep" not in stages:
-            needed.add("train.manifest")
-        needed.update(["trainprep.normalization.statistics", "dataset.partition"])
-    if "train" in stages:
-        needed.update(["train.resume", "model.initial_weights"])
-        if "trainprep" not in stages:
-            needed.add("train.preparation")
-    if "post" in stages and "train" not in stages:
-        needed.update(["train.preparation", "post.checkpoint", "post.results"])
-    return sorted(needed & set(declared))
+    return sorted(
+        key for key in declared if key.startswith("inputs.") and key.split(".")[1] in stages
+    )
+
+
+def settings_digest(config, stage):
+    """模型/训练设置完成态只跟本页参数，不含清单、准备和续训引用。"""
+    section = "train" if stage in {"train", "training"} else "model"
+    values = dict(config.get(section) or {})
+    if section == "train":
+        for key in ("manifest", "preparation", "resume"):
+            values.pop(key, None)
+    return json.dumps(values, sort_keys=True, default=str)
+
+
+def is_settings_save(operation):
+    """模型/训练完成只认保存记录；检查或结构跟踪不能冒充已保存。"""
+    if operation.get("source") == "save":
+        return True
+    return str(operation.get("operation_id") or "").startswith("settings-check:")
 
 
 def model_roles(config):
@@ -189,6 +198,50 @@ def field_matching_catalog(config, manifest=None):
     }
 
 
+SLICE_ROLES = ("train", "test", "eval")
+SLICE_LABELS = {"train": "训练集", "test": "测试集", "eval": "评价集"}
+
+
+def published_slices(record=None):
+    """从准备记录读出固定三分片；缺的桶人数为 0，不改历史文件。"""
+    payload = record if isinstance(record, dict) else {}
+    partitions = payload.get("partitions") if isinstance(payload.get("partitions"), dict) else {}
+    counts = (
+        payload.get("split_counts") if isinstance(payload.get("split_counts"), dict) else {}
+    )
+    split = payload.get("split") if isinstance(payload.get("split"), dict) else {}
+    completed = {name: [str(item) for item in partitions.get(name) or []] for name in SLICE_ROLES}
+    if not completed["eval"] and partitions.get("validation"):
+        completed["eval"] = [str(item) for item in partitions["validation"]]
+    method = str(split.get("method") or "original")
+    try:
+        seed = int(split.get("seed") or 0)
+    except (TypeError, ValueError):
+        seed = 0
+    slices = []
+    for name in SLICE_ROLES:
+        if name in partitions or (name == "eval" and "validation" in partitions):
+            count = len(completed[name])
+        elif name in counts:
+            try:
+                count = int(counts[name] or 0)
+            except (TypeError, ValueError):
+                count = 0
+        else:
+            count = 0
+        slices.append(
+            {
+                "name": name,
+                "role": name,
+                "label": SLICE_LABELS[name],
+                "count": count,
+                "method": method,
+                "seed": seed,
+            }
+        )
+    return slices
+
+
 def split_catalog(manifest=None):
     """准备页分片默认值：全部已处理样本，原分片人数，缺的桶为 0。"""
     partitions = (manifest or {}).get("partitions") or {}
@@ -253,6 +306,53 @@ def validate_split(values, manifest=None):
         raise ValueError("split_count_sum_mismatch")
     if train < 1:
         raise ValueError("split_train_required")
+
+
+def abupt_model(config) -> bool:
+    """现行官方 AB-UPT 组件才预填坐标 scale=1000，不猜其它模型。"""
+    model = str((config or {}).get("components", {}).get("model") or "")
+    return "abupt" in model.lower()
+
+
+def default_field_scale(declaration, *, abupt: bool):
+    """缺键时按现行写法补 scale：AB-UPT 统一空间为 1000，其余为 1。"""
+    if isinstance(declaration, dict) and declaration.get("scale") is not None:
+        return declaration["scale"]
+    if isinstance(declaration, dict) and declaration.get("method") == "coordinate" and abupt:
+        return 1000.0
+    return 1.0
+
+
+def normalize_field_scales(config: dict) -> dict:
+    """为 trainprep.normalization 每场写入显式 scale，不猜统计量。"""
+    result = deepcopy(config or {})
+    fields = ((result.get("trainprep") or {}).get("normalization") or {}).get("fields")
+    if not isinstance(fields, dict):
+        return result
+    abupt = abupt_model(result)
+    for declaration in fields.values():
+        if not isinstance(declaration, dict):
+            continue
+        if declaration.get("scale") is None:
+            declaration["scale"] = default_field_scale(declaration, abupt=abupt)
+    return result
+
+
+def validate_field_scales(trainprep):
+    """场上 scale 必须为正有限数；保存前应已写成显式值。"""
+    fields = ((trainprep or {}).get("normalization") or {}).get("fields") or {}
+    for name, declaration in fields.items():
+        if not isinstance(declaration, dict):
+            continue
+        raw = declaration.get("scale", 1)
+        if raw is None:
+            raw = 1
+        try:
+            factor = float(raw)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("invalid_field_scale:" + name) from exc
+        if factor <= 0 or not math.isfinite(factor):
+            raise ValueError("invalid_field_scale:" + name)
 
 
 def validate_field_bindings(trainprep, roles, fields):

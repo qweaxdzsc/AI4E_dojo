@@ -1,0 +1,17 @@
+[
+  {
+    "name": "shapenet_car4",
+    "source_manifest": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/9c1dac251856411d9091d8d1cc60bc3e/data/50b04c2d16de4d25b9603eceba7d2790/manifest.json",
+    "target": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/f644f908bfde4eb4a5bea65ad97e457a/shared/datasets/shapenet_car4/content",
+    "run_id": "50b04c2d16de4d25b9603eceba7d2790",
+    "source_digest": "630ba01aaffd95e4846ce970a96462a5761110e1d82dd72a5ec5e7dfcc13b58d",
+    "samples": 889,
+    "status": "migrated",
+    "copied_dependencies": [
+      "/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/ai4e_contrib/application/datasets/shapenet_car/statistics.yaml"
+    ],
+    "source_unchanged": true,
+    "checked_files": 9780,
+    "matching_copied_files": 9779
+  }
+]

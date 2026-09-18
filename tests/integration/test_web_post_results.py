@@ -1,6 +1,10 @@
 """后处理HTTP受控文件与分页，不返回服务器绝对路径。"""
 
+from pathlib import Path
+
 import ai4e_task as task
+from ai4e_task.storage.database import transaction
+from ai4e_task.storage.records import put
 
 from tests.integration.test_web_project_task import (
     platform as platform,  # noqa: PLC0414 - pytest跨模块夹具
@@ -114,3 +118,70 @@ def test_listing_does_not_register_or_hide_siblings(platform, monkeypatch):
     ).json()
     assert [f["id"] for f in value["files"]] == ["bad", "good"]
     assert all("ref" not in f for f in value["files"])
+
+
+def test_result_files_list_empty_train_run(platform):
+    client, project, item, _, _ = platform
+    root = Path(client.app.state.services.project(project))
+    run_id = "empty001"
+    run_dir = root / "tasks" / item["id"] / "runs" / run_id
+    data_dir = root / "tasks" / item["id"] / "data" / run_id
+    (run_dir / "checkpoints").mkdir(parents=True)
+    (data_dir / "infer").mkdir(parents=True)
+    (data_dir / "post").mkdir(parents=True)
+    (run_dir / "summary.json").write_text("{}")
+    with transaction(root) as db:
+        put(
+            db,
+            "run",
+            {
+                "id": run_id,
+                "task_id": item["id"],
+                "status": "succeeded",
+                "stages": ["train"],
+                "run_path": str(run_dir.relative_to(root)),
+                "data_path": str(data_dir.relative_to(root)),
+                "created_at": "2026-09-17T10:00:00+00:00",
+            },
+        )
+    url = f"/api/v1/projects/{project}/tasks/{item['id']}/post/results"
+    catalog = client.get(url).json()
+    assert catalog["items"] == []
+    assert catalog["batches"] == []
+    listed = client.get(url, params={"view": "files"}).json()
+    assert [row["tree_path"] for row in listed["files"]] == ["训练运行 · empty001"]
+    inner = client.get(url, params={"view": "files", "directory": "训练运行 · empty001"}).json()
+    assert [row["name"] for row in inner["files"]] == ["没有写出预测或网格"]
+    assert all(row["directory"] for row in inner["files"])
+
+
+def test_result_files_list_platform_dataset(platform):
+    from tests.integration.test_task_post_results import _publish_dataset
+
+    client, project, item, _, _ = platform
+    root = Path(client.app.state.services.project(project))
+    sample = "param1/1dc58be25e1b6e5675cad724c63e222e"
+    sample_dir = "平台数据集 · shapenet_car2/" + sample.replace("/", "／")
+    _publish_dataset(
+        root,
+        task_id=item["id"],
+        name="shapenet_car2",
+        samples=((sample, (("surface_pressure.pt", b"pt"), ("surface.vtkhdf", b"vtk"))),),
+    )
+    url = f"/api/v1/projects/{project}/tasks/{item['id']}/post/results"
+    catalog = client.get(url).json()
+    assert any(row["id"] == "dataset:shapenet_car2" for row in catalog["batches"])
+    listed = client.get(url, params={"view": "files"}).json()
+    assert any(row["tree_path"] == "平台数据集 · shapenet_car2" for row in listed["files"])
+    samples = client.get(
+        url, params={"view": "files", "directory": "平台数据集 · shapenet_car2"}
+    ).json()
+    assert [row["tree_path"] for row in samples["files"]] == [sample_dir]
+    assert all(row.get("sample") == sample for row in samples["files"])
+    files = client.get(url, params={"view": "files", "directory": sample_dir}).json()
+    names = {row["name"] for row in files["files"]}
+    assert names == {"surface_pressure.pt", "surface.vtkhdf"}
+    mesh = next(row for row in files["files"] if row["name"] == "surface.vtkhdf")
+    assert mesh["visualizable"] is True
+    assert mesh.get("sample") == sample
+    assert str(root) not in client.get(url, params={"view": "files", "directory": sample_dir}).text

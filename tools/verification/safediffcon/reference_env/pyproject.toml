@@ -1,0 +1,12 @@
+[project]
+name = "safediffcon-reference-verification"
+version = "0.1.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "torch==2.14.0", "h5py==3.16.0", "numpy==2.4.3", "scipy",
+  "einops", "einops-exts", "accelerate", "ema-pytorch", "tensorboardX",
+  "datasets==3.1.0", "pytest>=8", "pyyaml", "matplotlib", "ipython", "tqdm",
+]
+
+[tool.uv]
+package = false

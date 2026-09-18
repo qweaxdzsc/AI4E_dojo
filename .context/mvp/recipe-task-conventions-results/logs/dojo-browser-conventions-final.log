@@ -1,0 +1,23 @@
+
+Running 18 tests using 1 worker
+
+  ✓   1 e2e/configuration-composition.spec.ts:4:1 › 四类配置差异保留空值、删除及包含点的字段名 (477ms)
+  ✓   2 e2e/configuration-composition.spec.ts:21:1 › 训练保存只提交编辑路径且后续检查使用新修订 (624ms)
+  ✓   3 e2e/execution-log.spec.ts:8:1 › 长日志默认最近500行，取消跟随后不抢滚动，向上展开更早行 (812ms)
+  ✓   4 e2e/execution-log.spec.ts:78:1 › 提交运行说明只写入一行，不钉在日志底部 (493ms)
+  ✓   5 e2e/execution-log.spec.ts:117:1 › 失败且日志为空时展示运行记录中的错误 (418ms)
+  ✓   6 e2e/stage-consistency.spec.ts:3:1 › 阶段检查先保存，冲突不提交，响应丢失重用请求键 (667ms)
+  ✓   7 e2e/stage-consistency.spec.ts:21:1 › 浏览后处理不勾选前序步骤，已选输入按selected恢复 (673ms)
+  ✓   8 e2e/stage-consistency.spec.ts:38:1 › 平台数据集同一清单只选一条，按登记时间倒序且不与历史项联动 (587ms)
+  ✓   9 e2e/stage-consistency.spec.ts:63:1 › 数据准备字段按模型角色下拉匹配并标出张量形状不符 (493ms)
+  ✓  10 e2e/stage-consistency.spec.ts:85:1 › 数据准备分片显示原人数且数量之和须等于全部样本 (502ms)
+  ✓  11 e2e/stage-consistency.spec.ts:113:1 › 已完成步骤为绿当前为蓝，失效清单用人话，准备日志完整 (568ms)
+  ✓  12 e2e/stage-consistency.spec.ts:140:1 › 目录里失效共享名不覆盖已选本地清单 (440ms)
+  ✓  13 e2e/stage-consistency.spec.ts:159:1 › 数据准备有正式清单时提示先选，不自动勾最新 (482ms)
+  ✓  14 e2e/stage-consistency.spec.ts:185:1 › 数据准备树表列与再执行清进度日志叠加 (633ms)
+  ✓  15 e2e/stage-consistency.spec.ts:230:1 › 训练设置只选已准备数据集即可开训，提交不含准备步骤 (1.9s)
+  ✓  16 e2e/stage-consistency.spec.ts:283:1 › 训练设置开始训练后进入运行页只监控 (923ms)
+  ✓  17 e2e/stage-consistency.spec.ts:310:1 › 未改训练参数点保存后下一步仍打勾 (612ms)
+  ✓  18 e2e/stage-consistency.spec.ts:335:1 › 保存训练设置后步骤打勾，刷新仍按已保存事实恢复 (767ms)
+
+  18 passed (13.1s)

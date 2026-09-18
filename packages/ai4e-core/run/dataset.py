@@ -1,4 +1,7 @@
-"""按需 Dataset 的通用执行器：样本隔离、可选并行、失败传播与轻量汇总。"""
+"""按需 Dataset 的通用执行器：样本隔离、可选并行、失败传播与轻量汇总。
+
+逐样本步骤与提交只记 debug；整批开始、稀疏进度和失败保持常规日志。
+"""
 
 import threading
 import time
@@ -6,7 +9,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed, wait
 from copy import deepcopy
 
 from ai4e_core.applications.base import Stage, StageError
-from ai4e_core.base.events import LOGGER, SAMPLE, event, operation
+from ai4e_core.base.events import ATOMIC_LEVEL, LOGGER, SAMPLE, event, operation
 
 from .execute import BatchExecutionError
 
@@ -174,13 +177,13 @@ def _one(data, sample, partition, save, output, flags):
         for name, fn in data.steps:
 
             def call(current, fn=fn, name=name):
-                with operation("样本" + name):
+                with operation("样本" + name, level=ATOMIC_LEVEL):
                     return fn(current)
 
             call.__name__ = name
             steps.append(call)
         ctx = Stage("pre", steps).run(ctx)
-        with operation("样本提交", 分片=partition):
+        with operation("样本提交", level=ATOMIC_LEVEL, 分片=partition):
             return save(ctx, output=output)
     finally:
         SAMPLE.reset(token)

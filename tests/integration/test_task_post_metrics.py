@@ -20,6 +20,9 @@ def results_project(tmp_path):
     task.create_project(root)
     with transaction(root) as db:
         put(db, "task", {"id": "t", "version_id": "v", "archived": False})
+    import shutil
+
+    shutil.copytree(Path(__file__).resolve().parents[2] / "recipes/aero_cfd", root / "tasks/t/recipe")
     for batch in range(2):
         children = []
         for cp in range(2):
@@ -179,7 +182,11 @@ def test_cancel_keeps_completed_rows_and_checks_changed_member(results_project):
         "inputs": items,
         "request": {"fields": items[0]["fields"], "metrics": ["mse"]},
     }
-    value = run_evaluation(job, publish=published.append, canceled=lambda: bool(published))
+    from ai4e_core.run import execute_operation
+
+    value = execute_operation(
+        job, run_evaluation, publish=published.append, canceled=lambda: bool(published)
+    )
     assert value["status"] == "canceled" and value["completed"] == 1
     assert json.loads((Path(job["data_dir"]) / "metrics.json").read_text())["status"] == "canceled"
     Path(items[0]["files"][1]["path"]).write_bytes(b"changed")

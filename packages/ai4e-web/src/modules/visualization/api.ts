@@ -39,6 +39,17 @@ export const openPhysicalWorkspace=(project:string,task:string,body:unknown)=>ph
 export const closePhysicalWorkspace=(project:string,task:string,session:string)=>physicalRequest(`/projects/${project}/tasks/${task}/visualizations/sessions/${session}`,undefined,'DELETE').catch(()=>{});
 
 /** 当前项目受控结果列表。 */
-export const physicalSources=(project:string)=>physicalRequest(`/projects/${project}/assets`);
+export const physicalSources=(project:string,task?:string,root?:string,path?:string)=>{
+ if(task){
+  const query=new URLSearchParams();
+  if(root)query.set('root',root);
+  if(path)query.set('path',path);
+  const suffix=query.toString();
+  return physicalRequest(`/projects/${project}/tasks/${task}/visualizations/sources${suffix?`?${suffix}`:''}`);
+ }
+ return physicalRequest(`/projects/${project}/assets`);
+};
+/** 把受控路径登记为固定资产，追加前仍走修订核验。 */
+export const registerPhysicalSource=(project:string,body:unknown)=>physicalRequest(`/projects/${project}/assets`,body);
 /** 现有工作区追加结果，不创建任务版本。 */
 export const appendPhysicalSources=(project:string,task:string,session:string,sources:unknown[])=>physicalRequest(`/projects/${project}/tasks/${task}/visualizations/sessions/${session}/sources`,{sources});

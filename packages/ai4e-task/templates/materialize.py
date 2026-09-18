@@ -2,22 +2,47 @@
 
 from pathlib import Path
 
-from ..storage.files import read_json
-from ..storage.layout import inside
 from ..storage.snapshots import snapshot
 
 
+def recipe_entry(project: str | Path, task_id: str) -> dict:
+    """读取任务当前 recipe 投影的入口；不使用创建时冻结的旧键快照。"""
+    from ..storage.layout import task_dir
+
+    return read_entry(task_dir(project, task_id) / "recipe")
+
+
 def read_entry(recipe: Path) -> dict:
-    """读取可选 task-entry.json，运行前必须存在有效声明。"""
-    path = recipe / "task-entry.json"
-    if not path.exists():
+    """按固定文件和公共配置发现入口；不读取逐案例任务描述。"""
+    from omegaconf import OmegaConf
+
+    from ai4e_core.base.config.conventions import input_bindings
+
+    path = Path(recipe) / "config.yaml"
+    if not path.is_file():
         return {}
-    value = read_json(path)
-    for key in ("script", "config"):
-        inside(recipe, value[key])
-    if not isinstance(value.get("outputs"), dict) or not isinstance(value.get("inputs", {}), dict):
-        raise TypeError("invalid_entry_bindings")
-    return value
+    cfg = OmegaConf.to_container(OmegaConf.load(path), resolve=False)
+    if not isinstance(cfg, dict):
+        raise TypeError("configuration_must_be_mapping")
+    inputs = input_bindings(cfg)
+    # 这是从公共结构投影的内部查询结果，用户无需维护第二份声明。
+    return {
+        "script": "pipeline.py", "config": "config.yaml", "convention_version": 1,
+        "resume_key": "inputs.train.resume",
+        "inputs": inputs,
+        "outputs": {"run_root": "{run_root}", "data_root": "{data_dir}"},
+        "stage_inputs": {
+            name: [{"key": key} for key in inputs if key.split(".")[1] == name]
+            for name in cfg.get("inputs", {})
+        },
+        "components": cfg.get("components", {}),
+        "shared_outputs": ({
+            "physical_dataset": {
+                "kind": "dataset", "stage": "rawprep", "name_key": "dataset.processed_name",
+                "manifest": "manifest.json", "consumer_binding": "inputs.trainprep.dataset",
+            }
+        } if isinstance(cfg.get("dataset"), dict) and "processed_name" in cfg["dataset"] else {}),
+    }
 
 
 def materialize(source: Path | None, target: Path) -> dict:
@@ -34,7 +59,7 @@ def materialize(source: Path | None, target: Path) -> dict:
         base = (source / entry["config"]).parent
         for key in entry.get("inputs", {}):
             value = OmegaConf.select(cfg, key)
-            if isinstance(value, str) and value not in {"official", "last", "best", "latest"}:
+            if isinstance(value, str):
                 path = Path(value).expanduser()
                 OmegaConf.update(
                     cfg,

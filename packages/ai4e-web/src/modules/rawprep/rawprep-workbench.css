@@ -170,6 +170,19 @@
   flex: 1;
   padding: 0 0 10px;
 }
+.data-panel-body .file-tree-status,
+.settings-panel .settings-pending {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 13px;
+  color: #7787aa;
+  font-size: 12px;
+}
+.settings-panel .settings-pending {
+  min-height: 120px;
+  margin: 8px 0 0;
+}
 .data-panel-body .file-search,
 .data-panel-body .ant-input-search {
   display: block;
@@ -311,6 +324,16 @@
   text-align: center;
   color: #8ba1c6;
   padding: 18px 8px !important;
+}
+.artifact-dataset-label {
+  display: block;
+  margin: 0 0 4px;
+  color: #5a6d96;
+  font-size: 12px;
+}
+.artifact-dataset-picker {
+  width: 100%;
+  margin-bottom: 8px;
 }
 .data-panel-body.artifact-body {
   padding: 0 12px 10px;

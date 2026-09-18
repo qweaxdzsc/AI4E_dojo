@@ -82,3 +82,11 @@ NASA 小样本准备使用显式工况 identity，原因见上文。这里验证
 后续原任务产物复核：恢复 8000 服务后发现 `as` 已有成功运行 `b8517271de324a96aa2c32a8fbff9090`，本轮直接复读该运行，没有重复提交。实际转换一个训练样本 `param1/1dc58be25e1b6e5675cad724c63e222e`，清洗后表面 3586 点、体积 28504 点。七个 PT 均为 float32 张量，与修改前基线逐值、形状、类型一致，两个域的来源实体 ID 也完全一致；物理视图及准备字段接口读回通过。旧基线清单没有物理布局，复核时显式提供七字段布局，未改写历史清单。原任务脚本及配置与该运行快照摘要一致。证据为同批次 `profile-live-run.json`，其中包含实际数据清单和运行日志路径。本轮没有重新执行浏览器操作、完整数据准备或训练，也没有扩大为整库转换。
 
 当前服务重新检查原任务也通过：官方目录发现 889 样本，指定上述单样本的执行预检返回 200，依赖文件 2 个，没有再次触发 `recipe_profile_changed`。文档圈定 `test_web_design_documents.py`：12 passed。
+
+## 全部样本读绑定宇宙（2026-09-17）
+
+页面「全部」只读绑定数据集的官方或自身分片，回传 `sample_universe=bound_dataset`，不吃任务配置里看不见的 `dataset.partitions` 子集。当次执行或发布的名单只属于该次输出，不得写回下次 catalog。2026-09-17 23:50 正式 8000 重装并重启后，对照任务 catalog/页面「全部」为 **889** 样本、1778 来源文件，`sample_universe=bound_dataset`。圈定 `test_web_rawprep.py`、`test_web_dataset_binding.py`、`test_web_rawprep_handoff.py`。正式五页证据见后处理专项验收。
+
+## VTKHDF 默认勾选（2026-09-18）
+
+ShapeNet 新任务与缺键按清单/案例默认勾选 VTKHDF；NASA 仍不显示。对照任务当时已保存为关，已用正式 8000 写回 `rawprep.vtkhdf: true`。页面缺键回退 `profile.defaults.vtkhdf`。圈定 `packages/ai4e-web/e2e/rawprep-consistency.spec.ts`（7 passed）。正式 5173 原始处理页 VTKHDF 已勾选，未重装、未重启。证据 `official-20260918-vtkhdf/`。

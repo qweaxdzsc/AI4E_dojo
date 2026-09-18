@@ -23,4 +23,12 @@ from .physicalSpec import (
     layout_rectangles,
     balanced_layout,
     view_overlay_frames,
+    probe_pick_enabled,
 )
+__all__ += [
+    "normalize_physical_spec",
+    "layout_rectangles",
+    "balanced_layout",
+    "view_overlay_frames",
+    "probe_pick_enabled",
+]

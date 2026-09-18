@@ -1,0 +1,100 @@
+case: turek_hron_cno
+dataset:
+  name: turek_hron
+profile: scaled
+seed: 42
+run_root: /Users/zonghui/work/project_simulation/dojo_train/gencp/turek_hron_cno/dojo/runs
+data:
+  train_count: 256
+  val_count: 16
+fields:
+  fluid:
+    model:
+      backbone: cno
+      dataset_name: turek_hron_data
+      stage: fluid
+      x0_is_use_noise: true
+      in_dim: 4
+      out_dim: 3
+      in_size: 108
+      N_layers: 2
+      channel_multiplier: 4
+      N_res_neck: 1
+      latent_lift_proj_dim: 16
+    lr: 0.0003
+    eta_min: 0.0
+    objective:
+      dataset: turek_hron
+      field: fluid
+      sigma: 0.01
+      clean_neutron: true
+      clean_solid: false
+  structure:
+    model:
+      backbone: cno
+      dataset_name: turek_hron_data
+      stage: structure
+      x0_is_use_noise: true
+      in_dim: 4
+      out_dim: 1
+      in_size: 108
+      N_layers: 2
+      channel_multiplier: 4
+      N_res_neck: 1
+      latent_lift_proj_dim: 16
+    lr: 0.0003
+    eta_min: 0.0
+    objective:
+      dataset: turek_hron
+      field: structure
+      sigma: 0.01
+      clean_neutron: true
+      clean_solid: false
+train:
+  updates: 1000
+  batch_size: 2
+  evaluate_every: 1000
+  single_points: 10
+  device: mps
+  seconds: 3600
+infer:
+  flow_steps: 10
+  seed: 43
+  device: mps
+  boundary: none
+post:
+  plots: true
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - single
+  - infer
+  - post
+components:
+  model: ai4e_contrib.ability.model.gencp.adapters.construct
+  objective: ai4e_contrib.ability.constraint.gencp.objective.objective
+  neutron_condition: ai4e_contrib.ability.transform.gencp.conditions.neutron_condition
+  solid_condition: ai4e_contrib.ability.transform.gencp.conditions.solid_condition
+  fluid_condition: ai4e_contrib.ability.transform.gencp.conditions.fluid_condition
+data_root: /Users/zonghui/work/project_simulation/dojo_train/gencp/turek_hron_cno/dojo
+inputs:
+  rawprep:
+    source: /Users/zonghui/work/project_simulation/dojo_train/gencp/raw
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+    resume: null
+  infer:
+    preparation: null
+    checkpoint: null
+  single:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+rawprep: {}
+trainprep: {}
+model: {}

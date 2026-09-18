@@ -3,6 +3,7 @@
 .training-monitor .run-summary-header{display:flex;align-items:center;gap:16px;padding-bottom:8px;border-bottom:1px solid #e8f0fc;margin-bottom:8px}
 .training-monitor .run-summary-header h2{font-size:16px;margin:0}
 .training-monitor .run-badge{font-size:11px;background:#e9f3ff;padding:4px 7px;border-radius:5px}
+.training-monitor .handoff-hint{font-size:11px;color:#6178a4}
 .training-monitor .run-numbers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:center;gap:0;margin-top:0;padding:14px 0 8px}
 .training-monitor .run-number{border:0;border-right:1px solid #e1ebf9;border-radius:0;background:transparent;padding:0 12px;font-size:11px;color:#6178a4;min-width:0}
 .training-monitor .run-number:last-child{border-right:0}

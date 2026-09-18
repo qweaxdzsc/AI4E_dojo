@@ -17,7 +17,7 @@ from ..storage.records import all_records, get, put, remember, replay
 from ..storage.snapshots import digest, snapshot
 from .checkpoints import inference_samples, inspect_inference, list_inference_checkpoints
 from .configuration import read_configuration
-from .query import get_run, get_task, list_runs
+from .records import get_run, get_task, list_runs
 
 TERMINAL = {"succeeded", "partial", "failed", "canceled", "interrupted"}
 
@@ -243,7 +243,10 @@ def read_inference_batch(project: str | Path, task_id: str, identity: str) -> di
     """读取持久化批次；协调器失联只报告中断，不自动重复执行。"""
     get_task(project, task_id)
     folder = _folder(project, task_id, identity)
-    value = read_json(folder / "state.json")
+    path = folder / "state.json"
+    if not path.is_file():
+        raise ValueError("inference_batch_not_found: 推理批次不存在或已被清理")
+    value = read_json(path)
     if value["task_id"] != task_id:
         raise ValueError("inference_task_mismatch")
     age = (datetime.now(UTC) - datetime.fromisoformat(value["created_at"])).total_seconds()
@@ -257,7 +260,15 @@ def list_inference_batches(project: str | Path, task_id: str) -> list[dict]:
     get_task(project, task_id)
     with transaction(project) as db:
         ids = [r["id"] for r in all_records(db, "inference_batch") if r["task_id"] == task_id]
-    return [read_inference_batch(project, task_id, i) for i in reversed(ids)]
+    rows = []
+    for identity in reversed(ids):
+        try:
+            rows.append(read_inference_batch(project, task_id, identity))
+        except ValueError as exc:
+            if str(exc).startswith("inference_batch_not_found"):
+                continue
+            raise
+    return rows
 
 
 def cancel_inference(project: str | Path, task_id: str, identity: str) -> dict:

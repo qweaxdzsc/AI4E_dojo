@@ -1,0 +1,62 @@
+{
+  "case": "nasa_crm_abupt",
+  "scope": "recipe_task_conventions_real_data",
+  "attempts": [
+    {
+      "attempt": "nasa-fifth",
+      "directory_birthtime": 1789624628.8516002,
+      "reported_seconds": null,
+      "report": null
+    },
+    {
+      "attempt": "nasa-final-source",
+      "directory_birthtime": 1789628428.7888205,
+      "reported_seconds": 117.48400366702117,
+      "report": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-final-source/report.json"
+    },
+    {
+      "attempt": "nasa-first",
+      "directory_birthtime": 1789623712.5643196,
+      "reported_seconds": 25.65735658397898,
+      "report": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-first/report.json"
+    },
+    {
+      "attempt": "nasa-fourth",
+      "directory_birthtime": 1789624448.2626333,
+      "reported_seconds": 60.60753516602563,
+      "report": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-fourth/report.json"
+    },
+    {
+      "attempt": "nasa-second",
+      "directory_birthtime": 1789623910.8218682,
+      "reported_seconds": 51.5040748330066,
+      "report": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-second/report.json"
+    },
+    {
+      "attempt": "nasa-seventh",
+      "directory_birthtime": 1789626135.3926635,
+      "reported_seconds": 110.84620291693136,
+      "report": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-seventh/report.json"
+    },
+    {
+      "attempt": "nasa-sixth",
+      "directory_birthtime": 1789624744.977839,
+      "reported_seconds": 50.03700383298565,
+      "report": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-sixth/report.json"
+    },
+    {
+      "attempt": "nasa-third",
+      "directory_birthtime": 1789624277.7600222,
+      "reported_seconds": 49.2950036249822,
+      "report": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-third/report.json"
+    }
+  ],
+  "measured_seconds_sum": 465.4311806249316,
+  "unmeasured_attempts": [
+    "nasa-fifth"
+  ],
+  "charged_seconds": 4833.7111048698425,
+  "charge_basis": "Conservative sequential campaign wall-clock from first directory creation to final successful report, including debugging and idle gaps; not measured compute time. Missing attempt is not reset or counted as zero.",
+  "limit_seconds": 10800,
+  "remaining_seconds": 5966.2888951301575
+}

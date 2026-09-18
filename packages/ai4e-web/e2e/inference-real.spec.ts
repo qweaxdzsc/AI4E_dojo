@@ -103,8 +103,8 @@ test("真实批次：固定权重、多样本、下载及后处理 Trame", async
   await filesTab.evaluate((element) => element.scrollIntoView({ block: "start" }));
   await expect(page.getByRole("button", { name: "在后处理中打开" }).first()).toBeInViewport();
   await page.screenshot({ path: testInfo.outputPath("inference-results.png") });
-  await page.getByRole("tab", { name: "指标比较", exact: true }).click();
-  const metricsPanel = page.getByRole("tabpanel", { name: "指标比较", exact: true });
+  await page.getByRole("tab", { name: "聚合", exact: true }).click();
+  const metricsPanel = page.getByRole("tabpanel", { name: "聚合", exact: true });
   await expect(metricsPanel.locator("tbody tr")).toHaveCount(checkpointIds.length);
   await metricsPanel.evaluate((element) => element.scrollIntoView({ block: "start" }));
   await expect(metricsPanel.locator("tbody tr").last()).toBeInViewport();

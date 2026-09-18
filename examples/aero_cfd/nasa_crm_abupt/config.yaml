@@ -1,49 +1,26 @@
 dataset:
-  root: /shared/raw/nasa_crm
-  train_h5: ${dataset.root}/trainingData_NASA-CRM.h5
-  test_h5: ${dataset.root}/testData_NASA-CRM.h5
-  connectivity_h5: ${dataset.root}/connectivity_NASA-CRM.h5
+  processed_name: null
   chunk_count: 20
   validation_fraction: 0.2
   split_seed: 42
-  # null 从头训练；已有完整检查点路径可恢复模型、优化器及随机状态。
   resume: false
 pipeline:
   stages:
   - trainprep
   - train
+  - infer
   - post
-# 本次生成的数据根目录；各分片/归一化/预测路径仍可独立覆盖。
 data_root: /shared/datasets/nasa_physical
-# 运行配置、日志、检查点和报告目录；与输入和数据输出分开。
 run_root: /shared/runs/nasa_crm_abupt
-paths:
-  datasets:
-    root: ${data_root}
-    train: ${data_root}/train
-    eval: ${data_root}/eval
-    test: ${data_root}/test
-    normalize:
-      root: ${data_root}/normalize
-      train: ${paths.datasets.normalize.root}/train
-      eval: ${paths.datasets.normalize.root}/eval
-      test: ${paths.datasets.normalize.root}/test
-    predictions: ${data_root}/predictions/nasa_crm_abupt
-# 训练控制、优化器、调度、评价与恢复。
 train:
   mode: fit
-  # 训练总轮数；恢复时仍表示总预算，不是追加轮数。
   max_epochs: 1
-  # 每次更新读取的样本数；当前物理五例固定为 1。
   batch_size: 1
-  # auto 按 CUDA/MPS/CPU 选择；点名设备不可用时失败。
   device: auto
   precision: fp32
   num_workers: 0
   optimizer: lion
-  # 优化器初始学习率；调度按下方预算逐步调整。
   learning_rate: 5.0e-05
-  # 参数衰减系数；实际参数分组策略由训练配置决定。
   weight_decay: 0.05
   betas:
   - 0.9
@@ -60,25 +37,19 @@ train:
   snapshot: true
   save_on_interrupt: true
   evaluation_split: test
-  # null 从头训练；已有完整检查点路径可恢复模型、优化器及随机状态。
-  resume: null
   log_every: 1
   log_every_updates: null
   evaluation_enabled: false
-  manifest: ${data_root}/manifest.json
-# 模型构造、学习目标与在线采样预算。
 model:
   parameters:
     dim: 192
     geometry_depth: 6
     num_heads: 3
     blocks: pssssssssss
-    # 模型输入坐标空间的邻域半径；随冻结坐标变换定义，不猜测物理单位。
     radius: 9.0
     require_features: true
     num_domain_decoder_blocks:
       surface: 12
-  initial_weights: null
   freeze: []
   data_specs:
     position_dim: 3
@@ -104,12 +75,9 @@ model:
     normalization: surface_cf
     weight: 1.0
     loss: mse
-  # 训练准备登记的在线采样预算；实际取样发生在每轮读取样本时。
   sampling:
-    # global 沿共享随机流；independent 使用声明的独立采样流。
     random_stream: global
     pipeline_seed: null
-    # 可复现抽样与初始化种子；不保证不同设备之间逐值一致。
     seed: 42
     train_randomness: per_epoch
     evaluation_randomness: fixed
@@ -132,7 +100,6 @@ model:
           method: uniform
           num_points: 0
           insufficient: error
-# 训练准备：字段绑定与冻结变换；采样在训练迭代执行。
 trainprep:
   use_physics_features: true
   physical_rules: {}
@@ -152,23 +119,25 @@ trainprep:
   geometry_conditioning: {}
   normalization:
     execute: true
-    # false 只冻结变换并按需应用；true 另写归一化数据，不覆盖物理数据。
     materialize: false
     fields:
       surface_position:
         method: coordinate
+        scale: 1000
       surface_normals:
         method: identity
+        scale: 1
       surface_cp:
         method: zscore
+        scale: 1
       surface_cf:
         method: zscore
+        scale: 1
       conditions:
         method: zscore
         scope: condition
-# 预测、评价、保存和网格回贴；步骤顺序见 post.py。
+        scale: 1
 post:
-  # global 沿共享随机流；independent 使用声明的独立采样流。
   random_stream: global
   split: test
   evaluate: true
@@ -177,10 +146,8 @@ post:
   query: true
   sample_indices:
   - 0
-  # 完整网格查询单次处理的点数，控制峰值内存，不改变原实体身份。
   query_chunk_size: 16384
   overwrite: false
-  checkpoint: last
   samples:
   - Sample032
   - Sample019
@@ -190,17 +157,19 @@ post:
 snapshot_modules:
 - ai4e_spec
 - ai4e_contrib
-# 原始处理：参数分别交给读取、提取、几何、筛选和保存步骤。
 rawprep: {}
-# 可安装模块全限定路径；按对应 example 的公开输入契约选择数据与模型。
 components:
   dataset: ai4e_contrib.application.datasets.nasa_crm
   model: ai4e_contrib.ability.model.abupt.component
-
-# 独立推理参数。post 中的计算参数仅供历史 post-only 执行兼容。
+  application: ai4e_contrib.application.aero_cfd.operations
 infer:
   fields: null
-  metrics: [relative_l2, mae, rmse, max_abs_error, r2]
+  metrics:
+  - relative_l2
+  - mae
+  - rmse
+  - max_abs_error
+  - r2
   random_stream: global
   split: test
   evaluate: true
@@ -211,12 +180,30 @@ infer:
   - 0
   query_chunk_size: 16384
   overwrite: false
-  checkpoint: null
   samples:
   - Sample032
   - Sample019
   - Sample028
   - Sample004
   - Sample020
-  preparation: null
   device: cpu
+inputs:
+  rawprep:
+    source: /shared/raw/nasa_crm
+    manifest: null
+    train_h5: /shared/raw/nasa_crm/trainingData_NASA-CRM.h5
+    test_h5: /shared/raw/nasa_crm/testData_NASA-CRM.h5
+    connectivity_h5: /shared/raw/nasa_crm/connectivity_NASA-CRM.h5
+  trainprep:
+    partition: null
+    dataset: /shared/datasets/nasa_physical/manifest.json
+    statistics: null
+  train:
+    preparation: null
+    resume: null
+    initial_weights: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null

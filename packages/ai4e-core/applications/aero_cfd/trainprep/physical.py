@@ -5,14 +5,17 @@ from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
 
-from ai4e_core.abilities.data.source.split import apply_declared_split
+from ai4e_core.abilities.data.source.split import (
+    SPLIT_BUCKETS,
+    apply_declared_split,
+    complete_split_buckets,
+)
 from ai4e_core.abilities.data.stats.physical import freeze
 from ai4e_core.abilities.data.validate.fingerprint import fingerprint
 from ai4e_core.abilities.data.validate.physical import validate_bindings
 from ai4e_core.abilities.inference.randomness import preserve_randomness
 from ai4e_core.abilities.transform.normalization import Normalization
 from ai4e_core.base.config import operation_record, plain, resolve_operation
-from ai4e_core.base.config.steps import restore_operation
 
 
 @dataclass
@@ -29,9 +32,10 @@ class PhysicalPreparation:
     bound: bool = False
     batching: bool = False
     extensions: dict | None = None
+    version: int = 1
 
 
-def open_dataset(config, dataset_component, model_component, reference=None, dataset=None):
+def open_dataset(config, dataset_component, model_component, reference=None, dataset=None, *, version=1):
     """打开物理清单或已冻结准备引用，不在此拟合变换或进行模型准备。"""
     config = deepcopy(config)
     config.setdefault("train", {})
@@ -47,22 +51,21 @@ def open_dataset(config, dataset_component, model_component, reference=None, dat
     if isinstance(reference, dict):
         reference = reference["preparation"]
     old = json.loads(Path(reference).read_text()) if reference else None
-    if old and (old.get("version") == 2 or "dataset" not in old):
+    if version not in (1, 2):
+        raise ValueError("不支持的物理准备版本")
+    if old and ("dataset" not in old or (old.get("version") == 2 and old.get("kind") != "physical_fields")):
         raise ValueError("现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口")
+    if old:
+        version = old.get("version")
+        if version not in (1, 2):
+            raise ValueError("不支持的物理准备版本")
     if old:
         if not isinstance(old.get("manifest"), str):
             raise ValueError("冻结准备缺少物理数据清单引用")
-        requested = config["train"].get("manifest")
-        if (
-            requested
-            and Path(requested).is_file()
-            and Path(requested).resolve() != Path(old["manifest"]).resolve()
-        ):
-            raise ValueError("已选物理清单与冻结准备引用不一致")
         config["train"]["manifest"] = old["manifest"]
     view = dataset_component.open_physical(config)
     apply_declared_split(view, config, None if old is None else old.get("partitions"))
-    return PhysicalPreparation(config, view, model_component, old, extensions={})
+    return PhysicalPreparation(config, view, model_component, old, extensions={}, version=version)
 
 
 def bind_fields(data, *, settings=None):
@@ -71,7 +74,10 @@ def bind_fields(data, *, settings=None):
         data.config["trainprep"] = plain(settings)
         data.config["trainprep"].pop("normalization", None)
         data.config["trainprep"].pop("sampling", None)
-    if not data.view.partitions.get("train"):
+    if data.old is not None:
+        if not any(data.view.partitions.get(name) for name in SPLIT_BUCKETS):
+            raise ValueError("准备切片全部为空")
+    elif not data.view.partitions.get("train"):
         raise ValueError("物理准备需要非空训练分片")
     data.bound = True
     return data
@@ -97,12 +103,34 @@ def configure_sampling(data, *, settings=None, operation=None, model_component=N
     data.prepare = resolve_operation(
         selection, default=data.model_component.prepare_sample, operation=operation
     )
-    frozen_sampling = (data.old or {}).get("extensions", {}).get("sampling")
-    if operation is None and not selection.get("target") and frozen_sampling:
-        data.prepare = restore_operation(frozen_sampling)
-    if operation is not None or selection.get("target") or frozen_sampling:
+    if operation is not None or selection.get("target"):
         data.extensions["sampling"] = operation_record(data.prepare)
     return data
+
+
+def _same_physical_declarations(old, current) -> bool:
+    """物理准备声明只比模型、字段、归一化和采样方法，不比模型页点数。"""
+    from .preparation import sampling_methods
+
+    old, current = old or {}, current or {}
+    if old.get("component") != current.get("component"):
+        return False
+    for key in ("model", "trainprep", "normalization"):
+        if old.get(key) != current.get(key):
+            return False
+    return sampling_methods(old.get("sampling")) == sampling_methods(current.get("sampling"))
+
+
+def _physical_record_payload(record: dict) -> dict:
+    """比较用的物理准备载荷；旧记录里的采样点数不参与相等判断。"""
+    from .preparation import _sampling_record
+
+    payload = deepcopy(record)
+    payload.pop("digest", None)
+    declarations = deepcopy(payload.get("declarations") or {})
+    declarations["sampling"] = _sampling_record(declarations.get("sampling"))
+    payload["declarations"] = declarations
+    return payload
 
 
 def configure_batching(data, *, batch_size=None, model_component=None):
@@ -116,39 +144,51 @@ def configure_batching(data, *, batch_size=None, model_component=None):
 
 
 def validate_preparation(data):
-    """核对数据与冻结声明，并在隔离随机状态下验证真实模型输入。"""
+    """按当前平台配置校验一份可读样本；已导入准备不拿冻结声明挡现行参数。"""
     if not data.bound or data.normalization is None or data.prepare is None or not data.batching:
         raise ValueError("准备需要字段、归一化、采样和拼批全部配置")
     config, old = data.config, data.old
     data_id = data.view.content_digest()
+    from .preparation import _sampling_record
+
     declarations = deepcopy(
-        {k: config[k] for k in ("model", "trainprep", "sampling", "normalization")}
+        {k: config[k] for k in ("model", "trainprep", "normalization") if k in config}
     )
+    declarations["sampling"] = _sampling_record(config.get("sampling"))
     declarations["component"] = data.model_component.SOURCE
-    if old and (old.get("version") == 2 or "dataset" not in old):
+    if old and ("dataset" not in old or (old.get("version") == 2 and old.get("kind") != "physical_fields")):
         raise ValueError("现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口")
-    if old and (old["dataset"] != data_id or old["declarations"] != declarations):
-        raise ValueError("数据、模型输入或准备声明已变化")
     record = {
-        "version": 1,
+        "version": data.version,
         "dataset": data_id,
         "manifest": data.view.describe()["reference"],
         "declarations": declarations,
         "normalization": data.normalization.record,
-        "split_counts": {k: len(v) for k, v in data.view.partitions.items()},
+        "split_counts": {k: len(v) for k, v in complete_split_buckets(data.view.partitions).items()},
     }
-    if (config.get("trainprep") or {}).get("split") or (old or {}).get("partitions"):
-        record["partitions"] = {k: list(v) for k, v in data.view.partitions.items()}
+    if data.version == 2 or (config.get("trainprep") or {}).get("split") or (old or {}).get("partitions"):
+        record["partitions"] = complete_split_buckets(data.view.partitions)
         record["split"] = deepcopy(
             (config.get("trainprep") or {}).get("split") or (old or {}).get("split")
         )
     if data.extensions:
         record["extensions"] = deepcopy(data.extensions)
+    if data.version == 2:
+        from .preparation import component_record, external_inputs
+
+        record.update(
+            kind="physical_fields",
+            normalization_digest=data.normalization.digest,
+            components={"prepare": component_record(data.prepare)},
+            external_inputs=external_inputs(config),
+            partitions=complete_split_buckets(data.view.partitions),
+        )
     record["digest"] = fingerprint(record)
-    if old and old != record:
-        raise ValueError("冻结准备内容或扩展实现不一致，请重新准备")
+    probe = next((name for name in SPLIT_BUCKETS if data.view.partitions.get(name)), None)
+    if probe is None:
+        raise ValueError("准备切片全部为空")
     with preserve_randomness():
-        sample = data.view.read("train", 0)
+        sample = data.view.read(probe, 0)
         validate_bindings(sample, config["trainprep"])
         data.prepare(sample, config, data.normalization, evaluation=True)
     data.record = record
@@ -169,13 +209,15 @@ def publish(data, *, session):
     if session.dry_run:
         return check_report(data, session=session)
     path = session.artifact("preparation.json", data.record)
+    session.record_asset("preparation", path, kind="preparation", stage="trainprep",
+                         dependencies=[Path(data.record["manifest"]).parent])
     result = {"preparation": str(path), "split_counts": data.record["split_counts"]}
     session.report(result, stage="trainprep")
     return result
 
 
 def consume(config, dataset_component, model_component, reference=None):
-    """重建同一公开准备链，用于训练和独立后处理的契约校验。"""
+    """导入已有准备记录并按当前平台配置组计算，不拿冻结声明挡现行参数。"""
     data = open_dataset(config, dataset_component, model_component, reference)
     data = bind_fields(data)
     data = freeze_normalization(data)

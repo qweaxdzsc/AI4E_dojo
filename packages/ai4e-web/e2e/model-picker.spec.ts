@@ -137,8 +137,22 @@ async function fixture(page: Page, dataset = "shapenet_car") {
           revision: state.revision,
           stage: "model",
           values: state.values,
-          capabilities: state.options.find((o: any) => o.id === state.current)
-            .capabilities,
+          capabilities: {
+            ...state.options.find((o: any) => o.id === state.current)
+              .capabilities,
+            official_combos: {
+              current_model_id: state.current,
+              options: [
+                { id: "shapenet_car_abupt", name: "AB-UPT · ShapeNet-Car", model_id: "abupt" },
+                { id: "nasa_crm_abupt", name: "AB-UPT · NASA CRM", model_id: "abupt" },
+                {
+                  id: "shapenet_car_transolver3_surface",
+                  name: "Transolver-3 · ShapeNet-Car 表面",
+                  model_id: "transolver3",
+                },
+              ],
+            },
+          },
         },
       });
     }
@@ -146,13 +160,13 @@ async function fixture(page: Page, dataset = "shapenet_car") {
       return route.fulfill({
         json: [
           {
-            binding: "train.manifest",
+            binding: "inputs.trainprep.dataset",
             selected: false,
             ref: null,
             compatibility: { status: "invalid", reason: "path_outside_root" },
           },
           {
-            binding: "post.checkpoint",
+            binding: "inputs.infer.checkpoint",
             ref: null,
             compatibility: {
               status: "invalid",
@@ -226,19 +240,28 @@ for (const dataset of ["shapenet_car", "nasa_crm"])
         exact: true,
       });
       await expect(picker).toBeEnabled();
+      await expect(page.getByRole("combobox", { name: "模型设置组合" })).toBeVisible();
+      await expect(page.getByText("数据集-模型组合", { exact: true })).toBeVisible();
       await page.locator(".ant-select").filter({ has: picker }).click();
       await expect(page.getByRole("option")).toHaveCount(2);
       await page.keyboard.press("Escape");
       await expect(
-        page.getByRole("combobox", { name: "结构版本" }),
+        page.getByRole("combobox", { name: "当前参数来源" }),
       ).toBeDisabled();
+      await expect(
+        page.getByText("只表示当前模型参数来自官方案例默认", { exact: false }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("combobox", { name: "已导出的模型配置" }),
+      ).toBeVisible();
+      await expect(page.getByRole("button", { name: "保存配置", exact: true })).toBeEnabled();
       await expect(
         page.locator(".model-settings").getByText("path_outside_root"),
       ).toHaveCount(0);
       await expect(
         page.locator(".model-visualization").getByText("path_outside_root"),
       ).toHaveCount(0);
-      await expect(page.getByRole("combobox", { name: "train.manifest" })).toHaveCount(
+      await expect(page.getByRole("combobox", { name: "inputs.trainprep.dataset" })).toHaveCount(
         0,
       );
       await expect(page.getByText("binding_file_missing")).toHaveCount(0);
@@ -289,7 +312,7 @@ for (const dataset of ["shapenet_car", "nasa_crm"])
       await page.getByRole("button", { name: "保存配置", exact: true }).click();
       await expect(
         page.getByRole("button", { name: "保存配置", exact: true }),
-      ).toBeDisabled();
+      ).toBeEnabled();
       expect(state.saves[0].target_model).toBe("transolver3");
       if (dataset === "shapenet_car")
         expect(state.saves[0].target_variant).toBe("surface");
@@ -301,7 +324,7 @@ for (const dataset of ["shapenet_car", "nasa_crm"])
       await page.getByRole("button", { name: "保存配置", exact: true }).click();
       await expect(
         page.getByRole("button", { name: "保存配置", exact: true }),
-      ).toBeDisabled();
+      ).toBeEnabled();
       expect(state.saves[1].target_model).toBeUndefined();
       await choose(page, "AB-UPT");
       await expect(page.locator("summary", { hasText: "模型采样" })).toBeVisible();
@@ -340,10 +363,22 @@ test("ShapeNet 可改选体场变体", async ({ page }) => {
 test("导出当前模型配置", async ({ page }) => {
   const state = await fixture(page);
   await mount(page);
-  await page.getByLabel("导出模型名称").fill("我的汽车表面");
-  await page.getByRole("button", { name: "导出模型", exact: true }).click();
+  await page.getByLabel("导出模型配置名称").fill("我的汽车表面");
+  await page.getByRole("button", { name: "导出模型配置", exact: true }).click();
   await expect.poll(() => state.exports.length).toBe(1);
   expect(state.exports[0].name).toBe("我的汽车表面");
+});
+
+test("未改参数也可保存配置", async ({ page }) => {
+  const state = await fixture(page);
+  await mount(page);
+  const save = page.getByRole("button", { name: "保存配置", exact: true });
+  await expect(save).toBeEnabled();
+  await save.click();
+  await expect.poll(() => state.saves.length).toBe(1);
+  expect(state.saves[0].edited_paths).toEqual([]);
+  await expect(page.getByText("配置已保存，未创建新版本")).toBeVisible();
+  await expect(save).toBeEnabled();
 });
 
 test("换模保存冲突保留草稿，不启动检查", async ({ page }) => {
@@ -369,6 +404,45 @@ test("换模保存冲突保留草稿，不启动检查", async ({ page }) => {
   ).toBeVisible();
   expect(state.posts).toHaveLength(1);
   expect(state.posts[0].expected_revision).toBe(state.revision);
+});
+
+test("进页先反显已保存参数，模型列表后到", async ({ page }) => {
+  const state = await fixture(page);
+  let release!: () => void;
+  const hold = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/tasks/fixture/model-options", async (route) => {
+    await hold;
+    await route.fulfill({
+      json: {
+        revision: state.revision,
+        current_model_id: state.current,
+        current_variant: state.variant,
+        current_preset_id: undefined,
+        options: state.options,
+        presets: [],
+        trace_available: true,
+      },
+    });
+  });
+  await mount(page);
+  await expect(
+    page
+      .locator(".configuration-field")
+      .filter({ has: page.locator("label", { hasText: "特征维度" }) })
+      .getByRole("spinbutton"),
+  ).toHaveValue("192");
+  await expect(page.getByRole("combobox", { name: "模型设置组合" })).toBeVisible();
+  await expect(
+    page.getByRole("combobox", { name: "模型类型", exact: true }),
+  ).toBeDisabled();
+  release();
+  await expect(
+    page.getByRole("combobox", { name: "模型类型", exact: true }),
+  ).toBeEnabled();
+  await choose(page, "Transolver-3");
+  await expect(hidden(page)).toHaveValue("256");
 });
 
 test("选项加载失败可重试，原参数不丢失", async ({ page }) => {

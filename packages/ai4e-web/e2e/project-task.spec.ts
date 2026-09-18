@@ -25,11 +25,11 @@ test('项目查询、编辑、归档恢复和任务派生', async ({ page, reque
     await page.getByLabel('任务名称').fill('baseline');
     await page.getByRole('combobox',{name:'科研案例',exact:true}).click();await page.getByRole('option').first().click();
     await page.getByRole('dialog').getByRole('button', { name: '创建并进入原始处理',exact:true }).click();
-    await page.getByRole('link',{name:'返回任务管理',exact:true}).click();
+    await page.goto(`/projects/${p}/tasks`);
     await page.getByRole('button',{name:'baseline 更多操作',exact:true}).click();await page.getByRole('menuitem',{name:'派生任务',exact:true}).click();
     await page.getByLabel('任务名称').fill('child');
     await page.getByRole('dialog').getByRole('button', { name: '派生并进入原始处理',exact:true }).click();
-    await page.getByRole('link',{name:'返回任务管理',exact:true}).click();
+    await page.goto(`/projects/${p}/tasks`);
     await expect(page.getByRole('link', { name: 'child', exact: true })).toBeVisible();
     await expect(page.locator('.tasktable .task-name')).toHaveCount(2);
     await expect(page.locator('.tasktable .ministeps')).toHaveCount(2);

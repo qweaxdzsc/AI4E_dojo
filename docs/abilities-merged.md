@@ -295,3 +295,97 @@ O11 与 O16 复用部分保存函数，但使用目的和输入前提不同：�
 - 本轮核对了当前源码、相关装配调用和原始 89 项归属（本次简表核对另补录 4 项），没有重新执行算法、训练或数值对照。文档检查只证明对照完整、来源链接可定位与条目引用一致，不能自动证明业务粒度是最终正确答案。
 
 文档验收：`uv run pytest tests/integration/test_ability_inventory_document.py tests/integration/test_ability_merged_document.py`。
+
+## 2026-09-15 源码补录对应
+
+推理计算现位于 infer，post 消费固定结果；上文五类仍是讨论分类。新增物理约束不代表未列方程自动支持。
+
+| 编号 | 能力 | 对应能力 | 归并说明 | 源码 |
+| --- | --- | --- | --- | --- |
+| A094 | 物理残差与边界约束 | P04 | 当前源码补录，保持局部能力边界。 | [constraint/physical.py](../packages/ai4e-core/abilities/constraint/physical.py) |
+| A095 | 张量包与摘要 | O11 | 当前源码补录，保持局部能力边界。 | [data/save/bundle.py](../packages/ai4e-core/abilities/data/save/bundle.py) |
+| A096 | 样本等权汇总 | O15 | 当前源码补录，保持局部能力边界。 | [eval/aggregation.py](../packages/ai4e-core/abilities/eval/aggregation.py) |
+| A097 | 评价指标目录 | O15 | 当前源码补录，保持局部能力边界。 | [eval/catalog.py](../packages/ai4e-core/abilities/eval/catalog.py) |
+| A098 | 固定数组评价 | O15 | 当前源码补录，保持局部能力边界。 | [eval/result_metrics.py](../packages/ai4e-core/abilities/eval/result_metrics.py) |
+| A099 | 参数域几何与法向 | O07 | 当前源码补录，保持局部能力边界。 | [geometry/parametric.py](../packages/ai4e-core/abilities/geometry/parametric.py) |
+| A100 | 推理执行状态隔离 | O14 | 当前源码补录，保持局部能力边界。 | [inference/execution.py](../packages/ai4e-core/abilities/inference/execution.py) |
+| A101 | 注入预测调用 | O14 | 当前源码补录，保持局部能力边界。 | [inference/prediction.py](../packages/ai4e-core/abilities/inference/prediction.py) |
+| A102 | 设备同步计时 | O14 | 当前源码补录，保持局部能力边界。 | [inference/timing.py](../packages/ai4e-core/abilities/inference/timing.py) |
+| A103 | 坐标空间声明 | O17 | 当前源码补录，保持局部能力边界。 | [postproc/coordinate_space.py](../packages/ai4e-core/abilities/postproc/coordinate_space.py) |
+| A104 | 表格文件导出 | O16 | 当前源码补录，保持局部能力边界。 | [report/tabular.py](../packages/ai4e-core/abilities/report/tabular.py) |
+| A105 | 物理域点采样 | P01 | 当前源码补录，保持局部能力边界。 | [sampling/physical.py](../packages/ai4e-core/abilities/sampling/physical.py) |
+| A106 | 梯形物理导数变换 | O09 | 当前源码补录，保持局部能力边界。 | [transform/trapezoid.py](../packages/ai4e-core/abilities/transform/trapezoid.py) |
+| A107 | Advection 原版样条算术 | O12 | 当前源码补录，保持局部能力边界。 | [model/pibsnet/advection_numerics.py](../packages/ai4e-contrib/ability/model/pibsnet/advection_numerics.py) |
+| A108 | PI-BSNet 局部业务适配 | O12、P03、P04 | 当前源码补录，保持局部能力边界。 | [model/pibsnet/component.py](../packages/ai4e-contrib/ability/model/pibsnet/component.py) |
+| A109 | 参数化样条网络 | O12 | 当前源码补录，保持局部能力边界。 | [model/pibsnet/model.py](../packages/ai4e-contrib/ability/model/pibsnet/model.py) |
+| A110 | Neumann 原版样条算术 | O12、P04 | 当前源码补录，保持局部能力边界。 | [model/pibsnet/neumann_numerics.py](../packages/ai4e-contrib/ability/model/pibsnet/neumann_numerics.py) |
+| A111 | 原案例数值连接 | O12、P03、P04 | 当前源码补录，保持局部能力边界。 | [model/pibsnet/source_cases.py](../packages/ai4e-contrib/ability/model/pibsnet/source_cases.py) |
+| A112 | 样条基与求值 | O12 | 当前源码补录，保持局部能力边界。 | [model/pibsnet/spline.py](../packages/ai4e-contrib/ability/model/pibsnet/spline.py) |
+| A113 | 梯形参数域模型 | O12、P03、P04 | 当前源码补录，保持局部能力边界。 | [model/pibsnet/trapezoid.py](../packages/ai4e-contrib/ability/model/pibsnet/trapezoid.py) |
+| A114 | 梯形样条基 | O12 | 当前源码补录，保持局部能力边界。 | [model/pibsnet/trapezoid_basis.py](../packages/ai4e-contrib/ability/model/pibsnet/trapezoid_basis.py) |
+
+| O18 | 脚本物理场分析与图片 | 物理网格及显式参数 → 分析网格、图片或剖面数据 | 切片、剖切、矢量、流线、等值、视角与色标 | 不依赖 Web 会话；原子计算、显示与文件输出独立。 |
+
+### 脚本物理场新增映射
+
+| 编号 | 原能力 | 归属 | 说明 | 源码 |
+| --- | --- | --- | --- | --- |
+| A115 | 区域等权统计 | O15 | 脚本物理场分析与输出的可复用能力。 | [eval/region_statistics.py](../packages/ai4e-core/abilities/eval/region_statistics.py) |
+| A116 | 物理场文件输出 | O18 | 脚本物理场分析与输出的可复用能力。 | [postproc/export/visualization.py](../packages/ai4e-core/abilities/postproc/export/visualization.py) |
+| A117 | 视角与显示设置 | O18 | 脚本物理场分析与输出的可复用能力。 | [postproc/visualization/display.py](../packages/ai4e-core/abilities/postproc/visualization/display.py) |
+| A118 | 物理场选择 | O18 | 脚本物理场分析与输出的可复用能力。 | [postproc/visualization/fields.py](../packages/ai4e-core/abilities/postproc/visualization/fields.py) |
+| A119 | 物理场空间采样 | O18 | 脚本物理场分析与输出的可复用能力。 | [postproc/visualization/probe.py](../packages/ai4e-core/abilities/postproc/visualization/probe.py) |
+| A120 | 物理场图片生成 | O18 | 脚本物理场分析与输出的可复用能力。 | [postproc/visualization/render.py](../packages/ai4e-core/abilities/postproc/visualization/render.py) |
+| A121 | 三维切片与等值 | O18 | 脚本物理场分析与输出的可复用能力。 | [postproc/visualization/sections.py](../packages/ai4e-core/abilities/postproc/visualization/sections.py) |
+| A122 | 矢量与流线 | O18 | 脚本物理场分析与输出的可复用能力。 | [postproc/visualization/vectors.py](../packages/ai4e-core/abilities/postproc/visualization/vectors.py) |
+
+## GenCP 增量映射
+
+| O19 | 时空生成与多场耦合 | 原生数组、流匹配、网络与耦合积分 |
+
+| A123 | 速度目标逐样本损失 | O19 | 时空生成与耦合计算，保留来源追溯 | [flow_matching.py](../packages/ai4e-core/abilities/constraint/flow_matching.py) |
+| A124 | 物理时间历史/预测窗口 | O19 | 时空生成与耦合计算，保留来源追溯 | [time_windows.py](../packages/ai4e-core/abilities/data/extract/time_windows.py) |
+| A125 | 压缩来源安全物化，内容校验后复用已有文件 | O19 | 时空生成与耦合计算，保留来源追溯 | [archives.py](../packages/ai4e-core/abilities/data/source/archives.py) |
+| A126 | 原生数值数组按需读取 | O19 | 时空生成与耦合计算，保留来源追溯 | [array_read.py](../packages/ai4e-core/abilities/data/source/array_read.py) |
+| A127 | 时空场身份与布局校验 | O19 | 时空生成与耦合计算，保留来源追溯 | [trajectory.py](../packages/ai4e-core/abilities/data/validate/trajectory.py) |
+| A128 | 固定时空数组的样本等权评价，明确归约轴而非混合不同物理量 | O19 | 时空生成与耦合计算，保留来源追溯 | [trajectory.py](../packages/ai4e-core/abilities/eval/trajectory.py) |
+| A129 | 耦合场 Euler 更新 | O19 | 时空生成与耦合计算，保留来源追溯 | [coupled_steps.py](../packages/ai4e-core/abilities/inference/coupled_steps.py) |
+| A130 | 沿明确流时间网格积分，支持逐步观察与取消 | O19 | 时空生成与耦合计算，保留来源追溯 | [integration.py](../packages/ai4e-core/abilities/inference/integration.py) |
+| A131 | 明确轴的固定数组滤波 | O19 | 时空生成与耦合计算，保留来源追溯 | [filters.py](../packages/ai4e-core/abilities/postproc/filters.py) |
+| A132 | 规则网格固定物理帧的预测、真值与误差图 | O19 | 时空生成与耦合计算，保留来源追溯 | [trajectory.py](../packages/ai4e-core/abilities/postproc/visualization/trajectory.py) |
+| A133 | 生成流时间与噪声的显式采样 | O19 | 时空生成与耦合计算，保留来源追溯 | [flow.py](../packages/ai4e-core/abilities/sampling/flow.py) |
+| A134 | 可恢复的固定大小批次流 | O19 | 时空生成与耦合计算，保留来源追溯 | [iteration_stream.py](../packages/ai4e-core/abilities/training/iteration_stream.py) |
+| A135 | 按有效优化器更新次数训练，计算目标由普通函数提供 | O19 | 时空生成与耦合计算，保留来源追溯 | [iterations.py](../packages/ai4e-core/abilities/training/iterations.py) |
+| A136 | 冻结可逆场变换，明确常量分量和浮点运算顺序 | O19 | 时空生成与耦合计算，保留来源追溯 | [field_transforms.py](../packages/ai4e-core/abilities/transform/field_transforms.py) |
+| A137 | 独立条件流匹配概率路径 | O19 | 时空生成与耦合计算，保留来源追溯 | [flow_path.py](../packages/ai4e-core/abilities/transform/flow_path.py) |
+| A138 | 显式命名轴转换，不根据形状猜测通道 | O19 | 时空生成与耦合计算，保留来源追溯 | [layout.py](../packages/ai4e-core/abilities/transform/layout.py) |
+| A139 | 附加放大：归一化之后的可见系数，正反变换共用 | O19 | 时空生成与耦合计算，保留来源追溯 | [scale.py](../packages/ai4e-core/abilities/transform/scale.py) |
+| A140 | GenCP 单场训练目标 | O19 | 时空生成与耦合计算，保留来源追溯 | [objective.py](../packages/ai4e-contrib/ability/constraint/gencp/objective.py) |
+| A141 | GenCP 模型流时间、单场生成及耦合速度求值 | O19 | 时空生成与耦合计算，保留来源追溯 | [velocity.py](../packages/ai4e-contrib/ability/inference/gencp/velocity.py) |
+| A142 | GenCP 两种网络的显式构造，允许研究者替换普通构造函数 | O19 | 时空生成与耦合计算，保留来源追溯 | [adapters.py](../packages/ai4e-contrib/ability/model/gencp/adapters.py) |
+| A143 | GenCP 原 CNO 网络 | O19 | 时空生成与耦合计算，保留来源追溯 | [cno.py](../packages/ai4e-contrib/ability/model/gencp/cno.py) |
+| A144 | Miscellaneous utility classes and functions. | O19 | 时空生成与耦合计算，保留来源追溯 | [util.py](../packages/ai4e-contrib/ability/model/gencp/modules/CNO_libs/dnnlib/util.py) |
+| A145 | GenCP 原网络内部 custom_ops | O19 | 时空生成与耦合计算，保留来源追溯 | [custom_ops.py](../packages/ai4e-contrib/ability/model/gencp/modules/CNO_libs/local_torch_utils/custom_ops.py) |
+| A146 | GenCP 原网络内部 misc | O19 | 时空生成与耦合计算，保留来源追溯 | [misc.py](../packages/ai4e-contrib/ability/model/gencp/modules/CNO_libs/local_torch_utils/misc.py) |
+| A147 | Custom PyTorch ops for efficient bias and activati | O19 | 时空生成与耦合计算，保留来源追溯 | [bias_act.py](../packages/ai4e-contrib/ability/model/gencp/modules/CNO_libs/local_torch_utils/ops/bias_act.py) |
+| A148 | Custom replacement for `torch.nn.functional.conv2d | O19 | 时空生成与耦合计算，保留来源追溯 | [conv2d_gradfix.py](../packages/ai4e-contrib/ability/model/gencp/modules/CNO_libs/local_torch_utils/ops/conv2d_gradfix.py) |
+| A149 | 2D convolution with optional up/downsampling. | O19 | 时空生成与耦合计算，保留来源追溯 | [conv2d_resample.py](../packages/ai4e-contrib/ability/model/gencp/modules/CNO_libs/local_torch_utils/ops/conv2d_resample.py) |
+| A150 | GenCP 原网络内部 filtered_lrelu | O19 | 时空生成与耦合计算，保留来源追溯 | [filtered_lrelu.py](../packages/ai4e-contrib/ability/model/gencp/modules/CNO_libs/local_torch_utils/ops/filtered_lrelu.py) |
+| A151 | Fused multiply-add, with slightly faster gradients | O19 | 时空生成与耦合计算，保留来源追溯 | [fma.py](../packages/ai4e-contrib/ability/model/gencp/modules/CNO_libs/local_torch_utils/ops/fma.py) |
+| A152 | Custom replacement for `torch.nn.functional.grid_s | O19 | 时空生成与耦合计算，保留来源追溯 | [grid_sample_gradfix.py](../packages/ai4e-contrib/ability/model/gencp/modules/CNO_libs/local_torch_utils/ops/grid_sample_gradfix.py) |
+| A153 | Custom PyTorch ops for efficient resampling of 2D  | O19 | 时空生成与耦合计算，保留来源追溯 | [upfirdn2d.py](../packages/ai4e-contrib/ability/model/gencp/modules/CNO_libs/local_torch_utils/ops/upfirdn2d.py) |
+| A154 | Facilities for pickling Python code alongside othe | O19 | 时空生成与耦合计算，保留来源追溯 | [persistence.py](../packages/ai4e-contrib/ability/model/gencp/modules/CNO_libs/local_torch_utils/persistence.py) |
+| A155 | Copyright (c) 2021, NVIDIA Corporation & affiliate | O19 | 时空生成与耦合计算，保留来源追溯 | [filtered_networks.py](../packages/ai4e-contrib/ability/model/gencp/modules/CNO_libs/training/filtered_networks.py) |
+| A156 | GenCP 原 SiT-FNO 网络 | O19 | 时空生成与耦合计算，保留来源追溯 | [sit_fno.py](../packages/ai4e-contrib/ability/model/gencp/sit_fno.py) |
+| A157 | 原程序的后处理声明：明确保留真值 mask 与平滑来源 | O19 | 时空生成与耦合计算，保留来源追溯 | [reference.py](../packages/ai4e-contrib/ability/postproc/gencp/reference.py) |
+| A158 | GenCP 干净条件覆盖及可选边界路径回填 | O19 | 时空生成与耦合计算，保留来源追溯 | [boundaries.py](../packages/ai4e-contrib/ability/transform/gencp/boundaries.py) |
+| A159 | NTcouple 原场间条件映射，操作的是归一化场 | O19 | 时空生成与耦合计算，保留来源追溯 | [conditions.py](../packages/ai4e-contrib/ability/transform/gencp/conditions.py) |
+| A160 | GenCP 冻结归一化，保留输入/目标分离和原参考算术 | O19 | 时空生成与耦合计算，保留来源追溯 | [normalization.py](../packages/ai4e-contrib/ability/transform/gencp/normalization.py) |
+| A161 | GenCP 场状态分解与联合通道构造，不依赖运行配置 | O19 | 时空生成与耦合计算，保留来源追溯 | [state.py](../packages/ai4e-contrib/ability/transform/gencp/state.py) |
+| A162 | GenCP 原始场物理处理与训练条件 | O19 | 专属物理处理从数据装配分离 | [preprocessing.py](../packages/ai4e-contrib/ability/transform/gencp/preprocessing.py) |
+
+### WDNO 基础预测补充（2026-09-17）
+
+小波布局/准备/恢复位于贡献`ability/transform/wdno`；原二维网络与日程位于`ability/model/wdno`；条件目标与采样分别位于`ability/constraint/wdno`和`ability/inference/wdno`；物理MSE位于`ability/eval/wdno`。共享数组清单归core的data/save，精确迭代训练与EMA沿用既有能力。上述路径均可直接import，不新增全仓组件协议。
+
+领域连接、参数与配置、完整研究步骤见[WDNO recipe](../recipes/wdno/README.md)，实际已跑变体见[普通函数扩展](../examples/recipe_extensions/wdno/README.md)，结果范围见[专项验收](../.context/mvp/wdno-acceptance.md)。这是基础Burgers缩小迁移；本表旧文件计数为当时快照，不表示已覆盖后续全部实现，也不表示模型自动进入Web目录。

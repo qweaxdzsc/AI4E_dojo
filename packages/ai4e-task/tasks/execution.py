@@ -30,6 +30,7 @@ def submit_run(
     input_keys: list[str] | None = None,
     start: bool = True,
     metadata: dict | None = None,
+    overwrite: bool = False,
 ) -> dict:
     """捕获当前工作目录并提交；返回运行记录，不创建正式版本。"""
     from omegaconf import OmegaConf
@@ -45,6 +46,7 @@ def submit_run(
     fingerprint = digest(
         {
             "task_id": task_id,
+            "overwrite": overwrite,
             "overrides": overrides or [],
             "resumed_from": resumed_from,
             "operation_mode": operation_mode,
@@ -60,103 +62,162 @@ def submit_run(
             if prior:
                 return prior
             task = get(db, "task", task_id)
+            if task.get("archived") or info.get("archived"):
+                raise ValueError("task_archived")
             version = get(db, "version", task["version_id"])
-            source = _code or folder / "recipe"
-            entry = read_entry(source)
-            if not entry:
-                raise ValueError("entry_required: task-entry.json")
-            for field in ("script", "config"):
-                if not inside(source, entry[field]).is_file():
-                    raise FileNotFoundError(entry[field])
-            if expected_revision is not None:
-                import hashlib
+            shared_records = all_records(db, "asset")
+        source = _code or folder / "recipe"
+        entry = read_entry(source)
+        if not entry:
+            raise ValueError("configuration_unavailable: config.yaml")
+        for field in ("script", "config"):
+            if not inside(source, entry[field]).is_file():
+                raise FileNotFoundError(entry[field])
+        if expected_revision is not None:
+            import hashlib
 
-                if (
-                    hashlib.sha256(inside(source, entry["config"]).read_bytes()).hexdigest()
-                    != expected_revision
-                ):
-                    raise ValueError("configuration_revision_conflict")
-            stage.mkdir(parents=True)
-            captured = snapshot(source, stage / "code")
-            cfgpath = stage / "code" / entry["config"]
-            cfg = OmegaConf.load(cfgpath)
-            if overrides:
-                cfg = OmegaConf.merge(cfg, OmegaConf.from_dotlist(overrides))
-            # 数据及运行输出位置只允许绑定到本次任务位置，覆盖参数不能逃逸。
-            run_dir = folder / "runs" / identity
-            data_dir = folder / "data" / identity
-            bindings = {"run_root": str(run_dir.parent), "data_dir": str(data_dir)}
-            for key, pattern in entry["outputs"].items():
-                value = pattern.format(**bindings)
-                output = Path(value).resolve()
-                if key != "run_root" and not output.is_relative_to(data_dir):
-                    raise ValueError(f"output_binding_escape: {key}")
-                if key == "run_root" and output != run_dir.parent:
-                    raise ValueError("run_root_binding_mismatch")
-                OmegaConf.update(cfg, key, value, force_add=True)
-            if "run_root" not in entry["outputs"]:
-                raise ValueError("run_root_binding_required")
-            # 相对输入以工作目录为基准，不能因执行副本位置改变含义。
-            for key in entry.get("inputs", {}):
-                value = OmegaConf.select(cfg, key)
-                if isinstance(value, str) and value not in {"official", "last", "best", "latest"}:
-                    old = task.get("assets", {}).get(key)
-                    candidate = Path(value).expanduser()
-                    if not candidate.is_absolute():
-                        candidate = (source / entry["config"]).parent / candidate
-                    if old and candidate.resolve() == asset_path(project, old).resolve():
-                        candidate = validate_asset(project, old)
-                    OmegaConf.update(cfg, key, str(candidate.resolve()))
-            OmegaConf.save(cfg, cfgpath)
-            capture_entry = entry
-            if input_keys is not None:
-                if set(input_keys) - set(entry.get("inputs", {})):
-                    raise ValueError("unknown_stage_input_binding")
-                capture_entry = {
-                    **entry,
-                    "inputs": {key: entry["inputs"][key] for key in input_keys},
-                }
-            inputs = capture_inputs(
-                stage / "code",
-                capture_entry,
-                project=project,
-                inherited=task.get("assets", {}),
-                shared=all_records(db, "asset"),
-            )
-            request = {
-                "schema_version": 1,
-                "project_id": info["id"],
-                "task_id": task_id,
-                "version_id": task["version_id"],
-                "run_id": identity,
-                "run_dir": str(run_dir),
-                "data_dir": str(data_dir),
-                "code_dir": str(execution / "code"),
-                "version": version,
-                "assets": inputs,
-                "resumed_from": resumed_from,
+            if (
+                hashlib.sha256(inside(source, entry["config"]).read_bytes()).hexdigest()
+                != expected_revision
+            ):
+                raise ValueError("configuration_revision_conflict")
+        stage.mkdir(parents=True)
+        captured = snapshot(source, stage / "code")
+        cfgpath = stage / "code" / entry["config"]
+        cfg = OmegaConf.load(cfgpath)
+        if overrides:
+            cfg = OmegaConf.merge(cfg, OmegaConf.from_dotlist(overrides))
+        from ai4e_core.base.config.conventions import input_bindings
+
+        entry["inputs"] = input_bindings(OmegaConf.to_container(cfg, resolve=False))
+        from .output_bindings import allocate_outputs, selected_inputs
+
+        run_dir = folder / "runs" / identity
+        data_dir = folder / "data" / identity
+        _, shared_outputs = allocate_outputs(
+            project,
+            entry,
+            cfg,
+            run_dir,
+            data_dir,
+            operation_mode=operation_mode,
+            overwrite=overwrite,
+        )
+        declared_inputs = selected_inputs(entry, list(cfg.pipeline.stages))
+        if input_keys is None:
+            input_keys = declared_inputs
+        elif declared_inputs is not None:
+            input_keys = sorted(set(input_keys) & set(declared_inputs))
+        if shared_outputs:
+            OmegaConf.update(cfg, "execution.overwrite", overwrite, force_add=True)
+        # 相对输入以工作目录为基准，不能因执行副本位置改变含义。
+        for key in entry.get("inputs", {}):
+            if input_keys is not None and key not in input_keys:
+                continue
+            value = OmegaConf.select(cfg, key)
+            if isinstance(value, str) and value not in {"official", "last", "best", "latest"}:
+                old = task.get("assets", {}).get(key)
+                candidate = Path(value).expanduser()
+                if not candidate.is_absolute():
+                    candidate = (source / entry["config"]).parent / candidate
+                from ..storage.shared_datasets import resolve_reference
+
+                current_shared = resolve_reference(project, candidate)
+                if current_shared is not None:
+                    old = current_shared
+                if old and candidate.resolve() == asset_path(project, old).resolve():
+                    candidate = validate_asset(project, old)
+                OmegaConf.update(cfg, key, str(candidate.resolve()))
+        OmegaConf.save(cfg, cfgpath)
+        capture_entry = entry
+        if input_keys is not None:
+            if set(input_keys) - set(entry.get("inputs", {})):
+                raise ValueError("unknown_stage_input_binding")
+            capture_entry = {
+                **entry,
+                "inputs": {key: entry["inputs"][key] for key in input_keys},
             }
-            write_json(stage / "request.json", {"context": request, "entry": entry})
-            value = {
-                "id": identity,
-                "task_id": task_id,
-                "version_id": task["version_id"],
-                "status": "pending",
-                "created_at": datetime.now(UTC).isoformat(),
-                "run_path": str(run_dir.relative_to(project)),
-                "data_path": str(data_dir.relative_to(project)),
-                "code_path": str((execution / "code").relative_to(project)),
-                "request_path": str((execution / "request.json").relative_to(project)),
-                "pid": None,
-                "resumed_from": resumed_from,
-                "operation_mode": operation_mode,
-                "stages": list(OmegaConf.select(cfg, "pipeline.stages", default=[])),
-                "source_snapshot": captured,
-                "code_digest": digest(inventory(stage / "code")),
-                "metadata": metadata or {},
-            }
-            if not start:
-                value["status"] = "queued"
+        inputs = capture_inputs(
+            stage / "code",
+            capture_entry,
+            project=project,
+            inherited=task.get("assets", {}),
+            shared=shared_records,
+        )
+        request = {
+            "schema_version": 1,
+            "project_id": info["id"],
+            "task_id": task_id,
+            "version_id": task["version_id"],
+            "run_id": identity,
+            "run_dir": str(run_dir),
+            "data_dir": str(data_dir),
+            "code_dir": str(execution / "code"),
+            "version": version,
+            "assets": inputs,
+            "resumed_from": resumed_from,
+            "stage_outputs": {plan["stage"]: str(project / plan["path"]) for plan in shared_outputs},
+        }
+        from ..storage.shared_datasets import reserve
+
+        write_json(
+            stage / "request.json",
+            {
+                "context": request,
+                "entry": entry,
+                "project": str(project),
+                "shared_outputs": shared_outputs,
+                "overwrite": overwrite,
+            },
+        )
+        value = {
+            "id": identity,
+            "task_id": task_id,
+            "version_id": task["version_id"],
+            "status": "pending",
+            "created_at": datetime.now(UTC).isoformat(),
+            "run_path": str(run_dir.relative_to(project)),
+            "data_path": str(data_dir.relative_to(project)),
+            "code_path": str((execution / "code").relative_to(project)),
+            "request_path": str((execution / "request.json").relative_to(project)),
+            "pid": None,
+            "resumed_from": resumed_from,
+            "operation_mode": operation_mode,
+            "stages": list(OmegaConf.select(cfg, "pipeline.stages", default=[])),
+            "source_snapshot": captured,
+            "code_digest": digest(inventory(stage / "code")),
+            "metadata": metadata or {},
+            "shared_outputs": shared_outputs,
+        }
+        if not start:
+            value["status"] = "queued"
+        with transaction(project) as db:
+            prior = replay(db, idempotency_key, fingerprint)
+            if prior:
+                return prior
+            current = get(db, "task", task_id)
+            if current != task:
+                raise ValueError("task_changed_during_capture")
+            if current.get("archived") or open_project(project).get("archived"):
+                raise ValueError("task_archived")
+            # 长文件摘要在事务外；提交前复核共享发布身份，不能捕获正在覆盖的内容。
+            latest_assets = {a["id"]: a for a in all_records(db, "asset")}
+            for asset in inputs.values():
+                if asset.get("shared_dataset"):
+                    from ..storage.shared_datasets import resolve_reference
+
+                    latest = (
+                        resolve_reference(project, asset_path(project, asset))
+                        if asset.get("shared_project")
+                        else latest_assets.get(asset["id"])
+                    ) or {}
+                    if (
+                        latest.get("status") != "available"
+                        or latest.get("digest") != asset["digest"]
+                        or latest.get("source") != asset.get("source")
+                    ):
+                        raise ValueError("shared_dataset_changed_during_capture")
+            reserve(db, project, shared_outputs, identity)
             stage.rename(execution)
             published = True
             put(db, "run", value)
@@ -242,7 +303,22 @@ def stop_run(project: str | Path, run_id: str, *, timeout: float = 10) -> dict:
     if not local.alive(value.get("pid"), request):
         raise RuntimeError("process_identity_unconfirmed")
     write_json(request.parent / "stop.json", {"run_id": run_id})
-    local.terminate(value["pid"], request)
+    child = local.terminate(value["pid"], request)
+    if child is not None:
+        import signal
+        import subprocess
+
+        try:
+            code = child.wait(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            return get_run(project, run_id)
+        # 模块导入时信号处理器尚未安装，worker无法写收据。只有持有真实
+        # Popen并确认SIGTERM退出时才记录停止；裸PID消失依然是unknown。
+        if code == -signal.SIGTERM and not (request.parent / "finished.json").exists():
+            write_json(request.parent / "finished.json", {
+                "run_id": run_id, "status": "stopped",
+                "error": "terminated_before_worker_receipt", "exit_code": code,
+            })
     return wait_run(project, run_id, timeout=timeout)
 
 

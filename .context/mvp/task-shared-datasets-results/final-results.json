@@ -1,0 +1,40 @@
+{
+  "accepted-isolated-final.log": {
+    "passed": 146,
+    "skipped": 2,
+    "summary": "146 passed, 2 skipped, 2 warnings in 601.45s (0:10:01)"
+  },
+  "accepted-final-data-model.log": {
+    "passed": 130,
+    "summary": "130 passed, 1 warning in 398.01s (0:06:38)"
+  },
+  "accepted-final-installation.log": {
+    "passed": 2,
+    "summary": "2 passed in 36.52s"
+  },
+  "accepted-frozen-installation.log": {
+    "passed": 1,
+    "summary": "1 passed in 26.89s"
+  },
+  "accepted-boundaries.log": {
+    "passed": 6,
+    "summary": "6 passed, 2 warnings in 4.09s"
+  },
+  "accepted-final-documents-registry.log": {
+    "passed": 25,
+    "summary": "25 passed, 2 warnings in 72.38s (0:01:12)"
+  },
+  "accepted-configuration-link-final.log": {
+    "passed": 22,
+    "deselected": 1,
+    "summary": "22 passed, 1 deselected, 2 warnings in 10.08s"
+  },
+  "accepted-pde-boundary.log": {
+    "passed": 6,
+    "summary": "6 passed in 0.44s"
+  },
+  "accepted-final-browser.log": {
+    "skipped": 2,
+    "passed": 19
+  }
+}

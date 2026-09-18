@@ -153,7 +153,7 @@ def run_real_http_case(api_url: str, identities: Path, name: str, reference: Pat
     save("train", {"max_epochs": 1, "device": "mps", "snapshot": False})
     save("post", {"samples": config["post"]["samples"]})
     bindings = {}
-    for stage in ("rawprep", "trainprep", "train", "post"):
+    for stage in ("rawprep", "trainprep", "train", "infer", "post"):
         current = request("GET", task_url + "/configuration")
         selection = {"samples": samples, "bindings": bindings}
         payload = {
@@ -184,11 +184,13 @@ def run_real_http_case(api_url: str, identities: Path, name: str, reference: Pat
             if item["run_id"] == run_id:
                 bindings[item["binding"]] = item["ref"]
         if stage == "rawprep":
-            assert "train.manifest" in bindings, inputs
+            assert "inputs.trainprep.dataset" in bindings, inputs
         elif stage == "trainprep":
-            assert "train.preparation" in bindings, inputs
+            assert "inputs.train.preparation" in bindings, inputs
         elif stage == "train":
-            assert "post.checkpoint" in bindings, inputs
+            assert "inputs.infer.checkpoint" in bindings, inputs
+        elif stage == "infer":
+            assert "inputs.post.results" in bindings, inputs
         print(f"{name}: {stage} succeeded ({run_id})", flush=True)
     assert len(request("GET", base + "/lineage")) == len(ids["tasks"])
     client.close()

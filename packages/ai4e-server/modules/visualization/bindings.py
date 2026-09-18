@@ -3,11 +3,13 @@
 import hashlib
 import json
 import xml.etree.ElementTree as ET
+from pathlib import Path
 from urllib.parse import urlencode
 
 import ai4e_task as task
+from ai4e_task.tasks.post_results import MESH_SUFFIXES
 
-from ...infrastructure.content_access import revision
+from ...infrastructure.content_access import listing, revision, roots
 from .application import asset
 
 
@@ -174,6 +176,66 @@ def close_session(service, project, task_id, identity):
 
 
 _APPEND_LOCK = __import__("threading").RLock()
+
+
+def _visualizable_entries(entries, root_id):
+    """只保留目录和可视化网格，隐藏其余后缀。"""
+    items = []
+    for entry in entries:
+        suffix = Path(entry["name"]).suffix.lower()
+        if entry.get("directory"):
+            items.append(
+                {
+                    **entry,
+                    "id": f"{root_id}:{entry['path']}",
+                    "root": root_id,
+                    "leaf": False,
+                }
+            )
+        elif suffix in MESH_SUFFIXES:
+            items.append(
+                {
+                    **entry,
+                    "id": f"{root_id}:{entry['path']}",
+                    "root": root_id,
+                    "leaf": True,
+                }
+            )
+    return items
+
+
+def list_visualizable_sources(service, project, task_id, root=None, path=""):
+    """列出任务产物、共享数据集和已挂数据根中的可视化网格。"""
+    service.project(project)
+    if root:
+        try:
+            entries = listing(service, project, root, path or "", task_id)
+        except FileNotFoundError:
+            entries = []
+        return {"items": _visualizable_entries(entries, root)}
+    groups = []
+    visible = roots(service, project, task_id)
+    declared = [("task", "任务产物", "")] if "task" in visible else []
+    if "project" in visible:
+        declared.append(("project", "共享数据集", "shared/datasets"))
+    declared.extend((key, f"已挂数据根 {key}", "") for key in visible if str(key).startswith("data"))
+    for root_id, name, relative in declared:
+        try:
+            children = listing(service, project, root_id, relative, task_id)
+        except (FileNotFoundError, KeyError, ValueError):
+            children = []
+        groups.append(
+            {
+                "id": f"{root_id}:{relative}",
+                "name": name,
+                "directory": True,
+                "root": root_id,
+                "path": relative,
+                "leaf": False,
+                "children": _visualizable_entries(children, root_id),
+            }
+        )
+    return {"items": groups}
 
 
 def append_session_sources(service, project, task_id, identity, sources):

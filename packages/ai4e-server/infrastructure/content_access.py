@@ -36,6 +36,17 @@ def resolve(service, project, root, relative="", task_id=None):
     return path
 
 
+def listing_stamp(path):
+    """列表用路径、修改时间和大小识别同一文件，不把检查点整份读进摘要。"""
+    if path.is_symlink():
+        raise ValueError("asset_symlink_forbidden")
+    stat = path.stat()
+    stamp = hashlib.sha256(
+        f"{path.resolve()}\n{stat.st_mtime_ns}\n{stat.st_size}".encode()
+    ).hexdigest()
+    return stamp, stat.st_mtime_ns, stat.st_size
+
+
 def revision(path):
     """文件与目录共用稳定摘要；目录按成员名和内容累计，拒绝符号链接。"""
     if path.is_symlink():

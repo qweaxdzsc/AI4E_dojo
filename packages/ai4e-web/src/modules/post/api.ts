@@ -7,6 +7,8 @@ export const postMetrics=(p:string,run:string)=>request(`/projects/${p}/runs/${r
 const postBase=(p:string,t:string)=>`/projects/${p}/tasks/${t}/post`;
 export const resultCatalog=(p:string,t:string)=>request(postBase(p,t)+'/results'+query({view:'catalog'}));
 export const resultFiles=(p:string,t:string,params:{directory?:string;query?:string;batch?:string;run_id?:string;sample?:string;split?:string;status?:string}={})=>request(postBase(p,t)+'/results'+query({view:'files',...params}));
+export const taskRuns=(p:string,t:string)=>request(`/projects/${p}/runs`+query({task_id:t}));
+export const platformDatasets=()=>request('/datasets');
 export const metricCatalog=(p:string,t:string)=>request(postBase(p,t)+'/metrics/catalog');
 export const submitMetrics=(p:string,t:string,body:unknown)=>request(postBase(p,t)+'/metric-jobs',body);
 export const metricJobs=(p:string,t:string)=>request(postBase(p,t)+'/metric-jobs');

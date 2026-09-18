@@ -1,4 +1,10 @@
 # ai4e-viz 模块索引
+## 当前职责与本轮变更
+
+算法库与迁入可视化应用并存；包内 .context、PRD 和 architecture 为内部真源。
+
+- 本轮文件与回归清单：`.context/mvp/architecture-alignment-acceptance.md`。
+
 
 ## 模块边界
 
@@ -43,6 +49,8 @@ render/comparison.py：共色标表面、切面和曲线；compose/comparison.py
 - `packages/ai4e-viz/inspect/mesh.py`：真实文件检查、预览及独立执行。
 - `packages/ai4e-viz/inspect/tensor.py`：真实文件检查、预览及独立执行。
 - `packages/ai4e-viz/inspect/text.py`：真实文件检查、预览及独立执行。
+- `packages/ai4e-viz/inspect/model_graph.py`：平台两档官方结构图；只接收可前向网络和输入，一次写出阶段主干与阶段压缩块，失败不留半份页。
+- `packages/ai4e-viz/inspect/stage_display.py`：网络公开编码器/几何块/物理块/解码/读出时，按这些子模块收成阶段盒再交给两档参数；不实现模型前向。
 - `packages/ai4e-viz/preview/__init__.py`：真实文件检查、预览及独立执行。
 - `packages/ai4e-viz/preview/mesh.py`：真实文件检查、预览及独立执行。
 - `packages/ai4e-viz/preview/tensor.py`：真实文件检查、预览及独立执行。
@@ -51,7 +59,7 @@ render/comparison.py：共色标表面、切面和曲线；compose/comparison.py
 - `packages/ai4e-viz/runtime/worker.py`：真实文件检查、预览及独立执行。
 - `.context/mvp/web-rawprep-acceptance.md`：平台接入验收记录。
 
-- `docs/PRD/ai4e-viz/inspect/PRD.md`：真实字段检查业务。
+- `docs/PRD/ai4e-viz/inspect/PRD.md`：真实字段检查与两档结构图展示。
 
 - `docs/PRD/ai4e-viz/preview/PRD.md`：分页与基础三维预览业务。
 
@@ -107,6 +115,8 @@ render/comparison.py：共色标表面、切面和曲线；compose/comparison.py
 
 ## 后处理三页签与固定结果评价
 
+2026-09-18 三维结果核验追加：prediction/truth 按资产 revision、字段名和 Vis scalar 逐层核验；后处理宿主三维物理场最小高度调整为约 714px，正式入口换 Vis 后再做浏览器验收。
+
 - `backend/modules/visPhysField/worker.py`：IPC操作前保留草稿；visibility仅暂停/重绘。
 - `trameUI/controller.py`、`client/bridge.js`：隐藏暂停及返回尺寸通知。
 - `frontend/src/modules/visPhysField/hooks/usePhysField.js`、`pages/PhysFieldWorkspacePage.jsx`：直接同源宿主消息校验，常驻心跳。
@@ -115,3 +125,28 @@ render/comparison.py：共色标表面、切面和曲线；compose/comparison.py
 验收导航：`.context/mvp/post-workspace-acceptance.md`。
 
 物理场嵌入样式 `frontend/src/modules/visPhysField/pages/PhysFieldWorkspacePage.css` 绑定iframe视口高度，避免自动高度包装层造成150px裁切；后处理真实浏览器同时断言内外iframe尺寸。
+
+## 响应诊断与独立显隐计划（2026-09-15）
+
+- `.cursor/plans/trame-response-and-independent-visibility.plan.md`：已实施并完成真实 Web 回归的计划；真实 Trame 状态读取异常、草稿手柄漏同步、父子显隐独立及圈定测试。
+- `trameUI/controller.py` 已修复 `_sync_tree_visible` 错用 State.get 的异常；显隐包含回滚和推送，首次切面同步手柄；`test_phys_objects.py` 的相关用例改用真实 State。
+- 证据与测试边界见根 `.context/mvp/phys-workbench-acceptance.md`，不覆盖历史验收。
+
+响应实现与真实状态测试：包内 `backend/tests/modules/test_phys_display_updates.py`；真实宿主双层 iframe 点击回归 `packages/ai4e-web/e2e/trame-responsiveness.spec.ts`。结果见 `.context/mvp/phys-workbench-acceptance.md` 的本轮记录，历史诊断不等于修复验收。
+
+
+三维交互与对象隔离（2026-09-16）：新对象计算和显示草稿一起提交；辅助平面独立显隐，三轴平移与三轴旋转仅命中手柄启动；删除局部清理不重建背景和相机。种子和Probe有候选预览，等高线支持自动分层，同标量等值面保留生成标量。圈定 `test_phys_interaction.py`、`test_phys_objects.py`、`test_phys_display_updates.py`、`test_phys_filters.py`、配置/存储用例与 `viz_interaction_browser.cjs`；最终范围见根 `.context/mvp/phys-workbench-acceptance.md`，正式8000/5173不自动更新。
+
+三维着色与显示设置专项：新增 `backend/tests/modules/test_phys_display_settings.py`（Vis包内），前端 `transparentExport.test.jsx`；实现和证据见根 `.context/mvp/phys-workbench-acceptance.md`，正式入口未自动发布。
+
+三维工作台十一项增强（2026-09-17）：验收入口 `.context/mvp/phys-workbench-acceptance.md`。新增索引文件 `seedWidget.py`、`lineWidget.py`、`test_phys_plot_over_line.py`；导入对话框改为目录网格选择。功能正文只在包内 PRD。2026-09-17 后续：流线草稿不再拖种子；显示可选线/圆管；本地坐标轴实时跟转。
+
+线段提取 Line Chart View（2026-09-17）：`lineChart.py`、视口类型 `render`/`line_chart`、属性 X/Y 与 CSV。不拖线。验收入口 `.context/mvp/phys-workbench-acceptance.md`。
+
+三维默认光照对齐 ParaView（2026-09-17）：`visEngine/renderPasses.py` 使用 VTK Light Kit 五灯默认值；`visPhysField/scene.py` 持久渲染器装配该套件，阴影仍默认关。圈定 `test_vis_engine.py`、`test_phys_display_settings.py`。正式 8000/5173 须用户重启 Vis 后才能冒烟。
+
+辅助平面轨道相机（2026-09-17）：添加平面后旋转/平移/缩放不得被旧位姿拉回。按下先分类，几何刷新不夹带相机。圈定 `test_phys_interaction.py`、`interaction.test.js`。
+
+工作台小修复收口（2026-09-17）：删线/种子拖动残留；四条交接（按下分类、刷新不带相机、窗口类型、当前物理量）写入包内 PRD。验收入口 `.context/mvp/phys-workbench-acceptance.md`。正式 8000/5173 须换 Vis 后点验。
+
+正式发布/Web 冒烟硬规则：根 AGENTS 同名段。Agent 必须自己在正式宿主 5173→8000 验收双层嵌入；未重装 `ai4e-viz`、未换 Vis 子进程、只跑 7999/5172 或标「待发布」都是未验收。

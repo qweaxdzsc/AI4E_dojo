@@ -1,0 +1,190 @@
+.............................FsFs...F.                                   [100%]
+=================================== FAILURES ===================================
+___________ test_real_direct_and_task_training_restore_and_extension ___________
+
+tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/test_real_direct_and_task_trai0')
+
+    def test_real_direct_and_task_training_restore_and_extension(tmp_path):
+        config = fixture(tmp_path / "seed-recipe")
+>       result = exercise(tmp_path / "paired", config)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_wdno_task.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/verification/wdno/task_replay.py:164: in exercise
+    first = direct(code, cfg)
+            ^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/test_real_direct_and_task_trai0/paired/recipe')
+cfg = {'seed': 0, 'run_root': '/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/test_re...ct_and_task_trai0/paired/direct-data', 'pipeline': {'stages': ['rawprep', 'trainprep', 'train', 'infer', 'post']}, ...}
+
+    def direct(code, cfg):
+        config = code / "config.yaml"
+        config.write_text(yaml.safe_dump(cfg, sort_keys=False))
+        proc = subprocess.run(
+            [
+                "uv",
+                "run",
+                "--no-project",
+                "--python",
+                sys.executable,
+                "python",
+                str(code / "pipeline.py"),
+            ],
+            cwd=code.parent,
+            capture_output=True,
+            text=True,
+            timeout=180,
+            check=False,
+        )
+        (code.parent / "direct-console.txt").write_text(proc.stdout + proc.stderr)
+        if proc.returncode:
+>           raise AssertionError(proc.stdout + proc.stderr)
+E           AssertionError: WARN `--no-project` was provided, but no project was found
+E           /tmp/dojo-recipe-conventions-imports/ai4e_contrib/ability/inference/wdno/diffusion.py:491: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+E             @autocast(enabled = False)
+E           Traceback (most recent call last):
+E             File "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/test_real_direct_and_task_trai0/paired/recipe/pipeline.py", line 5, in <module>
+E               from infer import infer
+E             File "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/test_real_direct_and_task_trai0/paired/recipe/infer.py", line 6, in <module>
+E               from ai4e_contrib.application.spatiotemporal_pde.wdno.inference import infer as predict
+E             File "/tmp/dojo-recipe-conventions-imports/ai4e_contrib/application/spatiotemporal_pde/wdno/inference.py", line 10, in <module>
+E               from .model import diffusion
+E             File "/tmp/dojo-recipe-conventions-imports/ai4e_contrib/application/spatiotemporal_pde/wdno/model.py", line 5, in <module>
+E               from ai4e_contrib.ability.transform.wdno.burgers import scale
+E             File "/tmp/dojo-recipe-conventions-imports/ai4e_contrib/ability/transform/wdno/burgers.py", line 4, in <module>
+E               from pytorch_wavelets import DWT1DForward, DWTForward, DWTInverse
+E           ModuleNotFoundError: No module named 'pytorch_wavelets'
+
+tools/verification/wdno/task_replay.py:61: AssertionError
+__________________ test_new_task_runs_each_stage_and_resumes ___________________
+
+tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/test_new_task_runs_each_stage_0')
+
+    def test_new_task_runs_each_stage_and_resumes(tmp_path):
+        from tools.verification.wdno.task_replay import staged_exercise
+    
+        config = fixture(tmp_path / "staged-source")
+>       result = staged_exercise(tmp_path / "staged", config)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_wdno_task.py:131: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/verification/wdno/task_replay.py:298: in staged_exercise
+    a, b = pair("rawprep", ["rawprep"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/verification/wdno/task_replay.py:286: in pair
+    a = direct(code, left)
+        ^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+code = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/test_new_task_runs_each_stage_0/staged/recipe')
+cfg = {'seed': 0, 'run_root': '/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/test_ne...st-of-zonghui/pytest-502/test_new_task_runs_each_stage_0/staged/direct-data', 'pipeline': {'stages': ['rawprep']}, ...}
+
+    def direct(code, cfg):
+        config = code / "config.yaml"
+        config.write_text(yaml.safe_dump(cfg, sort_keys=False))
+        proc = subprocess.run(
+            [
+                "uv",
+                "run",
+                "--no-project",
+                "--python",
+                sys.executable,
+                "python",
+                str(code / "pipeline.py"),
+            ],
+            cwd=code.parent,
+            capture_output=True,
+            text=True,
+            timeout=180,
+            check=False,
+        )
+        (code.parent / "direct-console.txt").write_text(proc.stdout + proc.stderr)
+        if proc.returncode:
+>           raise AssertionError(proc.stdout + proc.stderr)
+E           AssertionError: WARN `--no-project` was provided, but no project was found
+E           /tmp/dojo-recipe-conventions-imports/ai4e_contrib/ability/inference/wdno/diffusion.py:491: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+E             @autocast(enabled = False)
+E           Traceback (most recent call last):
+E             File "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/test_new_task_runs_each_stage_0/staged/recipe/pipeline.py", line 3, in <module>
+E               from infer import infer
+E             File "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/test_new_task_runs_each_stage_0/staged/recipe/infer.py", line 6, in <module>
+E               from ai4e_contrib.application.spatiotemporal_pde.wdno.inference import infer as predict
+E             File "/tmp/dojo-recipe-conventions-imports/ai4e_contrib/application/spatiotemporal_pde/wdno/inference.py", line 10, in <module>
+E               from .model import diffusion
+E             File "/tmp/dojo-recipe-conventions-imports/ai4e_contrib/application/spatiotemporal_pde/wdno/model.py", line 5, in <module>
+E               from ai4e_contrib.ability.transform.wdno.burgers import scale
+E             File "/tmp/dojo-recipe-conventions-imports/ai4e_contrib/ability/transform/wdno/burgers.py", line 4, in <module>
+E               from pytorch_wavelets import DWT1DForward, DWTForward, DWTInverse
+E           ModuleNotFoundError: No module named 'pytorch_wavelets'
+
+tools/verification/wdno/task_replay.py:61: AssertionError
+____________ test_installed_copied_pipeline_resume_post_and_variant ____________
+
+tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/test_installed_copied_pipeline0')
+installed = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/wdno-wheel0/installed')
+
+    def test_installed_copied_pipeline_resume_post_and_variant(tmp_path, installed):
+        case = tmp_path / "case"
+        cfg = fixture(case)
+>       summary = run_script(case, "pipeline", cfg, installed)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_wdno_recipe.py:112: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+case = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/test_installed_copied_pipeline0/case')
+stage = 'pipeline'
+cfg = {'seed': 0, 'run_root': '/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/test_in...test_installed_copied_pipeline0/data', 'pipeline': {'stages': ['rawprep', 'trainprep', 'train', 'infer', 'post']}, ...}
+installed = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/wdno-wheel0/installed')
+
+    def run_script(case, stage, cfg, installed):
+        path = case / "config.yaml"
+        path.write_text(yaml.safe_dump(cfg))
+        proc = subprocess.run(
+            [
+                "uv",
+                "run",
+                "--no-project",
+                "--python",
+                sys.executable,
+                "python",
+                str(case / f"{stage}.py"),
+                "--config",
+                str(path),
+            ],
+            cwd=case.parent,
+            env={**os.environ, "PYTHONPATH": str(installed), "PYTHONDONTWRITEBYTECODE": "1"},
+            capture_output=True,
+            text=True,
+            timeout=180,
+            check=False,
+        )
+>       assert proc.returncode == 0, proc.stdout + proc.stderr
+E       AssertionError: WARN `--no-project` was provided, but no project was found
+E         /private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/wdno-wheel0/installed/ai4e_contrib/ability/inference/wdno/diffusion.py:491: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+E           @autocast(enabled = False)
+E         Traceback (most recent call last):
+E           File "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/test_installed_copied_pipeline0/case/pipeline.py", line 4, in <module>
+E             from infer import infer
+E           File "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/test_installed_copied_pipeline0/case/infer.py", line 6, in <module>
+E             from ai4e_contrib.application.spatiotemporal_pde.wdno.inference import infer as predict
+E           File "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/wdno-wheel0/installed/ai4e_contrib/application/spatiotemporal_pde/wdno/inference.py", line 10, in <module>
+E             from .model import diffusion
+E           File "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/wdno-wheel0/installed/ai4e_contrib/application/spatiotemporal_pde/wdno/model.py", line 5, in <module>
+E             from ai4e_contrib.ability.transform.wdno.burgers import scale
+E           File "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-502/wdno-wheel0/installed/ai4e_contrib/ability/transform/wdno/burgers.py", line 4, in <module>
+E             from pytorch_wavelets import DWT1DForward, DWTForward, DWTInverse
+E         ModuleNotFoundError: No module named 'pytorch_wavelets'
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['uv', 'run', '--no-project', '--python', '/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/...rch_wavelets import DWT1DForward, DWTForward, DWTInverse\nModuleNotFoundError: No module named \'pytorch_wavelets\'\n').returncode
+
+tests/integration/test_wdno_recipe.py:70: AssertionError
+=========================== short test summary info ============================
+FAILED tests/integration/test_wdno_task.py::test_real_direct_and_task_training_restore_and_extension
+FAILED tests/integration/test_wdno_task.py::test_new_task_runs_each_stage_and_resumes
+FAILED tests/integration/test_wdno_recipe.py::test_installed_copied_pipeline_resume_post_and_variant
+3 failed, 33 passed, 2 skipped in 11.94s

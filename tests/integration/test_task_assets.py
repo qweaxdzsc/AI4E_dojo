@@ -30,16 +30,12 @@ def test_copy_switches_and_execution_binding(tmp_path):
     project = tmp_path / "p"
     task.create_project(project)
     source = recipe(tmp_path)
-    import json
-
-    entry = json.loads((source / "task-entry.json").read_text())
     cfg = OmegaConf.load(source / "config.yaml")
     for kind in ("preparation", "checkpoint"):
         file = tmp_path / f"{kind}.bin"
         file.write_bytes(kind.encode())
-        cfg[kind] = str(file)
-        entry["inputs"][kind] = kind
-    (source / "task-entry.json").write_text(json.dumps(entry))
+        key = "preparation" if kind == "preparation" else "resume"
+        OmegaConf.update(cfg, "inputs.train." + key, str(file), force_add=True)
     OmegaConf.save(cfg, source / "config.yaml")
     first = task.new_task(project, "root", source=source)
     default = task.fork_task(project, first["id"])
@@ -55,7 +51,27 @@ def test_copy_switches_and_execution_binding(tmp_path):
             validate_asset(project, asset)
         if kind == "dataset":
             copied_cfg = OmegaConf.load(project / "tasks" / child["id"] / "recipe/config.yaml")
-            assert Path(copied_cfg.dataset.root) == asset_path(
-                project, child["assets"]["dataset.root"]
+            assert Path(copied_cfg.inputs.test.dataset) == asset_path(
+                project, child["assets"]["inputs.test.dataset"]
             )
     assert len(task.get_lineage(project)) == 5
+
+
+def test_shared_reference_keeps_array_dependencies(tmp_path):
+    from ai4e_task.tasks.assets import describe_asset
+
+    project = tmp_path / "project"
+    task.create_project(project)
+    manifest, array = tmp_path / "arrays.json", tmp_path / "field.npy"
+    manifest.write_text('{"field": "field.npy"}')
+    array.write_bytes(b"array contents")
+    dependencies = [describe_asset(array, kind="other")]
+    with pytest.raises(ValueError, match="asset_copy_not_portable"):
+        task.register_shared(project, "incomplete-copy", manifest, kind="dataset", copy=True,
+                             dependencies=dependencies)
+    shared = task.register_shared(project, "array-reference", manifest, kind="dataset",
+                                  dependencies=dependencies)
+    task.get_shared(project, shared["id"])
+    array.write_bytes(b"changed")
+    with pytest.raises(ValueError, match="asset_changed"):
+        task.get_shared(project, shared["id"])

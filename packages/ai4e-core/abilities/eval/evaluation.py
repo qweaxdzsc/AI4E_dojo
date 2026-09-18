@@ -8,7 +8,7 @@ import torch
 
 from ai4e_core.abilities.inference.randomness import preserve_randomness
 
-from .metrics import field_metrics
+from .metrics import field_metrics, selected_metrics
 
 
 def evaluate(
@@ -20,10 +20,16 @@ def evaluate(
     *,
     preserve_rng: bool = True,
     batch_context=None,
+    metric_names=None,
 ) -> dict:
-    """一次前向同时计算归一化总分、加权分项和声明点集物理指标。"""
+    """一次前向计算总分、加权分项和 metric_names 指定的物理指标。
+
+    metric_names=None 保留原三项，空序列仅计算损失；未知或重复项在
+    前向前抛 ValueError。返回格式不变，未选项不进入 metrics。
+    """
     from ai4e_core.abilities.constraint.supervised import supervised
 
+    selected = selected_metrics(metric_names)
     modes = {module: module.training for module in model.modules()}
     python_rng, numpy_rng = random.getstate(), np.random.get_state()
     totals, named, metrics = [], {}, {}
@@ -51,6 +57,8 @@ def evaluate(
                         named[name] = named.get(name, 0.0) + sum(
                             weight * result["losses"][name].item() for result in results
                         )
+                        if not selected:
+                            continue
                         prediction = predictions[objective["prediction"]]
                         target = batch["targets"][objective["target"]]
                         field = objective.get("normalization", objective["prediction"])
@@ -58,6 +66,7 @@ def evaluate(
                             values = field_metrics(
                                 normalization.inverse(field, pred),
                                 normalization.inverse(field, truth),
+                                metrics=selected,
                             )
                             for key, value in values.items():
                                 metrics.setdefault(objective["prediction"] + "/" + key, []).append(

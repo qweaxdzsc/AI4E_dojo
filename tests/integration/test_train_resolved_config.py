@@ -5,7 +5,7 @@ from pathlib import Path
 import yaml
 from omegaconf import OmegaConf
 
-from ai4e_core.applications.aero_cfd.train.resolve import apply_resolved, validate_joint
+from ai4e_contrib.application.aero_cfd.abupt import apply_resolved, validate_joint
 from ai4e_core.run.session import run_recipe
 from tests.integration.test_train_recipe import prepared_case
 

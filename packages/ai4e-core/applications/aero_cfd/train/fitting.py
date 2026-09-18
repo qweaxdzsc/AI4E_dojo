@@ -14,6 +14,7 @@ import torch
 from ai4e_core.abilities.constraint.supervised import supervised
 from ai4e_core.abilities.data.validate.fingerprint import fingerprint
 from ai4e_core.abilities.eval.evaluation import evaluate
+from ai4e_core.abilities.eval.metrics import selected_metrics
 from ai4e_core.abilities.training.batch import to_device
 from ai4e_core.abilities.training.loop import fit
 from ai4e_core.abilities.training.moving_average import MovingAverage
@@ -37,6 +38,12 @@ from ai4e_core.applications.aero_cfd.trainprep.dataset import (
 from ai4e_core.base.config import operation_record, plain, resolve_operation
 from ai4e_core.base.events import sample_context
 from ai4e_spec.components.model import describe_model
+
+
+def training_slice(settings) -> str:
+    """开训切片默认 train；旧 validation 并进 eval。"""
+    name = str((settings or {}).get("training_split") or "train")
+    return "eval" if name == "validation" else name
 
 
 @dataclass
@@ -159,6 +166,9 @@ def configure_optimization(job, *, settings=None):
                 raise ValueError(f"优化阶段不能改变已准备的 {key}")
         job.config["train"].update(supplied)
     settings, model, index = job.config["train"], job.model, job.data.index
+    split = training_slice(settings)
+    if not index.partitions.get(split):
+        raise ValueError(f"训练切片 {split} 为空，请选择有样本的切片")
     precision = settings.get("precision", "fp32")
     optimizer = build_optimizer(
         settings.get("optimizer", "lion"),
@@ -169,7 +179,7 @@ def configure_optimization(job, *, settings=None):
     )
     updates = total_updates(
         int(settings.get("max_epochs", 2)),
-        math.ceil(len(index.partitions["train"]) / int(settings["batch_size"])),
+        math.ceil(len(index.partitions[split]) / int(settings["batch_size"])),
         int(settings.get("accumulate", 1)),
     )
     scheduler = build_scheduler(
@@ -179,7 +189,8 @@ def configure_optimization(job, *, settings=None):
         warmup_ratio=float(settings.get("warmup_ratio", 0.05)),
         min_lr=float(settings.get("min_lr", 1e-6)),
     )
-    ema = MovingAverage(model, float(settings.get("ema_decay", 0.9999)))
+    decay = settings.get("ema_decay", 0.9999)
+    ema = MovingAverage(model, float(decay)) if decay is not None else None
     scaler = torch.amp.GradScaler("cuda") if precision == "amp" else None
 
     job.optimizer, job.scheduler, job.ema, job.scaler = optimizer, scheduler, ema, scaler
@@ -190,7 +201,17 @@ def configure_evaluation(job, *, step=None, callbacks=(), settings=None, operati
     """装配共享数据迭代、评估与恢复契约，训练尚未启动。"""
     if settings is not None:
         supplied = plain(settings)
-        for key in ("evaluation_split", "test_repeat", "evaluate_repeat", "metric"):
+        for key in (
+            "evaluation_split",
+            "evaluation_metrics",
+            "evaluation_fields",
+            "evaluation_aggregate",
+            "evaluation_enabled",
+            "validation_interval",
+            "test_repeat",
+            "evaluate_repeat",
+            "metric",
+        ):
             if key in supplied:
                 job.config["train"][key] = supplied[key]
     config = job.config
@@ -202,6 +223,21 @@ def configure_evaluation(job, *, step=None, callbacks=(), settings=None, operati
     model, predict, terms = job.model, job.predict, job.terms
     device, source, factory = job.device, job.source, job.factory
     selection = settings.get("evaluation_split", "test")
+    metric_names = selected_metrics(settings.get("evaluation_metrics"))
+    requested_fields = set(settings.get("evaluation_fields") or [])
+    evaluation_terms = [
+        term
+        for term in terms
+        if not requested_fields
+        or term.get("name") in requested_fields
+        or term.get("prediction") in requested_fields
+        or term.get("target") in requested_fields
+        or f"{term.get('domain', '')}/{term.get('name', '')}" in requested_fields
+    ]
+    if settings.get("evaluation_enabled", True) and requested_fields and not evaluation_terms:
+        raise ValueError("evaluation_fields 未匹配任何可评估物理量")
+    if settings.get("evaluation_enabled", True) and not index.partitions.get(selection):
+        raise ValueError(f"评估分片 {selection} 为空，请选择有样本的分片或关闭测试评估")
 
     def batches(partition, epoch=0, evaluation=False, repeat=None):
         yield from iter_partition_batches(
@@ -257,10 +293,11 @@ def configure_evaluation(job, *, step=None, callbacks=(), settings=None, operati
             model,
             batches(selection, evaluation=True),
             predict,
-            terms,
+            evaluation_terms,
             normalization,
             preserve_rng=preserve,
             batch_context=batch_scope,
+            metric_names=metric_names,
         )
         if not preserve:
             # 官方 OfflineLoss 与 AeroMetrics 为两个独立遍历，必须保留采样流的推进。
@@ -268,10 +305,11 @@ def configure_evaluation(job, *, step=None, callbacks=(), settings=None, operati
                 model,
                 batches(selection, evaluation=True),
                 predict,
-                terms,
+                evaluation_terms,
                 normalization,
                 preserve_rng=False,
                 batch_context=batch_scope,
+                metric_names=metric_names,
             )
             result["metrics"] = metric_result["metrics"]
         result["split"] = selection
@@ -306,7 +344,13 @@ def configure_evaluation(job, *, step=None, callbacks=(), settings=None, operati
                 yield to_device(batch, device)
 
         result = evaluate(
-            model, repeated(), predict, terms, normalization, batch_context=batch_scope
+            model,
+            repeated(),
+            predict,
+            evaluation_terms,
+            normalization,
+            batch_context=batch_scope,
+            metric_names=metric_names,
         )
         result["split"] = "test_repeat"
         result["repeats"] = repeats
@@ -334,7 +378,15 @@ def configure_evaluation(job, *, step=None, callbacks=(), settings=None, operati
         "train": {
             k: v
             for k, v in settings.items()
-            if k not in {"resume", "max_epochs", "device", "log_every", "preparation"}
+            if k
+            not in {
+                "resume",
+                "max_epochs",
+                "device",
+                "log_every",
+                "preparation",
+                "evaluation_metrics",
+            }
         },
     }
     settings = {
@@ -342,7 +394,7 @@ def configure_evaluation(job, *, step=None, callbacks=(), settings=None, operati
         "split_counts": {name: len(items) for name, items in index.partitions.items()},
     }
     job.execution = {
-        "batches": lambda epoch: batches("train", epoch),
+        "batches": lambda epoch: batches(training_slice(settings), epoch),
         "step": actual_step,
         "evaluate": evaluate_test,
         "repeat": evaluate_repeat if settings.get("evaluate_repeat", False) else None,
@@ -443,6 +495,8 @@ def execute_training(job):
         job.protocol["weights"] = fingerprint(model.state_dict())
         job.protocol["result"] = {"epochs": report["epochs"], "updates": report["updates"]}
         run.artifact("training-protocol.json", job.protocol)
+    if not isinstance(report.get("best"), (int, float)) or not math.isfinite(report["best"]):
+        report["best"] = None
     run.artifact("training.json", report)
     run.report(report)
     return report

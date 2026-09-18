@@ -1,13 +1,33 @@
-# 正式网络/预算由共享 recipe 按 case 展开；路径相对本文件。
 case: neumann_diffusion
 dataset:
-  manifest: ../../../../../project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/datasets/manifest.json
+  name: neumann_diffusion
 run_root: ../../../../../project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/runs
 trainprep:
   execute: true
-  output: ../../../../../project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/prepared_final
 train:
   execute: true
   device: cpu
-post:
-  output: ../../../../../project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/predictions
+post: {}
+data_root: ../data
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - infer
+  - post
+inputs:
+  rawprep:
+    manifest: ../../../../../project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/datasets/manifest.json
+  trainprep:
+    dataset: ../../../../../project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/datasets/manifest.json
+  train:
+    dataset: ../../../../../project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/datasets/manifest.json
+    preparation: null
+    resume: null
+  infer:
+    dataset: ../../../../../project_simulation/dojo_train/pibsnet/source_dojo_2026-09-14/neumann_diffusion/datasets/manifest.json
+    preparation: null
+    checkpoint: null
+  post:
+    results: null

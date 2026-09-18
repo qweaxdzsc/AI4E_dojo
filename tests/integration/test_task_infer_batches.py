@@ -22,29 +22,29 @@ def wait_batch(project, task_id, identity, timeout=180):
 
 
 def test_two_checkpoints_two_samples_real_execution(tmp_path, monkeypatch):
-    folder, cfg = case(tmp_path, "nasa_crm_transolver3")
+    folder, cfg = case(tmp_path, "nasa_crm_abupt")
+    # 平台批量推理消费现行 version=2 准备；保留案例专属 rawprep。
+    import shutil
+    for stage in ("trainprep.py", "train.py", "infer.py"):
+        shutil.copyfile(Path(__file__).resolve().parents[2] / "recipes/aero_cfd" / stage, folder / stage)
     cfg["pipeline"]["stages"] = ["trainprep", "train"]
     (folder / "config.yaml").write_text(yaml.safe_dump(cfg))
     import shutil
 
-    shutil.copyfile(
-        Path(__file__).resolve().parents[2] / "recipes/aero_cfd/task-entry.json",
-        folder / "task-entry.json",
-    )
     project = tmp_path / "project"
     task.create_project(project)
     item = task.new_task(project, "infer-test", source=folder)
-    first = task.submit_run(project, item["id"], input_keys=["train.manifest"])
+    first = task.submit_run(project, item["id"], input_keys=["inputs.trainprep.dataset"])
     first = task.wait_run(project, first["id"], timeout=180)
     assert first["status"] == "succeeded", task.read_log(project, first["id"])
     preparation = str(Path(first["run_dir"]) / "artifacts/preparation.json")
     second = task.submit_run(
         project,
         item["id"],
-        input_keys=["train.preparation"],
+        input_keys=["inputs.train.preparation"],
         overrides=[
             "pipeline.stages=[train]",
-            "train.preparation=" + json.dumps(preparation),
+            "inputs.train.preparation=" + json.dumps(preparation),
             "train.max_epochs=1",
         ],
     )

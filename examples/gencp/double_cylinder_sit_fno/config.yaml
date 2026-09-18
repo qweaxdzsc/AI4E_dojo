@@ -1,0 +1,110 @@
+case: double_cylinder_sit_fno
+dataset:
+  name: double_cylinder
+profile: scaled
+seed: 42
+run_root: /Users/zonghui/work/project_simulation/dojo_train/gencp/double_cylinder_sit_fno/dojo/runs
+data:
+  train_count: 256
+  val_count: 16
+fields:
+  fluid:
+    model:
+      backbone: sit_fno
+      dataset_name: double_cylinder_data
+      stage: fluid
+      x0_is_use_noise: true
+      input_size:
+      - 128
+      - 128
+      patch_size:
+      - 8
+      - 8
+      in_channels: 4
+      out_channels: 3
+      hidden_size: 64
+      depth: 2
+      num_heads: 4
+      modes: 4
+    lr: 0.0003
+    eta_min: 0.0
+    objective:
+      dataset: double_cylinder
+      field: fluid
+      sigma: 0.01
+      clean_neutron: true
+      clean_solid: false
+  structure:
+    model:
+      backbone: sit_fno
+      dataset_name: double_cylinder_data
+      stage: structure
+      x0_is_use_noise: true
+      input_size:
+      - 128
+      - 128
+      patch_size:
+      - 8
+      - 8
+      in_channels: 4
+      out_channels: 1
+      hidden_size: 64
+      depth: 2
+      num_heads: 4
+      modes: 4
+    lr: 0.0003
+    eta_min: 0.0
+    objective:
+      dataset: double_cylinder
+      field: structure
+      sigma: 0.01
+      clean_neutron: true
+      clean_solid: false
+train:
+  updates: 1000
+  batch_size: 2
+  evaluate_every: 1000
+  single_points: 10
+  device: mps
+  seconds: 3600
+infer:
+  flow_steps: 10
+  seed: 43
+  device: mps
+  boundary: none
+post:
+  plots: true
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - single
+  - infer
+  - post
+components:
+  model: ai4e_contrib.ability.model.gencp.adapters.construct
+  objective: ai4e_contrib.ability.constraint.gencp.objective.objective
+  neutron_condition: ai4e_contrib.ability.transform.gencp.conditions.neutron_condition
+  solid_condition: ai4e_contrib.ability.transform.gencp.conditions.solid_condition
+  fluid_condition: ai4e_contrib.ability.transform.gencp.conditions.fluid_condition
+data_root: /Users/zonghui/work/project_simulation/dojo_train/gencp/double_cylinder_sit_fno/dojo
+inputs:
+  rawprep:
+    source: /Users/zonghui/work/project_simulation/dojo_train/gencp/raw
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+    resume: null
+  infer:
+    preparation: null
+    checkpoint: null
+  single:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+rawprep: {}
+trainprep: {}
+model: {}

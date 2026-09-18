@@ -75,3 +75,37 @@ def test_idle_session_yields_capacity(tmp_path):
     finally:
         manager.shutdown()
     assert manager.items == {}
+
+
+def test_session_links_views_without_coordinate_space(tmp_path):
+    """会话里两个来源开联动，不必声明共同坐标空间。"""
+    from modules.visTaskManage import balanced_layout
+
+    path = tmp_path / "grid.vti"
+    grid = vtk.vtkImageData()
+    grid.SetDimensions(3, 3, 3)
+    writer = vtk.vtkXMLImageDataWriter()
+    writer.SetInputData(grid)
+    writer.SetFileName(str(path))
+    writer.Write()
+    ref = {"asset_id": "a", "revision": source_fingerprint(path)}
+    other = {**ref, "asset_id": "b"}
+    context = {
+        "context_id": "ctx",
+        "bindings": [{"ref": ref, "path": str(path)}, {"ref": other, "path": str(path)}],
+    }
+    spec = default_spec([{"id": "a", "ref": ref}, {"id": "b", "ref": other}])
+    spec["views"] = [{"id": 0}, {"id": 1}]
+    spec["layout"] = balanced_layout([0, 1])
+    spec["layers"][1]["view"] = 1
+    manager = Sessions(maximum=1)
+    try:
+        session = manager.create(context, spec)
+        linked = manager.command(
+            session["session_id"], "ctx", {"operation": "link_views", "views": [0, 1]}
+        )
+        assert linked["spec"]["link_groups"][0]["views"] == [0, 1]
+        assert linked["camera_link_notice"] == ""
+    finally:
+        manager.shutdown()
+    assert manager.items == {}

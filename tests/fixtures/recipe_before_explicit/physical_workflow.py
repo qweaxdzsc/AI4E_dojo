@@ -214,11 +214,8 @@ def train(cfg, prepared=None, *, dataset_component, model_component, session):
 
 def post(cfg, *, dataset_component, model_component, session):
     """统一具名物理预测交接。"""
-    from ai4e_core.applications.aero_cfd.post.physical import execute
+    from ai4e_core.applications.aero_cfd.workflow import post as legacy_post
 
-    return execute(
-        model_component.resolve(OmegaConf.to_container(cfg, resolve=True)),
-        dataset_component,
-        model_component,
-        session,
+    return legacy_post(
+        cfg, dataset_component=dataset_component, model_component=model_component, session=session
     )

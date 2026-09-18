@@ -4,7 +4,7 @@ from pathlib import Path
 
 from ..projects.project import open_project
 from ..storage.layout import inside, task_dir
-from .query import get_task
+from .records import get_task
 
 
 def visualization_storage(project: str | Path, task_id: str, *, write: bool = False) -> dict:

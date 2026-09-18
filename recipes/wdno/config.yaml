@@ -1,0 +1,58 @@
+seed: 0
+run_root: ../runs/wdno
+data_root: ../data/wdno
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - infer
+  - post
+inputs:
+  rawprep:
+    source: /Users/zonghui/work/project_simulation/dojo_train/wdno/burgers-local-v1-20260917/frozen/protocol.json
+    indices: /Users/zonghui/work/project_simulation/dojo_train/wdno/burgers-local-v1-20260917/frozen/indices.json
+  trainprep:
+    dataset: null
+    validation: null
+    test: null
+  train:
+    preparation: null
+    validation: null
+    test: null
+    resume: null
+  infer:
+    preparation: null
+    validation: null
+    test: null
+    checkpoint: null
+  post:
+    validation: null
+    test: null
+model:
+  dim: 128
+  dim_mults:
+  - 1
+  - 2
+  - 4
+  - 8
+  groups: 1
+  ddim_steps: 50
+train:
+  updates: 2000
+  batch_size: 16
+  lr: 0.0001
+  device: mps
+  seconds: 6000
+infer:
+  device: mps
+  batch_size: 16
+  checkpoint_format: dojo
+components:
+  reader: ai4e_contrib.application.spatiotemporal_pde.wdno.data.read
+  transform: ai4e_contrib.ability.transform.wdno.burgers.prepare
+  network: ai4e_contrib.application.spatiotemporal_pde.wdno.model.network
+  objective: ai4e_contrib.application.spatiotemporal_pde.wdno.model.objective
+  predict: ai4e_contrib.ability.inference.wdno.predict.predict
+  metrics: ai4e_contrib.ability.eval.wdno.physical.metrics
+  derived: null

@@ -109,3 +109,42 @@ def restore_selection(state, path, *, best_on_equal=False):
     ):
         raise ValueError("此前最佳检查点与恢复状态不一致")
     return deepcopy({key: value for key, value in selected.items() if key != "selection"})
+
+
+def capture_iteration(
+    model, optimizer, *, updates, stream, contract, history, ema=None, scheduler=None, scaler=None
+):
+    """在既有检查点容器中补充迭代状态，不改变旧轮次恢复语义。"""
+    state = capture(
+        model,
+        optimizer,
+        epoch=0,
+        updates=updates,
+        best=float("inf"),
+        contract=contract,
+        ema=ema,
+        scheduler=scheduler,
+        scaler=scaler,
+    )
+    state.update(loop_kind="iterations", stream=stream.state_dict(), history=list(history))
+    return state
+
+
+def restore_iteration(
+    path, model, optimizer, *, stream, contract, ema=None, scheduler=None, scaler=None
+):
+    """先核对合同和游标副本，再恢复模型与真实数据流，拒绝时不消耗输入。"""
+    state = torch.load(path, map_location="cpu", weights_only=False)
+    if state.get("loop_kind") != "iterations" or "stream" not in state:
+        raise ValueError("检查点缺少精确迭代恢复状态")
+    if state.get("version") != 2 or state.get("contract") != contract:
+        raise ValueError("检查点配置、模型或数据语义冲突")
+    if len(state.get("history", [])) != state.get("updates"):
+        raise ValueError("恢复历史与有效更新次数不匹配")
+    candidate = deepcopy(stream)
+    candidate.load_state_dict(state["stream"])
+    restored = restore(
+        path, model, optimizer, contract=contract, ema=ema, scheduler=scheduler, scaler=scaler
+    )
+    stream.load_state_dict(state["stream"])
+    return restored

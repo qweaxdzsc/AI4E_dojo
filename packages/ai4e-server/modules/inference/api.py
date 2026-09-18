@@ -32,6 +32,8 @@ class InferenceOptionsRequest(BaseModel):
     evaluate: bool = True
     save_predictions: bool = True
     export_vtk: bool = True
+    export_pointcloud: bool | None = None
+    export_mesh: bool | None = None
     query_chunk_size: int = 16384
 
 

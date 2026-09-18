@@ -1,0 +1,95 @@
+INFO:     Started server process [89786]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:7999 (Press CTRL+C to quit)
+INFO:     127.0.0.1:52099 - "GET /api/v1/datasets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52107 - "GET /api/v1/projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52108 - "GET /api/v1/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/5efda0a77ae94017a439a95da98b0df3/dataset HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52116 - "GET /api/v1/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/5efda0a77ae94017a439a95da98b0df3/stage-inputs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52109 - "GET /api/v1/projects/34f74688805f4d4e815885da04a081d2/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52110 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52111 - "GET /api/v1/projects/cfaa5a5281524be2a0200e41f657dd63/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53001 - "GET /api/v1/projects/f644f908bfde4eb4a5bea65ad97e457a/tasks/5efda0a77ae94017a439a95da98b0df3/stage-inputs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53406 - "GET /api/v1/projects/b26f3b16719e4629bed7b749d73db6f6/tasks/00c740296d0d42babce701cf2709a692/stage-inputs HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53404 - "GET /api/v1/projects/b26f3b16719e4629bed7b749d73db6f6/tasks/00c740296d0d42babce701cf2709a692/model-options HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53405 - "GET /api/v1/projects/b26f3b16719e4629bed7b749d73db6f6/tasks/00c740296d0d42babce701cf2709a692/configuration?stage=model HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53408 - "GET /api/v1/projects/b26f3b16719e4629bed7b749d73db6f6/tasks/00c740296d0d42babce701cf2709a692 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53407 - "GET /api/v1/projects/b26f3b16719e4629bed7b749d73db6f6/runs?task_id=00c740296d0d42babce701cf2709a692 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53409 - "GET /api/v1/projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53414 - "GET /api/v1/projects/b26f3b16719e4629bed7b749d73db6f6/tasks/00c740296d0d42babce701cf2709a692/configuration HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53415 - "GET /api/v1/projects/b26f3b16719e4629bed7b749d73db6f6/tasks/00c740296d0d42babce701cf2709a692 HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53416 - "GET /api/v1/projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53687 - "GET /api/v1/datasets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53695 - "GET /api/v1/projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53697 - "GET /api/v1/projects/34f74688805f4d4e815885da04a081d2/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53704 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/stage-inputs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53698 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53699 - "GET /api/v1/projects/cfaa5a5281524be2a0200e41f657dd63/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53696 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/dataset HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53713 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/stage-files?role=inputs&asset_id=472b2bfc7c263a66bc8689c910eb6ee7dc740526a2e7c00ce76636afd9894488&revision=6c7fa11eb3d2a25f06b9d0b70cfc76608833efe714ad23cf268b74099e991c13 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53735 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/stage-files?role=inputs&asset_id=472b2bfc7c263a66bc8689c910eb6ee7dc740526a2e7c00ce76636afd9894488&revision=6c7fa11eb3d2a25f06b9d0b70cfc76608833efe714ad23cf268b74099e991c13&path=train HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57561 - "GET /api/v1/projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57559 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/runs?task_id=5efda0a77ae94017a439a95da98b0df3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57560 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57563 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/configuration HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57558 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/stage-inputs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57557 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/configuration?stage=model HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57556 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/model-options HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58577 - "GET /api/v1/projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58578 - "GET /api/v1/projects/34f74688805f4d4e815885da04a081d2/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58579 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58580 - "GET /api/v1/projects/cfaa5a5281524be2a0200e41f657dd63/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61255 - "GET /api/v1/projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61257 - "GET /api/v1/projects/34f74688805f4d4e815885da04a081d2/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61259 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61260 - "GET /api/v1/projects/cfaa5a5281524be2a0200e41f657dd63/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61685 - "GET /api/v1/projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61681 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/configuration?stage=model HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61689 - "GET /api/v1/projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61687 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/configuration HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61683 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/runs?task_id=5efda0a77ae94017a439a95da98b0df3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61684 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61703 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61682 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/stage-inputs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61713 - "POST /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/model-inspections HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61718 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61720 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61725 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61733 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61738 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61746 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61759 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61765 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61770 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61775 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61777 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61783 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61797 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61803 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61805 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61807 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61815 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/operations/7112ef6d4919429eac15bbf7d03797d7 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61819 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/assets/7112ef6d4919429eac15bbf7d03797d7/content?member=model.html&revision=ecebe62f127128e694278d6fe46f4417ed9412f8557f690f50656fed15b96c45 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61817 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61680 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/model-options HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61985 - "GET /api/v1/datasets HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61996 - "GET /api/v1/projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62001 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/dataset HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61997 - "GET /api/v1/projects/34f74688805f4d4e815885da04a081d2/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62004 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/stage-inputs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61998 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61999 - "GET /api/v1/projects/cfaa5a5281524be2a0200e41f657dd63/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62009 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/stage-files?role=inputs&asset_id=472b2bfc7c263a66bc8689c910eb6ee7dc740526a2e7c00ce76636afd9894488&revision=6c7fa11eb3d2a25f06b9d0b70cfc76608833efe714ad23cf268b74099e991c13 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62043 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks/5efda0a77ae94017a439a95da98b0df3/stage-files?role=inputs&asset_id=472b2bfc7c263a66bc8689c910eb6ee7dc740526a2e7c00ce76636afd9894488&revision=6c7fa11eb3d2a25f06b9d0b70cfc76608833efe714ad23cf268b74099e991c13&path=train HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62614 - "GET /api/v1/projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62615 - "GET /api/v1/projects/34f74688805f4d4e815885da04a081d2/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62616 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62617 - "GET /api/v1/projects/cfaa5a5281524be2a0200e41f657dd63/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52273 - "GET /api/v1/projects HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52274 - "GET /api/v1/projects/34f74688805f4d4e815885da04a081d2/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52275 - "GET /api/v1/projects/7142b2dc062e4808a1686795076b8028/tasks HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52276 - "GET /api/v1/projects/cfaa5a5281524be2a0200e41f657dd63/tasks HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [89786]

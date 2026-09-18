@@ -106,16 +106,16 @@ docs/PRD/
 
 ## 模块对照
 
-整合平台实施中（2026-09-10）：[Dojo WEB 平台产品设计](ai4e-web/src/PRD.md)，状态实施中。完整产品正文按 Web 一级目录 src 归档，包含项目管理和任务工作台两章；不表示本轮全部功能已经通过验收。后续功能实现直接更新此正文，避免另建平行产品说明。技术架构见唯一架构文档第 19 节。
+整合平台现状（2026-09-15）：[Dojo WEB 平台产品设计](ai4e-web/src/PRD.md)，现行开放范围见正文；CAE 采样、批量研究和完整报告仍未开放。完整产品正文按 Web 一级目录 src 归档，包含项目管理和任务工作台两章；不表示本轮全部功能已经通过验收。后续功能实现直接更新此正文，避免另建平行产品说明。技术架构见唯一架构文档第 19 节。
 
 | 包 | 模块 PRD | 状态 |
 | --- | --- | --- |
 | ai4e-core | [abilities](ai4e-core/abilities/PRD.md) | 已交付：数据章、几何章、准备与训练能力，以及推理重建、锚点点云与完整网格回贴 |
-| ai4e-core | [applications](ai4e-core/applications/PRD.md) | 已交付：外流 pre、train 与 post（锚点评估保存、可选点云、完整网格回贴） |
+| ai4e-core | [applications](ai4e-core/applications/PRD.md) | 已交付：外流 rawprep/trainprep/model/train/infer/post 及参数化 PDE；现行 post 消费固定结果 |
 | ai4e-core | [run](ai4e-core/run/PRD.md) | 已交付：开车、点号覆盖、逐项执行、失败汇总与唯一写入；摘要可抄训练探测字段 |
 | ai4e-core | [base](ai4e-core/base/PRD.md)、tools | base 已交付配置与事件；tools 待编写 |
 | ai4e-spec | [components](ai4e-spec/components/PRD.md)、[artifacts](ai4e-spec/artifacts/PRD.md)、data、check | components 与 artifacts 已有契约；data 检查描述见下方导航，check 待编写 |
-| recipes | [aero_cfd](recipes/aero_cfd/PRD.md) | 已交付：字段映射、几何启用、已有数据根、官方分片、前处理与训练准备入口 |
+| recipes | [aero_cfd](recipes/aero_cfd/PRD.md) | 已交付：显式处理/准备/训练/推理/结果消费、字段映射和自由连接 |
 | ai4e-task / viz / server / web | 见下方模块导航 | 平台扩展实施中，按专项验收限定交付 |
 
 范本：[`ai4e-core/abilities/PRD.md`](ai4e-core/abilities/PRD.md)。
@@ -130,7 +130,7 @@ docs/PRD/
 
 - ai4e-contrib 的 application：[共享数据集 PRD](ai4e-contrib/application/PRD.md)。
 
-新增模块导航： [贡献模型](ai4e-contrib/ability/PRD.md)、[最小模型协议](ai4e-spec/components/PRD.md)。正式模型按专项验收记录限定已验证范围。
+新增模块导航： [贡献模型](ai4e-contrib/ability/PRD.md)、[局部模型调用约定](ai4e-spec/components/PRD.md)。正式模型按专项验收记录限定已验证范围。
 
 ## Task 本地模块
 
@@ -158,3 +158,9 @@ docs/PRD/
 ## 独立 Vis 应用的迁移例外
 
 原十三模块产品正文继续在 `packages/ai4e-viz/docs/PRD/` 维护，保留原结构；根 `docs/PRD/ai4e-viz` 继续描述现有静态/预览库。两者按职责维护，不重复同一正文。
+
+GenCP 可复制模板：[研究流程](recipes/gencp/PRD.md)，当前缩小对照范围。
+
+SafeDiffCon 模板：[控制研究流程](recipes/safediffcon/PRD.md)。数据/案例连接在contrib application第三章，算法在contrib ability第三章，领域交接在core applications第八章；三小时缩小范围以专项验收限定。
+
+WDNO 模板：[可复制小波预测](recipes/wdno/PRD.md)。模型/小波/损失归贡献ability第四章，数据和模型连接归贡献application第四章，时空场领域归core applications第九章。

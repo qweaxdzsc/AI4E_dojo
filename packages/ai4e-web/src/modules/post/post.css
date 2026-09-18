@@ -469,9 +469,8 @@
 .post-visualization-layout>.phys-host{grid-column:2 / -1}
 /* 后处理按用户参考图组织：页签、紧凑配置带、浅蓝状态带和有边界的内容区。 */
 .post-three-tabs{min-width:0;color:#293b68;container-type:inline-size}
-.post-three-tabs>nav{display:flex;gap:2px;border-bottom:1px solid #dce6f6;margin-top:12px}
-.post-three-tabs>nav button{min-width:140px;padding:12px 28px;background:#f7faff;border:1px solid #eaf0fa;border-bottom:3px solid transparent;border-radius:6px 6px 0 0;color:#52628a;font-size:14px;cursor:pointer}
-.post-three-tabs>nav button:last-child{min-width:210px}
+.post-three-tabs>nav{display:flex;gap:2px;border-bottom:1px solid #dce6f6;margin-top:4px}
+.post-three-tabs>nav button{min-width:0;padding:4px 10px;line-height:18px;background:#f7faff;border:1px solid #eaf0fa;border-bottom:2px solid transparent;border-radius:4px 4px 0 0;color:#52628a;font-size:12px;cursor:pointer}
 .post-three-tabs>nav button[aria-selected=true]{color:#2365ff;border-bottom-color:#316cff;background:white;font-weight:600}
 .post-three-tabs>section[role=tabpanel]{background:white;border:1px solid #e5ecf7;border-top:0;padding:22px;border-radius:0 0 7px 7px;min-width:0}
 .post-three-tabs>section[hidden]{display:none!important}
@@ -536,13 +535,13 @@
 .post-preview-controls .ant-btn{margin-left:auto;color:#376de8;border-color:#dce7f6;font-size:12px}
 .post-preview-canvas{flex:1;position:relative;min-height:260px;border-radius:4px;overflow:hidden;background:#f0f7fd}
 .post-preview-canvas>div{height:100%!important;min-height:260px}
-.post-three-tabs #post-panel-visualization{padding:0;flex:1;min-height:0;display:flex;flex-direction:column;overflow:auto}
+.post-three-tabs #post-panel-visualization{padding:0;flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 .task-workbench:has(#post-panel-visualization:not([hidden])) .post-three-tabs{flex:1;min-height:0;display:flex;flex-direction:column}
-.post-three-tabs .phys-host{flex:1;height:auto;min-height:600px}
+.post-three-tabs .phys-host{flex:1;height:auto;min-height:714px}
 .post-three-tabs .phys-host-context{padding:6px 12px}
-.post-three-tabs .phys-host-frame{height:100%;min-height:600px;flex:1}
+.post-three-tabs .phys-host-frame{height:100%;min-height:714px;flex:1}
 @container(max-width:1300px){.post-metric-config{grid-template-columns:repeat(6,minmax(0,1fr));gap:12px 16px}.post-metric-config>label{grid-column:span 2}.post-metric-config>label:nth-child(4){grid-column:span 4}.post-three-tabs>section[role=tabpanel]{padding:16px}.post-file-filters{grid-template-columns:1fr 1fr}.post-file-filters>.ant-input-affix-wrapper{grid-column:span 2}.post-file-actions>.ant-btn-primary{font-size:10px;padding:0 5px}.post-result-tree>header{gap:5px;padding:7px}}
-@container(max-width:850px){.post-result-files{grid-template-columns:minmax(240px,2fr) 8px minmax(300px,3fr)!important;overflow:auto}.post-metric-config>label{grid-column:span 3}.post-metric-config>label:nth-child(4){grid-column:span 3}.post-metric-config>.ant-btn{grid-column:span 3}.post-three-tabs>nav button{min-width:100px;padding:10px 16px}.post-three-tabs>nav button:last-child{min-width:170px}}
+@container(max-width:850px){.post-result-files{grid-template-columns:minmax(240px,2fr) 8px minmax(300px,3fr)!important;overflow:auto}.post-metric-config>label{grid-column:span 3}.post-metric-config>label:nth-child(4){grid-column:span 3}.post-metric-config>.ant-btn{grid-column:span 3}.post-three-tabs>nav button{padding:3px 8px}}
 
 .post-preview-body>.compact-file-preview{display:flex;flex:1;flex-direction:column;min-height:0;height:100%}
 .post-three-tabs .ant-btn-primary:disabled{background:#edf2fa;color:#99a9c2;box-shadow:none;border-color:#dce5f3}

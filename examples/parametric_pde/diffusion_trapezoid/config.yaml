@@ -1,13 +1,33 @@
-# 正式网络/预算由共享 recipe 按 case 展开；路径相对本文件。
 case: diffusion_trapezoid
 dataset:
-  manifest: ../../../../../project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/datasets/manifest.json
+  name: diffusion_trapezoid
 run_root: ../../../../../project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/runs
 trainprep:
   execute: true
-  output: ../../../../../project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/prepared
 train:
   execute: true
   device: cpu
-post:
-  output: ../../../../../project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/predictions
+post: {}
+data_root: ../data
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - infer
+  - post
+inputs:
+  rawprep:
+    manifest: ../../../../../project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/datasets/manifest.json
+  trainprep:
+    dataset: ../../../../../project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/datasets/manifest.json
+  train:
+    dataset: ../../../../../project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/datasets/manifest.json
+    preparation: null
+    resume: null
+  infer:
+    dataset: ../../../../../project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/datasets/manifest.json
+    preparation: null
+    checkpoint: null
+  post:
+    results: null

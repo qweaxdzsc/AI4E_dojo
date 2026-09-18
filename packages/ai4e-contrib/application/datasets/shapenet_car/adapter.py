@@ -13,7 +13,7 @@ MANIFEST_PATH = Path(__file__).with_name("manifest.yaml")
 
 
 def open_dataset(*, root, manifest=None, samples="all", partition="official", check_exists=True) -> Dataset:
-    """按 manifest 打开按需数据集；显式样本必须存在且恰好归属一个分片。"""
+    """按 manifest 打开按需数据集；unsplit 把官方名单收成单一训练宇宙，不发布 train/test。"""
     samples = (
         OmegaConf.to_container(samples, resolve=True) if OmegaConf.is_config(samples) else samples
     )
@@ -30,12 +30,20 @@ def open_dataset(*, root, manifest=None, samples="all", partition="official", ch
         metadata = yaml.safe_load(path.read_text())
         if metadata.get("version") != 1:
             raise ValueError("不支持的原始数据 manifest 版本")
-        if partition == "official":
+        if partition in {"official", "unsplit"}:
             source = path.parent / metadata["partition"]
             groups = yaml.safe_load(source.read_text())
             expected = groups.pop("expected", {})
             if any(len(groups.get(k, [])) != v for k, v in expected.items()):
                 raise ValueError("官方分片数量与 manifest 不一致")
+            if partition == "unsplit":
+                groups = {
+                    "train": [
+                        name
+                        for split in ("train", "eval", "test")
+                        for name in groups.get(split, [])
+                    ]
+                }
         elif isinstance(partition, Mapping):
             groups = dict(partition)
         else:

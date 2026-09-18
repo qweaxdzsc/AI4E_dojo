@@ -113,3 +113,42 @@ test("提交运行说明只写入一行，不钉在日志底部", async ({ page 
   await expect.poll(async () => (await log.innerText()).split("\n").at(-1)).toBe("[INFO] line 20");
   await expect.poll(async () => (await log.innerText()).split("\n")[0]).toBe("[INFO] 已提交运行 abc");
 });
+
+test("失败且日志为空时展示运行记录中的错误", async ({ page }) => {
+  page.setDefaultTimeout(15000);
+  await page.route("**/api/v1/**", async (route) => {
+    const url = new URL(route.request().url());
+    if (url.pathname.endsWith("/events")) {
+      await route.fulfill({
+        status: 200,
+        contentType: "text/event-stream",
+        body:
+          "data: " +
+          JSON.stringify({ status: "failed", text: "" }) +
+          "\n\n",
+      });
+      return;
+    }
+    if (url.pathname.endsWith("/runs/run-1")) {
+      await route.fulfill({
+        json: { id: "run-1", status: "failed", error: "TypeError: unexpected stage_outputs" },
+      });
+      return;
+    }
+    await route.fulfill({ json: { text: "" } });
+  });
+  await page.goto("/");
+  await page.evaluate(async () => {
+    const React = (await import("/node_modules/.vite/deps/react.js" as any)).default;
+    const { createRoot } = (await import("/node_modules/.vite/deps/react-dom_client.js" as any))
+      .default;
+    const { ExecutionLog } = await import("/src/modules/executions/ExecutionLog.tsx" as any);
+    document.body.innerHTML = '<div id="fixture"></div>';
+    createRoot(document.getElementById("fixture")!).render(
+      React.createElement(ExecutionLog, { project: "fixture", run: "run-1" }),
+    );
+  });
+  await expect(page.getByLabel("运行日志内容")).toContainText(
+    "TypeError: unexpected stage_outputs",
+  );
+});

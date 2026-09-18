@@ -9,9 +9,9 @@ from .physicalField import scalar_range
 
 __all__ = ["KernelCache", "evenly_spaced_indices", "scalar_range"]
 
-from .filters import apply_filter, field_array, scalar_mesh
-from .sampling import probe, entity
-from .renderPasses import enable_shadows
+from .filters import apply_filter, field_array, scalar_mesh, streamline_style, style_streamline_mesh
+from .sampling import probe, entity, sample_line
+from .renderPasses import apply_paraview_light_kit, enable_shadows, paraview_light_kit_defaults
 from .sampling import pick_ray
 from .cache import reuse_geometry
 from .seeds import (
@@ -32,3 +32,5 @@ from .planeWidget import (
     pick_plane_handle,
     plane_widget_geometry,
 )
+from .seedWidget import move_seed, seed_widget_geometry
+from .lineWidget import line_widget_geometry, move_line, pick_line_handle

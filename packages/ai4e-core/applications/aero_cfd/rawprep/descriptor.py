@@ -19,6 +19,28 @@ def merge_defaults(defaults: dict, values: dict) -> dict:
     return result
 
 
+def reconcile_format_keys(defaults: dict, user: dict, merged: dict) -> dict:
+    """平台已提供的格式选项覆盖清单默认和旧单键，生成配置不向用户报冲突。
+
+    页面写 `formats`。清单或历史文件里的 `format` 只在没有平台列表时使用。
+    两键并存时只保留平台列表，不提示、不拒绝。
+    """
+    result = dict(merged)
+    if "formats" in user and user.get("formats") is not None:
+        result["formats"] = deepcopy(user["formats"])
+        result.pop("format", None)
+        return result
+    if "format" in user:
+        result["format"] = deepcopy(user["format"])
+        result.pop("formats", None)
+        return result
+    if "formats" in defaults and defaults.get("formats") is not None:
+        result.pop("format", None)
+    elif "format" in defaults:
+        result.pop("formats", None)
+    return result
+
+
 def load_description(path, config=None) -> dict:
     """读取组件提供的 manifest；旧自定义 manifest 可继承已安装的处理描述。
 
@@ -73,8 +95,10 @@ def resolve_rawprep(config, *, validate=False, config_path=None):
     if not hasattr(component, "describe_rawprep"):
         return cfg
     profile = component.describe_rawprep(cfg)
-    raw = cfg.get("rawprep", {})
-    cfg["rawprep"] = _promote_legacy_volume_normals(merge_defaults(profile["defaults"], raw))
+    raw = cfg.get("rawprep") or {}
+    cfg["rawprep"] = _promote_legacy_volume_normals(
+        reconcile_format_keys(profile["defaults"], raw, merge_defaults(profile["defaults"], raw))
+    )
     resolved_workers(cfg["rawprep"])
     if validate:
         validate_rawprep(cfg["rawprep"], profile)
@@ -127,13 +151,12 @@ def selected_outputs(raw, profile):
 
 
 def resolved_formats(raw: dict) -> list[str]:
-    """解析输出格式；新旧键同时出现且不一致时拒绝。"""
+    """解析输出格式；平台 `formats` 覆盖旧 `format`，两键并存不拒绝。"""
+    if "format" in raw and raw["format"] not in {"pt", "zarr"}:
+        raise ValueError("rawprep.format: 不支持的输出格式")
     has_list = "formats" in raw and raw.get("formats") is not None
-    has_one = "format" in raw
     if has_list:
         formats = list(raw["formats"])
-        if has_one and [raw.get("format")] != formats:
-            raise ValueError("rawprep.format: 不能同时声明不一致的 format 与 formats")
     else:
         formats = [raw.get("format", "pt")]
     if (

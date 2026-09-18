@@ -72,3 +72,13 @@ def test_tensor_headers_preserve_vector_without_old_metrics(tmp_path, monkeypatc
 
     monkeypatch.setattr(torch, "load", inspect)
     assert describe_result_fields([str(manifest)])[str(manifest)]["components"] == {"v": 3}
+
+
+def test_constant_decimal_truth_r2_is_undefined():
+    """小数常量的求和舍入不能形成虚假真值方差。"""
+    import numpy as np
+
+    from ai4e_core.abilities.eval.result_metrics import evaluate_arrays
+
+    result = evaluate_arrays(np.ones((1331, 1)), np.full((1331, 1), 0.9), metrics=["r2"])
+    assert result["values"]["r2"] is None and result["undefined"]["r2"] == "真值恒定"

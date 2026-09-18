@@ -3,13 +3,17 @@
 import json
 import shutil
 from pathlib import Path
+
+import ai4e_task as task
 import numpy as np
 import pytest
 import torch
 import vtk
 from vtk.util.numpy_support import vtk_to_numpy
-import ai4e_task as task
-from tests.integration.test_web_project_task import platform
+
+from tests.integration.test_web_project_task import (
+    platform as platform,  # noqa: PLC0414 - 显式重导出共享 pytest fixture。
+)
 
 SAMPLE = "param1/1dc58be25e1b6e5675cad724c63e222e"
 REAL = Path("/Users/zonghui/work/datasets/shapenet_car_cfd/mlcfd_data/training_data")
@@ -42,7 +46,8 @@ def test_real_rawprep_to_existing_trainprep(platform):
     assert bound.status_code == 200, bound.text
     cfg = c.get(url).json()
     cfg["rawprep"]["vtkhdf"] = True
-    saved = c.put(url, json=cfg)
+    cfg["processed_name"] = "test_prepared_dataset"
+    saved = c.put(url, json={k: v for k, v in cfg.items() if k != "processed_name_status"})
     assert saved.status_code == 200, saved.text
     body = {
         "revision": saved.json()["revision"],
@@ -63,12 +68,14 @@ def test_real_rawprep_to_existing_trainprep(platform):
         project, result["id"]
     )
     published = c.get("/api/v1/datasets").json()
-    assert any(item["name"] == "shapenet_car" and item["status"] == "available" for item in published)
+    assert any(
+        item["name"] == cfg["processed_name"] and item["status"] == "available"
+        for item in published
+    )
     repeated = c.post(url + "/execute", json=body)
     assert repeated.json()["id"] == result["id"], repeated.text
     assert len(task.get_lineage(project)) == 1
-    data = Path(result["data_dir"])
-    manifest = data / "manifest.json"
+    manifest = task.run_physical_manifest(project, result)
     assert manifest.is_file()
     from ai4e_core.applications.aero_cfd.trainprep.dataset import (
         open_manifest_sample,
@@ -102,11 +109,9 @@ def test_real_rawprep_to_existing_trainprep(platform):
         tensor.flatten().numpy(), input_values[mapping["surface_pressure"]["entity_ids"]].flatten()
     )
     q = {
-        "root": "task",
+        "root": "project",
         "path": str(
-            (Path(record["path"]) / record["filemap"]["surface_pressure"]).relative_to(
-                project / "tasks" / t["id"]
-            )
+            (Path(record["path"]) / record["filemap"]["surface_pressure"]).relative_to(project)
         ),
         "task_id": t["id"],
         "operation": "preview",
@@ -117,3 +122,5 @@ def test_real_rawprep_to_existing_trainprep(platform):
     assert "rawprep" in task.read_log(project, result["id"])
     config = Path(result["run_dir"]) / "inputs/config.yaml"
     assert "trainprep" not in __import__("yaml").safe_load(config.read_text())["pipeline"]["stages"]
+    live = task.read_configuration(project, t["id"])["config"]["dataset"]
+    assert live.get("partitions") == "official"

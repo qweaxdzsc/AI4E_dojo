@@ -100,7 +100,8 @@ rawprep:
       - surface_position
       - volume_position
     vtkhdf: true
-    format: pt
+    formats:
+    - pt
   binding:
     mode: directory
     root_key: root

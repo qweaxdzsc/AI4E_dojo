@@ -5,7 +5,7 @@ from pathlib import Path
 
 import torch
 
-from ai4e_core.abilities.transform.coordinate_normalization import CoordinateNormalization
+from ai4e_core.abilities.transform.normalization import Normalization
 from ai4e_core.abilities.transform.standardization import Standardization
 
 
@@ -15,7 +15,18 @@ def test_actual_normalizer_float32_fixture():
     )
     standard = fixture["standardization"]
     standardizer = Standardization(tuple(standard["mean"]), tuple(standard["std"]))
-    coordinate = CoordinateNormalization((-4.5,), (6.0,))
+    coordinate = Normalization(
+        {
+            "version": 2,
+            "fields": {
+                "x": {
+                    "method": "coordinate",
+                    "parameters": {"minimum": [-4.5], "maximum": [6.0]},
+                    "scale": 1000,
+                }
+            },
+        }
+    ).transforms["x"]
     for transform, values in [(standardizer, standard), (coordinate, fixture["coordinate"])]:
         actual = transform.apply(torch.tensor(values["input"]))
         torch.testing.assert_close(actual, torch.tensor(values["output"]), rtol=0, atol=0)

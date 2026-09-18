@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import * as api from "./api";
+import { remainingCatalogsMatch, type SampleCatalog } from "./catalog";
+import {
+  defaultInferenceBatchName,
+  isInferBatchStamp,
+} from "./batchName";
 import {
   compatible,
   terminal,
@@ -9,6 +14,17 @@ import {
   type Results,
   type Field, type Metric,
 } from "./model";
+function storageKey(project: string, task: string) {
+  return `dojo.infer.${project}.${task}`;
+}
+function isMissingBatch(error: { message?: string; code?: string; status?: number }) {
+  const text = String(error?.message || "");
+  return (
+    error?.status === 404 ||
+    error?.code === "inference_batch_not_found" ||
+    /推理批次不存在或已被清理|文件不存在或数据根未配置/.test(text)
+  );
+}
 /** 任务内选择草稿、服务轮询及幂等提交；迟到响应不能覆盖其他任务。 */
 export function useInference(project: string, task: string) {
   const [catalog, setCatalog] = useState<Catalog>({
@@ -32,8 +48,12 @@ export function useInference(project: string, task: string) {
       evaluate: true,
       save_predictions: true,
       export_vtk: true,
+      export_pointcloud: true,
+      export_mesh: true,
       query_chunk_size: 16384,
     });
+  const [meshExportAvailable, setMeshExportAvailable] = useState(false);
+  const [meshExportReason, setMeshExportReason] = useState("");
   const [batches, setBatches] = useState<Batch[]>([]),
     [active, setActive] = useState(""),
     [detail, setDetail] = useState<Batch>(),
@@ -41,6 +61,9 @@ export function useInference(project: string, task: string) {
   const [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
     [loading, setLoading] = useState(true),
+    [samplesLoading, setSamplesLoading] = useState(false),
+    [catalogMismatch, setCatalogMismatch] = useState(""),
+    [perCheckpoint, setPerCheckpoint] = useState(false),
     [catalogTick, setCatalogTick] = useState(0),
     [tick, setTick] = useState(0),
     [notice, setNotice] = useState("");
@@ -78,50 +101,131 @@ export function useInference(project: string, task: string) {
     };
   }, [project, task, catalogTick]);
   const first = selected[0] || "";
+  const compatibleIds = catalog.items.filter(compatible).map((item) => item.id);
+  function applyCatalog(value: SampleCatalog) {
+    const rows = value.partitions || {};
+    const next = {
+      train: rows.train || [],
+      test: rows.test || [],
+      eval: rows.eval || (rows as Record<string, string[]>).validation || [],
+      ...Object.fromEntries(
+        Object.entries(rows).filter(
+          ([key]) => !["train", "test", "eval", "validation"].includes(key),
+        ),
+      ),
+    };
+    setPartitions(next);
+    setSelectionSupported(value.selection_supported !== false);
+    setFields(value.fields || []);
+    setMetrics(value.metrics || []);
+    setFieldIds((value.fields || []).filter((item) => item.default && item.available).map((item) => item.id));
+    setMetricIds((value.metrics || []).filter((item) => item.default).map((item) => item.id));
+    setSplit(
+      next.test.length ? "test" : next.eval.length ? "eval" : next.train.length ? "train" : "",
+    );
+    const mesh = value.vtk_exports?.mesh;
+    const available = mesh?.available === true;
+    setMeshExportAvailable(available);
+    setMeshExportReason(mesh?.reason || (available ? "" : "训练集没有可还原的 VTK 网格"));
+    setOptions((old) => ({
+      ...old,
+      export_mesh: available && old.export_mesh,
+      export_vtk: available && old.export_mesh,
+    }));
+    setError("");
+  }
+  function fallbackToCheckpoint(message: string) {
+    setPerCheckpoint(true);
+    setCatalogMismatch(message);
+    setPartitions({});
+    setSelections({});
+    setFields([]);
+    setMetrics([]);
+    setSelectionSupported(true);
+    setMeshExportAvailable(false);
+    setMeshExportReason("训练集没有可还原的 VTK 网格");
+  }
   useEffect(() => {
+    let live = true;
+    setPartitions({});
+    setSelections({});
+    setFields([]);
+    setMetrics([]);
+    setSelectionSupported(true);
+    setCatalogMismatch("");
+    setPerCheckpoint(false);
+    if (!compatibleIds.length) {
+      setSamplesLoading(false);
+      return;
+    }
+    setSamplesLoading(true);
+    const ids = compatibleIds;
+    const load = (id: string) => api.samples(project, task, id);
+    load(ids[0])
+      .then(async (first) => {
+        if (!live) return;
+        applyCatalog(first);
+        setSamplesLoading(false);
+        if (!(await remainingCatalogsMatch(load, ids, first)) && live) {
+          fallbackToCheckpoint(
+            "各 Checkpoint 的样本、物理量或指标不一致，请先选择一个 Checkpoint 再加载对应目录。",
+          );
+        }
+      })
+      .catch((e) => {
+        if (!live) return;
+        fallbackToCheckpoint(
+          "未能读取全部检查点的共用目录，请先选择一个 Checkpoint 再加载对应目录。",
+        );
+        if (!isMissingBatch(e)) setError(e.message);
+      })
+      .finally(() => live && setSamplesLoading(false));
+    return () => {
+      live = false;
+    };
+  }, [project, task, catalogTick, compatibleIds.join("|")]);
+  useEffect(() => {
+    if (!perCheckpoint) return;
     let live = true;
     setPartitions({});
     setSelections({});
     setFields([]);
     setSelectionSupported(true);
     setMetrics([]);
-    if (first)
-      api
-        .samples(project, task, first)
-        .then((v) => {
-          if (live) {
-            setPartitions(v.partitions);
-            setSelectionSupported(v.selection_supported !== false);
-            setFields(v.fields || []); setMetrics(v.metrics || []);
-            setFieldIds((v.fields || []).filter(f => f.default && f.available).map(f => f.id));
-            setMetricIds((v.metrics || []).filter(m => m.default).map(m => m.id));
-            setSplit(
-              v.partitions.test ? "test" : Object.keys(v.partitions)[0] || "",
-            );
-          }
-        })
-        .catch((e) => live && setError(e.message));
+    if (!first) {
+      setSamplesLoading(false);
+      return;
+    }
+    setSamplesLoading(true);
+    api
+      .samples(project, task, first)
+      .then((value) => {
+        if (live) applyCatalog(value);
+      })
+      .catch((e) => live && !isMissingBatch(e) && setError(e.message))
+      .finally(() => live && setSamplesLoading(false));
     return () => {
       live = false;
     };
-  }, [project, task, first, catalogTick]);
+  }, [project, task, first, catalogTick, perCheckpoint]);
   useEffect(() => {
     let live = true;
     let timer: ReturnType<typeof setTimeout>;
+    const key = storageKey(project, task);
     async function poll() {
       try {
         const rows = await api.listBatches(project, task);
         if (live) {
           setBatches(rows);
-          setActive(
-            (old) =>
-              old ||
-              sessionStorage.getItem(`dojo.infer.${project}.${task}`) ||
-              "",
-          );
+          setActive((old) => {
+            const candidate = old || sessionStorage.getItem(key) || "";
+            if (candidate && rows.some((row) => row.id === candidate)) return candidate;
+            if (candidate) sessionStorage.removeItem(key);
+            return "";
+          });
         }
       } catch (e: any) {
-        if (live) setError(e.message);
+        if (live && !isMissingBatch(e)) setError(e.message);
       } finally {
         if (live) timer = setTimeout(poll, 2500);
       }
@@ -138,7 +242,7 @@ export function useInference(project: string, task: string) {
     setDetail(undefined);
     setResult({ items: [], comparison: null });
     if (!active) return;
-    sessionStorage.setItem(`dojo.infer.${project}.${task}`, active);
+    sessionStorage.setItem(storageKey(project, task), active);
     let finished = false,
       resultsVersion = "";
     async function poll() {
@@ -157,7 +261,13 @@ export function useInference(project: string, task: string) {
         }
         finished = terminal(d.status);
       } catch (e: any) {
-        if (live) setError(e.message);
+        if (!live) return;
+        if (isMissingBatch(e)) {
+          sessionStorage.removeItem(storageKey(project, task));
+          setActive("");
+          return;
+        }
+        setError(e.message);
       } finally {
         if (live && !finished) timer = setTimeout(poll, 2500);
       }
@@ -202,10 +312,10 @@ export function useInference(project: string, task: string) {
     sampleSelection.length > 0 &&
     (!selectionSupported || fieldIds.length > 0) &&
     (!selectionSupported || !options.evaluate || metricIds.length > 0) &&
-    (options.evaluate || options.save_predictions) &&
-    (!options.export_vtk || options.save_predictions) &&
+    (options.evaluate || options.export_pointcloud || (meshExportAvailable && options.export_mesh)) &&
     !!device &&
     options.query_chunk_size > 0;
+  const running = Boolean(detail && !terminal(detail.status));
   async function action(fn: () => Promise<void>) {
     if (sending.current) return;
     sending.current = true;
@@ -221,17 +331,40 @@ export function useInference(project: string, task: string) {
       if (alive.current) setBusy(false);
     }
   }
+  function resolveBatchName(core: object): string {
+    if (name.trim()) return name.trim();
+    if (identity.current?.body) {
+      try {
+        const previous = JSON.parse(identity.current.body) as { name?: string };
+        const { name: previousName, ...previousCore } = previous;
+        if (
+          JSON.stringify(previousCore) === JSON.stringify(core) &&
+          typeof previousName === "string" &&
+          isInferBatchStamp(previousName)
+        )
+          return previousName;
+      } catch {}
+    }
+    return defaultInferenceBatchName();
+  }
   function body(): BatchRequest {
-    const data = {
-      name: name.trim() || "批量推理",
+    const exportMesh = meshExportAvailable && options.export_mesh;
+    const optionsPayload = {
+      evaluate: options.evaluate,
+      export_pointcloud: options.export_pointcloud,
+      export_mesh: exportMesh,
+      export_vtk: exportMesh,
+      save_predictions: options.export_pointcloud || exportMesh,
+      query_chunk_size: options.query_chunk_size,
+    };
+    const core = {
       expected_revision: catalog.revision,
       checkpoints: chosen.map((c) => ({ id: c.id, revision: c.revision })),
       sample_selection: sampleSelection,
       ...(selectionSupported ? {fields: fieldIds, ...(options.evaluate && metricIds.length ? {metrics: metricIds} : {})} : {}),
       device,
-      options,
+      options: optionsPayload,
     };
-    const serialized = JSON.stringify(data);
     if (!identity.current) {
       try {
         identity.current = JSON.parse(
@@ -240,6 +373,11 @@ export function useInference(project: string, task: string) {
         );
       } catch {}
     }
+    const data = {
+      name: resolveBatchName(core),
+      ...core,
+    };
+    const serialized = JSON.stringify(data);
     if (identity.current?.body !== serialized)
       identity.current = { body: serialized, key: crypto.randomUUID() };
     sessionStorage.setItem(
@@ -292,6 +430,8 @@ export function useInference(project: string, task: string) {
     setName,
     options,
     setOptions,
+    meshExportAvailable,
+    meshExportReason,
     batches,
     active,
     setActive,
@@ -300,8 +440,11 @@ export function useInference(project: string, task: string) {
     error,
     busy,
     loading,
+    samplesLoading,
+    catalogMismatch,
     notice,
     ready,
+    running,
     samePreparation,
     selectionSupported,
     duplicate,

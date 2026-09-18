@@ -6,6 +6,7 @@
 
 # recipes 模板索引
 
+- `.cursor/plans/wdno-reproduction-and-agent-composition.plan.md`：2026-09-17 按计划rules重排；基础迁移和Task适配已完成，近期补公开API新建任务及分阶段实跑、独立Agent使用；完整配置和研究脚本示例、文件职责、逐叶验收已列明，正式论文复现保留前置条件。
 ## 参数化 PDE 模板
 
 - `docs/pibsnet/设置与算法一致性核查.md`：五例PDF/源码/Dojo设置与算法差距、未决来源冲突和不依赖最终误差的验收链；2026-09-14只核查。
@@ -22,8 +23,8 @@
 普通文件集合，不是 workspace 成员或安装包。允许引用 core/spec/contrib；task 将来复制文件，不导入 recipe。
 
 - `recipes/aero_cfd/README.md`：复制、安装依赖、执行和参数说明。
-- `recipes/aero_cfd/config.yaml`：实验选择、路径插值与统计策略；新默认 VTKHDF 开、归一化副本开，`rawprep.formats` 可同时写 PT/Zarr，`rawprep.workers` 控制并行样本线程。
-- `recipes/aero_cfd/pipeline.py`：显式顺序串接 rawprep/trainprep/train/post。
+- `recipes/aero_cfd/config.yaml`：实验选择、路径插值与统计策略；新默认 VTKHDF 开、归一化副本开，场上 `scale` 默认 1，AB-UPT 官方案例坐标预填 1000，`rawprep.formats` 可同时写 PT/Zarr；与清单默认合并时以平台 `formats` 覆盖旧单键，`rawprep.workers` 控制并行样本线程。
+- `recipes/aero_cfd/pipeline.py`：显式顺序串接 rawprep/trainprep/train/infer/post。
 - `docs/PRD/recipes/aero_cfd/PRD.md`：模板行为与迁移。
 - `tests/integration/test_dataset_recipe.py`：复制脚本、路径、统计、失败与日志验收。
 - `tests/integration/test_aero_cfd_documents.py`：五例脚本交接，以及 ShapeNet 默认打开 / NASA 关闭 VTKHDF。
@@ -39,7 +40,7 @@
 
 ## 多域模型变更
 
-`recipes/aero_cfd/post.py`：贡献组件注入与唯一 session.launch；pipeline 登记 rawprep/trainprep/train/post。`config.yaml`：data_specs、trainprep、域采样、supervision，以及 post 评估/保存/点云/完整网格回贴开关。
+`recipes/aero_cfd/post.py`：通过 run.launch 加载配置，只读取固定推理结果；pipeline 显式连接 rawprep/trainprep/train/infer/post。`config.yaml` 的 infer 控制预测、评价与网格交付，post 历史参数仅供旧数值入口兼容。
 
 验收导航：`.context/mvp/abupt-multidomain-acceptance.md`。
 
@@ -47,7 +48,7 @@
 
 - `recipes/aero_cfd/rawprep.py`：数据前处理显式业务流水线。
 - `recipes/aero_cfd/trainprep.py`：独立准备、全分片校验与 preparation.json 引用；可选 `trainprep.split` 重划 train/test/eval，官方名单不改。
-- `recipes/aero_cfd/train.py`：消费准备引用、构建模型、目标、优化、评估与执行。
+- `recipes/aero_cfd/train.py`：消费准备引用、构建模型、目标、优化、评估与执行；成功后按 `train.export_predictions` / `export_vtk` / `export_split` 显式写出，默认关闭。
 - `tests/integration/test_recipe_three_stage.py`：独立入口、完整流水线、干跑和数据冲突。
 - `.context/mvp/abupt-reference-acceptance.md`：逐阶段官方对照及未完成门槛。
 
@@ -57,7 +58,9 @@ README 新增按 post-progress.json 检查部分交付、已有检查点仅补�
 
 ## Task 接入
 
-- `aero_cfd/task-entry.json`：显式输入输出绑定、恢复键与标量比较定义；模板不导入 task。
+- `.cursor/plans/safediffcon-task-transparent-execution.plan.md`：SafeDiffCon公共约定适配实施计划；已补齐案例、配置迁移和实际安装下双入口真实计算，证据见专项验收。
+
+历史说明（已被公共 pipeline/config 与 inputs 约定取代）：`aero_cfd/task-entry.json`：显式输入输出绑定、恢复键与标量比较定义；模板不导入 task。
 - `.context/mvp/task-acceptance.md`：相关验收入口。
 
 ## 双模型组件入口
@@ -93,7 +96,7 @@ examples/aero_cfd/ 下固定五个独立配置，阶段脚本基于 recipes/aero
 ## 本机实验存储位置
 
 按 AGENTS.md 的本机约定，新训练输出使用 `/Users/zonghui/work/project_simulation/dojo_train/<实验名>/`，显式配置运行与预测路径。50轮运行已迁至 `dojo_train/dojo-cross-model-50`；七个用户指定的历史工具缓存/暂存目录已同名迁入 dojo_train，迁移记录为该目录下 `cache-relocation-20260910.json`。旧tmp位置仅保留兼容链接，未变更可复制模板的跨机器默认路径。
-- `aero_cfd/task-entry.json`：当前比较量采样选择器使用 `model/sampling`，旧运行仍读取其代码快照中的历史 entry，不迁写冻结资产。
+历史说明（已被公共 pipeline/config 与 inputs 约定取代）：`aero_cfd/task-entry.json`：当前比较量采样选择器使用 `model/sampling`，旧运行仍读取其代码快照中的历史 entry，不迁写冻结资产。
 
 ## 显式流程与真实扩展
 
@@ -147,10 +150,10 @@ tools/verification/pibsnet/source_dojo.py执行独立生成、来源预检、实
 ## 独立推理与结果消费
 
 - `recipes/aero_cfd/infer.py` 与五个 `examples/aero_cfd/*/infer.py`：显式步骤，独立运行或 pipeline 中选择 infer。
-- `recipes/aero_cfd/legacy-profile.json`：六套模板在独立推理迁移前的 36 份完整 Python 脚本及 AST 摘要，供宿主精确识别已知历史模板；不代表任意历史修改均可自动执行。
-- 六份 configuration.py：支持 infer 参数及阶段顺序；config.yaml 提供独立推理设置并保留旧 post 参数兼容。
-- 六份 post.py：固定推理结果读取；旧归档 post-only 仍走原计算；新模板必须显式 post.legacy_predict=true 才允许历史数值对照。
-- `recipes/aero_cfd/legacy-profile.json`：本切片前精确 AST 摘要和原任务 entry，供宿主定向兼容，不放行任意旧逻辑。
+历史说明（已被公共 pipeline/config 与 inputs 约定取代）：`recipes/aero_cfd/legacy-profile.json`：六套模板在独立推理迁移前的 36 份完整 Python 脚本及 AST 摘要，保留历史来源记录；当前宿主以 task-entry 的操作声明判断支持范围。
+- 六份 configuration.py：支持 infer 参数及阶段顺序；config.yaml 仍写旧 `export_vtk`（未拆键时同时开关点云与网格化），源码已接受 `export_pointcloud` / `export_mesh`。`infer.py` 只调用 application 装配，不直接写 VTK。
+- 六份 post.py：固定推理结果读取；旧归档 post-only 仍走原计算；新模板不再提供预测开关，数值对照通过独立验证工具进行。
+- `recipes/aero_cfd/legacy-profile.json`：本切片前精确 AST 摘要和原任务 entry，保留当时来源；当前操作适配不以 AST 摘要做可用性判断。
 - `examples/recipe_extensions/inference_fields/{fields.py,README.md}`：普通误差函数、保存读回及真实网格交付。
 - `tests/integration/test_infer_{abilities,stage,extensions,compatibility}.py`：圈定验收；长期正文 `docs/PRD/recipes/aero_cfd/PRD.md`。
 
@@ -160,4 +163,63 @@ tools/verification/pibsnet/source_dojo.py执行独立生成、来源预检、实
 
 专项状态与证据见 `.context/mvp/inference-ui-acceptance.md`，不沿用旧验收结论。
 
-- `examples/recipe_extensions/inference_metrics/{metrics.py,README.md}`：普通逐场评价函数与复制方法；`test_infer_extensions.py` 验证版本记录、结果读回及派生字段真实VTK。原生post缺少固定结果拒绝，`post.legacy_predict=true`仅显式历史算术对照。
+- `examples/recipe_extensions/inference_metrics/{metrics.py,README.md}`：普通逐场评价函数与复制方法；`test_infer_extensions.py` 验证版本记录、结果读回及派生字段真实VTK。原生post缺少固定结果拒绝，历史算术对照由独立验证工具调用旧公开门面，新模板不再提供 post.legacy_predict 开关。
+
+## 架构优化后的当前连接
+
+- `examples/recipe_extensions/free_wiring/`：普通函数、自定义返回对象和局部连接，固定运行门面基线。
+- `configuration.py`：案例只保留局部 STEP_PARAMETERS，通用转换委托 contrib/application/aero_cfd/configuration。
+历史说明（已被公共 pipeline/config 与 inputs 约定取代）：`task-entry.json`：按需声明 inspect/evaluate/export 操作以及显式旧配置加载适配；平台不比较脚本目录指纹来判断可用性。历史 profile 文件只保留来源与旧验收说明。
+- `tests/fixtures/public_api_baseline/` 与 `test_public_api_stability.py`：冻结用户源码和真实安装测试；基线不可随内部改动重算摘要。
+
+## 项目共享数据切片
+
+历史说明（已被公共 pipeline/config 与 inputs 约定取代）：aero_cfd/task-entry.json 与字段/采样扩展入口声明共享物理输出及阶段输入；五案例共享名称由用户明确填写，独立脚本不受托管路径影响。五例 trainprep.py 已与通用模板同一条 `trainprep.preparation` 链对齐；历史 physical 包装仅作已核验摘要迁移来源。
+
+长期说明见对应包 PRD；当前证据见 `.context/mvp/task-shared-datasets-acceptance.md`。
+
+平台配置交接补齐：`examples/aero_cfd/*/rawprep.py` 五例与主模板一样优先透传 formats，避免平台双格式选择仅输出 PT；不改冻结脚本。验收见 `mvp/platform-configuration-acceptance.md`。
+
+## GenCP 可复制模板
+
+`recipes/gencp/` 含 README/config/configuration/rawprep/trainprep/train/single/infer/post/pipeline；Python 显示独立场和条件连接。`examples/gencp/` 为六组配置与 source-config；`examples/recipe_extensions/gencp/` 的 custom/extension 展示条件替换和固定速度模长保存/读回，retrain 展示单独重训流体、保留其他场权重并重新生成。长期说明 [GenCP PRD](../../docs/PRD/recipes/gencp/PRD.md)，真实范围 [验收记录](../mvp/gencp-acceptance.md)。
+
+## SafeDiffCon
+
+- `recipes/safediffcon/{pipeline.py,config.yaml}`：Task自动发现并执行同一研究正文，不恢复task-entry或专用执行器；公共inputs声明分片/权重/固定结果/求解资源。`tests/integration/test_safediffcon_{task,conventions}.py`覆盖阶段门禁、资源捕获及迁移。
+
+- `recipes/safediffcon/{configuration,rawprep,trainprep,train,posttrain,infer,post,pipeline}.py`：显式六阶段研究流程，posttrain正文显示两轮；README导航至模块PRD。
+- `examples/safediffcon/{burgers,tokamak}/`：各含configuration、pipeline及六阶段Python正文、README和config/quick.yaml；可在仓库外独立编辑执行或创建Task。quick保留原科学默认值，耗时须由原累计账本监督。
+- `examples/recipe_extensions/safediffcon/variants.py`：小模型、严格安全引导、带单位/有效性的安全余量；仓库外复制实跑。
+- `docs/PRD/recipes/safediffcon/PRD.md`：使用与扩展约定。
+- `recipes/safediffcon/README.md`：继续预训练的总更新语义、阶段限时与最终评价预留；后训练采用完整轮次交接。
+
+GenCP 当前只验收直接脚本运行；Task 入口补验缺少声明，尚不能提交训练/推理/post，见 [补验记录](../mvp/gencp-acceptance.md)。
+
+## WDNO 可复制研究入口
+
+- [现有集成补全方案](../../.cursor/plans/wdno-reproduction-and-agent-composition.plan.md)：基础迁移与公共Task适配已完成；本轮补分阶段实跑和独立Agent使用，论文完整复现仍待数据/协议及资源闭合。现有接口示例、后续职责和验收映射以新方案为准，不沿用早期未实现描述。
+
+- `recipes/wdno/`：configuration、rawprep、trainprep、train、infer、post、pipeline及config.yaml；步骤由Python决定。
+- `examples/wdno/burgers_base/`：原dim128/groups1基础配置；与模板同一完整脚本集合。
+- `examples/recipe_extensions/wdno/variants.py`：网络层级、损失替换与带单位/轴的能量输出；无需框架登记。
+- `examples/recipe_extensions/wdno/{config.yaml,pipeline.py,audit.py}`：完整变体参数、显式五阶段及预测后能量读回；覆盖到完整WDNO模板副本使用，扩展目录自身不是完整模板。
+- `tests/integration/test_wdno_extensions.py`：完整配置及新增结果消费，拒绝缺字段/错误形状/非有限值/错误能量；真实复制与Task运行由test_wdno_task.py圈定。
+- `docs/PRD/recipes/wdno/PRD.md`：长期使用边界；各README为复制/配置/恢复/扩展入口。
+- 验收 `test_wdno_recipe.py`：实际wheel、仓库外完整流程、续训、独立post与三个组件替换。
+
+WDNO当前直接/Task使用同一pipeline.py，配置采用inputs.<stage>和data_root，不新增task-entry.json；configuration.py提供显式旧配置转换。阶段通过TrainingRun发布目录、资产和指标；相关功能见WDNO PRD，真实双入口测试test_wdno_task.py，历史隔离安装保持。
+
+## 公共配置迁移
+
+当前官方模板共用 `inputs.<stage>.<name>`、`run_root`、`data_root`；Python决定阶段顺序，普通pipeline由直接入口和Task共用。取消task-entry，保留各领域与案例的实际步骤差异。`examples/recipe_extensions/gencp`消费固定准备/权重，在公开输出目录保存条件变体与单场替换结果。源码及安装验收见 `../mvp/recipe-task-conventions-acceptance.md`。
+
+公共路径续接：外流 configuration 的 application_parameters 是纯配置入口，阶段正文显式传入 session 分配输出。field_mapping/sampling 扩展采用同一连接；原数值夹具通过显式准备阶段及固定旧预测入口测试，固定公开基线不改。相关用例及当前限制见 Recipe/Task 专项验收。
+
+## WDNO最新公共约定补验（2026-09-17）
+
+WDNO protocol-update补验：recipe、burgers_base example、extension分别复制与运行；README分别解释正常增加步数、中断恢复、复制品显式绑定和旧指标保护范围。test_wdno_documents实际执行文档配置例子。 当前结果以 `.context/mvp/wdno-acceptance.md` 为准。
+
+## 研究变体任务入口
+
+[研究导航](../tasks/research.md) 按任务链接当前模板、示例和测试。`examples/recipe_extensions/wdno/variant_training.py` 是局部训练函数覆盖文件；先复制完整recipes/wdno。`examples/recipe_extensions/model_block/variants.py` 是AB-UPT内部激活变体，README给出复制和components.model选择。普通原模板不因共享执行重构批量修改。

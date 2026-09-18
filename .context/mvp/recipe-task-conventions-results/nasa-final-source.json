@@ -1,0 +1,77 @@
+{
+  "case": "nasa_crm_abupt",
+  "samples": {
+    "train": [
+      "Sample002",
+      "Sample004"
+    ],
+    "test": [
+      "Sample001",
+      "Sample002"
+    ]
+  },
+  "runs": [
+    {
+      "mode": "direct",
+      "stage": "rawprep",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-final-source/runs/2026-09-17T15-00-56_8daa3a"
+    },
+    {
+      "mode": "task",
+      "stage": "rawprep",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-final-source/project/tasks/cc217f05cafd44e2b3ee9c44983d2dd9/runs/aec6700bf5b24ce68c5924fe9b8e95d2"
+    },
+    {
+      "mode": "direct",
+      "stage": "trainprep",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-final-source/runs/2026-09-17T15-01-26_005086"
+    },
+    {
+      "mode": "task",
+      "stage": "trainprep",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-final-source/project/tasks/cc217f05cafd44e2b3ee9c44983d2dd9/runs/d7f26e9bfb8b4932ba4b36a819aa3596"
+    },
+    {
+      "mode": "direct",
+      "stage": "train",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-final-source/runs/2026-09-17T15-01-36_4fca85"
+    },
+    {
+      "mode": "task",
+      "stage": "train",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-final-source/project/tasks/cc217f05cafd44e2b3ee9c44983d2dd9/runs/f5b358ca88b94a4695ee7851963a5d2f"
+    },
+    {
+      "mode": "direct",
+      "stage": "train",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-final-source/runs/2026-09-17T15-01-49_098bb4"
+    },
+    {
+      "mode": "task",
+      "stage": "train",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-final-source/project/tasks/cc217f05cafd44e2b3ee9c44983d2dd9/runs/91c6b5e3eedb4c4c9e63058985d182c3"
+    },
+    {
+      "mode": "direct",
+      "stage": "infer",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-final-source/runs/2026-09-17T15-02-03_150065"
+    },
+    {
+      "mode": "task",
+      "stage": "infer",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-final-source/project/tasks/cc217f05cafd44e2b3ee9c44983d2dd9/runs/db190882e6854c5899b9c1a915711aef"
+    },
+    {
+      "mode": "direct",
+      "stage": "post",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-final-source/runs/2026-09-17T15-02-21_bfe782"
+    },
+    {
+      "mode": "task",
+      "stage": "post",
+      "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/nasa-final-source/project/tasks/cc217f05cafd44e2b3ee9c44983d2dd9/runs/110030ea3ceb421780b2ccd962eca79c"
+    }
+  ],
+  "status": "passed",
+  "seconds": 117.48400366702117
+}

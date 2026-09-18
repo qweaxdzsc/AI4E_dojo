@@ -62,7 +62,7 @@ export function StageFiles({
     stageFiles(project, task, role, run, asset, "", query)
       .then((value) => {
         if (!live) return;
-        const files = value.map(toFile);
+        const files: ArtifactTreeFile[] = value.map(toFile);
         if (query) setSearchRows(files);
         else {
           setRows(files);

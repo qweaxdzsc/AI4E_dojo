@@ -1,0 +1,16 @@
+version: 1
+axes: [sample, physical_time, height, width, component]
+fsi:
+  splits: {train: 9, val: 1}
+  frames: {length: 999, history: 3, prediction: 12, stride: 1}
+  fields: {fluid: [u, v, p], structure: [sdf]}
+  double_cylinder: {crop: [1, 129, 1, 129], dt: 10}
+  turek_hron: {crop: [26, 134, 66, 154], dt: 5}
+ntcouple:
+  splits: [decouple_train, decouple_val, couple_train, couple_val]
+  frames: 16
+  height: 64
+  widths: {neutron: 20, solid: 8, fluid: 12}
+  fields: {neutron: [neutron], solid: [temperature], fluid: [temperature, u, v, p]}
+  pairing: published_array_row_and_physical_frame
+  independent_physical_ids: unavailable

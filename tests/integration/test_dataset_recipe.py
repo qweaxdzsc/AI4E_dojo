@@ -24,7 +24,9 @@ RECIPE = Path(__file__).resolve().parents[2] / "recipes/aero_cfd"
 
 # 普通模板并非安装包；测试按其实际目录加载配置模块。
 sys.path.insert(0, str(RECIPE))
-from configuration import _public, application_parameters, load_configuration
+from configuration import application_parameters, load_configuration
+
+from ai4e_contrib.application.aero_cfd.configuration import _public
 
 
 def public_config(cfg):
@@ -33,7 +35,11 @@ def public_config(cfg):
     data["pipeline"]["stages"] = [
         "rawprep" if x == "datapre" else x for x in data["pipeline"]["stages"]
     ]
-    return OmegaConf.create(_public(data))
+    checkpoint = data.get("post", {}).get("checkpoint")
+    result = _public(data)
+    if checkpoint not in (None, "", "last", "best", "latest"):
+        result.setdefault("inputs", {}).setdefault("infer", {})["checkpoint"] = checkpoint
+    return OmegaConf.create(result)
 
 
 def load_internal(path, overrides=None):
@@ -55,9 +61,8 @@ def setup_case(tmp_path):
     manifest_path = tmp_path / "source-manifest.yaml"
     manifest_path.write_text(yaml.safe_dump(manifest))
     cfg = yaml.safe_load((folder / "config.yaml").read_text())
-    cfg["dataset"].update(
-        root=str(raw), manifest=str(manifest_path), partition={"train": ["a"], "test": ["b"]}
-    )
+    cfg["inputs"]["rawprep"].update(source=str(raw), manifest=str(manifest_path))
+    cfg["dataset"]["partitions"] = {"train": ["a"], "test": ["b"]}
     cfg["pipeline"]["stages"] = ["rawprep"]
     cfg["data_root"] = "../data"
     cfg["run_root"] = "../records"
@@ -74,12 +79,22 @@ def load_datapre(folder):
 
 
 def execute_case(folder, cfg, **flags):
-    return run.run_recipe(
+    before = set(Path(cfg.run_root).glob("*/summary.json"))
+    status = run.run_recipe(
         public_config(cfg),
         stages={"rawprep": load_datapre(folder)},
         script=folder / "rawprep.py",
         flags={"dry_run": False, "overwrite": False, "continue_on_error": False, **flags},
     )
+    summaries = set(Path(cfg.run_root).glob("*/summary.json")) - before
+    if status == 0 and not flags.get("dry_run"):
+        summary = json.loads(summaries.pop().read_text())
+        physical = Path(summary["data_dir"]) / "rawprep"
+        cfg.train.manifest = str(physical / "manifest.json")
+        cfg.paths.datasets.root = str(physical)
+        for split in ("train", "test", "eval"):
+            cfg.paths.datasets[split] = str(physical / split)
+    return status
 
 
 def test_copy_pipeline_and_datapre_are_equivalent(tmp_path):
@@ -108,14 +123,20 @@ def test_copy_pipeline_and_datapre_are_equivalent(tmp_path):
         assert effective["pipeline"]["stages"] == ["rawprep"]
         log = (record / "logs/run.log").read_text()
         for phrase in (
-            "[rawprep/字段提取/开始]",
-            "[rawprep/字段提取/结束]",
+            "[rawprep/阶段/开始]",
             "[rawprep/批量前处理/进度]",
             "[rawprep/统计/开始]",
             "[rawprep/数据清单/结束]",
         ):
             assert phrase in log
-        assert "[rawprep/阶段/开始]" in log
+        for phrase in (
+            "[rawprep/字段提取/开始]",
+            "[rawprep/张量读取/",
+            "[rawprep/张量提交/",
+            "[rawprep/样本读取/",
+            "[rawprep/样本提交/开始]",
+        ):
+            assert phrase not in log
         assert "[rawprep/datapre/" not in log
         assert "展开配置=" not in log
         assert "'results':" not in log

@@ -1,0 +1,2744 @@
+{
+  "date": "2026-09-15",
+  "repository": "/Users/zonghui/work/new_code_project/AI4E_Dojo",
+  "document_count": 40,
+  "unit": "按用户功能合并拆分的盘点项，不是逐句需求原子，也不是完成率分母",
+  "counts": {
+    "已实现": 91,
+    "部分实现": 3,
+    "未开放·PRD已说明": 4,
+    "已实现·范围有限": 10,
+    "未实现": 4
+  },
+  "rows": [
+    {
+      "id": "F001",
+      "scope": "Dojo 平台",
+      "title": "项目创建、编辑、搜索、归档与恢复",
+      "state": "done",
+      "status": "已实现",
+      "actual": "首页项目卡与项目 API、task 项目存储相连，支持进入项目及任务工作台。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/projects/api.ts",
+          "label": "packages/ai4e-web/src/modules/projects/api.ts",
+          "sha256": "53f3128ca3c2383f3ae5ad6798cf2bcd2f9df03e856b989ba7be1f6b0b113942"
+        },
+        {
+          "path": "packages/ai4e-task/projects/project.py",
+          "label": "packages/ai4e-task/projects/project.py",
+          "sha256": "b5ca708e86ea4254a8168d43865e6adbd98e42ec1b61091963893db70ed6ce47"
+        }
+      ]
+    },
+    {
+      "id": "F002",
+      "scope": "Dojo 平台",
+      "title": "任务创建、编辑、派生与案例选择",
+      "state": "done",
+      "status": "已实现",
+      "actual": "当前目录按两个模型、两个数据集和五个起步案例明确登记；创建任务后进入工作台。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/tasks/TaskManagement.tsx",
+          "label": "packages/ai4e-web/src/modules/tasks/TaskManagement.tsx",
+          "sha256": "2f2e1d31b9cadcd9608fb7a788c452dda17e19b1ca53e2c5ff083b9366533ba3"
+        },
+        {
+          "path": "packages/ai4e-server/modules/capabilities/model_cases.py",
+          "label": "packages/ai4e-server/modules/capabilities/model_cases.py",
+          "sha256": "621e23ec0e36c9b2c14123ab0845433f57a2e2604f755e396adaa3373936ca9a"
+        }
+      ]
+    },
+    {
+      "id": "F003",
+      "scope": "Dojo 平台",
+      "title": "版本树与阶段参数详情",
+      "state": "done",
+      "status": "已实现",
+      "actual": "从真实父版本构树，提供节点选择、缩放、阶段详情与派生入口。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/lineage/LineageView.tsx",
+          "label": "packages/ai4e-web/src/modules/lineage/LineageView.tsx",
+          "sha256": "27ed8f30508ea7d45cbe5c4cea6b394ccbd10e3487f3ef3ee04137a04fd711cf"
+        },
+        {
+          "path": "packages/ai4e-task/versions/details.py",
+          "label": "packages/ai4e-task/versions/details.py",
+          "sha256": "06a7efa9df5f9b92de41d4c8ba922511947484c39b3829f84cca24e26f42842d"
+        }
+      ]
+    },
+    {
+      "id": "F004",
+      "scope": "Dojo 平台",
+      "title": "配置、运行指标比较及保存重开",
+      "state": "done",
+      "status": "已实现",
+      "actual": "版本创建记录、工作目录、固定运行三个模式已有比较与持久保存操作。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/comparisons/ComparisonView.tsx",
+          "label": "packages/ai4e-web/src/modules/comparisons/ComparisonView.tsx",
+          "sha256": "71996116e224c5b4fad3cd09f88d2b9d096be66595c53854a617e369bd925616"
+        },
+        {
+          "path": "packages/ai4e-task/versions/compare.py",
+          "label": "packages/ai4e-task/versions/compare.py",
+          "sha256": "5a60eb2ff9c2c7a220ef10bd0f8e27d283d093558dda386fedc96c9b3c152156"
+        }
+      ]
+    },
+    {
+      "id": "F005",
+      "scope": "Dojo 平台",
+      "title": "版本比较的趋势视图",
+      "state": "partial",
+      "status": "部分实现",
+      "actual": "有“趋势”页签，但数值分支仅返回对象 A/B 的文字；没有趋势图或多版本序列。PRD 未细化趋势图形规格，因此可确认的是“趋势表达未完整实现”，不能据此追加自动跨分支连线需求。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/comparisons/ComparisonView.tsx",
+          "label": "packages/ai4e-web/src/modules/comparisons/ComparisonView.tsx",
+          "sha256": "71996116e224c5b4fad3cd09f88d2b9d096be66595c53854a617e369bd925616"
+        }
+      ]
+    },
+    {
+      "id": "F006",
+      "scope": "Dojo 平台",
+      "title": "固定运行的三维比较",
+      "state": "done",
+      "status": "已实现",
+      "actual": "已保存的运行比较可进入 DifferencePanel，再复用三维工作区展示与计算差值。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/comparisons/DifferencePanel.tsx",
+          "label": "packages/ai4e-web/src/modules/comparisons/DifferencePanel.tsx",
+          "sha256": "318fce0a1261e0fa3aeceead14aa674fdea02e6ffd5ca4182064d54f8da3f344"
+        },
+        {
+          "path": "packages/ai4e-web/src/modules/comparisons/ComparisonView.tsx",
+          "label": "packages/ai4e-web/src/modules/comparisons/ComparisonView.tsx",
+          "sha256": "71996116e224c5b4fad3cd09f88d2b9d096be66595c53854a617e369bd925616"
+        }
+      ]
+    },
+    {
+      "id": "F007",
+      "scope": "Dojo 平台",
+      "title": "项目报告编写、生成与导出",
+      "state": "deferred",
+      "status": "未开放·PRD已说明",
+      "actual": "页面仅显示未开放说明及已有文字记录；Server 有文字保存 API，Vis 有独立报告工具，都不能算作此平台报告流程已开放。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/reports/ProjectReport.tsx",
+          "label": "packages/ai4e-web/src/modules/reports/ProjectReport.tsx",
+          "sha256": "abc255e24040c0ef6d5739523df0ba44517b9409f65da313a91be4ffa4ec6899"
+        },
+        {
+          "path": "packages/ai4e-server/modules/reports/api.py",
+          "label": "packages/ai4e-server/modules/reports/api.py",
+          "sha256": "46589aa18cd8037ea71be8dd426bf68867cb6bdbab65951be7cb615da86810a5"
+        }
+      ]
+    },
+    {
+      "id": "F008",
+      "scope": "Dojo 平台",
+      "title": "项目文件浏览、筛选、预览与下载",
+      "state": "done",
+      "status": "已实现",
+      "actual": "ProjectFiles、FileBrowser 和预览组件使用实际文件服务；目录张量可作为整体下载。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/files/ProjectFiles.tsx",
+          "label": "packages/ai4e-web/src/modules/files/ProjectFiles.tsx",
+          "sha256": "b690a0a2686deaddea0a384a551a3dd26efd0341c018c16ab9748d3de26344a0"
+        },
+        {
+          "path": "packages/ai4e-web/src/modules/previews/FilePreviewContent.tsx",
+          "label": "packages/ai4e-web/src/modules/previews/FilePreviewContent.tsx",
+          "sha256": "6ca1d3aaaefd15673f2afa3f32dd0c2612e0e30700841ed2f5d9733916c4a6f4"
+        }
+      ]
+    },
+    {
+      "id": "F009",
+      "scope": "Dojo 平台",
+      "title": "批量派生、排队与执行",
+      "state": "deferred",
+      "status": "未开放·PRD已说明",
+      "actual": "只有 BatchShell 的计划表外壳，尚无批量任务操作；推理检查点批次不等于这里的批量研究任务。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/app/pages/BatchShell.tsx",
+          "label": "packages/ai4e-web/src/app/pages/BatchShell.tsx",
+          "sha256": "da3a7fe9cc276313c03e7287b7a4d8c14306a085320d7a4961ff3f7a72631cde"
+        }
+      ]
+    },
+    {
+      "id": "F010",
+      "scope": "Dojo 平台",
+      "title": "九步工作台与阶段状态",
+      "state": "done",
+      "status": "已实现",
+      "actual": "工作台按阶段路由到已有业务模块，状态读取任务阶段摘要。数据采样与报告保留未开放页。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/app/pages/TaskWorkbenchPage.tsx",
+          "label": "packages/ai4e-web/src/app/pages/TaskWorkbenchPage.tsx",
+          "sha256": "9a0b1f0345554f3c1b912caf139f1aaf69d773a87d01fde0c1135bb4632ba12b"
+        },
+        {
+          "path": "packages/ai4e-task/tasks/query.py",
+          "label": "packages/ai4e-task/tasks/query.py",
+          "sha256": "a0760237b8fce20229057d8132b3afd01a54eaeed8130b20dc56dc0095c38307"
+        }
+      ]
+    },
+    {
+      "id": "F011",
+      "scope": "Dojo 平台",
+      "title": "CAE 数据采样",
+      "state": "deferred",
+      "status": "未开放·PRD已说明",
+      "actual": "没有 CAE 采样执行入口；AB-UPT 的点/锚点/查询采样属于模型输入准备，不能替代此功能。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/app/pages/TaskWorkbenchPage.tsx",
+          "label": "packages/ai4e-web/src/app/pages/TaskWorkbenchPage.tsx",
+          "sha256": "9a0b1f0345554f3c1b912caf139f1aaf69d773a87d01fde0c1135bb4632ba12b"
+        }
+      ]
+    },
+    {
+      "id": "F012",
+      "scope": "Dojo 平台",
+      "title": "原始数据集绑定与样本选择",
+      "state": "limited",
+      "status": "已实现·范围有限",
+      "actual": "支持本机 ShapeNet-Car、NASA CRM 副本及对应模型案例的绑定、文件浏览、全部或指定样本执行；生成式 PDE 不在平台目录内。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/rawprep/DatasetBindingPanel.tsx",
+          "label": "packages/ai4e-web/src/modules/rawprep/DatasetBindingPanel.tsx",
+          "sha256": "936089e7d12cc5f5d025569aad6d37850f401b125e80a80d9e6e4e6527ad86ac"
+        },
+        {
+          "path": "packages/ai4e-web/src/modules/rawprep/RawprepWorkbench.tsx",
+          "label": "packages/ai4e-web/src/modules/rawprep/RawprepWorkbench.tsx",
+          "sha256": "cb90adb04bda9a0eb9c19ae2de55bf7613b5935ecce66e5b032e1018930aab07"
+        }
+      ]
+    },
+    {
+      "id": "F013",
+      "scope": "Dojo 平台",
+      "title": "字段提取、几何派生与输出格式",
+      "state": "done",
+      "status": "已实现",
+      "actual": "有字段增删改、几何能力选择、PT/Zarr 多选与 ShapeNet 可选 VTKHDF，配置交给 rawprep 执行。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/rawprep/FieldExtractionEditor.tsx",
+          "label": "packages/ai4e-web/src/modules/rawprep/FieldExtractionEditor.tsx",
+          "sha256": "d9ba068590bccb7da38aa35b73f574272be9c114f96ee3e9fdf62425592a2e85"
+        },
+        {
+          "path": "packages/ai4e-core/applications/aero_cfd/rawprep/descriptor.py",
+          "label": "packages/ai4e-core/applications/aero_cfd/rawprep/descriptor.py",
+          "sha256": "c0511d9fe0895909be1c0c4c000a163ef07c7b5c067bccccf3fd9c5c762a208e"
+        }
+      ]
+    },
+    {
+      "id": "F014",
+      "scope": "Dojo 平台",
+      "title": "原始处理执行、并行与平台数据集登记",
+      "state": "done",
+      "status": "已实现",
+      "actual": "设置名称和 workers 后提交任务；样本执行器支持线程并行，成功正式运行发布工作区数据集登记，供其他项目选用。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/run/dataset.py",
+          "label": "packages/ai4e-core/run/dataset.py",
+          "sha256": "54dc4e56cb1e1e9115bc9ec6d978a10895aa389577fcc28698a83b2a44401e22"
+        },
+        {
+          "path": "packages/ai4e-task/storage/processed_datasets.py",
+          "label": "packages/ai4e-task/storage/processed_datasets.py",
+          "sha256": "38fb39b3bd5e24d16cd34a599bcefe6d8f4e588c7f77ff240c8c5dc0f1842866"
+        }
+      ]
+    },
+    {
+      "id": "F015",
+      "scope": "Dojo 平台",
+      "title": "数据准备：字段映射、归一化与物化",
+      "state": "done",
+      "status": "已实现",
+      "actual": "模型角色与物理字段匹配，支持恒等、标准化、Min-Max、统一空间以及归一化副本。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/trainprep/PreparationPanel.tsx",
+          "label": "packages/ai4e-web/src/modules/trainprep/PreparationPanel.tsx",
+          "sha256": "3db8ff41c33cc1647cb316dbe0f5519930cb43fe1f56cf972c7945f3b51e3555"
+        },
+        {
+          "path": "packages/ai4e-core/applications/aero_cfd/trainprep/preparation.py",
+          "label": "packages/ai4e-core/applications/aero_cfd/trainprep/preparation.py",
+          "sha256": "e0cb39055a27132286e468f7633dc5266769dc75471cf08e84572d1e2dc37bdf"
+        }
+      ]
+    },
+    {
+      "id": "F016",
+      "scope": "Dojo 平台",
+      "title": "数据准备：重划 train/test/eval",
+      "state": "done",
+      "status": "已实现",
+      "actual": "界面填写数量、随机/保持方法与种子；准备链按选定样本池产生本次分片记录。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/trainprep/PreparationPanel.tsx",
+          "label": "packages/ai4e-web/src/modules/trainprep/PreparationPanel.tsx",
+          "sha256": "3db8ff41c33cc1647cb316dbe0f5519930cb43fe1f56cf972c7945f3b51e3555"
+        },
+        {
+          "path": "packages/ai4e-core/abilities/data/source/split.py",
+          "label": "packages/ai4e-core/abilities/data/source/split.py",
+          "sha256": "efc0292dede5db5c470b2dfe9e3380e657cf89f08171d4531e573cea702a3ae2"
+        }
+      ]
+    },
+    {
+      "id": "F017",
+      "scope": "Dojo 平台",
+      "title": "平台数据集下拉与产物树",
+      "state": "done",
+      "status": "已实现",
+      "actual": "平台名优先、同清单去重、按登记时间排序；输入与处理结果通过共用树浏览。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/stages/StageWorkbench.tsx",
+          "label": "packages/ai4e-web/src/modules/stages/StageWorkbench.tsx",
+          "sha256": "baccb9c8a7bfb3c267732d06ff9cd8933868d352b766d4f99423e78758f7472e"
+        },
+        {
+          "path": "packages/ai4e-web/src/modules/files/ArtifactFileTree.tsx",
+          "label": "packages/ai4e-web/src/modules/files/ArtifactFileTree.tsx",
+          "sha256": "6a8989b71d857f80597a85c422a028b0c1c43d79458f3bc0401f89527ba67f63"
+        }
+      ]
+    },
+    {
+      "id": "F018",
+      "scope": "Dojo 平台",
+      "title": "切换模型、应用变体与配置预设",
+      "state": "limited",
+      "status": "已实现·范围有限",
+      "actual": "支持 AB-UPT、Transolver-3 以及 ShapeNet 表面/体场变体；可导出同项目同数据集配置预设。这里的导出不包含权重或部署模型包。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/models/ModelPanel.tsx",
+          "label": "packages/ai4e-web/src/modules/models/ModelPanel.tsx",
+          "sha256": "0a9f4f624f9a3468b749cc4e8e039be71a670f1fb12b748fa32ea62689ddb996"
+        },
+        {
+          "path": "packages/ai4e-server/modules/capabilities/model_cases.py",
+          "label": "packages/ai4e-server/modules/capabilities/model_cases.py",
+          "sha256": "621e23ec0e36c9b2c14123ab0845433f57a2e2604f755e396adaa3373936ca9a"
+        }
+      ]
+    },
+    {
+      "id": "F019",
+      "scope": "Dojo 平台",
+      "title": "模型采样、损失设置与结构图",
+      "state": "done",
+      "status": "已实现",
+      "actual": "采样/损失控件读取模型能力，结构图调用后台真实模型跟踪，图像显示与参数编辑分开。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/models/ModelPanel.tsx",
+          "label": "packages/ai4e-web/src/modules/models/ModelPanel.tsx",
+          "sha256": "0a9f4f624f9a3468b749cc4e8e039be71a670f1fb12b748fa32ea62689ddb996"
+        },
+        {
+          "path": "packages/ai4e-core/abilities/modeling/inspection.py",
+          "label": "packages/ai4e-core/abilities/modeling/inspection.py",
+          "sha256": "796213aa69599510f540a5b879882c06359d2d1b48a0020fbb4017a503fb1d22"
+        }
+      ]
+    },
+    {
+      "id": "F020",
+      "scope": "Dojo 平台",
+      "title": "训练参数设置",
+      "state": "limited",
+      "status": "已实现·范围有限",
+      "actual": "配置项可保存，受案例能力限制。五个共享物理案例固定 batch_size=1、num_workers=0、fp32、关闭训练期评价；通用训练库的其他能力不能据此算作这些案例可配。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/training/TrainingPanel.tsx",
+          "label": "packages/ai4e-web/src/modules/training/TrainingPanel.tsx",
+          "sha256": "ded6a8a8d787dec2e76c3359fce2e3a79b72c99def16700365d2078de9cd1e15"
+        },
+        {
+          "path": "packages/ai4e-core/applications/aero_cfd/train/physical.py",
+          "label": "packages/ai4e-core/applications/aero_cfd/train/physical.py",
+          "sha256": "7737a2bde173ecc77542112dbe474da440dc37af9ce5372037696de76d3b18a0"
+        }
+      ]
+    },
+    {
+      "id": "F021",
+      "scope": "Dojo 平台",
+      "title": "训练启动、停止、损失与资源监控",
+      "state": "done",
+      "status": "已实现",
+      "actual": "已选准备交给训练入口；运行页轮询实际历史、展示 Loss、CPU/内存，并复用日志停止操作。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/executions/TrainingMonitor.tsx",
+          "label": "packages/ai4e-web/src/modules/executions/TrainingMonitor.tsx",
+          "sha256": "e747987d803c46412ad847c321ae0d005f731e997f94c1430801350d73e4c6b7"
+        },
+        {
+          "path": "packages/ai4e-task/tasks/execution.py",
+          "label": "packages/ai4e-task/tasks/execution.py",
+          "sha256": "74429fd05db20001cce66b316300e5a4a02c1be7d4a97859c466d61609f6e3d4"
+        }
+      ]
+    },
+    {
+      "id": "F022",
+      "scope": "Dojo 平台",
+      "title": "从检查点继续训练",
+      "state": "limited",
+      "status": "已实现·范围有限",
+      "actual": "恢复链已实现，但 Web 只提交运行 ID，Server 使用 task 默认 latest.pt。不能在此页选 best/周期权重；task Python API 支持 checkpoint 参数。PRD 未明确要求任意权重选择器，按现有入口范围列明，不定为完全缺失。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/executions/TrainingMonitor.tsx",
+          "label": "packages/ai4e-web/src/modules/executions/TrainingMonitor.tsx",
+          "sha256": "e747987d803c46412ad847c321ae0d005f731e997f94c1430801350d73e4c6b7"
+        },
+        {
+          "path": "packages/ai4e-task/tasks/execution.py",
+          "label": "packages/ai4e-task/tasks/execution.py",
+          "sha256": "74429fd05db20001cce66b316300e5a4a02c1be7d4a97859c466d61609f6e3d4"
+        }
+      ]
+    },
+    {
+      "id": "F023",
+      "scope": "Dojo 平台",
+      "title": "执行日志搜索、分级、跟随及下载",
+      "state": "done",
+      "status": "已实现",
+      "actual": "统一日志组件支持最近行窗口、向上扩展、自动滚动控制及原日志下载。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/executions/ExecutionLog.tsx",
+          "label": "packages/ai4e-web/src/modules/executions/ExecutionLog.tsx",
+          "sha256": "fedd82b15a30d6874f1faebe743454f5ebf8fbfb35646e878b2858e6a9cbba39"
+        },
+        {
+          "path": "packages/ai4e-web/src/modules/executions/logWindow.ts",
+          "label": "packages/ai4e-web/src/modules/executions/logWindow.ts",
+          "sha256": "83304aabeb16ed1fd4bc039d270494315f22d1751f5a2515a379e68fc2545328"
+        }
+      ]
+    },
+    {
+      "id": "F024",
+      "scope": "Dojo 平台",
+      "title": "推理检查点与跨分片样本选择",
+      "state": "done",
+      "status": "已实现",
+      "actual": "具备搜索/排序、Best/Latest/Top N、跨分片分页样本选择；检查点选择器属于推理页，不是训练恢复页。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/inference/CheckpointPicker.tsx",
+          "label": "packages/ai4e-web/src/modules/inference/CheckpointPicker.tsx",
+          "sha256": "d90ef4db8c82f333b282c8d26357108439332c8b469b601d2c4974d1b45d8126"
+        },
+        {
+          "path": "packages/ai4e-web/src/modules/inference/SamplePicker.tsx",
+          "label": "packages/ai4e-web/src/modules/inference/SamplePicker.tsx",
+          "sha256": "479fac8d582c0312b0966a75dcfad003090fe2b30815e85908c1601f27142675"
+        }
+      ]
+    },
+    {
+      "id": "F025",
+      "scope": "Dojo 平台",
+      "title": "独立推理、取消、中断恢复与失败重试",
+      "state": "done",
+      "status": "已实现",
+      "actual": "检查点×分片串行子运行，由 task 协调；有后台批次历史、取消、recover/retry 和结果交接。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-task/tasks/inference.py",
+          "label": "packages/ai4e-task/tasks/inference.py",
+          "sha256": "9084de352977d07a9fd2a4842fdb5600eda72cf1bfb025e9df08af0ebdf508de"
+        },
+        {
+          "path": "packages/ai4e-task/tasks/inference_worker.py",
+          "label": "packages/ai4e-task/tasks/inference_worker.py",
+          "sha256": "a0ebc34507b38836e800ed7d384c55ca3589f40c93aa8cc747dbba7c86055a6f"
+        }
+      ]
+    },
+    {
+      "id": "F026",
+      "scope": "Dojo 平台",
+      "title": "推理物理量、分量和九项指标",
+      "state": "done",
+      "status": "已实现",
+      "actual": "按模型字段选择物理量与分量，调用统一指标目录；显示样本聚合统计与结果图表。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/inference/FieldPicker.tsx",
+          "label": "packages/ai4e-web/src/modules/inference/FieldPicker.tsx",
+          "sha256": "322586ab0830375070c9b8fcdb054eb307a482954b5fa20b0affcce933d73e52"
+        },
+        {
+          "path": "packages/ai4e-core/abilities/eval/catalog.py",
+          "label": "packages/ai4e-core/abilities/eval/catalog.py",
+          "sha256": "19ff44ac9694dc3fa31ea184f64a98ee9da9eb8194c52879bd6992d1175bc02d"
+        }
+      ]
+    },
+    {
+      "id": "F027",
+      "scope": "Dojo 平台",
+      "title": "推理只评价、结果下载及 CSV/XLSX",
+      "state": "done",
+      "status": "已实现",
+      "actual": "评价可不保存大数组而保留轻量结果；保存预测后可下载数组，表格导出消费已保存的指标记录。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-task/tasks/inference_exports.py",
+          "label": "packages/ai4e-task/tasks/inference_exports.py",
+          "sha256": "f0c70abe99d6d9944a2862045eb5725a5056eba5252236856527e8950e473d3e"
+        },
+        {
+          "path": "packages/ai4e-core/applications/aero_cfd/infer/exports.py",
+          "label": "packages/ai4e-core/applications/aero_cfd/infer/exports.py",
+          "sha256": "8e1e6dbff19d63edd0b9d6e2231ce687ccebed13f5efef59ce23103cc4ca4a1e"
+        }
+      ]
+    },
+    {
+      "id": "F028",
+      "scope": "Dojo 平台",
+      "title": "后处理：指标重算、结果文件和三维页签",
+      "state": "done",
+      "status": "已实现",
+      "actual": "PostResultsWorkspace 分三个页签；指标从固定结果读取，文件浏览及三维入口接入既有服务。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/post/PostResultsWorkspace.tsx",
+          "label": "packages/ai4e-web/src/modules/post/PostResultsWorkspace.tsx",
+          "sha256": "301acb1ac4106c0f74b40b69077c422c6b1c9e82f8141d5d87348359a885bfb3"
+        },
+        {
+          "path": "packages/ai4e-core/applications/aero_cfd/post/result_evaluation.py",
+          "label": "packages/ai4e-core/applications/aero_cfd/post/result_evaluation.py",
+          "sha256": "a1fa8eb4be6bdf104a1aecb968eb569ed5984e4069ed109a3592b1eb7f804fd5"
+        }
+      ]
+    },
+    {
+      "id": "F029",
+      "scope": "Dojo 平台",
+      "title": "后处理三维会话保留、追加及重开",
+      "state": "done",
+      "status": "已实现",
+      "actual": "Tab 切换保持嵌入文档；来源追加、显式保存配置、重开和离页关闭通过统一 Vis 会话操作。刷新后须用已保存配置恢复，不含自动保存草稿。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/post/PostWorkspace.tsx",
+          "label": "packages/ai4e-web/src/modules/post/PostWorkspace.tsx",
+          "sha256": "ade998dfc1da54347b7222766896036bb0cf70ab71e4f760150f975116d3d9a7"
+        },
+        {
+          "path": "packages/ai4e-web/src/modules/visualization/PhysFieldEmbed.tsx",
+          "label": "packages/ai4e-web/src/modules/visualization/PhysFieldEmbed.tsx",
+          "sha256": "8cb12d2e3811cf1061b9422ecf26b2b88084e0b8dc7d5bd30aba59345ef04de0"
+        }
+      ]
+    },
+    {
+      "id": "F030",
+      "scope": "Dojo 平台",
+      "title": "任务报告编辑、发布与导出",
+      "state": "deferred",
+      "status": "未开放·PRD已说明",
+      "actual": "工作台第九步为未开放页，训练监控里的生成报告按钮也禁用。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/app/pages/TaskWorkbenchPage.tsx",
+          "label": "packages/ai4e-web/src/app/pages/TaskWorkbenchPage.tsx",
+          "sha256": "9a0b1f0345554f3c1b912caf139f1aaf69d773a87d01fde0c1135bb4632ba12b"
+        },
+        {
+          "path": "packages/ai4e-web/src/modules/executions/TrainingMonitor.tsx",
+          "label": "packages/ai4e-web/src/modules/executions/TrainingMonitor.tsx",
+          "sha256": "e747987d803c46412ad847c321ae0d005f731e997f94c1430801350d73e4c6b7"
+        }
+      ]
+    },
+    {
+      "id": "F031",
+      "scope": "Dojo 平台",
+      "title": "文件、比较、后处理共用三维工作台",
+      "state": "done",
+      "status": "已实现",
+      "actual": "宿主传入任务保存上下文与来源，统一嵌入 Trame；保存配置与图片/视频导出分别操作。",
+      "prd": {
+        "path": "docs/PRD/ai4e-web/src/PRD.md",
+        "label": "docs/PRD/ai4e-web/src/PRD.md",
+        "sha256": "927ac117d9b4d69e715aaca7150b81a2aa43a66a8cb96cb3bfac644c58141c23"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-web/src/modules/visualization/VisualizationWorkspace.tsx",
+          "label": "packages/ai4e-web/src/modules/visualization/VisualizationWorkspace.tsx",
+          "sha256": "1c503d2601d1324fe814bc8e5683572a3aff3a4fdc26d373e367efe71b6b0573"
+        },
+        {
+          "path": "packages/ai4e-web/src/modules/visualization/PhysicalFilePreview.tsx",
+          "label": "packages/ai4e-web/src/modules/visualization/PhysicalFilePreview.tsx",
+          "sha256": "c48aa9e8508c24efe2f09d6353e6a00a98f6736ee3b85bcd0fc049802ef92aeb"
+        }
+      ]
+    },
+    {
+      "id": "F032",
+      "scope": "算法与研究脚本",
+      "title": "原始文件读取、目录读取和格式适配",
+      "state": "limited",
+      "status": "已实现·范围有限",
+      "actual": "公共读取支持 .vtk/.vtp/.vtu/.vtkhdf/.vtkh5/.npy；NPY 可保留为无网格容器。NASA HDF5 另走专用数据适配，不是任意 CAE 格式通用接入。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/data/source/read.py",
+          "label": "packages/ai4e-core/abilities/data/source/read.py",
+          "sha256": "c53da930469f0e5be651a0045201a272acc5f22a79734f324e5dab0a8eac0545"
+        },
+        {
+          "path": "packages/ai4e-contrib/application/datasets/nasa_crm/adapter.py",
+          "label": "packages/ai4e-contrib/application/datasets/nasa_crm/adapter.py",
+          "sha256": "0678f2dfe15faf793bc9948dff8f6424d07f88c4db93f2548ea06413fec6164e"
+        }
+      ]
+    },
+    {
+      "id": "F033",
+      "scope": "算法与研究脚本",
+      "title": "网络下载、HuggingFace 和压缩包解压",
+      "state": "done",
+      "status": "已实现",
+      "actual": "source 下载模块提供远端下载及解压操作；Web 当前绑定本机副本，没有把下载函数包装为平台下载页。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/data/source/download/__init__.py",
+          "label": "packages/ai4e-core/abilities/data/source/download/__init__.py",
+          "sha256": "f0c32b888c5598b2f1609ad35ce00d573884f30853a10811fac1180331ae52a4"
+        }
+      ]
+    },
+    {
+      "id": "F034",
+      "scope": "算法与研究脚本",
+      "title": "字段提取、有效点标记、重合点筛选",
+      "state": "done",
+      "status": "已实现",
+      "actual": "VTK 点/单元数组提取、有效点和精确重合标记、字段筛选都有数值实现；此项仅盘点处理功能。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/data/extract/vtk_fields.py",
+          "label": "packages/ai4e-core/abilities/data/extract/vtk_fields.py",
+          "sha256": "ebeaae0eb8ae55df44c24cbdac89949a81c87681cd12d254c2ee90cde27055e3"
+        },
+        {
+          "path": "packages/ai4e-core/abilities/data/filter/coincident.py",
+          "label": "packages/ai4e-core/abilities/data/filter/coincident.py",
+          "sha256": "99836ed41d95f3db9f6d01c60d43f14324da0e07e557cebbef60a3bd5e9c3ffc"
+        }
+      ]
+    },
+    {
+      "id": "F035",
+      "scope": "算法与研究脚本",
+      "title": "具名张量保存、读回和物理清单",
+      "state": "done",
+      "status": "已实现",
+      "actual": "张量字段与文件映射落盘、PT/Zarr 读写、物理清单读取均有公共入口。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/data/save/store.py",
+          "label": "packages/ai4e-core/abilities/data/save/store.py",
+          "sha256": "5c00c11febbdf1337c73561f41393af662c435939e4c5512efe528da04c6d56b"
+        },
+        {
+          "path": "packages/ai4e-core/abilities/data/source/manifest.py",
+          "label": "packages/ai4e-core/abilities/data/source/manifest.py",
+          "sha256": "2ea13a4cdb318c06b9cc0a46cd496b5340c538ccc96aa2cbb90b330675bccdb7"
+        }
+      ]
+    },
+    {
+      "id": "F036",
+      "scope": "算法与研究脚本",
+      "title": "训练统计量读取与重新计算",
+      "state": "done",
+      "status": "已实现",
+      "actual": "可读取已发布统计，也可按训练样本累计均值、方差、Min/Max；准备链消费冻结结果。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/data/stats/load.py",
+          "label": "packages/ai4e-core/abilities/data/stats/load.py",
+          "sha256": "602fa016598ca7a7842f52b38fc71997b136c575fbc44eb63d799769bec6e7c2"
+        },
+        {
+          "path": "packages/ai4e-core/abilities/data/stats/physical.py",
+          "label": "packages/ai4e-core/abilities/data/stats/physical.py",
+          "sha256": "30b593dc6c41f507b0b6ecf62d873385979f56e883872a08921f5a4939213e0f"
+        }
+      ]
+    },
+    {
+      "id": "F037",
+      "scope": "算法与研究脚本",
+      "title": "分片名单与样本选择",
+      "state": "done",
+      "status": "已实现",
+      "actual": "按声明打开分片，并支持准备时重划分；不需要重写已处理张量。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/data/source/split.py",
+          "label": "packages/ai4e-core/abilities/data/source/split.py",
+          "sha256": "efc0292dede5db5c470b2dfe9e3380e657cf89f08171d4531e573cea702a3ae2"
+        }
+      ]
+    },
+    {
+      "id": "F038",
+      "scope": "算法与研究脚本",
+      "title": "最近顶点距离与方向",
+      "state": "done",
+      "status": "已实现",
+      "actual": "原子函数返回最近点距离及方向；平台原始处理的最近顶点项只取距离，不能反推底层没有方向输出。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/geometry/nearest.py",
+          "label": "packages/ai4e-core/abilities/geometry/nearest.py",
+          "sha256": "bf57427d0bc4ceeaf03437b2d65d621927d6aee6b9e4eec68dd124cac96cedb9"
+        }
+      ]
+    },
+    {
+      "id": "F039",
+      "scope": "算法与研究脚本",
+      "title": "网格表面距离与表面法向",
+      "state": "done",
+      "status": "已实现",
+      "actual": "独立实现点到表面有符号距离和法向；rawprep 可按需组合。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/geometry/mesh_sdf.py",
+          "label": "packages/ai4e-core/abilities/geometry/mesh_sdf.py",
+          "sha256": "33b87b9a3c534efda19bc7459c949b767cb7567b4fdf3b83ad934f4b06cfc2ff"
+        },
+        {
+          "path": "packages/ai4e-core/abilities/geometry/surface_normals.py",
+          "label": "packages/ai4e-core/abilities/geometry/surface_normals.py",
+          "sha256": "142c4557f5a78e33c636a5cc3ba91ee576f69f93f8eb7417bf76fb14e3d70a51"
+        }
+      ]
+    },
+    {
+      "id": "F040",
+      "scope": "算法与研究脚本",
+      "title": "变换、反变换、坐标统一和采样",
+      "state": "done",
+      "status": "已实现",
+      "actual": "恒等、标准化、Min-Max、共享坐标变换与点/超节点/查询采样均有实现，由模型和准备声明选用。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/transform/normalization.py",
+          "label": "packages/ai4e-core/abilities/transform/normalization.py",
+          "sha256": "4d1a569b3b02492a45f6c81ffbd033293f97cf03c74114cc850c9be25d173dcb"
+        },
+        {
+          "path": "packages/ai4e-core/abilities/sampling/points.py",
+          "label": "packages/ai4e-core/abilities/sampling/points.py",
+          "sha256": "da324996ef7ebde6adbbef213b6dd11617bdd578717ec59125da8fc9874197ca"
+        }
+      ]
+    },
+    {
+      "id": "F041",
+      "scope": "算法与研究脚本",
+      "title": "优化器、调度、累积、EMA 与轮次恢复",
+      "state": "limited",
+      "status": "已实现·范围有限",
+      "actual": "通用循环含 Adam/AdamW/Lion、调度、裁剪、累积、EMA、checkpoint 和恢复；具体 recipe 不一定开放所有组合。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/training/loop.py",
+          "label": "packages/ai4e-core/abilities/training/loop.py",
+          "sha256": "dd315df8637f37e8e102b11b5250ec2c9bf766fc4af66e7ea830f4b107c05c7f"
+        },
+        {
+          "path": "packages/ai4e-core/abilities/training/optimization.py",
+          "label": "packages/ai4e-core/abilities/training/optimization.py",
+          "sha256": "7312fbfae34bf3c99d12b819693b6c9fad292e7bfb1b35fe43b99a79d0b1c67e"
+        }
+      ]
+    },
+    {
+      "id": "F042",
+      "scope": "算法与研究脚本",
+      "title": "监督损失和训练评价",
+      "state": "done",
+      "status": "已实现",
+      "actual": "MSE、MAE、Huber、相对 L2 有独立实现；训练评价按调用方提供的数据与预测函数运行。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/constraint/compare.py",
+          "label": "packages/ai4e-core/abilities/constraint/compare.py",
+          "sha256": "94a3a52356892e0545a49252f81ab1bf5c87596f88365cba104dd903ccf5f31a"
+        },
+        {
+          "path": "packages/ai4e-core/abilities/eval/evaluation.py",
+          "label": "packages/ai4e-core/abilities/eval/evaluation.py",
+          "sha256": "6947c45ab102a229571ecb85a2c167e00a378c7c6869ea27654826e03b2f1ae4"
+        }
+      ]
+    },
+    {
+      "id": "F043",
+      "scope": "算法与研究脚本",
+      "title": "归一化副本与 VTKHDF 输出",
+      "state": "done",
+      "status": "已实现",
+      "actual": "归一化资产可物化，VTKHDF 由保存能力交付；是否显示选项由数据集声明决定。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/data/save/normalization.py",
+          "label": "packages/ai4e-core/abilities/data/save/normalization.py",
+          "sha256": "6404472bc7aeaa844a5ca3a4673f51a81066041ce508eed74eb50303e7a2d091"
+        },
+        {
+          "path": "packages/ai4e-core/abilities/data/save/vtkhdf.py",
+          "label": "packages/ai4e-core/abilities/data/save/vtkhdf.py",
+          "sha256": "ff908efc193f76f935a1afd0d7e1cc0f4931c20ebb30a647a12f8f5de046e5d9"
+        }
+      ]
+    },
+    {
+      "id": "F044",
+      "scope": "算法与研究脚本",
+      "title": "权重重建、分块查询与可替换预测函数",
+      "state": "done",
+      "status": "已实现",
+      "actual": "推理公开入口支持只载入权重、查询分块、随机状态保护及普通 callable 预测。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/inference/rebuild.py",
+          "label": "packages/ai4e-core/abilities/inference/rebuild.py",
+          "sha256": "e4a4bc0e9f535880ff7577ef4fba6ad55695d3513f9c5a28b7010dc99b8cf28a"
+        },
+        {
+          "path": "packages/ai4e-core/abilities/inference/query.py",
+          "label": "packages/ai4e-core/abilities/inference/query.py",
+          "sha256": "f346ef854e68f68bae057341fe5af491c4091fa90991805def8e44aae7be538a"
+        }
+      ]
+    },
+    {
+      "id": "F045",
+      "scope": "算法与研究脚本",
+      "title": "点云与完整网格输出",
+      "state": "done",
+      "status": "已实现",
+      "actual": "可把预测写为点云和网格文件；外流业务串接保存与回贴。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/postproc/export/pointcloud.py",
+          "label": "packages/ai4e-core/abilities/postproc/export/pointcloud.py",
+          "sha256": "894ebcecf5f42b68fdba3409df7efd7e6b95d5052c79d25a029ae670ae2a960d"
+        },
+        {
+          "path": "packages/ai4e-core/abilities/postproc/export/mesh.py",
+          "label": "packages/ai4e-core/abilities/postproc/export/mesh.py",
+          "sha256": "bc975b279f35f3e89c4514b85e48af89a1e2d1152b247e0a78ec6863310efc41"
+        }
+      ]
+    },
+    {
+      "id": "F046",
+      "scope": "算法与研究脚本",
+      "title": "PDE 点集与初边界条件",
+      "state": "limited",
+      "status": "已实现·范围有限",
+      "actual": "有物理点集采样、周期点配对、初值/边界残差函数；PI-BSNet 只消费其明确支持的网格点和条件，不代表任意几何 PINN 工作流。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/sampling/physical.py",
+          "label": "packages/ai4e-core/abilities/sampling/physical.py",
+          "sha256": "f8002c42d48f48b3b10396a796e89787d2ff0e492dec1fb052017cde6aa5bc01"
+        },
+        {
+          "path": "packages/ai4e-core/abilities/constraint/physical.py",
+          "label": "packages/ai4e-core/abilities/constraint/physical.py",
+          "sha256": "180b91285deb3fb0812d7885986559f849b8ec628effd18ef033640a20fe2ee3"
+        }
+      ]
+    },
+    {
+      "id": "F047",
+      "scope": "算法与研究脚本",
+      "title": "固定结果物理指标与样本统计",
+      "state": "done",
+      "status": "已实现",
+      "actual": "数组评价、字段分量、样本统计及表格导出有独立实现，可供 infer/post 复用。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "label": "docs/PRD/ai4e-core/abilities/PRD.md",
+        "sha256": "4abf435f93a68a9ad57608dfc2de0640cc9260de863026ea717539de1f23b212"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/abilities/eval/result_metrics.py",
+          "label": "packages/ai4e-core/abilities/eval/result_metrics.py",
+          "sha256": "53da7ae80b3ee767301d899ca93acde8080827e4545a8c0ba88baf4568d7fcf5"
+        },
+        {
+          "path": "packages/ai4e-core/abilities/eval/aggregation.py",
+          "label": "packages/ai4e-core/abilities/eval/aggregation.py",
+          "sha256": "5db82d39bd07cfc2b4f2f2d33b1e026d9b7533ee306cfae6a9b9590879eccf4c"
+        }
+      ]
+    },
+    {
+      "id": "F048",
+      "scope": "算法与研究脚本",
+      "title": "外流原始处理完整装配",
+      "state": "done",
+      "status": "已实现",
+      "actual": "读取、提取、几何、选择、保存、统计已串接；Dataset 登记样本步骤，run 执行样本循环。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/applications/PRD.md",
+        "label": "docs/PRD/ai4e-core/applications/PRD.md",
+        "sha256": "1346e9c8b147cc4516eac10c39229344285d0705342d5c07116e2935c7a3eb19"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/applications/aero_cfd/rawprep/dataset.py",
+          "label": "packages/ai4e-core/applications/aero_cfd/rawprep/dataset.py",
+          "sha256": "67f7ac45b43186a9a3fa3985ce84d1a488e21eb8765642bd1982e2d0cc7f4c6d"
+        },
+        {
+          "path": "packages/ai4e-core/applications/aero_cfd/rawprep/physical.py",
+          "label": "packages/ai4e-core/applications/aero_cfd/rawprep/physical.py",
+          "sha256": "bb3650be5d5b2d52385595ca69b8550cc59bdbba30d1b999459a7483acbc5523"
+        }
+      ]
+    },
+    {
+      "id": "F049",
+      "scope": "算法与研究脚本",
+      "title": "数据集声明驱动的处理默认",
+      "state": "done",
+      "status": "已实现",
+      "actual": "数据集 descriptor 提供默认字段、来源和几何能力，rawprep 展开并执行实际保存设置。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/applications/PRD.md",
+        "label": "docs/PRD/ai4e-core/applications/PRD.md",
+        "sha256": "1346e9c8b147cc4516eac10c39229344285d0705342d5c07116e2935c7a3eb19"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/applications/aero_cfd/rawprep/descriptor.py",
+          "label": "packages/ai4e-core/applications/aero_cfd/rawprep/descriptor.py",
+          "sha256": "c0511d9fe0895909be1c0c4c000a163ef07c7b5c067bccccf3fd9c5c762a208e"
+        },
+        {
+          "path": "packages/ai4e-core/applications/aero_cfd/rawprep/mapping.py",
+          "label": "packages/ai4e-core/applications/aero_cfd/rawprep/mapping.py",
+          "sha256": "8dcc1d647553d8bdda24b9f34a6a5248b43481f8ad331b9da569de7610de24bd"
+        }
+      ]
+    },
+    {
+      "id": "F050",
+      "scope": "算法与研究脚本",
+      "title": "Stage/Pipeline 顺序执行",
+      "state": "done",
+      "status": "已实现",
+      "actual": "最小 Stage 与 Pipeline 可按 Python 顺序执行步骤，已有 rawprep 标准装配。没有把 DAG 等架构远景列为本 PRD 缺项。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/applications/PRD.md",
+        "label": "docs/PRD/ai4e-core/applications/PRD.md",
+        "sha256": "1346e9c8b147cc4516eac10c39229344285d0705342d5c07116e2935c7a3eb19"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/applications/base/stage.py",
+          "label": "packages/ai4e-core/applications/base/stage.py",
+          "sha256": "b710886b98bc9ffc81c7b37464863cf9363a5ff134991b23b91c495480f511ae"
+        },
+        {
+          "path": "packages/ai4e-core/applications/base/pipeline.py",
+          "label": "packages/ai4e-core/applications/base/pipeline.py",
+          "sha256": "45f49462b3444e8fac3aaf45eabad1196f2c9dd8b1878a14d4d22de666b5f3ce"
+        }
+      ]
+    },
+    {
+      "id": "F051",
+      "scope": "算法与研究脚本",
+      "title": "外流准备、模型、训练与恢复业务",
+      "state": "done",
+      "status": "已实现",
+      "actual": "preparation 交付准备记录；fitting/physical 两条训练装配均消费模型与数据组件并进入通用训练循环。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/applications/PRD.md",
+        "label": "docs/PRD/ai4e-core/applications/PRD.md",
+        "sha256": "1346e9c8b147cc4516eac10c39229344285d0705342d5c07116e2935c7a3eb19"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/applications/aero_cfd/trainprep/preparation.py",
+          "label": "packages/ai4e-core/applications/aero_cfd/trainprep/preparation.py",
+          "sha256": "e0cb39055a27132286e468f7633dc5266769dc75471cf08e84572d1e2dc37bdf"
+        },
+        {
+          "path": "packages/ai4e-core/applications/aero_cfd/train/fitting.py",
+          "label": "packages/ai4e-core/applications/aero_cfd/train/fitting.py",
+          "sha256": "c61c7299734fb888f9137d1abac342c6b0827c51af56da281142d62f0ed250e7"
+        }
+      ]
+    },
+    {
+      "id": "F052",
+      "scope": "算法与研究脚本",
+      "title": "外流独立推理与派生场扩展",
+      "state": "done",
+      "status": "已实现",
+      "actual": "infer 提供恢复、预测、物理输出、评价、保存和网格步骤；可替换预测或插入字段操作。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/applications/PRD.md",
+        "label": "docs/PRD/ai4e-core/applications/PRD.md",
+        "sha256": "1346e9c8b147cc4516eac10c39229344285d0705342d5c07116e2935c7a3eb19"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/applications/aero_cfd/infer/stage.py",
+          "label": "packages/ai4e-core/applications/aero_cfd/infer/stage.py",
+          "sha256": "1983abb778b7c56c450876244b488f37f479ca1e27b16c899758954271d681ce"
+        },
+        {
+          "path": "recipes/aero_cfd/infer.py",
+          "label": "recipes/aero_cfd/infer.py",
+          "sha256": "e9ad74dc286de3db2f8d5b2cf61eb1d39653e43824bca64e57ca7ab389e5b7a2"
+        }
+      ]
+    },
+    {
+      "id": "F053",
+      "scope": "算法与研究脚本",
+      "title": "固定推理结果后处理",
+      "state": "done",
+      "status": "已实现",
+      "actual": "结果读取与重新评价消费已有预测/真值；新 post 无需再次运行模型，旧 post 计算入口仍保留。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/applications/PRD.md",
+        "label": "docs/PRD/ai4e-core/applications/PRD.md",
+        "sha256": "1346e9c8b147cc4516eac10c39229344285d0705342d5c07116e2935c7a3eb19"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/applications/aero_cfd/post/result_evaluation.py",
+          "label": "packages/ai4e-core/applications/aero_cfd/post/result_evaluation.py",
+          "sha256": "a1fa8eb4be6bdf104a1aecb968eb569ed5984e4069ed109a3592b1eb7f804fd5"
+        },
+        {
+          "path": "recipes/aero_cfd/post.py",
+          "label": "recipes/aero_cfd/post.py",
+          "sha256": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2"
+        }
+      ]
+    },
+    {
+      "id": "F054",
+      "scope": "算法与研究脚本",
+      "title": "参数化 PDE 准备、训练与独立预测",
+      "state": "limited",
+      "status": "已实现·范围有限",
+      "actual": "rawprep/trainprep/model/train/post 全链有实现，使用 PI-BSNet 和五种数据生成器；目前是 Python/recipe 路线，没有 Dojo Web 案例入口。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/applications/PRD.md",
+        "label": "docs/PRD/ai4e-core/applications/PRD.md",
+        "sha256": "1346e9c8b147cc4516eac10c39229344285d0705342d5c07116e2935c7a3eb19"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/applications/parametric_pde/train.py",
+          "label": "packages/ai4e-core/applications/parametric_pde/train.py",
+          "sha256": "a8aad354d71bd9c5a0b972bb6ee96d2358849d250e4006036211b1db53b4d7db"
+        },
+        {
+          "path": "packages/ai4e-core/applications/parametric_pde/post.py",
+          "label": "packages/ai4e-core/applications/parametric_pde/post.py",
+          "sha256": "bef683d7ea8f50b4cf3f4a1ac5401e6dcb4db2cdb3c010a4cce3235ae0dce037"
+        }
+      ]
+    },
+    {
+      "id": "F055",
+      "scope": "算法与研究脚本",
+      "title": "配置插值与普通函数扩展",
+      "state": "done",
+      "status": "已实现",
+      "actual": "支持配置覆盖、插值和调用方显式加载器；普通函数、对象和任意中间返回值由 recipe 局部连接。可选 target 参数绑定用于具体业务接入，Python 保持步骤顺序。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/base/PRD.md",
+        "label": "docs/PRD/ai4e-core/base/PRD.md",
+        "sha256": "9f4fddd92fc1dd18eac8341c1ef984225381754453ad79cea618ae505a7443d1"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/base/config/load.py",
+          "label": "packages/ai4e-core/base/config/load.py",
+          "sha256": "835fae6a308ca415ee2646b1c80f0d9a64fe8a044c74c0fc253939760d74b209"
+        },
+        {
+          "path": "packages/ai4e-core/base/config/steps.py",
+          "label": "packages/ai4e-core/base/config/steps.py",
+          "sha256": "19477d014a38fb79c47694cbdcf744ec009e4fcea23aeaf1d02c5dd7270736f6"
+        }
+      ]
+    },
+    {
+      "id": "F056",
+      "scope": "算法与研究脚本",
+      "title": "运行事件、日志、会话与产物记录",
+      "state": "done",
+      "status": "已实现",
+      "actual": "会话和 writer 落配置、日志、摘要，事件记录开始/结束/耗时及进度；支持逐样本执行和 task 托管目录。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/run/PRD.md",
+        "label": "docs/PRD/ai4e-core/run/PRD.md",
+        "sha256": "4f23a7675ebbfc9d88776b4d4eed32dedf643342e436226906f260ac5f63a898"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/run/session.py",
+          "label": "packages/ai4e-core/run/session.py",
+          "sha256": "a5193668c918ed65e7201238d1d2807a625840067c9178b7f42f86415230c13a"
+        },
+        {
+          "path": "packages/ai4e-core/run/writer.py",
+          "label": "packages/ai4e-core/run/writer.py",
+          "sha256": "d0cb24688cc159d43cc58899a34d0487371eb7f1493b868a46ff4c603523659c"
+        }
+      ]
+    },
+    {
+      "id": "F057",
+      "scope": "算法与研究脚本",
+      "title": "能力执行观察",
+      "state": "done",
+      "status": "已实现",
+      "actual": "traced 观察实际函数调用，后台发送长操作进度事件，run 消费事件写日志。",
+      "prd": {
+        "path": "docs/PRD/ai4e-core/base/PRD.md",
+        "label": "docs/PRD/ai4e-core/base/PRD.md",
+        "sha256": "9f4fddd92fc1dd18eac8341c1ef984225381754453ad79cea618ae505a7443d1"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-core/base/events.py",
+          "label": "packages/ai4e-core/base/events.py",
+          "sha256": "a65e879a0fe2f5d3df6557b1eeb51ae88ce79e492bc9ffa98836d61850b9fa75"
+        }
+      ]
+    },
+    {
+      "id": "F058",
+      "scope": "算法与研究脚本",
+      "title": "AB-UPT 完整模型与命名域装配",
+      "state": "done",
+      "status": "已实现",
+      "actual": "完整网络与 component 在 contrib 内，支持命名域/字段和条件装配；不依赖运行时导入外部参考仓库。",
+      "prd": {
+        "path": "docs/PRD/ai4e-contrib/ability/PRD.md",
+        "label": "docs/PRD/ai4e-contrib/ability/PRD.md",
+        "sha256": "bad93ad3260f217f5dca0286012989fc9fd56b8463b3934f618ba776055c156e"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-contrib/ability/model/abupt/model.py",
+          "label": "packages/ai4e-contrib/ability/model/abupt/model.py",
+          "sha256": "be4c3e9f513254325fc087f621ea485bbe3b35974cb6132636484a76d1941831"
+        },
+        {
+          "path": "packages/ai4e-contrib/ability/model/abupt/component.py",
+          "label": "packages/ai4e-contrib/ability/model/abupt/component.py",
+          "sha256": "5bf70e6c32a9cd073038ef0b9d71a397df36319534292a34b11f832390be7205"
+        }
+      ]
+    },
+    {
+      "id": "F059",
+      "scope": "算法与研究脚本",
+      "title": "Transolver-3 网络与全表面缓存预测",
+      "state": "done",
+      "status": "已实现",
+      "actual": "原网络、组件准备与全表面缓存/解码在 contrib 内，提供 NASA 和汽车表面/体场输入输出配置。",
+      "prd": {
+        "path": "docs/PRD/ai4e-contrib/ability/PRD.md",
+        "label": "docs/PRD/ai4e-contrib/ability/PRD.md",
+        "sha256": "bad93ad3260f217f5dca0286012989fc9fd56b8463b3934f618ba776055c156e"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-contrib/ability/model/transolver3/network.py",
+          "label": "packages/ai4e-contrib/ability/model/transolver3/network.py",
+          "sha256": "cbdda91ad2fc8bb2d5b944a65db5be907e3757c6cd7df323d2bbb1dea35ce6d5"
+        },
+        {
+          "path": "packages/ai4e-contrib/ability/model/transolver3/component.py",
+          "label": "packages/ai4e-contrib/ability/model/transolver3/component.py",
+          "sha256": "6ecc0c6ee25eb25869ba1b940a6824765447af1d8e0c1ccf51d67b4f72cf8503"
+        }
+      ]
+    },
+    {
+      "id": "F060",
+      "scope": "算法与研究脚本",
+      "title": "模型推理缓存与分块查询",
+      "state": "done",
+      "status": "已实现",
+      "actual": "AB-UPT 的上下文缓存和 Transolver 的全域汇总后解码都有实现，infer 查询块参数经组件进入预测过程。",
+      "prd": {
+        "path": "docs/PRD/ai4e-contrib/ability/PRD.md",
+        "label": "docs/PRD/ai4e-contrib/ability/PRD.md",
+        "sha256": "bad93ad3260f217f5dca0286012989fc9fd56b8463b3934f618ba776055c156e"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-contrib/ability/model/abupt/component.py",
+          "label": "packages/ai4e-contrib/ability/model/abupt/component.py",
+          "sha256": "5bf70e6c32a9cd073038ef0b9d71a397df36319534292a34b11f832390be7205"
+        },
+        {
+          "path": "packages/ai4e-contrib/ability/model/transolver3/component.py",
+          "label": "packages/ai4e-contrib/ability/model/transolver3/component.py",
+          "sha256": "6ecc0c6ee25eb25869ba1b940a6824765447af1d8e0c1ccf51d67b4f72cf8503"
+        }
+      ]
+    },
+    {
+      "id": "F061",
+      "scope": "算法与研究脚本",
+      "title": "PI-BSNet 样条模型和场重建",
+      "state": "limited",
+      "status": "已实现·范围有限",
+      "actual": "模型、样条、五案例组件存在；Neumann/Advection/梯形走各自当前案例实现。不能把代码存在表述为全部论文案例完全复现。",
+      "prd": {
+        "path": "docs/PRD/ai4e-contrib/ability/PRD.md",
+        "label": "docs/PRD/ai4e-contrib/ability/PRD.md",
+        "sha256": "bad93ad3260f217f5dca0286012989fc9fd56b8463b3934f618ba776055c156e"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-contrib/ability/model/pibsnet/component.py",
+          "label": "packages/ai4e-contrib/ability/model/pibsnet/component.py",
+          "sha256": "792d0c13797ad585bd45617e1dc6eb8b628682f9389f0fbd5033ed96d9a9f1d1"
+        },
+        {
+          "path": "packages/ai4e-contrib/ability/model/pibsnet/source_cases.py",
+          "label": "packages/ai4e-contrib/ability/model/pibsnet/source_cases.py",
+          "sha256": "4d740aa74dc30448dca02b9942a1d167c844749f2d5166188c6f0d907b1ef12c"
+        }
+      ]
+    },
+    {
+      "id": "F062",
+      "scope": "算法与研究脚本",
+      "title": "Burgers、对流、扩散、NS 残差函数",
+      "state": "done",
+      "status": "已实现",
+      "actual": "贡献方程可直接接收 PyTorch 场和导数返回残差；NS 是可调用函数，没有因此交付完整 NS 训练案例。",
+      "prd": {
+        "path": "docs/PRD/ai4e-contrib/ability/PRD.md",
+        "label": "docs/PRD/ai4e-contrib/ability/PRD.md",
+        "sha256": "bad93ad3260f217f5dca0286012989fc9fd56b8463b3934f618ba776055c156e"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-contrib/ability/constraint/equations/__init__.py",
+          "label": "packages/ai4e-contrib/ability/constraint/equations/__init__.py",
+          "sha256": "7a10a2650fd38c451ed0f9911e23e2192b1c4ba5269afa2d4be17a74d2f949cb"
+        }
+      ]
+    },
+    {
+      "id": "F063",
+      "scope": "算法与研究脚本",
+      "title": "ShapeNet-Car/NASA 数据集描述与复用",
+      "state": "done",
+      "status": "已实现",
+      "actual": "汽车目录和 NASA HDF5 有专用适配、字段映射、公开名单和默认处理声明，可被多个模型共用。",
+      "prd": {
+        "path": "docs/PRD/ai4e-contrib/application/PRD.md",
+        "label": "docs/PRD/ai4e-contrib/application/PRD.md",
+        "sha256": "0ee7c80d0b756367faa46cde6f9b3642ada053d63deeaa30070b1be975d9cfe5"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-contrib/application/datasets/shapenet_car/adapter.py",
+          "label": "packages/ai4e-contrib/application/datasets/shapenet_car/adapter.py",
+          "sha256": "3834766acc760bfd3a6f92d8edb0c21483973026f08b87aec11cbf48d58e905d"
+        },
+        {
+          "path": "packages/ai4e-contrib/application/datasets/nasa_crm/physical.py",
+          "label": "packages/ai4e-contrib/application/datasets/nasa_crm/physical.py",
+          "sha256": "dfd03665a2f246a724e7e8395a08cef0e57263782e91aa4f83fc554925b78b4c"
+        }
+      ]
+    },
+    {
+      "id": "F064",
+      "scope": "算法与研究脚本",
+      "title": "五类参数化 PDE 数据生成",
+      "state": "done",
+      "status": "已实现",
+      "actual": "对流扩散、Neumann、Advection、Burgers、梯形扩散均有独立 generate.py，生成后进入准备链。",
+      "prd": {
+        "path": "docs/PRD/ai4e-contrib/application/PRD.md",
+        "label": "docs/PRD/ai4e-contrib/application/PRD.md",
+        "sha256": "0ee7c80d0b756367faa46cde6f9b3642ada053d63deeaa30070b1be975d9cfe5"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-contrib/application/datasets/parametric.py",
+          "label": "packages/ai4e-contrib/application/datasets/parametric.py",
+          "sha256": "e36a5451d1b944e7031ad1c10dde88a1a26d20e8a1dbd73c51bb03fce32cb182"
+        },
+        {
+          "path": "recipes/parametric_pde/generate.py",
+          "label": "recipes/parametric_pde/generate.py",
+          "sha256": "459ac42e197e67788c7b9e2b142f12a2a512235d3688e7220c2fc8a31f0ce82c"
+        }
+      ]
+    },
+    {
+      "id": "F065",
+      "scope": "算法与研究脚本",
+      "title": "可复制外流 recipe 与阶段入口",
+      "state": "done",
+      "status": "已实现",
+      "actual": "新版模板及五例显式串接 rawprep/trainprep/train/infer/post；configuration 的转换委托 contrib/application，脚本使用 run 的公开会话门面，infer 样本必须显式指定。",
+      "prd": {
+        "path": "docs/PRD/recipes/aero_cfd/PRD.md",
+        "label": "docs/PRD/recipes/aero_cfd/PRD.md",
+        "sha256": "98f989ceef2a5947d234acf5f3c21d6e567235c922e06cf1c8542ea5beac7b36"
+      },
+      "sources": [
+        {
+          "path": "recipes/aero_cfd/pipeline.py",
+          "label": "recipes/aero_cfd/pipeline.py",
+          "sha256": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8"
+        },
+        {
+          "path": "recipes/aero_cfd/task-entry.json",
+          "label": "recipes/aero_cfd/task-entry.json",
+          "sha256": "9516a5dc9ffaf128db8a2afa5ba8e573d3960814bf793fdf4476f983abc34f65"
+        }
+      ]
+    },
+    {
+      "id": "F066",
+      "scope": "算法与研究脚本",
+      "title": "PDE recipe、自定义训练步与恢复",
+      "state": "done",
+      "status": "已实现",
+      "actual": "参数化模板可生成数据、准备、训练和独立后处理，train.step 以导入路径接入用户普通函数。",
+      "prd": {
+        "path": "docs/PRD/recipes/parametric_pde/PRD.md",
+        "label": "docs/PRD/recipes/parametric_pde/PRD.md",
+        "sha256": "ea25e4a4a1512d7c6d477707858497a5375043d2c1af5ca60f51ba6e234e573a"
+      },
+      "sources": [
+        {
+          "path": "recipes/parametric_pde/pipeline.py",
+          "label": "recipes/parametric_pde/pipeline.py",
+          "sha256": "51078001375a85f05bd75fd30b05e7fc3ba3e8c16dae5461db3862e14890a5ab"
+        },
+        {
+          "path": "packages/ai4e-core/applications/parametric_pde/train.py",
+          "label": "packages/ai4e-core/applications/parametric_pde/train.py",
+          "sha256": "a8aad354d71bd9c5a0b972bb6ee96d2358849d250e4006036211b1db53b4d7db"
+        }
+      ]
+    },
+    {
+      "id": "F067",
+      "scope": "任务与服务",
+      "title": "标准流程的局部组件约定与自由连接",
+      "state": "done",
+      "status": "已实现",
+      "actual": "spec 保留标准业务消费者实际需要的局部数据/模型约定，不是所有组件的统一协议。任意组件可由普通函数局部适配，只在持久化、跨进程和展示边界约定格式。",
+      "prd": {
+        "path": "docs/PRD/ai4e-spec/components/PRD.md",
+        "label": "docs/PRD/ai4e-spec/components/PRD.md",
+        "sha256": "1d854cca23bfa1dd49f58781118a988c6371b8bfecbbf07df5e0ea01ee2ad463"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-spec/components/model.py",
+          "label": "packages/ai4e-spec/components/model.py",
+          "sha256": "0b39734eed81159388ce6993e82e244cd0e0150b0e84601dc1813ed0604c0006"
+        },
+        {
+          "path": "packages/ai4e-spec/components/dataset.py",
+          "label": "packages/ai4e-spec/components/dataset.py",
+          "sha256": "ec31342b2557620a5a6a53fd9eaaff68fca632e07ac7a40a094ff1e3dddec7c4"
+        }
+      ]
+    },
+    {
+      "id": "F068",
+      "scope": "任务与服务",
+      "title": "文件字段目录描述",
+      "state": "done",
+      "status": "已实现",
+      "actual": "文件检查描述可表达坐标、场、张量成员和表格列，并供后端和页面展示。",
+      "prd": {
+        "path": "docs/PRD/ai4e-spec/data/PRD.md",
+        "label": "docs/PRD/ai4e-spec/data/PRD.md",
+        "sha256": "02e5e316b056aa4051d43fdc7d61822505e20b59c72fe01095a14639f94892b4"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-spec/data/inspection.py",
+          "label": "packages/ai4e-spec/data/inspection.py",
+          "sha256": "23fa21e24fb1cc5b7c34f6548f1d3c37f3d14597313a3858550d4eddfab1de40"
+        }
+      ]
+    },
+    {
+      "id": "F069",
+      "scope": "任务与服务",
+      "title": "运行、推理、预览与可视化交接结构",
+      "state": "done",
+      "status": "已实现",
+      "actual": "有轻量可序列化的运行、推理请求/结果、预览和可视化配置结构；这里只计其功能传递，不评身份规则。",
+      "prd": {
+        "path": "docs/PRD/ai4e-spec/artifacts/PRD.md",
+        "label": "docs/PRD/ai4e-spec/artifacts/PRD.md",
+        "sha256": "8936684ff9b5f4801f4f668fdd2d61e665819c9abb830b4e3054d201d4cc1e4d"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-spec/artifacts/inference.py",
+          "label": "packages/ai4e-spec/artifacts/inference.py",
+          "sha256": "d86bacbc87a84ea06e27406be947c24d2185c16fd565debbd5e80ad6bfe4abc5"
+        },
+        {
+          "path": "packages/ai4e-spec/artifacts/visualization.py",
+          "label": "packages/ai4e-spec/artifacts/visualization.py",
+          "sha256": "4fb108b49c41dcd2041e2625973575bf370e81a23255576ec50b5a86fbe828c7"
+        }
+      ]
+    },
+    {
+      "id": "F070",
+      "scope": "任务与服务",
+      "title": "项目共享数据与运行资产登记",
+      "state": "done",
+      "status": "已实现",
+      "actual": "可登记外部引用或复制内容、共享选定运行产物，并列出已有资产。",
+      "prd": {
+        "path": "docs/PRD/ai4e-task/projects/PRD.md",
+        "label": "docs/PRD/ai4e-task/projects/PRD.md",
+        "sha256": "e9442565ee5716ec975e7437c467e8ce04c8cfed5164aff173ad7b753bc03367"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-task/projects/shared.py",
+          "label": "packages/ai4e-task/projects/shared.py",
+          "sha256": "fb1f2b756b4c78017dcec6a6c6b46973af7d935c215a7ef215b6bb446a7969ee"
+        }
+      ]
+    },
+    {
+      "id": "F071",
+      "scope": "任务与服务",
+      "title": "任务 new/fork 与选择复制资产",
+      "state": "done",
+      "status": "已实现",
+      "actual": "可从模板/目录创建，从当前代码、创建记录或固定运行派生，按选项复制数据、准备和检查点。",
+      "prd": {
+        "path": "docs/PRD/ai4e-task/tasks/PRD.md",
+        "label": "docs/PRD/ai4e-task/tasks/PRD.md",
+        "sha256": "a2a686df27f507a916ec56e68a59d12833b2b1c8d33fa37b552a49e918d002be"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-task/tasks/create.py",
+          "label": "packages/ai4e-task/tasks/create.py",
+          "sha256": "2d803c5f00f77f46a2a5d3b22f4fba04f0f64848ac9286ac38866ff132803891"
+        },
+        {
+          "path": "packages/ai4e-task/tasks/assets.py",
+          "label": "packages/ai4e-task/tasks/assets.py",
+          "sha256": "5cab6843edf91ddcce2d77d6293f21ed3bba20a8096bdb50d9359b6bea665762"
+        }
+      ]
+    },
+    {
+      "id": "F072",
+      "scope": "任务与服务",
+      "title": "执行、等待、停止、恢复和离线导入",
+      "state": "done",
+      "status": "已实现",
+      "actual": "本地进程执行、等待/停止、checkpoint 恢复和已有运行导入均有 task 公开操作。",
+      "prd": {
+        "path": "docs/PRD/ai4e-task/tasks/PRD.md",
+        "label": "docs/PRD/ai4e-task/tasks/PRD.md",
+        "sha256": "a2a686df27f507a916ec56e68a59d12833b2b1c8d33fa37b552a49e918d002be"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-task/tasks/execution.py",
+          "label": "packages/ai4e-task/tasks/execution.py",
+          "sha256": "74429fd05db20001cce66b316300e5a4a02c1be7d4a97859c466d61609f6e3d4"
+        },
+        {
+          "path": "packages/ai4e-task/tasks/query.py",
+          "label": "packages/ai4e-task/tasks/query.py",
+          "sha256": "a0760237b8fce20229057d8132b3afd01a54eaeed8130b20dc56dc0095c38307"
+        }
+      ]
+    },
+    {
+      "id": "F073",
+      "scope": "任务与服务",
+      "title": "配置保存、阶段产物与独立检查",
+      "state": "done",
+      "status": "已实现",
+      "actual": "配置读写、整段替换、阶段摘要、产物候选和独立检查进程有实现；这里盘点操作入口，不评价检查充分性。",
+      "prd": {
+        "path": "docs/PRD/ai4e-task/tasks/PRD.md",
+        "label": "docs/PRD/ai4e-task/tasks/PRD.md",
+        "sha256": "a2a686df27f507a916ec56e68a59d12833b2b1c8d33fa37b552a49e918d002be"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-task/tasks/configuration.py",
+          "label": "packages/ai4e-task/tasks/configuration.py",
+          "sha256": "1fb70de8652be38fea9e7538ea7bc39e3b4e723fba7aa4400955bf88ccaa9778"
+        },
+        {
+          "path": "packages/ai4e-task/tasks/inspections.py",
+          "label": "packages/ai4e-task/tasks/inspections.py",
+          "sha256": "5e223e4edfc07997766cb85005d980904fb53ca4f3350c0c942609799addc909"
+        }
+      ]
+    },
+    {
+      "id": "F074",
+      "scope": "任务与服务",
+      "title": "推理批次和后处理评价任务管理",
+      "state": "done",
+      "status": "已实现",
+      "actual": "推理与 post 评价各有提交、查询、取消及结果/导出管理；复用原任务，不另建研究版本。",
+      "prd": {
+        "path": "docs/PRD/ai4e-task/tasks/PRD.md",
+        "label": "docs/PRD/ai4e-task/tasks/PRD.md",
+        "sha256": "a2a686df27f507a916ec56e68a59d12833b2b1c8d33fa37b552a49e918d002be"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-task/tasks/inference.py",
+          "label": "packages/ai4e-task/tasks/inference.py",
+          "sha256": "9084de352977d07a9fd2a4842fdb5600eda72cf1bfb025e9df08af0ebdf508de"
+        },
+        {
+          "path": "packages/ai4e-task/tasks/post_metrics.py",
+          "label": "packages/ai4e-task/tasks/post_metrics.py",
+          "sha256": "37ca832e924d35aaba2ada59438366c73cc40bb0f5959890aafa4efcbab63e21"
+        }
+      ]
+    },
+    {
+      "id": "F075",
+      "scope": "任务与服务",
+      "title": "版本血缘、代码配置及指标比较",
+      "state": "done",
+      "status": "已实现",
+      "actual": "版本树、工作目录差异、两个版本或两个运行比较均有函数；保存比较不会触发新训练。",
+      "prd": {
+        "path": "docs/PRD/ai4e-task/versions/PRD.md",
+        "label": "docs/PRD/ai4e-task/versions/PRD.md",
+        "sha256": "9dddea7aa6adae44621cbf6ce895d25f30723f745f839274034a44b63856300c"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-task/versions/compare.py",
+          "label": "packages/ai4e-task/versions/compare.py",
+          "sha256": "5a60eb2ff9c2c7a220ef10bd0f8e27d283d093558dda386fedc96c9b3c152156"
+        },
+        {
+          "path": "packages/ai4e-task/versions/tree.py",
+          "label": "packages/ai4e-task/versions/tree.py",
+          "sha256": "7f720052ad48712632b2ac0e96e1b05bb11ef8322a1deaa3d060c426d96306aa"
+        }
+      ]
+    },
+    {
+      "id": "F076",
+      "scope": "任务与服务",
+      "title": "模板登记、展开和执行声明",
+      "state": "done",
+      "status": "已实现",
+      "actual": "catalog/materialize 展开普通 recipe；task-entry 按需声明 inspect/evaluate/export，未声明某项只关闭该操作。平台不再以官方模板全文或 AST 一致判定用户扩展是否可用。",
+      "prd": {
+        "path": "docs/PRD/ai4e-task/templates/PRD.md",
+        "label": "docs/PRD/ai4e-task/templates/PRD.md",
+        "sha256": "6e7c73f73d28065bbd0b24f03b100baed349be7b06ee85e6fc6b85dd5c19ab64"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-task/templates/catalog.py",
+          "label": "packages/ai4e-task/templates/catalog.py",
+          "sha256": "4d2d6caf90f8aaceb2b9ea9538fc1ce88a350334c32b61ec0e2a575b186e19d2"
+        },
+        {
+          "path": "packages/ai4e-task/templates/materialize.py",
+          "label": "packages/ai4e-task/templates/materialize.py",
+          "sha256": "260c289c62ad3353355d9f60c1eef8ed243d0b5942d108257b915d1f1fa136f9"
+        }
+      ]
+    },
+    {
+      "id": "F077",
+      "scope": "任务与服务",
+      "title": "CLI 与 JSON 输出",
+      "state": "done",
+      "status": "已实现",
+      "actual": "命令行调用项目/任务公开能力，支持 JSON 输出；安装入口由包配置声明。",
+      "prd": {
+        "path": "docs/PRD/ai4e-task/cli/PRD.md",
+        "label": "docs/PRD/ai4e-task/cli/PRD.md",
+        "sha256": "37b7424e7d4f274eedc8b6fb0b1521b6c3adfe5018f008f0e6c2ddb41664d467"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-task/cli/main.py",
+          "label": "packages/ai4e-task/cli/main.py",
+          "sha256": "62d11cc3c2df51c17961389e76edcf94130e65bdc45e4037b9adf2154446b40c"
+        },
+        {
+          "path": "packages/ai4e-task/pyproject.toml",
+          "label": "packages/ai4e-task/pyproject.toml",
+          "sha256": "a821cb0ebb39028b6d5fd1611e8c9eb63c77e3c9e9b80c53150aaeba1b05e17a"
+        }
+      ]
+    },
+    {
+      "id": "F078",
+      "scope": "任务与服务",
+      "title": "本地记录、运行快照和数据集登记存储",
+      "state": "done",
+      "status": "已实现",
+      "actual": "SQLite 管理记录与便携文件、运行读取、任务可视化位置和工作区 processed dataset 登记均有实现。",
+      "prd": {
+        "path": "docs/PRD/ai4e-task/storage/PRD.md",
+        "label": "docs/PRD/ai4e-task/storage/PRD.md",
+        "sha256": "bf99dacbea6b6d19cc240b0c46a3788d810ddb9b8f030029b3c18efe6386539a"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-task/storage/records.py",
+          "label": "packages/ai4e-task/storage/records.py",
+          "sha256": "2ae5706fa2c8b0f1c59dff4747ac9fb9688b5f86d997fd0186cac1b34c85b96e"
+        },
+        {
+          "path": "packages/ai4e-task/storage/processed_datasets.py",
+          "label": "packages/ai4e-task/storage/processed_datasets.py",
+          "sha256": "38fb39b3bd5e24d16cd34a599bcefe6d8f4e588c7f77ff240c8c5dc0f1842866"
+        }
+      ]
+    },
+    {
+      "id": "F079",
+      "scope": "任务与服务",
+      "title": "Server 项目、数据处理与阶段 API",
+      "state": "done",
+      "status": "已实现",
+      "actual": "路由层调用 task 执行和配置操作，公开案例目录、处理描述和阶段数据交接，未在服务中另写训练循环。",
+      "prd": {
+        "path": "docs/PRD/ai4e-server/modules/PRD.md",
+        "label": "docs/PRD/ai4e-server/modules/PRD.md",
+        "sha256": "89000108d5b61266fe817e5a7e523c1162bdf1af91f5afe072a2adaaf2051369"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-server/modules/stages/application.py",
+          "label": "packages/ai4e-server/modules/stages/application.py",
+          "sha256": "2e8c85bf509d368c588df9d6c6cd4ecd772743d6d6f8280d7e435e982d033dce"
+        },
+        {
+          "path": "packages/ai4e-server/modules/capabilities/model_cases.py",
+          "label": "packages/ai4e-server/modules/capabilities/model_cases.py",
+          "sha256": "621e23ec0e36c9b2c14123ab0845433f57a2e2604f755e396adaa3373936ca9a"
+        }
+      ]
+    },
+    {
+      "id": "F080",
+      "scope": "任务与服务",
+      "title": "Server 推理与后处理 API",
+      "state": "done",
+      "status": "已实现",
+      "actual": "推理批次控制、固定结果、post 目录/评价/导出有服务接口，Web 对应模块消费它们。",
+      "prd": {
+        "path": "docs/PRD/ai4e-server/modules/PRD.md",
+        "label": "docs/PRD/ai4e-server/modules/PRD.md",
+        "sha256": "89000108d5b61266fe817e5a7e523c1162bdf1af91f5afe072a2adaaf2051369"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-server/modules/inference/api.py",
+          "label": "packages/ai4e-server/modules/inference/api.py",
+          "sha256": "dacde6c6346e66b62ecd697d6521405806c6e352f3af1a1de63cb59ebf702b6e"
+        },
+        {
+          "path": "packages/ai4e-server/modules/post/api.py",
+          "label": "packages/ai4e-server/modules/post/api.py",
+          "sha256": "639c7d05143667b15b892337fde519888f39374e1790267b613fbf2a534a53d3"
+        }
+      ]
+    },
+    {
+      "id": "F081",
+      "scope": "任务与服务",
+      "title": "Server 报告文字与已结束运行记录",
+      "state": "done",
+      "status": "已实现",
+      "actual": "GET/PUT 项目报告保存文字和运行记录；这一较窄 API 功能符合 Server PRD，不等于 Web 报告编辑/发布产品已开放。",
+      "prd": {
+        "path": "docs/PRD/ai4e-server/modules/PRD.md",
+        "label": "docs/PRD/ai4e-server/modules/PRD.md",
+        "sha256": "89000108d5b61266fe817e5a7e523c1162bdf1af91f5afe072a2adaaf2051369"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-server/modules/reports/api.py",
+          "label": "packages/ai4e-server/modules/reports/api.py",
+          "sha256": "46589aa18cd8037ea71be8dd426bf68867cb6bdbab65951be7cb615da86810a5"
+        }
+      ]
+    },
+    {
+      "id": "F082",
+      "scope": "任务与服务",
+      "title": "Server 本地持久化、文件传输及错误表达",
+      "state": "done",
+      "status": "已实现",
+      "actual": "本地 store、内容读取、非有限值转空和业务错误中文映射有实现，服务可向页面返回实际数据与原因。",
+      "prd": {
+        "path": "docs/PRD/ai4e-server/infrastructure/PRD.md",
+        "label": "docs/PRD/ai4e-server/infrastructure/PRD.md",
+        "sha256": "5f6f68547293e15bde4c8691d5ad9b377289ee030ab4c0c001311f95ab2cea39"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-server/infrastructure/persistence.py",
+          "label": "packages/ai4e-server/infrastructure/persistence.py",
+          "sha256": "b86b883517d327bd6df869858c7d9f98702fc2cf5eb08fe990ece7d1b07c17bb"
+        },
+        {
+          "path": "packages/ai4e-server/infrastructure/transport.py",
+          "label": "packages/ai4e-server/infrastructure/transport.py",
+          "sha256": "11e46d0792d3d6e956b9d65ae39f542c736280a989eeb6e582c8da77f0e75c23"
+        }
+      ]
+    },
+    {
+      "id": "F083",
+      "scope": "任务与服务",
+      "title": "Server 到独立 Vis 的上下文和会话交接",
+      "state": "done",
+      "status": "已实现",
+      "actual": "vis_client/vis_proxy 把任务保存上下文、来源、会话和显式输出交给独立可视化服务。",
+      "prd": {
+        "path": "docs/PRD/ai4e-server/infrastructure/PRD.md",
+        "label": "docs/PRD/ai4e-server/infrastructure/PRD.md",
+        "sha256": "5f6f68547293e15bde4c8691d5ad9b377289ee030ab4c0c001311f95ab2cea39"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-server/infrastructure/vis_client.py",
+          "label": "packages/ai4e-server/infrastructure/vis_client.py",
+          "sha256": "c99c5018f69d4d08b24d009fa060e6f16e15a5120e7d31fa22f3f3d6378f89e2"
+        },
+        {
+          "path": "packages/ai4e-server/infrastructure/vis_proxy.py",
+          "label": "packages/ai4e-server/infrastructure/vis_proxy.py",
+          "sha256": "b5e872430d2365267a6454673510e283db08e82c5f4fea02d3914e6d0bf28f4d"
+        }
+      ]
+    },
+    {
+      "id": "F084",
+      "scope": "可视化库",
+      "title": "离线比较 HTML 报告",
+      "state": "done",
+      "status": "已实现",
+      "actual": "compose 读取比较 JSON，按域组合指标与 PNG，输出 HTML；是独立离线能力。",
+      "prd": {
+        "path": "docs/PRD/ai4e-viz/compose/PRD.md",
+        "label": "docs/PRD/ai4e-viz/compose/PRD.md",
+        "sha256": "18d530a23f8f070c68715c61543cb9b23c4715adb9df9109159254e60357d409"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/compose/comparison.py",
+          "label": "packages/ai4e-viz/compose/comparison.py",
+          "sha256": "85cf531559897fd8aa80b6f4b18cb1d2649a9d1b412c6b2bacbaaac6fdb5a5db"
+        }
+      ]
+    },
+    {
+      "id": "F085",
+      "scope": "可视化库",
+      "title": "共色标表面、切片及截面曲线",
+      "state": "done",
+      "status": "已实现",
+      "actual": "render 按比较产物中的图形字段生成表面/曲线图，保留共色标布局。",
+      "prd": {
+        "path": "docs/PRD/ai4e-viz/render/PRD.md",
+        "label": "docs/PRD/ai4e-viz/render/PRD.md",
+        "sha256": "b2a77953b6357f7688c10cdfcefac06c127b823ecbb73abfda0b8e57be4e25f2"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/render/comparison.py",
+          "label": "packages/ai4e-viz/render/comparison.py",
+          "sha256": "84e338d7d806ff36dd4effa9580fcc440a0481da5689e523ae1ba39a8489c4ae"
+        }
+      ]
+    },
+    {
+      "id": "F086",
+      "scope": "可视化库",
+      "title": "文本、张量、HDF5 和网格检查",
+      "state": "done",
+      "status": "已实现",
+      "actual": "inspect 分发到真实文件解析器，返回字段/形状等描述，供预览选择。",
+      "prd": {
+        "path": "docs/PRD/ai4e-viz/inspect/PRD.md",
+        "label": "docs/PRD/ai4e-viz/inspect/PRD.md",
+        "sha256": "34a8726e1ebf9e436f6a69afd26f849f45c456b7ef6c57c41b3676643dfef908"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/inspect/dispatch.py",
+          "label": "packages/ai4e-viz/inspect/dispatch.py",
+          "sha256": "d9397654fa6e479429cc88ca8ee483f10cd1ddbfd4ee39446a318157450303f6"
+        },
+        {
+          "path": "packages/ai4e-viz/inspect/hdf5.py",
+          "label": "packages/ai4e-viz/inspect/hdf5.py",
+          "sha256": "55eaa5abfc270000c763e653abbe44698d0ba2722d86f07bca8f321773fc0c0e"
+        }
+      ]
+    },
+    {
+      "id": "F087",
+      "scope": "可视化库",
+      "title": "文本/张量分页与三维预览",
+      "state": "done",
+      "status": "已实现",
+      "actual": "文本、张量和网格 preview 入口存在；维度选择、字段读取和显示数据交付分别实现。",
+      "prd": {
+        "path": "docs/PRD/ai4e-viz/preview/PRD.md",
+        "label": "docs/PRD/ai4e-viz/preview/PRD.md",
+        "sha256": "6d43a205a111f2faea620bc15ec48a2e6021e892f0fb85dabf772211debf6de4"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/preview/tensor.py",
+          "label": "packages/ai4e-viz/preview/tensor.py",
+          "sha256": "883aec4dcff5c366505e247d709213853f425ef870e77f1c044856b65ea82a53"
+        },
+        {
+          "path": "packages/ai4e-viz/preview/mesh.py",
+          "label": "packages/ai4e-viz/preview/mesh.py",
+          "sha256": "c48cca3590eeeeeaeeabad359a415a013c197c6dcec05837154ee0a3cd527c96"
+        }
+      ]
+    },
+    {
+      "id": "F088",
+      "scope": "可视化库",
+      "title": "表面、切片、裁切、阈值及等值过滤",
+      "state": "done",
+      "status": "已实现",
+      "actual": "VTK pipeline 根据明确操作生成显示结果；该功能不包含跨模型物理差值算法。",
+      "prd": {
+        "path": "docs/PRD/ai4e-viz/pipeline/PRD.md",
+        "label": "docs/PRD/ai4e-viz/pipeline/PRD.md",
+        "sha256": "c4754733b69d767fc10dc045802b560f5c4e82235fb9074a7a3d6f814dff51ca"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/pipeline/execute.py",
+          "label": "packages/ai4e-viz/pipeline/execute.py",
+          "sha256": "9061aa701028c6820b4158ecda4f85508b5311103d5a76d0ca11dc07d6eccd1e"
+        }
+      ]
+    },
+    {
+      "id": "F089",
+      "scope": "可视化库",
+      "title": "独立文件预览进程",
+      "state": "done",
+      "status": "已实现",
+      "actual": "runtime worker 读取请求并分发检查/预览，服务在单独进程执行。",
+      "prd": {
+        "path": "docs/PRD/ai4e-viz/runtime/PRD.md",
+        "label": "docs/PRD/ai4e-viz/runtime/PRD.md",
+        "sha256": "e629bb7ccdab0f6be385b0501eeb8a6ef3f0fefd26940fd0cf10e2d5cd941e55"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/runtime/worker.py",
+          "label": "packages/ai4e-viz/runtime/worker.py",
+          "sha256": "51302c8088cde8c9dd322354b986cfc020be5d5fdb1130a947780c249249f7f6"
+        }
+      ]
+    },
+    {
+      "id": "F090",
+      "scope": "可视化库",
+      "title": "几何与字段二进制显示资产",
+      "state": "done",
+      "status": "已实现",
+      "actual": "serialization 分离几何、拓扑、字段数组并输出显示清单，浏览器读取这些资产。",
+      "prd": {
+        "path": "docs/PRD/ai4e-viz/serialization/PRD.md",
+        "label": "docs/PRD/ai4e-viz/serialization/PRD.md",
+        "sha256": "6e6b787da7518f845fe8eb34c7a19f00e32ee51bd796fc579f7fb6eb1ad3b425"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/serialization/geometry.py",
+          "label": "packages/ai4e-viz/serialization/geometry.py",
+          "sha256": "70356687b3723d9e8d029f893d82982ae08cdd4bf8682c822ab314c2392e541f"
+        }
+      ]
+    },
+    {
+      "id": "F091",
+      "scope": "独立 Vis 产品",
+      "title": "资产上传、选择与外部文件引用",
+      "state": "done",
+      "status": "已实现",
+      "actual": "独立 Vis 可上传/登记，Dojo 使用 externalSources 引用已有文件；支持会话内追加。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/dataAssets.md",
+        "label": "packages/ai4e-viz/docs/PRD/dataAssets.md",
+        "sha256": "a11a89035238b5c65a6c4487d97e0b2882d4f903cac0f501e6299521c3161797"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/dataAssets/api.py",
+          "label": "packages/ai4e-viz/backend/modules/dataAssets/api.py",
+          "sha256": "8504078f538c20cc5726e3aac455a9965d53f31f0aa21ee3c10a875b49aac758"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/dataAssets/externalSources.py",
+          "label": "packages/ai4e-viz/backend/modules/dataAssets/externalSources.py",
+          "sha256": "891f2787aae6b45f6b547b9501cb022a2980929e5ec2f1eee543e8aaa4d0d76f"
+        }
+      ]
+    },
+    {
+      "id": "F092",
+      "scope": "独立 Vis 产品",
+      "title": "物理场配置保存、修订及旧版读取",
+      "state": "done",
+      "status": "已实现",
+      "actual": "physicalSpec 表达 sources/pipeline/layers/probes/views/layout/time，visIO 保存任务配置并读回；不因 visPhysField/repository 的旧占位就判断整体保存未实现。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/visTaskManage.md",
+        "label": "packages/ai4e-viz/docs/PRD/visTaskManage.md",
+        "sha256": "a579ae1d5f93787d987180197de4ec680528b42c64bab3bfac5da693434421c2"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/visTaskManage/physicalSpec.py",
+          "label": "packages/ai4e-viz/backend/modules/visTaskManage/physicalSpec.py",
+          "sha256": "918dc98ce0f9c5aa0d81cc59871ba6c2b0bafced7f3f000d0e77d1e8a890de4a"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/visIO/save.py",
+          "label": "packages/ai4e-viz/backend/modules/visIO/save.py",
+          "sha256": "5665d5d4ea554f1871690a1a2ff10c11c075f86d2bfb62451fab6f7fd4c8e61f"
+        }
+      ]
+    },
+    {
+      "id": "F093",
+      "scope": "独立 Vis 产品",
+      "title": "字段画像、时间序列及命名面来源",
+      "state": "limited",
+      "status": "已实现·范围有限",
+      "actual": "读取网格字段、实体与时间帧，命名二维块可用于种子；PRD 明确多块文件一次只显示一个计算块，不是多块速度场合并。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/visDatasets.md",
+        "label": "packages/ai4e-viz/docs/PRD/visDatasets.md",
+        "sha256": "912c26fa1c3819f9e236b933d71a021406ccbc645ee9010fce2a5812262f627d"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/visDatasets/pipeline.py",
+          "label": "packages/ai4e-viz/backend/modules/visDatasets/pipeline.py",
+          "sha256": "b05086b6ae6f44bd5f22e3538908d6dc23ac60cf6a45a684969fe460a35afe83"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/visDatasets/application.py",
+          "label": "packages/ai4e-viz/backend/modules/visDatasets/application.py",
+          "sha256": "b652c9d1eaba5a81363049484fb931432afc1c4131b43ae0dab3817d31de288a"
+        }
+      ]
+    },
+    {
+      "id": "F094",
+      "scope": "独立 Vis 产品",
+      "title": "几何视角、缩放、线框与外观",
+      "state": "done",
+      "status": "已实现",
+      "actual": "O3DV 嵌入页具备旋转、平移、缩放、复位、线框、背景、全屏与配置视角。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/visGeometry.md",
+        "label": "packages/ai4e-viz/docs/PRD/visGeometry.md",
+        "sha256": "38bdee20d029e90e2da04002d675e7500967fd4995f0360ef7a3a4bb4ff26800"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/frontend/public/3dviewer/embed.html",
+          "label": "packages/ai4e-viz/frontend/public/3dviewer/embed.html",
+          "sha256": "a5b8142963caab66858787c786023aa31cc7259efd12c87c0e97c963eacfec40"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/visGeometry/o3dv.py",
+          "label": "packages/ai4e-viz/backend/modules/visGeometry/o3dv.py",
+          "sha256": "92606f15ac50af15ed5f83fa1aca6e54abcd6de1cfedf07010cd321c10a63039"
+        }
+      ]
+    },
+    {
+      "id": "F095",
+      "scope": "独立 Vis 产品",
+      "title": "几何选择、部件隐藏、结构树、剖切及测量",
+      "state": "partial",
+      "status": "部分实现",
+      "actual": "仅有 selected_node_ids/hidden_node_ids 状态字段；O3DV 宿主未提供结构树、选择/隐藏交互、剖切或测量工具。Trame 物理场的对象树与切片不能算作此几何模块已交付。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/visGeometry.md",
+        "label": "packages/ai4e-viz/docs/PRD/visGeometry.md",
+        "sha256": "38bdee20d029e90e2da04002d675e7500967fd4995f0360ef7a3a4bb4ff26800"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/visGeometry/domain.py",
+          "label": "packages/ai4e-viz/backend/modules/visGeometry/domain.py",
+          "sha256": "d1ff9ce5fe61908e75d06df67d5312de559ab178b945a340bdeed6ed1f1889f6"
+        },
+        {
+          "path": "packages/ai4e-viz/frontend/public/3dviewer/embed.html",
+          "label": "packages/ai4e-viz/frontend/public/3dviewer/embed.html",
+          "sha256": "a5b8142963caab66858787c786023aa31cc7259efd12c87c0e97c963eacfec40"
+        }
+      ]
+    },
+    {
+      "id": "F096",
+      "scope": "独立 Vis 产品",
+      "title": "STL 与兼容网格到 GLB",
+      "state": "done",
+      "status": "已实现",
+      "actual": "转换器支持 VTU/VTS/VTM/VTP/STL/PLY/OBJ，经表面提取与三角化写 GLB，已接几何读取和报告导出调用。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/visConvertor.md",
+        "label": "packages/ai4e-viz/docs/PRD/visConvertor.md",
+        "sha256": "4fc9aae3ab20fa0da497f7bf5426b9a54e389923abf8bb90abc06a02059ab5cd"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/visConvertor/converter.py",
+          "label": "packages/ai4e-viz/backend/modules/visConvertor/converter.py",
+          "sha256": "c283f16ea14fafeaf5a3c0c58e26afa452115850f337ae6cee92d42d3cb6f794"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/visGeometry/api.py",
+          "label": "packages/ai4e-viz/backend/modules/visGeometry/api.py",
+          "sha256": "f3314c4e1f4153103342332f4a341640ec32e832b1cadd47cfe9c575f0ececdb"
+        }
+      ]
+    },
+    {
+      "id": "F097",
+      "scope": "独立 Vis 产品",
+      "title": "STEP、DXF、CSV/JSON 到 GLB",
+      "state": "missing",
+      "status": "未实现",
+      "actual": "转换器读入分发表无这些格式；未识别扩展名直接报 unsupported GEO source format。CSV/JSON 的表格/图表解析是另一项功能。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/visConvertor.md",
+        "label": "packages/ai4e-viz/docs/PRD/visConvertor.md",
+        "sha256": "4fc9aae3ab20fa0da497f7bf5426b9a54e389923abf8bb90abc06a02059ab5cd"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/visConvertor/converter.py",
+          "label": "packages/ai4e-viz/backend/modules/visConvertor/converter.py",
+          "sha256": "c283f16ea14fafeaf5a3c0c58e26afa452115850f337ae6cee92d42d3cb6f794"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/visConvertor/application.py",
+          "label": "packages/ai4e-viz/backend/modules/visConvertor/application.py",
+          "sha256": "e29c3e3e1b73f586b92b06003e398f3ce892ead587ccd3a323dcc113da4b2880"
+        }
+      ]
+    },
+    {
+      "id": "F098",
+      "scope": "独立 Vis 产品",
+      "title": "PNG/JPG 图片预览与缩放",
+      "state": "partial",
+      "status": "部分实现",
+      "actual": "图片元数据、原生 img 预览和静态读取存在；当前图片分支只有 fit/caption，没有应用级放大缩小或缩放交互。浏览器整页缩放不计入此功能。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/visFigure.md",
+        "label": "packages/ai4e-viz/docs/PRD/visFigure.md",
+        "sha256": "1df86f1414a1d7a73a97983150cc202b99a2c66628fc561537f6ad61e8532f11"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/visFigure/application.py",
+          "label": "packages/ai4e-viz/backend/modules/visFigure/application.py",
+          "sha256": "cf8a43b3413e2c5ae11ef63cf4e05ef723f7380dd6c46f690ecf1d944ba09eb1"
+        },
+        {
+          "path": "packages/ai4e-viz/frontend/src/modules/visTaskManage/components/ExamplePreview.jsx",
+          "label": "packages/ai4e-viz/frontend/src/modules/visTaskManage/components/ExamplePreview.jsx",
+          "sha256": "55f0416ba1e59f914b06a4f4d542071c491d8c51ba7ec3fa91b25cfaff27d50a"
+        }
+      ]
+    },
+    {
+      "id": "F099",
+      "scope": "独立 Vis 产品",
+      "title": "物理场对象管理与处理对象串联",
+      "state": "done",
+      "status": "已实现",
+      "actual": "可创建/复制/改名/显隐/删除对象，分析结果可作为后续输入，草稿与已应用结果分别处理。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/visPhysField.md",
+        "label": "packages/ai4e-viz/docs/PRD/visPhysField.md",
+        "sha256": "645d2a0b968264577232445a659d039e73e996805ac00732f316181550605783"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/visPhysField/scene.py",
+          "label": "packages/ai4e-viz/backend/modules/visPhysField/scene.py",
+          "sha256": "a1479036ac69b03c1b291cbcc5fae1ff8429fdc6ca485090b5a5513c454a1130"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/visPhysField/trameUI/pipelinePanel.py",
+          "label": "packages/ai4e-viz/backend/modules/visPhysField/trameUI/pipelinePanel.py",
+          "sha256": "4cfbf3a7276f8a7236755abb928cc1cda95980a94b76d81b83517d846ba150c9"
+        }
+      ]
+    },
+    {
+      "id": "F100",
+      "scope": "独立 Vis 产品",
+      "title": "物理计算、着色和切面操控",
+      "state": "done",
+      "status": "已实现",
+      "actual": "切面/剖切/Glyph/流线/等值面等接入 VTK；计算参数通过应用提交，显示属性独立，平面手柄交互有内核实现。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/visPhysField.md",
+        "label": "packages/ai4e-viz/docs/PRD/visPhysField.md",
+        "sha256": "645d2a0b968264577232445a659d039e73e996805ac00732f316181550605783"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/visEngine/filters.py",
+          "label": "packages/ai4e-viz/backend/modules/visEngine/filters.py",
+          "sha256": "f3f0b0d2f56f190bd1184bedba45aedd1c2314b306a4d7cff2b204d8fc341ab2"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/visEngine/planeWidget.py",
+          "label": "packages/ai4e-viz/backend/modules/visEngine/planeWidget.py",
+          "sha256": "e5db79d9543c9901ec1a04610d7781b55b41fcf658745506b484fe3daa8f94d4"
+        }
+      ]
+    },
+    {
+      "id": "F101",
+      "scope": "独立 Vis 产品",
+      "title": "空间 Probe 与时间曲线",
+      "state": "done",
+      "status": "已实现",
+      "actual": "场景支持固定位置采样及时间查询；CSV 输出按位置、时间和字段生成。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/visPhysField.md",
+        "label": "packages/ai4e-viz/docs/PRD/visPhysField.md",
+        "sha256": "645d2a0b968264577232445a659d039e73e996805ac00732f316181550605783"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/visEngine/sampling.py",
+          "label": "packages/ai4e-viz/backend/modules/visEngine/sampling.py",
+          "sha256": "5c243526b379c427fdd2f5791b3dd7a96caba094c1ab839ec9b35a6340bed651"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/visPhysField/producer.py",
+          "label": "packages/ai4e-viz/backend/modules/visPhysField/producer.py",
+          "sha256": "62fcdb994cd2419c159baf7bb3ba70a16e0f276c94e3901c161c838567249f88"
+        }
+      ]
+    },
+    {
+      "id": "F102",
+      "scope": "独立 Vis 产品",
+      "title": "一至四视图与相机联动",
+      "state": "done",
+      "status": "已实现",
+      "actual": "配置和场景实现多视图、各视图图层/着色及相机联动操作。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/visPhysField.md",
+        "label": "packages/ai4e-viz/docs/PRD/visPhysField.md",
+        "sha256": "645d2a0b968264577232445a659d039e73e996805ac00732f316181550605783"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/visTaskManage/physicalSpec.py",
+          "label": "packages/ai4e-viz/backend/modules/visTaskManage/physicalSpec.py",
+          "sha256": "918dc98ce0f9c5aa0d81cc59871ba6c2b0bafced7f3f000d0e77d1e8a890de4a"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/visPhysField/scene.py",
+          "label": "packages/ai4e-viz/backend/modules/visPhysField/scene.py",
+          "sha256": "a1479036ac69b03c1b291cbcc5fae1ff8429fdc6ca485090b5a5513c454a1130"
+        }
+      ]
+    },
+    {
+      "id": "F103",
+      "scope": "独立 Vis 产品",
+      "title": "时间播放、动画与实际视口录制",
+      "state": "done",
+      "status": "已实现",
+      "actual": "物理时间帧播放、PNG 序列/MP4 导出和 WebM MediaRecorder 录制均有生产代码及界面调用。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/visPhysField.md",
+        "label": "packages/ai4e-viz/docs/PRD/visPhysField.md",
+        "sha256": "645d2a0b968264577232445a659d039e73e996805ac00732f316181550605783"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/frontend/src/modules/visPhysField/recording.js",
+          "label": "packages/ai4e-viz/frontend/src/modules/visPhysField/recording.js",
+          "sha256": "ebedf033111d9f711d81fd16d423b8db8ab5f7c1d7900c7872fd8909614e4042"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/visPhysField/producer.py",
+          "label": "packages/ai4e-viz/backend/modules/visPhysField/producer.py",
+          "sha256": "62fcdb994cd2419c159baf7bb3ba70a16e0f276c94e3901c161c838567249f88"
+        }
+      ]
+    },
+    {
+      "id": "F104",
+      "scope": "独立 Vis 产品",
+      "title": "保存重开及宿主嵌入",
+      "state": "done",
+      "status": "已实现",
+      "actual": "PhysFieldWorkspacePage 接收宿主上下文，支持配置恢复及隐藏保活/显示，保存和输出分开。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/visPhysField.md",
+        "label": "packages/ai4e-viz/docs/PRD/visPhysField.md",
+        "sha256": "645d2a0b968264577232445a659d039e73e996805ac00732f316181550605783"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/frontend/src/modules/visPhysField/pages/PhysFieldWorkspacePage.jsx",
+          "label": "packages/ai4e-viz/frontend/src/modules/visPhysField/pages/PhysFieldWorkspacePage.jsx",
+          "sha256": "95ceabc2c0d61e51d89f944c31b818f449c5528c46eac0e0381087991f2b289c"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/visIO/application.py",
+          "label": "packages/ai4e-viz/backend/modules/visIO/application.py",
+          "sha256": "5a7dbcd04e516f2190c55711933af6a73892b17dcd691940ae314d65aed2e484"
+        }
+      ]
+    },
+    {
+      "id": "F105",
+      "scope": "独立 Vis 产品",
+      "title": "配置资产与 PNG/CSV/视频显式导出",
+      "state": "done",
+      "status": "已实现",
+      "actual": "visIO 提供保存、导出、进度、取消、下载与录制上传路由；Exports 调用独立生产器。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/visIO.md",
+        "label": "packages/ai4e-viz/docs/PRD/visIO.md",
+        "sha256": "664da09a1ec9c403b00600870e6101d3e3774c69665d03a02bedf8ece464a105"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/visIO/api.py",
+          "label": "packages/ai4e-viz/backend/modules/visIO/api.py",
+          "sha256": "ff55f71ac4061f555bf063b9331227f21af20ceadde303b91ef316a0d799d817"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/visIO/exports.py",
+          "label": "packages/ai4e-viz/backend/modules/visIO/exports.py",
+          "sha256": "1f2f321c841bf57497bc3799fd772a3c6083d6c33336a70d0c7dc9f57d6bf750"
+        }
+      ]
+    },
+    {
+      "id": "F106",
+      "scope": "独立 Vis 产品",
+      "title": "VTK 过滤、种子及空间采样原语",
+      "state": "done",
+      "status": "已实现",
+      "actual": "filters/seeds/sampling 提供 VTK 数值操作；线段/球/平面/命名面种子可进入流线计算。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/visEngine.md",
+        "label": "packages/ai4e-viz/docs/PRD/visEngine.md",
+        "sha256": "165ebdbe9f1b74ab22fb30a93e6e046a07b10e3d95008270215f4aedcdc5cb0a"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/visEngine/filters.py",
+          "label": "packages/ai4e-viz/backend/modules/visEngine/filters.py",
+          "sha256": "f3f0b0d2f56f190bd1184bedba45aedd1c2314b306a4d7cff2b204d8fc341ab2"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/visEngine/seeds.py",
+          "label": "packages/ai4e-viz/backend/modules/visEngine/seeds.py",
+          "sha256": "35051ffd6431400cee94b20fc95b41d84d9be30248d62d3242d35f179bde07cc"
+        }
+      ]
+    },
+    {
+      "id": "F107",
+      "scope": "独立 Vis 产品",
+      "title": "自动化脚本提取、保存与受控执行",
+      "state": "missing",
+      "status": "未实现",
+      "actual": "公开门面仅 validate_script；repository.persistence_ready 返回 False，API Router 无路由，未形成脚本保存或执行流程。校验名称/源码非空不算此业务实现。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/automation.md",
+        "label": "packages/ai4e-viz/docs/PRD/automation.md",
+        "sha256": "f033c991953a0fb8b60aaf05cad8afcc3ad471a0b45e58b44cf30a3f449143f2"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/automation/application.py",
+          "label": "packages/ai4e-viz/backend/modules/automation/application.py",
+          "sha256": "a53d80ac9469eb3377e370c2a7b47247ab143647cb4c4d7c2a1a969fe3f2f4ec"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/automation/repository.py",
+          "label": "packages/ai4e-viz/backend/modules/automation/repository.py",
+          "sha256": "3ce4d7dd84343d61b8e8afd93cdc743750a30b9d2efc6cef0b4181caf035b00c"
+        }
+      ]
+    },
+    {
+      "id": "F108",
+      "scope": "独立 Vis 产品",
+      "title": "MCP 业务工具调用",
+      "state": "missing",
+      "status": "未实现",
+      "actual": "只有工具描述对象和构造函数，文档字符串明确供未来 MCP Server 注册；无实际 MCP Server/工具注册及调用适配。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/MCP.md",
+        "label": "packages/ai4e-viz/docs/PRD/MCP.md",
+        "sha256": "4924f8f824bbe07435a3472bfedd430bcc26a4bc05d0d2566117fafa8e34b94e"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/MCP/application.py",
+          "label": "packages/ai4e-viz/backend/modules/MCP/application.py",
+          "sha256": "9f9d2c3e631bc04fa9cea217d6e14ddfcd94e9566ece42edd7c8749388ab7966"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/MCP/api.py",
+          "label": "packages/ai4e-viz/backend/modules/MCP/api.py",
+          "sha256": "520b563e84ebb14a8c25f5a5992420b1997eb7cb3b7926bfd2f9a5b2308f7ff3"
+        }
+      ]
+    },
+    {
+      "id": "F109",
+      "scope": "独立 Vis 产品",
+      "title": "报告新建、查询、复制、冻结及导出",
+      "state": "done",
+      "status": "已实现",
+      "actual": "独立 Vis 报告中心接通报告存储、草稿/固定版本、复制、Quarto HTML/PDF 异步输出与下载。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/reportManage.md",
+        "label": "packages/ai4e-viz/docs/PRD/reportManage.md",
+        "sha256": "a2b4ffea1034d52eb1481a5a4816aaa8408d741c1732dceacad81a8b06e2d7c3"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/reportManage/api.py",
+          "label": "packages/ai4e-viz/backend/modules/reportManage/api.py",
+          "sha256": "f8c02205455055fa083087b60e82ae952c7e3ef604d6e439fb4abff0757e5d8f"
+        },
+        {
+          "path": "packages/ai4e-viz/frontend/src/modules/reportManage/pages/ReportsPage.jsx",
+          "label": "packages/ai4e-viz/frontend/src/modules/reportManage/pages/ReportsPage.jsx",
+          "sha256": "1bd3fd98ecea74cfbd3f58227f8b6aa8d07905c4327ff1c036b6aa1d6937e374"
+        }
+      ]
+    },
+    {
+      "id": "F110",
+      "scope": "独立 Vis 产品",
+      "title": "报告删除、收藏及母版管理",
+      "state": "missing",
+      "status": "未实现",
+      "actual": "当前报告 API/公开门面没有删除或收藏操作，也没有母版库管理；新建的 analysis/validation/weekly/blank 是内置起步模板，不能等同可管理母版。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/reportManage.md",
+        "label": "packages/ai4e-viz/docs/PRD/reportManage.md",
+        "sha256": "a2b4ffea1034d52eb1481a5a4816aaa8408d741c1732dceacad81a8b06e2d7c3"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/backend/modules/reportManage/__init__.py",
+          "label": "packages/ai4e-viz/backend/modules/reportManage/__init__.py",
+          "sha256": "466eda73b8ae5c44151f6e9136dd8778370655b6b3929457e82227c4a7063c1a"
+        },
+        {
+          "path": "packages/ai4e-viz/frontend/src/modules/reportManage/pages/ReportsPage.jsx",
+          "label": "packages/ai4e-viz/frontend/src/modules/reportManage/pages/ReportsPage.jsx",
+          "sha256": "1bd3fd98ecea74cfbd3f58227f8b6aa8d07905c4327ff1c036b6aa1d6937e374"
+        }
+      ]
+    },
+    {
+      "id": "F111",
+      "scope": "独立 Vis 产品",
+      "title": "报告内容、布局、拖拽与撤销重做",
+      "state": "done",
+      "status": "已实现",
+      "actual": "编排页使用 DndContext、章节/行/12 列块布局和 historyReducer；可编辑草稿并保存。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/reportDesigner.md",
+        "label": "packages/ai4e-viz/docs/PRD/reportDesigner.md",
+        "sha256": "f1636192e3da1fb4592800c61831a3902ca150c2ded96c421b1bc49a1b7f0f99"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/frontend/src/modules/reportDesigner/pages/ReportComposerPage.jsx",
+          "label": "packages/ai4e-viz/frontend/src/modules/reportDesigner/pages/ReportComposerPage.jsx",
+          "sha256": "f4e307afe70342a317e70a40eb7f4922760953fe038e1e59629b9e9543ae74e5"
+        },
+        {
+          "path": "packages/ai4e-viz/frontend/src/modules/reportDesigner/domain/reportDocument.js",
+          "label": "packages/ai4e-viz/frontend/src/modules/reportDesigner/domain/reportDocument.js",
+          "sha256": "3c2023e57637531a6015dee31c4288b7f9a3b8bd1f10fbf2c3dc1b7a8dc7464e"
+        }
+      ]
+    },
+    {
+      "id": "F112",
+      "scope": "独立 Vis 产品",
+      "title": "报告引用已保存的任务可视化",
+      "state": "done",
+      "status": "已实现",
+      "actual": "素材库取得已保存可视化，报告通过 visIO materialize_reference 请求图片；需要任务上下文的输出在 Vis 内完成。",
+      "prd": {
+        "path": "packages/ai4e-viz/docs/PRD/reportDesigner.md",
+        "label": "packages/ai4e-viz/docs/PRD/reportDesigner.md",
+        "sha256": "f1636192e3da1fb4592800c61831a3902ca150c2ded96c421b1bc49a1b7f0f99"
+      },
+      "sources": [
+        {
+          "path": "packages/ai4e-viz/frontend/src/modules/reportDesigner/pages/ReportComposerPage.jsx",
+          "label": "packages/ai4e-viz/frontend/src/modules/reportDesigner/pages/ReportComposerPage.jsx",
+          "sha256": "f4e307afe70342a317e70a40eb7f4922760953fe038e1e59629b9e9543ae74e5"
+        },
+        {
+          "path": "packages/ai4e-viz/backend/modules/visIO/application.py",
+          "label": "packages/ai4e-viz/backend/modules/visIO/application.py",
+          "sha256": "5a7dbcd04e516f2190c55711933af6a73892b17dcd691940ae314d65aed2e484"
+        }
+      ]
+    }
+  ],
+  "method": "前轮全仓功能核查作为逐项清单；本轮核对当前源码路径、职责变更、PRD状态及最终相关测试。文件摘要用于固定证据，不作为功能运行通过。",
+  "implementation_changes": [
+    "公开 run 加载器由调用方完整提供；旧外流兼容显式注入",
+    "平台操作不比较模板 AST；任务声明目标在子进程加载",
+    "新 post 只消费固定结果；数值实现归 infer",
+    "Task 查询/收据投影、Web 候选请求、Vis 控制职责拆分",
+    "评价结果按样本增量写入，最终快照保持既有格式"
+  ],
+  "review_note": "逐功能沿原全仓源码核对；本轮修改入口按最终实现更新。内容摘要用于来源定位，不作为执行通过证明；运行结果单独见 architecture-alignment-acceptance.md。"
+}

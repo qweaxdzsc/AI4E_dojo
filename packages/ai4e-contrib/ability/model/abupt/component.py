@@ -1,6 +1,6 @@
 """AB-UPT 组件公开出口；保留原构造器身份与数值行为。"""
 
-from ai4e_core.applications.aero_cfd.train.resolve import apply_resolved as resolve
+from ai4e_contrib.application.aero_cfd.abupt import apply_resolved as resolve
 
 from .batch import collate
 from .inference import InferenceContext

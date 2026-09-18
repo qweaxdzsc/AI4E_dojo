@@ -1,0 +1,5 @@
+
+> ai4e-vizreport@1.0.0 check:architecture
+> node scripts/check-architecture.mjs
+
+前端架构检查通过

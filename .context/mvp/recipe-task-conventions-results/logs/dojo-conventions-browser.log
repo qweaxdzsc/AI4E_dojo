@@ -1,0 +1,264 @@
+
+> ai4e-web@0.1.0 test:e2e
+> playwright test e2e/configuration-composition.spec.ts e2e/stage-consistency.spec.ts e2e/model-picker.spec.ts
+
+
+Running 21 tests using 1 worker
+
+  ✓   1 e2e/configuration-composition.spec.ts:4:1 › 四类配置差异保留空值、删除及包含点的字段名 (727ms)
+  ✓   2 e2e/configuration-composition.spec.ts:21:1 › 训练保存只提交编辑路径且后续检查使用新修订 (690ms)
+  ✓   3 e2e/model-picker.spec.ts:233:3 › shapenet_car 同数据集切换、编辑保存、刷新与告警分区 (2.6s)
+  ✓   4 e2e/model-picker.spec.ts:233:3 › nasa_crm 同数据集切换、编辑保存、刷新与告警分区 (2.6s)
+  ✓   5 e2e/model-picker.spec.ts:334:1 › ShapeNet 可改选体场变体 (1.3s)
+  ✓   6 e2e/model-picker.spec.ts:356:1 › 导出当前模型配置 (652ms)
+  ✓   7 e2e/model-picker.spec.ts:365:1 › 换模保存冲突保留草稿，不启动检查 (871ms)
+  ✓   8 e2e/model-picker.spec.ts:390:1 › 选项加载失败可重试，原参数不丢失 (964ms)
+  ✓   9 e2e/model-picker.spec.ts:413:1 › 迟到模型选项不覆盖新任务 (995ms)
+  ✓  10 e2e/stage-consistency.spec.ts:3:1 › 阶段检查先保存，冲突不提交，响应丢失重用请求键 (718ms)
+  ✘  11 e2e/stage-consistency.spec.ts:21:1 › 浏览后处理不勾选前序步骤，已选输入按selected恢复 (5.6s)
+  ✘  12 e2e/stage-consistency.spec.ts:38:1 › 平台数据集同一清单只选一条，按登记时间倒序且不与历史项联动 (2.0m)
+  ✓  13 e2e/stage-consistency.spec.ts:63:1 › 数据准备字段按模型角色下拉匹配并标出张量形状不符 (786ms)
+  ✘  14 e2e/stage-consistency.spec.ts:85:1 › 数据准备分片显示原人数且数量之和须等于全部样本 (5.5s)
+  ✘  15 e2e/stage-consistency.spec.ts:113:1 › 已完成步骤为绿当前为蓝，失效清单用人话，准备日志完整 (5.6s)
+  ✘  16 e2e/stage-consistency.spec.ts:140:1 › 数据准备有正式清单时提示先选，不自动勾最新 (5.4s)
+  ✘  17 e2e/stage-consistency.spec.ts:166:1 › 数据准备树表列与再执行清进度日志叠加 (5.5s)
+  ✘  18 e2e/stage-consistency.spec.ts:211:1 › 训练设置只选已准备数据集即可开训，提交不含准备步骤 (5.6s)
+  ✘  19 e2e/stage-consistency.spec.ts:264:1 › 训练设置开始训练后进入运行页只监控 (2.0m)
+  ✓  20 e2e/stage-consistency.spec.ts:291:1 › 未改训练参数点保存后下一步仍打勾 (630ms)
+  ✓  21 e2e/stage-consistency.spec.ts:316:1 › 保存训练设置后步骤打勾，刷新仍按已保存事实恢复 (842ms)
+
+
+  1) e2e/stage-consistency.spec.ts:21:1 › 浏览后处理不勾选前序步骤，已选输入按selected恢复 ─────────────────────────────
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: locator('.input-bindings .ant-select-selection-item').first()
+    Expected substring: "已绑定清单"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" locator('.input-bindings .ant-select-selection-item').first() with timeout 5000ms
+      - waiting for locator('.input-bindings .ant-select-selection-item').first()
+
+
+      33 |   return route.fulfill({json:[]});
+      34 |  });
+    > 35 |  await page.goto('/projects/p/tasks/t/6');await expect(page.locator('.workbench-steps .topstep.done')).toHaveCount(1);await expect(page.locator('.taskheading .statuspill')).toHaveText('部分阶段完成');await page.getByRole('link',{name:'模型设置 · 检查失效',exact:true}).click();await expect(page.locator('.workbench-steps .topstep.done')).toHaveCount(1);await expect(page.getByRole('combobox',{name:'train.manifest'})).toHaveCount(0);await expect(page.locator('summary',{hasText:'权重加载'})).toHaveCount(0);await page.getByRole('link',{name:'数据准备 · 未运行',exact:true}).click();await expect(page.locator('.input-bindings .ant-select-selection-item').first()).toContainText('已绑定清单');await expect(page.locator('.input-bindings .ant-select-selection-item').first()).not.toContainText('更新清单');
+         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^
+      36 | });
+      37 |
+      38 | test('平台数据集同一清单只选一条，按登记时间倒序且不与历史项联动',async({page})=>{
+        at /Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-web/e2e/stage-consistency.spec.ts:35:639
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/stage-consistency-浏览后处理不勾选前序步骤，已选输入按selected恢复/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/stage-consistency-浏览后处理不勾选前序步骤，已选输入按selected恢复/error-context.md
+
+  2) e2e/stage-consistency.spec.ts:38:1 › 平台数据集同一清单只选一条，按登记时间倒序且不与历史项联动 ────────────────────────────
+
+    Test timeout of 120000ms exceeded.
+
+    Error: locator.click: Test timeout of 120000ms exceeded.
+    Call log:
+      - waiting for getByRole('combobox', { name: 'train.manifest' })
+
+
+      48 |  });
+      49 |  await page.goto('/');await page.evaluate(async()=>{const React=(await import('/node_modules/.vite/deps/react.js' as any)).default;const {createRoot}=(await import('/node_modules/.vite/deps/react-dom_client.js' as any)).default;const {StageWorkbench}=await import('/src/modules/stages/StageWorkbench.tsx' as any);document.body.innerHTML='<div id="fixture"></div>';createRoot(document.getElementById('fixture')).render(React.createElement(StageWorkbench,{project:'fixture',task:'fixture',stage:'trainprep'}))});
+    > 50 |  await page.getByRole('combobox',{name:'inputs.trainprep.dataset'}).click();
+         |                                                           ^
+      51 |  const dropdown=page.locator('.ant-select-dropdown:not(.ant-select-dropdown-hidden)');
+      52 |  await expect(dropdown.getByText('shapenet_car',{exact:true})).toBeVisible();
+      53 |  await expect(dropdown.getByText('shapenet_car2',{exact:true})).toBeVisible();
+        at /Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-web/e2e/stage-consistency.spec.ts:50:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/stage-consistency-平台数据集同一清单只选一条，按登记时间倒序且不与历史项联动/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/stage-consistency-平台数据集同一清单只选一条，按登记时间倒序且不与历史项联动/error-context.md
+
+  3) e2e/stage-consistency.spec.ts:85:1 › 数据准备分片显示原人数且数量之和须等于全部样本 ──────────────────────────────────
+
+    Error: expect(locator).toHaveValue(expected) failed
+
+    Locator:  getByLabel('平台数据集名称')
+    Expected: "shapenet_car"
+    Received: ""
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveValue" getByLabel('平台数据集名称') with timeout 5000ms
+      - waiting for getByLabel('平台数据集名称')
+        14 × locator resolved to <input disabled value="" type="text" aria-label="平台数据集名称" id="prep-dataset-name" placeholder="请先在左侧选择平台数据集" class="ant-input ant-input-disabled css-dev-only-do-not-override-mncuj7 ant-input-outlined"/>
+           - unexpected value ""
+
+
+      94 |  });
+      95 |  await page.goto('/');await page.evaluate(async()=>{const React=(await import('/node_modules/.vite/deps/react.js' as any)).default;const {createRoot}=(await import('/node_modules/.vite/deps/react-dom_client.js' as any)).default;const {StageWorkbench}=await import('/src/modules/stages/StageWorkbench.tsx' as any);document.body.innerHTML='<div id="fixture"></div>';createRoot(document.getElementById('fixture')).render(React.createElement(StageWorkbench,{project:'fixture',task:'fixture',stage:'trainprep'}))});
+    > 96 |  await expect(page.getByLabel('平台数据集名称')).toHaveValue('shapenet_car');
+         |                                           ^
+      97 |  await expect(page.getByRole('combobox',{name:'执行范围',exact:true})).toBeVisible();
+      98 |  await expect(page.getByText(/处理样本：\s*3\s*个/)).toBeVisible();
+      99 |  await expect(page.getByLabel('全部样本数')).toHaveValue('3');
+        at /Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-web/e2e/stage-consistency.spec.ts:96:43
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/stage-consistency-数据准备分片显示原人数且数量之和须等于全部样本/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/stage-consistency-数据准备分片显示原人数且数量之和须等于全部样本/error-context.md
+
+  4) e2e/stage-consistency.spec.ts:113:1 › 已完成步骤为绿当前为蓝，失效清单用人话，准备日志完整 ──────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('平台数据集：已绑定来源不可用', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('平台数据集：已绑定来源不可用', { exact: true }) with timeout 5000ms
+      - waiting for getByText('平台数据集：已绑定来源不可用', { exact: true })
+
+
+      126 |  await expect(done).toHaveCSS('background-color','rgb(7, 156, 100)');
+      127 |  await expect(active).toHaveCSS('background-color','rgb(8, 115, 255)');
+    > 128 |  await expect(page.getByText('平台数据集：已绑定来源不可用',{exact:true})).toBeVisible();
+          |                                                              ^
+      129 |  await expect(page.getByText('所选文件不在可访问范围内。',{exact:true})).toBeVisible();
+      130 |  await expect(page.getByText('inputs.trainprep.dataset：已绑定来源不可用',{exact:true})).toHaveCount(0);
+      131 |  await expect(page.getByText('path_outside_root',{exact:true})).toHaveCount(0);
+        at /Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-web/e2e/stage-consistency.spec.ts:128:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/stage-consistency-已完成步骤为绿当前为蓝，失效清单用人话，准备日志完整/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/stage-consistency-已完成步骤为绿当前为蓝，失效清单用人话，准备日志完整/error-context.md
+
+  5) e2e/stage-consistency.spec.ts:140:1 › 数据准备有正式清单时提示先选，不自动勾最新 ───────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('有 2 个平台数据集，请选择', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('有 2 个平台数据集，请选择', { exact: true }) with timeout 5000ms
+      - waiting for getByText('有 2 个平台数据集，请选择', { exact: true })
+
+
+      149 |  });
+      150 |  await page.goto('/projects/p/tasks/t/trainprep');
+    > 151 |  await expect(page.getByText('有 2 个平台数据集，请选择',{exact:true})).toBeVisible();
+          |                                                              ^
+      152 |  await expect(page.getByText('请从上方选择平台数据集',{exact:true})).toBeVisible();
+      153 |  await expect(page.getByText('请先选择平台数据集再执行。',{exact:true})).toBeVisible();
+      154 |  await expect(page.getByRole('button',{name:'▶ 执行',exact:true})).toBeDisabled();
+        at /Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-web/e2e/stage-consistency.spec.ts:151:62
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/stage-consistency-数据准备有正式清单时提示先选，不自动勾最新/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/stage-consistency-数据准备有正式清单时提示先选，不自动勾最新/error-context.md
+
+  6) e2e/stage-consistency.spec.ts:166:1 › 数据准备树表列与再执行清进度日志叠加 ──────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('文件名', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('文件名', { exact: true }) with timeout 5000ms
+      - waiting for getByText('文件名', { exact: true })
+
+
+      189 |  });
+      190 |  await page.goto('/');await page.evaluate(async()=>{const React=(await import('/node_modules/.vite/deps/react.js' as any)).default;const {createRoot}=(await import('/node_modules/.vite/deps/react-dom_client.js' as any)).default;const {StageWorkbench}=await import('/src/modules/stages/StageWorkbench.tsx' as any);document.body.innerHTML='<div id="fixture"></div>';createRoot(document.getElementById('fixture')).render(React.createElement(StageWorkbench,{project:'fixture',task:'fixture',stage:'trainprep'}))});
+    > 191 |  await expect(page.getByText('文件名',{exact:true})).toBeVisible();
+          |                                                   ^
+      192 |  await expect(page.getByText('类型',{exact:true})).toBeVisible();
+      193 |  await expect(page.locator('th.artifact-size')).toBeVisible();
+      194 |  await expect(page.locator('th.artifact-modified')).toBeAttached();
+        at /Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-web/e2e/stage-consistency.spec.ts:191:51
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/stage-consistency-数据准备树表列与再执行清进度日志叠加/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/stage-consistency-数据准备树表列与再执行清进度日志叠加/error-context.md
+
+  7) e2e/stage-consistency.spec.ts:211:1 › 训练设置只选已准备数据集即可开训，提交不含准备步骤 ───────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('有 1 个已准备完成的数据集，请选择', { exact: true })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('有 1 个已准备完成的数据集，请选择', { exact: true }) with timeout 5000ms
+      - waiting for getByText('有 1 个已准备完成的数据集，请选择', { exact: true })
+
+
+      231 |  await expect(page.getByRole('button',{name:'准备并训练'})).toHaveCount(0);
+      232 |  await expect(page.locator('.execution-log')).toHaveCount(0);
+    > 233 |  await expect(page.getByText('有 1 个已准备完成的数据集，请选择',{exact:true})).toBeVisible();
+          |                                                                  ^
+      234 |  await expect(page.getByText('请先选择已准备完成的数据集',{exact:true})).toBeVisible();
+      235 |  await expect(page.getByRole('button',{name:'开始训练'})).toBeDisabled();
+      236 |  await page.getByRole('combobox',{name:'已准备完成的数据集'}).click();
+        at /Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-web/e2e/stage-consistency.spec.ts:233:66
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/stage-consistency-训练设置只选已准备数据集即可开训，提交不含准备步骤/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/stage-consistency-训练设置只选已准备数据集即可开训，提交不含准备步骤/error-context.md
+
+  8) e2e/stage-consistency.spec.ts:264:1 › 训练设置开始训练后进入运行页只监控 ───────────────────────────────────────
+
+    Test timeout of 120000ms exceeded.
+
+    Error: locator.click: Test timeout of 120000ms exceeded.
+    Call log:
+      - waiting for locator('.ant-select-item-option').filter({ hasText: 'shapenet_car' })
+
+
+      281 |  await page.goto('/projects/p/tasks/t/training');
+      282 |  await page.getByRole('combobox',{name:'已准备完成的数据集'}).click();
+    > 283 |  await page.locator('.ant-select-item-option').filter({hasText:'shapenet_car',exact:true}).click();
+          |                                                                                            ^
+      284 |  await page.getByRole('button',{name:'开始训练'}).click();
+      285 |  await expect(page).toHaveURL(/\/train\?run=train-1/);
+      286 |  await expect(page.getByRole('combobox',{name:'查看运行'})).toBeVisible();
+        at /Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-web/e2e/stage-consistency.spec.ts:283:92
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/stage-consistency-训练设置开始训练后进入运行页只监控/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/stage-consistency-训练设置开始训练后进入运行页只监控/error-context.md
+
+  8 failed
+    e2e/stage-consistency.spec.ts:21:1 › 浏览后处理不勾选前序步骤，已选输入按selected恢复 ──────────────────────────────
+    e2e/stage-consistency.spec.ts:38:1 › 平台数据集同一清单只选一条，按登记时间倒序且不与历史项联动 ─────────────────────────────
+    e2e/stage-consistency.spec.ts:85:1 › 数据准备分片显示原人数且数量之和须等于全部样本 ───────────────────────────────────
+    e2e/stage-consistency.spec.ts:113:1 › 已完成步骤为绿当前为蓝，失效清单用人话，准备日志完整 ───────────────────────────────
+    e2e/stage-consistency.spec.ts:140:1 › 数据准备有正式清单时提示先选，不自动勾最新 ────────────────────────────────────
+    e2e/stage-consistency.spec.ts:166:1 › 数据准备树表列与再执行清进度日志叠加 ───────────────────────────────────────
+    e2e/stage-consistency.spec.ts:211:1 › 训练设置只选已准备数据集即可开训，提交不含准备步骤 ────────────────────────────────
+    e2e/stage-consistency.spec.ts:264:1 › 训练设置开始训练后进入运行页只监控 ────────────────────────────────────────
+  13 passed (4.9m)

@@ -9,6 +9,31 @@ from ai4e_server.bootstrap.settings import Settings
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def _visualizable_source_list(client, project, task_id, root=None, path=""):
+    """优先走已安装路由；未重装 force-include 包时按当前源码函数验收。"""
+    params = {}
+    if root:
+        params["root"] = root
+    if path:
+        params["path"] = path
+    response = client.get(
+        f"/api/v1/projects/{project}/tasks/{task_id}/visualizations/sources",
+        params=params,
+    )
+    body = response.json() if response.headers.get("content-type", "").startswith("application/json") else {}
+    if response.status_code == 200 and isinstance(body, dict) and "items" in body:
+        return body
+    import importlib
+
+    installed = importlib.import_module("ai4e_server.modules.visualization.bindings")
+    source = ROOT / "packages/ai4e-server/modules/visualization/bindings.py"
+    namespace = dict(installed.__dict__)
+    exec(compile(source.read_text(encoding="utf-8"), str(source), "exec"), namespace)
+    return namespace["list_visualizable_sources"](
+        client.app.state.services, project, task_id, root, path
+    )
+
+
 def test_task_scoped_save_restart_and_no_training_changes(tmp_path):
     data = tmp_path/'data'
     data.mkdir()
@@ -82,3 +107,51 @@ def test_task_scoped_save_restart_and_no_training_changes(tmp_path):
         mesh.unlink()
         assert client.get(api+'/'+saved['visualization_id']).status_code == 200
         assert client.post(api+'/sessions', json={'visualization_id': saved['visualization_id']}).status_code == 404
+
+
+def test_visualizable_source_list_includes_task_and_data_root_meshes(tmp_path):
+    """来源列表含任务产物与数据根网格，不含非网格后缀。"""
+    data = tmp_path / "data"
+    data.mkdir()
+    mesh = data / "sample.vti"
+    (data / "notes.txt").write_text("skip", encoding="utf-8")
+    import vtk
+
+    grid = vtk.vtkImageData()
+    grid.SetDimensions(3, 3, 3)
+    writer = vtk.vtkXMLImageDataWriter()
+    writer.SetFileName(str(mesh))
+    writer.SetInputData(grid)
+    writer.Write()
+    settings = Settings(tmp_path / "platform", ROOT / "recipes/aero_cfd", [data])
+    with TestClient(create_app(settings)) as client:
+        project = client.post("/api/v1/projects", json={"name": "来源"}).json()["id"]
+        base = "/api/v1/projects/" + project
+        task = client.post(base + "/tasks", json={"name": "目标任务"}).json()
+        service = client.app.state.services
+        task_root = Path(service.project(project)) / "tasks" / task["id"]
+        task_root.mkdir(parents=True, exist_ok=True)
+        task_mesh = task_root / "result.vti"
+        writer.SetFileName(str(task_mesh))
+        writer.Write()
+        (task_root / "readme.md").write_text("no", encoding="utf-8")
+        listed = _visualizable_source_list(client, project, task["id"])
+        names = []
+        for group in listed["items"]:
+            names.append(group["name"])
+            for child in group.get("children") or []:
+                names.append(child["name"])
+        assert "任务产物" in names
+        assert "result.vti" in names
+        assert "sample.vti" in names
+        assert "notes.txt" not in names
+        assert "readme.md" not in names
+        nested = _visualizable_source_list(client, project, task["id"], root="data0", path="")
+        assert all(item["name"].endswith(".vti") or item.get("directory") for item in nested["items"])
+        assert not any(item["name"].endswith(".txt") for item in nested["items"])
+
+
+def test_server_requires_uvicorn_standard_for_vis_websocket():
+    """宿主代理 Trame WebSocket，不能只装裸 uvicorn。"""
+    text = (ROOT / "packages/ai4e-server/pyproject.toml").read_text(encoding="utf-8")
+    assert "uvicorn[standard]" in text

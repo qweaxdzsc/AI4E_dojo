@@ -1,0 +1,29 @@
+[
+  {
+    "name": "shapenet_car",
+    "source_manifest": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/4753032f34914c339c311ea02cd4bcb5/tasks/f9fca9f6c4414c17abae50f8713fd86b/data/a911df4e0eaa4498b5a0492f64b2c443/manifest.json",
+    "target": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/4753032f34914c339c311ea02cd4bcb5/shared/datasets/shapenet_car/content",
+    "run_id": "a911df4e0eaa4498b5a0492f64b2c443",
+    "source_digest": "21a0efa4bfd3163c12aae390129c305ced6d027bb21d1c0468268ea17b3b15ee",
+    "samples": 1,
+    "status": "planned"
+  },
+  {
+    "name": "shapenet_car2",
+    "source_manifest": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/4753032f34914c339c311ea02cd4bcb5/tasks/f9fca9f6c4414c17abae50f8713fd86b/data/5c33894b8ef644be897ea6c16477ca1d/manifest.json",
+    "target": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/4753032f34914c339c311ea02cd4bcb5/shared/datasets/shapenet_car2/content",
+    "run_id": "5c33894b8ef644be897ea6c16477ca1d",
+    "source_digest": "28eb469406fd4450ffaf22d068af4ab9da30380fc368109d77f3179f23cc4405",
+    "samples": 889,
+    "status": "planned"
+  },
+  {
+    "name": "shapenet_car3",
+    "source_manifest": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/4753032f34914c339c311ea02cd4bcb5/tasks/f9fca9f6c4414c17abae50f8713fd86b/data/407ffce3b4154938bdaad9b2bfa5d54b/manifest.json",
+    "target": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/4753032f34914c339c311ea02cd4bcb5/shared/datasets/shapenet_car3/content",
+    "run_id": "407ffce3b4154938bdaad9b2bfa5d54b",
+    "source_digest": "9f65684f3da9bfa392183114f3c82497f5738ccf0af9753487e80b2e1d81d2f6",
+    "samples": 889,
+    "status": "planned"
+  }
+]

@@ -14,7 +14,7 @@ from ai4e_contrib.ability.model.abupt.model import construct, predict
 from ai4e_contrib.ability.model.abupt.sampling import prepare_inputs
 from ai4e_core import run
 from ai4e_core.abilities.training.batch import to_device
-from ai4e_core.applications.aero_cfd.post import stage
+from ai4e_core.applications.aero_cfd.infer import anchor_stage as stage
 from ai4e_core.applications.aero_cfd.post.progress import PostProgress
 from ai4e_core.applications.aero_cfd.train.resolve import apply_resolved
 from ai4e_core.base.events import SAMPLE, phase, sample_context
@@ -129,8 +129,10 @@ def execute_post(folder, cfg, predictor=None):
     before = set(root.iterdir())
 
     def execute(value):
+        reference = OmegaConf.to_container(value, resolve=True)
+        reference.pop("infer", None)  # 此处覆盖历史数值路径的失败交付。
         return stage.run(
-            OmegaConf.to_container(value, resolve=True),
+            reference,
             TrainingRun(),
             construct=construct,
             predict=predictor or predict,
@@ -153,7 +155,8 @@ def execute_post(folder, cfg, predictor=None):
 
 @pytest.mark.parametrize("failure", ["evaluation", "tensor", "pointcloud", "surface", "volume"])
 def test_post_failure_retains_completed_work(trained, monkeypatch, failure):
-    from ai4e_core.applications.aero_cfd.post import export, mesh
+    from ai4e_core.applications.aero_cfd.infer import anchor_export as export
+    from ai4e_core.applications.aero_cfd.infer import mesh
 
     folder, cfg = trained
 

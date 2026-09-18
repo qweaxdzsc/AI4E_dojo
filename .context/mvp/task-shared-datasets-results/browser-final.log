@@ -1,0 +1,63 @@
+
+> ai4e-web@0.1.0 test:e2e
+> playwright test shared-datasets.spec.ts rawprep-consistency.spec.ts stage-consistency.spec.ts stage-files.spec.ts model-inspection.spec.ts
+
+
+Running 21 tests using 1 worker
+
+  -   1 e2e/model-inspection.spec.ts:5:1 › 正式模型检查操作到沙箱图形渲染
+  -   2 e2e/model-inspection.spec.ts:65:3 › shapenet_car_abupt 换模后真实准备到模型结构
+  -   3 e2e/model-inspection.spec.ts:65:3 › nasa_crm_abupt 换模后真实准备到模型结构
+  ✓   4 e2e/rawprep-consistency.spec.ts:8:1 › 公开数据集绑定取消、结果树预览下载与正式进度 (2.2s)
+  ✓   5 e2e/rawprep-consistency.spec.ts:91:1 › 刷新后仍显示最近一次正式执行终态 (416ms)
+  ✓   6 e2e/rawprep-consistency.spec.ts:116:1 › 再执行立刻清进度且日志叠加 (556ms)
+  ✓   7 e2e/rawprep-consistency.spec.ts:159:1 › 处理结果可选择已登记平台数据集且不自动勾最新 (569ms)
+  ✘   8 e2e/rawprep-consistency.spec.ts:188:1 › 同名已存在时询问覆盖并带标记提交 (5.4s)
+  ✓   9 e2e/shared-datasets.spec.ts:3:35 › 共享覆盖取消及单次确认 已有名称 (1.2s)
+  ✓  10 e2e/shared-datasets.spec.ts:3:35 › 共享覆盖取消及单次确认 提交时冲突 (992ms)
+  ✓  11 e2e/shared-datasets.spec.ts:33:1 › 真实服务离线共享可见与文件浏览 (4.9s)
+  ✓  12 e2e/stage-consistency.spec.ts:3:1 › 阶段检查先保存，冲突不提交，响应丢失重用请求键 (576ms)
+  ✓  13 e2e/stage-consistency.spec.ts:20:1 › 浏览后处理不勾选前序步骤，已选输入按selected恢复 (898ms)
+  ✓  14 e2e/stage-consistency.spec.ts:37:1 › 平台数据集同一清单只选一条，按登记时间倒序且不与历史项联动 (562ms)
+  ✓  15 e2e/stage-consistency.spec.ts:62:1 › 数据准备字段按模型角色下拉匹配并标出张量形状不符 (520ms)
+  ✓  16 e2e/stage-consistency.spec.ts:84:1 › 数据准备分片显示原人数且数量之和须等于全部样本 (465ms)
+  ✓  17 e2e/stage-consistency.spec.ts:112:1 › 已完成步骤为绿当前为蓝，失效清单用人话，准备日志完整 (517ms)
+  ✓  18 e2e/stage-consistency.spec.ts:139:1 › 数据准备有正式清单时提示先选，不自动勾最新 (482ms)
+  ✓  19 e2e/stage-consistency.spec.ts:165:1 › 数据准备树表列与再执行清进度日志叠加 (572ms)
+  ✓  20 e2e/stage-consistency.spec.ts:207:1 › 训练运行只选准备记录，未选不可执行，提交不含准备步骤 (904ms)
+  ✓  21 e2e/stage-files.spec.ts:3:1 › 阶段文件无来源不回退，切换范围只请求固定来源 (492ms)
+
+
+  1) e2e/rawprep-consistency.spec.ts:188:1 › 同名已存在时询问覆盖并带标记提交 ──────────────────────────────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('dialog', { name: '覆盖已有平台数据集？' })
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('dialog', { name: '覆盖已有平台数据集？' }) with timeout 5000ms
+      - waiting for getByRole('dialog', { name: '覆盖已有平台数据集？' })
+
+
+      209 |  await page.getByRole('button',{name:'执行',exact:true}).click();
+      210 |  const dialog=page.getByRole('dialog',{name:'覆盖已有平台数据集？'});
+    > 211 |  await expect(dialog).toBeVisible();
+          |                       ^
+      212 |  await dialog.getByRole('button',{name:'覆盖并执行'}).click();
+      213 |  await expect.poll(()=>executes.length).toBe(1);
+      214 |  expect(executes[0].overwrite_processed_name).toBe(true);
+        at /Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-web/e2e/rawprep-consistency.spec.ts:211:23
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/rawprep-consistency-同名已存在时询问覆盖并带标记提交/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/rawprep-consistency-同名已存在时询问覆盖并带标记提交/error-context.md
+
+  1 failed
+    e2e/rawprep-consistency.spec.ts:188:1 › 同名已存在时询问覆盖并带标记提交 ───────────────────────────────────────
+  3 skipped
+  17 passed (24.5s)

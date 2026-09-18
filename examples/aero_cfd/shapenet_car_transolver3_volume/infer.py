@@ -6,8 +6,8 @@ sys.dont_write_bytecode = True
 from configuration import application_parameters, load_components, load_configuration
 
 from ai4e_core import run
-from ai4e_core.applications.aero_cfd import infer as infer_stage
-from ai4e_core.run.training import TrainingRun
+from ai4e_core.applications.aero_cfd.infer import anchor as infer_stage
+from ai4e_core.run import TrainingRun
 
 
 def infer(cfg, trained=None):
@@ -19,7 +19,7 @@ def infer(cfg, trained=None):
         session.report(result, stage="infer")
         return result
     job = infer_stage.open_inference(
-        application_parameters(cfg),
+        application_parameters(cfg, session=run.TrainingRun()),
         trained=trained,
         dataset_component=components.dataset,
         model_component=components.model,
@@ -30,7 +30,7 @@ def infer(cfg, trained=None):
     job = infer_stage.configure_physical_output(job)
     job = infer_stage.configure_selection(job, fields=cfg.infer.get("fields"))
     job = infer_stage.configure_evaluation(job, settings=cfg.infer)
-    job = infer_stage.configure_save(job, output=cfg.paths.datasets.predictions, settings=cfg.infer)
+    job = infer_stage.configure_save(job, output=session.output_dir("infer") / "predictions", settings=cfg.infer)
     job = infer_stage.configure_mesh_export(job, settings=cfg.infer)
     if session.dry_run:
         return infer_stage.check_report(job)
@@ -39,5 +39,7 @@ def infer(cfg, trained=None):
 
 if __name__ == "__main__":
     raise SystemExit(
-        run.launch({"infer": infer}, script=__file__, only=["infer"], config_loader=load_configuration)
+        run.launch(
+            {"infer": infer}, script=__file__, only=["infer"], config_loader=load_configuration
+        )
     )

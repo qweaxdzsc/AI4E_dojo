@@ -1,0 +1,945 @@
+{
+  "project": "abeed313dadb40afb765dce79ac156bb",
+  "task": "10188549151443188ef9a088cfcf0c1e",
+  "target": "shapenet_car_transolver3_surface",
+  "platform_root": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform",
+  "data_roots": [
+    "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/raw"
+  ],
+  "revision": "a2a3d4faf3c9211b7d3cb6674c942244f6b2910748eac928ad69bf68cdd01a0d",
+  "raw": {
+    "id": "d7d5dca56bdf4d2d903c6694ea06ca51",
+    "task_id": "10188549151443188ef9a088cfcf0c1e",
+    "version_id": "8ae00bbec72e4a6cb5c2682c1fe9be2d",
+    "status": "succeeded",
+    "created_at": "2026-09-15T11:16:04.589373+00:00",
+    "run_path": "tasks/10188549151443188ef9a088cfcf0c1e/runs/d7d5dca56bdf4d2d903c6694ea06ca51",
+    "data_path": "tasks/10188549151443188ef9a088cfcf0c1e/data/d7d5dca56bdf4d2d903c6694ea06ca51",
+    "code_path": "tasks/10188549151443188ef9a088cfcf0c1e/.dojo/executions/d7d5dca56bdf4d2d903c6694ea06ca51/code",
+    "request_path": "tasks/10188549151443188ef9a088cfcf0c1e/.dojo/executions/d7d5dca56bdf4d2d903c6694ea06ca51/request.json",
+    "pid": 33932,
+    "resumed_from": null,
+    "operation_mode": "execute",
+    "stages": [
+      "rawprep"
+    ],
+    "source_snapshot": {
+      "files": {
+        "README.md": "a353a0dd57809cfa4e14fe861fe843857b1d04a9656b9b2a528ca033b248ef7a",
+        "config.yaml": "e0b24b7bc8897525937672651858fefabf20dd42db5fb36841e63661aa76db8c",
+        "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+        "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+        "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+        "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+        "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+        "task-entry.json": "295dfea2c7d1b87628ebc67b79fe511339714d09ba25f077461e0e880766d957",
+        "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+        "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+      },
+      "digest": "e0eab730f482aa4fb4cf52bc18dd2e7fb0c3e6f3fa8621f38f5f3e1cf4a1d545"
+    },
+    "code_digest": "12b35f8ad4ba048e767346f4a8022da4ef4acb1c71019171d595e3d075b90375",
+    "metadata": {},
+    "error": null,
+    "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/runs/d7d5dca56bdf4d2d903c6694ea06ca51",
+    "data_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/data/d7d5dca56bdf4d2d903c6694ea06ca51",
+    "summary": {
+      "total": 1,
+      "attempted": 1,
+      "success": 1,
+      "unexecuted": 0,
+      "failed": false,
+      "failed_count": 0,
+      "failures": [],
+      "dry_run": false,
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/runs/d7d5dca56bdf4d2d903c6694ea06ca51",
+      "reports": {
+        "dataset": {
+          "manifest": "/private/tmp/dojo-architecture-20260915/installed-final/ai4e_contrib/application/datasets/shapenet_car/manifest.yaml",
+          "definition": {
+            "version": 1,
+            "name": "shapenet_car",
+            "sample_pattern": "param*/*",
+            "partition": "partition.yaml",
+            "reference_statistics": "/private/tmp/dojo-architecture-20260915/installed-final/ai4e_contrib/application/datasets/shapenet_car/statistics.yaml",
+            "sources": {
+              "surface": {
+                "filename": "quadpress_smpl.vtk",
+                "cell_type": "quad"
+              },
+              "volume": {
+                "filename": "hexvelo_smpl.vtk",
+                "cell_type": null
+              }
+            },
+            "fields": {
+              "surface": {
+                "pressure": {
+                  "array": "point_scalars",
+                  "association": "point",
+                  "kind": "scalar",
+                  "components": 1,
+                  "unit": "unknown"
+                }
+              },
+              "volume": {
+                "velocity": {
+                  "array": "point_vectors",
+                  "association": "point",
+                  "kind": "vector",
+                  "components": 3,
+                  "unit": "unknown"
+                }
+              }
+            },
+            "outputs": {
+              "surface_pressure": {
+                "domain": "surface",
+                "field": "fields.pressure"
+              },
+              "surface_position": {
+                "domain": "surface",
+                "field": "points"
+              },
+              "surface_normals": {
+                "domain": "surface",
+                "field": "normals"
+              },
+              "volume_velocity": {
+                "domain": "volume",
+                "field": "fields.velocity"
+              },
+              "volume_position": {
+                "domain": "volume",
+                "field": "points"
+              },
+              "volume_sdf": {
+                "domain": "volume",
+                "field": "nearest_distance"
+              },
+              "volume_normals": {
+                "domain": "volume",
+                "field": "nearest_direction"
+              },
+              "volume_surface_distance": {
+                "domain": "volume",
+                "field": "signed_distance"
+              },
+              "volume_closest_surface": {
+                "domain": "volume",
+                "field": "closest_on_surface"
+              },
+              "volume_surface_direction": {
+                "domain": "volume",
+                "field": "surface_direction"
+              }
+            },
+            "rawprep": {
+              "defaults": {
+                "sources": [
+                  "surface",
+                  "volume"
+                ],
+                "fields": {
+                  "surface": {
+                    "pressure": {
+                      "components": 1
+                    }
+                  },
+                  "volume": {
+                    "velocity": {
+                      "components": 3
+                    }
+                  }
+                },
+                "geometry": [
+                  "nearest_vertex",
+                  "volume_normals",
+                  "surface_normals",
+                  "exterior_mask"
+                ],
+                "save_fields": [
+                  "surface_pressure",
+                  "surface_position",
+                  "surface_normals",
+                  "volume_velocity",
+                  "volume_position",
+                  "volume_sdf",
+                  "volume_normals"
+                ],
+                "filters": {
+                  "surface": [
+                    "mask"
+                  ],
+                  "volume": [
+                    "exterior_mask"
+                  ]
+                },
+                "statistics": {
+                  "mode": "reference",
+                  "fields": [
+                    "surface_pressure",
+                    "surface_position",
+                    "surface_normals",
+                    "volume_velocity",
+                    "volume_position",
+                    "volume_sdf",
+                    "volume_normals"
+                  ],
+                  "position_fields": [
+                    "surface_position",
+                    "volume_position"
+                  ]
+                },
+                "vtkhdf": true,
+                "format": "pt"
+              },
+              "binding": {
+                "mode": "directory",
+                "root_key": "root",
+                "slots": [
+                  {
+                    "key": "root",
+                    "label": "ShapeNet 数据目录",
+                    "kind": "directory"
+                  }
+                ],
+                "description": "按 ShapeNet-Car 声明读取样本目录、表面/体积 VTK 并派生几何场。",
+                "locate": {
+                  "mode": "directory",
+                  "marker": "quadpress_smpl.vtk",
+                  "sample_parent": "param*"
+                }
+              },
+              "domains": {
+                "surface": "表面",
+                "volume": "体积"
+              },
+              "formats": [
+                "pt",
+                "zarr"
+              ],
+              "vtkhdf": true,
+              "statistics_modes": [
+                "reference",
+                "fit",
+                "none"
+              ],
+              "outputs": [
+                {
+                  "name": "surface_pressure",
+                  "label": "表面压力",
+                  "domain": "surface",
+                  "association": "point",
+                  "components": 1,
+                  "source_field": "surface_pressure",
+                  "required": false,
+                  "requires": [],
+                  "raw_field": "surface/point/point_scalars"
+                },
+                {
+                  "name": "surface_position",
+                  "label": "表面坐标",
+                  "domain": "surface",
+                  "association": "geometry",
+                  "components": 3,
+                  "source_field": "surface_position",
+                  "required": true,
+                  "requires": []
+                },
+                {
+                  "name": "surface_normals",
+                  "label": "表面法向",
+                  "domain": "surface",
+                  "association": "point",
+                  "components": 3,
+                  "source_field": "surface_normals",
+                  "required": false,
+                  "requires": [
+                    "surface_normals"
+                  ]
+                },
+                {
+                  "name": "volume_velocity",
+                  "label": "体积速度",
+                  "domain": "volume",
+                  "association": "point",
+                  "components": 3,
+                  "source_field": "volume_velocity",
+                  "required": false,
+                  "requires": [],
+                  "raw_field": "volume/point/point_vectors"
+                },
+                {
+                  "name": "volume_position",
+                  "label": "体积坐标",
+                  "domain": "volume",
+                  "association": "geometry",
+                  "components": 3,
+                  "source_field": "volume_position",
+                  "required": true,
+                  "requires": []
+                },
+                {
+                  "name": "volume_sdf",
+                  "label": "最近距离",
+                  "domain": "volume",
+                  "association": "point",
+                  "components": 1,
+                  "source_field": "volume_sdf",
+                  "required": false,
+                  "requires": [
+                    "nearest_vertex"
+                  ]
+                },
+                {
+                  "name": "volume_normals",
+                  "label": "体积法向",
+                  "domain": "volume",
+                  "association": "point",
+                  "components": 3,
+                  "source_field": "volume_normals",
+                  "required": false,
+                  "requires": [
+                    "volume_normals"
+                  ]
+                },
+                {
+                  "name": "volume_surface_distance",
+                  "label": "点到表面有符号距离",
+                  "domain": "volume",
+                  "association": "point",
+                  "components": 1,
+                  "source_field": "volume_surface_distance",
+                  "required": false,
+                  "requires": [
+                    "mesh_signed_distance"
+                  ]
+                },
+                {
+                  "name": "volume_closest_surface",
+                  "label": "表面最近点",
+                  "domain": "volume",
+                  "association": "point",
+                  "components": 3,
+                  "source_field": "volume_closest_surface",
+                  "required": false,
+                  "requires": [
+                    "mesh_signed_distance"
+                  ]
+                },
+                {
+                  "name": "volume_surface_direction",
+                  "label": "表面最近方向",
+                  "domain": "volume",
+                  "association": "point",
+                  "components": 3,
+                  "source_field": "volume_surface_direction",
+                  "required": false,
+                  "requires": [
+                    "mesh_signed_distance"
+                  ]
+                }
+              ],
+              "geometry": [
+                {
+                  "id": "nearest_vertex",
+                  "label": "最近顶点距离",
+                  "output": "volume_sdf",
+                  "parameters": {
+                    "epsilon": {
+                      "label": "数值稳定阈值",
+                      "default": 1e-08
+                    }
+                  },
+                  "domains": [
+                    "surface",
+                    "volume"
+                  ],
+                  "conflicts": [
+                    "mesh_signed_distance"
+                  ]
+                },
+                {
+                  "id": "volume_normals",
+                  "label": "体积法向",
+                  "output": "volume_normals",
+                  "parameters": {
+                    "epsilon": {
+                      "label": "数值稳定阈值",
+                      "default": 1e-08
+                    }
+                  },
+                  "domains": [
+                    "surface",
+                    "volume"
+                  ],
+                  "conflicts": [
+                    "mesh_signed_distance"
+                  ]
+                },
+                {
+                  "id": "mesh_signed_distance",
+                  "label": "点到网格表面距离",
+                  "output": [
+                    "volume_surface_distance",
+                    "volume_closest_surface",
+                    "volume_surface_direction"
+                  ],
+                  "parameters": {
+                    "epsilon": {
+                      "label": "数值稳定阈值",
+                      "default": 1e-08
+                    }
+                  },
+                  "domains": [
+                    "surface",
+                    "volume"
+                  ],
+                  "conflicts": [
+                    "nearest_vertex",
+                    "volume_normals"
+                  ]
+                },
+                {
+                  "id": "surface_normals",
+                  "label": "表面法向",
+                  "output": "surface_normals",
+                  "parameters": {
+                    "epsilon": {
+                      "label": "数值稳定阈值",
+                      "default": 1e-08
+                    }
+                  },
+                  "domains": [
+                    "surface"
+                  ]
+                },
+                {
+                  "id": "exterior_mask",
+                  "label": "体积点重合标记",
+                  "domains": [
+                    "surface",
+                    "volume"
+                  ]
+                }
+              ],
+              "filters": [
+                {
+                  "domain": "surface",
+                  "id": "mask",
+                  "label": "清洗未参与网格的表面节点"
+                },
+                {
+                  "domain": "volume",
+                  "id": "exterior_mask",
+                  "label": "清洗体积域中的表面点",
+                  "requires": [
+                    "exterior_mask"
+                  ]
+                }
+              ]
+            },
+            "manifest_path": "/private/tmp/dojo-architecture-20260915/installed-final/ai4e_contrib/application/datasets/shapenet_car/manifest.yaml",
+            "physical_layout": {
+              "domains": {
+                "surface": {
+                  "position": "surface_position",
+                  "fields": {
+                    "pressure": "surface_pressure",
+                    "normals": "surface_normals"
+                  }
+                },
+                "volume": {
+                  "position": "volume_position",
+                  "fields": {
+                    "velocity": "volume_velocity",
+                    "distance": "volume_sdf",
+                    "normals": "volume_normals"
+                  }
+                }
+              },
+              "conditions": {}
+            }
+          },
+          "partitions": {
+            "train": [
+              "param1/1dc58be25e1b6e5675cad724c63e222e"
+            ]
+          }
+        }
+      }
+    },
+    "lineage": {
+      "project_id": "abeed313dadb40afb765dce79ac156bb",
+      "task_id": "10188549151443188ef9a088cfcf0c1e",
+      "version_id": "8ae00bbec72e4a6cb5c2682c1fe9be2d",
+      "run_id": "d7d5dca56bdf4d2d903c6694ea06ca51",
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/runs/d7d5dca56bdf4d2d903c6694ea06ca51",
+      "data_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/data/d7d5dca56bdf4d2d903c6694ea06ca51",
+      "code_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/.dojo/executions/d7d5dca56bdf4d2d903c6694ea06ca51/code",
+      "version": {
+        "id": "8ae00bbec72e4a6cb5c2682c1fe9be2d",
+        "task_id": "10188549151443188ef9a088cfcf0c1e",
+        "created_at": "2026-09-15T11:16:04.457080+00:00",
+        "parent_version_id": null,
+        "baseline_version_id": null,
+        "snapshot": {
+          "files": {
+            "README.md": "a353a0dd57809cfa4e14fe861fe843857b1d04a9656b9b2a528ca033b248ef7a",
+            "config.yaml": "481c2bcb534af451f45c3235485863462ab3742c8067024f6185d4b2c1034c1b",
+            "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+            "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+            "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+            "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+            "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+            "task-entry.json": "295dfea2c7d1b87628ebc67b79fe511339714d09ba25f077461e0e880766d957",
+            "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+            "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          },
+          "digest": "881c169967a08d5abc822e34ba8ec202f849866e7c797f818192490cf441dc36"
+        },
+        "source_snapshot": {
+          "files": {
+            "README.md": "a353a0dd57809cfa4e14fe861fe843857b1d04a9656b9b2a528ca033b248ef7a",
+            "config.yaml": "846ba30ac3ac4b0ea3e2fa31d34650a70b57a29e16b3e069cfe4b3ca4c08d7a3",
+            "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+            "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+            "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+            "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+            "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+            "task-entry.json": "295dfea2c7d1b87628ebc67b79fe511339714d09ba25f077461e0e880766d957",
+            "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+            "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          },
+          "digest": "c74be272555aa5b626937d33854cf00936001b040990ca27bae670e495fbb584"
+        },
+        "source": {
+          "kind": "template",
+          "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/case-templates/shapenet_car_abupt-5a106e15463b2802c3417dcfd395b52abc948b729c7d16bde0889316603b10b6",
+          "run_id": null
+        },
+        "assets": {},
+        "copied_outputs": {},
+        "changes": [
+          {
+            "path": "README.md",
+            "before": null,
+            "after": "a353a0dd57809cfa4e14fe861fe843857b1d04a9656b9b2a528ca033b248ef7a"
+          },
+          {
+            "path": "config.yaml",
+            "before": null,
+            "after": "481c2bcb534af451f45c3235485863462ab3742c8067024f6185d4b2c1034c1b"
+          },
+          {
+            "path": "configuration.py",
+            "before": null,
+            "after": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0"
+          },
+          {
+            "path": "infer.py",
+            "before": null,
+            "after": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62"
+          },
+          {
+            "path": "pipeline.py",
+            "before": null,
+            "after": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8"
+          },
+          {
+            "path": "post.py",
+            "before": null,
+            "after": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2"
+          },
+          {
+            "path": "rawprep.py",
+            "before": null,
+            "after": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af"
+          },
+          {
+            "path": "task-entry.json",
+            "before": null,
+            "after": "295dfea2c7d1b87628ebc67b79fe511339714d09ba25f077461e0e880766d957"
+          },
+          {
+            "path": "train.py",
+            "before": null,
+            "after": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0"
+          },
+          {
+            "path": "trainprep.py",
+            "before": null,
+            "after": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          }
+        ]
+      },
+      "assets": {
+        "dataset.root": {
+          "id": "241ac587716f4de18dda194f9dcca4f5",
+          "kind": "dataset",
+          "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/raw",
+          "external": true,
+          "digest": "a09bf95f0dd453d39d54a416131e94bcc98558ed792196ec8ae2542cef597be2",
+          "source": {},
+          "dependencies": []
+        }
+      },
+      "resumed_from": null,
+      "schema_version": 1
+    }
+  },
+  "old_preparation": {
+    "id": "c11bf032d7b34e6ca7dfb8f5ce1b9088",
+    "task_id": "10188549151443188ef9a088cfcf0c1e",
+    "version_id": "8ae00bbec72e4a6cb5c2682c1fe9be2d",
+    "status": "succeeded",
+    "created_at": "2026-09-15T11:16:08.540307+00:00",
+    "run_path": "tasks/10188549151443188ef9a088cfcf0c1e/runs/c11bf032d7b34e6ca7dfb8f5ce1b9088",
+    "data_path": "tasks/10188549151443188ef9a088cfcf0c1e/data/c11bf032d7b34e6ca7dfb8f5ce1b9088",
+    "code_path": "tasks/10188549151443188ef9a088cfcf0c1e/.dojo/executions/c11bf032d7b34e6ca7dfb8f5ce1b9088/code",
+    "request_path": "tasks/10188549151443188ef9a088cfcf0c1e/.dojo/executions/c11bf032d7b34e6ca7dfb8f5ce1b9088/request.json",
+    "pid": 34000,
+    "resumed_from": null,
+    "operation_mode": "execute",
+    "stages": [
+      "trainprep"
+    ],
+    "source_snapshot": {
+      "files": {
+        "README.md": "a353a0dd57809cfa4e14fe861fe843857b1d04a9656b9b2a528ca033b248ef7a",
+        "config.yaml": "f7d07d578af307509b93123e6f19408d26eebbb4170584fc0e47a8ea623e47d7",
+        "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+        "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+        "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+        "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+        "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+        "task-entry.json": "295dfea2c7d1b87628ebc67b79fe511339714d09ba25f077461e0e880766d957",
+        "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+        "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+      },
+      "digest": "aa3ba80b927c9e9f9936cd0657ca58e171a2e7afb52421cf2f38397701462586"
+    },
+    "code_digest": "652d53d6aa1d830e3ecfe8ffd7b918295f317a51947acaf79f009bcc523f5bd6",
+    "metadata": {},
+    "error": null,
+    "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/runs/c11bf032d7b34e6ca7dfb8f5ce1b9088",
+    "data_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/data/c11bf032d7b34e6ca7dfb8f5ce1b9088",
+    "summary": {
+      "total": 0,
+      "attempted": 0,
+      "success": 0,
+      "unexecuted": 0,
+      "failed": false,
+      "failed_count": 0,
+      "failures": [],
+      "dry_run": false,
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/runs/c11bf032d7b34e6ca7dfb8f5ce1b9088",
+      "reports": {
+        "trainprep": {
+          "preparation": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/runs/c11bf032d7b34e6ca7dfb8f5ce1b9088/artifacts/preparation.json",
+          "split_counts": {
+            "train": 1
+          }
+        }
+      }
+    },
+    "lineage": {
+      "project_id": "abeed313dadb40afb765dce79ac156bb",
+      "task_id": "10188549151443188ef9a088cfcf0c1e",
+      "version_id": "8ae00bbec72e4a6cb5c2682c1fe9be2d",
+      "run_id": "c11bf032d7b34e6ca7dfb8f5ce1b9088",
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/runs/c11bf032d7b34e6ca7dfb8f5ce1b9088",
+      "data_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/data/c11bf032d7b34e6ca7dfb8f5ce1b9088",
+      "code_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/.dojo/executions/c11bf032d7b34e6ca7dfb8f5ce1b9088/code",
+      "version": {
+        "id": "8ae00bbec72e4a6cb5c2682c1fe9be2d",
+        "task_id": "10188549151443188ef9a088cfcf0c1e",
+        "created_at": "2026-09-15T11:16:04.457080+00:00",
+        "parent_version_id": null,
+        "baseline_version_id": null,
+        "snapshot": {
+          "files": {
+            "README.md": "a353a0dd57809cfa4e14fe861fe843857b1d04a9656b9b2a528ca033b248ef7a",
+            "config.yaml": "481c2bcb534af451f45c3235485863462ab3742c8067024f6185d4b2c1034c1b",
+            "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+            "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+            "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+            "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+            "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+            "task-entry.json": "295dfea2c7d1b87628ebc67b79fe511339714d09ba25f077461e0e880766d957",
+            "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+            "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          },
+          "digest": "881c169967a08d5abc822e34ba8ec202f849866e7c797f818192490cf441dc36"
+        },
+        "source_snapshot": {
+          "files": {
+            "README.md": "a353a0dd57809cfa4e14fe861fe843857b1d04a9656b9b2a528ca033b248ef7a",
+            "config.yaml": "846ba30ac3ac4b0ea3e2fa31d34650a70b57a29e16b3e069cfe4b3ca4c08d7a3",
+            "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+            "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+            "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+            "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+            "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+            "task-entry.json": "295dfea2c7d1b87628ebc67b79fe511339714d09ba25f077461e0e880766d957",
+            "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+            "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          },
+          "digest": "c74be272555aa5b626937d33854cf00936001b040990ca27bae670e495fbb584"
+        },
+        "source": {
+          "kind": "template",
+          "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/case-templates/shapenet_car_abupt-5a106e15463b2802c3417dcfd395b52abc948b729c7d16bde0889316603b10b6",
+          "run_id": null
+        },
+        "assets": {},
+        "copied_outputs": {},
+        "changes": [
+          {
+            "path": "README.md",
+            "before": null,
+            "after": "a353a0dd57809cfa4e14fe861fe843857b1d04a9656b9b2a528ca033b248ef7a"
+          },
+          {
+            "path": "config.yaml",
+            "before": null,
+            "after": "481c2bcb534af451f45c3235485863462ab3742c8067024f6185d4b2c1034c1b"
+          },
+          {
+            "path": "configuration.py",
+            "before": null,
+            "after": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0"
+          },
+          {
+            "path": "infer.py",
+            "before": null,
+            "after": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62"
+          },
+          {
+            "path": "pipeline.py",
+            "before": null,
+            "after": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8"
+          },
+          {
+            "path": "post.py",
+            "before": null,
+            "after": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2"
+          },
+          {
+            "path": "rawprep.py",
+            "before": null,
+            "after": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af"
+          },
+          {
+            "path": "task-entry.json",
+            "before": null,
+            "after": "295dfea2c7d1b87628ebc67b79fe511339714d09ba25f077461e0e880766d957"
+          },
+          {
+            "path": "train.py",
+            "before": null,
+            "after": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0"
+          },
+          {
+            "path": "trainprep.py",
+            "before": null,
+            "after": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          }
+        ]
+      },
+      "assets": {
+        "train.manifest": {
+          "id": "555c7784016d4d548a85b8dac3102877",
+          "kind": "dataset",
+          "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/data/d7d5dca56bdf4d2d903c6694ea06ca51/manifest.json",
+          "external": true,
+          "digest": "3ae01fe5cd908abe10ee799914e3eafa63aa7a8f30c2f44cb99ac003a0d4eb5e",
+          "source": {},
+          "dependencies": []
+        }
+      },
+      "resumed_from": null,
+      "schema_version": 1
+    }
+  },
+  "new_preparation": {
+    "id": "4e23bd01c47a4a448284b7b24ae7fbff",
+    "task_id": "10188549151443188ef9a088cfcf0c1e",
+    "version_id": "8ae00bbec72e4a6cb5c2682c1fe9be2d",
+    "status": "succeeded",
+    "created_at": "2026-09-15T11:16:31.033540+00:00",
+    "run_path": "tasks/10188549151443188ef9a088cfcf0c1e/runs/4e23bd01c47a4a448284b7b24ae7fbff",
+    "data_path": "tasks/10188549151443188ef9a088cfcf0c1e/data/4e23bd01c47a4a448284b7b24ae7fbff",
+    "code_path": "tasks/10188549151443188ef9a088cfcf0c1e/.dojo/executions/4e23bd01c47a4a448284b7b24ae7fbff/code",
+    "request_path": "tasks/10188549151443188ef9a088cfcf0c1e/.dojo/executions/4e23bd01c47a4a448284b7b24ae7fbff/request.json",
+    "pid": 34406,
+    "resumed_from": null,
+    "operation_mode": "execute",
+    "stages": [
+      "trainprep"
+    ],
+    "source_snapshot": {
+      "files": {
+        "README.md": "a353a0dd57809cfa4e14fe861fe843857b1d04a9656b9b2a528ca033b248ef7a",
+        "config.yaml": "3376d09fe9ca4b10fd1a6699d5a5a1a57653ccd48e8c77891c9791cda5459957",
+        "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+        "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+        "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+        "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+        "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+        "task-entry.json": "295dfea2c7d1b87628ebc67b79fe511339714d09ba25f077461e0e880766d957",
+        "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+        "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+      },
+      "digest": "95342ca55b03b655e82124c9b28da42d4a656349724d32046b6faa22e549b52f"
+    },
+    "code_digest": "4eb6dc630ed4776f796b6eb8065bdcdae0a6144d66175de1e0bee4cdda823815",
+    "metadata": {},
+    "error": null,
+    "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/runs/4e23bd01c47a4a448284b7b24ae7fbff",
+    "data_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/data/4e23bd01c47a4a448284b7b24ae7fbff",
+    "summary": {
+      "total": 0,
+      "attempted": 0,
+      "success": 0,
+      "unexecuted": 0,
+      "failed": false,
+      "failed_count": 0,
+      "failures": [],
+      "dry_run": false,
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/runs/4e23bd01c47a4a448284b7b24ae7fbff",
+      "reports": {
+        "trainprep": {
+          "preparation": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/runs/4e23bd01c47a4a448284b7b24ae7fbff/artifacts/preparation.json",
+          "split_counts": {
+            "train": 1
+          }
+        }
+      }
+    },
+    "lineage": {
+      "project_id": "abeed313dadb40afb765dce79ac156bb",
+      "task_id": "10188549151443188ef9a088cfcf0c1e",
+      "version_id": "8ae00bbec72e4a6cb5c2682c1fe9be2d",
+      "run_id": "4e23bd01c47a4a448284b7b24ae7fbff",
+      "run_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/runs/4e23bd01c47a4a448284b7b24ae7fbff",
+      "data_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/data/4e23bd01c47a4a448284b7b24ae7fbff",
+      "code_dir": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/.dojo/executions/4e23bd01c47a4a448284b7b24ae7fbff/code",
+      "version": {
+        "id": "8ae00bbec72e4a6cb5c2682c1fe9be2d",
+        "task_id": "10188549151443188ef9a088cfcf0c1e",
+        "created_at": "2026-09-15T11:16:04.457080+00:00",
+        "parent_version_id": null,
+        "baseline_version_id": null,
+        "snapshot": {
+          "files": {
+            "README.md": "a353a0dd57809cfa4e14fe861fe843857b1d04a9656b9b2a528ca033b248ef7a",
+            "config.yaml": "481c2bcb534af451f45c3235485863462ab3742c8067024f6185d4b2c1034c1b",
+            "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+            "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+            "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+            "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+            "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+            "task-entry.json": "295dfea2c7d1b87628ebc67b79fe511339714d09ba25f077461e0e880766d957",
+            "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+            "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          },
+          "digest": "881c169967a08d5abc822e34ba8ec202f849866e7c797f818192490cf441dc36"
+        },
+        "source_snapshot": {
+          "files": {
+            "README.md": "a353a0dd57809cfa4e14fe861fe843857b1d04a9656b9b2a528ca033b248ef7a",
+            "config.yaml": "846ba30ac3ac4b0ea3e2fa31d34650a70b57a29e16b3e069cfe4b3ca4c08d7a3",
+            "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+            "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+            "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+            "post.py": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2",
+            "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+            "task-entry.json": "295dfea2c7d1b87628ebc67b79fe511339714d09ba25f077461e0e880766d957",
+            "train.py": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0",
+            "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          },
+          "digest": "c74be272555aa5b626937d33854cf00936001b040990ca27bae670e495fbb584"
+        },
+        "source": {
+          "kind": "template",
+          "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/case-templates/shapenet_car_abupt-5a106e15463b2802c3417dcfd395b52abc948b729c7d16bde0889316603b10b6",
+          "run_id": null
+        },
+        "assets": {},
+        "copied_outputs": {},
+        "changes": [
+          {
+            "path": "README.md",
+            "before": null,
+            "after": "a353a0dd57809cfa4e14fe861fe843857b1d04a9656b9b2a528ca033b248ef7a"
+          },
+          {
+            "path": "config.yaml",
+            "before": null,
+            "after": "481c2bcb534af451f45c3235485863462ab3742c8067024f6185d4b2c1034c1b"
+          },
+          {
+            "path": "configuration.py",
+            "before": null,
+            "after": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0"
+          },
+          {
+            "path": "infer.py",
+            "before": null,
+            "after": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62"
+          },
+          {
+            "path": "pipeline.py",
+            "before": null,
+            "after": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8"
+          },
+          {
+            "path": "post.py",
+            "before": null,
+            "after": "cf9ffc9245efef3455978f3373163361edda824fa8a01392e607b8225bce48d2"
+          },
+          {
+            "path": "rawprep.py",
+            "before": null,
+            "after": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af"
+          },
+          {
+            "path": "task-entry.json",
+            "before": null,
+            "after": "295dfea2c7d1b87628ebc67b79fe511339714d09ba25f077461e0e880766d957"
+          },
+          {
+            "path": "train.py",
+            "before": null,
+            "after": "6bb642449fa96dc35609d64fc3ad86a6c78c486afea170bbec786e51370bd3f0"
+          },
+          {
+            "path": "trainprep.py",
+            "before": null,
+            "after": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+          }
+        ]
+      },
+      "assets": {
+        "train.manifest": {
+          "id": "dc23b911eeff432b9d734beb303ef5dc",
+          "kind": "dataset",
+          "path": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/data/d7d5dca56bdf4d2d903c6694ea06ca51/manifest.json",
+          "external": true,
+          "digest": "3ae01fe5cd908abe10ee799914e3eafa63aa7a8f30c2f44cb99ac003a0d4eb5e",
+          "source": {},
+          "dependencies": []
+        }
+      },
+      "resumed_from": null,
+      "schema_version": 1
+    }
+  },
+  "manifest": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/data/d7d5dca56bdf4d2d903c6694ea06ca51/manifest.json",
+  "prepared": "/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-274/test_model_switch_real_prepara0/platform/projects/896acadca1af42bf85d599fee2b5bffd/tasks/10188549151443188ef9a088cfcf0c1e/runs/4e23bd01c47a4a448284b7b24ae7fbff/artifacts/preparation.json",
+  "split_counts": {
+    "train": 1
+  }
+}

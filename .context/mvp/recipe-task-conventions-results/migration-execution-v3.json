@@ -1,0 +1,421 @@
+[
+  {
+    "task": "f9fca9f6c4414c17abae50f8713fd86b",
+    "source_kind": "native",
+    "candidate": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/f9fca9f6c4414c17abae50f8713fd86b/candidate",
+    "original_digest": {
+      "README.md": "584f403221db54c01f2c9017258d88e86c6a1efaa3041ff0292b212fe1b1d17a",
+      "config.yaml": "dd9a35138e4d76b16df63dcacea6a7452f063638043b7fb5d70963f19fb8ffd9",
+      "configuration.py": "208575b085113900295223ebd5d494d48736844d73fa8ffd711ab840ae1f2017",
+      "pipeline.py": "c64f4315397f1e793ff236ffd27bc09623036847b4913e783d051458daa9def1",
+      "post.py": "2961ecd2bda5e6af01f0ba0b37ff584ad3399ea851b96409e901b5a78b3af05e",
+      "rawprep.py": "1d0999b7df6ed0e03e5ab39cc148c037d2bd9f38cae163bdf30f149ca1ba87a3",
+      "task-entry.json": "2f4bd88ca5c48edf47cec2237cd824b65ef5d1a1ec28bb105875021ee6578bc2",
+      "train.py": "3956237eca1242570db4b74e67156b3453e2c0ea28e839677a1be1de67f5cd91",
+      "trainprep.py": "f4874081717ab2a9bda0399aa111ec9dc6a69b4ff0a7f1049b8ce04987302052"
+    },
+    "runs": [
+      {
+        "id": "7ca2ba3792d44a14aa2e45b75757691d",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/f9fca9f6c4414c17abae50f8713fd86b/project/tasks/5888c29613594111825a053ea3c35e9c/runs/7ca2ba3792d44a14aa2e45b75757691d"
+      },
+      {
+        "id": "472e9ea92ca94518ac1d07f4cce572a1",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/f9fca9f6c4414c17abae50f8713fd86b/project/tasks/5888c29613594111825a053ea3c35e9c/runs/472e9ea92ca94518ac1d07f4cce572a1"
+      },
+      {
+        "id": "3e2092e8a7c149d79d0f5c8962538b9d",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/f9fca9f6c4414c17abae50f8713fd86b/project/tasks/5888c29613594111825a053ea3c35e9c/runs/3e2092e8a7c149d79d0f5c8962538b9d"
+      }
+    ],
+    "status": "passed",
+    "scope": "small original-data handoff, not full historical training",
+    "samples": {
+      "train": [
+        "param1/1dc58be25e1b6e5675cad724c63e222e"
+      ]
+    },
+    "resume": "exact_model_parameters",
+    "lineage_versions": 1,
+    "seconds": 25.457206708029844
+  },
+  {
+    "task": "5efda0a77ae94017a439a95da98b0df3",
+    "source_kind": "physical",
+    "candidate": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/5efda0a77ae94017a439a95da98b0df3/candidate",
+    "original_digest": {
+      "README.md": "d08c3d0c041007e649acf5f92d3bfff6ea09cbf412c59a81578fd48e2a95d4f4",
+      "config.yaml": "3be3dcbee4903c4dc9df9238070f0ae4dd75ca49f4e48330c59bb9945f88ac39",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "post.py": "b578c52e862b27ecd4a670d34336a6fd6cbf6a4f65942ce311a9a839e7da5e71",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "762f759b753fcebbb79d5a816970e287a888189c52b43ad9b03e1c399959a688",
+      "train.py": "5775d4f10dfd6353cf6b6df7c6a2345c6b6760878bbc87a92bcdd639324c25e9",
+      "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+    },
+    "runs": [
+      {
+        "id": "03bf7287c4854fc4865a1b7122c19dab",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/5efda0a77ae94017a439a95da98b0df3/project/tasks/b289672161be48deac38bdcbda3c577d/runs/03bf7287c4854fc4865a1b7122c19dab"
+      },
+      {
+        "id": "800370b85e5b46dd8453ef9ab36a7828",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/5efda0a77ae94017a439a95da98b0df3/project/tasks/b289672161be48deac38bdcbda3c577d/runs/800370b85e5b46dd8453ef9ab36a7828"
+      },
+      {
+        "id": "045c0cb9802b489e8820bb733a0f55a0",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/5efda0a77ae94017a439a95da98b0df3/project/tasks/b289672161be48deac38bdcbda3c577d/runs/045c0cb9802b489e8820bb733a0f55a0"
+      }
+    ],
+    "status": "passed",
+    "scope": "small original-data handoff, not full historical training",
+    "samples": {
+      "train": [
+        "param1/1dc58be25e1b6e5675cad724c63e222e"
+      ],
+      "test": [
+        "param0/100715345ee54d7ae38b52b4ee9d36a3"
+      ]
+    },
+    "resume": "exact_model_parameters",
+    "lineage_versions": 1,
+    "seconds": 19.497568499995396
+  },
+  {
+    "task": "885aa4bad4c04f3da12441c0bd19a787",
+    "source_kind": "native",
+    "candidate": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/885aa4bad4c04f3da12441c0bd19a787/candidate",
+    "original_digest": {
+      "README.md": "d08c3d0c041007e649acf5f92d3bfff6ea09cbf412c59a81578fd48e2a95d4f4",
+      "config.yaml": "3be3dcbee4903c4dc9df9238070f0ae4dd75ca49f4e48330c59bb9945f88ac39",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "post.py": "b578c52e862b27ecd4a670d34336a6fd6cbf6a4f65942ce311a9a839e7da5e71",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "762f759b753fcebbb79d5a816970e287a888189c52b43ad9b03e1c399959a688",
+      "train.py": "4b39c04f807cf6293196c2bb99b31946744541fa683021af0798238f1f444089",
+      "trainprep.py": "2e32fed9ddffa4d76d16776320646f5b1ebaa6958e18d5f38c9547bf9cc1dca8"
+    },
+    "runs": [
+      {
+        "id": "3173724c5a784c4ebec74532387f6527",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/885aa4bad4c04f3da12441c0bd19a787/project/tasks/4ab3b8e9517b4801be5268af6514e169/runs/3173724c5a784c4ebec74532387f6527"
+      },
+      {
+        "id": "5dc7aebdf50d4430904f1e426ddc8967",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/885aa4bad4c04f3da12441c0bd19a787/project/tasks/4ab3b8e9517b4801be5268af6514e169/runs/5dc7aebdf50d4430904f1e426ddc8967"
+      },
+      {
+        "id": "098bfd84a9a345f8816c0dd2bbc7a23f",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/885aa4bad4c04f3da12441c0bd19a787/project/tasks/4ab3b8e9517b4801be5268af6514e169/runs/098bfd84a9a345f8816c0dd2bbc7a23f"
+      }
+    ],
+    "status": "passed",
+    "scope": "small original-data handoff, not full historical training",
+    "samples": {
+      "train": [
+        "param1/1dc58be25e1b6e5675cad724c63e222e"
+      ],
+      "test": [
+        "param0/100715345ee54d7ae38b52b4ee9d36a3"
+      ]
+    },
+    "resume": "exact_model_parameters",
+    "lineage_versions": 1,
+    "seconds": 18.91895125003066
+  },
+  {
+    "task": "9a9de296d0cd4d7398cd4b95de710264",
+    "source_kind": "physical",
+    "candidate": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/9a9de296d0cd4d7398cd4b95de710264/candidate",
+    "original_digest": {
+      "README.md": "d08c3d0c041007e649acf5f92d3bfff6ea09cbf412c59a81578fd48e2a95d4f4",
+      "config.yaml": "2cf96e793d3c96cc5ab9e42a735dfe6e8d02373664625ee60bc5395506f42693",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "post.py": "b578c52e862b27ecd4a670d34336a6fd6cbf6a4f65942ce311a9a839e7da5e71",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "762f759b753fcebbb79d5a816970e287a888189c52b43ad9b03e1c399959a688",
+      "train.py": "5775d4f10dfd6353cf6b6df7c6a2345c6b6760878bbc87a92bcdd639324c25e9",
+      "trainprep.py": "2e32fed9ddffa4d76d16776320646f5b1ebaa6958e18d5f38c9547bf9cc1dca8"
+    },
+    "runs": [
+      {
+        "id": "25fbf2c140aa45cb880102fa810a5104",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/9a9de296d0cd4d7398cd4b95de710264/project/tasks/ce88ee1d41a749ddb28e26360a432219/runs/25fbf2c140aa45cb880102fa810a5104"
+      },
+      {
+        "id": "2476e13b120e4151aee3d044eae9bca1",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/9a9de296d0cd4d7398cd4b95de710264/project/tasks/ce88ee1d41a749ddb28e26360a432219/runs/2476e13b120e4151aee3d044eae9bca1"
+      },
+      {
+        "id": "e84f2316d76d4e26b8aecdb95011ee99",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/9a9de296d0cd4d7398cd4b95de710264/project/tasks/ce88ee1d41a749ddb28e26360a432219/runs/e84f2316d76d4e26b8aecdb95011ee99"
+      }
+    ],
+    "status": "passed",
+    "scope": "small original-data handoff, not full historical training",
+    "samples": {
+      "train": [
+        "param1/1dc58be25e1b6e5675cad724c63e222e"
+      ],
+      "test": [
+        "param0/100715345ee54d7ae38b52b4ee9d36a3"
+      ]
+    },
+    "resume": "exact_model_parameters",
+    "lineage_versions": 1,
+    "seconds": 17.853605375043117
+  },
+  {
+    "task": "9bb3729b7001425fa380adc9044c13ab",
+    "source_kind": "native",
+    "candidate": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/9bb3729b7001425fa380adc9044c13ab/candidate",
+    "original_digest": {
+      "README.md": "d08c3d0c041007e649acf5f92d3bfff6ea09cbf412c59a81578fd48e2a95d4f4",
+      "config.yaml": "3be3dcbee4903c4dc9df9238070f0ae4dd75ca49f4e48330c59bb9945f88ac39",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "post.py": "b578c52e862b27ecd4a670d34336a6fd6cbf6a4f65942ce311a9a839e7da5e71",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "762f759b753fcebbb79d5a816970e287a888189c52b43ad9b03e1c399959a688",
+      "train.py": "9fbfda72c584fd7ae5fb297f8ed10d92d434162563258aa6a2d6a5f647819e06",
+      "trainprep.py": "2e32fed9ddffa4d76d16776320646f5b1ebaa6958e18d5f38c9547bf9cc1dca8"
+    },
+    "runs": [
+      {
+        "id": "a54320aa75ec4036bc62b10ab27597fa",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/9bb3729b7001425fa380adc9044c13ab/project/tasks/796b5ff984334e3ea3a0c1bc6af2a1f6/runs/a54320aa75ec4036bc62b10ab27597fa"
+      },
+      {
+        "id": "f3d5341240b4412aad384a329cd209a7",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/9bb3729b7001425fa380adc9044c13ab/project/tasks/796b5ff984334e3ea3a0c1bc6af2a1f6/runs/f3d5341240b4412aad384a329cd209a7"
+      },
+      {
+        "id": "3c6d5d1c99574a7baebba50338894a3f",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/9bb3729b7001425fa380adc9044c13ab/project/tasks/796b5ff984334e3ea3a0c1bc6af2a1f6/runs/3c6d5d1c99574a7baebba50338894a3f"
+      }
+    ],
+    "status": "passed",
+    "scope": "small original-data handoff, not full historical training",
+    "samples": {
+      "train": [
+        "param1/1dc58be25e1b6e5675cad724c63e222e"
+      ],
+      "test": [
+        "param0/100715345ee54d7ae38b52b4ee9d36a3"
+      ]
+    },
+    "resume": "exact_model_parameters",
+    "lineage_versions": 1,
+    "seconds": 18.437788292067125
+  },
+  {
+    "task": "9c1dac251856411d9091d8d1cc60bc3e",
+    "source_kind": "physical",
+    "candidate": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/9c1dac251856411d9091d8d1cc60bc3e/candidate",
+    "original_digest": {
+      "README.md": "9cef2dfdbc8d3c046ad56453b93b37746b7f912e012fa8bae1f07f2bea747a71",
+      "config.yaml": "358388c5782a10cab07b9e7bc0f000fbc4bd18906fece9dfc5230709f0285285",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "8ec280823e51e938d3239f775591f4025c1a3b59f69a8500fd90fa9058b172e7",
+      "pipeline.py": "151bbeaff76480c644a8d0a64ec0f2218fd80829b3e93d6aa7b1b95322654c8a",
+      "post.py": "229feb36cb17d4bfddedb9747a0dcc2752ff52eb5c3496bf424540dae8352bc0",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "65de1a4584f5101e8ddb826f56fedb2424270aba2d1e86f111296d1bc7fa232f",
+      "train.py": "bd65ce30d49afb8827827019db40a076c9ec556c4a90de9e58de73bef182772c",
+      "trainprep.py": "2e32fed9ddffa4d76d16776320646f5b1ebaa6958e18d5f38c9547bf9cc1dca8"
+    },
+    "runs": [
+      {
+        "id": "a865ab81f908468c8af500925e8a4eb3",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/9c1dac251856411d9091d8d1cc60bc3e/project/tasks/5e037f2578f54acc96fc4d89d0b3dd37/runs/a865ab81f908468c8af500925e8a4eb3"
+      },
+      {
+        "id": "8bf0a79e7eae42649ddb6a22c293cec1",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/9c1dac251856411d9091d8d1cc60bc3e/project/tasks/5e037f2578f54acc96fc4d89d0b3dd37/runs/8bf0a79e7eae42649ddb6a22c293cec1"
+      },
+      {
+        "id": "0e697516061e44c0a08cc8f563441b42",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/9c1dac251856411d9091d8d1cc60bc3e/project/tasks/5e037f2578f54acc96fc4d89d0b3dd37/runs/0e697516061e44c0a08cc8f563441b42"
+      }
+    ],
+    "status": "passed",
+    "scope": "small original-data handoff, not full historical training",
+    "samples": {
+      "train": [
+        "param1/1dc58be25e1b6e5675cad724c63e222e"
+      ],
+      "test": [
+        "param0/100715345ee54d7ae38b52b4ee9d36a3"
+      ]
+    },
+    "resume": "exact_model_parameters",
+    "lineage_versions": 1,
+    "seconds": 24.64567812497262
+  },
+  {
+    "task": "da62c1c8f4114146a3b3b13a3967a114",
+    "source_kind": "physical",
+    "candidate": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/da62c1c8f4114146a3b3b13a3967a114/candidate",
+    "original_digest": {
+      "README.md": "d08c3d0c041007e649acf5f92d3bfff6ea09cbf412c59a81578fd48e2a95d4f4",
+      "config.yaml": "3be3dcbee4903c4dc9df9238070f0ae4dd75ca49f4e48330c59bb9945f88ac39",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "pipeline.py": "f55761c4e624a5daeb627d9a647c0adb32848976ab6b57cee780a1a09205f6c8",
+      "post.py": "b578c52e862b27ecd4a670d34336a6fd6cbf6a4f65942ce311a9a839e7da5e71",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "762f759b753fcebbb79d5a816970e287a888189c52b43ad9b03e1c399959a688",
+      "train.py": "5775d4f10dfd6353cf6b6df7c6a2345c6b6760878bbc87a92bcdd639324c25e9",
+      "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+    },
+    "runs": [
+      {
+        "id": "e83f619cfc2745ce8d12b63b32ea044e",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/da62c1c8f4114146a3b3b13a3967a114/project/tasks/0871352dfa8042bc9451ae6dc96d46b0/runs/e83f619cfc2745ce8d12b63b32ea044e"
+      },
+      {
+        "id": "ccc7b12e434c49bdb024b1d2c5ead47a",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/da62c1c8f4114146a3b3b13a3967a114/project/tasks/0871352dfa8042bc9451ae6dc96d46b0/runs/ccc7b12e434c49bdb024b1d2c5ead47a"
+      },
+      {
+        "id": "1089f314a63b45a083b45964194397ae",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/da62c1c8f4114146a3b3b13a3967a114/project/tasks/0871352dfa8042bc9451ae6dc96d46b0/runs/1089f314a63b45a083b45964194397ae"
+      }
+    ],
+    "status": "passed",
+    "scope": "small original-data handoff, not full historical training",
+    "samples": {
+      "train": [
+        "param1/1dc58be25e1b6e5675cad724c63e222e"
+      ],
+      "test": [
+        "param0/100715345ee54d7ae38b52b4ee9d36a3"
+      ]
+    },
+    "resume": "exact_model_parameters",
+    "lineage_versions": 1,
+    "seconds": 17.90705187502317
+  },
+  {
+    "task": "e0086a31a4b04da0a466c295c44d6cd6",
+    "source_kind": "physical",
+    "candidate": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/e0086a31a4b04da0a466c295c44d6cd6/candidate",
+    "original_digest": {
+      "README.md": "d08c3d0c041007e649acf5f92d3bfff6ea09cbf412c59a81578fd48e2a95d4f4",
+      "config.yaml": "3be3dcbee4903c4dc9df9238070f0ae4dd75ca49f4e48330c59bb9945f88ac39",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "pipeline.py": "07a410bcfb0c94cb51fe2c0a84671d2a4c3550bfacfaec766d0fc470c3ba8811",
+      "post.py": "b578c52e862b27ecd4a670d34336a6fd6cbf6a4f65942ce311a9a839e7da5e71",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "762f759b753fcebbb79d5a816970e287a888189c52b43ad9b03e1c399959a688",
+      "train.py": "5775d4f10dfd6353cf6b6df7c6a2345c6b6760878bbc87a92bcdd639324c25e9",
+      "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+    },
+    "runs": [
+      {
+        "id": "140567e167dd44b2a746b6a9b6d8de8a",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/e0086a31a4b04da0a466c295c44d6cd6/project/tasks/fa63cfa755a24e52a035d8ae9a10ae97/runs/140567e167dd44b2a746b6a9b6d8de8a"
+      },
+      {
+        "id": "1c5c35f280ee49b3a8e63d5461c93a14",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/e0086a31a4b04da0a466c295c44d6cd6/project/tasks/fa63cfa755a24e52a035d8ae9a10ae97/runs/1c5c35f280ee49b3a8e63d5461c93a14"
+      },
+      {
+        "id": "c275ffc9acdf45eb84d0861490b0ba71",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/e0086a31a4b04da0a466c295c44d6cd6/project/tasks/fa63cfa755a24e52a035d8ae9a10ae97/runs/c275ffc9acdf45eb84d0861490b0ba71"
+      }
+    ],
+    "status": "passed",
+    "scope": "small original-data handoff, not full historical training",
+    "samples": {
+      "train": [
+        "param1/1dc58be25e1b6e5675cad724c63e222e"
+      ],
+      "test": [
+        "param0/100715345ee54d7ae38b52b4ee9d36a3"
+      ]
+    },
+    "resume": "exact_model_parameters",
+    "lineage_versions": 1,
+    "seconds": 18.44443983398378
+  },
+  {
+    "task": "f540a1f563f8419ba2adf8dbe47e1cb4",
+    "source_kind": "physical",
+    "candidate": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/f540a1f563f8419ba2adf8dbe47e1cb4/candidate",
+    "original_digest": {
+      "README.md": "d08c3d0c041007e649acf5f92d3bfff6ea09cbf412c59a81578fd48e2a95d4f4",
+      "config.yaml": "3be3dcbee4903c4dc9df9238070f0ae4dd75ca49f4e48330c59bb9945f88ac39",
+      "configuration.py": "712a43fc5576df85500664192e820f86115087012bf0a55e8600200608cbb8f0",
+      "infer.py": "77311d93b917bc77f52ba499edd028997c5f272782c5b284719d852368d43c62",
+      "pipeline.py": "07a410bcfb0c94cb51fe2c0a84671d2a4c3550bfacfaec766d0fc470c3ba8811",
+      "post.py": "b578c52e862b27ecd4a670d34336a6fd6cbf6a4f65942ce311a9a839e7da5e71",
+      "rawprep.py": "b18ff7e0113389d5e14aa12be0d41cf88b87495ede2237ad9eb7e179041873af",
+      "task-entry.json": "762f759b753fcebbb79d5a816970e287a888189c52b43ad9b03e1c399959a688",
+      "train.py": "5775d4f10dfd6353cf6b6df7c6a2345c6b6760878bbc87a92bcdd639324c25e9",
+      "trainprep.py": "b5e0c07bcac120394937d1e3e34c5162d49e1f74d9816d84815c168aee754d1f"
+    },
+    "runs": [
+      {
+        "id": "cc2a541945c048ea9d4712ef9fcdf7a0",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/f540a1f563f8419ba2adf8dbe47e1cb4/project/tasks/66c9b4244eae47438e05edba8514bc98/runs/cc2a541945c048ea9d4712ef9fcdf7a0"
+      },
+      {
+        "id": "8998a1017798420fa3ba4a85148d889c",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/f540a1f563f8419ba2adf8dbe47e1cb4/project/tasks/66c9b4244eae47438e05edba8514bc98/runs/8998a1017798420fa3ba4a85148d889c"
+      },
+      {
+        "id": "c766bfdc367f42a6a3550b3d8b9f1ce5",
+        "status": "succeeded",
+        "run_dir": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/migration-execution-v3/f540a1f563f8419ba2adf8dbe47e1cb4/project/tasks/66c9b4244eae47438e05edba8514bc98/runs/c766bfdc367f42a6a3550b3d8b9f1ce5"
+      }
+    ],
+    "status": "passed",
+    "scope": "small original-data handoff, not full historical training",
+    "samples": {
+      "train": [
+        "param1/1dc58be25e1b6e5675cad724c63e222e"
+      ],
+      "test": [
+        "param0/100715345ee54d7ae38b52b4ee9d36a3"
+      ]
+    },
+    "resume": "exact_model_parameters",
+    "lineage_versions": 1,
+    "seconds": 17.477865208056755
+  }
+]

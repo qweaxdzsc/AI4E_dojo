@@ -2,6 +2,7 @@
 
 from ai4e_core.abilities.data.stats.population import PopulationMoments
 from ai4e_core.abilities.transform.normalization import Normalization
+from ai4e_core.abilities.transform.scale import resolve_scale
 
 
 def freeze(view, config: dict) -> Normalization:
@@ -77,7 +78,7 @@ def freeze(view, config: dict) -> Normalization:
             parameters = {
                 "minimum": lo.tolist(),
                 "maximum": hi.tolist(),
-                "scale": spec.get("scale", 1.0),
+                "scale": 1.0,
             }
         elif method == "coordinate" and not parameters:
             if stats:
@@ -85,11 +86,12 @@ def freeze(view, config: dict) -> Normalization:
             else:
                 lo, hi = bounds[name]
                 parameters = {"minimum": [lo], "maximum": [hi]}
-            parameters.update(scale=1000.0, check_range=False)
+            parameters.update(scale=1.0, check_range=False)
         fields[name] = {
             "method": method,
             "parameters": parameters,
             "scope": spec.get("scope", "point"),
+            "scale": resolve_scale(spec),
         }
         if method == "custom":
             fields[name]["target"] = spec["target"]

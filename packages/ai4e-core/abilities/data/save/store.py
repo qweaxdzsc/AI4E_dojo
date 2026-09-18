@@ -46,7 +46,10 @@ def write_named_tensors(
     overwrite: bool = False,
     extra_writers: Mapping[str, Any] | None = None,
 ) -> Path:
-    """预检后写同级临时目录，备份旧目录再提升；恢复失败保留所有证据。"""
+    """预检后写同级临时目录，备份旧目录再提升；恢复失败保留所有证据。
+
+    每次提交只记 debug；循环里的常规摘要由 application 阶段输出。
+    """
     selected = plan_output(dest, list(payloads), filemap, optional=optional, overwrite=overwrite)
     for name in selected:
         value = payloads[name]
@@ -113,7 +116,11 @@ def write_named_tensors(
 
 @traced("张量读取")
 def load_named_tensor(path: str | Path) -> Any:
-    """仅加载张量和具名张量映射。"""
+    """仅加载张量和具名张量映射。
+
+    每次调用只记 debug，供循环按样本读取；失败仍为错误。阶段摘要由
+    application 输出，不在此重复 info。
+    """
     if Path(path).suffix == ".zarr":
         from .zarr import read_zarr
 

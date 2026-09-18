@@ -16,7 +16,7 @@ CASES = {
 }
 
 
-def defaults(case):
+def _domain_defaults(case):
     """正式案例默认参数；研究用覆盖仍通过同一校验入口。"""
     if case not in CASES:
         raise ValueError(f"未知案例: {case}")
@@ -120,9 +120,9 @@ def _unknown(value, allowed, path):
         raise ValueError(f"{path}: 未知配置 {sorted(extra)}")
 
 
-def validate(cfg):
+def _validate_domain(cfg):
     """脚本和程序共用严格输入检查；不修改用户配置或历史产物。"""
-    reference = defaults(cfg["case"])
+    reference = _domain_defaults(cfg["case"])
     _unknown(cfg, set(reference) | {"execution"}, "config")
     for section in ("dataset", "components", "rawprep", "trainprep", "model", "train", "post"):
         _unknown(cfg[section], reference[section], section)
@@ -229,33 +229,91 @@ def validate(cfg):
     ):
         raise ValueError("gradient_clip 必须为 null 或有限正数")
     stages = cfg["pipeline"]["stages"]
-    order = ["rawprep", "trainprep", "train", "post"]
+    order = ["rawprep", "trainprep", "train", "infer", "post"]
     if not stages or len(set(stages)) != len(stages) or stages != [s for s in order if s in stages]:
         raise ValueError("阶段必须按 rawprep/trainprep/train/post 顺序选择")
     return cfg
 
 
+def defaults(case):
+    """公共阶段输入和数据输出根，科学参数保留原默认值。"""
+    cfg = _domain_defaults(case)
+    manifest = cfg["dataset"].pop("manifest")
+    cfg["data_root"] = "../data"
+    cfg["dataset"]["name"] = case
+    cfg["inputs"] = {
+        "rawprep": {"manifest": manifest},
+        "trainprep": {"dataset": manifest},
+        "train": {"dataset": manifest, "preparation": None, "resume": None},
+        "infer": {"dataset": manifest, "preparation": None, "checkpoint": None},
+        "post": {"results": None},
+    }
+    cfg["trainprep"].pop("output")
+    cfg["train"].pop("resume")
+    cfg["post"] = {}
+    cfg["infer"] = {}
+    cfg["pipeline"]["stages"] = ["rawprep", "trainprep", "train", "infer", "post"]
+    return cfg
+
+
+def application_parameters(config, *, stage="trainprep", session=None, dataset=None,
+                           prepared=None, trained=None, results=None):
+    """领域所需参数由公共输入显式绑定；冻结模型语义不包含目录外壳。"""
+    from copy import deepcopy
+    from ai4e_core.base.config.conventions import input_bindings, require_current_keys
+
+    cfg = deepcopy(config)
+    require_current_keys(cfg, {"dataset.manifest": "inputs.<stage>.dataset",
+        "trainprep.output": "data_root", "train.resume": "inputs.train.resume",
+        "post.checkpoint": "inputs.infer.checkpoint", "post.output": "data_root"})
+    input_bindings(cfg)
+    inputs = cfg.pop("inputs")
+    root = Path(cfg.pop("data_root"))
+    cfg.pop("infer", None)
+    cfg["dataset"] = {"manifest": inputs["rawprep"].get("manifest")}
+    if stage in ("trainprep", "train", "infer"):
+        cfg["dataset"]["manifest"] = inputs[stage].get("dataset")
+    if dataset is not None:
+        cfg["dataset"]["manifest"] = dataset["manifest"] if isinstance(dataset, dict) else dataset
+    reference = prepared
+    if reference is None and stage in ("train", "infer"):
+        reference = inputs[stage].get("preparation")
+    if isinstance(reference, dict):
+        reference = reference["path"]
+    cfg["trainprep"]["output"] = str(Path(reference).parent) if reference else str(root / "trainprep")
+    if stage == "trainprep" and session is not None:
+        cfg["trainprep"]["output"] = str(session.output_dir("trainprep"))
+    if stage in ("train", "infer") and not reference:
+        raise ValueError(f"{stage} 缺少明确 preparation 输入")
+    cfg["train"]["resume"] = inputs["train"].get("resume")
+    cfg["post"] = {"checkpoint": inputs["infer"].get("checkpoint"),
+                   "output": str(session.output_dir("infer") / "results") if session else str(root / "infer")}
+    if trained is not None:
+        cfg["post"]["checkpoint"] = str(session.run_dir / "checkpoints/last.pt")
+    if stage == "post":
+        cfg["post"]["results"] = results["results"] if isinstance(results, dict) else results or inputs["post"].get("results")
+        if not cfg["post"]["results"]:
+            raise ValueError("post 缺少固定结果")
+    return cfg
+
+
+def validate(cfg):
+    """校验公开参数，数据是否存在由实际消费阶段判断。"""
+    from ai4e_core.base.config.conventions import input_bindings, require_current_keys
+    input_bindings(cfg)
+    internal = application_parameters(cfg)
+    _validate_domain(internal)
+    return cfg
+
+
 def load_configuration(path, overrides=None):
-    """以配置文件为基准解析全部显式路径，运行前冻结一份完整配置。"""
+    """以配置文件为基准解析公共输入，旧公共键明确拒绝。"""
+    from ai4e_core.base.config.conventions import normalize_recipe_config
     path = Path(path).resolve()
     user = OmegaConf.merge(OmegaConf.load(path), OmegaConf.from_dotlist(overrides or []))
-    if "sampling" in user or "sampling" in user.get("trainprep", {}):
-        raise ValueError("采样配置必须位于 model.sampling")
     cfg = OmegaConf.to_container(OmegaConf.merge(defaults(user["case"]), user), resolve=True)
+    cfg = normalize_recipe_config(cfg, base=path.parent)
     validate(cfg)
-    for parent, key in (
-        (cfg, "run_root"),
-        (cfg["dataset"], "manifest"),
-        (cfg["trainprep"], "output"),
-        (cfg["post"], "output"),
-        (cfg["post"], "checkpoint"),
-        (cfg["train"], "resume"),
-    ):
-        if parent[key]:
-            value = Path(parent[key]).expanduser()
-            parent[key] = str(
-                value.resolve() if value.is_absolute() else (path.parent / value).resolve()
-            )
     return cfg
 
 

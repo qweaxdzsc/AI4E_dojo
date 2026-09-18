@@ -27,10 +27,12 @@ def test_examples_share_configuration_and_explicit_domain_steps():
             assert (ROOT / "recipes/aero_cfd" / script).read_bytes() == (
                 ROOT / "examples/aero_cfd" / example / script
             ).read_bytes()
-        for script in ("rawprep.py", "trainprep.py", "train.py", "post.py"):
+        for script in ("rawprep.py", "trainprep.py", "train.py", "infer.py"):
             source = (ROOT / "examples/aero_cfd" / example / script).read_text()
             assert ".workflow" not in source
             assert "load_components" in source
+        post = (ROOT / "examples/aero_cfd" / example / "post.py").read_text()
+        assert "open_results" in post and "legacy_predict" not in post
         assert (
             "configure_objectives"
             in (ROOT / "examples/aero_cfd" / example / "train.py").read_text()

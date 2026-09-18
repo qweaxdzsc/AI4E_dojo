@@ -2,6 +2,8 @@
 
 import random
 from dataclasses import dataclass
+from time import perf_counter
+from types import SimpleNamespace
 
 import numpy as np
 import torch
@@ -37,22 +39,27 @@ class PreparedSamples(torch.utils.data.Dataset):
             )
         self.data, self.epoch = data, 0
 
+    def _split(self):
+        name = str((self.data.config.get("train") or {}).get("training_split") or "train")
+        return "eval" if name == "validation" else name
+
     def __len__(self):
-        return len(self.data.view.partitions["train"])
+        return len(self.data.view.partitions[self._split()])
 
     def __getitem__(self, index):
         data = self.data
+        split = self._split()
         with sample_context(
             "训练准备",
             [
                 {
-                    "sample": data.view.partitions["train"][index],
-                    "partition": "train",
+                    "sample": data.view.partitions[split][index],
+                    "partition": split,
                     "index": index,
                 }
             ],
         ):
-            sample = data.view.read("train", index)
+            sample = data.view.read(split, index)
             validate_bindings(sample, data.config["trainprep"])
             return data.prepare(sample, data.config, data.normalization, epoch=self.epoch)
 
@@ -75,6 +82,8 @@ class PhysicalTraining:
     contract: dict | None = None
     protocol: dict | None = None
     extensions: dict | None = None
+    callbacks: tuple = ()
+    dataset_component: object = None
 
 
 def open_training(config, *, reference, dataset_component, model_component, session):
@@ -92,7 +101,23 @@ def open_training(config, *, reference, dataset_component, model_component, sess
     data = preparation.consume(config, dataset_component, model_component, reference)
     if not session.dry_run:
         session.artifact("preparation.json", data.record)
-    return PhysicalTraining(data.config, session, model_component, data, extensions={})
+    return PhysicalTraining(
+        data.config,
+        session,
+        model_component,
+        data,
+        extensions={},
+        dataset_component=dataset_component,
+    )
+
+
+def configure_callbacks(job: PhysicalTraining, *, callbacks: tuple = ()) -> PhysicalTraining:
+    """登记轮次观察函数，不改变既有训练协议或底层回调签名。"""
+    callbacks = tuple(callbacks)
+    if not all(callable(callback) for callback in callbacks):
+        raise TypeError("训练观察者必须可调用")
+    job.callbacks = callbacks
+    return job
 
 
 def check_report(job):
@@ -270,6 +295,41 @@ def execute_training(job):
             )
             return job.objective(network, batch, job.config)
 
+    observations = []
+
+    def observe(event, *, epoch, updates, result):
+        if event != "epoch":
+            return
+        context = SimpleNamespace(
+            model=job.model,
+            prepared=job.data,
+            component=job.component,
+            dataset_component=job.dataset_component,
+            epoch=epoch,
+            updates=updates,
+            origin={"run": str(job.session.run_dir), "epoch": epoch, "updates": updates},
+        )
+        for callback in job.callbacks:
+            started = perf_counter()
+            produced = callback(context)
+            if produced is not None:
+                elapsed = perf_counter() - started
+                snapshot_seconds = (
+                    produced.get("timings", {}).get("snapshot_seconds", 0)
+                    if isinstance(produced, dict)
+                    else 0
+                )
+                observations.append(
+                    {
+                        "epoch": epoch,
+                        "updates": updates,
+                        "seconds": elapsed,
+                        "snapshot_seconds": snapshot_seconds,
+                        "analysis_seconds": max(0, elapsed - snapshot_seconds),
+                        "result": produced,
+                    }
+                )
+
     try:
         report = fit(
             job.model,
@@ -281,7 +341,10 @@ def execute_training(job):
             config={**job.config["train"], "split_counts": job.data.record["split_counts"]},
             contract=job.contract,
             scheduler=job.scheduler,
+            callbacks=(observe,) if job.callbacks else (),
         )
+        if observations:
+            report["observations"] = observations
         job.protocol["weights"] = fingerprint(job.model.state_dict())
         job.session.artifact("training-protocol.json", job.protocol)
         report["checkpoints"] = {

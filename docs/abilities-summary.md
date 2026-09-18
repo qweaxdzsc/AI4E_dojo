@@ -28,3 +28,18 @@
 这里的“原子”是便于组合和讨论的业务单元，不要求每项只有一个函数或独立进程。阶段之间复用同一底层实现；采样、归一化等也可能在训练迭代或后处理中执行。具体模型支持的选项仍以当前实现为准，这张表不表示任意组合均可运行，也不表示拖拽节点已实现。
 
 详细归并及源码对应关系保留在 [合并清单](abilities-merged.md) 与 [原始能力清单](abilities-inventory.md)。
+
+### 脚本物理场分析与输出
+
+- 后处理分析：字段选择、切片、剖切、矢量、流线、等值面及探针采样。
+- 图片：物理场和剖面曲线，显式视角、色带、范围；可替换普通 Python 函数。
+- 文件：PNG、VTP/VTU、CSV/JSON 分别保存，可独立读回。
+- 指标：九项误差复用原评价，区域统计采用有效实体等权口径。
+
+GenCP 增加原生时空数组、流匹配路径与目标、可恢复迭代流、异形场条件映射、同步/顺序积分和逐帧评价；源码逐项见详细清单，真实验收见仓库 GenCP 专项记录。
+
+### WDNO 基础预测补充（2026-09-17）
+
+小波布局/准备/恢复位于贡献`ability/transform/wdno`；原二维网络与日程位于`ability/model/wdno`；条件目标与采样分别位于`ability/constraint/wdno`和`ability/inference/wdno`；物理MSE位于`ability/eval/wdno`。共享数组清单归core的data/save，精确迭代训练与EMA沿用既有能力。上述路径均可直接import，不新增全仓组件协议。
+
+领域连接、参数与配置、完整研究步骤见[WDNO recipe](../recipes/wdno/README.md)，实际已跑变体见[普通函数扩展](../examples/recipe_extensions/wdno/README.md)，结果范围见[专项验收](../.context/mvp/wdno-acceptance.md)。这是基础Burgers缩小迁移；本表旧文件计数为当时快照，不表示已覆盖后续全部实现，也不表示模型自动进入Web目录。

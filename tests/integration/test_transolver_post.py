@@ -12,7 +12,7 @@ from ai4e_contrib.ability.model.transolver3.model import construct
 from ai4e_core.abilities.postproc.export.field_surface import write_vtp
 from ai4e_core.abilities.postproc.surface_geometry import SurfaceTopology
 from ai4e_core.abilities.sampling.stride import reconstruct
-from ai4e_core.applications.aero_cfd.post.pointfields import complete
+from ai4e_core.applications.aero_cfd.infer.pointfields import complete
 from ai4e_core.applications.aero_cfd.post.progress import PostProgress
 from tests.integration.test_transolver_training import reference_module
 from tools.verification.transolver3.compare import require
@@ -123,7 +123,7 @@ def test_partial_delivery_and_missing_prediction(tmp_path):
 
 def test_preflight_and_selection_collision(tmp_path):
     """D4：干跑/提交共享覆盖门禁，选择顺序参与文件名，恢复显式放行重算。"""
-    from ai4e_core.applications.aero_cfd.post.pointfields import metrics_stem, preflight, select
+    from ai4e_core.applications.aero_cfd.infer.pointfields import metrics_stem, preflight, select
 
     output = tmp_path / "out"
     output.mkdir()
@@ -157,7 +157,7 @@ def test_real_post_write_failure_and_retry(tmp_path, monkeypatch):
 
     from ai4e_contrib.ability.model.transolver3 import component
     from ai4e_contrib.application.datasets import nasa_crm
-    from ai4e_core.applications.aero_cfd.post import pointfields
+    from ai4e_core.applications.aero_cfd.infer import pointfields
     from tests.transolver_assets import configuration
 
     cfg, path = configuration(tmp_path)

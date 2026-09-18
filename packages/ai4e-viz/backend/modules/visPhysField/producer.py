@@ -13,14 +13,19 @@ def csv_value(value):
     return value[0] if isinstance(value, list) and len(value) == 1 else value
 
 
-def capture(scene, path: Path, width=1280, height=720):
+def capture(scene, path: Path, width=1280, height=720, transparent=False):
     """从同一 VTK 场景捕获固定尺寸 PNG。"""
     if not 64 <= width <= 8192 or not 64 <= height <= 8192:
         raise ValueError("export_size_out_of_range")
     scene.window.SetSize(width, height)
+    scene.window.SetAlphaBitPlanes(1 if transparent else 0)
+    for renderer in scene.renderers:
+        renderer.SetBackgroundAlpha(0 if transparent else 1)
     scene.window.Render()
     image = vtk.vtkWindowToImageFilter()
     image.SetInput(scene.window)
+    if transparent:
+        image.SetInputBufferTypeToRGBA()
     image.ReadFrontBufferOff()
     image.Update()
     writer = vtk.vtkPNGWriter()
@@ -54,7 +59,41 @@ def produce(bindings: list, spec: dict, options: dict, output: Path, progress=No
             scene.add_annotations()
 
         kind = options["format"]
+        transparent = options.get("transparent_background", False)
+        if not isinstance(transparent, bool):
+            raise ValueError("invalid_transparent_background")  # noqa: TRY004 - 请求校验沿用业务 ValueError 协议。
+        if transparent and kind not in ("png", "png_sequence"):
+            raise ValueError("transparent_format_not_supported")
         if kind == "csv":
+            chart = options.get("chart") or {}
+            if options.get("operation") == "plot_over_line" or options.get("kind") == "plot_over_line":
+                path = output / "line_chart.csv"
+                headers = chart.get("headers")
+                body = chart.get("body")
+                if not headers:
+                    from .modules.dataOverview.lineChart import line_chart_table
+
+                    rows = scene.command(
+                        {
+                            "operation": "plot_over_line",
+                            "input": options["input"],
+                            "point1": options.get("point1") or options.get("start"),
+                            "point2": options.get("point2") or options.get("end"),
+                            "resolution": int(options.get("resolution", 1000)),
+                            "fields": options.get("fields"),
+                        }
+                    )["rows"]
+                    headers, body = line_chart_table(
+                        rows,
+                        options.get("x_array") or "arc_length",
+                        list(options.get("y_arrays") or []),
+                    )
+                with path.open("w", newline="", encoding="utf-8") as stream:
+                    writer = csv.writer(stream)
+                    writer.writerow(headers)
+                    for row in body:
+                        writer.writerow(["" if cell is None else cell for cell in row])
+                return [path]
             rows = scene.command(
                 {
                     "operation": options.get("operation", "probe"),
@@ -86,7 +125,7 @@ def produce(bindings: list, spec: dict, options: dict, output: Path, progress=No
         if kind == "png":
             path = output / "view.png"
             select_view()
-            capture(scene, path, width, height)
+            capture(scene, path, width, height, transparent)
             return [path]
         if kind not in ("png_sequence", "mp4"):
             raise ValueError("unsupported_export_format")
@@ -106,7 +145,7 @@ def produce(bindings: list, spec: dict, options: dict, output: Path, progress=No
                 scene.command({"operation": "camera", "camera": cameras[min(i, len(cameras) - 1)]})
             path = output / f"frame-{i:06d}.png"
             select_view()
-            capture(scene, path, width, height)
+            capture(scene, path, width, height, transparent)
             paths.append(path)
             if progress:
                 progress(i + 1, total)

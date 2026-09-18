@@ -8,9 +8,12 @@ export function MetricPicker({items,selected,onChange,disabled}:{items:Metric[];
  const categories=[...new Set(items.map(m=>m.category))];
  const rows=items.filter(m=>(!category||m.category===category)&&(m.label+m.id).toLowerCase().includes(query.toLowerCase())&&(filter!=="selected"||selected.includes(m.id)));
  if(sorted)rows.sort((a,b)=>a.label.localeCompare(b.label));
- return <section className="infer-card infer-picker" data-region="metrics"><h3>4. 指标 <small>已选择 {selected.length} / {items.length} 个</small></h3>
+ const allOn=!!rows.length&&rows.every(m=>selected.includes(m.id));
+ const some=rows.some(m=>selected.includes(m.id));
+ return <section className="infer-card infer-picker" data-region="metrics"><h3>指标 <small>已选择 {selected.length} / {items.length} 个</small></h3>
  <div className="infer-search"><Input prefix={<SearchOutlined/>} aria-label="搜索指标" placeholder="搜索指标名称" value={query} onChange={e=>setQuery(e.target.value)}/><Button icon={<SortAscendingOutlined/>} onClick={()=>setSorted(!sorted)}>排序</Button><Popover trigger="click" content={<Select aria-label="指标筛选范围" value={filter} onChange={setFilter} options={[{value:"all",label:"全部"},{value:"selected",label:"已选择"}]}/>}><Button icon={<FilterOutlined/>}>筛选</Button></Popover></div>
  <div className="infer-tabs">{categories.map(c=><Button key={c} className={category===c?"active":""} onClick={()=>setCategory(category===c?"":c)} title="再次点击显示全部指标">{c} ({items.filter(m=>m.category===c).length})</Button>)}</div>
+ {!!rows.length&&<div className="infer-select-all"><Checkbox aria-label="全选指标" checked={allOn} indeterminate={some&&!allOn} disabled={disabled} onChange={e=>onChange(e.target.checked?[...new Set([...selected,...rows.map(m=>m.id)])]:selected.filter(id=>!rows.some(m=>m.id===id)))}>全选当前分类 ({rows.length})</Checkbox></div>}
  <div className="infer-picker-list">{!items.length?<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="等待指标目录"/>:rows.map(m=><div className="infer-choice" key={m.id} title={`${m.formula}\n零分母及常量真值保留不可定义原因`}><Checkbox aria-label={"选择指标 "+m.label} checked={selected.includes(m.id)} disabled={disabled} onChange={e=>onChange(e.target.checked?[...selected,m.id]:selected.filter(id=>id!==m.id))}>{m.label}</Checkbox><small className="infer-field-badge">{m.category}</small></div>)}</div>
  </section>;
 }

@@ -60,3 +60,7 @@ from .mapping import FieldMapParameters, map_fields
 
 __all__ += ["compute_statistics", "publish_dataset", "read", "save_sample", "to_tensors"]
 __all__ += ["FieldMapParameters", "encode", "map_fields", "open_source"]
+
+from .descriptor import resolve_rawprep, resolved_workers
+
+__all__ += ["resolve_rawprep", "resolved_workers"]

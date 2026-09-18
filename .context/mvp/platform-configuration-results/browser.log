@@ -1,0 +1,32 @@
+
+> ai4e-web@0.1.0 test:e2e
+> playwright test configuration-composition.spec.ts stage-consistency.spec.ts model-picker.spec.ts rawprep-consistency.spec.ts
+
+
+Running 23 tests using 1 worker
+
+  ✓   1 e2e/configuration-composition.spec.ts:4:1 › 四类配置差异保留空值、删除及包含点的字段名 (392ms)
+  ✓   2 e2e/configuration-composition.spec.ts:21:1 › 训练保存只提交编辑路径且后续检查使用新修订 (515ms)
+  ✓   3 e2e/model-picker.spec.ts:219:3 › shapenet_car 同数据集切换、编辑保存、刷新与告警分区 (2.4s)
+  ✓   4 e2e/model-picker.spec.ts:219:3 › nasa_crm 同数据集切换、编辑保存、刷新与告警分区 (2.4s)
+  ✓   5 e2e/model-picker.spec.ts:318:1 › ShapeNet 可改选体场变体 (1.2s)
+  ✓   6 e2e/model-picker.spec.ts:340:1 › 导出当前模型配置 (409ms)
+  ✓   7 e2e/model-picker.spec.ts:349:1 › 换模保存冲突保留草稿，不启动检查 (871ms)
+  ✓   8 e2e/model-picker.spec.ts:374:1 › 选项加载失败可重试，原参数不丢失 (890ms)
+  ✓   9 e2e/model-picker.spec.ts:397:1 › 迟到模型选项不覆盖新任务 (837ms)
+  ✓  10 e2e/rawprep-consistency.spec.ts:8:1 › 公开数据集绑定取消、结果树预览下载与正式进度 (1.7s)
+  ✓  11 e2e/rawprep-consistency.spec.ts:91:1 › 刷新后仍显示最近一次正式执行终态 (386ms)
+  ✓  12 e2e/rawprep-consistency.spec.ts:116:1 › 再执行立刻清进度且日志叠加 (520ms)
+  ✓  13 e2e/rawprep-consistency.spec.ts:159:1 › 处理结果可选择已登记平台数据集且不自动勾最新 (566ms)
+  ✓  14 e2e/rawprep-consistency.spec.ts:188:1 › 同名已存在时询问覆盖并带标记提交 (647ms)
+  ✓  15 e2e/stage-consistency.spec.ts:3:1 › 阶段检查先保存，冲突不提交，响应丢失重用请求键 (532ms)
+  ✓  16 e2e/stage-consistency.spec.ts:20:1 › 浏览后处理不勾选前序步骤，已选输入按selected恢复 (509ms)
+  ✓  17 e2e/stage-consistency.spec.ts:37:1 › 平台数据集同一清单只选一条，按登记时间倒序且不与历史项联动 (763ms)
+  ✓  18 e2e/stage-consistency.spec.ts:62:1 › 数据准备字段按模型角色下拉匹配并标出张量形状不符 (407ms)
+  ✓  19 e2e/stage-consistency.spec.ts:84:1 › 数据准备分片显示原人数且数量之和须等于全部样本 (419ms)
+  ✓  20 e2e/stage-consistency.spec.ts:112:1 › 已完成步骤为绿当前为蓝，失效清单用人话，准备日志完整 (455ms)
+  ✓  21 e2e/stage-consistency.spec.ts:139:1 › 数据准备有正式清单时提示先选，不自动勾最新 (444ms)
+  ✓  22 e2e/stage-consistency.spec.ts:165:1 › 数据准备树表列与再执行清进度日志叠加 (510ms)
+  ✓  23 e2e/stage-consistency.spec.ts:207:1 › 训练运行只选准备记录，未选不可执行，提交不含准备步骤 (891ms)
+
+  23 passed (19.4s)

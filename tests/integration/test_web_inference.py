@@ -1,6 +1,11 @@
 """推理 HTTP 边界、结果固定引用与任务作用域。"""
 
+import inspect
+from pathlib import Path
+
 import ai4e_task as task
+import pytest
+from ai4e_server.modules.inference import application as infer_app
 
 from tests.integration.test_web_project_task import platform as _platform
 
@@ -80,7 +85,110 @@ def test_inference_cannot_bypass_fixed_batch(platform):
     assert task.list_runs(root, item["id"]) == []
 
 
-def test_unknown_recipe_is_not_silently_executed(platform):
+def test_server_samples_source_keeps_vtk_exports():
+    text = (
+        Path(__file__).resolve().parents[2]
+        / "packages/ai4e-server/modules/inference/application.py"
+    ).read_text()
+    assert 'if "vtk_exports" in value:' in text
+    assert 'result["vtk_exports"] = value["vtk_exports"]' in text
+
+
+def test_server_options_source_keeps_optional_new_keys():
+    text = (
+        Path(__file__).resolve().parents[2] / "packages/ai4e-server/modules/inference/api.py"
+    ).read_text()
+    assert "export_pointcloud: bool | None = None" in text
+    assert "export_mesh: bool | None = None" in text
+    assert "exclude_unset=True" in text
+
+
+def test_old_export_vtk_evaluate_only_does_not_materialize_new_keys():
+    from ai4e_server.modules.inference.api import InferenceOptionsRequest
+
+    field = InferenceOptionsRequest.model_fields["export_pointcloud"]
+    if field.default is not None:
+        pytest.skip("安装副本尚未重装 ai4e-server")
+    dumped = InferenceOptionsRequest(
+        evaluate=True, save_predictions=False, export_vtk=False
+    ).model_dump(exclude_unset=True)
+    assert "export_pointcloud" not in dumped
+    assert "export_mesh" not in dumped
+    assert dumped["export_vtk"] is False
+
+
+def test_sample_catalog_keeps_vtk_exports(platform, monkeypatch):
+    if "vtk_exports" not in inspect.getsource(infer_app.samples):
+        pytest.skip("安装副本尚未重装 ai4e-server")
+    client, project, item, _, _ = platform
+    capability = {
+        "pointcloud": {"available": True, "include_truth": True},
+        "mesh": {
+            "available": False,
+            "include_truth": True,
+            "reason": "训练集没有可还原的 VTK 网格",
+        },
+    }
+
+    def catalog(*_args, **_kwargs):
+        return {
+            "partitions": {"test": ["a"]},
+            "fields": [],
+            "metrics": [],
+            "selection_supported": True,
+            "preparation": {"digest": "d", "revision": "r"},
+            "vtk_exports": capability,
+        }
+
+    monkeypatch.setattr(task, "inference_samples", catalog)
+    response = client.get(
+        f"/api/v1/projects/{project}/tasks/{item['id']}/inference/samples",
+        params={"checkpoint_id": "run:last.pt"},
+    )
+    assert response.status_code == 200, response.text
+    assert response.json().get("vtk_exports") == capability
+
+
+def test_missing_sample_catalog_is_not_data_root_error(platform, monkeypatch):
+    client, project, item, _, _ = platform
+
+    def boom(*_args, **_kwargs):
+        raise FileNotFoundError("/missing/preparation.json")
+
+    monkeypatch.setattr(task, "inference_samples", boom)
+    response = client.get(
+        f"/api/v1/projects/{project}/tasks/{item['id']}/inference/samples",
+        params={"checkpoint_id": "run:last.pt"},
+    )
+    assert response.status_code == 400, response.text
+    assert "数据根未配置" not in response.text
+    assert "准备" in response.text
+
+
+def test_missing_inference_batch_is_not_data_root_error(platform):
+    client, project, item, _, _ = platform
+    response = client.get(
+        f"/api/v1/projects/{project}/tasks/{item['id']}/inference/batches/missing"
+    )
+    assert response.status_code == 400, response.text
+    assert "数据根未配置" not in response.text
+    assert "不存在" in response.text or "清理" in response.text
+
+
+def test_list_skips_missing_inference_batch_records(platform):
+    client, project, item, _, _ = platform
+    root = client.app.state.services.project(project)
+    from ai4e_task.storage.database import transaction
+    from ai4e_task.storage.records import put
+
+    with transaction(root) as db:
+        put(db, "inference_batch", {"id": "ghost", "task_id": item["id"]})
+    response = client.get(f"/api/v1/projects/{project}/tasks/{item['id']}/inference/batches")
+    assert response.status_code == 200, response.text
+    assert response.json()["items"] == []
+
+
+def test_user_recipe_still_requires_valid_fixed_inputs(platform):
     client, project, item, _, _ = platform
     from pathlib import Path
 
@@ -89,6 +197,12 @@ def test_unknown_recipe_is_not_silently_executed(platform):
     path.write_text('raise RuntimeError("custom algorithm")')
     response = client.post(
         f"/api/v1/projects/{project}/tasks/{item['id']}/inference/batches",
-        json={"expected_revision": "revision", "checkpoints": [{"id": "r:last.pt", "revision": "bytes"}], "samples": ["sample"]}
+        json={
+            "expected_revision": "revision",
+            "checkpoints": [{"id": "r:last.pt", "revision": "bytes"}],
+            "samples": ["sample"],
+        },
     )
-    assert response.status_code == 400 and "recipe_profile_changed" in response.text
+    assert response.status_code in {400, 409}
+    assert "recipe_profile_changed" not in response.text
+    assert task.list_runs(root, item["id"]) == []

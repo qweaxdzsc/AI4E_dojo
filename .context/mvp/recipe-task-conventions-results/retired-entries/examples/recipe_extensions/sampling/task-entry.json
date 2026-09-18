@@ -1,0 +1,186 @@
+{
+  "script": "pipeline.py",
+  "config": "config.yaml",
+  "resume_key": "train.resume",
+  "inputs": {
+    "dataset.root": "dataset",
+    "dataset.manifest": "dataset",
+    "dataset.partition": "dataset",
+    "train.manifest": "dataset",
+    "train.preparation": "preparation",
+    "train.resume": "checkpoint",
+    "model.initial_weights": "checkpoint",
+    "post.checkpoint": "checkpoint",
+    "trainprep.normalization.statistics": "other"
+  },
+  "outputs": {
+    "run_root": "{run_root}",
+    "data_root": "{data_dir}",
+    "paths.datasets.root": "{shared_physical_dataset_dir}",
+    "paths.datasets.train": "{shared_physical_dataset_dir}/train",
+    "paths.datasets.eval": "{shared_physical_dataset_dir}/eval",
+    "paths.datasets.test": "{shared_physical_dataset_dir}/test",
+    "paths.datasets.normalize.root": "{data_dir}/normalize",
+    "paths.datasets.normalize.train": "{data_dir}/normalize/train",
+    "paths.datasets.normalize.eval": "{data_dir}/normalize/eval",
+    "paths.datasets.normalize.test": "{data_dir}/normalize/test",
+    "paths.datasets.predictions": "{data_dir}/predictions"
+  },
+  "metrics": [
+    {
+      "name": "surface_pressure/relative_l2",
+      "path": [
+        "reports",
+        "train",
+        "history",
+        -1,
+        "evaluation",
+        "metrics",
+        "surface_pressure/relative_l2",
+        "value"
+      ],
+      "quantity": {
+        "field": "surface_pressure",
+        "domain": "surface",
+        "unit": "1",
+        "split": "test",
+        "statistic": "mean_sample_relative_l2"
+      },
+      "quantity_config": {
+        "split": [
+          "train",
+          "evaluation_split"
+        ],
+        "sampling": [
+          "model",
+          "sampling"
+        ],
+        "partition": [
+          "dataset",
+          "partition"
+        ]
+      }
+    },
+    {
+      "name": "volume_velocity/relative_l2",
+      "path": [
+        "reports",
+        "train",
+        "history",
+        -1,
+        "evaluation",
+        "metrics",
+        "volume_velocity/relative_l2",
+        "value"
+      ],
+      "quantity": {
+        "field": "volume_velocity",
+        "domain": "volume",
+        "unit": "1",
+        "split": "test",
+        "statistic": "mean_sample_relative_l2"
+      },
+      "quantity_config": {
+        "split": [
+          "train",
+          "evaluation_split"
+        ],
+        "sampling": [
+          "model",
+          "sampling"
+        ],
+        "partition": [
+          "dataset",
+          "partition"
+        ]
+      }
+    }
+  ],
+  "produced_assets": {
+    "preparation": [
+      "artifacts/preparation.json"
+    ],
+    "checkpoint": [
+      "checkpoints/*.pt"
+    ]
+  },
+  "components": {
+    "dataset": "ai4e_contrib.application.datasets.shapenet_car",
+    "model": "ai4e_contrib.ability.model.abupt.component"
+  },
+  "operations": {
+    "inspect": {
+      "target": "ai4e_core.applications.aero_cfd.inspection.execute"
+    },
+    "evaluate": {
+      "target": "ai4e_core.applications.aero_cfd.post.run_evaluation"
+    },
+    "export": {
+      "target": "ai4e_core.applications.aero_cfd.post.export_evaluation"
+    }
+  },
+  "configuration_adapter": "ai4e_contrib.application.aero_cfd.loader_adapter.load_user_configuration",
+  "shared_outputs": {
+    "physical_dataset": {
+      "kind": "dataset",
+      "stage": "rawprep",
+      "name_key": "dataset.processed_name",
+      "manifest": "manifest.json",
+      "consumer_binding": "train.manifest"
+    }
+  },
+  "stage_inputs": {
+    "rawprep": [
+      {
+        "key": "dataset.root"
+      },
+      {
+        "key": "dataset.manifest"
+      },
+      {
+        "key": "dataset.partition"
+      }
+    ],
+    "trainprep": [
+      {
+        "key": "train.manifest",
+        "provided_by": "rawprep"
+      },
+      {
+        "key": "trainprep.normalization.statistics"
+      },
+      {
+        "key": "dataset.partition"
+      }
+    ],
+    "model": [
+      {
+        "key": "train.manifest",
+        "provided_by": "rawprep"
+      },
+      {
+        "key": "train.preparation",
+        "provided_by": "trainprep"
+      }
+    ],
+    "train": [
+      {
+        "key": "train.preparation",
+        "provided_by": "trainprep"
+      },
+      {
+        "key": "train.resume"
+      },
+      {
+        "key": "model.initial_weights"
+      }
+    ],
+    "infer": [
+      {
+        "key": "train.preparation",
+        "provided_by": "trainprep"
+      }
+    ],
+    "post": []
+  }
+}

@@ -1,11 +1,12 @@
 """真实模板创建、配置修订和归档恢复的 HTTP 验收。"""
 
 from pathlib import Path
-from fastapi.testclient import TestClient
+
 import ai4e_task as task
 import pytest
 from ai4e_server.bootstrap.app import create_app
 from ai4e_server.bootstrap.settings import Settings
+from fastapi.testclient import TestClient
 
 RECIPE = Path(__file__).resolve().parents[2] / "recipes/aero_cfd"
 
@@ -32,12 +33,28 @@ def test_projects_tasks_configuration_restart(platform):
     assert c.patch(base, json={"archived": False}).json()["name"] == "renamed"
     cfg = c.get(base + f"/tasks/{t['id']}/rawprep").json()
     cfg["rawprep"]["vtkhdf"] = True
-    saved = c.put(base + f"/tasks/{t['id']}/rawprep", json=cfg)
+    cfg["processed_name"] = "test_prepared_dataset"
+    saved = c.put(
+        base + f"/tasks/{t['id']}/rawprep",
+        json={k: v for k, v in cfg.items() if k != "processed_name_status"},
+    )
     assert saved.status_code == 200, saved.text
-    assert c.put(base + f"/tasks/{t['id']}/rawprep", json=cfg).status_code == 409
+    assert (
+        c.put(
+            base + f"/tasks/{t['id']}/rawprep",
+            json={k: v for k, v in cfg.items() if k != "processed_name_status"},
+        ).status_code
+        == 409
+    )
     assert len(c.get(base + "/lineage").json()) == 1
     assert c.patch(base + f"/tasks/{t['id']}", json={"archived": True}).json()["archived"]
-    assert c.put(base + f"/tasks/{t['id']}/rawprep", json=saved.json()).status_code == 400
+    assert (
+        c.put(
+            base + f"/tasks/{t['id']}/rawprep",
+            json={k: v for k, v in saved.json().items() if k != "processed_name_status"},
+        ).status_code
+        == 400
+    )
     c.patch(base + f"/tasks/{t['id']}", json={"archived": False, "name": "changed"})
     child = c.post(base + f"/tasks/{t['id']}/fork", json={"name": "child"}).json()
     assert child["parent_version_id"] == t["version_id"]
@@ -52,8 +69,10 @@ def test_projects_tasks_configuration_restart(platform):
 def test_unbound_template_create_does_not_weaken_execution(platform):
     c, p, t, _, _ = platform
     project = c.app.state.services.project(p)
-    with pytest.raises(FileNotFoundError):
+    with pytest.raises(ValueError, match="processed_dataset_name_required"):
         task.submit_run(project, t["id"])
+    with pytest.raises(FileNotFoundError):
+        task.submit_run(project, t["id"], overrides=["dataset.processed_name=unbound"])
     assert task.list_runs(project, t["id"]) == []
 
 
@@ -68,9 +87,7 @@ def test_case_create_clears_template_manifest_placeholder(platform):
     project = c.app.state.services.project(p)
     cfg = task.read_configuration(project, created.json()["id"])
     assert cfg["config"].get("train", {}).get("manifest") in {None, ""}
-    items = c.get(
-        f"/api/v1/projects/{p}/tasks/{created.json()['id']}/stage-inputs"
-    ).json()
+    items = c.get(f"/api/v1/projects/{p}/tasks/{created.json()['id']}/stage-inputs").json()
     assert not any(item["binding"] == "train.manifest" for item in items)
 
 

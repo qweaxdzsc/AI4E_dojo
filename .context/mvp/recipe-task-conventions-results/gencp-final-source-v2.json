@@ -1,0 +1,62 @@
+[
+  {
+    "case": "double_cylinder_cno",
+    "status": "passed",
+    "seconds": 472.04541820893064,
+    "preparation": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/double_cylinder_cno/direct_data/2026-09-17T15-03-30_92b9b1/trainprep/preparation.json",
+    "direct_results": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/double_cylinder_cno/direct_data/2026-09-17T15-06-39_bbd6c6/infer/results/results.json",
+    "task_results": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/double_cylinder_cno/project/tasks/3c650a0b2c69456683621935fee8c25c/data/ad92fdf289d64b2293c4dee954e4f377/infer/results/results.json",
+    "scope": "rawprep_prepare_two_updates_resume_to_three_single_infer_post; not_paper_accuracy",
+    "attempt_seconds": 207.07385637494735
+  },
+  {
+    "case": "double_cylinder_sit_fno",
+    "status": "passed",
+    "seconds": 286.6242147603771,
+    "preparation": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/double_cylinder_sit_fno/direct_data/2026-09-17T15-06-57_e1bc83/trainprep/preparation.json",
+    "direct_results": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/double_cylinder_sit_fno/direct_data/2026-09-17T15-09-19_c98cf3/infer/results/results.json",
+    "task_results": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/double_cylinder_sit_fno/project/tasks/967e9007903c44de9d4eb249f4942f2e/data/97be9c69d28748739ab59eb27516da2e/infer/results/results.json",
+    "scope": "rawprep_prepare_two_updates_resume_to_three_single_infer_post; not_paper_accuracy",
+    "attempt_seconds": 149.3831198749831
+  },
+  {
+    "case": "ntcouple_cno",
+    "status": "passed",
+    "seconds": 359.78540945705026,
+    "preparation": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/ntcouple_cno/direct_data/2026-09-17T15-09-27_646751/trainprep/preparation.json",
+    "direct_results": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/ntcouple_cno/direct_data/2026-09-17T15-12-12_6a6a5c/infer/results/results.json",
+    "task_results": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/ntcouple_cno/project/tasks/8f7e4ffbd0d5453e8d32bc0f075c2ea5/data/df12c1f4c3ba404584678e37734e4bee/infer/results/results.json",
+    "scope": "rawprep_prepare_two_updates_resume_to_three_single_infer_post; not_paper_accuracy",
+    "attempt_seconds": 180.6533490420552
+  },
+  {
+    "case": "ntcouple_sit_fno",
+    "status": "passed",
+    "seconds": 254.44690733402967,
+    "preparation": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/ntcouple_sit_fno/direct_data/2026-09-17T15-12-27_59c308/trainprep/preparation.json",
+    "direct_results": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/ntcouple_sit_fno/direct_data/2026-09-17T15-14-59_12b6f7/infer/results/results.json",
+    "task_results": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/ntcouple_sit_fno/project/tasks/11a8d6305258421ba06dcdfa37871833/data/53442df2396e44afaea65df1b04b805f/infer/results/results.json",
+    "scope": "rawprep_prepare_two_updates_resume_to_three_single_infer_post; not_paper_accuracy",
+    "attempt_seconds": 161.0161470839521
+  },
+  {
+    "case": "turek_hron_cno",
+    "status": "passed",
+    "seconds": 281.4370237910189,
+    "preparation": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/turek_hron_cno/direct_data/2026-09-17T15-15-08_07eb86/trainprep/preparation.json",
+    "direct_results": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/turek_hron_cno/direct_data/2026-09-17T15-17-59_dc57ef/infer/results/results.json",
+    "task_results": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/turek_hron_cno/project/tasks/ba695519928d48bc9442af7bc4db8a4f/data/ed8fa9645cd843e790a79c6e6996f49a/infer/results/results.json",
+    "scope": "rawprep_prepare_two_updates_resume_to_three_single_infer_post; not_paper_accuracy",
+    "attempt_seconds": 182.41567833395675
+  },
+  {
+    "case": "turek_hron_sit_fno",
+    "status": "passed",
+    "seconds": 244.8061088330578,
+    "preparation": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/turek_hron_sit_fno/direct_data/2026-09-17T15-18-11_0c8691/trainprep/preparation.json",
+    "direct_results": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/turek_hron_sit_fno/direct_data/2026-09-17T15-20-48_cde1f1/infer/results/results.json",
+    "task_results": "/Users/zonghui/work/project_simulation/dojo_train/recipe_task_conventions/gencp-final-source-v2/turek_hron_sit_fno/project/tasks/847b63895b7c45d183e1d32059474a5c/data/c0b2fe67926d44e8bae78b4648719ecc/infer/results/results.json",
+    "scope": "rawprep_prepare_two_updates_resume_to_three_single_infer_post; not_paper_accuracy",
+    "attempt_seconds": 165.00019666703884
+  }
+]

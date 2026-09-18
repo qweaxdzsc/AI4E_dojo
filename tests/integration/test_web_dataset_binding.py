@@ -3,6 +3,7 @@
 from pathlib import Path
 from shutil import rmtree
 
+import ai4e_task as task
 import pytest
 from ai4e_server.bootstrap.app import create_app
 from ai4e_server.bootstrap.settings import Settings
@@ -78,6 +79,29 @@ def test_four_cases_bind_with_revision_and_no_new_version(binding_platform, case
     assert client.get(base + "/tasks/" + task["id"]).json()["version_id"] == task["version_id"]
 
 
+def test_rebind_does_not_rewrite_hidden_partitions(binding_platform):
+    client, base, _, _ = binding_platform
+    created = create(client, base, "shapenet_car_abupt")
+    url = base + "/tasks/" + created["id"]
+    project = client.app.state.services.project(base.rsplit("/", 1)[-1])
+    poison = {
+        "train": ["param1/1dc58be25e1b6e5675cad724c63e222e"],
+        "test": ["param1/1dc757e77f3cfad0253c03b7df20edd5"],
+    }
+    current = task.read_configuration(project, created["id"])
+    task.save_configuration(
+        project, created["id"], {"dataset": {"partitions": poison}}, revision=current["revision"]
+    )
+    binding = client.get(url + "/dataset").json()
+    rebound = client.put(
+        url + "/dataset",
+        json={"expected_revision": binding["revision"], "sources": sources("shapenet_car_abupt")},
+    )
+    assert rebound.status_code == 200, rebound.text
+    kept = task.read_configuration(project, created["id"])["config"]["dataset"]
+    assert kept["partitions"] == poison
+
+
 def test_shapenet_restart_fork_and_management_keep_binding(binding_platform):
     client, base, _, settings = binding_platform
     case = CASES[0]
@@ -147,7 +171,7 @@ def test_nasa_requires_all_files_and_refresh_reports_missing(binding_platform):
     assert invalid["revision"] == saved.json()["revision"]
 
 
-def test_history_recipe_without_components_can_bind_directory(binding_platform):
+def test_missing_operations_disable_only_domain_features(binding_platform):
     client, base, _, settings = binding_platform
     created = client.post(base + "/tasks", json={"name": "history recipe"})
     assert created.status_code == 200, created.text
@@ -164,16 +188,11 @@ def test_history_recipe_without_components_can_bind_directory(binding_platform):
     assert "components" not in OmegaConf.load(config)
     url = base + "/tasks/" + task["id"] + "/dataset"
     initial = client.get(url)
-    assert initial.status_code == 200, initial.text
-    value = initial.json()
-    assert value["dataset_id"] == "shapenet_car"
-    assert value["binding_mode"] == "directory"
-    assert value["status"] in {"unbound", "invalid"}
-    saved = client.put(
-        url, json={"expected_revision": value["revision"], "sources": sources(CASES[0])}
-    )
-    assert saved.status_code == 200, saved.text
-    assert saved.json()["status"] == "valid"
+    assert initial.status_code == 400, initial.text
+    assert "operation_unavailable" in initial.text
+    # 删除领域声明不会破坏基础任务查询或配置编辑。
+    assert client.get(base + "/tasks/" + task["id"]).status_code == 200
+    assert client.get(base + "/tasks/" + task["id"] + "/configuration").status_code == 200
 
 
 def test_legacy_creation_accepts_bound_directory(binding_platform):

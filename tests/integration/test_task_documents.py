@@ -1,6 +1,5 @@
 """Task 文档入口、六节 PRD 与声明文件完整性。"""
 
-import json
 import re
 from pathlib import Path
 
@@ -25,7 +24,10 @@ def test_task_documents_and_entry_links():
             assert re.findall(r"^(\d+)\. ", inventory, re.MULTILINE) == re.findall(
                 r"^#### (\d+)\. ", chapter, re.MULTILINE
             )
-    entry = json.loads((ROOT / "recipes/aero_cfd/task-entry.json").read_text())
+    from ai4e_task.templates.materialize import read_entry
+
+    entry = read_entry(ROOT / "recipes/aero_cfd")
+    assert not (ROOT / "recipes/aero_cfd/task-entry.json").exists()
     assert (ROOT / "recipes/aero_cfd" / entry["script"]).is_file()
     assert (ROOT / "recipes/aero_cfd" / entry["config"]).is_file()
     assert (ROOT / "docs/adr/0003-task-local-package.md").is_file()

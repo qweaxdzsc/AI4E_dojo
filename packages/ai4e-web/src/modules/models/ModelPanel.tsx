@@ -1,9 +1,15 @@
 import { ActionButton as Button } from "../../infrastructure/components/ActionButton";
 import { Alert, Card, Input, InputNumber, Select, Table } from "antd";
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ConfigurationField } from "../../infrastructure/components/ConfigurationField";
+import { fitModelGraphViewport } from "./graphViewport";
+import { selectableGraphViews, selectedGraphMember } from "./graphViews";
 import "./model.css";
+const modelLabels: Record<string, string> = {
+  abupt: "AB-UPT",
+  transolver3: "Transolver-3",
+};
 const labels: Record<string, string> = {
   n_hidden: "隐藏层宽度",
   n_layers: "网络层数",
@@ -37,6 +43,7 @@ export function ModelPanel({
   onChange,
   trace,
   traceUrl,
+  graphUrl,
   onTrace,
   busy,
   canTrace = true,
@@ -54,12 +61,17 @@ export function ModelPanel({
   modelError,
   modelsLoading,
   onRetryModels,
+  officialCombos = [],
+  selectedCombo,
+  comboLocked,
+  onLoadCombo,
 }: {
   capabilities?: any;
   values: any;
   onChange: (key: string, v: any) => void;
   trace: any;
   traceUrl?: string;
+  graphUrl?: (member?: string) => string | undefined;
   onTrace: () => void;
   busy: boolean;
   canTrace?: boolean;
@@ -77,8 +89,66 @@ export function ModelPanel({
   modelError?: string;
   modelsLoading?: boolean;
   onRetryModels?: () => void;
+  officialCombos?: { id: string; name: string }[];
+  selectedCombo?: string;
+  comboLocked?: boolean;
+  onLoadCombo?: (id: string) => void;
 }) {
+  const [graphHtml, setGraphHtml] = useState<string>();
+  const [graphError, setGraphError] = useState<string>();
+  const views = selectableGraphViews(trace?.result);
+  const viewKey = views.map((item) => item.id + ":" + item.member).join("|");
+  const [viewId, setViewId] = useState(
+    () => String(trace?.result?.default_view || views[0]?.id || ""),
+  );
+  useEffect(() => {
+    setViewId(String(trace?.result?.default_view || views[0]?.id || ""));
+  }, [trace?.operation_id, trace?.result?.default_view, viewKey]);
+  const graphMember = selectedGraphMember(trace?.result, viewId);
+  const resolvedUrl = graphUrl?.(graphMember) || traceUrl;
+  useEffect(() => {
+    if (busy || !resolvedUrl) {
+      setGraphHtml(undefined);
+      setGraphError(undefined);
+      return;
+    }
+    const controller = new AbortController();
+    setGraphHtml(undefined);
+    setGraphError(undefined);
+    fetch(resolvedUrl, { signal: controller.signal })
+      .then((response) => {
+        if (!response.ok) throw new Error("结构图加载失败");
+        return response.text();
+      })
+      .then((html) => {
+        if (!controller.signal.aborted) setGraphHtml(fitModelGraphViewport(html));
+      })
+      .catch((error: Error) => {
+        if (error.name !== "AbortError") setGraphError(error.message || "结构图加载失败");
+      });
+    return () => controller.abort();
+  }, [resolvedUrl, busy]);
+  const fetchingGraph = Boolean(!busy && resolvedUrl && !graphHtml && !graphError);
+  const graphLoading = busy || fetchingGraph;
+  const graphLoadingText = busy
+    ? "正在生成模型结构…"
+    : "正在载入结构图…";
+  const currentView = views.find((item) => item.id === viewId);
+  const graphNodes = currentView?.graph_nodes ?? trace?.result?.graph_nodes;
   const selectedModel = modelOptions.find((item) => item.id === selectedCase);
+  const pickerOptions = modelOptions.length
+    ? modelOptions.map((item) => ({
+        value: item.id,
+        label: item.name,
+      }))
+    : selectedCase
+      ? [
+          {
+            value: selectedCase,
+            label: modelLabels[selectedCase] || selectedCase,
+          },
+        ]
+      : [];
   const [exportName, setExportName] = useState("");
   const losses = values.supervision?.length
     ? values.supervision
@@ -106,15 +176,28 @@ export function ModelPanel({
               <Select
                 aria-label="模型类型"
                 value={selectedCase}
-                placeholder="选择模型"
+                placeholder={modelsLoading ? "正在加载可选择的模型" : "选择模型"}
                 loading={modelsLoading}
-                disabled={busy || modelsLoading || Boolean(modelError)}
-                options={modelOptions.map((item) => ({
-                  value: item.id,
-                  label: item.name,
-                }))}
+                disabled={busy || Boolean(modelError) || !modelOptions.length}
+                options={pickerOptions}
                 onChange={onModelChange}
               />
+              {officialCombos.length ? (
+                <>
+                  <label>数据集-模型组合</label>
+                  <Select
+                    aria-label="模型设置组合"
+                    placeholder="选择官方配置"
+                    value={selectedCombo}
+                    disabled={busy || comboLocked}
+                    options={officialCombos.map((item) => ({
+                      value: item.id,
+                      label: item.name,
+                    }))}
+                    onChange={(id) => onLoadCombo?.(id)}
+                  />
+                </>
+              ) : null}
               {selectedModel?.variants?.length ? (
                 <>
                   <label>应用变体</label>
@@ -130,22 +213,29 @@ export function ModelPanel({
                   />
                 </>
               ) : null}
-              <label>我保存的模型</label>
+              <label>已导出的模型配置</label>
               <Select
                 allowClear
-                aria-label="我保存的模型"
+                aria-label="已导出的模型配置"
                 value={selectedPreset}
-                placeholder="未使用导出预设"
-                disabled={busy || modelsLoading}
+                placeholder={
+                  modelsLoading && !presets.length
+                    ? "正在加载已导出配置"
+                    : "未选用已导出配置"
+                }
+                disabled={busy || (modelsLoading && !presets.length)}
                 options={presets.map((item: any) => ({
                   value: item.id,
                   label: item.name,
                 }))}
                 onChange={(value) => onPresetChange?.(value)}
               />
-              <label>结构版本</label>
+              <p className="model-field-help">
+                本项目里用「导出模型配置」保存过的参数组合，不含权重。选中后只替换本页参数，点保存才写入任务。
+              </p>
+              <label>当前参数来源</label>
               <Select
-                aria-label="结构版本"
+                aria-label="当前参数来源"
                 value={selectedModel?.structure_version?.id}
                 disabled
                 options={
@@ -159,6 +249,9 @@ export function ModelPanel({
                     : []
                 }
               />
+              <p className="model-field-help">
+                只表示当前模型参数来自官方案例默认，还是来自某份已导出的配置；此处不能切换。
+              </p>
             </div>
             {modelError && (
               <Alert
@@ -174,8 +267,8 @@ export function ModelPanel({
             )}
             <div className="model-export">
               <Input
-                aria-label="导出模型名称"
-                placeholder="导出名称"
+                aria-label="导出模型配置名称"
+                placeholder="配置名称"
                 value={exportName}
                 disabled={busy || exportBusy}
                 onChange={(e) => setExportName(e.target.value)}
@@ -185,11 +278,11 @@ export function ModelPanel({
                 loading={exportBusy}
                 onClick={() => onExport?.(exportName.trim())}
               >
-                导出模型
+                导出模型配置
               </Button>
             </div>
             <p>
-              换模型将恢复目标官方预设或导出配置的训练默认值，并解除旧准备和权重选择；数据绑定与研究版本保持。
+              导出的是当前模型、训练和准备参数，不是权重文件。换模型将恢复目标官方预设或导出配置的训练默认值，并解除旧准备和权重选择；数据绑定与研究版本保持。
             </p>
           </div>
         </details>
@@ -362,29 +455,79 @@ export function ModelPanel({
         }
       >
         {bindings}
-        {trace && traceUrl ? (
-          <>
-            <p>
-              参数量 {trace.result.parameter_count?.toLocaleString()} ·{" "}
-              {trace.result.model_type}
-            </p>
-            <iframe
-              title="真实模型结构"
-              sandbox="allow-scripts"
-              src={traceUrl}
-            />
-          </>
-        ) : (
-          <div className="empty-record">
-            TorchVista 模型结构
-            <br />
-            <small>
-              {canTrace
-                ? "将按最近一次可用物理来源跟踪实际模型"
-                : "请先完成原始处理后再生成真实结构"}
-            </small>
+        {views.length > 1 ? (
+          <div className="model-graph-views" role="group" aria-label="结构图档位">
+            {views.map((item) => (
+              <Button
+                key={item.id}
+                type={item.id === viewId ? "primary" : "default"}
+                disabled={busy}
+                onClick={() => setViewId(item.id)}
+              >
+                {item.label}
+              </Button>
+            ))}
           </div>
-        )}
+        ) : null}
+        <div
+          className="model-graph-host"
+          role="status"
+          aria-live="polite"
+          aria-busy={graphLoading}
+        >
+          {graphLoading ? (
+            <>
+              <p className="model-graph-status">{graphLoadingText}</p>
+              <div className="model-graph-placeholder" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </div>
+            </>
+          ) : resolvedUrl ? (
+            <>
+              <p>
+                参数量 {trace?.result?.parameter_count?.toLocaleString()} ·{" "}
+                {trace?.result?.model_type}
+                {typeof graphNodes === "number"
+                  ? ` · ${graphNodes.toLocaleString()} 个模块节点`
+                  : ""}
+              </p>
+              <p className="model-graph-hint">
+                滚轮缩放，拖动画布。官方两档结构图按宽度显示，按钮只切换已生成的页。
+              </p>
+              {graphError ? (
+                <iframe
+                  title="真实模型结构"
+                  sandbox="allow-scripts"
+                  src={resolvedUrl}
+                />
+              ) : graphHtml ? (
+                <iframe
+                  title="真实模型结构"
+                  sandbox="allow-scripts"
+                  srcDoc={graphHtml}
+                />
+              ) : (
+                <div className="model-graph-placeholder" aria-hidden="true">
+                  <span />
+                  <span />
+                  <span />
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="empty-record">
+              TorchVista 模型结构
+              <br />
+              <small>
+                {canTrace
+                  ? "将按最近一次可用物理来源跟踪实际模型，一次生成阶段主干和阶段压缩块"
+                  : "请先完成原始处理后再生成真实结构"}
+              </small>
+            </div>
+          )}
+        </div>
       </Card>
     </div>
   );

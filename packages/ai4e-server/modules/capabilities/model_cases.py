@@ -1,5 +1,6 @@
 """官方起步预设与模型候选：只读 example，经 task 独立进程取得默认值和能力。"""
 
+from copy import deepcopy
 from uuid import uuid4
 
 import ai4e_task as task
@@ -79,7 +80,9 @@ def dataset_id(config: dict) -> str:
         if component not in known:
             raise ValueError("unsupported_dataset_binding")
         return known[component]
-    if any(config.get("dataset", {}).get(key) for key in ("train_h5", "test_h5", "connectivity_h5")):
+    if any(
+        config.get("inputs", {}).get("rawprep", {}).get(key) for key in ("train_h5", "test_h5", "connectivity_h5")
+    ):
         return "nasa_crm"
     if {"rawprep", "trainprep", "model", "train", "post"} <= set(config):
         return "shapenet_car"
@@ -87,9 +90,11 @@ def dataset_id(config: dict) -> str:
 
 
 def model_id(config: dict) -> str:
-    """按模型组件识别官方模型；历史缺声明视为 AB-UPT。"""
+    """按明确组件声明识别官方模型；未知或缺失不冒充 AB-UPT。"""
     component = (config.get("components") or {}).get("model") or ""
-    return MODEL_COMPONENTS.get(component, "abupt")
+    if component not in MODEL_COMPONENTS:
+        raise ValueError("unsupported_model_binding")
+    return MODEL_COMPONENTS[component]
 
 
 def current_variant(config: dict) -> str | None:
@@ -100,6 +105,63 @@ def current_variant(config: dict) -> str | None:
     if domains == {"volume"}:
         return "volume"
     return "surface"
+
+
+def preparation_combos(config: dict) -> dict:
+    """按当前数据集列出可加载的官方数据准备组合。"""
+    kind = dataset_id(config)
+    try:
+        current = resolve_case(kind, model_id(config), current_variant(config))
+    except ValueError:
+        current = None
+    return {
+        "current_id": current,
+        "options": [
+            {
+                "id": case_id,
+                "name": item["name"],
+                "model_id": item["model_id"],
+                "variant": item.get("variant"),
+            }
+            for case_id, item in CASES.items()
+            if item["dataset_id"] == kind
+        ],
+    }
+
+
+def official_combos(config: dict) -> dict:
+    """按当前模型列出全部官方数据集-模型组合，名称含数据集，不按任务数据过滤。"""
+    try:
+        current_model = model_id(config)
+    except ValueError:
+        current_model = None
+    return {
+        "current_model_id": current_model,
+        "options": [
+            {
+                "id": case_id,
+                "name": item["name"],
+                "model_id": item["model_id"],
+                "variant": item.get("variant"),
+            }
+            for case_id, item in CASES.items()
+        ],
+    }
+
+
+def official_page_values(service, case_id: str, section: str) -> dict:
+    """读取官方案例的模型或训练段，去掉路径绑定，不检查当前数据集。"""
+    if case_id not in CASES:
+        raise ValueError("unknown_registered_case")
+    if section not in {"model", "train"}:
+        raise ValueError("official_combo_section_unsupported")
+    value = deepcopy(case_configuration(service, case_id).get(section) or {})
+    if section == "train":
+        for key in ("manifest", "preparation", "resume"):
+            value.pop(key, None)
+    else:
+        value.pop("initial_weights", None)
+    return value
 
 
 def resolve_case(dataset_key: str, model_key: str, variant: str | None = None) -> str | None:
@@ -115,7 +177,9 @@ def resolve_case(dataset_key: str, model_key: str, variant: str | None = None) -
         for case_id, item in matches:
             if item.get("variant") == variant:
                 return case_id
-    preferred = variant or ("surface" if dataset_key == "shapenet_car" and model_key == "transolver3" else None)
+    preferred = variant or (
+        "surface" if dataset_key == "shapenet_car" and model_key == "transolver3" else None
+    )
     if preferred:
         for case_id, item in matches:
             if item.get("variant") == preferred:
@@ -183,16 +247,15 @@ def describe_official_model(
                 "component": described["component"],
             }
             continue
-        extra = describe_model_case(
-            service, project, identity, resolve_case(kind, model_key, item["id"]), captured
-        )
+        extra_id = resolve_case(kind, model_key, item["id"])
+        extra = _catalog_option(service, extra_id, model_key, kind)
         variant_defaults[item["id"]] = {
             "id": model_key,
             "model_id": model_key,
             "model": extra["model"],
             "train": extra["train"],
             "trainprep": extra["trainprep"],
-            "capabilities": extra["capabilities"],
+            "capabilities": {},
             "component": extra["component"],
         }
     return {
@@ -205,9 +268,75 @@ def describe_official_model(
     }
 
 
+def _catalog_option(service, case_id: str, model_key: str, dataset_key: str) -> dict:
+    """用官方案例 YAML 组装下拉项，不启动 describe_case。"""
+    raw = case_configuration(service, case_id)
+    variants = official_variants(dataset_key, model_key)
+    variant_defaults = {}
+    for item in variants:
+        extra_id = resolve_case(dataset_key, model_key, item["id"])
+        extra = case_configuration(service, extra_id)
+        model = deepcopy(extra.get("model") or {})
+        model.pop("initial_weights", None)
+        train = deepcopy(extra.get("train") or {})
+        for key in ("manifest", "preparation", "resume"):
+            train.pop(key, None)
+        variant_defaults[item["id"]] = {
+            "id": model_key,
+            "model_id": model_key,
+            "model": model,
+            "train": train,
+            "trainprep": deepcopy(extra.get("trainprep") or {}),
+            "capabilities": {},
+            "component": extra["components"]["model"],
+        }
+    model = deepcopy(raw.get("model") or {})
+    model.pop("initial_weights", None)
+    train = deepcopy(raw.get("train") or {})
+    for key in ("manifest", "preparation", "resume"):
+        train.pop(key, None)
+    case = CASES[case_id]
+    return {
+        "id": model_key,
+        "name": MODELS[model_key]["name"],
+        "model_id": model_key,
+        "dataset_id": dataset_key,
+        "variant": case.get("variant"),
+        "binding_mode": case.get("binding_mode"),
+        "case_id": case_id,
+        "structure_version": {"id": "default", "name": "案例默认"},
+        "component": raw["components"]["model"],
+        "model": model,
+        "train": train,
+        "trainprep": deepcopy(raw.get("trainprep") or {}),
+        "capabilities": {},
+        "variants": variants,
+        "variant_defaults": variant_defaults,
+    }
+
+
+def describe_model_option(
+    service,
+    project: str,
+    identity: str,
+    model_key: str | None = None,
+    variant: str | None = None,
+    preset_id: str | None = None,
+) -> dict:
+    """按点选目标描述一份可换模默认值与能力；列表接口不走这里。"""
+    captured = task.read_configuration(service.project(project), identity)
+    if preset_id:
+        from .model_presets import load_preset
+
+        return load_preset(service, project, identity, preset_id, captured)
+    if not model_key:
+        raise ValueError("model_option_target_required")
+    return describe_official_model(service, project, identity, model_key, captured, variant)
+
+
 def model_options(service, project: str, identity: str) -> dict:
-    """提供两个官方模型和同数据集用户预设；创建来源不代替当前模型。"""
-    from .model_presets import describe_preset, list_presets, match_preset
+    """提供两个官方模型和同数据集用户预设；进页只读目录，不描述全部候选。"""
+    from .model_presets import catalog_preset, list_presets, match_preset
 
     captured = task.read_configuration(service.project(project), identity)
     kind = dataset_id(captured["config"])
@@ -215,28 +344,15 @@ def model_options(service, project: str, identity: str) -> dict:
     variant = current_variant(captured["config"])
     options = []
     for key in MODELS:
-        if resolve_case(kind, key) is None:
+        case_id = resolve_case(kind, key, variant if key == current_model else None)
+        if case_id is None:
             continue
         if not (
-            service.settings.template.parent.parent
-            / "examples/aero_cfd"
-            / resolve_case(kind, key, variant if key == current_model else None)
-            / "config.yaml"
+            service.settings.template.parent.parent / "examples/aero_cfd" / case_id / "config.yaml"
         ).is_file():
             continue
-        options.append(
-            describe_official_model(
-                service,
-                project,
-                identity,
-                key,
-                captured,
-                variant if key == current_model else None,
-            )
-        )
-    presets = []
-    for record in list_presets(service, project, kind):
-        presets.append(describe_preset(service, project, identity, record, captured))
+        options.append(_catalog_option(service, case_id, key, kind))
+    presets = [catalog_preset(record) for record in list_presets(service, project, kind)]
     current_preset = match_preset(captured["config"], presets)
     return {
         "revision": captured["revision"],

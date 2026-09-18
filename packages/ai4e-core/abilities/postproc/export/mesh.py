@@ -8,7 +8,14 @@ from uuid import uuid4
 import numpy as np
 from vtkmodules.util.numpy_support import numpy_to_vtk, vtk_to_numpy
 from vtkmodules.vtkCommonCore import vtkCommand
-from vtkmodules.vtkCommonDataModel import vtkDataSet, vtkPolyData, vtkUnstructuredGrid
+from vtkmodules.vtkCommonDataModel import (
+    vtkDataSet,
+    vtkImageData,
+    vtkPolyData,
+    vtkRectilinearGrid,
+    vtkStructuredGrid,
+    vtkUnstructuredGrid,
+)
 from vtkmodules.vtkFiltersGeometry import vtkDataSetSurfaceFilter
 from vtkmodules.vtkIOXML import (
     vtkXMLPolyDataReader,
@@ -16,6 +23,27 @@ from vtkmodules.vtkIOXML import (
     vtkXMLUnstructuredGridReader,
     vtkXMLUnstructuredGridWriter,
 )
+
+
+def mesh_topology_kind(mesh) -> str:
+    """判断网格是结构化、非结构、表面还是只有点，不猜测文件名。
+
+    结构化含图像/矩形/结构网格；有面或体单元的 PolyData 算表面；
+    只有独立顶点时算点云。调用方据此选择写出器，不能把点云冒充网格。
+    """
+    if isinstance(mesh, (vtkImageData, vtkRectilinearGrid, vtkStructuredGrid)):
+        return "structured"
+    if isinstance(mesh, vtkUnstructuredGrid):
+        return "unstructured" if mesh.GetNumberOfCells() > 0 else "points"
+    if isinstance(mesh, vtkPolyData):
+        if mesh.GetNumberOfPolys() > 0 or mesh.GetNumberOfStrips() > 0:
+            return "surface"
+        if mesh.GetNumberOfVerts() > 0 and mesh.GetNumberOfCells() == mesh.GetNumberOfPoints():
+            return "pointcloud"
+        return "surface" if mesh.GetNumberOfCells() > 0 else "points"
+    if isinstance(mesh, vtkDataSet) and mesh.GetNumberOfCells() > 0:
+        return "unstructured"
+    return "points"
 
 
 def extract_point_field(data, *, kind: str, names: tuple[str, ...] = ()):

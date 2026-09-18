@@ -1,0 +1,120 @@
+{
+  "commit": "f931ca5243286a83952333fac73cf7014f86ee45",
+  "files": {
+    "model/safediffcon/burgers_unet.py": {
+      "source": "1D/model/unet.py",
+      "original_sha256": "5214c315452e353de6e956976bbc1f7f5c8cadfe906bf0dc3cf6b5582f9dc118",
+      "sha256": "164fbddff9c9170a8c195e8c4b6a4ff6685f171dc77eca285bc7d78f6cf469a0",
+      "changes": [
+        "module docstring",
+        "qualified imports"
+      ]
+    },
+    "model/safediffcon/burgers_model_utils.py": {
+      "source": "1D/model/model_utils.py",
+      "original_sha256": "2f017dc8b613caf28c2772ee021fe3a9169dcc123121539b812e85d1d944ca55",
+      "sha256": "b5b201ac246f01e783dd42b4f1f0d6ca1a5f01b4c4a371e4710d221a51588444",
+      "changes": [
+        "module docstring",
+        "qualified imports"
+      ]
+    },
+    "inference/safediffcon/burgers.py": {
+      "source": "1D/model/diffusion.py",
+      "original_sha256": "a2ffbce44f538d11105b07d3d785d3669d5c2e049203d8d62f32e8734316b1f7",
+      "sha256": "712cc65551d26f3cf1dd855f9358eb4895a0f9c7b2aee95e83e47d2396d64168",
+      "changes": [
+        "module docstring",
+        "qualified imports"
+      ]
+    },
+    "model/safediffcon/tokamak_unet.py": {
+      "source": "tokamak/model/unet.py",
+      "original_sha256": "35ab05c4291f31740729f0ab889fb30ac847a7530741b773be190dbdd0e17c70",
+      "sha256": "4fbf45d4538d344e0393a061635521987579eebc30a1ab710141ac57dc7d75d9",
+      "changes": [
+        "module docstring",
+        "qualified imports"
+      ]
+    },
+    "model/safediffcon/tokamak_model_utils.py": {
+      "source": "tokamak/model/model_utils.py",
+      "original_sha256": "2f017dc8b613caf28c2772ee021fe3a9169dcc123121539b812e85d1d944ca55",
+      "sha256": "b5b201ac246f01e783dd42b4f1f0d6ca1a5f01b4c4a371e4710d221a51588444",
+      "changes": [
+        "module docstring",
+        "qualified imports"
+      ]
+    },
+    "inference/safediffcon/tokamak.py": {
+      "source": "tokamak/model/diffusion.py",
+      "original_sha256": "52e55ad1e0ee0a7ab01c7dd138a80fcba797bc52085befffc76f44b9599c430e",
+      "sha256": "14a1699107f4f1ea8acec4402d512d5628e54d4047b0490991647640ac541ec3",
+      "changes": [
+        "module docstring",
+        "qualified imports"
+      ]
+    },
+    "postproc/safediffcon/burgers.py": {
+      "source": "1D/data/generate_burgers.py",
+      "original_sha256": "2ed9b4236c84d1789637ba66f223859f8af9483a58627c3720913f31bed3bb3c",
+      "sha256": "0ce99926c28b4844e0d443f2aa9742be81a5da9a71dd578ff58722c3169487cc",
+      "changes": [
+        "module docstring",
+        "qualified imports or explicit asset path",
+        "selected solver functions only"
+      ]
+    },
+    "constraint/safediffcon/pinn_loss.py": {
+      "source": "1D/model/pinn_loss.py",
+      "original_sha256": "41f3536d38f2e1bbcb98b6ee5d9fb38c65cc0ecc160be481a9480c03ce1c2279",
+      "sha256": "011f7725997e672461d6af9438e1729b347ff657c017c1dad0b3b5df60a25ab9",
+      "changes": [
+        "module docstring",
+        "qualified imports or explicit asset path",
+        "no numerical changes"
+      ]
+    },
+    "postproc/safediffcon/kstar.py": {
+      "source": "tokamak/kstar_solver.py",
+      "original_sha256": "12e54fab22944a21bef15ed9ae6d4acea13b9665d3edc0b84faca8f94a24a273",
+      "sha256": "33150d12bc5a6da87ca72ed8aea6a011885143f41bd905a0cfb900817ecd9fd3",
+      "changes": [
+        "module docstring",
+        "qualified imports or explicit asset path",
+        "no numerical changes"
+      ]
+    },
+    "postproc/safediffcon/kstar_common/model_structure.py": {
+      "source": "tokamak/common/model_structure.py",
+      "original_sha256": "2bedac0c496b4c2317af0ec69e207793defdcdf3d898625c711281fc9891b77c",
+      "sha256": "c4513f55559bb71091f6213c770570ea9f93155f899b2c9d97cc47e58e9698b0",
+      "changes": [
+        "module docstring",
+        "qualified imports or explicit asset path",
+        "no numerical changes"
+      ]
+    },
+    "postproc/safediffcon/kstar_common/wall.py": {
+      "source": "tokamak/common/wall.py",
+      "original_sha256": "5aa93d333b07f53ad408f2a13baa1c7a9fe616954ffe20cf1ca79bebbfb311b9",
+      "sha256": "f149c37b6d22b4b50fcf9d9f9a86d670b28fa333f03f668c39a9eea027b78eac",
+      "changes": [
+        "module docstring",
+        "qualified imports or explicit asset path",
+        "no numerical changes"
+      ]
+    },
+    "postproc/safediffcon/kstar_common/setting.py": {
+      "source": "tokamak/common/setting.py",
+      "original_sha256": "ae3cceccbd2d1e390b489b765def548986b8cc46b11862f2cbb5472f5181be32",
+      "sha256": "b0badb5bc30afd7cda7c900b0d37358f370e996ffc69b27f7d873599331f6a2a",
+      "changes": [
+        "module docstring",
+        "qualified imports or explicit asset path",
+        "no numerical changes"
+      ]
+    }
+  },
+  "license": "MIT; LICENSE in this directory covers vendored SafeDiffCon definitions"
+}
