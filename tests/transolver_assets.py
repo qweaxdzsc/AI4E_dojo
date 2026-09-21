@@ -38,16 +38,42 @@ def write_source(path: Path, sample_count: int, point_count: int, *, offset: flo
                 sample.attrs[name] = sample_value * 0.1 * (target_index + 1)
 
 
-def configuration(tmp_path):
-    """生成完整 schema 的小数据和真实网络小配置用于快速契约测试。"""
+def write_connectivity(path: Path, point_count: int) -> None:
+    """写出由互不重叠三角形组成的对称 NASA 邻接夹具。"""
+    if point_count % 3:
+        raise ValueError("NASA 拓扑夹具点数必须是 3 的倍数")
+    with h5py.File(path, "w") as output:
+        group = output.create_group("Connectivity")
+        for point in range(point_count):
+            first = point - point % 3
+            group.create_dataset(
+                str(point),
+                data=np.asarray(
+                    [candidate for candidate in range(first, first + 3) if candidate != point],
+                    dtype=np.int64,
+                ),
+            )
+
+
+def configuration(tmp_path, *, legacy: bool = False):
+    """生成完整 schema 的小数据和当前或冻结历史配置。"""
     root = Path(__file__).resolve().parents[1]
     cfg = yaml.safe_load((root / "tests/fixtures/transolver3/reference-example.yaml").read_text())
     raw = tmp_path / "raw"
     raw.mkdir(parents=True)
     train, test = raw / "training.h5", raw / "test.h5"
+    connectivity_path = raw / "connectivity.h5"
     write_source(train, 5, 24, offset=0)
     write_source(test, 2, 24, offset=100)
-    cfg["dataset"].update(root=str(raw), train_h5=str(train), test_h5=str(test), chunk_count=4)
+    write_connectivity(connectivity_path, 24)
+    dataset = cfg["dataset"]
+    dataset.update(
+        root=str(raw),
+        train_h5=str(train),
+        test_h5=str(test),
+        connectivity_h5=str(connectivity_path),
+        chunk_count=4,
+    )
     cfg["data_root"] = str(tmp_path / "data")
     cfg["run_root"] = str(tmp_path / "runs")
     cfg["model"]["parameters"].update(
@@ -55,6 +81,34 @@ def configuration(tmp_path):
     )
     cfg["train"].update(device="cpu", max_epochs=2)
     cfg["post"].update(export_vtk=False, all_samples=True)
+    if legacy:
+        config_dir = tmp_path / "configuration"
+        config_dir.mkdir()
+        path = config_dir / "config.yaml"
+        path.write_text(yaml.safe_dump(cfg, sort_keys=False))
+        from omegaconf import OmegaConf
+
+        return OmegaConf.create(cfg), path
+
+    # reference-example.yaml 保留历史案例快照；测试当前公开入口时显式迁移到
+    # inputs.<stage>，避免通过放宽生产配置门禁来消费旧 dataset/path 键。
+    dataset.pop("root", None)
+    dataset.pop("train_h5", None)
+    dataset.pop("test_h5", None)
+    dataset.pop("connectivity_h5", None)
+    cfg.pop("paths", None)
+    checkpoint = cfg["post"].pop("checkpoint", None)
+    train_resume = cfg["train"].pop("resume", None)
+    cfg["inputs"] = {
+        "rawprep": {
+            "source": str(raw),
+            "train_h5": str(train),
+            "test_h5": str(test),
+            "connectivity_h5": str(connectivity_path),
+        },
+        "train": {"resume": train_resume},
+        "infer": {"checkpoint": checkpoint},
+    }
     config_dir = tmp_path / "configuration"
     config_dir.mkdir()
     path = config_dir / "config.yaml"

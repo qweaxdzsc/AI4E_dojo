@@ -1,6 +1,6 @@
 case: tokamak
 seed: 42
-run_root: ./runs
+run_root: ../runs
 model:
   dim: 64
   ddim_steps: 50
@@ -26,7 +26,7 @@ infer:
   weight: 0.01
   lr: 9.0e-06
 solver:
-  python: /Users/zonghui/work/project_simulation/dojo_train/safediffcon/environments/kstar/bin/python
+  python: ./runs/safediffcon/environments/kstar/bin/python
   timeout_seconds: 600
 post: {}
 components:
@@ -45,14 +45,14 @@ pipeline:
   - posttrain
   - infer
   - post
-data_root: ./data
+data_root: ../data
 dataset:
   name: tokamak
 rawprep: {}
 trainprep: {}
 inputs:
   rawprep:
-    source: /Users/zonghui/work/datasets/tokamak
+    source: ./inputs/tokamak
   trainprep:
     dataset_train: null
     dataset_cal: null
@@ -67,7 +67,7 @@ inputs:
     preparation_cal: null
     preparation_test: null
     checkpoint: null
-    solver_assets: /Users/zonghui/work/project_simulation/dojo_train/safediffcon/admission/20260916/source/tokamak
+    solver_assets: ./runs/safediffcon/admission/20260916/source/tokamak
   post:
     results: null
   posttrain:

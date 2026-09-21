@@ -92,14 +92,14 @@ def test_case_create_clears_template_manifest_placeholder(platform):
 
 
 def test_new_task_vtkhdf_follows_case_capability(platform):
-    """新建官方案例：ShapeNet 默认打开 VTKHDF，NASA 未接入不强开。"""
+    """新建官方外流案例默认保留来源已有的网格拓扑。"""
     c, p, _, _, _ = platform
     for case_id, enabled in (
         ("shapenet_car_abupt", True),
         ("shapenet_car_transolver3_surface", True),
         ("shapenet_car_transolver3_volume", True),
-        ("nasa_crm_abupt", False),
-        ("nasa_crm_transolver3", False),
+            ("nasa_crm_abupt", True),
+            ("nasa_crm_transolver3", True),
     ):
         created = c.post(
             f"/api/v1/projects/{p}/tasks",

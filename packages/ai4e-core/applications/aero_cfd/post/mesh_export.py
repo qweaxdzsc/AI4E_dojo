@@ -10,7 +10,9 @@ from ai4e_core.abilities.postproc.coordinate_space import coordinate_space
 from ai4e_core.applications.aero_cfd.infer.vtk_export import sample_identity, stamp_mesh_identity
 
 
-def export_prediction_meshes(config, dataset_component, manifest_path, *, committed=None):
+def export_prediction_meshes(
+    config, dataset_component, manifest_path, *, committed=None, source_meshes=None
+):
     """逐域写真实 VTP/VTU；失效点单元不补零，成功路径才登记到清单。"""
     import vtk
 
@@ -37,15 +39,55 @@ def export_prediction_meshes(config, dataset_component, manifest_path, *, commit
         fields.update(
             {d["field"]: read(d["field"]) for d in declaration.get("derived_fields", {}).values()}
         )
-        original = dataset_component.comparison_mesh(
-            config, metadata["identity"]["sample"], domain, points
-        )
+        physical_mesh = (source_meshes or {}).get(domain)
+        if physical_mesh:
+            reader = vtk.vtkHDFReader()
+            reader.SetFileName(str(physical_mesh))
+            reader.Update()
+            original = reader.GetOutput()
+            if original is None or not original.GetNumberOfCells():
+                raise ValueError("物理 VTKHDF 缺少有效拓扑")
+        else:
+            original = dataset_component.comparison_mesh(
+                config, metadata["identity"]["sample"], domain, points
+            )
+        mapping_ids = ids if declaration["identity_basis"] == "source" else None
+        if physical_mesh:
+            import numpy as np
+            from vtk.util.numpy_support import vtk_to_numpy
+
+            mesh_ids = original.GetPointData().GetArray("original_point_id")
+            if mesh_ids is not None:
+                source_ids = vtk_to_numpy(mesh_ids)
+                rows = {int(value): i for i, value in enumerate(source_ids)}
+                if len(rows) != len(source_ids) or any(int(i) not in rows for i in ids):
+                    raise ValueError("物理网格实体身份重复或缺失")
+                mapping_ids = np.array([rows[int(i)] for i in ids], dtype=np.int64)
+            elif np.array_equal(
+                vtk_to_numpy(original.GetPoints().GetData()).astype(points.dtype), points
+            ):
+                mapping_ids = np.arange(len(points), dtype=np.int64)
+            else:
+                mapping_ids = None
         mapped = attach_valid_mesh(
             original,
             points,
             fields,
-            source_ids=ids if declaration["identity_basis"] == "source" else None,
+            source_ids=mapping_ids,
         )
+        if physical_mesh:
+            from vtk.util.numpy_support import numpy_to_vtk, vtk_to_numpy
+
+            # 物理网格已经筛选；匹配使用局部行号，交付仍保留原实体身份。
+            original_cells = original.GetCellData().GetArray("original_cell_id")
+            if original_cells is not None:
+                rows = vtk_to_numpy(mapped.GetCellData().GetArray("original_cell_id"))
+                values = numpy_to_vtk(vtk_to_numpy(original_cells)[rows], deep=True)
+                values.SetName("original_cell_id")
+                mapped.GetCellData().AddArray(values)
+            values = numpy_to_vtk(ids, deep=True)
+            values.SetName("original_point_id")
+            mapped.GetPointData().AddArray(values)
         output = surface(mapped) if domain == "surface" else mapped
         if space is not None:
             for key, value in space.items():

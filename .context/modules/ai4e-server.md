@@ -5,9 +5,9 @@ bootstrap 装配，infrastructure 受控存储与传输，modules 平台业务�
 
 - `packages/ai4e-server/modules/capabilities/aero_cfd.py`：平台操作可用性门禁，不再比较模板 AST 或代码文件集合。
 - `packages/ai4e-server/modules/capabilities/model_cases.py`：官方目录映射，未知模型不冒充 AB-UPT；按数据集列出可加载的数据准备组合。`model-options` 进页只读 YAML 目录，点选 `/model-option` 再描述目标默认值与能力。
-- `packages/ai4e-server/modules/stages/application.py`：开训合成现行配置，只认 version=2 准备；仅当任务脚本摘要已核验时才替换旧官方包装。阶段提交按当前 recipe 投影的 `inputs.*` 捕获输入。阶段输入列表按文件戳登记检查点，不整文件摘要；准备完成的数据带回 train/test/eval 切片。准备处理结果列举现行 `data_dir/trainprep/normalize`，历史运行回退 `data_dir/normalize`。
+- `packages/ai4e-server/modules/stages/application.py`：开训合成现行配置，只认 version=2 准备；仅当任务脚本摘要已核验时才替换旧官方包装。打开配置、检查、提交时写回缺的训练切片和旧 `validation` 别名，不新建研究版本。阶段提交按当前 recipe 投影的 `inputs.*` 捕获输入。阶段输入列表按文件戳登记检查点，不整文件摘要；准备完成的数据带回 train/test/eval 切片。准备处理结果列举现行 `data_dir/trainprep/normalize`，历史运行回退 `data_dir/normalize`。
 - `packages/ai4e-server/modules/rawprep/application.py`：正式提交覆盖 `inputs.rawprep.source`，不再写旧键 `dataset.root`。
-- `packages/ai4e-server/modules/stages/domain.py`：`normalize_field_scales` 为每场写入显式 scale。
+- `packages/ai4e-server/modules/stages/domain.py`：`normalize_field_scales` 为每场写入显式 scale；`published_slices` 阅读准备记录交出固定三分片，`legacy_slice_patch` 给出旧任务写回段。
 - 本轮文件与回归清单：`.context/mvp/architecture-alignment-acceptance.md`。
 
 

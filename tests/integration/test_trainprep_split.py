@@ -25,6 +25,24 @@ def _source_split():
     return module
 
 
+def _source_stage_domain():
+    path = Path(__file__).resolve().parents[2] / "packages/ai4e-server/modules/stages/domain.py"
+    spec = importlib.util.spec_from_file_location("dojo_source_stage_domain", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _source_compose():
+    path = (
+        Path(__file__).resolve().parents[2] / "packages/ai4e-server/modules/stages/configuration.py"
+    )
+    spec = importlib.util.spec_from_file_location("dojo_source_stage_configuration", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def write_physical_manifest(root, partitions):
     """写出最小物理清单，每个样本一个坐标张量。"""
     samples = []
@@ -146,6 +164,21 @@ def test_open_dataset_applies_random_split(tmp_path):
     data.index.read("eval", 0, fields=["pos"])
 
 
+def test_open_dataset_overlay_allows_empty_train(tmp_path):
+    import ai4e_core.abilities.data.source.split as installed
+
+    if not hasattr(installed, "complete_split_buckets"):
+        pytest.skip("安装副本尚未包含切片补齐")
+    path = write_physical_manifest(tmp_path, {"train": ["a"], "test": ["b"]})
+    data = open_dataset(
+        {"train": {"manifest": str(path)}, "trainprep": {}},
+        overlay={"train": [], "test": ["b"], "eval": ["a"]},
+    )
+    assert "train" not in data.index.partitions
+    assert list(data.index.partitions["test"]) == ["b"]
+    assert list(data.index.partitions["eval"]) == ["a"]
+
+
 def test_open_dataset_overlay_uses_stored_partitions(tmp_path):
     path = write_physical_manifest(tmp_path, {"train": ["a", "b"]})
     data = open_dataset(
@@ -186,6 +219,61 @@ def test_published_slices_fill_missing_buckets_and_keep_zero():
         "test": [],
         "eval": ["b"],
     }
+    assert split.named_slice("validation") == "eval"
+    assert split.named_slice(None, "test") == "test"
+
+
+def test_published_slices_core_and_server_match():
+    """核心与服务对同一准备记录交出相同三分片目录。"""
+    core = _source_split()
+    server = _source_stage_domain()
+    records = [
+        {
+            "partitions": {"train": ["a"], "validation": ["b"]},
+            "split": {"method": "original", "seed": 1},
+            "split_counts": {"train": "bad"},
+        },
+        {
+            "partitions": {"train": ["a", "b"]},
+            "split": {"method": "random", "seed": 3},
+            "split_counts": {"train": 2},
+        },
+        None,
+    ]
+    for record in records:
+        assert core.published_slices(record) == server.published_slices(record)
+
+
+def test_legacy_slice_patch_fills_missing_and_keeps_explicit():
+    domain = _source_stage_domain()
+    assert domain.legacy_slice_patch(
+        {
+            "train": {"evaluation_split": "validation", "export_split": "validation"},
+            "trainprep": {"split": {"method": "original", "counts": {"train": 2, "test": 1}}},
+            "post": {"split": "validation"},
+        }
+    ) == {
+        "train": {
+            "training_split": "train",
+            "evaluation_split": "eval",
+            "export_split": "eval",
+        },
+        "trainprep": {"split": {"counts": {"eval": 0}}},
+        "post": {"split": "eval"},
+    }
+    assert domain.legacy_slice_patch({"train": {"training_split": "test"}}) == {}
+
+
+def test_compose_configuration_allows_training_split():
+    compose = _source_compose().compose_configuration
+    result = compose(
+        {"train": {"learning_rate": 1}},
+        "train",
+        {"training_split": "test"},
+        edited_paths=[["training_split"]],
+    )
+    assert result["train"]["training_split"] == "test"
+    assert result["train"]["learning_rate"] == 1
 
 
 def test_open_dataset_rejects_empty_train_split(tmp_path):

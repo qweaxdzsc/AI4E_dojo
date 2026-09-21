@@ -7,6 +7,14 @@
 
 本目录同时是包工程根和源码根；由构建配置映射为 Python 导入名 `ai4e_core`，不得再嵌套同名目录。
 
+## 可选网络计算组件
+
+core 提供可独立组合的 `FLAREPlusPlus` 注意力层，公开导入为 `ai4e_core.abilities.modeling.modules.flare_attention.FLAREPlusPlus`。它将普通 `(B, N, C)` 浮点特征映射为同形特征，仅依赖 Torch，由用户选择性放入网络，不自动替换现有模型或默认 GALE。
+
+组件不包含完整模型、残差、MLP 或训练循环，不支持 padding/因果掩码、token 分片和 Transformer Engine。使用方式见 [网络组件指南](../../docs/agent-help/user-components/network.md)，参数见 [FLARE++ API](../../docs/agent-help/api/core/abilities/modeling/modules/flare_attention.md)，长期行为见 [abilities PRD](../../docs/PRD/ai4e-core/abilities/PRD.md)。
+
+[组件验收](../../.context/mvp/flare-attention-acceptance.md)区分源码、隔离 wheel 与正式安装状态；数值一致性和安装验证不代表完整模型的精度或性能提升。来源与 Apache-2.0 许可位于 `Notice/physicsnemo/`。
+
 ## 本切片边界
 
 - `abilities/data/source/download/`：HuggingFace 整库/单文件、普通网址、多包解压。不管数据集内容，不删除已知缺文件的样本目录。

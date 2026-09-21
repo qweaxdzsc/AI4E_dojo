@@ -75,3 +75,37 @@ def test_shared_reference_keeps_array_dependencies(tmp_path):
     array.write_bytes(b"changed")
     with pytest.raises(ValueError, match="asset_changed"):
         task.get_shared(project, shared["id"])
+
+
+def test_rebound_shared_bundle_survives_fork(tmp_path):
+    """同一输入槽从旧文件改绑共享清单，fork必须保留新资产的完整目录。"""
+    from ai4e_task.tasks.assets import describe_asset
+
+    project = tmp_path / "project"
+    task.create_project(project)
+    source = recipe(tmp_path)
+    old = tmp_path / "old.bin"
+    old.write_bytes(b"old")
+    cfg = OmegaConf.load(source / "config.yaml")
+    OmegaConf.update(cfg, "inputs.train.preparation", str(old), force_add=True)
+    OmegaConf.save(cfg, source / "config.yaml")
+    parent = task.new_task(project, "root", source=source)
+    bundle = tmp_path / "prepared"
+    bundle.mkdir()
+    manifest = bundle / "manifest.json"
+    manifest.write_text('{"field":"field.npy"}')
+    (bundle / "field.npy").write_bytes(b"complete-array")
+    shared = task.register_shared(
+        project, "prepared", manifest, kind="preparation", copy=True,
+        dependencies=[describe_asset(bundle / "field.npy", kind="other")],
+        bundle=describe_asset(bundle, kind="other"),
+    )
+    current = task.read_configuration(project, parent["id"])
+    current["config"].setdefault("inputs", {}).setdefault("train", {})["preparation"] = str(
+        project / shared["path"]
+    )
+    task.replace_configuration(project, parent["id"], current["config"], revision=current["revision"])
+    child = task.fork_task(project, parent["id"], copy_preparation=True)
+    copied = validate_asset(project, child["assets"]["inputs.train.preparation"])
+    assert (copied.parent / "field.npy").read_bytes() == b"complete-array"
+    assert child["assets"]["inputs.train.preparation"]["bundle"]

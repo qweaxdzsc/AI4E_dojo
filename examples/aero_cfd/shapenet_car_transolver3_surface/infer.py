@@ -6,12 +6,16 @@ sys.dont_write_bytecode = True
 from configuration import application_parameters, load_components, load_configuration
 
 from ai4e_core import run
-from ai4e_core.applications.aero_cfd.infer import anchor as infer_stage
 from ai4e_core.run import TrainingRun
 
 
 def infer(cfg, trained=None):
     """连续运行消费训练引用，独立运行消费指定检查点。"""
+    if cfg.trainprep.get("topology"):
+        from ai4e_core.applications.aero_cfd import infer as infer_stage
+    else:
+        from ai4e_core.applications.aero_cfd.infer import anchor as infer_stage
+
     components = load_components(cfg)
     session = TrainingRun()
     if trained and trained.get("mode", "").endswith("_check"):
@@ -30,7 +34,9 @@ def infer(cfg, trained=None):
     job = infer_stage.configure_physical_output(job)
     job = infer_stage.configure_selection(job, fields=cfg.infer.get("fields"))
     job = infer_stage.configure_evaluation(job, settings=cfg.infer)
-    job = infer_stage.configure_save(job, output=session.output_dir("infer") / "predictions", settings=cfg.infer)
+    job = infer_stage.configure_save(
+        job, output=session.output_dir("infer") / "predictions", settings=cfg.infer
+    )
     job = infer_stage.configure_mesh_export(job, settings=cfg.infer)
     if session.dry_run:
         return infer_stage.check_report(job)

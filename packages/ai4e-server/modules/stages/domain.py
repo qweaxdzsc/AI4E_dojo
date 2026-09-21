@@ -242,6 +242,36 @@ def published_slices(record=None):
     return slices
 
 
+def legacy_slice_patch(config):
+    """旧任务缺训练切片或仍写 validation 时给出写回段；已有显式切片不改。"""
+    if not isinstance(config, dict):
+        return {}
+    patch = {}
+    train = config.get("train") if isinstance(config.get("train"), dict) else {}
+    train_patch = {}
+    if "training_split" not in train:
+        train_patch["training_split"] = "train"
+    for key in ("training_split", "evaluation_split", "export_split"):
+        if key in train_patch:
+            continue
+        if train.get(key) == "validation":
+            train_patch[key] = "eval"
+    if train_patch:
+        patch["train"] = train_patch
+    post = config.get("post") if isinstance(config.get("post"), dict) else {}
+    if post.get("split") == "validation":
+        patch["post"] = {"split": "eval"}
+    infer = config.get("infer") if isinstance(config.get("infer"), dict) else {}
+    if infer.get("split") == "validation":
+        patch["infer"] = {"split": "eval"}
+    prep = config.get("trainprep") if isinstance(config.get("trainprep"), dict) else {}
+    split = prep.get("split") if isinstance(prep.get("split"), dict) else {}
+    counts = split.get("counts") if isinstance(split.get("counts"), dict) else None
+    if counts is not None and "eval" not in counts:
+        patch["trainprep"] = {"split": {"counts": {"eval": 0}}}
+    return patch
+
+
 def split_catalog(manifest=None):
     """准备页分片默认值：全部已处理样本，原分片人数，缺的桶为 0。"""
     partitions = (manifest or {}).get("partitions") or {}

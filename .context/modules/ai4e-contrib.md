@@ -1,7 +1,15 @@
 # ai4e-contrib 模块索引
 ## 当前职责与本轮变更
 
-ability 中的模型/方程与 application 中的数据适配、模型专属配置和局部连接。
+ability 中不可中立化的模型/方程与 application 中的数据适配、模型专属配置、步骤和局部连接。来自单个模型源码的通用计算优先进入 ai4e-core/abilities；contrib 不承载通用图构造、批处理、rollout 或评价。
+
+## MeshGraphNets / CylinderFlow 与静态外流扩展
+
+- `ability/model/meshgraphnet/`：MeshGraphNet 的 Encoder/Processor/Decoder 模型本体及静态单域/多域外壳；通用图消息传递、网格边和分区复用 core。
+- `application/datasets/cylinder_flow/`：官方 meta/TFRecord 字段、固定轨迹、九类节点和 train/valid/test 分片适配；通用 TFRecord framing、图构造和评价复用 core。
+- `application/spatiotemporal_pde/meshgraphnet/`：完整 11 维节点归一化、Normal 噪声、Normal/Outflow loss、速度增量、边界保持 rollout、恢复合同和来源身份。
+- `application/aero_cfd/meshgraphnet.py`：静态外流字段、工况广播、核心节点监督、分区拼回和检查点身份连接；ShapeNet-Car 使用表面/体积两个独立子网络，NASA CRM 使用表面子网络。
+- `recipes/meshgraphnet/`：可复制研究流程；长期行为见 `docs/PRD/recipes/meshgraphnet/PRD.md`，当前工程验收由相关 integration tests 记录。
 
 - `packages/ai4e-contrib/application/aero_cfd/configuration.py`：官方配置分组转换和本地扩展参数连接。
 - `packages/ai4e-contrib/application/aero_cfd/abupt.py`：AB-UPT 默认布局和专属参数校验。
@@ -22,7 +30,7 @@ ability 中的模型/方程与 application 中的数据适配、模型专属配�
 - `packages/ai4e-contrib/application/datasets/shapenet_car/adapter.py`：按 manifest 选择样本与分片，不加载网格。`unsplit` 把官方名单收成单一训练宇宙，供平台原始处理不按 train/test 落盘。
 - `packages/ai4e-contrib/application/datasets/shapenet_car/manifest.yaml`：数据结构、字段分量/归属、未知单位、输出契约；能力与默认均打开 VTKHDF；默认写出 `formats: [pt]`。
 - 同目录 `partition.yaml`：官方 train/test 稳定样本名单；`statistics.yaml`：显式选择的参考统计。
-- `packages/ai4e-contrib/application/datasets/nasa_crm/manifest.yaml`：NASA 未接入 VTKHDF，默认关闭；默认写出 `formats: [pt]`。
+- `packages/ai4e-contrib/application/datasets/nasa_crm/manifest.yaml`：NASA 默认写出 `formats: [pt]` 并开启 VTKHDF；`physical.py` 使用官方 connectivity 与每样本坐标构造 `surface.vtkhdf`。
 - `docs/PRD/ai4e-contrib/application/PRD.md`：适配器复用、复制修改和失败规则；SafeDiffCon 的参考数据准入与正式适配交付边界。现已新增控制算法与案例，验收范围见专项记录。
 - `tests/integration/test_dataset_recipe.py`：安装、复制与自定义 manifest 交接。
 
@@ -43,7 +51,7 @@ network 输入错误保留 ValueError 并拆分实际/期望约束；sampling �
 
 ## 双模型组件入口
 
-- `application/aero_cfd/`：全限定组件加载及缺省汽车组件选择；不代表兼容旧公开配置树。`loader_adapter.py` 是显式旧外流加载适配；通用运行器不解释业务键。`operations.py` 的 inspect 对现行公共键做输入绑定；历史旧键仍走原检查门面，不改写任务 YAML。
+- `application/aero_cfd/`：全限定组件加载及缺省汽车组件选择；不代表兼容旧公开配置树。`loader_adapter.py` 是显式旧外流加载适配；通用运行器不解释业务键。`operations.py` 的 inspect 对现行公共键做输入绑定，并把临时数据输出隔离到检查目录；历史旧键仍走原检查门面，不改写任务 YAML。
 - `application/datasets/nasa_crm/`：HDF5/NPY 视图、字段声明、拓扑适配。
 - `ability/model/{abupt,transolver3}/component.py`：组件出口；AB-UPT 声明可配置点/锚点/查询采样，Transolver-3 声明抽稀步长只读的采样与固定 MSE。
 - `ability/model/transolver3/`：独立训练网络、缓存解码、适配与来源摘要。
@@ -139,3 +147,28 @@ WDNO handoff.py共用数组依赖解析；指标绑定清单与全部数组，�
 ## WDNO 局部训练策略
 
 `application/spatiotemporal_pde/wdno/{training,configuration}.py` 接收可选优化器/调度器/更新函数并记录来源；未选择保持原合同。`inference.py` 对固定权重忽略新增训练策略身份，原模型/数据/目标身份仍严格检查，完整续训不忽略策略。示例与验收从 [研究任务导航](../tasks/research.md) 进入。
+
+## GeoTransolver
+
+- `ability/model/geotransolver/{network,__init__}.py`：网络组合公开入口；`README.md/source.json/LICENSE`说明支持范围和来源。
+- `application/geotransolver.py`：模型构造、Muon/AdamW分组选择、参考调度及公共配置绑定。实际数学和状态属于core。
+- `application/datasets/{darcy_flow,bumper_beam}/{adapter.py,__init__.py,manifest.yaml}`：来源文件、字段、样本身份、单位与工况顺序。
+- `application/{parametric_pde,spatiotemporal_pde}/geotransolver/{binding,configuration,__init__}.py`：分别绑定Darcy与保险杠；无贡献侧训练/预测循环、统计或报告算法。
+- PRD：贡献ability与application第六章；真实状态见 `.context/mvp/geotransolver-acceptance.md`。不登记Web案例。
+
+## PCNO 发布连接
+
+`ability/model/pcno/`：组合、严格原权重导入、GPL许可证与source.json；`application/datasets/geothermal_cmg/adapter.py`：24/18例身份及字段校验；`application/geothermal/pcno/`：configuration、protocol、objective、training、inference、economy、post。计算主要在core。PRD见ability/application正文。
+
+
+## GeoTransolver 外流扩展
+
+`application/aero_cfd/geotransolver/{configuration,binding}.py` 绑定 ShapeNet-Car 双域和 NASA CRM 全局工况；`ability/model/geotransolver/network.py::forward_stream` 复用网络权重，仅支持无局部非结构分支。计算与循环仍由 core 提供。
+
+行为见对应模块 PRD；实际证据与边界见 [外流验收](../mvp/geotransolver-aero-acceptance.md)。
+
+## PCNO圆柱连接
+
+`ability/model/pcno/cylinder.py`：变体组合；`application/datasets/cylinder_flow/download.py`：官方子集；`datasets/gencp/cylinder.py`：5/1轨迹及未清零速度；`application/spatiotemporal_pde/pcno/`：configuration/objective/training/inference/post。CylinderFlow物理准入未通过。
+
+功能正文见相应模块PRD；实际范围见[圆柱验收](../mvp/pcno-cylinder-acceptance.md)。

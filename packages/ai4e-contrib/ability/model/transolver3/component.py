@@ -2,13 +2,34 @@
 
 from .inference import SurfaceInference
 from .model import SOURCE, construct, describe, predict
+from .preparation import prepare_sample
 
-__all__ = ["SOURCE", "SurfaceInference", "construct", "describe", "predict", "resolve"]
+# core 的训练/推理装配使用统一的 prepare_inputs/collate 门面；Transolver
+# 的算法实现名称保持 prepare_sample，适配层在这里明确完成名称交接。
+prepare_inputs = prepare_sample
+
+
+def collate(items):
+    """收集 Transolver 单样本批次，保留点 ID 和样本元数据。"""
+    if len(items) != 1:
+        raise ValueError("Transolver 参考流程当前只支持 batch_size=1")
+    return items[0]
+
+__all__ = [
+    "SOURCE",
+    "SurfaceInference",
+    "collate",
+    "construct",
+    "describe",
+    "predict",
+    "prepare_inputs",
+    "resolve",
+]
 
 
 from ai4e_contrib.application.aero_cfd.transolver3 import resolve
 
-from .preparation import loss, predict_sample, prepare_sample
+from .preparation import loss, predict_sample
 
 __all__ += ["loss", "predict_sample", "prepare_sample", "training_parameters"]
 

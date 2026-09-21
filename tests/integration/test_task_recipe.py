@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import ai4e_task as task
+import pytest
 from omegaconf import OmegaConf
 
 from tests.integration.test_dataset_recipe import public_config, setup_case
@@ -34,10 +35,12 @@ def test_formal_recipe_new_fork_train_post(tmp_path):
     assert (Path(a["run_dir"]) / "checkpoints/last.pt").is_file()
     assert "post" in a["summary"]["reports"]
     assert "infer" in a["summary"]["reports"]
-    child = task.fork_task(
-        project, first["id"], copy_datasets=True, copy_preparation=True, copy_checkpoints=True
-    )
-    assert {a["kind"] for a in child["copied_outputs"].values()} == {"preparation", "checkpoint"}
+    # preparation.json 仍引用共享物理数据和统计文件，不能脱离依赖目录单独复制。
+    # 派生任务保持这些输入的来源引用；无外部依赖的检查点可以显式复制。
+    with pytest.raises(ValueError, match="asset_copy_not_portable: use reference fork"):
+        task.fork_task(project, first["id"], copy_preparation=True)
+    child = task.fork_task(project, first["id"], copy_checkpoints=True)
+    assert {item["kind"] for item in child["copied_outputs"].values()} == {"checkpoint"}
     assert all(asset["source"]["run_id"] == a["id"] for asset in child["copied_outputs"].values())
     b = task.submit_run(
         project,

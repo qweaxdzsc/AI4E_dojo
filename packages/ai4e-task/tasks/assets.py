@@ -126,6 +126,9 @@ def capture_inputs(
         if not path.is_absolute():
             path = (recipe / entry["config"]).parent / path
         old = (inherited or {}).get(key)
+        # 配置可把同一输入槽改绑到另一共享资产；旧引用不能遮蔽新资产的依赖闭包。
+        if old is not None and asset_path(project, old).resolve() != path.resolve():
+            old = None
         from ..storage.shared_datasets import resolve_reference
 
         current = resolve_reference(project, path)

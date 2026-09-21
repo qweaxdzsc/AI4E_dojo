@@ -1,7 +1,7 @@
 import { Button, Checkbox, Empty, Input, Pagination, Popover, Select } from "antd";
 import { SearchOutlined, SortAscendingOutlined, FilterOutlined } from "@ant-design/icons";
 import { useEffect, useMemo, useState } from "react";
-export const splitLabel=(split:string)=>({train:"训练集",validation:"验证集",eval:"验证集",test:"测试集"}[split]||split);
+export const splitLabel=(split:string)=>({train:"训练集",validation:"评价集",eval:"评价集",test:"测试集"}[split]||split);
 const SLICE_ORDER=["train","test","eval"];
 function sliceNames(partitions:Record<string,string[]>){
   const extras=Object.keys(partitions).filter((key)=>!SLICE_ORDER.includes(key)&&key!=="validation");

@@ -1,0 +1,30 @@
+{
+  "name": "MeshGraphNets",
+  "source": "https://github.com/google-deepmind/deepmind-research/tree/master/meshgraphnets",
+  "source_commit": "f5de0ede8430809180254ee957abf36ed62579ef",
+  "license": "Apache-2.0",
+  "variant": "CylinderFlow reference with Dojo static aero extension",
+  "runtime_dependency": "Dojo PyTorch implementation; no PhysicsNeMo runtime dependency",
+  "physicsnemo_reference": "https://github.com/NVIDIA/physicsnemo/tree/aa19b58a129f8d1fabdcaa41c6ca85d5dc01aae1/physicsnemo/models/meshgraphnet",
+  "physicsnemo_reference_commit": "aa19b58a129f8d1fabdcaa41c6ca85d5dc01aae1",
+  "network": {
+    "latent_size": 128,
+    "message_passing_steps": 15,
+    "aggregation": "sum",
+    "activation": "relu",
+    "normalization": "layer_norm"
+  },
+  "reference_files": {
+    "core_model.py": "50ccc1b04796022759474bcb62c252321a9615ec5909261a984ed6c977ebe802",
+    "cfd_model.py": "b726be4cc3a878678f4914997801305585771b41f7decc8c7838257d09a00434",
+    "cfd_eval.py": "19fbdf990ad3b43fdf7bc6c74db5f18a451673e1f12da5acc64b573e09d23952",
+    "dataset.py": "97b3273a47f5c51dece8261fccaba43580e3cc9dc7c8f76518eaa2659d9991aa",
+    "normalization.py": "2267dd3452cfd9cf0581efa11ea58766ab02fbaf6a559078f9747b56ff9e664a"
+  },
+  "dojo_extensions": {
+    "static_multidomain": "static-multidomain-v1",
+    "scope": "ShapeNet-Car surface and volume plus NASA CRM surface engineering examples",
+    "paper_equivalence": false
+  },
+  "structure_version": 3
+}

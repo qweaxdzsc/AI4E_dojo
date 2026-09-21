@@ -6,32 +6,72 @@ from .tasks.create import fork_task, new_task
 from .tasks.execution import resume_run, start_captured_run, stop_run, submit_run, wait_run
 from .tasks.query import get_run, get_task, import_run, list_runs, list_tasks, read_log
 from .templates.catalog import list_templates, register_template
+from .templates.resources import (
+    HelpIndexError,
+    HelpSymbolNotFoundError,
+    HelpTopicNotFoundError,
+    check_example,
+    copy_example,
+    create_smoke_data,
+    describe_help_symbol,
+    export_guide,
+    export_help,
+    guide_info,
+    help_info,
+    help_root,
+    list_examples,
+    list_help_topics,
+    read_case_manifest,
+    read_help_topic,
+    resource_root,
+    search_help,
+    source_location,
+)
 from .versions.compare import compare_runs, compare_versions, compare_worktree
 from .versions.tree import get_lineage
 
 __all__ = [
+    "HelpIndexError",
+    "HelpSymbolNotFoundError",
+    "HelpTopicNotFoundError",
+    "check_example",
     "compare_runs",
     "compare_versions",
     "compare_worktree",
+    "copy_example",
     "create_project",
+    "create_smoke_data",
+    "describe_help_symbol",
+    "export_guide",
+    "export_help",
     "fork_task",
     "get_lineage",
     "get_run",
     "get_shared",
     "get_task",
+    "guide_info",
+    "help_info",
+    "help_root",
     "import_run",
+    "list_examples",
+    "list_help_topics",
     "list_runs",
     "list_shared",
     "list_tasks",
     "list_templates",
     "new_task",
     "open_project",
+    "read_case_manifest",
+    "read_help_topic",
     "read_log",
     "recover_project",
     "register_shared",
     "register_template",
+    "resource_root",
     "resume_run",
+    "search_help",
     "share_run_asset",
+    "source_location",
     "stop_run",
     "submit_run",
     "wait_run",
@@ -173,12 +213,12 @@ __all__ += [
 ]
 
 from .projects.dataset_migration import migrate_shared_datasets
-from .templates.materialize import recipe_entry
 from .tasks.official_scripts import (
     is_old_official_stage,
     migrate_official_aero_scripts,
     verified_old_sources,
 )
+from .templates.materialize import recipe_entry
 
 __all__ += ["migrate_shared_datasets", "recipe_entry"]
 __all__ += ["is_old_official_stage", "migrate_official_aero_scripts", "verified_old_sources"]

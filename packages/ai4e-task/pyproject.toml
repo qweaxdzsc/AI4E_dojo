@@ -23,3 +23,6 @@ bypass-selection = true
 "versions" = "ai4e_task/versions"
 "templates" = "ai4e_task/templates"
 "storage" = "ai4e_task/storage"
+
+[tool.hatch.build.hooks.custom]
+path = "build_hook.py"

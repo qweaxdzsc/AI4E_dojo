@@ -6,20 +6,26 @@ sys.dont_write_bytecode = True
 from functools import partial
 
 from configuration import application_parameters, load_components, load_configuration
-from trainprep import trainprep
 
 from ai4e_core import run
-from ai4e_core.applications.aero_cfd.train import fitting
 from ai4e_core.run import TrainingRun
 
 
 def train(cfg, prepared=None):
     """缺少准备引用时显式调用同一准备阶段，不隐藏另一套准备链。"""
+    graph_mode = bool(cfg.trainprep.get("topology"))
+    if graph_mode:
+        from ai4e_core.applications.aero_cfd.train import physical as fitting
+    else:
+        from ai4e_core.applications.aero_cfd.train import fitting
+
     components = load_components(cfg)
     session = TrainingRun()
     config = application_parameters(cfg, session=run.TrainingRun())
     reference = prepared if prepared is not None else cfg.inputs.train.get("preparation")
-    if session.dry_run or cfg.train.get("mode", "fit") in {"probe", "prepare"}:
+    if not graph_mode and (session.dry_run or cfg.train.get("mode", "fit") in {"probe", "prepare"}):
+        from trainprep import trainprep
+
         return fitting.check_or_prepare(
             config,
             reference=reference,
@@ -30,16 +36,27 @@ def train(cfg, prepared=None):
         )
     if reference is None:
         raise ValueError("train 需要显式 inputs.train.preparation；请先执行 trainprep")
-    job = fitting.open_training(
-        config,
-        session,
-        reference=reference,
-        factory=components.model.construct,
-        predict=components.model.predict,
-        prepare=components.model.prepare_inputs,
-        collate=components.model.collate,
-        source=components.model.SOURCE,
-    )
+    if graph_mode:
+        job = fitting.open_training(
+            config,
+            reference=reference,
+            dataset_component=components.dataset,
+            model_component=components.model,
+            session=session,
+        )
+    else:
+        job = fitting.open_training(
+            config,
+            session,
+            reference=reference,
+            factory=components.model.construct,
+            predict=components.model.predict,
+            prepare=components.model.prepare_inputs,
+            collate=components.model.collate,
+            source=components.model.SOURCE,
+        )
+    if session.dry_run:
+        return fitting.check_report(job)
     job = fitting.build_model(job, settings=config["model"])
     job = fitting.configure_objectives(job, settings=cfg.model.get("supervision"))
     job = fitting.configure_optimization(job, settings=cfg.train)
@@ -83,7 +100,13 @@ def observe_epoch(context, *, cfg):
         split=cfg.post.get("snapshot_split", "test"),
         origin=context.origin,
     )
-    return run.stage("post", analyze_sample, snapshot, cfg=cfg, output=TrainingRun().output_dir("post") / "analysis")
+    return run.stage(
+        "post",
+        analyze_sample,
+        snapshot,
+        cfg=cfg,
+        output=TrainingRun().output_dir("post") / "analysis",
+    )
 
 
 if __name__ == "__main__":

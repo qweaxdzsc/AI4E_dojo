@@ -7,7 +7,11 @@ from pathlib import Path
 import torch
 
 from ai4e_core.abilities.data.source.manifest import ManifestIndex
-from ai4e_core.abilities.data.source.split import apply_declared_split, complete_split_buckets
+from ai4e_core.abilities.data.source.split import (
+    apply_declared_split,
+    complete_split_buckets,
+    named_slice,
+)
 from ai4e_core.abilities.data.validate.fingerprint import fingerprint
 from ai4e_core.abilities.inference.randomness import preserve_randomness
 
@@ -227,7 +231,7 @@ def _checkpoint_evaluation(state):
 
         if isinstance(loss, (int, float)) and math.isfinite(loss):
             cfg = state.get("effective_config", {})
-            split = cfg.get("train", {}).get("evaluation_split", "validation")
+            split = named_slice(cfg.get("train", {}).get("evaluation_split"), "test")
             return {
                 "value": loss,
                 "metric": "loss",

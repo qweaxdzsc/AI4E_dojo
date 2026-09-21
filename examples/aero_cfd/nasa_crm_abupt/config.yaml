@@ -10,8 +10,8 @@ pipeline:
   - train
   - infer
   - post
-data_root: /shared/datasets/nasa_physical
-run_root: /shared/runs/nasa_crm_abupt
+data_root: ./data/nasa_physical
+run_root: ./runs/nasa_crm_abupt
 train:
   mode: fit
   max_epochs: 1
@@ -157,7 +157,8 @@ post:
 snapshot_modules:
 - ai4e_spec
 - ai4e_contrib
-rawprep: {}
+rawprep:
+  vtkhdf: true
 components:
   dataset: ai4e_contrib.application.datasets.nasa_crm
   model: ai4e_contrib.ability.model.abupt.component
@@ -189,14 +190,14 @@ infer:
   device: cpu
 inputs:
   rawprep:
-    source: /shared/raw/nasa_crm
+    source: ./inputs/nasa_crm
     manifest: null
-    train_h5: /shared/raw/nasa_crm/trainingData_NASA-CRM.h5
-    test_h5: /shared/raw/nasa_crm/testData_NASA-CRM.h5
-    connectivity_h5: /shared/raw/nasa_crm/connectivity_NASA-CRM.h5
+    train_h5: ./inputs/nasa_crm/trainingData_NASA-CRM.h5
+    test_h5: ./inputs/nasa_crm/testData_NASA-CRM.h5
+    connectivity_h5: ./inputs/nasa_crm/connectivity_NASA-CRM.h5
   trainprep:
     partition: null
-    dataset: /shared/datasets/nasa_physical/manifest.json
+    dataset: ./data/nasa_physical/manifest.json
     statistics: null
   train:
     preparation: null

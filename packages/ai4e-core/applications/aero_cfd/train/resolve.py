@@ -3,6 +3,7 @@
 from copy import deepcopy
 
 from ai4e_core.abilities.constraint.compare import METHODS
+from ai4e_core.abilities.data.source.split import named_slice
 from ai4e_core.abilities.eval.metrics import selected_metrics
 
 POST_DEFAULTS = {
@@ -90,14 +91,15 @@ def validate_joint(config: dict) -> None:
         raise ValueError("test_repeat 必须为正")
     if train.get("export_vtk") and not train.get("export_predictions"):
         raise ValueError("写出网格需要同时打开写出预测")
-    split = train.get("export_split", "test")
+    split = named_slice(train.get("export_split"), "test")
     if not isinstance(split, str) or not split:
         raise ValueError("训练写出分片不能为空")
-    training_split = train.get("training_split", "train")
-    if training_split == "validation":
-        training_split = "eval"
+    training_split = named_slice(train.get("training_split"), "train")
     if training_split not in {"train", "test", "eval"}:
         raise ValueError("训练切片必须是 train、test 或 eval")
+    evaluation_split = named_slice(train.get("evaluation_split"), "test")
+    if evaluation_split not in {"train", "test", "eval"}:
+        raise ValueError("评估切片必须是 train、test 或 eval")
     interval = train.get("log_every_updates")
     if interval not in (None, "") and int(interval) < 1:
         raise ValueError("日志更新间隔必须为正")

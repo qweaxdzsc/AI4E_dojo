@@ -61,3 +61,8 @@ uv run --no-project --python <研究Python> python configuration.py --migrate ol
 编辑复制目录中的步骤正文可插入普通函数；`components.model/guide/derived` 可替换构造、安全引导与派生量。现有扩展示例位于 `examples/recipe_extensions/safediffcon/variants.py`。派生量声明 values/valid/units/axes，保存后由独立post消费。
 
 物理、准备和推理结果登记自包含数组目录；共享/复制原样保留科学文件。后处理指标登记固定真值、样本、单位与统计口径，不因预测变化误判不可比；自定义指标缺少科学语义则不冒充可比较指标。后处理不重新训练、不更新权重、不调用求解器；这不免除正常训练与推理的验收。
+
+
+## Example 与 Agent 交接
+
+本目录是仓库内 recipe 维护源；可复制的完整研究目录位于对应 `examples/` standalone。公共阶段脚本由案例清单声明并逐文件核对，配置、数据根和研究预算可以不同，但阶段顺序、输入键、恢复交接和产物语义不能漂移。Agent 先在复制目录通过 `ai4e_core.run.launch` 直接运行，再按需用同一目录调用 `ai4e_task` Python API；CLI 只是便利方式。

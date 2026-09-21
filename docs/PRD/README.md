@@ -116,6 +116,7 @@ docs/PRD/
 | ai4e-core | [base](ai4e-core/base/PRD.md)、tools | base 已交付配置与事件；tools 待编写 |
 | ai4e-spec | [components](ai4e-spec/components/PRD.md)、[artifacts](ai4e-spec/artifacts/PRD.md)、data、check | components 与 artifacts 已有契约；data 检查描述见下方导航，check 待编写 |
 | recipes | [aero_cfd](recipes/aero_cfd/PRD.md) | 已交付：显式处理/准备/训练/推理/结果消费、字段映射和自由连接 |
+| recipes | [meshgraphnet](recipes/meshgraphnet/PRD.md) | 已交付：CylinderFlow 固定网格工程流程；论文级精度按专项证据限定 |
 | ai4e-task / viz / server / web | 见下方模块导航 | 平台扩展实施中，按专项验收限定交付 |
 
 范本：[`ai4e-core/abilities/PRD.md`](ai4e-core/abilities/PRD.md)。
@@ -164,3 +165,9 @@ GenCP 可复制模板：[研究流程](recipes/gencp/PRD.md)，当前缩小对�
 SafeDiffCon 模板：[控制研究流程](recipes/safediffcon/PRD.md)。数据/案例连接在contrib application第三章，算法在contrib ability第三章，领域交接在core applications第八章；三小时缩小范围以专项验收限定。
 
 WDNO 模板：[可复制小波预测](recipes/wdno/PRD.md)。模型/小波/损失归贡献ability第四章，数据和模型连接归贡献application第四章，时空场领域归core applications第九章。
+
+## PCNO 模板正文
+
+[PCNO 地热研究模板](recipes/pcno/PRD.md) 对应普通模板集合；能力与应用详见core及contrib对应模块PRD。
+
+圆柱研究模板：[PCNO圆柱变体](recipes/pcno_cylinder/PRD.md)。来源准入、短预算效果与工程交付分别说明。

@@ -1,0 +1,12 @@
+{
+  "partition_calls": 1,
+  "first_seconds": 263.4966807500459,
+  "reload_seconds": 0.028990083024837077,
+  "node_count": 454404,
+  "directed_edge_count": 1819400,
+  "partition_count": 28,
+  "train_infer_identical": true,
+  "reload_identical": true,
+  "unique_core_count": 454404,
+  "cache_path": "/Users/zonghui/work/project_simulation/dojo_train/meshgraphnet_aero_cfd/formal-web-20260920/real-cache-final/3b/3b9beffa1119970f3c2a6f513479087c900a706c9a29e332666721c501b70814.pt"
+}

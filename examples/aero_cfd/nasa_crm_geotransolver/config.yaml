@@ -1,0 +1,188 @@
+dataset:
+  processed_name: null
+  chunk_count: 20
+  validation_fraction: 0.2
+  split_seed: 42
+  resume: false
+pipeline:
+  stages:
+  - trainprep
+  - train
+  - infer
+  - post
+data_root: ./data/nasa_crm_geotransolver
+run_root: ./runs/nasa_crm_geotransolver
+train:
+  mode: fit
+  max_epochs: 2
+  batch_size: 1
+  device: auto
+  precision: fp32
+  num_workers: 0
+  optimizer: muon_adamw
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  betas:
+  - 0.9
+  - 0.999
+  scheduler: step
+  warmup_ratio: 0.05
+  min_lr: 1.0e-06
+  accumulate: 1
+  gradient_clip: null
+  ema_decay: null
+  ema_save_every: 10
+  test_repeat: 1
+  evaluate_repeat: false
+  snapshot: true
+  save_on_interrupt: true
+  evaluation_split: test
+  log_every: 1
+  log_every_updates: null
+  evaluation_enabled: false
+  step_size: 100
+  gamma: 0.5
+model:
+  parameters:
+    n_layers: 4
+    n_hidden: 128
+    n_head: 4
+    slice_num: 64
+    mlp_ratio: 2
+    dropout: 0.0
+    include_local_features: false
+    use_te: false
+    plus: false
+  freeze: []
+  data_specs:
+    position_dim: 3
+    domains:
+      surface:
+        feature_dim:
+          normals: 3
+        output_dims:
+          cp: 1
+          cf: 3
+    conditioning_dims:
+      conditions: 6
+  supervision:
+  - name: surface_cp
+    prediction: surface_cp
+    target: surface_cp_target
+    normalization: surface_cp
+    weight: 1.0
+    loss: mse
+  - name: surface_cf
+    prediction: surface_cf
+    target: surface_cf_target
+    normalization: surface_cf
+    weight: 1.0
+    loss: mse
+  sampling:
+    seed: 42
+    random_stream: independent
+    geometry:
+      method: random
+      max_points: 8192
+    domains:
+      surface:
+        train:
+          method: random
+          max_points: 8192
+trainprep:
+  use_physics_features: true
+  physical_rules: {}
+  geometry_field: surface_position
+  domains:
+    surface:
+      position: surface_position
+      features:
+        normals: surface_normals
+      targets:
+        cp: surface_cp
+        cf: surface_cf
+  conditioning:
+    conditions:
+      field: conditions
+  geometry_conditioning: {}
+  normalization:
+    execute: true
+    materialize: false
+    fields:
+      surface_position:
+        method: coordinate
+        scale: 1
+        coordinate_group: spatial
+      surface_normals:
+        method: identity
+        scale: 1
+      surface_cp:
+        method: zscore
+        scale: 1
+      surface_cf:
+        method: zscore
+        scale: 1
+      conditions:
+        method: zscore
+        scope: condition
+        scale: 1
+post:
+  analysis_enabled: true
+  samples: []
+  figures:
+  - surface
+  pressure: surface:cp:prediction
+  image_size:
+  - 1000
+  - 700
+  overwrite_analysis: false
+snapshot_modules:
+- ai4e_spec
+- ai4e_contrib
+rawprep:
+  vtkhdf: true
+components:
+  dataset: ai4e_contrib.application.datasets.nasa_crm
+  model: ai4e_contrib.application.aero_cfd.geotransolver
+  application: ai4e_contrib.application.aero_cfd.operations
+infer:
+  fields: null
+  metrics:
+  - relative_l2
+  - mae
+  - rmse
+  - max_abs_error
+  - r2
+  random_stream: independent
+  split: test
+  evaluate: true
+  save_predictions: true
+  export_vtk: true
+  query: true
+  sample_indices: null
+  query_chunk_size: 8192
+  overwrite: false
+  samples: []
+  device: auto
+  seed: 42
+  export_mesh: true
+inputs:
+  rawprep:
+    source: ./inputs/nasa_crm
+    manifest: null
+    train_h5: ./inputs/nasa_crm/trainingData_NASA-CRM.h5
+    test_h5: ./inputs/nasa_crm/testData_NASA-CRM.h5
+    connectivity_h5: ./inputs/nasa_crm/connectivity_NASA-CRM.h5
+  trainprep:
+    partition: null
+    dataset: ./data/nasa_physical/manifest.json
+    statistics: null
+  train:
+    preparation: null
+    resume: null
+    initial_weights: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null

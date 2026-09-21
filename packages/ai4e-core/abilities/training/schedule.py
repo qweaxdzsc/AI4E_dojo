@@ -48,3 +48,33 @@ def build_scheduler(
         return floor + (1.0 - floor) * 0.5 * (1.0 + math.cos(math.pi * progress))
 
     return torch.optim.lr_scheduler.LambdaLR(optimizer, factor, last_epoch=last_epoch)
+
+
+class EpochBoundaryScheduler:
+    """将每更新调用转换为真实轮次末尾推进，包含恢复游标。"""
+
+    def __init__(self, scheduler, updates_per_epoch: int):
+        if type(updates_per_epoch) is not int or updates_per_epoch < 1:
+            raise ValueError("每轮更新数须为正整数")
+        self.scheduler, self.updates_per_epoch, self.updates = scheduler, updates_per_epoch, 0
+
+    def step(self):
+        """只在完整轮次结束时推进底层调度器。"""
+        self.updates += 1
+        if self.updates % self.updates_per_epoch == 0:
+            self.scheduler.step()
+
+    def state_dict(self):
+        """保存底层状态和更新游标。"""
+        return {
+            "updates": self.updates,
+            "updates_per_epoch": self.updates_per_epoch,
+            "scheduler": self.scheduler.state_dict(),
+        }
+
+    def load_state_dict(self, state):
+        """轮次定义改变时拒绝恢复。"""
+        if state["updates_per_epoch"] != self.updates_per_epoch:
+            raise ValueError("恢复轮次边界不一致")
+        self.scheduler.load_state_dict(state["scheduler"])
+        self.updates = state["updates"]

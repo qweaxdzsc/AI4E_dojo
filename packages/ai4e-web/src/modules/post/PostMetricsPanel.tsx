@@ -7,7 +7,7 @@ import {metricCatalog} from './api';
 import {finished,jobLabel,type ResultCatalog} from './model';
 import {usePostMetrics} from './usePostMetrics';
 const sampleKey=(r:{sample:string;split?:string})=>JSON.stringify([r.split||"unknown",r.sample]);
-const sampleLabel=(r:{sample:string;split?:string})=>`${({train:'训练集',eval:'验证集',validation:'验证集',test:'测试集'} as Record<string,string>)[r.split||'']||r.split||'历史分片'} · ${r.sample}`;
+const sampleLabel=(r:{sample:string;split?:string})=>`${({train:'训练集',eval:'评价集',validation:'评价集',test:'测试集'} as Record<string,string>)[r.split||'']||r.split||'历史分片'} · ${r.sample}`;
 /** 固定结果评价面板。后处理页不再挂页签，组件与评价接口保留给程序或专项调用。 */
 export function PostMetricsPanel({project,task,catalog,initialBatch,onExport,active=true}:{project:string;task:string;catalog:ResultCatalog;initialBatch?:string;onExport:()=>void;active?:boolean}){
  const [batches,setBatches]=useState<string[]>([]),[samples,setSamples]=useState<string[]>([]),[fields,setFields]=useState<string[]>([]),[metrics,setMetrics]=useState(['relative_l2','rmse','mse','mae']),[options,setOptions]=useState<any[]>([]),[selected,setSelected]=useState<React.Key[]>([]),[detail,setDetail]=useState<any>(),[query,setQuery]=useState(''),[catalogError,setCatalogError]=useState(''),[catalogRetry,setCatalogRetry]=useState(0);

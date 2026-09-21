@@ -4,7 +4,7 @@ neutron:
   seed: 42
   results_path: ./results/
   dataset_name: ntcouple
-  dataset_path: /path/to/gencp_dataset/NTcouple/
+  dataset_path: ./inputs/gencp_dataset/NTcouple/
   field: neutron
   split: decouple_train
   num_workers: 8
@@ -65,7 +65,7 @@ solid:
   seed: 42
   results_path: ./results/
   dataset_name: ntcouple
-  dataset_path: /path/to/gencp_dataset/NTcouple/
+  dataset_path: ./inputs/gencp_dataset/NTcouple/
   field: solid
   split: decouple_train
   num_workers: 8
@@ -126,7 +126,7 @@ fluid:
   seed: 42
   results_path: ./results/
   dataset_name: ntcouple
-  dataset_path: /path/to/gencp_dataset/NTcouple/
+  dataset_path: ./inputs/gencp_dataset/NTcouple/
   field: fluid
   split: decouple_train
   num_workers: 8

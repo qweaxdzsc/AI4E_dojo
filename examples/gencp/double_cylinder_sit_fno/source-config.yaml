@@ -4,7 +4,7 @@ fluid:
   seed: 0
   results_path: ./results/
   dataset_name: double_cylinder_data
-  dataset_path: /path/to/gencp_dataset/
+  dataset_path: ./inputs/gencp_dataset/
   num_workers: 12
   normalizer: range
   n_data_set: null
@@ -57,7 +57,7 @@ structure:
   seed: 0
   results_path: ./results/
   dataset_name: double_cylinder_data
-  dataset_path: /path/to/gencp_dataset/
+  dataset_path: ./inputs/gencp_dataset/
   num_workers: 12
   normalizer: range
   n_data_set: null

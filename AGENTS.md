@@ -2,7 +2,7 @@
 
 历史进度原文见 [.context/history/development-updates-20260917.md](.context/history/development-updates-20260917.md)。研究任务先从 [.context/tasks/research.md](.context/tasks/research.md) 按需阅读；本页保留当前规则与授权边界。
 
-当前仓库：七个正式包，外流 CFD、参数化 PDE、耦合物理场、控制轨迹与时空预测五类应用；可安装 AB-UPT、Transolver-3、PI-BSNet、GenCP（CNO/SiT-FNO）、SafeDiffCon 和 WDNO（基础预测缩小预算）。平台只开放已登记外流案例，生成式 PDE 走 Python。缺失产品功能不因架构整理自动实施。
+当前仓库：七个正式包，外流 CFD、参数化 PDE、耦合物理场、控制轨迹、时空预测与地热六类应用；可安装 AB-UPT、Transolver-3、PI-BSNet、GenCP（CNO/SiT-FNO）、SafeDiffCon、WDNO（基础预测缩小预算）和 MeshGraphNet（CylinderFlow 及 ShapeNet-Car/NASA CRM 静态外流工程接入；两例已完成真实小样本短训与完整推理，未完成论文复现或生产精度）。GeoTransolver 已接入 Darcy/公开保险杠，并支持 ShapeNet-Car 双域和 NASA CRM 表面的普通 GALE 基础配置（无局部编码）；计算能力沉淀 core，外流五轮真实参考、全点预测、恢复与安装后 Python/Task 对照通过，未复现论文精度。外流专项及回归边界见 `.context/mvp/geotransolver-aero-acceptance.md`。另已接入 PCNO 发布小数据双场流程（短预算验证，含明确数值修正，非论文复现）。平台模型选择仍只开放原登记外流案例，生成式 PDE、MeshGraphNet、GeoTransolver 与 PCNO 走 Python；NASA 数据准备已支持 VTKHDF。缺失产品功能不因架构整理自动实施。
 
 历史数值验收按 `.context/mvp/` 原记录保留，当前入口不复制历史进度。全局架构唯一正文为 `docs/AI4E_Dojo_ARCHITECTURE (1).md`，本轮源码—功能—文档—测试核对及最终结果见 `.context/mvp/architecture-alignment-acceptance.md`。
 
@@ -21,6 +21,8 @@
 
 ## 组件自由与稳定公开边界
 
+core 另提供可选 FLARE++ 注意力组件，普通张量显式调用，不默认替换已有模型，不表示平台或 GeoTransolver 已开放该后端。组件验收见 `.context/mvp/flare-attention-acceptance.md`。
+
 - 不建立全仓统一组件协议。普通函数/对象自行定义输入输出，recipe 或局部连接负责转换，application 负责领域绑定；只有选用特定业务步骤才承担其实际调用约定。
 - 稳定门面为 `ai4e_core.run` 的 launch、stage、TrainingRun、execute_operation、managed_run。配置加载器显式传入，不在通用运行器解释外流、模型或 PDE 参数。可选 configuration_adapter 仅在显式托管上下文生效，退出恢复。
 - 不读取框架私有会话字典或跨层内部实现。新官方模板的配置转换及模型专属参数归 contrib/application；自由研究脚本不需要使用官方配置树。
@@ -31,6 +33,8 @@
 ## 工作入口与阅读顺序
 
 模型集成使用仓库 skill [dojo-integrate-model](.agents/skills/dojo-integrate-model/SKILL.md)，完整标准见 [模型集成目标与验收原则](docs/model-integration-goals.md)。Codex 可调用 `$dojo-integrate-model`；其他 Agent 可直接阅读同一 SKILL.md。先阅读 Dojo 框架、模型原仓库与论文，数据集、明确指标、对应源码三项齐备才考虑集成；原代码按论文设置复现通过后才正式迁移。已有记录按证据续接，技能调用不扩大本次授权范围。 阶段交付按 skill 追加[改进日志](.context/model-integration-learning.md)，区分事实错误与流程候选；后续更新遵循 skill 的三个部分，不把个案方法自动变成通用要求。
+
+一般研究使用 [dojo-research](.agents/skills/dojo-research/SKILL.md)，无 skill 环境从 `DOJO_AGENT_GUIDE.md` 进入同一 [Agent Help Center](docs/agent-help/index.md)。首屏按数据、几何采样、模型、损失、训练恢复、推理、评价、后处理、run/Task 九类能力直达教程；这些菜单从能力教程元数据生成。先选能力和接入深度：单个工具直接调用；已有研究代码保留模型与科学目标，优先用公开批次/损失连接复用训练；需要完整流程才复制 standalone 并物化 extension。调用前核对现行签名、输入输出、设备和数值/恢复语义，适配成本小且语义一致时优先复用，具体缺口允许自定义并说明。需要运行记录时 direct-core；有版本、资产、后台、停止、恢复或比较需求时再用同目录 Task。CLI 是便利包装，读取帮助或导入成功不能替代真实调用和产物读回证据。
 
 每次工作按以下顺序阅读，当前用户指令优先级最高：
 
@@ -65,7 +69,7 @@ PRD 是模块功能的长期文档，须记录现行行为、设计原因、使�
 1. **加载与默认注入。** 配置加载、相对路径、从其他目录启动、`--set`、独立脚本和程序调用入口都要读新树；所有模型的默认采样/归一化必须写进新位置，禁止再注入旧顶层键。旧键拒绝须覆盖配置文件、`--set`、脚本和程序入口，并测新旧键同时存在。内部装配键（如 rawprep 的 `pre:`）与已废弃的案例阶段名不是一回事，禁止误拒绝。
 2. **对照与选择器。** 对照工具与 task 比较选择器必须指向新路径。已声明的比较条件取不到值就是不可比，禁止填 `None` 或空对象后仍判相同。缺键禁止 `get(..., {})` 静默回到默认种子或预算。对照脚本若加载案例模块、调用阶段函数，必须一起改，不能只改阶段字符串。
 3. **用户配置 ≠ 冻结产物。** 用户配置可以拒绝旧格式；历史准备产物只判断能否导入平台使用（可读、现行 `version=2`、摘要完整），不得在选中后再拿冻结声明去挡当前平台或 core 参数。计算按当前平台页面与 core 模板组配置，冻结记录只提供清单、统计和物化场；字段角色、数据规格、采样方法、模型字典或组件来源不同也不能因此拒绝跟踪、开训或推理。模型页采样预算（几何 `max_points`、超节点点数、域锚点点数）不属于准备冻结：新 `preparation.json` 的 `declarations` 不得写入这些键。随机种子和训练批次同样不参与导入判断。`version=1` 旧物理准备仍须按现行数据准备重新生成；检查点仍核权重结构，dim/blocks 对不上拒绝恢复该检查点。每一步只校验自己的输入，不得用后一步默认值卡当前步。已有历史证据文件保留原样。验收必须覆盖准备导入、轮次恢复、独立 post、归一化物化、task 资产与指标比较、其他模型工作流，以及实际 wheel 安装后的复制 recipe；不能只用几个 recipe 脚本测试代替。
-4. **原始处理输入 / 处理配置 / 输出分开。** 输入是绑定数据集及其官方或自身分片，不因某次任务执行改写。页面只保存可见处理配置（字段、格式、workers、processed_name、全部或指定样本）。当次 run 或发布的样本名单只属于该次输出/历史，不得写回绑定源或下次 catalog/execute。`samples=all` 且页面未指定样本时读官方/自身分片，不吃任务里看不见的 `dataset.partitions` 子集。平台提交 ShapeNet 等非 NASA 案例时运行覆盖写 `unsplit`：产物不按官方 train/test 落盘，切分只在数据准备划分。准备记录固定带 train/test/eval 三个切片（空切片人数为 0）；训练设置选已准备数据集后再选其中切片，默认训练集；推理样本目录读这些切片，不回退源清单官方分片。`unsplit` 与 `official` 一样是分片模式名，配置加载不得把它展开成文件路径。页面上没有的键保存时不得改写。2026-09-18 正式 `5173→8000` 对照任务冒烟见 `.context/mvp/preparation-import-acceptance.md`。
+4. **原始处理输入 / 处理配置 / 输出分开。** 输入是绑定数据集及其官方或自身分片，不因某次任务执行改写。页面只保存可见处理配置（字段、格式、workers、processed_name、全部或指定样本）。当次 run 或发布的样本名单只属于该次输出/历史，不得写回绑定源或下次 catalog/execute。`samples=all` 且页面未指定样本时读官方/自身分片，不吃任务里看不见的 `dataset.partitions` 子集。平台提交 ShapeNet 等非 NASA 案例时运行覆盖写 `unsplit`：产物不按官方 train/test 落盘，切分只在数据准备划分。准备记录固定带 train/test/eval 三个切片（空切片人数为 0）；训练设置选已准备数据集后再选其中切片，默认训练集；推理样本目录读这些切片，不回退源清单官方分片。打开、检查、提交或推理预检时写回缺的训练切片和旧 `validation` 别名，不新建研究版本，已显式选过的切片不覆盖；历史准备记录不改字节。`unsplit` 与 `official` 一样是分片模式名，配置加载不得把它展开成文件路径。页面上没有的键保存时不得改写。2026-09-18 无切分导入冒烟见 `.context/mvp/preparation-import-acceptance.md`；切片选择与旧任务写回见 `.context/mvp/prepared-slices-acceptance.md`。
 
 本切片相关验收入口：
 
@@ -115,7 +119,9 @@ recipes      task        viz
 ## 分层与修改纪律
 
 - 原子能力按 data、transform、geometry、sampling、modeling、constraint、training、inference、eval、postproc、report 分层。
+- 能力归属默认进入 `ai4e-core/abilities`，按行为、输入输出和潜在复用判断，不按源码来源判断。来自单个模型源码的组件也必须先审查是否可中立化；只有依赖具体模型结构/私有状态、数据集字段或步骤/业务流且无法中立表达时，才放入 `ai4e-contrib/ability`。`contrib/application` 负责数据适配、配置和专属业务连接。新能力不确定时先将实际计算实现放入 core，再由贡献侧绑定语义；不等待多个使用者出现，不以 core 门面反向导入贡献算法。
 - `data` 按六个阶段组织：`source` 来源读取与分片名单、`extract` 字段与记录、`validate` 对齐和输出门禁、`filter` 标记与筛选、`save` 张量读写与恢复、`stats` 数组流统计。不得恢复 clean/offline/online 的状态式划分。
+- 原始来源存在网格或可重建 connectivity 时，平台数据必须同时交付逐场 PT、VTKHDF、实体身份和 manifest 网格引用；只有来源本身确实是无拓扑点云时才允许缺少 VTKHDF。模型需要的图边、诱导子图、核心分区和 halo 属于 trainprep 派生缓存，不写回共享平台数据。
 - 同组字段声明来源、point/cell、实体数和原 ID 序列，无 mask 也必须校验行身份与数量；筛选统一更新组内字段与身份，点 mask 不适用于 CellData。编码器不猜组名后缀，`cell.pt` 是 recipe 的可选业务打包约定。
 - `geometry` 保留完整 VTK，点到面与法向共用全二维面门禁，不抽取体外壳；按原 point ID 回贴法向，孤立点为零且有效性标记为 False。几何不依赖物理场，`pre.geometry.enabled` 显式选择，未启用不计算。`nearest_vertex` 只出最近距离，`volume_normals` 独立出体积法向。fields 可显式为空。
 - 外流 rawprep 保留 read/derive/select/save/stats 单样本能力，由 dataset 模块提供按需装配。recipe 使用 datapre(cfg) 显式登记步骤，run 内封装样本循环，application 不反向导入 run。
@@ -136,6 +142,8 @@ recipes      task        viz
 - MVP1 目标与验收以 `.context/mvp/abupt-mvp1.md` 为准。
 
 ## 验证纪律
+
+JOREK RMHD 双组实验使用 `tools/verification/dojo_validity/rmhd/` 独立协议：组级工作根隔离，round-00 的环境、原始数据准备和训练由各组新 CLI 会话实际完成。隐藏测试只由主控在双方最终候选冻结后评价；推理进程不持有真值且断网，评分器不执行候选代码。完整40帧推理 P95 上限50ms。圈定 `test_dojo_validity_rmhd.py` 与既有 `test_dojo_validity.py`、`test_dojo_validity_cli.py`，真实进度见 `.context/mvp/jorek-rmhd-validity-acceptance.md`；不以预实验或工具测试代替五轮正式结果。
 
 单次改动的验收以「修改与验收纪律」第 3 条为准：先圈定相关用例；架构全仓对齐需复跑全部新增/修改测试并集及必要回归，最终代码变更后重新跑受影响集合。skip、失败、缺环境不能计为通过。下面是仓库门禁，不是每次改动都要跑完全部：
 
@@ -283,3 +291,22 @@ Probe 点选拾取可见开关（2026-09-17）：Probe 属性「点选拾取」�
 
 
 训练指标与曲线（2026-09-18）：现行外流训练设置可选实际计算的 MSE／MAE／相对 L2；未声明兼容原三项、清空只保留评估 Loss。运行页新增 Loss／更新步／学习率页签及空配置入口。圈定 `test_model_evaluation.py`、`test_train_loop.py`、`test_train_online_loss.py`、`test_train_recipe.py`、`test_public_api_stability.py`、`test_web_configuration_composition.py` 与 `e2e/execution-monitor.spec.ts`、`e2e/stage-consistency.spec.ts`。正式发布须当次授权更新 core/server 并重启8000；状态见 `.context/mvp/training-metrics-ui-acceptance.md`。
+
+## PCNO 小数据集成实施（2026-09-20）
+
+用户已授权24例、双分支各250轮的原版与Dojo代码对照，不含Web。当前参考工具、真实数据/经济回放和双分支首步对照通过，原版长训练进行中；尚未交付正式PCNO模型。继续前读 `.context/mvp/pcno-acceptance.md` 与 `.cursor/plans/pcno-small-data-integration.plan.md`，不要重复启动既有250轮运行，不以单步/首轮通过替代完整基线。实时状态及后续预测链位于 `dojo_train/pcno/reference/`。圈定前置测试为 `test_pcno_data.py`、`test_pcno_reference.py`、`test_pcno_reference_prediction.py`、`test_pcno_reference_artifacts.py`；它们不代表未来Dojo/Task/wheel验收通过。
+
+## PCNO 本机快速集成
+
+用户已改为先迁移、后短训，原250轮任务停止；模型组合与数据语义在contrib，主要计算在core。圈定 `test_pcno_*.py`、共享训练/API以及案例/Task安装回归。原版温度训练有非有限梯度问题，必须区分原版失败证据与显式数值修正参考，不以同为NaN判一致。范围与当前证据见 `.context/mvp/pcno-acceptance.md`。本次无Web消费链。
+
+
+## Neumann 双组有效性实验
+
+实验会话工作根分别为 `dojo_train/neumann-plain/` 与 `dojo_train/neumann-dojo/`，本次实验各自位于独立的 `experiment-UUID/`；不绑定共同父目录或互相读取。baseline、环境与产物独立，比较资料仅主会话访问；可选前提材料只读且位于两组根外。Dojo 组使用本组复制的 `DOJO_AGENT_GUIDE.md` 和 Agent Help Center，首次文档学习计入成本。正式五轮必须有覆盖整个会话的访问隔离和真实计量，命令沙箱或 fake runner 不能替代。工具与圈定用例见 `.context/modules/repository.md`，当前阻塞/实测见 `.context/mvp/dojo-validity-acceptance.md`。本验证工具不涉及正式 Web 服务，不为此 sync 或重启 8000/5173。
+
+Neumann 双组实验正式 CLI 由整进程 Seatbelt 限定各组工作根，专用 Codex 状态与工具副本保存在组内；CLI 内部沙箱关闭仅避免 macOS 重复施加，不能作为取消外层权限的选项。公网可用、本机服务与跨组读取须实测拒绝。正式会话和五轮完成状态见 `.context/mvp/dojo-validity-acceptance.md`，不以初始化成功代替完整实验。
+
+## PCNO 圆柱变体
+
+新增core二维时空谱/U-Net、连续性与窗口评价，贡献侧绑定Double Cylinder五训练/一验证轨迹。实际短训、安装及扩展证据见`.context/mvp/pcno-cylinder-acceptance.md`；CylinderFlow官方8/2/2轨迹已取得，P1散度未通过准入，未开放训练。仅Python/Task，无Web登记，不改变地热PCNO验收边界。

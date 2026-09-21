@@ -1,0 +1,73 @@
+{
+  "updated_at": "2026-09-21T04:08:21.245136+08:00",
+  "report": "2026-09-21.md",
+  "previous_report": "2026-09-18-global.md",
+  "head": "477c47bc4cba83fd1e903800034d7d58286ee6d8",
+  "workspace_content_sha256": "7d4c5ea0e8470c0bd72589ada98e5e4883ca6119f90ded25c1a05aee98720b0c",
+  "notification_reason": [
+    "new_structural_evidence_provider_dispatch",
+    "new_structural_evidence_task_viz_bridge",
+    "recommendation_A_superseded_C_partially_addressed"
+  ],
+  "recommendations": [
+    {
+      "id": "R1",
+      "title": "领域 provider 覆盖完整科学操作链",
+      "status": "open",
+      "priority": "high",
+      "origin": "B refined; known model-contract seam remains; wider dispatch gap newly observed",
+      "baseline": {
+        "inspect_inference_calls": 8,
+        "explicit_provider_calls": 1,
+        "default_scientific_calls": 6,
+        "default_device_calls": 1
+      },
+      "next": "优先讨论该边界；实施需另行授权，不能只修 model 字段"
+    },
+    {
+      "id": "R2",
+      "title": "资产事实目录与领域输入候选映射分离",
+      "status": "open_conditional",
+      "priority": "medium",
+      "origin": "B continued; known stage-candidate limitation",
+      "next": "新领域需要候选或平台消费时实施，不阻塞自由 Task 执行"
+    },
+    {
+      "id": "R3",
+      "title": "检查出图装配移出 Task worker",
+      "status": "open",
+      "priority": "medium",
+      "origin": "newly identified, not proven newly introduced",
+      "next": "保持现有图行为，在独立适配入口生产固定资产"
+    }
+  ],
+  "legacy": [
+    {
+      "id": "A",
+      "status": "superseded",
+      "reason": "强制晋级路径已撤回；入口支持与科学质量分别声明"
+    },
+    {
+      "id": "B",
+      "status": "refined",
+      "successors": [
+        "R1",
+        "R2"
+      ]
+    },
+    {
+      "id": "C",
+      "status": "partially_addressed",
+      "reason": "帮助中心、案例清单、资源检索源码已有；盲定位与安装本轮未验证"
+    }
+  ],
+  "implementation": "none",
+  "tests_executed": false,
+  "end_verification": {
+    "verified_at": "2026-09-21T04:08:21.245136+08:00",
+    "changed_outside_review": [],
+    "added_outside_review": [],
+    "unchanged": true
+  },
+  "experience_receipt": "receipt_81fbde6dc65040b6a05b400e2c39336d"
+}

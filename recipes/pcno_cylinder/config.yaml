@@ -1,0 +1,41 @@
+seed: 7
+run_root: ./outputs/runs
+data_root: ./outputs/data
+pipeline:
+  stages: [rawprep, trainprep, train, infer, post]
+inputs:
+  rawprep:
+    source: null
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+    resume: null
+  infer:
+    preparation: null
+    checkpoints: null
+  post:
+    results: null
+dataset:
+  case: double_cylinder
+model:
+  modes: [4, 4, 4]
+  width: 8
+  blocks: 4
+  history: 3
+  horizon: 12
+train:
+  updates: 500
+  batch_size: 1
+  device: cpu
+  threads: 4
+  learning_rate: 0.001
+loss:
+  warmup_fraction: 0.2
+  ramp_fraction: 0.2
+  gradient_weight: 0.1
+  divergence_weight: 0.1
+infer:
+  split: val
+components:
+  network: ai4e_contrib.ability.model.pcno.cylinder.build_model

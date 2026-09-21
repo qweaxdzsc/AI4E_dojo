@@ -376,7 +376,7 @@ export function TrainingPanel({
           </label>
           <label className="train-combo">
             训练切片
-            {sliceSelect("training_split", trainingSplit)}
+            {sliceSelect("training_split", trainingSplit || "train")}
           </label>
           {selectedSlice?.method ? (
             <p>

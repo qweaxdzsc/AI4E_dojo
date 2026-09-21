@@ -1,0 +1,253 @@
+dataset:
+  processed_name: null
+  samples: all
+  partitions: official
+pipeline:
+  stages:
+  - trainprep
+  - train
+  - infer
+  - post
+data_root: ./data/car_experiment
+run_root: ./runs/shapenet_car_meshgraphnet
+train:
+  mode: fit
+  max_epochs: 1
+  batch_size: 1
+  device: auto
+  precision: fp32
+  num_workers: 0
+  optimizer: adamw
+  learning_rate: 0.0001
+  weight_decay: 0.0
+  betas:
+  - 0.9
+  - 0.999
+  scheduler: warmup_cosine
+  warmup_ratio: 0.05
+  min_lr: 1.0e-06
+  accumulate: 1
+  gradient_clip: 1.0
+  ema_decay: null
+  ema_save_every: 10
+  test_repeat: 10
+  evaluate_repeat: false
+  snapshot: true
+  save_on_interrupt: true
+  evaluation_split: test
+  log_every: 1
+  log_every_updates: null
+  evaluation_enabled: false
+model:
+  parameters:
+    hidden_dim: 128
+    processor_layers: 15
+  freeze: []
+  data_specs:
+    position_dim: 3
+    domains:
+      surface:
+        feature_dim:
+          normals: 3
+        output_dims:
+          pressure: 1
+      volume:
+        feature_dim:
+          distance: 1
+          normals: 3
+        output_dims:
+          velocity: 3
+    conditioning_dims: {}
+  supervision:
+  - name: surface_pressure
+    prediction: surface_pressure
+    target: surface_pressure_target
+    normalization: surface_pressure
+    weight: 1.0
+    loss: mse
+  - name: volume_velocity
+    prediction: volume_velocity
+    target: volume_velocity_target
+    normalization: volume_velocity
+    weight: 1.0
+    loss: mse
+  sampling:
+    seed: 42
+    domains:
+      surface:
+        train:
+          method: full
+        infer:
+          method: full
+      volume:
+        train:
+          method: core_halo
+          core_nodes: 16384
+          halo_hops: 15
+        infer:
+          method: core_halo
+          core_nodes: 16384
+          halo_hops: 15
+trainprep:
+  use_physics_features: true
+  physical_rules: {}
+  geometry_field: surface_position
+  domains:
+    surface:
+      position: surface_position
+      features:
+        normals: surface_normals
+      targets:
+        pressure: surface_pressure
+    volume:
+      position: volume_position
+      features:
+        distance: volume_sdf
+        normals: volume_normals
+      targets:
+        velocity: volume_velocity
+  conditioning: {}
+  geometry_conditioning: {}
+  normalization:
+    execute: true
+    fields:
+      surface_pressure:
+        method: zscore
+        scale: 1
+      volume_velocity:
+        method: zscore
+        scale: 1
+      volume_sdf:
+        method: zscore
+        scale: 1
+      surface_position:
+        method: coordinate
+        scale: 1000
+      volume_position:
+        method: coordinate
+        scale: 1000
+      surface_normals:
+        method: identity
+        scale: 1
+      volume_normals:
+        method: identity
+        scale: 1
+    materialize: false
+  topology:
+    domains:
+      surface:
+        mesh: surface
+      volume:
+        mesh: volume
+post:
+  random_stream: global
+  split: test
+  evaluate: true
+  save_predictions: true
+  export_vtk: true
+  query: true
+  sample_indices:
+  - 0
+  query_chunk_size: 16384
+  overwrite: false
+  samples:
+  - param0/1abeca7159db7ed9f200a72c9245aee7
+  - param0/1641efa5c92514d86c4f4dbcda5f2fc0
+  - param0/192fdf42f5a2623d673ddeabdcc8c6e
+  - param0/10e99b1475098c0aaa69dfdc5532bb13
+  - param0/1dbb02c20bb93af81c1b3b2ed8d13bf8
+snapshot_modules:
+- ai4e_spec
+- ai4e_contrib
+rawprep:
+  sources:
+  - surface
+  - volume
+  fields:
+    surface:
+      pressure:
+        components: 1
+    volume:
+      velocity:
+        components: 3
+  geometry:
+  - nearest_vertex
+  - volume_normals
+  - surface_normals
+  - exterior_mask
+  save_fields:
+  - surface_pressure
+  - surface_position
+  - surface_normals
+  - volume_velocity
+  - volume_position
+  - volume_sdf
+  - volume_normals
+  filters:
+    surface:
+    - mask
+    volume:
+    - exterior_mask
+  statistics:
+    mode: reference
+    fields:
+    - surface_pressure
+    - surface_position
+    - surface_normals
+    - volume_velocity
+    - volume_position
+    - volume_sdf
+    - volume_normals
+    position_fields:
+    - surface_position
+    - volume_position
+  vtkhdf: true
+components:
+  dataset: ai4e_contrib.application.datasets.shapenet_car
+  model: ai4e_contrib.application.aero_cfd.meshgraphnet
+  application: ai4e_contrib.application.aero_cfd.operations
+infer:
+  fields: null
+  metrics:
+  - relative_l2
+  - mae
+  - rmse
+  - max_abs_error
+  - r2
+  random_stream: global
+  split: test
+  evaluate: true
+  save_predictions: true
+  export_vtk: true
+  query: true
+  sample_indices:
+  - 0
+  query_chunk_size: 16384
+  overwrite: false
+  samples:
+  - param0/1abeca7159db7ed9f200a72c9245aee7
+  - param0/1641efa5c92514d86c4f4dbcda5f2fc0
+  - param0/192fdf42f5a2623d673ddeabdcc8c6e
+  - param0/10e99b1475098c0aaa69dfdc5532bb13
+  - param0/1dbb02c20bb93af81c1b3b2ed8d13bf8
+  device: cpu
+inputs:
+  rawprep:
+    source: ./inputs/shapenet_car
+    manifest: null
+    train_h5: null
+    test_h5: null
+    connectivity_h5: null
+  trainprep:
+    partition: null
+    dataset: ./data/car_experiment/manifest.json
+    statistics: null
+  train:
+    preparation: null
+    resume: null
+    initial_weights: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null

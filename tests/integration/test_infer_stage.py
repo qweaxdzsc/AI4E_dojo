@@ -8,7 +8,6 @@ import torch
 import yaml
 
 from ai4e_core.applications.aero_cfd.infer.configuration import DEFAULTS, OPTIONAL
-
 from tests.integration.test_cross_model_recipe import NAMES
 from tests.integration.test_recipe_explicit_equivalence import case
 from tests.integration.test_recipe_extensions import script
@@ -19,7 +18,7 @@ def test_native_infer_matches_old_post_and_consumes_results(tmp_path, name):
     folder, cfg = case(tmp_path, name)
     cfg["pipeline"]["stages"] = ["trainprep", "train", "post"]
     cfg["run_root"] = str(tmp_path / "legacy-runs")
-    cfg["paths"]["datasets"]["predictions"] = str(tmp_path / "legacy-predictions")
+    cfg["data_root"] = str(tmp_path / "legacy-data")
     (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
     import shutil
 
@@ -66,7 +65,7 @@ def post(cfg, trained=None):
     }
     cfg["pipeline"]["stages"] = ["infer", "post"]
     cfg["run_root"] = str(tmp_path / "native-runs")
-    cfg["paths"]["datasets"]["predictions"] = str(tmp_path / "native-predictions")
+    cfg["data_root"] = str(tmp_path / "native-data")
     (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
     completed = script(folder)
     assert completed.returncode == 0, completed.stdout + completed.stderr
@@ -235,7 +234,7 @@ def test_wheel_installed_external_recipe_infer_and_post(tmp_path, monkeypatch):
     cfg["pipeline"]["stages"] = ["infer", "post"]
     cfg["post"] = {"results": None}
     cfg["run_root"] = str(tmp_path / "infer-runs")
-    cfg["paths"]["datasets"]["predictions"] = str(tmp_path / "predictions")
+    cfg["data_root"] = str(tmp_path / "predictions-data")
     (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
     done = script(folder)
     assert done.returncode == 0, done.stdout + done.stderr

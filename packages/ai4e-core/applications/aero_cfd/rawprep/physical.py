@@ -163,8 +163,9 @@ def publish_dataset(results, *, source, session):
         "manifest": str(path),
         "split_counts": {key: len(values) for key, values in source.raw.partitions.items()},
     }
-    session.record_asset("dataset", path, kind="dataset", stage="rawprep",
-                         dependencies=[path.parent])
+    session.record_asset(
+        "dataset", path, kind="dataset", stage="rawprep", dependencies=[path.parent]
+    )
     session.report(report, stage="rawprep")
     return report
 
@@ -223,7 +224,9 @@ class SavePhysical:
         )
         from .descriptor import primary_format, resolved_formats
 
-        raw = self.config["rawprep"] if isinstance(self.config.get("rawprep"), dict) else self.config
+        raw = (
+            self.config["rawprep"] if isinstance(self.config.get("rawprep"), dict) else self.config
+        )
         formats = resolved_formats(raw)
         format = primary_format(formats)
         aliases = ctx.get("field_aliases", {})
@@ -267,6 +270,24 @@ class SavePhysical:
                         if item == "zarr"
                         else partial(write_tensor_file, payload=fields[name], overwrite=True)
                     )
+        meshes = {}
+        if raw.get("vtkhdf", False):
+            from functools import partial
+
+            from ai4e_core.abilities.data.save.vtkhdf import write_vtkhdf
+
+            for domain, declaration in self.component.LAYOUT["domains"].items():
+                position = declaration["position"]
+                if position not in fields:
+                    continue
+                if not hasattr(self.component, "comparison_mesh"):
+                    raise ValueError(f"{domain}: 数据适配器未提供 VTKHDF 网格构造能力")
+                mesh = self.component.comparison_mesh(
+                    self.config, name, domain, fields[position].detach().cpu().numpy()
+                )
+                filename = domain + ".vtkhdf"
+                extra[filename] = partial(write_vtkhdf, mesh=mesh)
+                meshes[domain] = filename
         write_named_tensors(
             dest, fields, filemap, overwrite=ctx.get("overwrite", False), extra_writers=extra
         )
@@ -280,7 +301,7 @@ class SavePhysical:
                 }
             return {"shape": list(value.shape), "dtype": str(value.dtype), "state": "physical"}
 
-        return {
+        result = {
             **record,
             "written": True,
             "filemap": filemap,
@@ -290,6 +311,11 @@ class SavePhysical:
             "source": {"path": source, "sample": name},
             "fields": {k: descriptor(v) for k, v in fields.items()},
         }
+        if extra:
+            result["assets"] = sorted(extra)
+        if meshes:
+            result["meshes"] = meshes
+        return result
 
 
 def execute(config, component, executor, session):

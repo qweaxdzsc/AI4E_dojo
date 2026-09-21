@@ -157,6 +157,26 @@ def test_edit_legacy_sampling_preserves_unedited_budget():
     assert "sampling" not in result["trainprep"]
 
 
+def test_training_split_is_an_allowed_train_edit():
+    import importlib.util
+    from pathlib import Path
+
+    path = (
+        Path(__file__).resolve().parents[2] / "packages/ai4e-server/modules/stages/configuration.py"
+    )
+    spec = importlib.util.spec_from_file_location("dojo_source_stage_configuration", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    result = module.compose_configuration(
+        {"train": {"learning_rate": 1}},
+        "train",
+        {"training_split": "test"},
+        edited_paths=[["training_split"]],
+    )
+    assert result["train"]["training_split"] == "test"
+    assert result["train"]["learning_rate"] == 1
+
+
 def test_legacy_method_switch_keeps_new_explicit_custom_parameters():
     original = {"trainprep": {"normalization": {"fields": {"p": {"method": "identity"}}}}}
     custom = {"method": "custom", "target": "research.normalize", "parameters": {"factor": 2}}

@@ -206,6 +206,7 @@ train:
   snapshot: true
   save_on_interrupt: true
   evaluation_split: test
+  training_split: train
   export_predictions: false
   export_vtk: false
   export_split: test

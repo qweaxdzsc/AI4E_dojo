@@ -158,3 +158,16 @@ WDNO公共约定使用方：直接发现pipeline.py/config.yaml，阶段输入�
 ## WDNO最新公共约定补验（2026-09-17）
 
 WDNO使用现有公开new/fork/submit/resume/compare和CLI；task_management.py实跑复制品消费及中断恢复，test_wdno_task_assets覆盖；不修改Task通用实现，平台可选操作不新增。 当前结果以 `.context/mvp/wdno-acceptance.md` 为准。
+
+## 安装资源与案例门面
+
+- `templates/resources.py`：清单读取、standalone 检查/复制、extension base-plus-overlay 物化、provenance、Agent Help Center 检索/读取/导出、guide/skill 导出、源码定位和显式 smoke 数据生成；除 smoke 数据函数外不 import 案例或训练栈。
+- `cli/resources.py`：`guide search/topic/symbol/export`、`source`、`example list/copy/check/smoke-data create` 的薄解析层；CLI 不是研究入口。
+- `build_hook.py`：把清单允许的 examples、guide、skill 和完整 `docs/agent-help` 构建副本收入 wheel，排除 recipes、.context、缓存和开发路径。
+- `case-manifest.json`：仅有 standalone/extension 两类，verification 是证据字段，不是发布状态。
+- `docs/agent-help/manifest.json` 与 `indexes/`：帮助合同、主题、符号、案例和源码位置；由 `tools/docs/build_agent_help.py` 使用 AST 和 Markdown 元数据生成并用 `--check` 核对漂移。
+- 长期行为见 `docs/PRD/ai4e-task/templates/PRD.md` 与 `docs/PRD/ai4e-task/cli/PRD.md`；圈定覆盖和 wheel 证据见 `../mvp/agent-help-acceptance.md`。
+
+- `tasks/assets.py`：输入槽改绑后重新匹配当前共享资产，保留新准备的依赖闭包及 bundle；覆盖 `test_task_assets.py::test_rebound_shared_bundle_survives_fork`，GeoTransolver 真实复制见 `.context/mvp/geotransolver-acceptance.md`。
+
+- `docs/agent-help/capabilities/`：九类能力的输入输出、真实调用例子和边界；教程元数据生成 skill/GUIDE/帮助首页菜单。`tests/integration/test_agent_capabilities.py` 覆盖链接、符号、九例实跑、查询及离线导出；验收见 `.context/mvp/agent-capabilities-acceptance.md`。

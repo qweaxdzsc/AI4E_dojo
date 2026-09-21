@@ -7,7 +7,7 @@ const xLabelDenom:Record<TickDensity,number>={dense:20,normal:10,sparse:5};
 const plot={left:78,right:1390,top:28,bottom:300,width:1400,height:368};
 /** 图表仅把后台统计映射到坐标，缺失与非正对数值留空，不重复预测。 */
 export function InferenceCharts({view,onConfigure}:{view:ReturnType<typeof useInferenceResults>;onConfigure:()=>void}) {
- const rowLabel=(r:typeof view.rows[number])=>r.split?`${({train:"训练集",eval:"验证集",validation:"验证集",test:"测试集"} as Record<string,string>)[r.split]||r.split} / ${r.label}`:r.label;
+ const rowLabel=(r:typeof view.rows[number])=>r.split?`${({train:"训练集",eval:"评价集",validation:"评价集",test:"测试集"} as Record<string,string>)[r.split]||r.split} / ${r.label}`:r.label;
  const blocked=view.config.mode==="checkpoint"&&view.rows.length>1&&!(["comparable","compatible"].includes(view.comparison?.status));
  const values=view.rows.flatMap(r=>view.chart.series.map(k=>r.cells[k]).filter(v=>typeof v==="number"&&(view.chart.scale!=="log"||v>0))) as number[];
  const valid=(v:unknown):v is number=>typeof v==="number"&&Number.isFinite(v)&&(view.chart.scale!=="log"||v>0);

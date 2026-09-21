@@ -458,6 +458,10 @@ export function PreparationPanel({
                       ? "训练分片至少需要 1 个样本。"
                       : `三个分片数量之和必须等于全部样本 ${splitTotal}。`}
                   </p>
+                ) : splitMethod === "original" ? (
+                  <p className="prep-note">
+                    保持原划分只保留处理后的成员，中栏人数不会改发布名单。无官方切分的产物会发布为训练集=全部，测试集和评价集为 0。
+                  </p>
                 ) : (
                   <p className="prep-note">test / eval 可为 0。数据转换只拟合训练分片。</p>
                 )}

@@ -1,0 +1,8 @@
+name: bumper_beam
+revision: 78f1302fba4d75926c6fdd22d01d5133efc14742
+partitions: {train: TRAINING_DATA, validation: VALIDATION_DATA}
+counts: {train: 124, validation: 7}
+condition_order: [velocity_x, thickness_scale, rwall_origin_y]
+target_order: [x, y, z, effective_plastic_strain, stress_vm]
+units: {position: mm, time: ms, mass: kg, stress: 'kg/(mm ms^2)', strain: '1'}
+common_times: [0,10,20,30,40,50,60,70,80,90,100]

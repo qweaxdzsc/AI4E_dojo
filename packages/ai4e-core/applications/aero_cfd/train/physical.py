@@ -8,6 +8,7 @@ from types import SimpleNamespace
 import numpy as np
 import torch
 
+from ai4e_core.abilities.data.source.split import named_slice
 from ai4e_core.abilities.data.validate.fingerprint import fingerprint
 from ai4e_core.abilities.data.validate.physical import validate_bindings
 from ai4e_core.abilities.modeling.weights import initialize_weights
@@ -40,8 +41,7 @@ class PreparedSamples(torch.utils.data.Dataset):
         self.data, self.epoch = data, 0
 
     def _split(self):
-        name = str((self.data.config.get("train") or {}).get("training_split") or "train")
-        return "eval" if name == "validation" else name
+        return named_slice((self.data.config.get("train") or {}).get("training_split"), "train")
 
     def __len__(self):
         return len(self.data.view.partitions[self._split()])
@@ -96,8 +96,6 @@ def open_training(config, *, reference, dataset_component, model_component, sess
         or settings["precision"] != "fp32"
     ):
         raise ValueError("当前共享物理路径要求 batch_size=1、num_workers=0、fp32")
-    if settings.get("evaluation_enabled", True):
-        raise ValueError("当前共享实验训练需关闭训练期评价，使用独立 post 全点评价")
     data = preparation.consume(config, dataset_component, model_component, reference)
     if not session.dry_run:
         session.artifact("preparation.json", data.record)
@@ -176,8 +174,11 @@ def configure_objectives(job, *, settings=None, operation=None):
     return job
 
 
-def configure_optimization(job, *, settings=None):
-    """装配原参数分组、优化器及逐轮/逐更新调度。"""
+def configure_optimization(job, *, settings=None, optimizer_factory=None, scheduler_factory=None):
+    """装配优化与调度；可选工厂消费 model/settings 或 optimizer/settings/updates_per_epoch。
+
+    未提供工厂时保持原装配；显式工厂来源进入检查点恢复合同。
+    """
     if settings is not None:
         supplied = plain(settings)
         for key in ("batch_size", "device", "precision", "num_workers"):
@@ -186,6 +187,18 @@ def configure_optimization(job, *, settings=None):
         job.config["train"].update(supplied)
     settings = job.config["train"]
     model = job.model
+    if optimizer_factory is not None or scheduler_factory is not None:
+        if optimizer_factory is None or scheduler_factory is None:
+            raise ValueError("优化器和调度器工厂须同时提供")
+        job.optimizer = optimizer_factory(model, settings)
+        job.scheduler = scheduler_factory(
+            job.optimizer,
+            settings,
+            updates_per_epoch=total_updates(1, len(job.samples), settings["accumulate"]),
+        )
+        job.extensions["optimizer_factory"] = operation_record(optimizer_factory)
+        job.extensions["scheduler_factory"] = operation_record(scheduler_factory)
+        return job
     job.optimizer = build_optimizer(
         settings["optimizer"],
         parameter_groups(
@@ -219,13 +232,26 @@ def configure_optimization(job, *, settings=None):
 def configure_evaluation(job, *, settings=None):
     """冻结训练协议；当前物理路线保留独立全点评价的既有边界。"""
     settings = job.config["train"]
+    # 完整物理评价需要逐样本全点推理，统一在独立 infer 中执行。旧案例即使
+    # 保留 evaluation_enabled，也不能让通用训练循环调用一个不存在的批次评价器。
+    settings["evaluation_enabled"] = False
     job.contract = {
         "component": job.component.describe(job.model),
         "preparation": job.data.record["digest"],
         "train": {
             k: v
             for k, v in settings.items()
-            if k not in {"manifest", "preparation", "resume", "snapshot", "device"}
+            if k
+            not in {
+                "manifest",
+                "preparation",
+                "resume",
+                "snapshot",
+                "device",
+                "max_epochs",
+                "log_every",
+                "log_every_updates",
+            }
         },
     }
     if job.extensions:

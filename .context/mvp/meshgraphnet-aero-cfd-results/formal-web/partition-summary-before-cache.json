@@ -1,0 +1,15 @@
+{
+  "node_count": 454404,
+  "directed_edge_count": 1819400,
+  "partition_count": 28,
+  "core_nodes_limit": 16384,
+  "halo_hops": 2,
+  "elapsed_seconds": 264.1760252920212,
+  "core_count": 454404,
+  "unique_core_count": 454404,
+  "min_core_nodes": 12036,
+  "max_core_nodes": 16384,
+  "min_partition_nodes": 15748,
+  "max_partition_nodes": 22832,
+  "all_core_masks_match": true
+}

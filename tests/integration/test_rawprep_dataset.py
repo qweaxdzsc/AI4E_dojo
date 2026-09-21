@@ -18,9 +18,16 @@ def test_recipe_vtkhdf_mapping(tmp_path):
     folder, cfg = setup_case(tmp_path)
     cfg.vtkhdf = True
     assert execute_case(folder, cfg) == 0
-    manifest = json.loads((tmp_path / "data/manifest.json").read_text())
+    manifests = list((tmp_path / "data").glob("*/rawprep/manifest.json"))
+    assert len(manifests) == 1
+    manifest = json.loads(manifests[0].read_text())
     for record in manifest["samples"]:
         directory = Path(record["path"])
+        assert record["meshes"] == {
+            "surface": "surface.vtkhdf",
+            "volume": "volume.vtkhdf",
+        }
+        assert set(record["meshes"].values()) <= set(record["assets"])
         mapping = json.loads((directory / "entity_mapping.json").read_text())
         for name, identity in mapping.items():
             reader = vtk.vtkHDFReader()

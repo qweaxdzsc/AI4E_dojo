@@ -1,0 +1,1517 @@
+{
+  "schema_version": 1,
+  "example_contract_version": 1,
+  "recipe_contract_version": 1,
+  "cases": [
+    {
+      "id": "aero_cfd.nasa_crm_abupt",
+      "type": "standalone",
+      "path": "aero_cfd/nasa_crm_abupt",
+      "model": "AB-UPT",
+      "dataset": "nasa_crm",
+      "purpose": "外流 CFD 联合域预测",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "aero_cfd",
+      "shared_stage_files": [
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "aero_cfd.nasa_crm_transolver3",
+      "type": "standalone",
+      "path": "aero_cfd/nasa_crm_transolver3",
+      "model": "Transolver-3",
+      "dataset": "nasa_crm",
+      "purpose": "外流 CFD 表面预测",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "aero_cfd",
+      "shared_stage_files": [
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "aero_cfd.shapenet_car_abupt",
+      "type": "standalone",
+      "path": "aero_cfd/shapenet_car_abupt",
+      "model": "AB-UPT",
+      "dataset": "shapenet_car",
+      "purpose": "汽车表面与体积预测",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "aero_cfd",
+      "shared_stage_files": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "aero_cfd.shapenet_car_transolver3_surface",
+      "type": "standalone",
+      "path": "aero_cfd/shapenet_car_transolver3_surface",
+      "model": "Transolver-3",
+      "dataset": "shapenet_car",
+      "purpose": "汽车表面预测",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "aero_cfd",
+      "shared_stage_files": [
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "aero_cfd.shapenet_car_transolver3_volume",
+      "type": "standalone",
+      "path": "aero_cfd/shapenet_car_transolver3_volume",
+      "model": "Transolver-3",
+      "dataset": "shapenet_car",
+      "purpose": "汽车体积预测",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "aero_cfd",
+      "shared_stage_files": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "safediffcon.burgers",
+      "type": "standalone",
+      "path": "safediffcon/burgers",
+      "model": "SafeDiffCon",
+      "dataset": "burgers",
+      "purpose": "控制扩散研究",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "posttrain.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "posttrain.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "safediffcon",
+      "shared_stage_files": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "posttrain.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "safediffcon.tokamak",
+      "type": "standalone",
+      "path": "safediffcon/tokamak",
+      "model": "SafeDiffCon",
+      "dataset": "tokamak",
+      "purpose": "控制扩散研究",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "posttrain.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "posttrain.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "safediffcon",
+      "shared_stage_files": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "posttrain.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "wdno.burgers_base",
+      "type": "standalone",
+      "path": "wdno/burgers_base",
+      "model": "WDNO",
+      "dataset": "burgers",
+      "purpose": "时空小波预测",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "wdno",
+      "shared_stage_files": [
+        "rawprep.py",
+        "trainprep.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "parametric_pde.advection",
+      "type": "standalone",
+      "path": "parametric_pde/advection",
+      "model": "PI-BSNet",
+      "dataset": "advection",
+      "purpose": "参数化 PDE 研究",
+      "entry": "pipeline.py",
+      "stages": [
+        "generate.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "generate.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [
+        "generate.yaml"
+      ],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "parametric_pde",
+      "shared_stage_files": [
+        "generate.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "parametric_pde.burgers",
+      "type": "standalone",
+      "path": "parametric_pde/burgers",
+      "model": "PI-BSNet",
+      "dataset": "burgers",
+      "purpose": "参数化 PDE 研究",
+      "entry": "pipeline.py",
+      "stages": [
+        "generate.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "generate.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [
+        "generate.yaml"
+      ],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "parametric_pde",
+      "shared_stage_files": [
+        "generate.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "parametric_pde.convection_diffusion",
+      "type": "standalone",
+      "path": "parametric_pde/convection_diffusion",
+      "model": "PI-BSNet",
+      "dataset": "convection_diffusion",
+      "purpose": "参数化 PDE 研究",
+      "entry": "pipeline.py",
+      "stages": [
+        "generate.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "generate.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [
+        "generate.yaml"
+      ],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "parametric_pde",
+      "shared_stage_files": [
+        "generate.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "parametric_pde.diffusion_trapezoid",
+      "type": "standalone",
+      "path": "parametric_pde/diffusion_trapezoid",
+      "model": "PI-BSNet",
+      "dataset": "diffusion_trapezoid",
+      "purpose": "参数化 PDE 研究",
+      "entry": "pipeline.py",
+      "stages": [
+        "generate.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "generate.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [
+        "generate.yaml"
+      ],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "parametric_pde",
+      "shared_stage_files": [
+        "generate.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "parametric_pde.neumann_diffusion",
+      "type": "standalone",
+      "path": "parametric_pde/neumann_diffusion",
+      "model": "PI-BSNet",
+      "dataset": "neumann_diffusion",
+      "purpose": "参数化 PDE 研究",
+      "entry": "pipeline.py",
+      "stages": [
+        "generate.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "generate.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [
+        "generate.yaml"
+      ],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "parametric_pde",
+      "shared_stage_files": [
+        "generate.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "gencp.double_cylinder_cno",
+      "type": "standalone",
+      "path": "gencp/double_cylinder_cno",
+      "model": "GenCP",
+      "dataset": "double_cylinder",
+      "purpose": "耦合物理场生成研究",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [
+        "source-config.yaml"
+      ],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "gencp",
+      "shared_stage_files": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "gencp.double_cylinder_sit_fno",
+      "type": "standalone",
+      "path": "gencp/double_cylinder_sit_fno",
+      "model": "GenCP",
+      "dataset": "double_cylinder_sit",
+      "purpose": "耦合物理场生成研究",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [
+        "source-config.yaml"
+      ],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "gencp",
+      "shared_stage_files": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "gencp.ntcouple_cno",
+      "type": "standalone",
+      "path": "gencp/ntcouple_cno",
+      "model": "GenCP",
+      "dataset": "ntcouple",
+      "purpose": "耦合物理场生成研究",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [
+        "source-config.yaml"
+      ],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "gencp",
+      "shared_stage_files": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "gencp.ntcouple_sit_fno",
+      "type": "standalone",
+      "path": "gencp/ntcouple_sit_fno",
+      "model": "GenCP",
+      "dataset": "ntcouple_sit",
+      "purpose": "耦合物理场生成研究",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [
+        "source-config.yaml"
+      ],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "gencp",
+      "shared_stage_files": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "gencp.turek_hron_cno",
+      "type": "standalone",
+      "path": "gencp/turek_hron_cno",
+      "model": "GenCP",
+      "dataset": "turek_hron",
+      "purpose": "耦合物理场生成研究",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [
+        "source-config.yaml"
+      ],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "gencp",
+      "shared_stage_files": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "gencp.turek_hron_sit_fno",
+      "type": "standalone",
+      "path": "gencp/turek_hron_sit_fno",
+      "model": "GenCP",
+      "dataset": "turek_hron_sit",
+      "purpose": "耦合物理场生成研究",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [
+        "source-config.yaml"
+      ],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "gencp",
+      "shared_stage_files": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "single.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke"
+      }
+    },
+    {
+      "id": "recipe_extensions.field_mapping",
+      "type": "extension",
+      "path": "recipe_extensions/field_mapping",
+      "base_case": "aero_cfd.shapenet_car_abupt",
+      "override_files": [
+        "custom_abilities.py",
+        "configuration.py",
+        "post.py",
+        "rawprep.py",
+        "config.yaml",
+        "pipeline.py",
+        "train.py",
+        "infer.py",
+        "trainprep.py"
+      ],
+      "purpose": "参考变体与 Agent 组件组装示例",
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke",
+        "materialization": "base-plus-overlay"
+      },
+      "recipe_source": null
+    },
+    {
+      "id": "recipe_extensions.free_wiring",
+      "type": "extension",
+      "path": "recipe_extensions/free_wiring",
+      "base_case": "aero_cfd.shapenet_car_abupt",
+      "override_files": [
+        "configuration.py",
+        "user_wiring.py",
+        "config.yaml",
+        "points.json",
+        "pipeline.py",
+        "user_steps.py"
+      ],
+      "purpose": "参考变体与 Agent 组件组装示例",
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke",
+        "materialization": "base-plus-overlay"
+      },
+      "recipe_source": null
+    },
+    {
+      "id": "recipe_extensions.gencp",
+      "type": "extension",
+      "path": "recipe_extensions/gencp",
+      "base_case": "gencp.double_cylinder_cno",
+      "override_files": [
+        "custom.py",
+        "retrain.py",
+        "extension.py"
+      ],
+      "purpose": "参考变体与 Agent 组件组装示例",
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke",
+        "materialization": "base-plus-overlay"
+      },
+      "recipe_source": null
+    },
+    {
+      "id": "recipe_extensions.inference_fields",
+      "type": "extension",
+      "path": "recipe_extensions/inference_fields",
+      "base_case": "aero_cfd.shapenet_car_abupt",
+      "override_files": [
+        "fields.py"
+      ],
+      "purpose": "参考变体与 Agent 组件组装示例",
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke",
+        "materialization": "base-plus-overlay"
+      },
+      "recipe_source": null
+    },
+    {
+      "id": "recipe_extensions.inference_metrics",
+      "type": "extension",
+      "path": "recipe_extensions/inference_metrics",
+      "base_case": "aero_cfd.shapenet_car_abupt",
+      "override_files": [
+        "metrics.py"
+      ],
+      "purpose": "参考变体与 Agent 组件组装示例",
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke",
+        "materialization": "base-plus-overlay"
+      },
+      "recipe_source": null
+    },
+    {
+      "id": "recipe_extensions.model_block",
+      "type": "extension",
+      "path": "recipe_extensions/model_block",
+      "base_case": "aero_cfd.shapenet_car_abupt",
+      "override_files": [
+        "variants.py"
+      ],
+      "purpose": "参考变体与 Agent 组件组装示例",
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke",
+        "materialization": "base-plus-overlay"
+      },
+      "recipe_source": null
+    },
+    {
+      "id": "recipe_extensions.physical_visualization",
+      "type": "extension",
+      "path": "recipe_extensions/physical_visualization",
+      "base_case": "aero_cfd.shapenet_car_abupt",
+      "override_files": [
+        "post.py",
+        "custom_render.py"
+      ],
+      "purpose": "参考变体与 Agent 组件组装示例",
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke",
+        "materialization": "base-plus-overlay"
+      },
+      "recipe_source": null
+    },
+    {
+      "id": "recipe_extensions.safediffcon",
+      "type": "extension",
+      "path": "recipe_extensions/safediffcon",
+      "base_case": "safediffcon.burgers",
+      "override_files": [
+        "variants.py"
+      ],
+      "purpose": "参考变体与 Agent 组件组装示例",
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke",
+        "materialization": "base-plus-overlay"
+      },
+      "recipe_source": null
+    },
+    {
+      "id": "recipe_extensions.sampling",
+      "type": "extension",
+      "path": "recipe_extensions/sampling",
+      "base_case": "aero_cfd.shapenet_car_abupt",
+      "override_files": [
+        "custom_abilities.py",
+        "configuration.py",
+        "post.py",
+        "rawprep.py",
+        "config.yaml",
+        "pipeline.py",
+        "train.py",
+        "infer.py",
+        "trainprep.py"
+      ],
+      "purpose": "参考变体与 Agent 组件组装示例",
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke",
+        "materialization": "base-plus-overlay"
+      },
+      "recipe_source": null
+    },
+    {
+      "id": "recipe_extensions.wdno",
+      "type": "extension",
+      "path": "recipe_extensions/wdno",
+      "base_case": "wdno.burgers_base",
+      "override_files": [
+        "variants.py",
+        "audit.py",
+        "configure_variant.py",
+        "config.yaml",
+        "variant_training.py",
+        "pipeline.py"
+      ],
+      "purpose": "参考变体与 Agent 组件组装示例",
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "example-task-smoke",
+        "materialization": "base-plus-overlay"
+      },
+      "recipe_source": null
+    },
+    {
+      "id": "aero_cfd.shapenet_car_meshgraphnet",
+      "type": "standalone",
+      "path": "aero_cfd/shapenet_car_meshgraphnet",
+      "model": "MeshGraphNet",
+      "dataset": "shapenet_car",
+      "purpose": "汽车表面压力与体积速度图预测",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "aero_cfd",
+      "shared_stage_files": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "meshgraphnet-aero-cfd"
+      }
+    },
+    {
+      "id": "aero_cfd.nasa_crm_meshgraphnet",
+      "type": "standalone",
+      "path": "aero_cfd/nasa_crm_meshgraphnet",
+      "model": "MeshGraphNet",
+      "dataset": "nasa_crm",
+      "purpose": "NASA CRM 表面 Cp 与 Cf 分区图预测",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "aero_cfd",
+      "shared_stage_files": [
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "meshgraphnet-aero-cfd"
+      }
+    },
+    {
+      "id": "geotransolver.darcy",
+      "type": "standalone",
+      "path": "geotransolver/darcy",
+      "model": "GeoTransolver",
+      "dataset": "darcy",
+      "purpose": "具名网格场/轨迹预测工程对照",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py",
+        "pipeline.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib[geotransolver]"
+      ],
+      "recipe_source": "geotransolver/darcy",
+      "shared_stage_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py",
+        "pipeline.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "geotransolver-engineering"
+      }
+    },
+    {
+      "id": "geotransolver.bumper_beam",
+      "type": "standalone",
+      "path": "geotransolver/bumper_beam",
+      "model": "GeoTransolver",
+      "dataset": "bumper_beam",
+      "purpose": "具名网格场/轨迹预测工程对照",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py",
+        "pipeline.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib[geotransolver]"
+      ],
+      "recipe_source": "geotransolver/bumper_beam",
+      "shared_stage_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py",
+        "pipeline.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "geotransolver-engineering"
+      }
+    },
+    {
+      "id": "recipe_extensions.geotransolver",
+      "type": "extension",
+      "path": "recipe_extensions/geotransolver",
+      "base_case": "geotransolver.darcy",
+      "override_files": [
+        "variants.py"
+      ],
+      "purpose": "平方相对损失与固定误差数组读回",
+      "recipe_source": null,
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "geotransolver-extension",
+        "materialization": "base-plus-overlay"
+      }
+    },
+    {
+      "id": "geothermal.pcno",
+      "type": "standalone",
+      "path": "geothermal/pcno",
+      "model": "PCNO",
+      "dataset": "geothermal_cmg",
+      "purpose": "发布24例地热双场与技术经济研究",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core[geothermal]",
+        "ai4e-contrib[pcno]"
+      ],
+      "recipe_source": "pcno",
+      "shared_stage_files": [
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "pcno-short-integration"
+      }
+    },
+    {
+      "id": "extension.pcno",
+      "type": "extension",
+      "path": "recipe_extensions/pcno",
+      "base_case": "geothermal.pcno",
+      "purpose": "替换网络并保存读回温降数组",
+      "override_files": [
+        "pipeline.py",
+        "local_components.py",
+        "README.md"
+      ]
+    },
+    {
+      "id": "aero_cfd.shapenet_car_geotransolver",
+      "type": "standalone",
+      "path": "aero_cfd/shapenet_car_geotransolver",
+      "model": "GeoTransolver",
+      "dataset": "shapenet_car",
+      "purpose": "汽车表面压力与体积速度点场预测",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "geotransolver/shapenet_car",
+      "shared_stage_files": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py",
+        "pipeline.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "geotransolver-aero-cfd"
+      }
+    },
+    {
+      "id": "aero_cfd.nasa_crm_geotransolver",
+      "type": "standalone",
+      "path": "aero_cfd/nasa_crm_geotransolver",
+      "model": "GeoTransolver",
+      "dataset": "nasa_crm",
+      "purpose": "NASA CRM 表面 Cp 与 Cf 条件点场预测",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "geotransolver/nasa_crm",
+      "shared_stage_files": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py",
+        "pipeline.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "geotransolver-aero-cfd"
+      }
+    },
+    {
+      "id": "recipe_extensions.geotransolver_aero",
+      "type": "extension",
+      "path": "recipe_extensions/geotransolver_aero",
+      "base_case": "aero_cfd.shapenet_car_geotransolver",
+      "override_files": [
+        "train.py",
+        "infer.py",
+        "post.py",
+        "variants.py"
+      ],
+      "purpose": "外流L1训练与固定绝对误差场读回",
+      "recipe_source": null,
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "geotransolver-aero-extension",
+        "materialization": "base-plus-overlay"
+      }
+    },
+    {
+      "id": "pcno.double_cylinder",
+      "type": "standalone",
+      "path": "pcno/double_cylinder",
+      "model": "PCNO-cylinder",
+      "dataset": "double_cylinder",
+      "purpose": "双圆柱二维时空监督与连续性约束对照",
+      "entry": "pipeline.py",
+      "stages": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "required_files": [
+        "README.md",
+        "config.yaml",
+        "configuration.py",
+        "pipeline.py",
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py"
+      ],
+      "optional_files": [],
+      "dependencies": [
+        "ai4e-core",
+        "ai4e-contrib"
+      ],
+      "recipe_source": "pcno_cylinder",
+      "shared_stage_files": [
+        "rawprep.py",
+        "trainprep.py",
+        "train.py",
+        "infer.py",
+        "post.py",
+        "pipeline.py"
+      ],
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "pcno-cylinder"
+      }
+    },
+    {
+      "id": "extension.pcno_cylinder",
+      "type": "extension",
+      "path": "recipe_extensions/pcno_cylinder",
+      "base_case": "pcno.double_cylinder",
+      "override_files": [
+        "pipeline.py",
+        "local_components.py"
+      ],
+      "purpose": "替换网络并保存读回速度模长",
+      "recipe_source": null,
+      "verification": {
+        "contract": "example-contract",
+        "acceptance": "pcno-cylinder-extension",
+        "materialization": "base-plus-overlay"
+      }
+    }
+  ]
+}

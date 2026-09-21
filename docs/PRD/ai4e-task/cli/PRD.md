@@ -25,6 +25,8 @@ flowchart TD
   N0 --> N1
   N2["安装后独立使用"]
   N1 --> N2
+  N3["搜索 Agent 帮助"]
+  N2 --> N3
 ```
 
 ### 1.3 业务状态机
@@ -40,6 +42,10 @@ flowchart TD
 1. 调用项目与任务操作
 2. 读取结构化结果
 3. 安装后独立使用
+4. 发现和复制研究案例
+5. 导出 Agent 指南与 skill
+6. 定位安装源码和生成 smoke 数据
+7. 搜索和读取 Agent 帮助
 
 ### 1.6 功能点详解
 
@@ -56,3 +62,23 @@ flowchart TD
 #### 3. 安装后独立使用
 
 安装包后即可从源码目录之外使用命令与 Python 导入。管理操作不会提前加载模型；实际执行仍需要案例依赖。
+
+#### 4. 发现和复制研究案例
+
+清单只允许 `standalone` 和 `extension` 两种案例类型。standalone 复制完整研究目录；extension 先物化 `base_case`，再叠加声明的覆盖文件并写出 provenance。未知案例、非空目标、缺基案例和未声明冲突直接失败。发现、检查和复制只读取清单与文件树，不导入案例或训练栈。
+
+#### 5. 导出 Agent 指南与 skill
+
+安装资源提供启动指南、唯一 skill 源的构建副本和完整 Agent Help Center。支持 Agent Skills 的环境以 `dojo-research/SKILL.md` 为主入口，由 skill 检索帮助中心；不支持 skills 的 Agent 从 guide 定位同一帮助正文。Guide 与 skill 的首屏必须显著链接帮助中心，并明确自身只负责分流和导航。两者都要把第一次使用、概念边界、研究工作流、API、用户组件、案例、recipe、故障处理和固定参考分别路由到对应帮助类型，同时给出 Python 检索和离线机器索引入口。
+
+API 签名、参数、返回值、源码、工作流、组件写法和案例不在单页 guide 或 skill 中重复维护。两种入口都必须要求 Agent 阅读帮助正文，并继续读取所选 standalone 的 README、配置、pipeline 与阶段脚本。导出会按需创建 `.agents/skills/dojo-research/` 和 `docs/agent-help/`，不会创建或修改 `AGENTS.md`，也不把仓库内部导航写入安装后的使用说明。
+
+#### 6. 定位安装源码和生成 smoke 数据
+
+`source` 只定位当前解释器真正可见的模块源码。`smoke-data create` 显式调用 Neumann 数据生成能力，固定最小 train/test、网格和 CPU 预算；数据命令的成功不等于 direct-core 或 Task 训练成功，后续仍须读回阶段产物。
+
+#### 7. 搜索和读取 Agent 帮助
+
+`guide search` 按研究任务、全限定符号、配置键、产物、错误、recipe 或案例查找主题，并可按 kind、layer 和条数限制结果。完全匹配的符号、主题或案例优先于普通文本匹配。`guide topic` 读取一个稳定 topic ID 的元数据和 Markdown 正文；`guide symbol` 返回签名、稳定性、页面锚点、关联案例和源码位置。
+
+三个命令只包装同名 Python 资源 API，输出继续服从文本/JSON 和退出码约定。未知主题、未知符号、空查询、非法条数或过滤值返回明确业务错误；不 import 模型、Torch、example 或 recipe，也不把搜索命中当作组件兼容或运行成功。

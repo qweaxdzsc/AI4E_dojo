@@ -17,6 +17,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.egg-info/
+.hatch-resources/
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/

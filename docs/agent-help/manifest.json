@@ -1,0 +1,16 @@
+{
+  "coverage": {
+    "cases": 41,
+    "symbols": 1829,
+    "topics": 2375
+  },
+  "default_entry": "index.md",
+  "help_contract_version": 1,
+  "indexes": {
+    "cases": "indexes/cases.json",
+    "source_map": "indexes/source-map.jsonl",
+    "symbols": "indexes/symbols.jsonl",
+    "topics": "indexes/topics.json"
+  },
+  "schema_version": 1
+}

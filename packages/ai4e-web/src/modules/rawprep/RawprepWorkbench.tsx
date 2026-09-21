@@ -375,7 +375,7 @@ export function RawprepWorkbench({
     setDirty(false);
     return current;
   }
-  async function refreshCatalog(revision = cfg?.revision) {
+  async function refreshCatalog(revision = cfg?.revision): Promise<string | undefined> {
     if (!revision || binding?.status !== "valid") return;
     const current = ++generation.current;
     setCatalogBusy(true);
@@ -388,7 +388,9 @@ export function RawprepWorkbench({
         setCatalog(value);
       }
     } catch (e: any) {
-      if (current === generation.current) setError(e.message);
+      const detail = e.message;
+      if (current === generation.current) setError(detail);
+      return detail;
     } finally {
       if (current === generation.current) setCatalogBusy(false);
     }
@@ -471,7 +473,11 @@ export function RawprepWorkbench({
       }
       if (kind === "refresh") {
         invalidateDatasetCatalog(project, task);
-        await refreshCatalog(current.revision);
+        const detail = await refreshCatalog(current.revision);
+        if (detail) {
+          finishAction(kind, "failed", detail);
+          return;
+        }
         finishAction(kind, "succeeded", "已按当前配置刷新样本与字段");
         return;
       }

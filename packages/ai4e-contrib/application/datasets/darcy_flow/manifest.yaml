@@ -1,0 +1,9 @@
+name: darcy_flow
+source: https://huggingface.co/datasets/lkuang/example_data
+revision: 9763cc5c52c693144fb8869d8aede9b589c11909
+fields:
+  coeff: {association: point, axes: [sample, x, y], unit: benchmark}
+  sol: {association: point, axes: [sample, x, y], unit: benchmark}
+partitions: {train: 'smooth1[:1000]', test: 'smooth2[:200]'}
+physical_grid: [421,421]
+model_grid: [85,85]

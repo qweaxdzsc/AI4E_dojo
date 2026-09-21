@@ -110,6 +110,11 @@ class PhysicalView:
                 "ids": ids,
                 "identity_basis": "source" if id_field or identity_record else "artifact",
                 "topology": deepcopy(record.get("topology", {}).get(domain)),
+                "mesh": (
+                    str(self._index.resolve_asset(partition, index, mesh_name))
+                    if (mesh_name := (record.get("meshes") or {}).get(domain))
+                    else None
+                ),
             }
         conditions = {}
         for name, width in self._layout.get("conditions", {}).items():

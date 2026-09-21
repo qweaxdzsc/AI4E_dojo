@@ -4,7 +4,7 @@ from pathlib import Path
 
 import ai4e_task as task
 
-from ..stages.application import _migrate_official_scripts
+from ..stages.application import _migrate_legacy_slices, _migrate_official_scripts
 from ..visualization import register
 from . import domain
 
@@ -54,6 +54,8 @@ def check(service, project: str, identity: str, request: dict) -> dict:
 
     require_profile(service, project, identity)
     _migrate_official_scripts(service, service.project(project), identity)
+    captured = _migrate_legacy_slices(service, service.project(project), identity)
+    request = {**request, "expected_revision": captured["revision"]}
     value = task.check_inference(service.project(project), identity, request)
     return {
         "request": value["request"],
@@ -69,6 +71,8 @@ def submit(service, project: str, identity: str, request: dict) -> dict:
 
     require_profile(service, project, identity)
     _migrate_official_scripts(service, service.project(project), identity)
+    captured = _migrate_legacy_slices(service, service.project(project), identity)
+    request = {**request, "expected_revision": captured["revision"]}
     return domain.batch(task.submit_inference(service.project(project), identity, request))
 
 

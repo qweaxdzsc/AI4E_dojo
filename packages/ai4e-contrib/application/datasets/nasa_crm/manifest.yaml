@@ -47,7 +47,7 @@ rawprep:
     - surface_ids
     formats:
     - pt
-    vtkhdf: false
+    vtkhdf: true
     statistics:
       mode: none
       fields: []
@@ -92,7 +92,7 @@ rawprep:
   formats:
   - pt
   - zarr
-  vtkhdf: false
+  vtkhdf: true
   statistics_modes:
   - none
   outputs:

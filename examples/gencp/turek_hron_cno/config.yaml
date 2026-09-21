@@ -3,7 +3,7 @@ dataset:
   name: turek_hron
 profile: scaled
 seed: 42
-run_root: /Users/zonghui/work/project_simulation/dojo_train/gencp/turek_hron_cno/dojo/runs
+run_root: ../runs
 data:
   train_count: 256
   val_count: 16
@@ -78,10 +78,10 @@ components:
   neutron_condition: ai4e_contrib.ability.transform.gencp.conditions.neutron_condition
   solid_condition: ai4e_contrib.ability.transform.gencp.conditions.solid_condition
   fluid_condition: ai4e_contrib.ability.transform.gencp.conditions.fluid_condition
-data_root: /Users/zonghui/work/project_simulation/dojo_train/gencp/turek_hron_cno/dojo
+data_root: ../data
 inputs:
   rawprep:
-    source: /Users/zonghui/work/project_simulation/dojo_train/gencp/raw
+    source: ./inputs/raw
   trainprep:
     dataset: null
   train:

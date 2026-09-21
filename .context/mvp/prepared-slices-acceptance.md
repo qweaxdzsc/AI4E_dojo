@@ -1,0 +1,42 @@
+# 准备切片选择与旧任务写回验收
+
+日期：2026-09-18 17:23–17:33。对照任务 `测试09182`（逻辑项目 `179ed1fe447b415b8870c45b6a89a296`，磁盘项目 `8ef5b810780b4d50bc1311be0db90156`，任务 `01400e5e5b8a4bd88d43f658ddc2fb9f`）。正式入口 `http://127.0.0.1:5173` 代理 `http://127.0.0.1:8000`。隔离 `7999`/`5172` 不作为本切片验收。
+
+产品规则：准备记录固定交出 train/test/eval；训练选其中一份，默认训练集；推理页签读准备切片，不回退源清单。历史准备文件不改字节。旧任务缺训练切片或仍写 `validation` 时，打开/检查/提交写回配置，不新建研究版本。
+
+Experience 检索 `receipt_949bc33dee774d3fbe661982c3ee5d3c`：无覆盖本切片的条目。
+
+## 发布
+
+2026-09-18 17:23 按当次授权执行 `uv sync --group dev --group visualization --reinstall-package ai4e-core --reinstall-package ai4e-server`。冒烟中发现换模保存若整段替换 `train` 会丢掉训练切片键，随后 GET 写回改修订导致 409；17:40 补上保存时合并缺键，再重装 `ai4e-server` 并只重启 8000。现行安装摘要：`split.py` `ecd08e569abfbf59`，`stages/domain.py` `09ccf81ca91c2948`，`stages/application.py` `7315f5be9449ee28`，`inference/application.py` `959db9c1c42e5160`，`fitting.py` `252c435fbb0aa36a`。
+
+正式 8000 现进程 **85161**（2026-09-18 17:40:22），参数与此前正式入口相同。5173 未动：Vite **23629**（2026-09-17 14:53:17）。回退：重装变更前包版本并再只重启 8000。
+
+## 圈定 pytest
+
+源码侧此前 36 通过 / 1 跳过（安装门禁）。浏览器：`e2e/stage-consistency.spec.ts` 训练设置（含空评价集不能开训）通过；`e2e/inference-selection.spec.ts` 7 项通过。
+
+重装后圈定：`test_trainprep_split.py`、`test_web_recipe_compatibility.py`、`test_web_configuration_composition.py`、`test_web_stage_consistency.py`、`test_infer_inspect_contract.py`。换模保存补键后，`test_registered_model_switch_replaces_defaults_and_preserves_identity` 4 项通过。整组按修复后计数为 116 通过 / 2 跳过。
+
+## 正式 Web 冒烟（5173→8000）
+
+入口：`http://127.0.0.1:5173/projects/179ed1fe447b415b8870c45b6a89a296/tasks/01400e5e5b8a4bd88d43f658ddc2fb9f/training`（无阶段 slug 会落到项目列表，须带 `training` / `infer` / `trainprep`）。
+
+写回前配置无 `training_split`，哈希 `28719021846c9205fb4b5b9064144833842ffce72520c4bb66c994048131a57f`。打开配置后写回 `train.training_split: train`，修订 `57ee715e92c7260c01432731697a265ee1f9db8c6600994c3cec6a0b4b5fb368`，不新建研究版本。`evaluation_split` / `infer.split` / `post.split` 本就为 `test`，无残留 `validation`。`trainprep.split.counts` 已有 `eval: 0`。
+
+阶段输入绑定准备 `321151f000d648b9a40429f407307a4f` 的 slices：训练 789、测试 100、评价 0，方法 original，种子 0。推理样本接口（检查点 `08bbe33e8a7c4b628487fa7dd0c5b042:last.pt`）partitions 同为 train/test/eval = 789/100/0，无 `official` 键；preparation revision `6c2f3b5f3665416a4b5ae6aae68c4e0ba3dd53102ed6add1b15fe28e36286c8b`。
+
+| 项 | 操作 | 结果 |
+| --- | --- | --- |
+| A 打开旧任务 | 打开对照任务训练设置 | **通过**。任务名 `测试09182` 可读，训练切片默认「训练集（789）」，评估/写出为「测试集（100）」。截图 `prepared-slices-training.png`、`prepared-slices-training-slice.png`。 |
+| B 写回配置 | 打开配置后出现训练切片，旧 `validation` 改评价集 | **通过**。GET `/configuration` 写入 `training_split: train`，修订随 YAML 内容哈希更新。无 `validation` 残留。 |
+| C 训练切片 | 能选训练集并看到人数；空评价集不能开训 | **通过**。下拉为训练集（789）/测试集（100）/评价集（0）。选评价集后「开始训练」禁用，提示「所选切片没有样本」。截图 `prepared-slices-empty-eval.png`。改回训练集后保存并重开仍是「训练集（789）」，开始训练可用。 |
+| D 推理页签 | 三个页签来自准备，不出现源清单官方测试集冒充 | **通过（目录）/ 部分（页面人数）**。页签固定为训练集/测试集/评价集，无「验证集」。HTTP 目录 789/100/0 来自准备记录。页面人数停在 0：检查点标记「当前 trainprep 与检查点 effective_config 不兼容」，前端不把不兼容检查点并入共用目录。此兼容提示是既有检查点/当前准备不一致，不是源清单官方分片冒充。截图 `prepared-slices-infer.png`。 |
+
+数据准备页方法为保持原划分，中栏 789/100/0，可见「中栏人数不会改发布名单」说明。截图 `prepared-slices-trainprep.png`。
+
+未改：四份历史 `preparation.json` 字节与冒烟前哈希一致；绑定源分片名单未改写。用户未改过的缺键才写回默认训练集。
+
+## 重装后圈定
+
+首次重装后该组曾 3 失败：换模保存未带训练切片键，打开配置写回改修订，后续保存 409。保存路径合并缺键后，换模 4 组合通过。另 1 项 `nasa_crm_transolver3-abupt` 曾报 contrib 组件导入失败，重跑即过，不计入本切片缺陷。

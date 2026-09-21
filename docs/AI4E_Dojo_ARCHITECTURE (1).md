@@ -4,19 +4,19 @@
 
 ## 0. 定位与实现范围
 
-Dojo 是供研究者组合数据处理、模型、训练、推理和结果分析的研究框架。当前有外流 CFD、参数化 PDE、耦合物理场、控制轨迹和时空预测五类应用。可安装模型包括 AB-UPT、Transolver-3、PI-BSNet、GenCP（CNO/SiT-FNO）、SafeDiffCon 和 WDNO（基础预测缩小预算）；Dojo Web 官方目录只开放前两个模型及 ShapeNet-Car/NASA CRM 五个案例。PDE 与 GenCP 通过 Python/recipe 使用。
+Dojo 是供研究者组合数据处理、模型、训练、推理和结果分析的研究框架。当前有外流 CFD、参数化 PDE、耦合物理场、控制轨迹和时空预测五类应用。可安装模型包括 AB-UPT、Transolver-3、PI-BSNet、GenCP（CNO/SiT-FNO）、SafeDiffCon、WDNO（基础预测缩小预算）和 MeshGraphNet（CylinderFlow 工程接入，未完成论文复现）；Dojo Web 官方目录只开放前两个模型及 ShapeNet-Car/NASA CRM 五个案例。PDE、GenCP 与 MeshGraphNet 通过 Python/recipe 使用。
 
 已有源码不等于生产精度或跨硬件等价。CAE 采样、平台批量研究任务和报告生成未开放；Vis 的部分几何交互、格式转换、自动化和 MCP 仅有限实现或预留。详见各模块 PRD，不在本轮补功能。
 
 ## 0.1 主线：Core、Task、Server、Web 的分层合作
 
-Dojo 的主架构问题是“谁拥有哪类事实，谁在什么边界调用谁”，不是“某个模型能否逐级晋级到平台”。模型只是领域 application 提供的一类科学实现；它的结构、损失、采样、参数、输入输出和平台希望展示的能力，都留在 `ai4e-contrib/application` 及其能力实现中。平台可以登记模型描述，但不把模型变成 Task 的分支。
+Dojo 的主架构问题是“谁拥有哪类事实，谁在什么边界调用谁”，不是“某个模型能否逐级晋级到平台”。模型只是领域 application 提供的一类科学实现；不可中立化的结构、损失、采样、参数、输入输出和平台展示语义留在贡献侧，能够用中立输入输出表达、可由合成数据验证并可能跨模型复用的计算能力优先进入 `ai4e-core/abilities`。平台可以登记模型描述，但不把模型变成 Task 的分支。
 
 | 层 | 拥有的事实与职责 | 明确不做 |
 | --- | --- | --- |
 | `ai4e-spec` | 共享名词和跨进程/持久化边界所需的最小记录：输入引用、运行来源、资产、指标、结果和可视化引用 | 不实现算法，不规定所有科学对象的统一格式 |
 | `ai4e-core` | 原子能力、领域 application、顺序 Stage/Pipeline、训练/推理执行、writer 和稳定 `run` 门面 | 不管理项目任务生命周期，不维护 Web 页面，不登记具体官方模型目录 |
-| `ai4e-contrib` | 模型、数据集、方程、约束和专属连接；把科学语义装配成 application/provider | 不把模型分支写进 Task，不接管通用运行记录 |
+| `ai4e-contrib` | 不可中立化的模型本体和专属算法；数据集适配、模型配置与业务连接把具体科学语义装配成 application/provider | 不承载可中立化的通用能力，不把模型分支写进 Task，不接管通用运行记录 |
 | `recipe` | 研究流程正文；Python 决定步骤和连接，YAML 提供参数与执行范围 | 不复制 Task 数据库，不把平台规则藏进训练循环 |
 | `ai4e-task` | 项目、任务、版本、配置修订、运行收据、输入绑定、资产、检查点引用、失败和恢复事实 | 不识别 AB-UPT 等模型，不解释损失/采样/物理约束，不加载模型栈 |
 | `ai4e-server` | 面向平台的业务用例、受控路径、能力描述、请求校验和 Task/Vis 适配；模型目录只属于平台 capability | 不实现数值算法，不读取模型内部状态来替代 application 描述 |
@@ -104,14 +104,22 @@ Python 包保持一层物理目录，由构建配置映射到下划线导入名�
 
 `abilities/` 按 data、transform、geometry、sampling、modeling、constraint、training、inference、eval、postproc、report 组织计算。原子能力不认识具体案例。
 
+### 5.1 能力归属判定：默认进入 core
+
+能力归属按行为、输入输出和复用边界判断，不按源码来源判断。来自某个模型源码的函数或模块，仍然必须先审查是否可以成为中立的 core ability。默认进入 `ai4e-core/abilities`，只有确认存在不可中立化的模型、数据集或业务流程依赖时，才留在 `ai4e-contrib`。
+
+判定时依次检查：是否可以用不包含具体模型名称的输入输出表达；是否依赖固定网络结构、结构版本或私有状态；是否依赖数据集字段名称、节点类别或文件布局；是否能用合成数据独立测试；是否可能被其他模型或领域流程复用；是否实际上只是某个步骤或业务流的参数交接。不确定时先设计中立 core 外壳，再由 contrib/application 绑定专属语义，不因为当前只有一个使用者就把能力判为专属。
+
+`contrib/ability` 只保存无法中立化的模型本体和专属算法；可中立化的图构造、批处理、噪声、mask、rollout、评价和图算子应优先进入 core。`contrib/application` 负责数据集适配、模型配置、训练/推理连接、来源交接和领域业务流。不等待多个使用者出现才进入 core；归属不确定时，实际计算默认在 core 实现并独立测试，贡献侧只绑定具体组合与语义。后续复用用于改进边界，不是首次沉淀的前置条件。
+
 `applications/base` 提供顺序 Stage/Pipeline 和不解释领域语义的迭代训练装配；领域 application 按 rawprep/trainprep/model/train/infer/post 组织可组合业务步骤。时空预测以物理轨迹、模型准备和固定结果区分交接，共用数组清单能力与迭代装配；WDNO 的小波、条件和数据语义留在 contrib。阶段参数和业务中间对象归领域所有，不是运行器的可变会话字典。
 
-- data 按 source/extract/validate/filter/save/stats 组织；PT 与 Zarr 并列，VTKHDF 是显式附加输出。
-- transform 持有冻结变换和反变换；sampling 提供点集与几何选择；专属采样逻辑可留在模型贡献侧。
+- data 按 source/extract/validate/filter/save/stats 组织；PT 与 Zarr 并列，VTKHDF 是规范网格资产。原始来源含网格或可重建 connectivity 时，平台数据必须同时交付逐场 PT、VTKHDF、实体身份及 manifest 网格引用；只有来源本身确实是无拓扑点云时才允许缺少 VTKHDF。模型图边、诱导子图、分区和 halo 由 trainprep 从只读平台数据派生，不写回共享数据集。
+- transform 持有冻结变换和反变换；sampling 提供点集与几何选择；采样原语默认先按中立能力进入 core，只有依赖模型私有状态或业务流程的连接才留在模型贡献侧。
 - modeling 提供构造、检查等机制；AB-UPT 结构版本为 3，训练检查点容器为 2，两者不可混写。
 - constraint 含监督比较和物理残差原语，已被 PDE 训练使用；通用符号方程编译或任意几何 PINN 工作流未交付。
 - training 提供更新循环、优化、调度、EMA、恢复与设备处理；各 recipe 的开放组合可更窄。
-- inference 管理无梯度预测、随机状态保护、恢复和分块原语；模型专属缓存留在 contrib。
+- inference 管理无梯度预测、随机状态保护、恢复、rollout 和分块原语；模型专属缓存留在 contrib。
 - eval 基于固定预测/真值计算指标；postproc 负责回贴网格、物理空间与可视表达输入；report 提供表格导出，不等同平台报告产品。
 
 ## 6. 配置、连接与公开执行入口

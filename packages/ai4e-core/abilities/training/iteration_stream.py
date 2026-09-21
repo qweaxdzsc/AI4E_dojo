@@ -43,3 +43,28 @@ class IterationStream:
             raise ValueError("批次流状态损坏")
         self.order, self.offset = order.clone(), state["offset"]
         self.generator.set_state(state["rng"])
+
+
+class CountedIterationStream(IterationStream):
+    """额外保存已取批次数，供局部目标函数恢复阶段调度。"""
+
+    def __init__(self, count, batch_size, *, seed=42):
+        super().__init__(count, batch_size, seed=seed)
+        self.updates = 0
+
+    def next(self):
+        """返回批次并推进明确的调度游标。"""
+        result = super().next()
+        self.updates += 1
+        return result
+
+    def state_dict(self):
+        """保存随机排列和调度游标。"""
+        return {**super().state_dict(), "updates": self.updates}
+
+    def load_state_dict(self, state):
+        """恢复时拒绝缺少调度游标的状态。"""
+        if type(state.get("updates")) is not int or state["updates"] < 0:
+            raise ValueError("调度游标缺失或非法")
+        super().load_state_dict(state)
+        self.updates = state["updates"]

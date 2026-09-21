@@ -96,3 +96,8 @@ uv run --no-project --python "$wdno_python" python -m ai4e_task resume "$run_id"
 ## 局部优化与更新
 
 默认训练无需改脚本。复制目录可通过 components.optimizer / scheduler / update 选择模块级普通函数，详见[训练策略示例](../../examples/recipe_extensions/wdno/README.md#只替换训练策略)。构造参数来自 train，新的选择参与完整恢复身份；未选时原合同不变。自定义更新不接管日志、保存或EMA/调度推进。
+
+
+## Example 与 Agent 交接
+
+本目录是仓库内 recipe 维护源；可复制的完整研究目录位于对应 `examples/` standalone。公共阶段脚本由案例清单声明并逐文件核对，配置、数据根和研究预算可以不同，但阶段顺序、输入键、恢复交接和产物语义不能漂移。Agent 先在复制目录通过 `ai4e_core.run.launch` 直接运行，再按需用同一目录调用 `ai4e_task` Python API；CLI 只是便利方式。

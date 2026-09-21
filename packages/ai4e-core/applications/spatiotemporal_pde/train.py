@@ -48,3 +48,10 @@ def fit(
         cancelled=cancelled,
         update_step=update_step,
     )
+
+
+def fit_trajectories(**kwargs):
+    """显式具名轨迹监督训练；不引入原 u/f 语义。"""
+    from ai4e_core.applications.parametric_pde.train import fit_fields
+
+    return fit_fields(**kwargs)

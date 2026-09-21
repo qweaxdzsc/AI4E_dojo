@@ -1,0 +1,121 @@
+{
+  "capsule": "https://codeocean.com/capsule/8000337/tree/v1",
+  "commit": "dc4cd4417ed7f97715ffb47496690ce60f7665a3",
+  "license": "GPL-3.0",
+  "sha256": {
+    "PCNO_Model_4D.py": "19529907e756fee88079696207b80a7f9006637d3684ae1ebf38f2652dd887ae",
+    "PCNO_Train_4D.py": "3e0250575e0e547d141d80ae28029317f57a12c39353abcd9e382d37e16189db",
+    "PCNO_Heat_Ele_Eco_model.py": "d5ac7f086b9d0051f6e156b3a73b7f1f399991b4f86593221c2f9f9bd5a3ced5"
+  },
+  "modules": [
+    {
+      "file": "packages/ai4e-core/abilities/modeling/modules/fourier4d.py",
+      "definitions": [
+        "SpectralConv4d"
+      ],
+      "source": "PCNO_Model_4D.py"
+    },
+    {
+      "file": "packages/ai4e-core/abilities/modeling/modules/unet_volume.py",
+      "definitions": [
+        "UNet3D_Lite"
+      ],
+      "source": "PCNO_Model_4D.py"
+    },
+    {
+      "file": "packages/ai4e-core/abilities/modeling/modules/global_features.py",
+      "definitions": [
+        "GlobalFeatureFusion"
+      ],
+      "source": "PCNO_Model_4D.py"
+    },
+    {
+      "file": "packages/ai4e-core/abilities/modeling/models/fourier_unet4d.py",
+      "definitions": [
+        "Block4dWithUNet",
+        "FNO4dUNet",
+        "FNO4dUNet_WithGlobalFusion"
+      ],
+      "source": "PCNO_Model_4D.py"
+    },
+    {
+      "file": "packages/ai4e-core/abilities/constraint/spatiotemporal_field.py",
+      "definitions": [
+        "compute_enhanced_gradient_loss",
+        "create_smooth_weight_map",
+        "weighted_mse"
+      ],
+      "source": "PCNO_Model_4D.py"
+    },
+    {
+      "file": "packages/ai4e-core/abilities/postproc/wellbore.py",
+      "definitions": [
+        "WellboreModel",
+        "wellbore_model_run",
+        "extract_wellData",
+        "process_wellResult"
+      ],
+      "source": "PCNO_Model_4D.py"
+    },
+    {
+      "file": "packages/ai4e-core/abilities/constraint/geothermal.py",
+      "definitions": [
+        "PDE_F",
+        "physical_loss",
+        "compute_loss"
+      ],
+      "source": "PCNO_Model_4D.py"
+    },
+    {
+      "file": "packages/ai4e-contrib/ability/model/pcno/model.py",
+      "definitions": [
+        "EnhancedP_T_Net"
+      ],
+      "source": "PCNO_Model_4D.py"
+    },
+    {
+      "file": "packages/ai4e-contrib/application/geothermal/pcno/protocol.py",
+      "definitions": [
+        "TrainConfig",
+        "ModelConfig"
+      ],
+      "source": "PCNO_Train_4D.py"
+    },
+    {
+      "file": "packages/ai4e-core/abilities/postproc/geothermal_economics.py",
+      "definitions": [
+        "utilization_eff",
+        "cap_cost",
+        "ope_cost",
+        "level_cost",
+        "score_tech_econ"
+      ],
+      "source": "PCNO_Heat_Ele_Eco_model.py"
+    },
+    {
+      "file": "packages/ai4e-contrib/application/geothermal/pcno/economy.py",
+      "definitions": [
+        "technical_results",
+        "ensure_column"
+      ],
+      "source": "PCNO_Heat_Ele_Eco_model.py"
+    }
+  ],
+  "adaptations": [
+    "split modules and remove import-time seed changes",
+    "explicit stats argument for technical_results",
+    "ordinary function for fixed-result economic table",
+    "shared Dojo training replaces original loop",
+    "Explicit PDE_F.vis inactive-branch masking: active formulas unchanged; original temperature gradient fails at update 6; raw-source failure retained"
+  ],
+  "cylinder_variant": {
+    "status": "method adaptation; Double Cylinder short training; CylinderFlow physics admission failed",
+    "implementation": "core FourierUNet3d; newly implemented 2D space plus time variant; not source-weight equivalent",
+    "source_paper": "Code Ocean capsule 8000337 v1 PCNO; spectral plus local U-Net fusion idea",
+    "data_sources": [
+      "GenCP Double Cylinder public HDF5",
+      "DeepMind dm-meshgraphnets/cylinder_flow official TFRecord subset"
+    ],
+    "geothermal_compatibility": "existing model constructors and source modules unchanged"
+  }
+}

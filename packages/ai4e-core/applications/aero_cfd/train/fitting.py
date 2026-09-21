@@ -12,6 +12,7 @@ import numpy as np
 import torch
 
 from ai4e_core.abilities.constraint.supervised import supervised
+from ai4e_core.abilities.data.source.split import named_slice
 from ai4e_core.abilities.data.validate.fingerprint import fingerprint
 from ai4e_core.abilities.eval.evaluation import evaluate
 from ai4e_core.abilities.eval.metrics import selected_metrics
@@ -42,8 +43,7 @@ from ai4e_spec.components.model import describe_model
 
 def training_slice(settings) -> str:
     """开训切片默认 train；旧 validation 并进 eval。"""
-    name = str((settings or {}).get("training_split") or "train")
-    return "eval" if name == "validation" else name
+    return named_slice((settings or {}).get("training_split"), "train")
 
 
 @dataclass
@@ -222,7 +222,7 @@ def configure_evaluation(job, *, step=None, callbacks=(), settings=None, operati
     prepare, collate = job.data.prepare, job.data.collate
     model, predict, terms = job.model, job.predict, job.terms
     device, source, factory = job.device, job.source, job.factory
-    selection = settings.get("evaluation_split", "test")
+    selection = named_slice(settings.get("evaluation_split"), "test")
     metric_names = selected_metrics(settings.get("evaluation_metrics"))
     requested_fields = set(settings.get("evaluation_fields") or [])
     evaluation_terms = [

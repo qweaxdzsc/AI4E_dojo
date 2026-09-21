@@ -1,8 +1,11 @@
 # 全仓辅助目录
 
+- [GeoTransolver 集成前评估](../mvp/geotransolver-assessment.md)：记录论文/源码身份、公开数据访问、实验配置差异与能力归属；第 6 节补充 20 GB 以下保险杠/Darcy 候选及文献对标限制，不表示模型已实现。
+- [GeoTransolver 小数据实施计划](../../.cursor/plans/geotransolver-small-data-integration.plan.md)：原始数据归档及全量核验完成；计划涵盖参考修正、两个案例的科学协议、源码迁移与可复制研究验收，模型实现未启动。
+
 - [共享训练执行与研究任务导航计划](../../.cursor/plans/training-execution-and-research-navigation.plan.md)：两点优化正在实施；共享执行、局部策略与研究路由已落盘，分层数值/复制/安装证据见专项验收，core/contrib已授权发布，实际页面补验发现Task恢复候选缺口，修正待追加发布授权。
 
-- [.agents/skills/dojo-integrate-model/SKILL.md](../../.agents/skills/dojo-integrate-model/SKILL.md)：仓库模型接入辅助指引；以目标与交付、必须检查节点、可选参考作为正文及后续更新原则，要求阶段改进日志，不限定实现细节。
+- [.agents/skills/dojo-integrate-model/SKILL.md](../../.agents/skills/dojo-integrate-model/SKILL.md)：模型接入参考；能力优先抽取进 core 后逐步通用化；每次训练先估时，优先本机整体小于三小时的集成检查，保留用户明确范围与阶段证据。
 - [.context/model-integration-learning.md](../model-integration-learning.md)：真实错误和流程候选的反馈日志，注明证据与边界，不自动成为规则。
 - [docs/model-integration-goals.md](../../docs/model-integration-goals.md)：新模型接入的长期目标与关键检查；目标与交付、必须检查节点、可选参考三部分，无统一记录模板或个案进度。不替代架构正文或模块 PRD。
 
@@ -132,3 +135,69 @@ tools/verification/wdno/task_replay.py --staged --case recipe|example|extension�
 - `tools/verification/training_execution.py`：冻结原/新训练轨迹对照及所有配置入口盘点。
 - `tools/verification/architecture_inventory.py`：新增声明签名、起止行与类方法定位。
 - `tests/integration/test_training_{execution,strategy_extensions}.py`、`test_research_navigation.py`：执行语义、安装复制变体与导航。
+
+## 案例资源与 Agent 文档
+
+- `examples/case-manifest.json`：standalone 与 extension 的机器可读契约。
+- `examples/`：仓库外可复制完整案例；每个 standalone 包含 README、配置、configuration、pipeline 及清单声明阶段。
+- `DOJO_AGENT_GUIDE.md`：安装后研究者和 Agent 的公开使用指南，不依赖仓库内部导航。
+- `.agents/skills/dojo-research/SKILL.md`：Agent 决策树唯一源文件，安装副本由 ai4e-task 构建生成。
+
+## PCNO 参考工具与历史边界
+
+- `tools/verification/pcno/{data_audit,reference,verify_first_step,economy}.py`：发布数据门禁、完整原训练透明适配、无观察首步对照与固定预测经济回放；README记录实际入口与科学边界。
+- `tools/verification/pcno/{predict,finish_reference}.py`：双分支完整检查点推理、井级结果与指标；保留历史250轮最终态门禁，用户已停止长训练，当前不运行等待器。
+- `tests/integration/test_pcno_{data,reference,reference_prediction,reference_artifacts}.py`：数据异常、AST适配、参考轮次恢复、最终态门禁、指标、真实准入产物；仅覆盖参考前置；Dojo短训与复制/安装另有当前证据。
+- `.cursor/plans/pcno-small-data-integration.plan.md`：用户最新授权的先集成后短训计划，250轮已停止。
+- `.context/mvp/pcno-acceptance.md`：当前代码集成、短训、科学修正、实际使用入口与剩余回归问题。
+
+## GeoTransolver 对照与可复制验收
+
+`tools/verification/geotransolver/`：`vendor_sources.py`按锁定源码提取；`reference.py`独立上游定义；`audit_preparation.py`独立原数据与统计；`compare.py`前向/梯度/更新；`benchmark.py`正式网络整网测速；`budget.py`累计计费与截止；`reference_train.py`独立参考短训；`write_recipes.py`仅作初次脚手架，最终双案例正文独立维护。参考差异见 `reference_patches.md`。相关用例为 `tests/integration/test_geotransolver_*.py`；不运行全仓代替圈定验收。
+
+## PCNO 代码集成与短训验证
+
+`tools/verification/pcno/{short_reference,compare_short,numerical_repair,diagnose_temperature}.py`：缩小预算参考、固定容差对照与原版数值问题定位；`test_pcno_*.py` 为数据、源码、训练、后处理与真实产物门禁。250轮旧任务已停止，当前状态见 `../mvp/pcno-acceptance.md`。
+
+## Neumann 双组有效性实验
+
+- `tools/verification/dojo_validity/rmhd/`：独立的 JOREK 协议，不改旧 Neumann 数学和历史结果。`protocol/model/preflight` 定义冻结起点和主控预实验；`materials/verification` 交付原始分片与网络、核查独立准备；`isolation/network/sessions` 限制全进程路径、公网代理和新CLI会话；`controller` 保证双最终锁定后才允许隐藏评价；`worker/evaluate/metrics` 分离无真值预测与可信FP64评分；`accounting/report` 保留未知项、独立排序和科学曲线；`worker_check` 仅主控验证已训baseline复放及恶意访问拒绝。
+- `tests/integration/test_dojo_validity_rmhd.py`：六场等权、非法输出、完整预实验门禁、fake双组round00加五轮、冻结防篡改、公开代理与真实Seatbelt边界。
+- [RMHD验收](../mvp/jorek-rmhd-validity-acceptance.md)：真实MPS预实验、隔离及正式执行证据。长期行为同下方参数化PDE PRD第二章维护。
+
+- `tools/verification/dojo_validity/`：prepare/environment/baseline/metrics/ledger/isolation/runner 与 CLI；单组工作根和 experiment ID 分离，比较由主会话读取。
+- `tests/integration/test_dojo_validity.py`：目录边界、FP64 指标、时间/token、失败续接、fake 五轮和正式阻塞门禁。
+- [参数化 PDE PRD 第二章](../../docs/PRD/recipes/parametric_pde/PRD.md#二独立双组研究实验)：现行行为及未实现边界。
+- [验收记录](../mvp/dojo-validity-acceptance.md)：科学起点、独立环境、命令级隔离及真实会话未验范围。
+
+GeoTransolver后续验证入口：`train_pairs.py/continue_pairs.py/reference_train.py/evaluate_pairs.py`负责固定目标训练、已完成目标恢复及全量评价；`install.py/installed_replay.py/task_replay.py/asset_replay.py`负责真实安装和复制案例/worker一致性。`docs/agent-help/workflows/geotransolver.md`为用户研究导航；API与案例关联支持嵌套recipe来源。
+
+- `tools/verification/dojo_validity/{cli,formal,activity}.py`：整进程隔离的新 CLI 会话、同会话五轮及只读候选重放、分阶段进程计时；`policies/` 保存上游 Seatbelt 平台策略及许可。`test_dojo_validity_cli.py` 覆盖实际权限、配置续接和请求用量读取。
+
+- `tools/verification/dojo_validity/telemetry.py`：从正式 session 的原始工具调用与供应商 usage 重建编码、训练观察及混合请求分类；模型生成、工具、活动进程和执行器等待各按实际事件计时，失败尝试保留，未结束不封账。
+
+- `tools/verification/dojo_validity/finish.py`：核对两组五轮与冻结内容后封账，按原始记录汇总失败成本，分别输出最终/第五轮/最佳精度、开发与训练成本、入口读取事件及源码组件引用；未结束 CLI 拒绝封账。
+
+## 可选注意力组件验证
+
+- `tests/fixtures/flare_plus_plus/upstream.py.txt`：PhysicsNeMo 锁定 commit 的原始源码，只提取独立类用于数值对照；对应许可随 core Notice 交付。
+- `tests/integration/test_flare_attention.py`、`test_flare_attention_installation.py`：组件与实际 wheel 验收。
+- `docs/agent-help/api/core/abilities/modeling/modules/flare_attention.md`：自动生成的公开 API；用户组合示例位于 `docs/agent-help/user-components/network.md`。
+- `docs/reviews/trend/news/`：每周框架调研的日期报告、最新入口、候选/建议去重账本与来源证据；网络组件候选和全局架构建议分开。
+
+- `docs/agent-help/capabilities/`：九类能力的输入输出、真实调用例子和边界；教程元数据生成 skill/GUIDE/帮助首页菜单。`tests/integration/test_agent_capabilities.py` 覆盖链接、符号、九例实跑、查询及离线导出；验收见 `.context/mvp/agent-capabilities-acceptance.md`。
+
+- [JOREK RMHD 下一轮双组实验计划](../../.cursor/plans/jorek-rmhd-dojo-validity.plan.md)：原始数据核查、独立前处理、整轨迹隐藏测试、MPS U-Net 和延迟准入；正式运行进度见对应验收记录。
+
+
+## GeoTransolver 外流扩展
+
+`tools/verification/geotransolver/aero_reference.py` 锁定独立数值参考，`aero_acceptance.py` 完成测速、成对训练、完整预测对照，`aero_replay.py` 检查实际安装 Task、恢复和独立 post。新增 `tests/integration/test_geotransolver_aero_{inputs,reference,training,inference,recipe_task}.py`；预算、安装和文档用例沿用同模型专项文件。
+
+行为见对应模块 PRD；实际证据与边界见 [外流验收](../mvp/geotransolver-aero-acceptance.md)。
+
+## PCNO圆柱验证
+
+`tools/verification/pcno/cylinder/`：官方来源恢复、标签准入、准备、测速、安装和清理验证；`tests/integration/test_pcno_cylinder_*.py`：相关用例。现行结果见`.context/mvp/pcno-cylinder-acceptance.md`。
+
+功能正文见相应模块PRD；实际范围见[圆柱验收](../mvp/pcno-cylinder-acceptance.md)。

@@ -1,0 +1,15 @@
+{
+  "repository": "https://github.com/NVIDIA/physicsnemo",
+  "revision": "94dbdf829d1a4e93e3f31ecb77713392c471388e",
+  "source": "physicsnemo/nn/module/flare_attention.py",
+  "source_sha256": "ad9dc3e13b2d12214bf5ae12c087332f088f0ff9b5be6c530434d9ec0c76201f",
+  "symbol": "FLAREPlusPlus",
+  "license": "Apache-2.0",
+  "license_file": "LICENSE",
+  "changes": [
+    "Use plain torch reshape/transpose instead of einops; no jaxtyping or PhysicsNeMo runtime dependency.",
+    "Chinese public API docs; explicit shape, nonempty token, floating tensor and constructor validation.",
+    "Preserve upstream parameter names/layout and three SDPA operations; expose standalone forward only.",
+    "No model, context adapter, training loop or default recipe changes."
+  ]
+}

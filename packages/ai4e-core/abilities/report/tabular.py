@@ -52,3 +52,8 @@ def export_tables(path, tables: dict[str, list[dict]], *, format: str) -> str:
                     )
             book.save(temporary)
     return str(path)
+
+
+def export_frame_metrics(path, metrics: dict):
+    """导出保留样本、时间、字段和单位的评价表。"""
+    return export_tables(path, {"metrics": metrics["rows"]}, format="csv")

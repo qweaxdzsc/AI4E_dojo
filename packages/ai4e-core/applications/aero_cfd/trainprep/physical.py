@@ -33,9 +33,12 @@ class PhysicalPreparation:
     batching: bool = False
     extensions: dict | None = None
     version: int = 1
+    topology: dict | None = None
 
 
-def open_dataset(config, dataset_component, model_component, reference=None, dataset=None, *, version=1):
+def open_dataset(
+    config, dataset_component, model_component, reference=None, dataset=None, *, version=1
+):
     """打开物理清单或已冻结准备引用，不在此拟合变换或进行模型准备。"""
     config = deepcopy(config)
     config.setdefault("train", {})
@@ -53,7 +56,9 @@ def open_dataset(config, dataset_component, model_component, reference=None, dat
     old = json.loads(Path(reference).read_text()) if reference else None
     if version not in (1, 2):
         raise ValueError("不支持的物理准备版本")
-    if old and ("dataset" not in old or (old.get("version") == 2 and old.get("kind") != "physical_fields")):
+    if old and (
+        "dataset" not in old or (old.get("version") == 2 and old.get("kind") != "physical_fields")
+    ):
         raise ValueError("现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口")
     if old:
         version = old.get("version")
@@ -156,7 +161,9 @@ def validate_preparation(data):
     )
     declarations["sampling"] = _sampling_record(config.get("sampling"))
     declarations["component"] = data.model_component.SOURCE
-    if old and ("dataset" not in old or (old.get("version") == 2 and old.get("kind") != "physical_fields")):
+    if old and (
+        "dataset" not in old or (old.get("version") == 2 and old.get("kind") != "physical_fields")
+    ):
         raise ValueError("现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口")
     record = {
         "version": data.version,
@@ -164,9 +171,15 @@ def validate_preparation(data):
         "manifest": data.view.describe()["reference"],
         "declarations": declarations,
         "normalization": data.normalization.record,
-        "split_counts": {k: len(v) for k, v in complete_split_buckets(data.view.partitions).items()},
+        "split_counts": {
+            k: len(v) for k, v in complete_split_buckets(data.view.partitions).items()
+        },
     }
-    if data.version == 2 or (config.get("trainprep") or {}).get("split") or (old or {}).get("partitions"):
+    if (
+        data.version == 2
+        or (config.get("trainprep") or {}).get("split")
+        or (old or {}).get("partitions")
+    ):
         record["partitions"] = complete_split_buckets(data.view.partitions)
         record["split"] = deepcopy(
             (config.get("trainprep") or {}).get("split") or (old or {}).get("split")
@@ -183,6 +196,11 @@ def validate_preparation(data):
             external_inputs=external_inputs(config),
             partitions=complete_split_buckets(data.view.partitions),
         )
+    if data.topology:
+        record["topology"] = {
+            **deepcopy(data.topology),
+            "digests": deepcopy(getattr(data.view, "digests", {})),
+        }
     record["digest"] = fingerprint(record)
     probe = next((name for name in SPLIT_BUCKETS if data.view.partitions.get(name)), None)
     if probe is None:
@@ -209,8 +227,13 @@ def publish(data, *, session):
     if session.dry_run:
         return check_report(data, session=session)
     path = session.artifact("preparation.json", data.record)
-    session.record_asset("preparation", path, kind="preparation", stage="trainprep",
-                         dependencies=[Path(data.record["manifest"]).parent])
+    session.record_asset(
+        "preparation",
+        path,
+        kind="preparation",
+        stage="trainprep",
+        dependencies=[Path(data.record["manifest"]).parent],
+    )
     result = {"preparation": str(path), "split_counts": data.record["split_counts"]}
     session.report(result, stage="trainprep")
     return result
@@ -220,6 +243,16 @@ def consume(config, dataset_component, model_component, reference=None):
     """导入已有准备记录并按当前平台配置组计算，不拿冻结声明挡现行参数。"""
     data = open_dataset(config, dataset_component, model_component, reference)
     data = bind_fields(data)
+    if data.old and data.old.get("topology"):
+        from .topology import bind_topology
+
+        root = Path(config["paths"]["datasets"]["root"]).parent / "trainprep" / "topology"
+        data = bind_topology(
+            data,
+            settings=data.old["topology"]["settings"],
+            output=root,
+            sampling=config.get("sampling"),
+        )
     data = freeze_normalization(data)
     data = configure_sampling(data)
     data = configure_batching(data)

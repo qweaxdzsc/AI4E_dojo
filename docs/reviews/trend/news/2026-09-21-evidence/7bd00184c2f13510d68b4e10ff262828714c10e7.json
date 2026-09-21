@@ -1,0 +1,161 @@
+{
+  "sha": "7bd00184c2f13510d68b4e10ff262828714c10e7",
+  "node_id": "C_kwDOI2RmUNoAKDdiZDAwMTg0YzJmMTM1MTBkNjhiNGUxMGZmMjYyODI4NzE0YzEwZTc",
+  "commit": {
+    "author": {
+      "name": "Carmelo Gonzales",
+      "email": "43048528+melo-gonzo@users.noreply.github.com",
+      "date": "2026-09-17T13:41:43Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-09-17T13:41:43Z"
+    },
+    "message": "Unified External Aero Recipe: scale geometry once per NonDimensionalizeByMetadata chain (#1995)\n\n* Scale mesh geometry once per NonDimensionalizeByMetadata chain via scale_geometry\n\n* Merge every NonDimensionalizeByMetadata field map when re-dimensionalizing predictions\n\n* Shorten changelog entry for the nondimensionalization fix\n\n* docs: update changelog",
+    "tree": {
+      "sha": "f6357c3796c0b894a5838d22d74142662aa3bfac",
+      "url": "https://api.github.com/repos/NVIDIA/physicsnemo/git/trees/f6357c3796c0b894a5838d22d74142662aa3bfac"
+    },
+    "url": "https://api.github.com/repos/NVIDIA/physicsnemo/git/commits/7bd00184c2f13510d68b4e10ff262828714c10e7",
+    "comment_count": 0,
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJqq+4oCRC1aQ7uu5UhlAAAOLQQACoPVTjQccSKLObEqqU3txFb\nP/4EQaCbTeD7j0iUKOEiYxeaqGb2LxRs0WFaWlpFKG3UYsnR6PBKRsPd9Nf5oSrD\nMA4tv/fz2sLrU7nbyVTEMw6YF6qoZhGQHmEmf1/jP8SXkQG4hs52Z91Nlz/5la9Z\nuhbdoyJ8SXsfXxUSOM0BkOu/2sZZFY99x01nAwUVSKVLvIwJ011JvTezamXWDHii\nheSx1KwdvSGGHFKOwcuMR+FAreT40/bx8adFi2J0ywMwZQAyXq19JVSpwJ25JZkS\nDWRP8pGaMbUismgJbCKnEKcYzn5jyFnko7w+Z0ZQ2ZIEF7FpqM9Dw1fbMGNAXVhg\nTJ67g4rI+7Y9EBK79GEt6h0MRkbT1lZRxTi6abXjL//oBbXfoaYQQpk2uZlq3o6Y\nq0oGj7m+M6uus0XMXeKrnuCf5zLwAfwdw1CmW0zriWOOeW/kbuhY5rNcNIl3CMlH\nrA9uyzfqZ2pp4iuVbKmWVGEkhDfQp7h+psI3mAepVRd9QPfYpoc1TemLU5teUJ7C\nz6NHvRZIRBE5d/Rvfy0j1ywfvv5hm6Kpw1ZMyVk61kQFhzuHYIeJck65ozmZjtjZ\nltpPNdXqiYBM8gb13AHA9hKdYE8nwlLDLK0J9Hu3yLyqBE2/rVUVgVkWQWMHZ12u\nZeY5Hwxsfo0JRov7UJFb\n=2bXd\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree f6357c3796c0b894a5838d22d74142662aa3bfac\nparent d25b6361e16457370bd2c0558add625cb367c245\nauthor Carmelo Gonzales <43048528+melo-gonzo@users.noreply.github.com> 1789652503 +0000\ncommitter GitHub <noreply@github.com> 1789652503 +0000\n\nUnified External Aero Recipe: scale geometry once per NonDimensionalizeByMetadata chain (#1995)\n\n* Scale mesh geometry once per NonDimensionalizeByMetadata chain via scale_geometry\n\n* Merge every NonDimensionalizeByMetadata field map when re-dimensionalizing predictions\n\n* Shorten changelog entry for the nondimensionalization fix\n\n* docs: update changelog",
+      "verified_at": "2026-09-17T13:42:01Z"
+    }
+  },
+  "url": "https://api.github.com/repos/NVIDIA/physicsnemo/commits/7bd00184c2f13510d68b4e10ff262828714c10e7",
+  "html_url": "https://github.com/NVIDIA/physicsnemo/commit/7bd00184c2f13510d68b4e10ff262828714c10e7",
+  "comments_url": "https://api.github.com/repos/NVIDIA/physicsnemo/commits/7bd00184c2f13510d68b4e10ff262828714c10e7/comments",
+  "author": {
+    "login": "melo-gonzo",
+    "id": 43048528,
+    "node_id": "MDQ6VXNlcjQzMDQ4NTI4",
+    "avatar_url": "https://avatars.githubusercontent.com/u/43048528?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/melo-gonzo",
+    "html_url": "https://github.com/melo-gonzo",
+    "followers_url": "https://api.github.com/users/melo-gonzo/followers",
+    "following_url": "https://api.github.com/users/melo-gonzo/following{/other_user}",
+    "gists_url": "https://api.github.com/users/melo-gonzo/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/melo-gonzo/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/melo-gonzo/subscriptions",
+    "organizations_url": "https://api.github.com/users/melo-gonzo/orgs",
+    "repos_url": "https://api.github.com/users/melo-gonzo/repos",
+    "events_url": "https://api.github.com/users/melo-gonzo/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/melo-gonzo/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "committer": {
+    "login": "web-flow",
+    "id": 19864447,
+    "node_id": "MDQ6VXNlcjE5ODY0NDQ3",
+    "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/web-flow",
+    "html_url": "https://github.com/web-flow",
+    "followers_url": "https://api.github.com/users/web-flow/followers",
+    "following_url": "https://api.github.com/users/web-flow/following{/other_user}",
+    "gists_url": "https://api.github.com/users/web-flow/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/web-flow/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/web-flow/subscriptions",
+    "organizations_url": "https://api.github.com/users/web-flow/orgs",
+    "repos_url": "https://api.github.com/users/web-flow/repos",
+    "events_url": "https://api.github.com/users/web-flow/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/web-flow/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false
+  },
+  "parents": [
+    {
+      "sha": "d25b6361e16457370bd2c0558add625cb367c245",
+      "url": "https://api.github.com/repos/NVIDIA/physicsnemo/commits/d25b6361e16457370bd2c0558add625cb367c245",
+      "html_url": "https://github.com/NVIDIA/physicsnemo/commit/d25b6361e16457370bd2c0558add625cb367c245"
+    }
+  ],
+  "stats": {
+    "total": 171,
+    "additions": 165,
+    "deletions": 6
+  },
+  "files": [
+    {
+      "sha": "7a3fd708b3dd50e4919297e8f637612b142e69f3",
+      "filename": "CHANGELOG.md",
+      "status": "modified",
+      "additions": 3,
+      "deletions": 0,
+      "changes": 3,
+      "blob_url": "https://github.com/NVIDIA/physicsnemo/blob/7bd00184c2f13510d68b4e10ff262828714c10e7/CHANGELOG.md",
+      "raw_url": "https://github.com/NVIDIA/physicsnemo/raw/7bd00184c2f13510d68b4e10ff262828714c10e7/CHANGELOG.md",
+      "contents_url": "https://api.github.com/repos/NVIDIA/physicsnemo/contents/CHANGELOG.md?ref=7bd00184c2f13510d68b4e10ff262828714c10e7",
+      "patch": "@@ -22,6 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0\n   `PHYSICSNEMO_DIST_TIMEOUT_S`; unset or empty configuration keeps PyTorch's\n   backend default. Invalid timeouts are rejected before initialization state\n   changes, allowing corrected configuration to be retried.\n+- Unified external aero recipe: `NonDimensionalizeByMetadata` gains\n+  `scale_geometry` so chained instances scale the geometry once; inference\n+  re-dimensionalizes with the field maps of every instance.\n \n ### Changed\n "
+    },
+    {
+      "sha": "eb196cd8940c91505c3879459886c67047fe5eab",
+      "filename": "examples/cfd/external_aerodynamics/unified_external_aero_recipe/README.md",
+      "status": "modified",
+      "additions": 4,
+      "deletions": 0,
+      "changes": 4,
+      "blob_url": "https://github.com/NVIDIA/physicsnemo/blob/7bd00184c2f13510d68b4e10ff262828714c10e7/examples%2Fcfd%2Fexternal_aerodynamics%2Funified_external_aero_recipe%2FREADME.md",
+      "raw_url": "https://github.com/NVIDIA/physicsnemo/raw/7bd00184c2f13510d68b4e10ff262828714c10e7/examples%2Fcfd%2Fexternal_aerodynamics%2Funified_external_aero_recipe%2FREADME.md",
+      "contents_url": "https://api.github.com/repos/NVIDIA/physicsnemo/contents/examples%2Fcfd%2Fexternal_aerodynamics%2Funified_external_aero_recipe%2FREADME.md?ref=7bd00184c2f13510d68b4e10ff262828714c10e7",
+      "patch": "@@ -139,6 +139,10 @@ flowchart LR\n \n   Also supports temperature, density, and identity (pass-through) field\n   types, and provides an `inverse()` for re-dimensionalizing predictions.\n+  When `L_ref` is in `global_data` the mesh coordinates are divided by it\n+  as well, once per instance: a chain that needs a second instance (say\n+  interior `point_data` fields first, boundary `cell_data` fields second)\n+  sets `scale_geometry: false` on the second one.\n   Input points are non-dimensionalized by a single reference scalar\n   `L_ref` (rather than scaling x/y/z independently) so geometry aspect\n   ratios are preserved."
+    },
+    {
+      "sha": "f0b6941ac4554704d246ce7ff1af3fb7ebceb1be",
+      "filename": "examples/cfd/external_aerodynamics/unified_external_aero_recipe/src/infer.py",
+      "status": "modified",
+      "additions": 5,
+      "deletions": 1,
+      "changes": 6,
+      "blob_url": "https://github.com/NVIDIA/physicsnemo/blob/7bd00184c2f13510d68b4e10ff262828714c10e7/examples%2Fcfd%2Fexternal_aerodynamics%2Funified_external_aero_recipe%2Fsrc%2Finfer.py",
+      "raw_url": "https://github.com/NVIDIA/physicsnemo/raw/7bd00184c2f13510d68b4e10ff262828714c10e7/examples%2Fcfd%2Fexternal_aerodynamics%2Funified_external_aero_recipe%2Fsrc%2Finfer.py",
+      "contents_url": "https://api.github.com/repos/NVIDIA/physicsnemo/contents/examples%2Fcfd%2Fexternal_aerodynamics%2Funified_external_aero_recipe%2Fsrc%2Finfer.py?ref=7bd00184c2f13510d68b4e10ff262828714c10e7",
+      "patch": "@@ -160,7 +160,11 @@ def build_redim_field_types(ds_yaml: DictConfig) -> dict[str, NondimFieldType]:\n             continue\n         target = str(t.get(\"_target_\", \"\"))\n         if \"NonDimensionalizeByMetadata\" in target:\n-            nondim_fields = dict(t.get(\"fields\", {}) or {})\n+            ### A chain may hold several instances (interior point_data fields,\n+            ### then boundary cell_data fields); merge them instead of keeping\n+            ### only the last one, or the interior predictions would not be\n+            ### re-dimensionalized.\n+            nondim_fields.update(t.get(\"fields\", {}) or {})\n         elif \"RenameMeshFields\" in target:\n             ### Rename maps live under per-association sub-blocks; a field\n             ### is renamed in whichever association it was declared."
+    },
+    {
+      "sha": "021eb51b6a9bf329e867ab689240568e5fd2e2df",
+      "filename": "examples/cfd/external_aerodynamics/unified_external_aero_recipe/src/nondim.py",
+      "status": "modified",
+      "additions": 25,
+      "deletions": 5,
+      "changes": 30,
+      "blob_url": "https://github.com/NVIDIA/physicsnemo/blob/7bd00184c2f13510d68b4e10ff262828714c10e7/examples%2Fcfd%2Fexternal_aerodynamics%2Funified_external_aero_recipe%2Fsrc%2Fnondim.py",
+      "raw_url": "https://github.com/NVIDIA/physicsnemo/raw/7bd00184c2f13510d68b4e10ff262828714c10e7/examples%2Fcfd%2Fexternal_aerodynamics%2Funified_external_aero_recipe%2Fsrc%2Fnondim.py",
+      "contents_url": "https://api.github.com/repos/NVIDIA/physicsnemo/contents/examples%2Fcfd%2Fexternal_aerodynamics%2Funified_external_aero_recipe%2Fsrc%2Fnondim.py?ref=7bd00184c2f13510d68b4e10ff262828714c10e7",
+      "patch": "@@ -157,9 +157,14 @@ class NonDimensionalizeByMetadata(MeshTransform):\n     - **density**: ``rho / rho_inf``\n     - **identity**: pass-through (no scaling applied)\n \n-    If ``L_ref`` is present in ``global_data``, mesh points are divided\n-    by it to produce non-dimensional coordinates: ``x* = x / L_ref``.\n-    This normalises point clouds and cell centroids computed downstream.\n+    If ``L_ref`` is present in ``global_data`` and ``scale_geometry`` is\n+    ``True`` (the default), mesh points are divided by it to produce\n+    non-dimensional coordinates: ``x* = x / L_ref``. This normalises point\n+    clouds and cell centroids computed downstream. The geometry is scaled\n+    once per instance, so a chain that needs a second instance (for example\n+    ``point_data`` fields on the interior and ``cell_data`` fields on the\n+    boundaries) sets ``scale_geometry: false`` on every instance after the\n+    first; otherwise the coordinates are divided by ``L_ref`` again.\n \n     Args:\n         fields: Mapping of ``{field_name: field_type}`` where *field_type*\n@@ -168,6 +173,9 @@ class NonDimensionalizeByMetadata(MeshTransform):\n             in a field name addresses a nested leaf (``\"solution.p\"``).\n         association: Mesh field association containing the fields\n             (``\"point_data\"`` or ``\"cell_data\"``).\n+        scale_geometry: Divide the mesh coordinates by ``L_ref`` (and multiply\n+            them back in :meth:`inverse`). Leave ``True`` on the first instance\n+            in a transform chain and set ``False`` on any further instance.\n \n     Example YAML::\n \n@@ -176,12 +184,20 @@ class NonDimensionalizeByMetadata(MeshTransform):\n             pMeanTrim: pressure\n             wallShearStressMeanTrim: stress\n           association: point_data\n+        # a second instance for boundary face data: fields only, geometry\n+        # was already scaled above\n+        - _target_: ${dp:NonDimensionalizeByMetadata}\n+          fields:\n+            prescribed.velocity: velocity\n+          association: cell_data\n+          scale_geometry: false\n     \"\"\"\n \n     def __init__(\n         self,\n         fields: dict[str, NondimFieldType],\n         association: MeshFieldAssociation = \"point_data\",\n+        scale_geometry: bool = True,\n     ) -> None:\n         super().__init__()\n         if association not in MESH_FIELD_ASSOCIATIONS:\n@@ -201,6 +217,7 @@ def __init__(\n             as_nested_key(name): ftype for name, ftype in fields.items()\n         }\n         self._association = association\n+        self._scale_geometry = scale_geometry\n \n     def _transform_mesh(\n         self,\n@@ -251,7 +268,7 @@ def _transform_mesh(\n \n         # Scale geometry to/from nondim space (x* = x / L_ref).\n         # assume_invertible=True avoids a per-mesh sync from the det check.\n-        if L_ref is not None:\n+        if L_ref is not None and self._scale_geometry:\n             torch._assert_async(L_ref != 0)\n             factor = L_ref if inverse else 1.0 / L_ref\n             new_mesh = new_mesh.scale(factor, assume_invertible=True)\n@@ -365,4 +382,7 @@ def _redim(name: NestedKey, val: torch.Tensor) -> torch.Tensor:\n         return td.named_apply(_redim, nested_keys=True)  # ty: ignore[invalid-return-type]\n \n     def extra_repr(self) -> str:\n-        return f\"fields={self._fields}, association={self._association!r}\"\n+        return (\n+            f\"fields={self._fields}, association={self._association!r}, \"\n+            f\"scale_geometry={self._scale_geometry}\"\n+        )"
+    },
+    {
+      "sha": "29907b3a5a68f3e48b22cf5ee5ac06840e626cb4",
+      "filename": "examples/cfd/external_aerodynamics/unified_external_aero_recipe/tests/test_infer.py",
+      "status": "modified",
+      "additions": 35,
+      "deletions": 0,
+      "changes": 35,
+      "blob_url": "https://github.com/NVIDIA/physicsnemo/blob/7bd00184c2f13510d68b4e10ff262828714c10e7/examples%2Fcfd%2Fexternal_aerodynamics%2Funified_external_aero_recipe%2Ftests%2Ftest_infer.py",
+      "raw_url": "https://github.com/NVIDIA/physicsnemo/raw/7bd00184c2f13510d68b4e10ff262828714c10e7/examples%2Fcfd%2Fexternal_aerodynamics%2Funified_external_aero_recipe%2Ftests%2Ftest_infer.py",
+      "contents_url": "https://api.github.com/repos/NVIDIA/physicsnemo/contents/examples%2Fcfd%2Fexternal_aerodynamics%2Funified_external_aero_recipe%2Ftests%2Ftest_infer.py?ref=7bd00184c2f13510d68b4e10ff262828714c10e7",
+      "patch": "@@ -65,6 +65,41 @@ def test_build_redim_field_types_volume():\n     }\n \n \n+def test_build_redim_field_types_merges_every_nondim_instance():\n+    \"\"\"Two instances (interior point_data, boundary cell_data) both contribute.\"\"\"\n+    ds_yaml = OmegaConf.create(\n+        {\n+            \"pipeline\": {\n+                \"transforms\": [\n+                    {\n+                        \"_target_\": \"${dp:NonDimensionalizeByMetadata}\",\n+                        \"fields\": {\"UMeanTrim\": \"velocity\", \"pMeanTrim\": \"pressure\"},\n+                        \"association\": \"point_data\",\n+                    },\n+                    {\n+                        \"_target_\": \"${dp:NonDimensionalizeByMetadata}\",\n+                        \"fields\": {\"prescribed.velocity\": \"velocity\"},\n+                        \"association\": \"cell_data\",\n+                        \"scale_geometry\": False,\n+                    },\n+                    {\n+                        \"_target_\": \"${dp:RenameMeshFields}\",\n+                        \"point_data\": {\n+                            \"UMeanTrim\": \"velocity\",\n+                            \"pMeanTrim\": \"pressure\",\n+                        },\n+                    },\n+                ]\n+            }\n+        }\n+    )\n+    assert infer.build_redim_field_types(ds_yaml) == {\n+        \"velocity\": \"velocity\",\n+        \"pressure\": \"pressure\",\n+        \"prescribed.velocity\": \"velocity\",\n+    }\n+\n+\n def test_build_redim_field_types_no_nondim_is_empty():\n     \"\"\"No NonDimensionalizeByMetadata transform (or no pipeline at all) -> {}.\n "
+    },
+    {
+      "sha": "d1a58bc09d94c4f01e7388d9d16d56b65c01c8eb",
+      "filename": "examples/cfd/external_aerodynamics/unified_external_aero_recipe/tests/test_nondim.py",
+      "status": "added",
+      "additions": 93,
+      "deletions": 0,
+      "changes": 93,
+      "blob_url": "https://github.com/NVIDIA/physicsnemo/blob/7bd00184c2f13510d68b4e10ff262828714c10e7/examples%2Fcfd%2Fexternal_aerodynamics%2Funified_external_aero_recipe%2Ftests%2Ftest_nondim.py",
+      "raw_url": "https://github.com/NVIDIA/physicsnemo/raw/7bd00184c2f13510d68b4e10ff262828714c10e7/examples%2Fcfd%2Fexternal_aerodynamics%2Funified_external_aero_recipe%2Ftests%2Ftest_nondim.py",
+      "contents_url": "https://api.github.com/repos/NVIDIA/physicsnemo/contents/examples%2Fcfd%2Fexternal_aerodynamics%2Funified_external_aero_recipe%2Ftests%2Ftest_nondim.py?ref=7bd00184c2f13510d68b4e10ff262828714c10e7",
+      "patch": "@@ -0,0 +1,93 @@\n+# SPDX-FileCopyrightText: Copyright (c) 2023 - 2026 NVIDIA CORPORATION & AFFILIATES.\n+# SPDX-FileCopyrightText: All rights reserved.\n+# SPDX-License-Identifier: Apache-2.0\n+#\n+# Licensed under the Apache License, Version 2.0 (the \"License\");\n+# you may not use this file except in compliance with the License.\n+# You may obtain a copy of the License at\n+#\n+#     http://www.apache.org/licenses/LICENSE-2.0\n+#\n+# Unless required by applicable law or agreed to in writing, software\n+# distributed under the License is distributed on an \"AS IS\" BASIS,\n+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n+# See the License for the specific language governing permissions and\n+# limitations under the License.\n+\n+\"\"\"``NonDimensionalizeByMetadata`` geometry scaling is applied once per chain.\"\"\"\n+\n+import torch\n+from tensordict import TensorDict\n+\n+from physicsnemo.mesh import Mesh\n+\n+from nondim import NonDimensionalizeByMetadata\n+\n+L_REF, U_INF = 0.4, 10.0\n+\n+\n+def _mesh() -> Mesh:\n+    return Mesh(\n+        points=torch.randn(6, 3),\n+        cells=torch.arange(6).view(2, 3),\n+        point_data=TensorDict({\"velocity\": torch.randn(6, 3)}, batch_size=[6]),\n+        cell_data=TensorDict(\n+            {\"prescribed\": {\"velocity\": torch.randn(2, 3)}}, batch_size=[2]\n+        ),\n+        global_data=TensorDict(\n+            {\n+                \"U_inf\": torch.tensor([U_INF, 0.0, 0.0]),\n+                \"rho_inf\": torch.tensor(1.225),\n+                \"p_inf\": torch.tensor(0.0),\n+                \"L_ref\": torch.tensor(L_REF),\n+            },\n+            batch_size=[],\n+        ),\n+    )\n+\n+\n+def test_geometry_is_scaled_by_default():\n+    \"\"\"A single instance divides coordinates by L_ref and velocity by |U_inf|.\"\"\"\n+    mesh = _mesh()\n+    out = NonDimensionalizeByMetadata({\"velocity\": \"velocity\"})(mesh)\n+    assert torch.allclose(out.points, mesh.points / L_REF)\n+    assert torch.allclose(\n+        out.point_data[\"velocity\"], mesh.point_data[\"velocity\"] / U_INF\n+    )\n+\n+\n+def test_second_instance_leaves_geometry_alone():\n+    \"\"\"With scale_geometry=False the second instance scales fields only.\"\"\"\n+    mesh = _mesh()\n+    once = NonDimensionalizeByMetadata({\"velocity\": \"velocity\"})(mesh)\n+    twice = NonDimensionalizeByMetadata(\n+        {\"prescribed.velocity\": \"velocity\"},\n+        association=\"cell_data\",\n+        scale_geometry=False,\n+    )(once)\n+    assert torch.allclose(twice.points, mesh.points / L_REF)  # not / L_REF**2\n+    assert torch.allclose(\n+        twice.cell_data[\"prescribed\", \"velocity\"],\n+        mesh.cell_data[\"prescribed\", \"velocity\"] / U_INF,\n+    )\n+\n+\n+def test_inverse_respects_scale_geometry():\n+    \"\"\"Inverting both instances restores geometry and fields exactly once.\"\"\"\n+    mesh = _mesh()\n+    first = NonDimensionalizeByMetadata({\"velocity\": \"velocity\"})\n+    second = NonDimensionalizeByMetadata(\n+        {\"prescribed.velocity\": \"velocity\"},\n+        association=\"cell_data\",\n+        scale_geometry=False,\n+    )\n+    back = first.inverse(second.inverse(second(first(mesh))))\n+    assert torch.allclose(back.points, mesh.points, atol=1e-6)\n+    assert torch.allclose(\n+        back.point_data[\"velocity\"], mesh.point_data[\"velocity\"], atol=1e-6\n+    )\n+    assert torch.allclose(\n+        back.cell_data[\"prescribed\", \"velocity\"],\n+        mesh.cell_data[\"prescribed\", \"velocity\"],\n+        atol=1e-6,\n+    )"
+    }
+  ]
+}

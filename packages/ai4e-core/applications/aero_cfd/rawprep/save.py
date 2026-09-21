@@ -2,7 +2,7 @@
 
 import warnings
 from pathlib import Path
-from typing import TypedDict
+from typing import NotRequired, TypedDict
 
 from ai4e_core.abilities.data.save import encode_field, write_named_tensors
 from ai4e_core.abilities.data.save.store import BackupCleanupWarning
@@ -24,6 +24,11 @@ class SampleResult(TypedDict):
     filters: dict[str, list[str]]
     skipped: list[str]
     warnings: list[str]
+    formats: NotRequired[list[str]]
+    format_filemaps: NotRequired[dict[str, dict[str, str]]]
+    assets: NotRequired[list[str]]
+    identity_assets: NotRequired[list[str]]
+    meshes: NotRequired[dict[str, str]]
 
 
 def sample_destination(config: dict, sample: str | Path | None) -> Path:
@@ -154,4 +159,8 @@ def write_tensors(ctx: dict) -> dict[str, SampleResult]:
     if extras:
         result["assets"] = list(extras)
         result["identity_assets"] = ["field-identities.json"]
+    if ctx.get("vtkhdf"):
+        # 平台清单显式建立领域到规范网格的映射；下游不猜文件名，
+        # 复制数据集后也不需要返回原始 VTK 来源寻找拓扑。
+        result["meshes"] = {domain: domain + ".vtkhdf" for domain in ctx["data"]}
     return {"result": result}

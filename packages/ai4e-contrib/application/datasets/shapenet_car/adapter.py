@@ -30,7 +30,11 @@ def open_dataset(*, root, manifest=None, samples="all", partition="official", ch
         metadata = yaml.safe_load(path.read_text())
         if metadata.get("version") != 1:
             raise ValueError("不支持的原始数据 manifest 版本")
-        if partition in {"official", "unsplit"}:
+        if isinstance(partition, Mapping):
+            # 页面/配置可以直接传入显式分片映射；先判断映射类型，避免
+            # 将 dict 放进字符串集合 membership 时触发 unhashable 错误。
+            groups = dict(partition)
+        elif partition in {"official", "unsplit"}:
             source = path.parent / metadata["partition"]
             groups = yaml.safe_load(source.read_text())
             expected = groups.pop("expected", {})
@@ -44,8 +48,6 @@ def open_dataset(*, root, manifest=None, samples="all", partition="official", ch
                         for name in groups.get(split, [])
                     ]
                 }
-        elif isinstance(partition, Mapping):
-            groups = dict(partition)
         else:
             groups = yaml.safe_load(Path(partition).read_text())
         if not groups or set(groups) - {"train", "eval", "test"}:

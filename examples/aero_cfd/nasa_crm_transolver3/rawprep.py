@@ -6,40 +6,15 @@ sys.dont_write_bytecode = True
 from configuration import application_parameters, load_components, load_configuration
 
 from ai4e_core import run
-from ai4e_core.applications.aero_cfd import rawprep as pre
+from ai4e_core.applications.aero_cfd.rawprep import physical
 
 
 def rawprep(cfg):
-    """交付本次成功处理的数据清单，检查模式不发布数据。"""
-    config = application_parameters(cfg, session=run.TrainingRun())
+    """按 NASA 物理字段契约交付完整数据清单。"""
+    session = run.TrainingRun()
+    config = application_parameters(cfg, session=session)
     components = load_components(cfg)
-    source = pre.open_source(component=components.dataset, settings=config["dataset"])
-
-    # 仅登记；每个样本在 run.execute 中才读取和计算。
-    data = pre.read(source, sources=cfg.rawprep.sources)
-    data = pre.extract_fields(
-        data, fields=cfg.rawprep.fields, extraction=cfg.rawprep.get("extraction")
-    )
-    data = pre.derive_geometry(data, features=cfg.rawprep.geometry)
-    data = pre.select_fields(
-        data, fields=cfg.rawprep.save_fields, extraction=cfg.rawprep.get("extraction")
-    )
-    data = pre.validate_fields(data)
-    data = pre.filter_points(data, filters=cfg.rawprep.filters)
-    data = pre.validate_fields(data)
-    data = pre.encode(
-        data,
-        **(
-            {"formats": list(cfg.rawprep.formats)}
-            if "formats" in cfg.rawprep
-            else {"format": cfg.rawprep.get("format", "pt")}
-        ),
-        vtkhdf=cfg.rawprep.vtkhdf,
-    )
-
-    results = run.execute(data, save=pre.save_sample, output=config["paths"]["datasets"])
-    statistics = pre.compute_statistics(results, settings=cfg.rawprep.statistics)
-    return pre.publish_dataset(results, statistics=statistics, session=run.TrainingRun())
+    return physical.execute(config, components.dataset, run.execute, session)
 
 
 if __name__ == "__main__":

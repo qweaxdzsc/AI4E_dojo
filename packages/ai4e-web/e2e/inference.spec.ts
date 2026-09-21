@@ -294,7 +294,7 @@ test("提交失败保留幂等身份与选择；换分片保留样本", async ({
   expect(state.submitted[0].idempotency_key).toBe(
     state.submitted[1].idempotency_key,
   );
-  await page.getByRole("tab", {name:/验证集/}).click();
+  await page.getByRole("tab", {name:/评价集/}).click();
   await expect(page.getByRole("checkbox",{name:"选择样本 car-c"})).not.toBeChecked();
   await page.getByRole("tab", {name:/测试集/}).click();
   await expect(page.getByRole("checkbox",{name:"选择样本 car-a",exact:true})).toBeChecked();

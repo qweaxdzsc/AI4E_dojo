@@ -46,3 +46,10 @@ def predict_split(
             "derived_fields": descriptions,
         },
     )
+
+
+def predict_named_trajectories(*args, **kwargs):
+    """按显式时间和通道解码固定轨迹，复用具名物理结果交付。"""
+    from ai4e_core.applications.parametric_pde.infer import predict_fields
+
+    return predict_fields(*args, **kwargs)

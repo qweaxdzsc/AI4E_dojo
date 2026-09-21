@@ -278,6 +278,13 @@ test('训练设置只选已准备数据集即可开训，提交不含准备步�
  await expect(page.getByRole('combobox',{name:'训练切片'})).toBeVisible();
  await expect(page.getByText('训练集（2）').first()).toBeVisible();
  await expect(page.getByRole('button',{name:'开始训练'})).toBeEnabled();
+ await page.locator('label.train-combo',{has:page.getByRole('combobox',{name:'训练切片'})}).locator('.ant-select-selector').click();
+ await page.locator('.ant-select-item-option').filter({hasText:'评价集（0）'}).click();
+ await expect(page.getByRole('button',{name:'开始训练'})).toBeDisabled();
+ await expect(page.getByText('所选切片没有样本',{exact:true})).toBeVisible();
+ await page.locator('label.train-combo',{has:page.getByRole('combobox',{name:'训练切片'})}).locator('.ant-select-selector').click();
+ await page.locator('.ant-select-item-option').filter({hasText:'训练集（2）'}).click();
+ await expect(page.getByRole('button',{name:'开始训练'})).toBeEnabled();
  await page.getByRole('radio',{name:'继续训练'}).click();
  await expect(page.getByRole('button',{name:'开始训练'})).toBeDisabled();
  await expect(page.getByText('请先选择检查点',{exact:true})).toBeVisible();
@@ -314,7 +321,7 @@ test('训练设置开始训练后进入运行页只监控',async({page})=>{
    if(req.method()==='PUT'){revision='r2';return route.fulfill({json:{revision,config:{train:req.postDataJSON().values}}});}
    return route.fulfill({json:{revision,stage:'train',values:{max_epochs:2},capabilities:{training_options:{optimizer:['adamw']},official_combos:{current_model_id:'abupt',options:[]}}}});
   }
-  if(url.pathname.endsWith('/stage-inputs'))return route.fulfill({json:[{binding:'inputs.train.preparation',run_id:'prep1xxxx',name:'preparation.json',processed_name:'shapenet_car',selected:false,ref:{asset_id:'p',revision:'v1'}}]});
+  if(url.pathname.endsWith('/stage-inputs'))return route.fulfill({json:[{binding:'inputs.train.preparation',run_id:'prep1xxxx',name:'preparation.json',processed_name:'shapenet_car',selected:false,ref:{asset_id:'p',revision:'v1'},slices:[{name:'train',role:'train',label:'训练集',count:2,method:'random',seed:0},{name:'test',role:'test',label:'测试集',count:1,method:'random',seed:0},{name:'eval',role:'eval',label:'评价集',count:0,method:'random',seed:0}]}]});
   if(url.pathname.endsWith('/stages/train/operations'))return route.fulfill({json:{id:'train-1',status:'queued',stages:['train']}});
   if(url.pathname.endsWith('/runs'))return route.fulfill({json:[{id:'train-1',status:'queued',stages:['train']}]});
   if(url.pathname.endsWith('/metrics'))return route.fulfill({json:{status:'queued',history:[]}});
@@ -390,7 +397,7 @@ test('训练设置先出配置，慢的产物列表不挡住切步',async({page}
  await page.route('**/api/v1/**',async route=>{
   const url=new URL(route.request().url());
   if(url.pathname.endsWith('/configuration'))return route.fulfill({json:{revision:'r1',stage:'train',values:{max_epochs:2,optimizer:'adamw',export_predictions:false,export_vtk:false,export_split:'test',evaluation_enabled:false},capabilities:{training_options:{optimizer:['adamw']},official_combos:{current_model_id:'abupt',options:[]}}}});
-  if(url.pathname.endsWith('/stage-inputs')){await inputs;return route.fulfill({json:[{binding:'inputs.train.preparation',run_id:'prep1xxxx',name:'preparation.json',processed_name:'shapenet_car',selected:true,ref:{asset_id:'p',revision:'v1'}}]});}
+  if(url.pathname.endsWith('/stage-inputs')){await inputs;return route.fulfill({json:[{binding:'inputs.train.preparation',run_id:'prep1xxxx',name:'preparation.json',processed_name:'shapenet_car',selected:true,ref:{asset_id:'p',revision:'v1'},slices:[{name:'train',role:'train',label:'训练集',count:2,method:'random',seed:0},{name:'test',role:'test',label:'测试集',count:1,method:'random',seed:0},{name:'eval',role:'eval',label:'评价集',count:0,method:'random',seed:0}]}]});}
   return route.fulfill({json:[]});
  });
  await page.goto('/');

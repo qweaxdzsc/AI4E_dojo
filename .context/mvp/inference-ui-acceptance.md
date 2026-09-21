@@ -93,3 +93,9 @@
 - 运行状态位于推理配置下方；无选择时开始计算按钮禁用。结果文件树显示推理批次和两个 checkpoint 目录，不再显示“固定结果文件与后处理交接”容器。
 - VTK 精确核验详见 `/Users/zonghui/work/project_simulation/dojo_train/formal-20260918-consistency/vtk-identity.json`：源 PT prediction/truth 不相等（max abs diff 104.5523529、mean abs diff 4.89271736）；经 `original_point_id` 对齐后，VTK 的 `surface.pressure.prediction` 与 `surface.pressure.truth` 分别逐值匹配源 prediction/truth，字段没有写反或被覆盖。
 - 后续健康检查返回 `{"status":"ok"}`；正式服务当前 PID 为 **48179**。
+
+## 安装副本与 rawprep 失败归因复核（2026-09-18）
+
+- 上一轮发布遗漏 `ai4e-contrib`，导致正式 `.venv` 确实没有同步当时的 contrib 源码；已按规则重装 `ai4e-contrib` 与 `ai4e-core`，并重启正式 8000（当前 PID **12681**）。
+- 重装后 ShapeNet 显式分片字典的 `unhashable type: 'dict'` 已由 `adapter.open_dataset` 分支顺序修复，相关复制适配器测试通过。
+- `test_infer_stage.py` 仍有 8 项失败，但剩余原因不是单一旧安装副本：NASA 数据集模块本身没有现行 rawprep 所需的 `open_dataset`；部分旧测试仍访问已移除的 `cfg["paths"]`；另有 `inspect_inputs` 兼容路径契约需单独迁移。此前将 8 项全部归因于旧 contrib 安装副本是不准确的，已更正。

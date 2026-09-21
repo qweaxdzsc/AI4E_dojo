@@ -6,7 +6,7 @@
 
 v1 的 **17 项业务大组 + 7 项策略**保留为后文 O/P 索引，不再把它们当作原子能力总数。修订重点：将模型与训练的大组展开；有实质计算语义的模型内部组件保留为嵌套能力，只有契约、机械辅助和薄包装被吸收。
 
-这是对当前实现的能力归类建议，**不是代码合并、公开 API 变更或拖拽节点已实现的声明**。原始 [源码明细表（89 项及新增 4 项）](abilities-inventory.md) 保留对照；本版逐条说明其归属，没有把未列入主清单的实现删除。长期功能行为仍以 [core abilities PRD](PRD/ai4e-core/abilities/PRD.md) 和 [contrib ability PRD](PRD/ai4e-contrib/ability/PRD.md) 为准。
+这是对当前实现的能力归类建议，**不是代码合并、公开 API 变更或拖拽节点已实现的声明**。原始 [源码明细表（历史基础表及后续增量）](abilities-inventory.md) 保留对照；本版逐条说明其归属，没有把未列入主清单的实现删除。长期功能行为仍以 [core abilities PRD](PRD/ai4e-core/abilities/PRD.md) 和 [contrib ability PRD](PRD/ai4e-contrib/ability/PRD.md) 为准。
 
 快速定位：[rawprep 原始处理](#stage-rawprep) · [trainprep 数据准备](#stage-trainprep) · **[model 模型能力](#stage-model) · [train 训练能力](#stage-train) · [post 后处理能力](#stage-post)**。
 
@@ -79,6 +79,7 @@ v1 的 **17 项业务大组 + 7 项策略**保留为后文 O/P 索引，不再�
 | M10 | 物理切片注意力交互 | 模型内计算单元 | 点特征 → 经物理切片聚合、交互及回贴的特征 | 切片数、头数及已有块参数 | 切片权重、token 聚合、attention/deslice 组成完整单元；Transolver 专用。 | O12 | A088 |
 | M11 | 域输出映射 | 模型内计算单元 | 域隐藏特征 → 声明输出通道 | 域输出维度及已有条件配置 | DomainReadout 的归一化、调制与输出投影合并；不等于最终物理逆变换。 | O12 | A078 |
 | M12 | 完整网络装配 | 复合模型 | 输入布局与模型结构 → 完整 AB-UPT/Transolver 网络 | 已有完整模型选项 | 组合上述计算单元；它是父容器，不与内部组件相加声称独立能力总数。 | O12 | A081、A088 |
+| M13 | 输入条件动态路由注意力 | 模型内计算单元 | 普通点/token 特征 → 同形特征 | 头数、内部宽度、路由数、输出 dropout、注意力缩放 | core 可选 FLARE++；不含残差/MLP、几何上下文或完整模型，不自动替换现有网络，无 padding/因果/token 分片/TE。 | O12 | A163 |
 
 <a id="stage-train"></a>
 
@@ -389,3 +390,12 @@ O11 与 O16 复用部分保存函数，但使用目的和输入前提不同：�
 小波布局/准备/恢复位于贡献`ability/transform/wdno`；原二维网络与日程位于`ability/model/wdno`；条件目标与采样分别位于`ability/constraint/wdno`和`ability/inference/wdno`；物理MSE位于`ability/eval/wdno`。共享数组清单归core的data/save，精确迭代训练与EMA沿用既有能力。上述路径均可直接import，不新增全仓组件协议。
 
 领域连接、参数与配置、完整研究步骤见[WDNO recipe](../recipes/wdno/README.md)，实际已跑变体见[普通函数扩展](../examples/recipe_extensions/wdno/README.md)，结果范围见[专项验收](../.context/mvp/wdno-acceptance.md)。这是基础Burgers缩小迁移；本表旧文件计数为当时快照，不表示已覆盖后续全部实现，也不表示模型自动进入Web目录。
+
+
+### FLARE++ 可选组件增量（2026-09-21）
+
+M13 属于模型内部可选计算单元，不是新的顶层流程或全局架构变化。用户在 Python 网络正文中显式组合，现有模型及默认 GALE 不变；使用与参数见 [网络组件指南](agent-help/user-components/network.md)及[公开 API](agent-help/api/core/abilities/modeling/modules/flare_attention.md)。数值和隔离安装证据见[组件验收](../.context/mvp/flare-attention-acceptance.md)，不推断整模型性能。
+
+| 原编号 | 原能力 | 归入 | 归并说明 | 源码 |
+| --- | --- | --- | --- | --- |
+| A163 | FLARE++ 动态路由注意力 | O12 | M13 保留为可选嵌套计算能力；普通张量计算归 core，不携带模型上下文或训练流程。 | [modeling/modules/flare_attention.py](../packages/ai4e-core/abilities/modeling/modules/flare_attention.py) |

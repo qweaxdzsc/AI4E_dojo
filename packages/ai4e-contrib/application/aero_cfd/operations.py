@@ -7,8 +7,9 @@ __all__ = ["evaluate", "export", "infer", "inspect"]
 
 
 def inspect(request: dict) -> dict:
-    """在领域边界转换公共配置；旧配置由离线工具显式迁移。"""
+    """在领域边界转换公共配置，并隔离检查进程的临时输出。"""
     from copy import deepcopy
+    from pathlib import Path
 
     from ai4e_core.applications.aero_cfd.inspection import execute
     from ai4e_core.base.config.conventions import normalize_recipe_config
@@ -18,8 +19,14 @@ def inspect(request: dict) -> dict:
     value = deepcopy(request)
     config = value.get("config")
     if config:
+        output = Path(value["output_dir"]).resolve()
+        output_dirs = {
+            stage: output / "workspace" / stage
+            for stage in ("rawprep", "trainprep", "infer", "post")
+        }
         bound = bind_inputs(
-            normalize_recipe_config(config, base=value.get("config_dir", "."))
+            normalize_recipe_config(config, base=value.get("config_dir", ".")),
+            output_dirs=output_dirs,
         )
         value["config"] = bound
     result = execute(value)
@@ -40,7 +47,7 @@ def infer(request: dict) -> dict:
     value = deepcopy(request)
     arguments = value.get("arguments", {})
     if "config" in arguments:
-        arguments["config"] = bind_inputs(normalize_recipe_config(
-            arguments["config"], base=arguments.get("config_dir", ".")
-        ))
+        arguments["config"] = bind_inputs(
+            normalize_recipe_config(arguments["config"], base=arguments.get("config_dir", "."))
+        )
     return inspect_artifacts(value)

@@ -54,7 +54,7 @@ base 通用配置与事件；abilities 原子计算；applications 领域步骤�
 - `packages/ai4e-core/abilities/data/filter/`：按约定单元类型核对 VTK 单元并生成有效点 mask；`coincident.py` 标与表面坐标精确重合的体积点（`exterior_mask`）；`select.py` 筛普通数组；`records.py` 对字段记录与身份统一筛选，前后校验。不删原数组。
 - `packages/ai4e-core/abilities/data/validate/`：`aligned.py` 校验首维；`fields.py` 校验组来源、归属、数量、身份与分量，返回结构化报告；`output.py` 共用输出预检。
 - `packages/ai4e-core/abilities/data/save/`：`encode.py` 编码单场；`store.py` 按映射读写张量或打包载荷，临时目录/备份/提升/恢复，不认识 cell 名字；必需项缺失失败，可选性由调用方声明。
-- `packages/ai4e-core/abilities/data/source/split.py`：按传入名单列分片并校验人数，不扫盘冒充官方顺序；准备阶段可按 `trainprep.split` 先限定执行样本再重划 train/test/eval，不改张量。阅读准备时固定给出三个切片，空切片人数为 0。
+- `packages/ai4e-core/abilities/data/source/split.py`：按传入名单列分片并校验人数，不扫盘冒充官方顺序；准备阶段可按 `trainprep.split` 先限定执行样本再重划 train/test/eval，不改张量。阅读准备时固定给出三个切片，空切片人数为 0。旧 `validation` 并进评价集。
 - `packages/ai4e-core/abilities/data/stats/`：`load.py` 读写 YAML/JSON；`moments.py` 保留尾维流式累计；`fit.py` 对具名数组流累计，不解释目录或训练分片。支持按冻结记录在训练和推理应用正反变换。
 - `packages/ai4e-core/abilities/transform/`：字段变换和可追踪逆变换；`scale.py` 是方法之后的可见放大。
 - `packages/ai4e-core/abilities/geometry/`：本切片已交付。`surface.py` 为全二维面门禁、私有表面转换及原 point ID；`nearest.py` 为点到最近表面顶点（只吃坐标）；`mesh_sdf.py` 先校验全部单元为支持的二维面再算有符号距离、面上最近点与方向；`surface_normals.py` 按原点身份回贴法向及有效性 mask，参与面法向非有限/零长度拒绝。不加 sklearn / trimesh / meshio。
@@ -71,9 +71,16 @@ base 通用配置与事件；abilities 原子计算；applications 领域步骤�
 
 - `packages/ai4e-core/applications/`：标准业务装配；只能协调公开能力，不能实现原子算法。
 - `packages/ai4e-core/applications/base/`：已交付最小 `Stage` / `Pipeline`（顺序 `ctx = step(ctx)`，按 `pipeline.stages` 选阶段）。DAG、内容缓存和 profile 仍为规划。
+- 能力归属原则：来自模型源码的图构造、变长收批、mask、rollout、轨迹评价等先按中立输入输出进入 `abilities`；只有固定模型结构、私有状态或业务字段语义无法中立化时才由 contrib 持有。MeshGraphNet 的通用图原语接入后仍不导入 contrib。
+- `abilities/data/source/tfrecord.py`：TFRecord framing、CRC 与 `tf.train.Example` bytes feature 基础解析；dtype/shape 由数据集适配器解释。
+- `abilities/geometry/mesh_graph.py`、`modeling/modules/graph_message_passing.py`：三角形双向边、sender→receiver 边特征和先边后节点的中立消息传递。
+- `abilities/geometry/mesh_graph.py`、`abilities/sampling/graph.py`：混合 VTK 单元真实边、诱导子图、稳定 BFS 核心分区与指定跳数 halo；组合分区只构造一次邻接表，不解释数据集或模型名称。
+- `abilities/training/graph_batch.py`、`transform/{noise,running_normalizer}.py`、`constraint/masked.py`：变长图收批、在线统计、噪声和可选特征归约的 mask 监督。
+- `abilities/inference/rollout.py`、`eval/trajectory.py`：边界保持的通用状态推进及累计 horizon MSE；具体节点类型由 contrib 绑定。
 - `packages/ai4e-core/applications/aero_cfd/rawprep/`：五模块公开业务步骤：`read.py` 样本发现/读取/提取及域类型；`derive.py` 可选几何装配；`select.py` 选场/组契约校验/筛选；`save.py` 实际路径/编码/提交和轻量结果，`formats` 可同时写 PT/Zarr；`descriptor.py` 合并默认时平台格式选项覆盖旧单键，不报冲突；`stats.py` 训练样本/字段/缺失策略与统计量。无批量循环，不导入 run。
 - `packages/ai4e-core/applications/aero_cfd/model/`：贡献模型引用、初始权重、冻结和学习目标装配。
 - `packages/ai4e-core/applications/aero_cfd/train/`：`fitting.py` 装配训练、评估、监控与恢复；`resolve.py` 展开默认（设备默认自动选择）并联合校验，写出预测/网格默认关闭；`export.py` 训练成功后按现行 version=2 准备调用独立锚点推理保存正文，不走旧物理准备接口；`__init__.py` 保留旧只读调用的兼容导出，读盘实现位于 trainprep/dataset.py。
+- `packages/ai4e-core/applications/aero_cfd/trainprep/topology.py`：从 manifest 声明的 VTKHDF 按 PT 原点身份对齐坐标、派生图，并按当前训练/推理核心块和 halo 预算缓存分区；缓存可删除或在预算变化后重建，共享平台数据保持只读。
 - `packages/ai4e-core/applications/aero_cfd/post/`：`stage.py` 按配置串锚点评估/保存/点云与完整网格回贴；`evaluation.py` 复用共享评估；`export.py` 提交具名张量；`mesh.py` 装配下标、原始网格与分块回贴；`inference.py` 保留分块查询，不再作为案例默认产物。
 - `packages/ai4e-core/run/`：`session.py` 展开默认、联合校验并映射 `gpu`→`cuda`；`runner.py` 读取配置并驱动管道，不解释业务路径；`execute.py` 顺序批量执行、首错/继续和轻量汇总；`writer.py` 独占运行配置、源码快照、日志和摘要写入，业务报告经 reports 交付，不写训练张量。
 - `packages/ai4e-core/tools/`：项目创建、recipe fork、组件生成和检查等非运行时工具。
@@ -311,6 +318,8 @@ applications/parametric_pde/train.py的epoch_sum先顺序汇总损失图再一�
 - `applications/aero_cfd/infer/stage.py`：唯一完整物理步骤实现，旧 post/physical 委托；通过 run.execute_many 执行有序样本。
 - `infer/configuration.py`：独立参数与旧模型内部交接。
 - `infer/inspection.py`：inspect_checkpoint、inspect_inputs、available_devices，供独立检查进程使用。预检与检查点 `effective_config` 只比权重结构、数据规格、字段角色和采样方法，不整段比 `model+sampling` 点数。
+- `infer/configuration.py`：检查进程可从保存的 `inputs.*` 公共配置重建最小业务视图，不要求管理进程依赖 contrib 装配器。
+- `abilities/data/source/manifest.py`：重挂分片时按目标分片选择同名来源记录，允许 train/test 来源各自存在同名样本。
 - `tests/integration/test_infer_inspect_contract.py`：采样点数不同可通过预检，dim/blocks 或 data_specs 不同必须拒绝。
 - `infer/fields.py`：具名派生点场的实体、单位及分量校验。
 - `infer/results.py`：固定结果读取、数组读回及严格 compare_results。
@@ -387,3 +396,41 @@ WDNO已使用公共base/config/conventions和TrainingRun.data_dir/output_dir/rec
 
 
 训练观察指标：`abilities/eval/metrics.py` 校验并只算所选三项；`evaluation.py` 可选 `metric_names` 保留默认兼容；`applications/aero_cfd/train/fitting.py` 贯通 `train.evaluation_metrics` 与重复评价，观察项不进入恢复合同；`inspection.py` 发布算法指标目录。圈定 `test_model_evaluation.py`、`test_train_loop.py`、`test_train_online_loss.py`、`test_train_recipe.py`、`test_public_api_stability.py`。
+
+## GeoTransolver 引入的中立能力
+
+- `abilities/data/source/matlab.py`、`extract/time_series.py`、`validate/time_series.py`：具名MAT、数值时间/帧组装与实体门禁。
+- `abilities/data/save/{indexed_cache,mesh_dataset}.py`、`stats/tensor_moments.py`：身份缓存、逐场PT+VTKHDF可搬移清单、显式dtype及归约顺序的统计。
+- `abilities/transform/{mesh_fields,trajectory,field_encoding}.py`、`sampling/structured_grid.py`：保留身份的转点、窗口/轨迹布局、冻结正反变换及一致网格采样。
+- `abilities/geometry/radius_query.py`：torch半径查询、CPU回退、独立邻域缓存及身份核验。
+- `abilities/modeling/modules/{projected_mlp,physics_attention,geometry_attention,context_projection,multiscale_local}.py`：实际投影、切片、GALE、上下文与局部编码；`modeling/weights.py` 增显式映射严格加载。
+- `abilities/constraint/relative_norm.py`、`training/{parameter_partition,combined_optimizer,schedule}.py`：逐样本相对范数、无遗漏分组、组合优化完整状态及真实轮次调度。
+- `abilities/inference/prediction.py`、`eval/trajectory.py`、`postproc/visualization/trajectory.py`、`report/tabular.py`：具名取批与末批预测、float64逐帧场指标、显式时间单位与表格。
+- `applications/{parametric_pde,spatiotemporal_pde}/{rawprep,trainprep,train,infer,post}.py`：新增具名场/轨迹入口，保留原入口；`applications/base/iteration_training.py`可选检查点间隔；`applications/base/array_assets.py`连接完整资产依赖。
+- `Notice/physicsnemo/{LICENSE,source.json}`：迁入core的许可及来源，随core wheel交付。功能正文见 core abilities 第十章及 applications 第十章；验收见 `.context/mvp/geotransolver-acceptance.md`。
+
+## PCNO 提取能力与地热装配
+
+`abilities/modeling/modules/{fourier4d,unet_volume,global_features}.py`、`modeling/models/fourier_unet4d.py`：谱算子、U-Net、全局融合；`constraint/{spatiotemporal_field,geothermal}.py`：监督与物理；`postproc/{wellbore,geothermal_economics}.py`：井筒与经济；`training/rotating_chunks.py`：可恢复轮换；`eval/relative_field.py`：误差。`applications/geothermal/{data,inference,post}.py`：冻结交接、双场推理、固定结果消费。`applications/base/iteration_training.py`：可选评价回调。许可 `abilities/PCNO_LICENSE`，PRD为abilities/applications现行正文。
+
+## 可选 FLARE++ 注意力
+
+- `packages/ai4e-core/README.md` 提供包入口；能力清单的 A163/M13 与 Agent Help 网络指南相互导航，均按可选模型内计算单元描述。
+
+- `packages/ai4e-core/abilities/modeling/modules/flare_attention.py`：可选 `FLAREPlusPlus` 注意力层，普通 `(B,N,C)` 张量，三次 SDPA 动态路由；不绑定模型/几何或默认启用。
+- `packages/ai4e-core/Notice/physicsnemo/flare_plus_plus.json`：独立上游 revision、源摘要和修改说明；既有 GeoTransolver 来源记录不变。
+- `tests/integration/test_flare_attention.py`、`test_flare_attention_installation.py`：上游/独立公式、梯度与更新、恢复、参数门禁及实际 wheel 仓库外使用。
+- [FLARE++ 验收](../mvp/flare-attention-acceptance.md)：组件范围、安装证据和未验证的精度/性能；长期行为在 core abilities PRD 第十章。
+
+
+## GeoTransolver 外流扩展
+
+`abilities/transform/point_features.py` 校验并拼接具名点特征；`abilities/inference/indexed_prediction.py` 实现索引分块和全覆盖回贴；`data/stats/physical.py` 增加显式坐标组。`applications/aero_cfd/trainprep/point_inputs.py` 与 `infer/point_prediction.py` 提供模型无关点流装配；`train/physical.py` 支持优化与调度构造注入。网格导出优先消费物理 VTKHDF，原身份保留。
+
+行为见对应模块 PRD；实际证据与边界见 [外流验收](../mvp/geotransolver-aero-acceptance.md)。
+
+## 圆柱时空计算
+
+`abilities/data/source/record_download.py`：版本固定的范围记录下载；`data/stats/masked_fields.py`：流式有效域统计；`modeling/models/fourier_unet3d.py`：二维时空网络；`constraint/{continuity,field_supervision}.py`：散度及监督；`eval/field_windows.py`：窗口误差；`training/iteration_stream.py`：计数恢复；`applications/spatiotemporal_pde/window_results.py`：固定结果及派生消费。
+
+功能正文见相应模块PRD；实际范围见[圆柱验收](../mvp/pcno-cylinder-acceptance.md)。

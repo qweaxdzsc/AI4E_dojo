@@ -13,9 +13,9 @@ __all__ = [
     "reconstruct_surface_topology",
 ]
 
-from .physical import LAYOUT, open_physical, physical_fields
+from .physical import LAYOUT, comparison_mesh, open_physical, physical_fields
 
-__all__ += ["LAYOUT", "open_physical", "physical_fields"]
+__all__ += ["LAYOUT", "comparison_mesh", "open_physical", "physical_fields"]
 
 
 def prepare_physical(cfg, *, executor, session):
@@ -31,9 +31,7 @@ def prepare_physical(cfg, *, executor, session):
     )
 
 
-from .physical import comparison_mesh
-
-__all__ += ["comparison_mesh", "prepare_physical"]
+__all__ += ["prepare_physical"]
 
 from .inspection import inspect_dataset
 

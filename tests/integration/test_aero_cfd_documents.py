@@ -39,8 +39,15 @@ def test_examples_share_configuration_and_explicit_domain_steps():
         )
 
 
-def test_shapenet_examples_enable_vtkhdf_nasa_does_not():
-    """ShapeNet 官方案例默认打开 VTKHDF；NASA 案例不写或关闭。"""
+def test_nasa_meshgraphnet_uses_physical_hdf_rawprep():
+    """NASA 图案例沿 HDF5 物理适配器读取，不误用 VTK 目录数据集入口。"""
+    source = (ROOT / "examples/aero_cfd/nasa_crm_meshgraphnet/rawprep.py").read_text()
+    assert "rawprep import physical" in source
+    assert "physical.execute" in source
+
+
+def test_topological_aero_examples_enable_vtkhdf():
+    """来源具有网格拓扑的外流案例显式交付 VTKHDF。"""
     root = ROOT / "examples/aero_cfd"
     for name in (
         "shapenet_car_abupt",
@@ -51,7 +58,7 @@ def test_shapenet_examples_enable_vtkhdf_nasa_does_not():
         assert cfg["rawprep"]["vtkhdf"] is True
     for name in ("nasa_crm_abupt", "nasa_crm_transolver3"):
         cfg = yaml.safe_load((root / name / "config.yaml").read_text())
-        assert (cfg.get("rawprep") or {}).get("vtkhdf") in {None, False}
+        assert cfg["rawprep"]["vtkhdf"] is True
     template = yaml.safe_load((ROOT / "recipes/aero_cfd/config.yaml").read_text())
     assert template["rawprep"]["vtkhdf"] is True
 

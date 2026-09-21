@@ -113,6 +113,25 @@ test('刷新后仍显示最近一次正式执行终态',async({page})=>{
  await expect(page.getByRole('progressbar')).toHaveAttribute('aria-valuenow','100');
 });
 
+test('样本目录刷新失败时不显示成功终态',async({page})=>{
+ page.setDefaultTimeout(15000);let catalogs=0;
+ await page.route('**/api/v1/**',async route=>{
+  const url=new URL(route.request().url());let value:any=[];
+  if(url.pathname.endsWith('/dataset'))value={revision:'r1',dataset_id:'nasa_crm',label:'NASA CRM',status:'valid',location:'files',sources:{train_h5:{root:'data1',path:'train.h5'}},errors:[],binding_schema:{mode:'files',root_key:'train_h5',slots:[]}};
+  else if(url.pathname.endsWith('/rawprep')&&!url.pathname.includes('/catalog'))value={revision:'r1',processed_name:'nasa',profile:{dataset_id:'nasa_crm',outputs:[],geometry:[],filters:[],formats:['pt'],vtkhdf:true,statistics_modes:['none'],defaults:{vtkhdf:true}},rawprep:{formats:['pt'],geometry:{},filters:{},statistics:{mode:'none'},vtkhdf:true,sources:[]}};
+  else if(url.pathname.endsWith('/rawprep/catalog')){catalogs++;if(catalogs>1){await route.fulfill({status:400,json:{detail:'目录检查失败'}});return;}value={revision:'cat',samples:[],fields:[],sources:[],errors:[]};}
+  else if(url.pathname.endsWith('/runs')||url.pathname.endsWith('/files')||url.pathname.includes('/stage-files'))value=[];
+  await route.fulfill({json:value});
+ });
+ await page.goto('/');
+ await page.evaluate(async()=>{const React=(await import('/node_modules/.vite/deps/react.js' as any)).default;const {createRoot}=(await import('/node_modules/.vite/deps/react-dom_client.js' as any)).default;const {RawprepWorkbench}=await import('/src/modules/rawprep/RawprepWorkbench.tsx' as any);document.body.innerHTML='<div id="fixture"></div>';createRoot(document.getElementById('fixture')).render(React.createElement(RawprepWorkbench,{project:'fixture',task:'task'}));});
+ await expect.poll(()=>catalogs).toBe(1);
+ await page.getByRole('button',{name:'刷新样本与字段'}).click();
+ await expect(page.getByLabel('处理进度')).toContainText('刷新失败');
+ await expect(page.getByLabel('运行日志内容')).toContainText('目录检查失败');
+ await expect(page.getByText('已按当前配置刷新样本与字段',{exact:true})).toHaveCount(0);
+});
+
 test('再执行立刻清进度且日志叠加',async({page})=>{
  page.setDefaultTimeout(15000);
  let current=snapshot('succeeded',2,2);

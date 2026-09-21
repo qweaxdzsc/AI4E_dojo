@@ -134,3 +134,41 @@ def train(cfg, *, dataset_component, model_component, session):
         stage="train",
     )
     return result
+
+
+def fit_fields(
+    *,
+    model,
+    batch,
+    objective,
+    optimizer,
+    stream,
+    session,
+    updates,
+    contract,
+    scheduler=None,
+    resume=None,
+    deadline=None,
+    cancelled=None,
+    checkpoint_every=500,
+):
+    """监督网格场预测；取批和目标注入，状态/循环复用共享训练执行。"""
+    from ai4e_core.applications.base.iteration_training import train_model
+
+    return train_model(
+        model,
+        optimizer,
+        stream,
+        batch,
+        objective,
+        session=session,
+        updates=updates,
+        contract=contract,
+        namespace="train",
+        scheduler=scheduler,
+        resume=resume,
+        deadline=deadline,
+        cancelled=cancelled,
+        max_grad_norm=None,
+        checkpoint_every=checkpoint_every,
+    )

@@ -1,6 +1,7 @@
 """B1—B3：真实 HDF5、完整点字段、来源身份与冻结准备。"""
 
 import json
+from pathlib import Path
 
 import h5py
 import numpy as np
@@ -32,7 +33,7 @@ def prepared(tmp_path):
 def test_source_identity_and_train_statistics(tmp_path):
     """B1/B2/B3：跨来源重名不混读；只有训练数据参与统计。"""
     cfg, _ = prepared(tmp_path)
-    view = nasa_crm.View(cfg.data_root)
+    view = nasa_crm.View(cfg.paths.datasets.root)
     assert {k: len(v) for k, v in view.partitions.items()} == {
         "train": 4,
         "validation": 1,
@@ -71,7 +72,7 @@ def test_resume_and_preparation_content_guard(tmp_path):
     path = tmp_path / "preparation.json"
     path.write_text(json.dumps(record))
     open_preparation(config, nasa_crm, path)
-    target = next((tmp_path / "data/train").glob("*/labels_part0.npy"))
+    target = next(Path(cfg.paths.datasets.train).glob("*/labels_part0.npy"))
     value = np.load(target)
     value[0, 0] += 1
     np.save(target, value)
@@ -107,7 +108,7 @@ def test_source_failure_variants(tmp_path, kind):
 def test_resume_does_not_trust_incomplete_commit_manifest(tmp_path):
     """B2：即使来源摘要合法，缺少文件项目的完成标记也必须重建。"""
     cfg, _ = prepared(tmp_path)
-    directory = next((tmp_path / "data/train").iterdir())
+    directory = next(Path(cfg.paths.datasets.train).iterdir())
     marker = directory / ".commit.json"
     record = json.loads(marker.read_text())
     record["files"] = {}
@@ -146,7 +147,7 @@ def test_invalid_statistics_cannot_be_frozen(invalid):
 def test_field_order_and_cross_source_point_count_guard(tmp_path):
     """B1/B3：字段排列变化和来源点数不一致不能作为合法数据消费。"""
     cfg, _ = prepared(tmp_path)
-    path = tmp_path / "data/manifest.json"
+    path = Path(cfg.paths.datasets.root) / "manifest.json"
     record = json.loads(path.read_text())
     record["fields"]["labels"].reverse()
     record["fingerprint"] = nasa_crm.manifest_digest(record)

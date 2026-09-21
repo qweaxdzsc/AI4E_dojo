@@ -17,3 +17,10 @@ def prepare_physical(reader, options: dict, output: str) -> dict:
         )
         for name, arrays in splits.items()
     }
+
+
+def prepare_named_trajectories(samples, reader, output, *, session, metadata: dict):
+    """交付带时间字段的原始网格样本，保留原 point/cell 关联及所有帧。"""
+    from ai4e_core.applications.parametric_pde.rawprep import prepare_named_fields
+
+    return prepare_named_fields(samples, reader, output, session=session, metadata=metadata)

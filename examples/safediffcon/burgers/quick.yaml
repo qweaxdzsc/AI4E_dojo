@@ -1,6 +1,6 @@
 case: burgers
 seed: 42
-run_root: ./runs
+run_root: ../runs
 model:
   dim: 64
   ddim_steps: 50
@@ -45,14 +45,14 @@ pipeline:
   - posttrain
   - infer
   - post
-data_root: ./data
+data_root: ../data
 dataset:
   name: burgers
 rawprep: {}
 trainprep: {}
 inputs:
   rawprep:
-    source: /Users/zonghui/work/datasets/1D_burger/1D Burgers_
+    source: ./inputs/1D_burger/1D Burgers_
   trainprep:
     dataset_train: null
     dataset_cal: null

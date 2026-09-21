@@ -8,8 +8,8 @@ pipeline:
   - train
   - infer
   - post
-data_root: /shared/datasets/recipe_field_mapping
-run_root: /shared/runs/recipe_field_mapping
+data_root: ./data/recipe_field_mapping
+run_root: ./runs/recipe_field_mapping
 snapshot_modules:
 - ai4e_spec
 - ai4e_contrib
@@ -246,7 +246,7 @@ infer:
   samples: []
 inputs:
   rawprep:
-    source: /shared/raw/shapenet_car
+    source: ./inputs/shapenet_car
     manifest: null
     train_h5: null
     test_h5: null

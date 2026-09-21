@@ -86,6 +86,12 @@ def flatten_samples(partitions: Mapping[str, Sequence[str]]) -> list[str]:
     return seen
 
 
+def named_slice(name: Any, default: str = "train") -> str:
+    """分片名缺省为 default；旧 validation 并进 eval。"""
+    value = str(name or default)
+    return "eval" if value == "validation" else value
+
+
 def complete_split_buckets(
     partitions: Mapping[str, Sequence[str]] | None,
 ) -> dict[str, list[str]]:
@@ -120,7 +126,7 @@ def published_slices(record: Mapping[str, Any] | None) -> list[dict[str, Any]]:
             try:
                 count = int(counts[name] or 0)
             except (TypeError, ValueError):
-                count = len(completed[name])
+                count = 0
         else:
             count = 0
         slices.append(

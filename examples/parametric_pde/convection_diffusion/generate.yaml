@@ -4,4 +4,4 @@ train: 40
 test: 1
 nx: 101
 nt: 101
-output: ../../../../../project_simulation/dojo_train/pibsnet/convection_diffusion/datasets
+output: ../data

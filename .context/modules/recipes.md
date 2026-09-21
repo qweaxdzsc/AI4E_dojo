@@ -6,6 +6,14 @@
 
 # recipes 模板索引
 
+## MeshGraphNets / CylinderFlow
+
+- `recipes/meshgraphnet/`：固定二维网格的 MeshGraphNet 时空预测流程，显式交接 rawprep、trainprep、train、infer、post；Python 决定顺序，YAML 只提供参数。
+- `docs/PRD/recipes/meshgraphnet/PRD.md`：Recipe 长期功能与使用约定。
+- `tests/integration/test_meshgraphnet_core.py`、`test_tfrecord_source.py`、`test_meshgraphnet_recipe.py`：core-first 图能力、TFRecord/轨迹适配、累计指标、直接 Recipe、固定 post、恢复和 Task 托管。
+- `.context/mvp/meshgraphnet-acceptance.md`：参考版本、真实单条官方轨迹、wheel、工程测试和论文级未验范围。
+- `.context/mvp/meshgraphnet-aero-cfd-acceptance.md`：ShapeNet-Car/NASA CRM 静态图准备、短训、完整拼回、全表面分区缓存、Task、wheel 与正式 Web rawprep；Web 模型训练/推理边界单列。
+
 - `.cursor/plans/wdno-reproduction-and-agent-composition.plan.md`：2026-09-17 按计划rules重排；基础迁移和Task适配已完成，近期补公开API新建任务及分阶段实跑、独立Agent使用；完整配置和研究脚本示例、文件职责、逐叶验收已列明，正式论文复现保留前置条件。
 ## 参数化 PDE 模板
 
@@ -27,7 +35,7 @@
 - `recipes/aero_cfd/pipeline.py`：显式顺序串接 rawprep/trainprep/train/infer/post。
 - `docs/PRD/recipes/aero_cfd/PRD.md`：模板行为与迁移。
 - `tests/integration/test_dataset_recipe.py`：复制脚本、路径、统计、失败与日志验收。
-- `tests/integration/test_aero_cfd_documents.py`：五例脚本交接，以及 ShapeNet 默认打开 / NASA 关闭 VTKHDF。
+- `tests/integration/test_aero_cfd_documents.py`：外流脚本交接、NASA HDF 物理 rawprep，以及有拓扑来源的 ShapeNet/NASA 默认打开 VTKHDF。
 - `tests/recipe_assets.py`、`tests/legacy_pre.py`、`tests/fixtures/legacy_pre.yaml`：旧行为回归夹具，不是产品入口。
 
 不包含 init/main、缓存、训练占位和用户组件目录；共享 manifest/adapter 在 contrib。
@@ -79,7 +87,7 @@ README 新增按 post-progress.json 检查部分交付、已有检查点仅补�
 - `docs/ai4s-framework-comparison.md`：Dojo 与五框架的能力比较；后续通过新模型、数据集和科研案例发现共同需求，相关建议按案例触发，不预设接入清单或前置重构。
 - `tests/integration/test_framework_comparison_document.py`：比较文档的索引与仓内证据链接检查；本次只新增参考文档和演进约定，不改变案例执行行为。
 
-examples/aero_cfd/ 下固定五个独立配置，阶段脚本基于 recipes/aero_cfd，物理流程以对应公开步骤显式编写；新增 nasa_crm_abupt、shapenet_car_transolver3_surface、shapenet_car_transolver3_volume。三个 ShapeNet 案例 `rawprep.vtkhdf` 默认打开；NASA 案例不写该键，沿用清单未接入。
+examples/aero_cfd/ 下有七个独立配置，阶段脚本基于 recipes/aero_cfd，物理流程以对应公开步骤显式编写；除原五例外，新增 ShapeNet-Car 与 NASA CRM 两个静态 MeshGraphNet 案例。`trainprep.topology` 存在时从平台 VTKHDF 派生图，否则保持原锚点路径。所有 ShapeNet 与 NASA 案例均打开 VTKHDF；NASA HDF 来源使用其物理 rawprep 步骤，数据集清单默认支持网格交付。
 
 状态与圈定测试见 `.context/mvp/cross-model-acceptance.md`。
 
@@ -149,7 +157,7 @@ tools/verification/pibsnet/source_dojo.py执行独立生成、来源预检、实
 
 ## 独立推理与结果消费
 
-- `recipes/aero_cfd/infer.py` 与五个 `examples/aero_cfd/*/infer.py`：显式步骤，独立运行或 pipeline 中选择 infer。
+- `recipes/aero_cfd/infer.py` 与七个 `examples/aero_cfd/*/infer.py`：显式步骤，独立运行或 pipeline 中选择 infer；图案例走完整物理拼回，原五例保留锚点兼容路径。
 历史说明（已被公共 pipeline/config 与 inputs 约定取代）：`recipes/aero_cfd/legacy-profile.json`：六套模板在独立推理迁移前的 36 份完整 Python 脚本及 AST 摘要，保留历史来源记录；当前宿主以 task-entry 的操作声明判断支持范围。
 - 六份 configuration.py：支持 infer 参数及阶段顺序；config.yaml 仍写旧 `export_vtk`（未拆键时同时开关点云与网格化），源码已接受 `export_pointcloud` / `export_mesh`。`infer.py` 只调用 application 装配，不直接写 VTK。
 - 六份 post.py：固定推理结果读取；旧归档 post-only 仍走原计算；新模板不再提供预测开关，数值对照通过独立验证工具进行。
@@ -223,3 +231,24 @@ WDNO protocol-update补验：recipe、burgers_base example、extension分别复�
 ## 研究变体任务入口
 
 [研究导航](../tasks/research.md) 按任务链接当前模板、示例和测试。`examples/recipe_extensions/wdno/variant_training.py` 是局部训练函数覆盖文件；先复制完整recipes/wdno。`examples/recipe_extensions/model_block/variants.py` 是AB-UPT内部激活变体，README给出复制和components.model选择。普通原模板不因共享执行重构批量修改。
+
+## GeoTransolver 双案例
+
+`recipes/geotransolver/{darcy,bumper_beam}/` 每例九个完整文件：README/config/configuration/rawprep/trainprep/train/infer/post/pipeline。显式连接core能力与贡献语义；同样正文复制至 `examples/geotransolver/`。`examples/recipe_extensions/geotransolver/variants.py`替换损失、保存误差数组并独立消费。PRD见 `docs/PRD/recipes/geotransolver/PRD.md`；状态与真实证据见 `.context/mvp/geotransolver-acceptance.md`。
+
+## PCNO 双场流程
+
+`recipes/pcno/` 与 `examples/geothermal/pcno/`：完整五阶段脚本与配置。`examples/recipe_extensions/pcno/`：替换构造器、插入温降保存与下游消费。PRD见 `docs/PRD/recipes/pcno/PRD.md`。实际证据与范围见 `../mvp/pcno-acceptance.md`。
+
+
+## GeoTransolver 外流扩展
+
+`recipes/geotransolver/{shapenet_car,nasa_crm}/` 为两个完整九文件案例；安装资源位于 `examples/aero_cfd/{shapenet_car,nasa_crm}_geotransolver/`；`examples/recipe_extensions/geotransolver_aero/` 替换 L1 并保存、消费绝对误差。
+
+行为见对应模块 PRD；实际证据与边界见 [外流验收](../mvp/geotransolver-aero-acceptance.md)。
+
+## PCNO圆柱案例
+
+`recipes/pcno_cylinder/`、`examples/pcno/double_cylinder/`：显式阶段正文；`examples/recipe_extensions/pcno_cylinder/`：普通构造器替换和速度模长消费。`examples/pcno/cylinder_flow/README.md`只记录准入阻断，不登记可训练案例。
+
+功能正文见相应模块PRD；实际范围见[圆柱验收](../mvp/pcno-cylinder-acceptance.md)。

@@ -11,7 +11,7 @@ test('从首页完成两权重三分片推理、导出及固定结果交接',asy
  await page.setViewportSize({width:1672,height:941});await page.goto('/projects');const card=page.locator('.projectgrid .taskcard').filter({hasText:'真实 CFD 推理验收'});await card.getByRole('link',{name:'进入项目',exact:true}).click();await page.getByRole('link',{name:'进入工作台',exact:true}).click();await page.locator('.workbench-steps').getByRole('link',{name:/^推理 ·/}).click();
  const response=await request.get(base+'/checkpoints');expect(response.ok()).toBeTruthy();const catalog=await response.json();
  for(const id of context.checkpoint_ids){const cp=catalog.items.find((c:any)=>c.id===id);expect(cp).toBeTruthy();await page.getByRole('checkbox',{name:`选择检查点 ${cp.name} · ${cp.run_id}`,exact:true}).check();}
- const samplePanel=page.locator('[data-region="samples"]');for(const ref of context.sample_selection){const title={train:'训练集',eval:'验证集',validation:'验证集',test:'测试集'}[ref.split as string];await samplePanel.getByRole('tab',{name:new RegExp(title!)}).click();await samplePanel.getByRole('checkbox',{name:'选择样本 '+ref.sample,exact:true}).check();}
+ const samplePanel=page.locator('[data-region="samples"]');for(const ref of context.sample_selection){const title={train:'训练集',eval:'评价集',validation:'评价集',test:'测试集'}[ref.split as string];await samplePanel.getByRole('tab',{name:new RegExp(title!)}).click();await samplePanel.getByRole('checkbox',{name:'选择样本 '+ref.sample,exact:true}).check();}
  await expect(samplePanel).toContainText('已选择 3 / 3 个');await page.locator('[data-region="settings"] .ant-select').click();await page.locator('.ant-select-item-option').filter({hasText:'CPU'}).click();await page.getByRole('spinbutton',{name:'推理查询块大小'}).fill('1024');
  const checkResponse=page.waitForResponse(r=>r.url().endsWith('/inference/check'));await page.getByRole('button',{name:'检查推理配置',exact:true}).click();const checked=await checkResponse;expect(checked.ok(),await checked.text()).toBeTruthy();await expect(page.getByText('检查通过；尚未提交推理')).toBeVisible({timeout:60000});
  const submission=page.waitForResponse(r=>r.url().endsWith('/inference/batches')&&r.request().method()==='POST');await page.getByRole('button',{name:'开始计算',exact:true}).click();const sent=await submission;expect(sent.ok(),await sent.text()).toBeTruthy();const batchId=(await sent.json()).id;
@@ -55,7 +55,7 @@ test('真实CFD只评价、进程中断恢复、取消与任务隔离',async({pa
  const before=await (await request.get(`/api/v1/projects/${c.project}/tasks/${c.task}/configuration`)).json();
  await page.goto(url);const catalog=await (await request.get(base+'/checkpoints')).json();
  for(const id of c.checkpoint_ids){const cp=catalog.items.find((v:any)=>v.id===id);await page.getByRole('checkbox',{name:`选择检查点 ${cp.name} · ${cp.run_id}`,exact:true}).check();}
- for(const ref of c.sample_selection){await page.locator('[data-region="samples"]').getByRole('tab',{name:new RegExp(({train:'训练集',eval:'验证集',test:'测试集'} as any)[ref.split])}).click();await page.getByRole('checkbox',{name:'选择样本 '+ref.sample,exact:true}).check();}
+ for(const ref of c.sample_selection){await page.locator('[data-region="samples"]').getByRole('tab',{name:new RegExp(({train:'训练集',eval:'评价集',test:'测试集'} as any)[ref.split])}).click();await page.getByRole('checkbox',{name:'选择样本 '+ref.sample,exact:true}).check();}
  await page.getByRole('checkbox',{name:'导出点云数据',exact:true}).uncheck();await page.getByRole('checkbox',{name:'导出VTK网格化数据',exact:true}).uncheck();
  await page.locator('[data-region="settings"] .ant-select').click();await page.locator('.ant-select-item-option').filter({hasText:'CPU'}).click();
  async function submit(){const p=page.waitForResponse(r=>r.url().endsWith('/inference/batches')&&r.request().method()==='POST');await page.getByRole('button',{name:'开始计算',exact:true}).click();const r=await p;expect(r.ok(),await r.text()).toBeTruthy();return (await r.json()).id as string;}
@@ -150,7 +150,7 @@ test('真实目录搜索排序筛选与全选取消名单准确',async({page,req
  const cpPanel=page.locator('[data-region="checkpoints"]');await cpPanel.getByRole('textbox',{name:'搜索检查点'}).fill(c.checkpoint_ids[0].split(':')[0]);await expect(cpPanel.locator('.infer-choice')).toHaveCount(catalog.items.filter((v:any)=>v.run_id===c.checkpoint_ids[0].split(':')[0]).length);await cpPanel.getByRole('textbox',{name:'搜索检查点'}).fill('');
  await cpPanel.getByRole('button',{name:/排序/}).click();await page.locator('.ant-select').filter({has:page.getByRole('combobox',{name:'检查点排序方式'})}).click();await page.locator('.ant-select-item-option').filter({hasText:'名称'}).click();await cpPanel.getByRole('button',{name:/排序/}).click();
  const samples=page.locator('[data-region="samples"]');for(const ref of c.sample_selection){
-  await samples.getByRole('tab',{name:new RegExp(({train:'训练集',eval:'验证集',test:'测试集'} as any)[ref.split])}).click();
+  await samples.getByRole('tab',{name:new RegExp(({train:'训练集',eval:'评价集',test:'测试集'} as any)[ref.split])}).click();
   await samples.getByRole('textbox',{name:'搜索推理样本'}).fill(ref.sample);await samples.getByRole('button',{name:/排序/}).click();
   await samples.getByRole('checkbox',{name:/全选当前页/}).check();await samples.getByRole('checkbox',{name:/全选当前页/}).uncheck();await samples.getByRole('checkbox',{name:/全部筛选范围/}).check();await samples.getByRole('textbox',{name:'搜索推理样本'}).fill('');
  }

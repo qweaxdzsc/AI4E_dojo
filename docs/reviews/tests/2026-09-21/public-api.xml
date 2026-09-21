@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="2" tests="35" time="8.545" timestamp="2026-09-21T02:03:26.502748+08:00" hostname="zonghuideMacBook-Pro.local"><testcase classname="tests.integration.test_agent_help" name="test_generated_help_is_current" time="6.666"><failure message="subprocess.CalledProcessError: Command '['uv', 'run', '--no-sync', 'python', 'tools/docs/build_agent_help.py', '--check']' returned non-zero exit status 1.">def test_generated_help_is_current():
+&gt;       subprocess.run(
+            ["uv", "run", "--no-sync", "python", "tools/docs/build_agent_help.py", "--check"],
+            cwd=ROOT,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+tests/integration/test_agent_help.py:76: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+input = None, capture_output = True, timeout = None, check = True
+popenargs = (['uv', 'run', '--no-sync', 'python', 'tools/docs/build_agent_help.py', '--check'],)
+kwargs = {'cwd': PosixPath('/Users/zonghui/work/new_code_project/AI4E_Dojo'), 'text': True, 'stdout': -1, 'stderr': -1}
+
+    def run(*popenargs,
+            input=None, capture_output=False, timeout=None, check=False, **kwargs):
+        """Run command with arguments and return a CompletedProcess instance.
+    
+        The returned instance will have attributes args, returncode, stdout and
+        stderr. By default, stdout and stderr are not captured, and those attributes
+        will be None. Pass stdout=PIPE and/or stderr=PIPE in order to capture them,
+        or pass capture_output=True to capture both.
+    
+        If check is True and the exit code was non-zero, it raises a
+        CalledProcessError. The CalledProcessError object will have the return code
+        in the returncode attribute, and output &amp; stderr attributes if those streams
+        were captured.
+    
+        If timeout (seconds) is given and the process takes too long,
+         a TimeoutExpired exception will be raised.
+    
+        There is an optional argument "input", allowing you to
+        pass bytes or a string to the subprocess's stdin.  If you use this argument
+        you may not also use the Popen constructor's "stdin" argument, as
+        it will be used internally.
+    
+        By default, all communication is in bytes, and therefore any "input" should
+        be bytes, and the stdout and stderr will be bytes. If in text mode, any
+        "input" should be a string, and stdout and stderr will be strings decoded
+        according to locale encoding, or by "encoding" if set. Text mode is
+        triggered by setting any of text, encoding, errors or universal_newlines.
+    
+        The other arguments are the same as for the Popen constructor.
+        """
+        if input is not None:
+            if kwargs.get('stdin') is not None:
+                raise ValueError('stdin and input arguments may not both be used.')
+            kwargs['stdin'] = PIPE
+    
+        if capture_output:
+            if kwargs.get('stdout') is not None or kwargs.get('stderr') is not None:
+                raise ValueError('stdout and stderr arguments may not be used '
+                                 'with capture_output.')
+            kwargs['stdout'] = PIPE
+            kwargs['stderr'] = PIPE
+    
+        with Popen(*popenargs, **kwargs) as process:
+            try:
+                stdout, stderr = process.communicate(input, timeout=timeout)
+            except TimeoutExpired as exc:
+                process.kill()
+                if _mswindows:
+                    # Windows accumulates the output in a single blocking
+                    # read() call run on child threads, with the timeout
+                    # being done in a join() on those threads.  communicate()
+                    # _after_ kill() is required to collect that and add it
+                    # to the exception.
+                    exc.stdout, exc.stderr = process.communicate()
+                else:
+                    # POSIX _communicate already populated the output so
+                    # far into the TimeoutExpired exception.
+                    process.wait()
+                raise
+            except:  # Including KeyboardInterrupt, communicate handled that.
+                process.kill()
+                # We don't call process.wait() as .__exit__ does that for us.
+                raise
+            retcode = process.poll()
+            if check and retcode:
+&gt;               raise CalledProcessError(retcode, process.args,
+                                         output=stdout, stderr=stderr)
+E               subprocess.CalledProcessError: Command '['uv', 'run', '--no-sync', 'python', 'tools/docs/build_agent_help.py', '--check']' returned non-zero exit status 1.
+
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py:571: CalledProcessError</failure></testcase><testcase classname="tests.integration.test_agent_help" name="test_ability_application_and_recipe_symbols_are_covered" time="0.199" /><testcase classname="tests.integration.test_agent_help" name="test_core_run_and_task_public_exports_are_covered" time="0.011" /><testcase classname="tests.integration.test_agent_help" name="test_topic_schema_paths_and_coverage_counts_are_consistent" time="0.244" /><testcase classname="tests.integration.test_agent_help" name="test_every_symbol_has_page_anchor_and_required_sections" time="0.189" /><testcase classname="tests.integration.test_agent_help" name="test_all_manifest_cases_have_help_pages" time="0.010" /><testcase classname="tests.integration.test_agent_help" name="test_installable_help_has_no_repository_only_dependency" time="0.024" /><testcase classname="tests.integration.test_example_contract" name="test_case_manifest_has_only_two_case_types_and_complete_standalones" time="0.002" /><testcase classname="tests.integration.test_example_contract" name="test_examples_do_not_contain_development_paths_or_internal_navigation" time="0.014" /><testcase classname="tests.integration.test_example_contract" name="test_declared_recipe_stage_files_are_byte_identical" time="0.005" /><testcase classname="tests.integration.test_example_contract" name="test_agent_resources_are_public_and_portable[DOJO_AGENT_GUIDE.md]" time="0.000" /><testcase classname="tests.integration.test_example_contract" name="test_agent_resources_are_public_and_portable[.agents/skills/dojo-research/SKILL.md]" time="0.000" /><testcase classname="tests.integration.test_example_contract" name="test_agent_resources_define_one_primary_entry_per_agent_capability" time="0.000" /><testcase classname="tests.integration.test_example_contract" name="test_agent_resources_contain_executable_python_api_contract" time="0.009" /><testcase classname="tests.integration.test_example_core_runs" name="test_five_research_workflows_expose_direct_core_entry[aero_cfd.shapenet_car_transolver3_surface]" time="0.001" /><testcase classname="tests.integration.test_example_core_runs" name="test_five_research_workflows_expose_direct_core_entry[parametric_pde.neumann_diffusion]" time="0.000" /><testcase classname="tests.integration.test_example_core_runs" name="test_five_research_workflows_expose_direct_core_entry[gencp.turek_hron_cno]" time="0.001" /><testcase classname="tests.integration.test_example_core_runs" name="test_five_research_workflows_expose_direct_core_entry[safediffcon.burgers]" time="0.001" /><testcase classname="tests.integration.test_example_core_runs" name="test_five_research_workflows_expose_direct_core_entry[wdno.burgers_base]" time="0.000" /><testcase classname="tests.integration.test_example_core_runs" name="test_neumann_stage_scripts_use_public_launch" time="0.000" /><testcase classname="tests.integration.test_example_core_runs" name="test_neumann_direct_core_smoke" time="0.000"><skipped type="pytest.skip" message="显式开启仓库外 Neumann smoke">/Users/zonghui/work/new_code_project/AI4E_Dojo/tests/integration/test_example_core_runs.py:46: 显式开启仓库外 Neumann smoke</skipped></testcase><testcase classname="tests.integration.test_example_task_runs" name="test_task_api_accepts_copied_case" time="0.031" /><testcase classname="tests.integration.test_example_task_runs" name="test_neumann_task_smoke_and_resume" time="0.000"><skipped type="pytest.skip" message="显式开启 Neumann Task smoke">/Users/zonghui/work/new_code_project/AI4E_Dojo/tests/integration/test_example_task_runs.py:24: 显式开启 Neumann Task smoke</skipped></testcase><testcase classname="tests.integration.test_task_resources" name="test_resource_manifest_and_checks" time="0.004" /><testcase classname="tests.integration.test_task_resources" name="test_copy_standalone_rejects_non_empty_target" time="0.004" /><testcase classname="tests.integration.test_task_resources" name="test_copy_extension_materializes_base_and_provenance" time="0.007" /><testcase classname="tests.integration.test_task_resources" name="test_guide_export_and_source_location_do_not_create_agents" time="0.184" /><testcase classname="tests.integration.test_task_resources" name="test_help_search_topic_symbol_and_export" time="0.154" /><testcase classname="tests.integration.test_task_resources" name="test_resource_commands_do_not_import_training_stack" time="0.103" /><testcase classname="tests.integration.test_task_resources" name="test_help_cli_wraps_python_api" time="0.464" /><testcase classname="tests.integration.test_task_resources" name="test_documented_agent_python_apis_are_public" time="0.005" /><testcase classname="tests.integration.test_research_navigation" name="test_research_task_routes_and_links" time="0.001" /><testcase classname="tests.integration.test_research_navigation" name="test_inventory_signatures_are_locatable" time="0.001" /><testcase classname="tests.integration.test_research_navigation" name="test_every_configuration_is_classified_without_claiming_runtime" time="0.075" /><testcase classname="tests.integration.test_research_navigation" name="test_history_remains_accessible_and_current_rules_are_small" time="0.001" /></testsuite></testsuites>

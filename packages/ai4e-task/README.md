@@ -70,3 +70,29 @@ run = task.submit_run(project, consumer_id, overrides=["pipeline.stages=[trainpr
 入口可选 `shared_outputs` 声明生产阶段、名称键、清单与消费绑定；`stage_inputs` 声明输入的使用阶段及 `provided_by` 前序生产方。原 `outputs` 通过 `{shared_<group>_dir}` 取得受控目录。未知自定义入口不自动追加声明，显式空声明保持原意。
 
 迁移已有登记条目时可用 `migrate_shared_datasets(project, sources={"登记名称": "正式运行ID"})` 精确预览；带 `dry_run=False` 才复制。省略 sources 沿用按配置名称选最新正式运行；空映射不迁移，试跑与失败来源拒绝。
+
+## 研究案例资源与执行边界
+
+`ai4e_core.run.launch` 是 standalone 的首选入口；`ai4e_task` Python API 在需要代码快照、资产、后台运行、停止、恢复或比较时托管同一份案例目录。CLI 只是便利包装，不能把命令成功当成训练成功。
+
+安装资源门面位于 `ai4e_task.templates.resources`，只读取 `case-manifest.json`、文本和文件树，不导入案例、模型或训练栈。它支持 standalone 完整复制、extension 的 base-plus-overlay 物化、provenance、guide/skill 导出和当前解释器源码定位。目标目录非空、未知案例、缺基案例、未声明冲突和路径污染会明确失败；物化不会绑定本机数据、启动任务或创建 `task-entry.json`。
+
+`example smoke-data create` 是唯一会按需加载 `ai4e-contrib` 的资源命令，默认生成 Neumann train 2、test 1、7×7 CPU 数据。数据、准备、检查点、预测、指标和 post 结果必须由 direct-core 或 Task 运行读回；smoke 只证明流程接线和恢复，不证明精度。
+
+便利命令为：`ai4e guide`、`ai4e guide export --to <目录>`、`ai4e source <模块名>`、`ai4e example list`、`ai4e example copy <案例ID> --to <目录>`、`ai4e example check <案例ID>` 与 `ai4e example smoke-data create --to <目录>`。这些命令只做资源定位、复制或显式数据生成，不加载案例训练栈。
+
+## Agent Help Center
+
+安装资源包含完整 `docs/agent-help/`，它是研究 API、工作流、recipe、用户组件、案例和故障说明的唯一详细正文。支持 Agent Skills 的环境先从 `dojo-research` skill 路由；不支持 skill 时从 `DOJO_AGENT_GUIDE.md` 定位帮助中心。
+
+```python
+import ai4e_task as task
+
+print(task.help_info())
+hits = task.search_help("替换损失并恢复训练", limit=5)
+topic = task.read_help_topic(hits[0]["topic_id"])
+symbol = task.describe_help_symbol("ai4e_core.run.launch")
+task.export_help("./offline-help")
+```
+
+`list_help_topics` 支持按 kind、layer、domain 和 case 过滤。所有帮助操作只读取静态 Markdown 与 JSON/JSONL 索引，不 import example、recipe、模型或训练栈。命令行的 `guide search`、`guide topic`、`guide symbol` 和 `guide export` 是相同 Python API 的便利包装。

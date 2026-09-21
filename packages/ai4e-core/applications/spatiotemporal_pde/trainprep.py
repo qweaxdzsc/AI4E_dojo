@@ -33,3 +33,20 @@ def prepare_inputs(
         },
     )
     return {"train": manifest, "validation": physical["validation"], "test": physical["test"]}
+
+
+def prepare_trajectory_inputs(
+    physical, output, *, extract, statistics, transform, declaration, caches=None
+):
+    """具名轨迹准备入口，抽取时间与通道绑定由调用方声明。"""
+    from ai4e_core.applications.parametric_pde.trainprep import prepare_field_inputs
+
+    return prepare_field_inputs(
+        physical,
+        output,
+        extract=extract,
+        statistics=statistics,
+        transform=transform,
+        declaration=declaration,
+        caches=caches,
+    )

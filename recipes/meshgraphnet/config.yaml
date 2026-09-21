@@ -1,0 +1,36 @@
+seed: 0
+run_root: ../runs/meshgraphnet
+data_root: ../data/meshgraphnet
+pipeline:
+  stages: [rawprep, trainprep, train, infer, post]
+inputs:
+  rawprep:
+    source: null
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+    resume: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+model:
+  hidden_dim: 128
+  processor_layers: 15
+rawprep:
+  splits: [train, valid, test]
+  max_trajectories: null
+train:
+  updates: 10000000
+  batch_size: 2
+  lr: 0.0001
+  lr_decay_steps: 5000000
+  lr_decay_rate: 0.1
+  lr_floor: 0.000001
+  noise_std: 0.02
+  normalizer_warmup: 1000
+  device: auto
+infer:
+  steps: all

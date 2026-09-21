@@ -21,3 +21,18 @@ job = infer_stage.configure_derived_fields(
 新增字段只共享原域实体 ID，不生成新数据集，不修改原训练目标。
 
 派生字段须在 `configure_selection` 前登记，可用 `surface:pressure_error:scalar` 精确选择。未选派生字段不保存；没有独立真值的派生字段保留数组及不可评价原因，不用误差场自身充当真值。字段与普通用户评价一起通过 `test_infer_extensions.py` 外部复制、真实运行、读回和VTK验收。
+
+## 物化说明
+
+- `base_case`: `aero_cfd.shapenet_car_abupt`。该目录是 extension 参考覆盖集，不是独立流程。
+- 物化时先复制完整基案例，再叠加清单声明的覆盖文件，并写出 `.dojo-provenance.json`；未声明冲突、缺少基案例或非空目标会失败。
+- 物化目录随后可以由 Agent 自由修改、用 direct-core 运行或交给 `ai4e_task` Python API；扩展目录本身不会绑定本机数据或自动启动任务。
+
+## Agent Help Center
+
+本目录是 `参考变体`。Agent 先读取帮助主题 `case:recipe_extensions.inference_fields`，再按主题关联的 workflow 和 API 参考核对输入、函数签名、产物与证据边界。支持 Python 帮助 API 时可调用：
+
+```python
+import ai4e_task as task
+print(task.read_help_topic("case:recipe_extensions.inference_fields")["content"])
+```

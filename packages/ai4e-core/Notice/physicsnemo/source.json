@@ -1,0 +1,116 @@
+{
+  "revision": "aa19b58a129f8d1fabdcaa41c6ca85d5dc01aae1",
+  "records": [
+    {
+      "source": "physicsnemo/nn/module/mlp_layers.py",
+      "source_sha256": "8c781b78de29a7f926fa01294349b38e08318634c962c75b629378cf2cadec6b",
+      "symbols": [
+        "Mlp"
+      ],
+      "target": "packages/ai4e-core/abilities/modeling/modules/projected_mlp.py",
+      "target_sha256": "4fb32ab0a828ff0fcd7e464c8d5e02d8fe147075bd6fcf71068133eacf5ebdfe"
+    },
+    {
+      "source": "physicsnemo/nn/module/physics_attention.py",
+      "source_sha256": "fd50cf883927b188f905da6ec7a79b32f5c422502f121e04e8bb3bf4be0286b2",
+      "symbols": [
+        "_project_input",
+        "_compute_slices_from_projections",
+        "PhysicsAttentionBase",
+        "PhysicsAttentionIrregularMesh",
+        "PhysicsAttentionStructuredMesh2D"
+      ],
+      "target": "packages/ai4e-core/abilities/modeling/modules/physics_attention.py",
+      "target_sha256": "afaedc86e56ede41547a4d9eeecc412640177ef1372f1e9fd82bc014ad7f373c"
+    },
+    {
+      "source": "physicsnemo/nn/module/gale.py",
+      "source_sha256": "5531a91bee5cc96de85fd4c29e7a119c5e60fd6722c6a1c328d2d7fd9a41cd70",
+      "symbols": [
+        "_mix_self_and_cross",
+        "_gale_compute_slice_attention_cross",
+        "_gale_forward_impl",
+        "GALE",
+        "_gale_cross_init",
+        "_GALEStructuredForwardMixin",
+        "GALEStructuredMesh2D",
+        "GALEBlock"
+      ],
+      "target": "packages/ai4e-core/abilities/modeling/modules/geometry_attention.py",
+      "target_sha256": "945fb8fbcebe7938254283afdaf5b116e222cbc824ad7de0db2e12d05c19f106"
+    },
+    {
+      "source": "physicsnemo/models/geotransolver/context_projector.py",
+      "source_sha256": "a111137e6a76c18ea5f34310a5931d7d73860fa112cc6b8694b1575a9d905f63",
+      "symbols": [
+        "_structured_grid_to_conv_input",
+        "_SliceToContextMixin",
+        "ContextProjector",
+        "StructuredContextProjector",
+        "GlobalContextBuilder"
+      ],
+      "target": "packages/ai4e-core/abilities/modeling/modules/context_projection.py",
+      "target_sha256": "1f8c393b6e80da9b65171a880540b4d1fbd738e4e49b8d52a97d15dcf042206d"
+    },
+    {
+      "source": "physicsnemo/models/geotransolver/context_projector.py",
+      "source_sha256": "a111137e6a76c18ea5f34310a5931d7d73860fa112cc6b8694b1575a9d905f63",
+      "symbols": [
+        "GeometricFeatureProcessor",
+        "MultiScaleFeatureExtractor"
+      ],
+      "target": "packages/ai4e-core/abilities/modeling/modules/multiscale_local.py",
+      "target_sha256": "ed60635d05a2c0d32fe77c0caf6ee6b372bae0910054c6c76ed274069edfc38e"
+    },
+    {
+      "source": "physicsnemo/models/geotransolver/geotransolver.py",
+      "source_sha256": "2b414e208061005703c4977360660c7204581821c7e0c842cf0b4283ee3e1548",
+      "symbols": [
+        "_normalize_dim",
+        "_normalize_tensor",
+        "_structured_num_tokens",
+        "_flatten_for_structured",
+        "GeoTransolver"
+      ],
+      "target": "packages/ai4e-contrib/ability/model/geotransolver/network.py",
+      "target_sha256": "f37fed547dedc2e8d15d6e5eab10d95df80c1dc69269b4e34880bf7cedea7843"
+    },
+    {
+      "source": "physicsnemo/nn/functional/neighbors/radius_search/_torch_impl.py",
+      "source_sha256": "b35499eabff1689a4d739c7fe81a07938cc6ac7e3622a2e07e2c54791f5de934",
+      "symbols": [
+        "radius_search_impl"
+      ],
+      "target": "packages/ai4e-core/abilities/geometry/radius_query.py",
+      "target_sha256": "5f950d5db8fe7483ee8bd8c4bae762bd9bb20b88623abbee44de051dcb8d33eb"
+    },
+    {
+      "source": "examples/structural_mechanics/crash/datapipe.py",
+      "source_sha256": "8f60092549f30a37555e731ff4d7e41c9082b668826e3256636af5ccd2187f4a",
+      "symbols": [
+        "CrashBaseDataset._compute_autoreg_node_stats"
+      ],
+      "target": "packages/ai4e-core/abilities/data/stats/tensor_moments.py",
+      "target_sha256": "5c6a114c5324d9c05df5b7a677256e7b80b314be79f5c8df4ba513a770ee128a"
+    },
+    {
+      "source": "examples/cfd/darcy_transolver/darcy_datapipe_fix.py",
+      "source_sha256": "efb870c13dd114f8e8d19132df5ae13532cc3c2e829f82dc5137a7d66e748f4c",
+      "symbols": [
+        "UnitTransformer"
+      ],
+      "target": "packages/ai4e-core/abilities/transform/field_encoding.py",
+      "target_sha256": "3ac608c9cb3ee94484d607c45ff4fd423ea3d167975c2757ebd1c7b86f1135a1"
+    }
+  ],
+  "changes": [
+    "imports and framework metadata removed",
+    "plain torch GALE/2D supported; other options rejected",
+    "Chinese docstrings added",
+    "radius query relocated with equivalent torch fallback",
+    "Core radius query chunks query axis and preserves original torch topk order; MPS search on CPU",
+    "Data-only reference fixes: xy grid convention; parse all timestamps; 1000/200 and 124/7 protocol; float32 normalization with explicit reductions",
+    "Contrib Notice is a file; network license lives with model; numeric license bundled separately in core"
+  ],
+  "aero_extension": "forward_stream shares existing weights; only unstructured streams without local encoding. ShapeNet-Car and NASA CRM are engineering data-transfer cases."
+}

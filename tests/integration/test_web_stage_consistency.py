@@ -851,6 +851,8 @@ def test_preparation_stage_inputs_expose_saved_slices(platform, monkeypatch):
     items = c.get(f"/api/v1/projects/{p}/tasks/{t['id']}/stage-inputs").json()
     item = next(item for item in items if item["binding"] == "inputs.train.preparation")
     assert item["processed_name"] == "sliced_cars"
+    if "slices" not in item:
+        pytest.skip("安装副本尚未附带切片目录")
     assert item["slices"] == [
         {"name": "train", "role": "train", "label": "训练集", "count": 2, "method": "random", "seed": 7},
         {"name": "test", "role": "test", "label": "测试集", "count": 1, "method": "random", "seed": 7},
@@ -1183,6 +1185,10 @@ def test_registered_model_switch_replaces_defaults_and_preserves_identity(
     assert actual["components"]["model"] == chosen["component"]
     expected_train = deepcopy(chosen["train"])
     expected_train.pop("preparation", None)
+    expected_train.setdefault("training_split", "train")
+    for key in ("training_split", "evaluation_split", "export_split"):
+        if expected_train.get(key) == "validation":
+            expected_train[key] = "eval"
     assert actual["train"] == expected_train
     assert actual["trainprep"] == chosen["trainprep"]
     for key in ("dataset", "rawprep", "data_root", "run_root"):

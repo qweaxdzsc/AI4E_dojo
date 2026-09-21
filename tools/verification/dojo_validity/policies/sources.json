@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/openai/codex",
+  "retrieved": "2026-09-20",
+  "license": "Apache-2.0",
+  "files": {
+    "network.sbpl": "eb2bf67e7a697d954f05fbd563e5888402fde3a279ecf383832473d44831ad0a",
+    "base.sbpl": "5103332ddb8885ee5e1926de6c0ef23a61f4e55e31297506ae05fa4e0b24ba74",
+    "platform.sbpl": "6c5c0ae4361e738053f172b635f4e1ab6287087f3d9b6e5882b0bc06922a7199"
+  }
+}

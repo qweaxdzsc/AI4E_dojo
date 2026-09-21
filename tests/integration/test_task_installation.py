@@ -75,6 +75,38 @@ def test_wheel_install_outside_checkout(tmp_path):
     info = json.loads(probe.stdout)
     assert all(str(envdir) in info[key] for key in ("path", "core", "spec"))
     assert info["torch"] is False
+    help_probe = subprocess.run(
+        [
+            str(python),
+            "-c",
+            """import json, sys, ai4e_task as task
+info = task.help_info()
+hit = task.search_help('ai4e_core.run.launch', limit=1)[0]
+symbol = task.describe_help_symbol('ai4e_core.run.launch')
+topic = task.read_help_topic('workflow:parametric-pde')
+print(json.dumps({
+    'symbols': info['coverage']['symbols'],
+    'hit': hit['topic_id'],
+    'signature': symbol['signature'],
+    'topic': topic['title'],
+    'torch': 'torch' in sys.modules,
+    'contrib': 'ai4e_contrib' in sys.modules,
+}))
+""",
+        ],
+        cwd=tmp_path,
+        env=clean,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    help_result = json.loads(help_probe.stdout)
+    assert help_result["symbols"] > 1_000
+    assert help_result["hit"] == "api:ai4e_core.run.launch"
+    assert help_result["signature"].startswith("launch(")
+    assert help_result["topic"] == "参数化 PDE 研究流程"
+    assert help_result["torch"] is False
+    assert help_result["contrib"] is False
     cli = envdir / "bin/ai4e"
     project = tmp_path / "installed-study"
 

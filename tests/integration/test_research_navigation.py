@@ -19,6 +19,8 @@ def test_research_task_routes_and_links():
     for file in (
         path,
         ROOT / ".agents/skills/dojo-research/SKILL.md",
+        ROOT / ".agents/skills/dojo-integrate-model/SKILL.md",
+        ROOT / "docs/model-integration-goals.md",
         ROOT / "examples/recipe_extensions/README.md",
         ROOT / "recipes/README.md",
     ):

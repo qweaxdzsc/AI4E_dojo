@@ -22,3 +22,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+PCNO: Code Ocean capsule 8000337 v1.0 (dc4cd4417ed7f97715ffb47496690ce60f7665a3), GPL-3.0.
+Original definitions are split between ai4e-core abilities and the PCNO model/application.
+Full license: ability/model/pcno/LICENSE; core license: abilities/PCNO_LICENSE.
+
+GeoTransolver network composition: NVIDIA PhysicsNeMo, Apache-2.0.
+License and pinned source records: ability/model/geotransolver/LICENSE and source.json.
+Core numeric implementations carry their own Notice/physicsnemo/LICENSE.

@@ -1,0 +1,245 @@
+dataset:
+  processed_name: null
+  samples: all
+  partitions: official
+pipeline:
+  stages:
+  - trainprep
+  - train
+  - infer
+  - post
+data_root: ./data/shapenet_car_geotransolver
+run_root: ./runs/shapenet_car_geotransolver
+train:
+  mode: fit
+  max_epochs: 2
+  batch_size: 1
+  device: auto
+  precision: fp32
+  num_workers: 0
+  optimizer: muon_adamw
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  betas:
+  - 0.9
+  - 0.999
+  scheduler: step
+  warmup_ratio: 0.05
+  min_lr: 1.0e-06
+  accumulate: 1
+  gradient_clip: null
+  ema_decay: null
+  ema_save_every: 10
+  test_repeat: 1
+  evaluate_repeat: false
+  snapshot: true
+  save_on_interrupt: true
+  evaluation_split: test
+  log_every: 1
+  log_every_updates: null
+  evaluation_enabled: false
+  step_size: 100
+  gamma: 0.5
+model:
+  parameters:
+    n_layers: 4
+    n_hidden: 128
+    n_head: 4
+    slice_num: 64
+    mlp_ratio: 2
+    dropout: 0.0
+    include_local_features: false
+    use_te: false
+    plus: false
+  freeze: []
+  data_specs:
+    position_dim: 3
+    domains:
+      surface:
+        feature_dim:
+          normals: 3
+        output_dims:
+          pressure: 1
+      volume:
+        feature_dim:
+          distance: 1
+          normals: 3
+        output_dims:
+          velocity: 3
+    conditioning_dims: {}
+  supervision:
+  - name: surface_pressure
+    prediction: surface_pressure
+    target: surface_pressure_target
+    normalization: surface_pressure
+    weight: 1.0
+    loss: mse
+  - name: volume_velocity
+    prediction: volume_velocity
+    target: volume_velocity_target
+    normalization: volume_velocity
+    weight: 1.0
+    loss: mse
+  sampling:
+    seed: 42
+    random_stream: independent
+    geometry:
+      method: random
+      max_points: 8192
+    domains:
+      surface:
+        train:
+          method: random
+          max_points: 8192
+      volume:
+        train:
+          method: random
+          max_points: 8192
+trainprep:
+  use_physics_features: true
+  physical_rules: {}
+  geometry_field: surface_position
+  domains:
+    surface:
+      position: surface_position
+      features:
+        normals: surface_normals
+      targets:
+        pressure: surface_pressure
+    volume:
+      position: volume_position
+      features:
+        distance: volume_sdf
+        normals: volume_normals
+      targets:
+        velocity: volume_velocity
+  conditioning: {}
+  geometry_conditioning: {}
+  normalization:
+    execute: true
+    fields:
+      surface_pressure:
+        method: zscore
+        scale: 1
+      volume_velocity:
+        method: zscore
+        scale: 1
+      volume_sdf:
+        method: zscore
+        scale: 1
+      surface_position:
+        method: coordinate
+        scale: 1
+        coordinate_group: spatial
+      volume_position:
+        method: coordinate
+        scale: 1
+        coordinate_group: spatial
+      surface_normals:
+        method: identity
+        scale: 1
+      volume_normals:
+        method: identity
+        scale: 1
+    materialize: false
+post:
+  analysis_enabled: true
+  samples: []
+  figures:
+  - surface
+  pressure: surface:pressure:prediction
+  image_size:
+  - 1000
+  - 700
+  overwrite_analysis: false
+snapshot_modules:
+- ai4e_spec
+- ai4e_contrib
+rawprep:
+  sources:
+  - surface
+  - volume
+  fields:
+    surface:
+      pressure:
+        components: 1
+    volume:
+      velocity:
+        components: 3
+  geometry:
+  - nearest_vertex
+  - volume_normals
+  - surface_normals
+  - exterior_mask
+  save_fields:
+  - surface_pressure
+  - surface_position
+  - surface_normals
+  - volume_velocity
+  - volume_position
+  - volume_sdf
+  - volume_normals
+  filters:
+    surface:
+    - mask
+    volume:
+    - exterior_mask
+  statistics:
+    mode: reference
+    fields:
+    - surface_pressure
+    - surface_position
+    - surface_normals
+    - volume_velocity
+    - volume_position
+    - volume_sdf
+    - volume_normals
+    position_fields:
+    - surface_position
+    - volume_position
+  vtkhdf: true
+components:
+  dataset: ai4e_contrib.application.datasets.shapenet_car
+  model: ai4e_contrib.application.aero_cfd.geotransolver
+  application: ai4e_contrib.application.aero_cfd.operations
+infer:
+  fields: null
+  metrics:
+  - relative_l2
+  - mae
+  - rmse
+  - max_abs_error
+  - r2
+  random_stream: independent
+  split: test
+  evaluate: true
+  save_predictions: true
+  export_vtk: true
+  query: true
+  sample_indices: null
+  query_chunk_size: 8192
+  overwrite: false
+  samples: []
+  device: auto
+  seed: 42
+  export_mesh: true
+inputs:
+  rawprep:
+    source: ./inputs/shapenet_car
+    manifest: null
+    train_h5: null
+    test_h5: null
+    connectivity_h5: null
+  trainprep:
+    partition: null
+    dataset: ./data/car_experiment/manifest.json
+    statistics: null
+  train:
+    preparation: null
+    resume: null
+    initial_weights: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null

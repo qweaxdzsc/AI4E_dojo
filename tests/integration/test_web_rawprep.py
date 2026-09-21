@@ -93,9 +93,9 @@ def _use_source_rawprep(monkeypatch):
         "ai4e_contrib.application.datasets.nasa_crm.inspection",
         "packages/ai4e-contrib/application/datasets/nasa_crm/inspection.py",
     )
-    importlib.import_module("ai4e_contrib.application.datasets.nasa_crm").inspect_dataset = (
-        nasa.inspect_dataset
-    )
+    importlib.import_module(
+        "ai4e_contrib.application.datasets.nasa_crm"
+    ).inspect_dataset = nasa.inspect_dataset
 
     def inspect_task(project, task_id, operation, **kwargs):
         from ai4e_contrib.application.aero_cfd.operations import inspect as domain_inspect
@@ -117,6 +117,39 @@ def _use_source_rawprep(monkeypatch):
     monkeypatch.setattr(app.task, "inspect_task", inspect_task)
     monkeypatch.setattr(task, "inspect_task", inspect_task)
     return inspect_dataset
+
+
+def test_dataset_inspection_uses_isolated_output_paths(tmp_path, monkeypatch):
+    """任务检查不把案例相对 data_root 展开到复制 recipe 的代码目录。"""
+    from ai4e_contrib.application.aero_cfd.operations import inspect
+    from ai4e_contrib.application.datasets import nasa_crm
+    from ai4e_core.base.config import load_config
+
+    recipe = tmp_path / "task" / "recipe"
+    recipe.mkdir(parents=True)
+    config = load_config(ROOT / "examples/aero_cfd/nasa_crm_abupt/config.yaml")
+    captured = {}
+
+    def inspect_dataset(value):
+        captured.update(value)
+        return {"dataset_id": "nasa_crm", "samples": [], "sources": []}
+
+    monkeypatch.setattr(nasa_crm, "inspect_dataset", inspect_dataset)
+    output = tmp_path / "inspections" / "catalog"
+    result = inspect(
+        {
+            "operation": "inspect_dataset",
+            "config": config,
+            "config_dir": str(recipe),
+            "output_dir": str(output),
+            "selection": {"root": str(tmp_path / "raw"), "sample_scope": {"mode": "all"}},
+        }
+    )
+
+    assert result["dataset_id"] == "nasa_crm"
+    physical = Path(captured["paths"]["datasets"]["root"])
+    assert physical.is_relative_to(output / "workspace" / "rawprep")
+    assert not physical.is_relative_to(recipe)
 
 
 def _poison_partitions(client, base, identity, partitions):
@@ -227,9 +260,10 @@ def test_save_execute_publish_do_not_write_output_list_back(binding_platform, mo
     assert "inputs.rawprep.source=" in "\n".join(overrides)
     after_execute = task.read_configuration(project, created["id"])
     assert after_execute["config"]["dataset"]["partitions"] == POISONED
-    assert after_execute["config"]["inputs"]["rawprep"]["source"] == stored["config"]["inputs"][
-        "rawprep"
-    ]["source"]
+    assert (
+        after_execute["config"]["inputs"]["rawprep"]["source"]
+        == stored["config"]["inputs"]["rawprep"]["source"]
+    )
 
     captured.clear()
     selected = client.post(

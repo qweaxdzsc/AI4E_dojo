@@ -39,3 +39,17 @@
 ## 需要更深定位时
 
 源码索引生成器 [architecture_inventory](../../tools/verification/architecture_inventory.py) 输出文件、声明签名和行号，供先定位再读；它不能证明组件兼容或运行成功。当前共享执行的证据与未验范围见[专项验收](../mvp/training-execution-acceptance.md)。
+
+## 可组合 Dojo 案例与 Agent 路由
+
+Dojo 研究入口首先按能力和接入深度分流：单工具、已有研究代码、完整领域流程。九类能力教程位于 `docs/agent-help/capabilities/`，元数据是 skill、GUIDE、帮助首页菜单的唯一来源；生成器 `tools/docs/build_agent_help.py --write/--check` 同步导航及索引。不要要求局部工具用户先复制完整案例。
+
+支持 Agent Skills 时使用 `.agents/skills/dojo-research/SKILL.md`，否则从 `DOJO_AGENT_GUIDE.md` 进入相同帮助中心。直接读能力教程，再用 `describe_help_symbol` 核对现行签名、源码和稳定性；搜索用于补充定位。已有 PyTorch 模型优先阅读 training 的真实短训/恢复例子，已有 NumPy 预测优先阅读 evaluation 的 FP64 复算例子。具体不兼容时允许局部适配或自定义，不把搜索无结果视为能力缺失。
+
+完整流程仍选 standalone、物化 extension、阅读阶段正文并 direct-core 验证；按需交给同目录 Task。单个工具只需真实输入输出证据，训练与恢复验证状态，post 固定预测读回。工程接线、学习效果和论文精度分别陈述。
+
+案例资源清单为 `examples/case-manifest.json`，只允许 `standalone` 与 `extension` 两种类型。recipe 是仓库内维护源，example 是仓库外复制交付物；清单声明的公共阶段脚本逐文件核对，配置和研究预算可以不同。Neumann smoke 固定 train 2、test 1、nx=7、nt=7、CPU、两轮以内，只验证公开入口、参数生效、恢复和结果交接。
+
+Agent Help Center 的源文件位于 `docs/agent-help/`，机器索引由 `tools/docs/build_agent_help.py` 从 AST、Markdown 元数据和案例清单生成。`uv run --no-sync python tools/docs/build_agent_help.py --check` 只检查签名、源码位置、案例和索引漂移；逐 API 用途、研究工作流与证据边界仍由人工正文负责。当前覆盖与安装证据见 `../mvp/agent-help-acceptance.md`。
+
+PCNO 地热：完整案例 `examples/geothermal/pcno/`，扩展 `examples/recipe_extensions/pcno/`；能力优先在core，当前核验见 `../mvp/pcno-acceptance.md`，长期功能见 `docs/PRD/recipes/pcno/PRD.md`。用户已改为先集成后短训，不等待已停止的250轮任务。

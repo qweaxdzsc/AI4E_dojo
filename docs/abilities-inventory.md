@@ -1,6 +1,6 @@
 # Dojo 当前 Ability 清单（源码盘点）
 
-源码导航更新日期：2026-09-17。目的：先看清已有能力，再讨论工作流节点粒度。
+源码导航：基础记录更新于 2026-09-17；2026-09-21 补充可选 FLARE++ 条目 A163。目的：先看清已有能力，再讨论工作流节点粒度。
 
 ## 阅读口径
 
@@ -332,3 +332,12 @@
 小波布局/准备/恢复位于贡献`ability/transform/wdno`；原二维网络与日程位于`ability/model/wdno`；条件目标与采样分别位于`ability/constraint/wdno`和`ability/inference/wdno`；物理MSE位于`ability/eval/wdno`。共享数组清单归core的data/save，精确迭代训练与EMA沿用既有能力。上述路径均可直接import，不新增全仓组件协议。
 
 领域连接、参数与配置、完整研究步骤见[WDNO recipe](../recipes/wdno/README.md)，实际已跑变体见[普通函数扩展](../examples/recipe_extensions/wdno/README.md)，结果范围见[专项验收](../.context/mvp/wdno-acceptance.md)。这是基础Burgers缩小迁移；本表旧文件计数为当时快照，不表示已覆盖后续全部实现，也不表示模型自动进入Web目录。
+
+
+## 可选动态路由注意力（2026-09-21）
+
+以下是 core 组件增量；不改变历史计数，不表示此前快照已覆盖所有后续能力。公开说明见 [网络组件指南](agent-help/user-components/network.md) 与 [API](agent-help/api/core/abilities/modeling/modules/flare_attention.md)，已执行的数值与安装范围见 [组件验收](../.context/mvp/flare-attention-acceptance.md)。
+
+| 编号 | 能力 | 做什么 | 当前入口 | 范围与边界 | 源码 |
+| --- | --- | --- | --- | --- | --- |
+| A163 | FLARE++ 动态路由注意力 | 从输入合成路由，聚合并回传特征，输出同形张量。 | `FLAREPlusPlus`<br>`forward` | 普通浮点 `(B,N,C)`，可选使用；无掩码/因果/token 分片/TE，不是完整模型或输入预处理。 | [modeling/modules/flare_attention.py](../packages/ai4e-core/abilities/modeling/modules/flare_attention.py) |

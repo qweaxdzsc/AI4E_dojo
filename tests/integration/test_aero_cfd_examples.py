@@ -25,7 +25,7 @@ def test_components_have_distinct_defaults(tmp_path):
 
 def test_copied_four_stage_pipeline(tmp_path):
     """A2：历史复制脚本仍完整运行 NPY 参考前处理、训练与数值后处理。"""
-    cfg, path = configuration(tmp_path)
+    cfg, path = configuration(tmp_path, legacy=True)
     folder = tmp_path / "recipe"
     shutil.copytree(
         ROOT / "tests/fixtures/recipe_before_explicit",
@@ -59,8 +59,10 @@ def test_relative_hdf_paths_follow_copied_configuration(tmp_path):
 
     _, path = configuration(tmp_path)
     public = yaml.safe_load(path.read_text())
-    public["dataset"].update(
-        root="../raw", train_h5="${dataset.root}/training.h5", test_h5="${dataset.root}/test.h5"
+    public["inputs"]["rawprep"].update(
+        source="../raw",
+        train_h5="${inputs.rawprep.source}/training.h5",
+        test_h5="${inputs.rawprep.source}/test.h5",
     )
     path.write_text(yaml.safe_dump(public, sort_keys=False))
     actual = load_internal(path)
@@ -91,7 +93,7 @@ def test_independent_stages_match_pipeline_weights_and_predictions(tmp_path):
     import torch
     import yaml
 
-    cfg, path = configuration(tmp_path / "separate")
+    cfg, path = configuration(tmp_path / "separate", legacy=True)
     public = yaml.safe_load(path.read_text())
     runs = Path(cfg.run_root)
     environment = {**os.environ, "OMP_NUM_THREADS": "1", "MKL_NUM_THREADS": "1"}
@@ -123,7 +125,7 @@ def test_independent_stages_match_pipeline_weights_and_predictions(tmp_path):
         if stage == "train":
             trained = last
     assert json.loads((last / "artifacts/post-progress.json").read_text())["status"] == "succeeded"
-    other, other_path = configuration(tmp_path / "pipeline")
+    other, other_path = configuration(tmp_path / "pipeline", legacy=True)
     result = subprocess.run(
         [
             sys.executable,
@@ -155,7 +157,7 @@ def test_independent_stages_match_pipeline_weights_and_predictions(tmp_path):
 
 def test_rawprep_dry_run_and_overwrite_gate(tmp_path):
     """B1/B2：真实入口干跑不写数据，非空目标在干跑和提交中均拒绝覆盖。"""
-    cfg, path = configuration(tmp_path)
+    cfg, path = configuration(tmp_path, legacy=True)
     command = [
         sys.executable,
         "-B",

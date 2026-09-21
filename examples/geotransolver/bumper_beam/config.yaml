@@ -1,0 +1,59 @@
+seed: 42
+run_root: ./runs
+data_root: ./data
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - infer
+  - post
+inputs:
+  rawprep:
+    source: null
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+    resume: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+model:
+  functional_dim: 3
+  out_dim: 50
+  geometry_dim: 3
+  n_layers: 6
+  n_hidden: 256
+  n_head: 8
+  slice_num: 128
+  use_te: false
+  global_dim: 3
+  include_local_features: true
+  radii:
+  - 0.05
+  - 0.25
+  neighbors_in_radius:
+  - 8
+  - 32
+  n_hidden_local: 32
+train:
+  updates: 20
+  batch_size: 1
+  lr: 0.0001
+  weight_decay: 0.0001
+  schedule: epoch_cosine
+  schedule_epochs: 10000
+  end_lr: 3.0e-07
+  device: cpu
+  seconds: 120
+  checkpoint_every: 10
+infer:
+  batch_size: 1
+  device: cpu
+components:
+  loss: torch.nn.functional.mse_loss
+  derived: null
+  consume: null

@@ -38,19 +38,32 @@ class ManifestIndex:
 
     def remap_partitions(self, partitions: Mapping[str, Sequence[str]]) -> None:
         """按样本名重挂分片；张量路径不变，空分片不进入索引。"""
-        by_name: dict[str, dict] = {}
+        by_name: dict[str, list[dict]] = {}
         for (_partition, sample), record in self.records.items():
-            existing = by_name.get(sample)
-            if existing is not None and existing is not record and existing != record:
-                raise ValueError(f"同一样本在多个原分片中且记录不一致: {sample}")
-            by_name[sample] = record
+            by_name.setdefault(sample, []).append(record)
         rebuilt: dict[tuple[str, str], dict] = {}
         remapped: dict[str, list[str]] = {}
         for name, samples in partitions.items():
             kept: list[str] = []
             for sample in samples:
                 identity = str(sample)
-                record = by_name.get(identity)
+                candidates = by_name.get(identity, [])
+                # 同名样本可以来自不同原始来源；目标 test 优先消费原 test
+                # 记录，训练/验证优先消费原 train/validation 记录。
+                record = next(
+                    (item for item in candidates if item.get("partition") == name),
+                    None,
+                )
+                if record is None and name == "test":
+                    record = next(
+                        (item for item in candidates if item.get("partition") == "test"),
+                        None,
+                    )
+                if record is None:
+                    record = next(
+                        (item for item in candidates if item.get("partition") != "test"),
+                        None,
+                    )
                 if record is None:
                     raise ValueError(f"重划分片找不到样本 {identity}")
                 rebuilt[(str(name), identity)] = record
@@ -103,6 +116,29 @@ class ManifestIndex:
             else {key: value[selection] for key, value in selected.items()}
         )
 
+    def resolve_asset(self, partition: str, index: int, name: str) -> Path:
+        """解析样本清单显式声明的资产，拒绝未登记文件和路径越界。
+
+        ``name`` 可以是 ``assets`` 中的文件名，也可以是 ``meshes`` 中的
+        逻辑网格名。调用方不能借此接口遍历样本目录或读取历史残留文件。
+        """
+        samples = self.partitions.get(partition, [])
+        if index < 0 or index >= len(samples):
+            raise IndexError(f"分片 {partition} 没有第 {index} 个样本")
+        record = self.records[(partition, samples[index])]
+        meshes = record.get("meshes") or {}
+        filename = meshes.get(name, name)
+        declared = set(record.get("assets") or ()) | set(meshes.values())
+        if filename not in declared or Path(filename).name != filename:
+            raise ValueError(f"样本资产未声明或路径非法: {name}")
+        root = Path(record["path"])
+        if not root.is_absolute():
+            root = self.path.parent / root
+        target = root / filename
+        if not target.is_file() or not target.resolve().is_relative_to(root.resolve()):
+            raise FileNotFoundError(f"样本资产不存在或越出样本目录: {target}")
+        return target.resolve()
+
     def describe(self):
         """返回已发布清单的结构声明。"""
         return self.manifest
@@ -131,9 +167,17 @@ class ManifestIndex:
                     with path.open("rb") as stream:
                         for chunk in iter(lambda: stream.read(1024 * 1024), b""):
                             hasher.update(chunk)
-            for filename in sorted(record.get("identity_assets", [])):
+            covered = set(record["filemap"].values())
+            asset_names = (
+                set(record.get("assets", []))
+                | set(record.get("identity_assets", []))
+                | set((record.get("meshes") or {}).values())
+            )
+            for filename in sorted(asset_names):
+                if filename in covered:
+                    continue
                 if Path(filename).name != filename:
-                    raise ValueError("实体身份文件路径非法")
+                    raise ValueError("样本资产路径非法")
                 hasher.update(filename.encode())
                 with (root / filename).open("rb") as stream:
                     for chunk in iter(lambda: stream.read(1024 * 1024), b""):

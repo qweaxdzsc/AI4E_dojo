@@ -1,0 +1,16 @@
+name: cylinder_flow
+variant: meshgraphnet
+format: deepmind-tfrecord-or-torch-bundle
+dimension: 2
+velocity_components: 2
+node_type_count: 9
+splits:
+  - train
+  - valid
+  - test
+split_aliases:
+  eval: valid
+trajectory_length: 600
+units:
+  position: unknown
+  velocity: unknown

@@ -23,4 +23,8 @@
 - 模型专属研究：[GenCP](gencp/README.md)、[SafeDiffCon](safediffcon/README.md)。
 - 训练中观察与可视化：[物理场输出](physical_visualization/README.md)。
 
-只改研究变化部分，按[研究任务导航](../../.context/tasks/research.md)圈定前向、短训、恢复与固定输出读回。目录存在或导入成功不是数值验收。
+只改研究变化部分，按研究任务导航圈定前向、短训、恢复与固定输出读回。目录存在或导入成功不是数值验收。
+
+## PCNO
+
+`pcno/` 覆盖到完整 `geothermal.pcno` 副本；README说明构造器替换与带单位温降数组的保存读回。

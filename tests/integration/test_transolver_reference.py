@@ -101,7 +101,6 @@ def paired(tmp_path):
 def test_independent_two_epoch_reference(tmp_path):
     """B3/C3/D1/D2：原训练循环独立两轮，并对照所有预测块、数值场和指标。"""
     cfg, ref, run = paired(tmp_path)
-    data = Path(cfg.data_root)
     manifest = json.loads((Path(cfg.paths.datasets.root) / "manifest.json").read_text())
     reference_manifest = json.loads((ref / "processed/manifest.json").read_text())
     assert manifest["splits"] == reference_manifest["splits"]
@@ -120,16 +119,23 @@ def test_independent_two_epoch_reference(tmp_path):
         assert left["learning_rate"] == right["learning_rate"]
     for path in (ref / "predictions/test").glob("*/prediction_part*.npy"):
         require(
-            np.load(data / "predictions/test" / path.relative_to(ref / "predictions/test")),
+            np.load(
+                Path(cfg.paths.datasets.predictions)
+                / "test"
+                / path.relative_to(ref / "predictions/test")
+            ),
             np.load(path),
             identity=str(path.relative_to(ref)),
         )
     for path in (ref / "post/test").glob("*.h5"):
-        with h5py.File(path) as expected_h5, h5py.File(data / "post/test" / path.name) as actual_h5:
+        with (
+            h5py.File(path) as expected_h5,
+            h5py.File(Path(cfg.paths.datasets.post) / "test" / path.name) as actual_h5,
+        ):
             assert set(actual_h5) == set(expected_h5)
             for key in expected_h5:
                 require(actual_h5[key][...], expected_h5[key][...], identity=f"{path.name}/{key}")
-    actual_metrics = json.loads((data / "post/test/metrics.json").read_text())
+    actual_metrics = json.loads((Path(cfg.paths.datasets.post) / "test/metrics.json").read_text())
     expected_metrics = json.loads((ref / "post/test/metrics.json").read_text())
     for key in ("mse", "mae", "relative_l2", "cf_magnitude"):
         for field in expected_metrics["aggregate"][key]:
@@ -152,7 +158,7 @@ def test_resume_matches_reference_restart(tmp_path):
     config = yaml.safe_load((tmp_path / "configuration/config.yaml").read_text())
     config["run_root"] = str(tmp_path / "resume-runs")
     config["pipeline"]["stages"] = ["train"]
-    config["train"]["resume"] = str(
+    config.setdefault("inputs", {}).setdefault("train", {})["resume"] = str(
         tmp_path / "configuration/dojo-epoch-snapshots" / run.name / "epoch-1.pt"
     )
     config_path = tmp_path / "configuration/resume.yaml"

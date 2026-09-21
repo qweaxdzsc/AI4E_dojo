@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "recommendations": [
+    {
+      "id": "N-001",
+      "mechanism": "input-conditioned-routing-shared-mixer-model-context-adapter",
+      "title": "FLARE++ 中立动态路由与局部上下文连接",
+      "status": "optional_component_delivered_source_and_isolated_wheel",
+      "first_seen": "2026-09-21T05:06:31.783220+08:00",
+      "last_checked": "2026-09-21T11:20:32.501053+08:00",
+      "source_commit": "94dbdf829d1a4e93e3f31ecb77713392c471388e",
+      "source_pr": "https://github.com/NVIDIA/physicsnemo/pull/1940",
+      "implemented": true,
+      "executed": true,
+      "benefit_measured": false,
+      "prior_report": null,
+      "report": "2026-09-21.md",
+      "classification": "optional_component_not_architecture",
+      "history": [
+        {
+          "at": "2026-09-21T11:17:08.386186+08:00",
+          "event": "用户纠正：单个注意力结构不是架构级建议；授权仅在 core 增加可选能力。"
+        },
+        {
+          "at": "2026-09-21T11:20:32.501053+08:00",
+          "event": "组件与隔离wheel 43项通过，正式环境未发布；无整模型收益结论。"
+        }
+      ],
+      "validation": "43 passed; CPU equivalence and real wheel",
+      "acceptance": ".context/mvp/flare-attention-acceptance.md"
+    }
+  ],
+  "architecture_recommendations": []
+}

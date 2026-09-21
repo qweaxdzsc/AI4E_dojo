@@ -28,7 +28,8 @@ def test_invalid_car_configuration(edit):
         validate_rawprep(raw, profile)
 
 
-def test_nasa_rejects_inactive_vtk_output():
+def test_nasa_enables_vtkhdf_by_default():
     p = nasa_crm.describe_rawprep()
-    with pytest.raises(ValueError, match="网格"):
-        validate_rawprep({**p["defaults"], "vtkhdf": True}, p)
+    assert p["vtkhdf"] is True
+    assert p["defaults"]["vtkhdf"] is True
+    validate_rawprep(p["defaults"], p)

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="23" time="81.792" timestamp="2026-09-21T02:13:03.096426+08:00" hostname="zonghuideMacBook-Pro.local"><testcase classname="tests.integration.test_trainprep_split" name="test_default_counts_use_original_lengths_and_zero_missing" time="0.000" /><testcase classname="tests.integration.test_trainprep_split" name="test_random_split_is_reproducible_and_original_keeps_members" time="0.000" /><testcase classname="tests.integration.test_trainprep_split" name="test_random_split_rejects_sum_mismatch_and_empty_train" time="0.000" /><testcase classname="tests.integration.test_trainprep_split" name="test_manifest_overlay_can_read_remapped_sample" time="0.003" /><testcase classname="tests.integration.test_trainprep_split" name="test_open_dataset_allows_train_only_manifest" time="0.001" /><testcase classname="tests.integration.test_trainprep_split" name="test_open_dataset_applies_random_split" time="0.002"><failure message="ValueError: 重划分片找不到样本 c">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-870/test_open_dataset_applies_rand0')
+
+    def test_open_dataset_applies_random_split(tmp_path):
+        path = write_physical_manifest(tmp_path, {"train": ["a", "b"], "test": ["c"]})
+&gt;       data = open_dataset(
+            {
+                "train": {"manifest": str(path)},
+                "trainprep": {
+                    "split": {"method": "random", "seed": 0, "counts": {"train": 2, "test": 0, "eval": 1}}
+                },
+            }
+        )
+
+tests/integration/test_trainprep_split.py:153: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/ai4e_core/applications/aero_cfd/trainprep/preparation.py:83: in open_dataset
+    apply_declared_split(index, config, overlay)
+.venv/lib/python3.12/site-packages/ai4e_core/abilities/data/source/split.py:244: in apply_declared_split
+    index.remap_partitions(resolve_split(index.partitions, split))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;ai4e_core.abilities.data.source.manifest.ManifestIndex object at 0x1115e65a0&gt;
+partitions = {'train': ['a', 'c'], 'eval': ['b']}
+
+    def remap_partitions(self, partitions: Mapping[str, Sequence[str]]) -&gt; None:
+        """按样本名重挂分片；张量路径不变，空分片不进入索引。"""
+        by_name: dict[str, list[dict]] = {}
+        for (_partition, sample), record in self.records.items():
+            by_name.setdefault(sample, []).append(record)
+        rebuilt: dict[tuple[str, str], dict] = {}
+        remapped: dict[str, list[str]] = {}
+        for name, samples in partitions.items():
+            kept: list[str] = []
+            for sample in samples:
+                identity = str(sample)
+                candidates = by_name.get(identity, [])
+                # 同名样本可以来自不同原始来源；目标 test 优先消费原 test
+                # 记录，训练/验证优先消费原 train/validation 记录。
+                record = next(
+                    (item for item in candidates if item.get("partition") == name),
+                    None,
+                )
+                if record is None and name == "test":
+                    record = next(
+                        (item for item in candidates if item.get("partition") == "test"),
+                        None,
+                    )
+                if record is None:
+                    record = next(
+                        (item for item in candidates if item.get("partition") != "test"),
+                        None,
+                    )
+                if record is None:
+&gt;                   raise ValueError(f"重划分片找不到样本 {identity}")
+E                   ValueError: 重划分片找不到样本 c
+
+.venv/lib/python3.12/site-packages/ai4e_core/abilities/data/source/manifest.py:68: ValueError</failure></testcase><testcase classname="tests.integration.test_trainprep_split" name="test_open_dataset_overlay_allows_empty_train" time="0.002" /><testcase classname="tests.integration.test_trainprep_split" name="test_open_dataset_overlay_uses_stored_partitions" time="0.002" /><testcase classname="tests.integration.test_trainprep_split" name="test_published_slices_fill_missing_buckets_and_keep_zero" time="0.000" /><testcase classname="tests.integration.test_trainprep_split" name="test_published_slices_core_and_server_match" time="0.001" /><testcase classname="tests.integration.test_trainprep_split" name="test_legacy_slice_patch_fills_missing_and_keeps_explicit" time="0.001" /><testcase classname="tests.integration.test_trainprep_split" name="test_compose_configuration_allows_training_split" time="0.000" /><testcase classname="tests.integration.test_trainprep_split" name="test_open_dataset_rejects_empty_train_split" time="0.002" /><testcase classname="tests.integration.test_web_recipe_compatibility" name="test_user_recipe_changes_do_not_disable_platform[additional]" time="11.902" /><testcase classname="tests.integration.test_web_recipe_compatibility" name="test_user_recipe_changes_do_not_disable_platform[implementation]" time="11.579" /><testcase classname="tests.integration.test_web_recipe_compatibility" name="test_user_recipe_changes_do_not_disable_platform[format]" time="11.733" /><testcase classname="tests.integration.test_web_recipe_compatibility" name="test_stage_editor_preserves_existing_recipe_extensions" time="3.153" /><testcase classname="tests.integration.test_web_recipe_compatibility" name="test_legacy_loader_requires_explicit_migration_without_rewriting_task" time="31.079" /><testcase classname="tests.integration.test_web_recipe_compatibility" name="test_official_cases_declare_visible_field_scale" time="0.012" /><testcase classname="tests.integration.test_web_recipe_compatibility" name="test_official_recipe_declares_training_split" time="0.005" /><testcase classname="tests.integration.test_web_recipe_compatibility" name="test_legacy_slice_writeback_does_not_create_research_version" time="3.116" /><testcase classname="tests.integration.test_web_recipe_compatibility" name="test_legacy_slice_writeback_keeps_explicit_training_split" time="3.012" /><testcase classname="tests.integration.test_web_recipe_compatibility" name="test_configuration_get_writes_legacy_slices" time="5.921" /></testsuite></testsuites>

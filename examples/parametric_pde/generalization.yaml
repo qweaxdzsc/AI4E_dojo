@@ -2,7 +2,7 @@
 case: advection
 dataset:
   manifest: ../../../../project_simulation/dojo_train/pibsnet/advection/datasets/manifest.json
-run_root: ../../../../project_simulation/dojo_train/pibsnet/generalization/runs
+run_root: ../runs
 trainprep:
   output: ../../../../project_simulation/dojo_train/pibsnet/generalization/prepared_paper_v3
 model:

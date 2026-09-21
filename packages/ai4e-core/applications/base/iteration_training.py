@@ -28,6 +28,9 @@ def train_model(
     accumulation_reduction="mean",
     scaler=None,
     epoch_end=None,
+    checkpoint_every=500,
+    evaluate=None,
+    evaluate_every=None,
 ):
     """显式恢复后执行训练并交付当前完整状态，writer 独占检查点写入。"""
     if type(updates) is not int or updates < 0:
@@ -41,6 +44,8 @@ def train_model(
     if update_step is not None and (accumulate != 1 or scaler is not None):
         raise ValueError("自定义更新不能叠加默认累积或混合精度")
     execution_options = {}
+    if evaluate is not None:
+        execution_options["evaluate"] = evaluate
     if update_step is not None:
         execution_options["update_step"] = update_step
     if accumulate != 1:
@@ -128,7 +133,7 @@ def train_model(
         ema=None,
         after_update=after_update,
         checkpoint=save,
-        evaluate_every=500,
+        evaluate_every=checkpoint_every if evaluate_every is None else evaluate_every,
         deadline=deadline,
         **({"cancelled": cancelled} if cancelled is not None else {}),
         history=history,

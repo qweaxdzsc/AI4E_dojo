@@ -5,4 +5,4 @@ test: 10
 nx: 21
 nt: 1001
 ny: 21
-output: ../../../../../project_simulation/dojo_train/pibsnet/trapezoid_dojo_10/datasets
+output: ../data

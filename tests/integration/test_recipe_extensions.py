@@ -153,6 +153,14 @@ def test_sampling_runs_during_each_training_epoch(tmp_path, injection):
                 "data, settings=cfg.model.sampling, model_component=components.model, operation=reverse_geometry",
             )
         )
+        stage = folder / "train.py"
+        stage.write_text(
+            "from custom_abilities import reverse_geometry\n"
+            + stage.read_text().replace(
+                "prepare=components.model.prepare_inputs,",
+                "prepare=reverse_geometry,",
+            )
+        )
     result = script(folder)
     assert result.returncode == 0, result.stdout + result.stderr
     calls = Path(str(path) + ".calls").read_text().splitlines()
@@ -161,11 +169,14 @@ def test_sampling_runs_during_each_training_epoch(tmp_path, injection):
     record = json.loads((directory / "artifacts/preparation.json").read_text())
     assert record["components"]["prepare"]["name"] == "custom_abilities.reverse_geometry"
     cfg["inputs"]["train"]["preparation"] = str(directory / "artifacts/preparation.json")
+    before = len(calls)
     path.write_text(source + "\n# implementation changed\n")
     (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
     result = script(folder, "train.py")
-    assert result.returncode != 0
-    assert "变化" in result.stderr
+    assert result.returncode == 0, result.stdout + result.stderr
+    changed_calls = Path(str(path) + ".calls").read_text().splitlines()
+    assert len(changed_calls) > before
+    assert "0:False" in changed_calls[before:] and "1:False" in changed_calls[before:]
 
 
 def test_extension_parameters_and_bad_output_fail_before_publish(tmp_path):

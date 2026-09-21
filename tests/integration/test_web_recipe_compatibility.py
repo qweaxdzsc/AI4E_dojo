@@ -175,3 +175,98 @@ def test_official_cases_declare_visible_field_scale():
     assert nasa["trainprep"]["normalization"]["fields"]["surface_position"]["scale"] == 1000
     transolver = yaml.safe_load((root / "shapenet_car_transolver3_surface/config.yaml").read_text())
     assert transolver["trainprep"]["normalization"]["fields"]["surface_position"]["scale"] == 1
+
+
+def test_official_recipe_declares_training_split():
+    import yaml
+
+    cfg = yaml.safe_load(
+        (Path(__file__).resolve().parents[2] / "recipes/aero_cfd/config.yaml").read_text()
+    )
+    assert cfg["train"]["training_split"] == "train"
+
+
+def test_legacy_slice_writeback_does_not_create_research_version(platform):
+    """缺键旧任务写回训练切片和评价集，不新建研究版本。"""
+    import importlib.util
+
+    import ai4e_task as task
+
+    path = Path(__file__).resolve().parents[2] / "packages/ai4e-server/modules/stages/domain.py"
+    spec = importlib.util.spec_from_file_location("dojo_source_stage_domain", path)
+    domain = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(domain)
+    client, project, item, _, _ = platform
+    base = client.app.state.services.project(project)
+    current = task.read_configuration(base, item["id"])
+    train = dict(current["config"]["train"])
+    train.pop("training_split", None)
+    train["evaluation_split"] = "validation"
+    train["export_split"] = "validation"
+    saved = task.save_configuration(
+        base, item["id"], {"train": train}, revision=current["revision"], replace_sections=("train",)
+    )
+    saved = task.save_configuration(
+        base,
+        item["id"],
+        {"trainprep": {"split": {"method": "original", "seed": 0, "counts": {"train": 2, "test": 1}}}},
+        revision=saved["revision"],
+    )
+    patch = domain.legacy_slice_patch(saved["config"])
+    written = task.save_configuration(base, item["id"], patch, revision=saved["revision"])
+    assert written["config"]["train"]["training_split"] == "train"
+    assert written["config"]["train"]["evaluation_split"] == "eval"
+    assert written["config"]["train"]["export_split"] == "eval"
+    assert written["config"]["trainprep"]["split"]["counts"]["eval"] == 0
+    assert len(task.get_lineage(base)) == 1
+
+
+def test_legacy_slice_writeback_keeps_explicit_training_split(platform):
+    import importlib.util
+
+    import ai4e_task as task
+
+    path = Path(__file__).resolve().parents[2] / "packages/ai4e-server/modules/stages/domain.py"
+    spec = importlib.util.spec_from_file_location("dojo_source_stage_domain", path)
+    domain = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(domain)
+    client, project, item, _, _ = platform
+    base = client.app.state.services.project(project)
+    current = task.read_configuration(base, item["id"])
+    written = task.save_configuration(
+        base,
+        item["id"],
+        {"train": {"training_split": "test"}},
+        revision=current["revision"],
+    )
+    assert domain.legacy_slice_patch(written["config"]) == {}
+    assert written["config"]["train"]["training_split"] == "test"
+
+
+def test_configuration_get_writes_legacy_slices(platform):
+    """打开配置即写回缺的训练切片；安装副本尚无该入口时跳过。"""
+    import ai4e_server.modules.stages.domain as installed
+    import ai4e_task as task
+
+    if not hasattr(installed, "legacy_slice_patch"):
+        pytest.skip("安装副本尚未包含切片写回")
+    client, project, item, _, _ = platform
+    base = client.app.state.services.project(project)
+    current = task.read_configuration(base, item["id"])
+    train = dict(current["config"]["train"])
+    train.pop("training_split", None)
+    train["evaluation_split"] = "validation"
+    saved = task.save_configuration(
+        base, item["id"], {"train": train}, revision=current["revision"], replace_sections=("train",)
+    )
+    page = client.get(
+        f"/api/v1/projects/{project}/tasks/{item['id']}/configuration",
+        params={"stage": "train"},
+    )
+    assert page.status_code == 200, page.text
+    assert page.json()["values"]["training_split"] == "train"
+    assert page.json()["values"]["evaluation_split"] == "eval"
+    after = task.read_configuration(base, item["id"])
+    assert after["revision"] != saved["revision"]
+    assert after["config"]["train"]["training_split"] == "train"
+    assert len(task.get_lineage(base)) == 1

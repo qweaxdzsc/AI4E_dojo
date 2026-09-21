@@ -95,6 +95,22 @@ def freeze(view, config: dict) -> Normalization:
         }
         if method == "custom":
             fields[name]["target"] = spec["target"]
+    # 同一物理空间的多个域必须使用相同坐标映射；旧声明不受影响。
+    coordinate_groups = {}
+    for name, spec in specs.items():
+        group = spec.get("coordinate_group")
+        if group is not None:
+            if spec["method"] != "coordinate" or not isinstance(group, str) or not group:
+                raise ValueError("coordinate_group 仅用于具名坐标变换组")
+            coordinate_groups.setdefault(group, []).append(name)
+    for names in coordinate_groups.values():
+        if len({fields[name]["scale"] for name in names}) != 1:
+            raise ValueError("同一坐标组的 scale 必须相同")
+        low = min(min(fields[name]["parameters"]["minimum"]) for name in names)
+        high = max(max(fields[name]["parameters"]["maximum"]) for name in names)
+        for name in names:
+            fields[name]["parameters"].update(minimum=[low], maximum=[high])
+            fields[name]["coordinate_group"] = specs[name]["coordinate_group"]
     return Normalization(
         {"version": 2, "fields": fields, "training_samples": view.partitions["train"]}
     )

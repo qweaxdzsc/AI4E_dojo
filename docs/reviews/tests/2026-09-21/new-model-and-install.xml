@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="2.813" timestamp="2026-09-21T02:15:11.596798+08:00" hostname="zonghuideMacBook-Pro.local"><testcase classname="" name="tests.integration.test_pcno_inference" time="0.000"><error message="collection failure">ImportError while importing test module '/Users/zonghui/work/new_code_project/AI4E_Dojo/tests/integration/test_pcno_inference.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_pcno_inference.py:8: in &lt;module&gt;
+    from ai4e_contrib.application.geothermal.pcno import inference
+.venv/lib/python3.12/site-packages/ai4e_contrib/application/geothermal/pcno/inference.py:12: in &lt;module&gt;
+    from ai4e_core.applications.geothermal.inference import predict_fields, predict_wells, save_sample
+.venv/lib/python3.12/site-packages/ai4e_core/applications/geothermal/inference.py:5: in &lt;module&gt;
+    from ai4e_core.abilities.constraint.geothermal import physical_loss
+.venv/lib/python3.12/site-packages/ai4e_core/abilities/constraint/geothermal.py:10: in &lt;module&gt;
+    from ai4e_core.abilities.postproc.wellbore import extract_wellData, process_wellResult
+.venv/lib/python3.12/site-packages/ai4e_core/abilities/postproc/wellbore.py:9: in &lt;module&gt;
+    from iapws import IAPWS97
+E   ModuleNotFoundError: No module named 'iapws'</error></testcase></testsuite></testsuites>

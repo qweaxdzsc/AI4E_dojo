@@ -1,7 +1,7 @@
 case: convection_diffusion
 dataset:
   name: convection_diffusion
-run_root: ../../../../../project_simulation/dojo_train/pibsnet/convection_diffusion/runs
+run_root: ../runs
 trainprep:
   execute: true
 train:
@@ -18,15 +18,15 @@ pipeline:
   - post
 inputs:
   rawprep:
-    manifest: ../../../../../project_simulation/dojo_train/pibsnet/convection_diffusion/datasets/manifest.json
+    manifest: ../data/manifest.json
   trainprep:
-    dataset: ../../../../../project_simulation/dojo_train/pibsnet/convection_diffusion/datasets/manifest.json
+    dataset: ../data/manifest.json
   train:
-    dataset: ../../../../../project_simulation/dojo_train/pibsnet/convection_diffusion/datasets/manifest.json
+    dataset: ../data/manifest.json
     preparation: null
     resume: null
   infer:
-    dataset: ../../../../../project_simulation/dojo_train/pibsnet/convection_diffusion/datasets/manifest.json
+    dataset: ../data/manifest.json
     preparation: null
     checkpoint: null
   post:

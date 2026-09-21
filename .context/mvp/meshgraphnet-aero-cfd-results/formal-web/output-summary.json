@@ -1,0 +1,96 @@
+{
+  "formal_run": "deb40c30c97e45f09216f0b32c820f77",
+  "manifest": "/Users/zonghui/work/project_simulation/dojo_train/platform/projects/8ef5b810780b4d50bc1311be0db90156/shared/datasets/nasa_crm_meshgraphnet_formal_0920/content/manifest.json",
+  "manifest_sha256": "0a0caf57d67ec618f6a5c3fb8496051e0191916edf5fadac15aa85ec9e343119",
+  "partition": "train",
+  "sample": "Sample002",
+  "assets": [
+    "surface.vtkhdf"
+  ],
+  "meshes": {
+    "surface": "surface.vtkhdf"
+  },
+  "fields": {
+    "conditions.pt": {
+      "shape": [
+        1,
+        6
+      ],
+      "dtype": "torch.float32",
+      "finite": true,
+      "sha256": "64c2fcefe69ae0a13e19308e577a180857f432158ef0ec543b8e902e0d4bc129"
+    },
+    "global_targets.pt": {
+      "shape": [
+        1,
+        3
+      ],
+      "dtype": "torch.float64",
+      "finite": true,
+      "sha256": "cd7905ef051adfdedd2885d02c6e129246afc7037f206537ba4c91df9f512972"
+    },
+    "surface_area.pt": {
+      "shape": [
+        454404,
+        1
+      ],
+      "dtype": "torch.float32",
+      "finite": true,
+      "sha256": "6dfc8a3315adae097b52cd96a159927ce4e8b0ba1e8a7a20ddcf4c38aa5baf37"
+    },
+    "surface_cf.pt": {
+      "shape": [
+        454404,
+        3
+      ],
+      "dtype": "torch.float32",
+      "finite": true,
+      "sha256": "37f36875b91455c2aba5cb0b1e4cf6c71480e6c29e61d9f723bf1d027b3a2ea0"
+    },
+    "surface_cp.pt": {
+      "shape": [
+        454404,
+        1
+      ],
+      "dtype": "torch.float32",
+      "finite": true,
+      "sha256": "77db2e1f996c2148255499079b4cfbb44628a33b6200090c18f7a46791242899"
+    },
+    "surface_ids.pt": {
+      "shape": [
+        454404
+      ],
+      "dtype": "torch.int64",
+      "finite": true,
+      "sha256": "7bab14848f46f9fc155fade1e468e859dd486fddf504d6965037d6479a8fee5c"
+    },
+    "surface_normals.pt": {
+      "shape": [
+        454404,
+        3
+      ],
+      "dtype": "torch.float32",
+      "finite": true,
+      "sha256": "ef6eb775249ccf1ead331680b00849eb40e6cafa3229efeec9c627a73f51e271"
+    },
+    "surface_position.pt": {
+      "shape": [
+        454404,
+        3
+      ],
+      "dtype": "torch.float32",
+      "finite": true,
+      "sha256": "b724446c6ec6bd0f40d8fa6f31626d9df70640850f8998bc72f67c7e8fd1a6d7"
+    }
+  },
+  "mesh": {
+    "path": "surface.vtkhdf",
+    "sha256": "60ddb99d1924ffb05fbbb48bd04e9135601421f314da7b2304fb8e4689fb2b17",
+    "type": "vtkPolyData",
+    "points": 454404,
+    "cells": 455304,
+    "ai4e_point_id_count": 454404,
+    "ai4e_point_id_first": 0,
+    "ai4e_point_id_last": 454403
+  }
+}

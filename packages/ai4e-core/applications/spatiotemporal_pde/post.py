@@ -15,3 +15,10 @@ def evaluate(results: dict, metrics) -> dict:
             "results": path,
         }
     return summary
+
+
+def report_trajectories(*args, **kwargs):
+    """按固定物理时间出具名轨迹报告，不构建网络或重跑预测。"""
+    from ai4e_core.applications.parametric_pde.post import report_fields
+
+    return report_fields(*args, **kwargs)

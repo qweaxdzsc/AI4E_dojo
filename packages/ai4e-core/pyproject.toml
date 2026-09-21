@@ -34,8 +34,11 @@ bypass-selection = true
 "base" = "ai4e_core/base"
 "run" = "ai4e_core/run"
 "tools" = "ai4e_core/tools"
+"Notice" = "ai4e_core/Notice"
 
 [project.optional-dependencies]
 post = ["pyvista>=0.49,<0.50", "matplotlib>=3.10"]
 modeling = ["einops>=0.8"]
 hdf5 = ["h5py>=3.11"]
+matlab = ["scipy>=1.14"]
+geothermal = ["iapws==1.5.4"]

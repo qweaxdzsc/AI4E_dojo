@@ -76,13 +76,15 @@ def open_inference(config, *, dataset_component, model_component, session, train
     if not checkpoint.is_file():
         raise ValueError(f"post 需要可用检查点: {checkpoint}")
     reference = (
-        config["train"].get("preparation")
+        post.get("preparation")
+        or config["train"].get("preparation")
         or checkpoint.parent.parent / "artifacts/preparation.json"
     )
     old = json.loads(Path(reference).read_text())
     config["train"]["manifest"] = old["manifest"]
     data = consume(config, dataset_component, model_component, reference)
-    samples, split = list(post["samples"]), post.get("split", "test")
+    split = post.get("split", "test")
+    samples = list(post["samples"] or data.view.partitions.get(split, []))
     if (
         not samples
         or len(samples) != len(set(samples))
@@ -330,7 +332,11 @@ def configure_mesh_export(job, *, settings=None):
             return item
         try:
             item.meshes = export_prediction_meshes(
-                job.config, job.dataset_component, item.manifest, committed=job.progress.committed
+                job.config,
+                job.dataset_component,
+                item.manifest,
+                committed=job.progress.committed,
+                source_meshes={k: v.get("mesh") for k, v in item.sample["domains"].items()},
             )
         except (OSError, ValueError, KeyError, TypeError) as exc:
             skip_vtk(item.manifest, str(exc), channel="mesh")
@@ -518,6 +524,7 @@ def _execute(job, dataset_component=None, model_component=None, session=None):
         if job.phase == "infer":
             path = job.session.artifact("inference-results.json", {**report, "version": 2})
             from .indexing import register_results
+
             register_results(job.session, path, report)
         job.progress.finish()
         job.session.report(report, stage=job.phase)

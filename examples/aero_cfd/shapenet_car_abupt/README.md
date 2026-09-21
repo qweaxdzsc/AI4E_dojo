@@ -7,7 +7,7 @@
 - 一轮完整训练，最后检查点；固定五个测试样本全点评价。前三个样本用于跨运行图表。
 - NASA 只有表面场。汽车 Transolver 表面与体积各使用独立 example，复用同一物理数据。
 
-本期交叉实跑已交付；结果与验收边界见仓库 `.context/mvp/cross-model-acceptance.md`。
+本期交叉实跑已交付；结果与验收边界见仓库 固定结果与证据清单。
 
 ## 独立推理
 
@@ -15,7 +15,7 @@
 
 原生 infer 只解释 infer 参数；后处理以 `post.results` 或 `infer.results` 指向已经完成的 `physical-predictions.json`，不会再次预测。完整物理场五例交付同形预测与物理指标；旧锚点模板保留独立兼容结果，不冒充同一比较口径。进度为 `inference-progress.json`，所有运行文件由 writer 提交，数组写配置指定数据目录。
 
-派生字段例子见 `examples/recipe_extensions/inference_fields/`；详细功能约定见 `docs/PRD/recipes/aero_cfd/PRD.md`。
+派生字段例子见 `examples/recipe_extensions/inference_fields/`；详细功能约定见 `docs/PRD/维护源/PRD.md`。
 
 ### 推理字段与指标选择
 
@@ -30,3 +30,28 @@
 `post.py` 的 `analyze_sample` 是可编辑流程正文，可插入步骤或替换绘图。训练中设置 `post.snapshot_every` 和 `post.snapshot_sample`；默认 0 不执行。数据按来源摘要及样本隔离，重复出图需选择新输出根或显式 `overwrite_analysis: true`。自定义函数和保存读回示例见 `examples/recipe_extensions/physical_visualization`。
 
 指标 JSON/CSV、剖面 CSV、PNG、VTP/VTU 和 manifest 均在数据目录。图形与原数值独立，原始结果只读；不需要启动 Web。
+
+## 统一案例契约
+
+- `example_contract_version=1`，`recipe_contract_version=1`；本目录是可在仓库外复制的完整 standalone。
+- 阶段顺序由 `pipeline.py` 的普通 Python 表达，YAML 只提供参数、路径和能力选择。每个阶段脚本都通过公开 `ai4e_core.run.launch` 启动。
+- 从目录外运行时使用 `python /path/to/shapenet_car_abupt/pipeline.py`，单阶段可直接运行同目录阶段脚本；配置中的 `inputs.*`、`run_root` 和 `data_root` 是唯一交接路径。
+- 需要代码快照、资产、后台运行、停止、恢复或比较时，把同一目录交给 `ai4e_task` Python API；Task 不复制训练循环，也不要求 `task-entry.json`。
+- 修改网络、损失、字段、采样、优化器、调度器或 post 后，必须从阶段报告、配置快照、检查点、预测、指标和 post 结果证明新组件实际被调用。
+- 恢复要区分重新初始化和完整状态恢复；结构、数据身份或更新策略变化可能使原检查点失效。smoke 只证明流程接线、参数生效和产物交接，不构成精度或论文复现结论。
+## 输入、阶段与产物
+
+- 模型：`AB-UPT`；数据集：`shapenet_car`；依赖：`ai4e-core`、`ai4e-contrib`，以及配置中声明的可选模型依赖。
+- 阶段顺序：`rawprep → trainprep → train → infer → post`。单阶段入口是同名 `.py` 文件；参数覆盖使用 `--set`，不通过隐藏任务文件传参。
+- 外部输入放在 `inputs.<stage>.<name>`；运行摘要、阶段报告、检查点、预测、指标和 post 派生结果分别从 `run_root`/`data_root` 的固定清单读回。
+- 恢复使用阶段 README 和配置声明的 `inputs.*.resume` 或 `checkpoint` 键；模型结构、数据身份、采样或更新策略改变时先做兼容性检查。
+- 仅凭文件存在、导入成功或短训退出不能宣称科学精度；smoke 证据与论文级结论分开记录。
+
+## Agent Help Center
+
+本目录是 `完整案例`。Agent 先读取帮助主题 `case:aero_cfd.shapenet_car_abupt`，再按主题关联的 workflow 和 API 参考核对输入、函数签名、产物与证据边界。支持 Python 帮助 API 时可调用：
+
+```python
+import ai4e_task as task
+print(task.read_help_topic("case:aero_cfd.shapenet_car_abupt")["content"])
+```

@@ -3,7 +3,7 @@
 import argparse
 import sys
 
-from . import project, task, template, version
+from . import project, resources, task, template, version
 from .output import render
 
 
@@ -19,7 +19,7 @@ def main(argv: list[str] | None = None) -> int:
     def common(p):
         p.add_argument("--project", default=".")
 
-    for module in (project, task, version, template):
+    for module in (project, task, version, template, resources):
         module.register(commands, common)
     args = parser.parse_args(argv)
     try:

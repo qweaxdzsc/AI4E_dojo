@@ -10,8 +10,8 @@ pipeline:
   - post
 inputs:
   rawprep:
-    source: /Users/zonghui/work/project_simulation/dojo_train/wdno/burgers-local-v1-20260917/frozen/protocol.json
-    indices: /Users/zonghui/work/project_simulation/dojo_train/wdno/burgers-local-v1-20260917/frozen/indices.json
+    source: ./runs/wdno/burgers-local-v1-20260917/frozen/protocol.json
+    indices: ./runs/wdno/burgers-local-v1-20260917/frozen/indices.json
   trainprep:
     dataset: null
     validation: null

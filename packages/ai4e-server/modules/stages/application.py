@@ -19,6 +19,7 @@ from .domain import (
     execution_stages,
     field_matching_catalog,
     is_settings_save,
+    legacy_slice_patch,
     normalize_field_scales,
     published_slices,
     reject_statistics,
@@ -61,7 +62,7 @@ def _describe_case(project: str, identity: str, revision: str, output_root: str)
 
 def configuration(project: str, identity: str, service, stage: str | None = None):
     """读取任务 YAML 中的用户配置，不建立第二份配置。"""
-    value = task.read_configuration(service.project(project), identity)
+    value = _migrate_legacy_slices(service, service.project(project), identity)
     if stage:
         validate_stage(stage)
         try:
@@ -131,7 +132,7 @@ def save(
     edited_paths: list[list[str]] | None = None,
     removed_paths: list[list[str]] | None = None,
 ):
-    """核对修订保存阶段草稿；显式换模同时替换关联默认值并解除旧输入。"""
+    """核对修订保存阶段草稿；显式换模同时替换关联默认值并解除旧输入。换模后的完整稿补上缺的训练切片键，避免随后打开配置再改修订。"""
     validate_stage(stage)
     if edited_paths is None:
         reject_statistics(values)
@@ -271,6 +272,12 @@ def save(
                 raise ValueError("invalid_stage_binding_structure: " + key)  # noqa: TRY004 - 统一配置业务错误
         section[parts[-1]] = resolved
     patch = normalize_field_scales(patch)
+    extra = legacy_slice_patch(patch)
+    if extra:
+        patch = OmegaConf.to_container(
+            OmegaConf.merge(OmegaConf.create(patch), OmegaConf.create(extra)),
+            resolve=False,
+        )
     if stage == "trainprep":
         manifest = _read_manifest(patch)
         matching = field_matching_catalog(patch, manifest)
@@ -397,12 +404,13 @@ def model_inspection(project: str, identity: str, body: OperationCommand, servic
     if captured["revision"] != body.expected_revision:
         raise ValueError("configuration_revision_conflict")
     _migrate_official_scripts(service, service.project(project), identity)
+    captured = _migrate_legacy_slices(service, service.project(project), identity)
     selection, inputs = _trace_selection(service, project, identity)
     return submit_model_inspection(
         service,
         project,
         identity,
-        body.expected_revision,
+        captured["revision"],
         selection,
         inputs,
         body.idempotency_key,
@@ -483,6 +491,8 @@ def operation(project: str, identity: str, stage: str, body: OperationCommand, s
     if task.get_task(base, identity).get("archived") or task.open_project(base).get("archived"):
         raise ValueError("archived")
     _migrate_official_scripts(service, base, identity)
+    captured = _migrate_legacy_slices(service, base, identity)
+    revision = captured["revision"]
     for source in body.inputs:
         asset(service, project, source)
     bindings = body.selection.get("bindings", {})
@@ -499,6 +509,7 @@ def operation(project: str, identity: str, stage: str, body: OperationCommand, s
             _require_current_preparation(preparation)
     if body.mode == "check":
         body.selection["stage"] = stage
+        body.expected_revision = revision
         return _inspect(project, identity, body, service, "validate_configuration")
     stages = execution_stages(stage, body.mode, body.selection)
     config = normalize_field_scales(captured["config"])
@@ -530,7 +541,7 @@ def operation(project: str, identity: str, stage: str, body: OperationCommand, s
         identity,
         overrides=overrides,
         idempotency_key=body.idempotency_key,
-        expected_revision=body.expected_revision,
+        expected_revision=revision,
         operation_mode=body.mode,
         input_keys=selected_input_keys(stages, declared),
         overwrite=bool(body.selection.get("overwrite", False)),
@@ -543,7 +554,7 @@ def operation(project: str, identity: str, stage: str, body: OperationCommand, s
             "run_id": result["id"],
             "mode": body.mode,
             "stage": stage,
-            "revision": body.expected_revision,
+            "revision": revision,
             "inputs": body.inputs,
         },
     )
@@ -569,6 +580,15 @@ def _migrate_official_scripts(service, project, identity):
     if not source.is_dir():
         raise ValueError("migration_registered_case_missing")
     task.migrate_official_aero_scripts(project, identity, source, expected_sources=expected)
+
+
+def _migrate_legacy_slices(_service, project, identity):
+    """缺的训练切片和旧 validation 写回配置，不新建研究版本。"""
+    captured = task.read_configuration(project, identity)
+    patch = legacy_slice_patch(captured["config"])
+    if not patch:
+        return captured
+    return task.save_configuration(project, identity, patch, revision=captured["revision"])
 
 
 def _selected_preparation(config, resolved) -> str | None:

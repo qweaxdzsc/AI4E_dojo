@@ -1,0 +1,113 @@
+{
+  "created_at": "2026-09-21T05:06:31.783220+08:00",
+  "files": [
+    {
+      "path": "10f8c259d417909ad78ae891509cbfb8e3bcf5fc/LICENSE",
+      "sha256": "f07ce7285d558b622f7cbb0a344e40da25728ab8b7a518d13ef3c2f64c6ceaa9"
+    },
+    {
+      "path": "10f8c259d417909ad78ae891509cbfb8e3bcf5fc/training/src/anemoi/training/utils/compile.py",
+      "sha256": "3588c5ba32f94e080698e5097002a9de9076c1e72d6d91b4582091682f1bb1bf"
+    },
+    {
+      "path": "10f8c259d417909ad78ae891509cbfb8e3bcf5fc/training/tests/integration/conftest.py",
+      "sha256": "ef7808b19943cbc93502239cce48965078416db1526433443e9169693f4df08f"
+    },
+    {
+      "path": "10f8c259d417909ad78ae891509cbfb8e3bcf5fc.json",
+      "sha256": "1dec24a392a787e6c1b75b591cf137b249b0384b6acea74016d751ed4dd264c0"
+    },
+    {
+      "path": "7bd00184c2f13510d68b4e10ff262828714c10e7/examples/cfd/external_aerodynamics/unified_external_aero_recipe/src/nondim.py",
+      "sha256": "5163ce9421e6be4be31852a56db5ca0f936e58e2fe79afadb066ec39f53e1d47"
+    },
+    {
+      "path": "7bd00184c2f13510d68b4e10ff262828714c10e7/examples/cfd/external_aerodynamics/unified_external_aero_recipe/tests/test_infer.py",
+      "sha256": "b0092679e71de5b784bc1ff2d97522a3a117a5a2b4877331a61ccc9ad0740020"
+    },
+    {
+      "path": "7bd00184c2f13510d68b4e10ff262828714c10e7/examples/cfd/external_aerodynamics/unified_external_aero_recipe/tests/test_nondim.py",
+      "sha256": "545aab663270e04c7d2a28bb2b3b4880c7f05557f876b7419797c14e69dcc592"
+    },
+    {
+      "path": "7bd00184c2f13510d68b4e10ff262828714c10e7.json",
+      "sha256": "67c221f4e5549a7fec34edd94d2b9610ff14b02353808c5ec0d520224a69ae4d"
+    },
+    {
+      "path": "94dbdf829d1a4e93e3f31ecb77713392c471388e/LICENSE.txt",
+      "sha256": "f804cfd52b3bacfd16cb9e80c1af55ccd97a0c41159fc06452d7b8b44432149f"
+    },
+    {
+      "path": "94dbdf829d1a4e93e3f31ecb77713392c471388e/physicsnemo/nn/module/flare_attention.py",
+      "sha256": "ad9dc3e13b2d12214bf5ae12c087332f088f0ff9b5be6c530434d9ec0c76201f"
+    },
+    {
+      "path": "94dbdf829d1a4e93e3f31ecb77713392c471388e/test/models/flare/test_flare.py",
+      "sha256": "50159d255f9c9ef8fdb7706117a4933b8a997e40178834e4ca7a2e07d4ea824c"
+    },
+    {
+      "path": "94dbdf829d1a4e93e3f31ecb77713392c471388e/test/models/geotransolver/test_flare_plus_plus.py",
+      "sha256": "fa690fdd8d7448c43d509435f9ba6395dcee2aaa492c6ec30591a2c96545f32f"
+    },
+    {
+      "path": "94dbdf829d1a4e93e3f31ecb77713392c471388e/test/models/geotransolver/test_geotransolver.py",
+      "sha256": "d81d1c76c3357829542ec0eafdcf4547748c16057faefd946a8f8071a16635db"
+    },
+    {
+      "path": "94dbdf829d1a4e93e3f31ecb77713392c471388e/test/nn/module/test_flare_attention.py",
+      "sha256": "274fec4f7b34f782b9e2214777d707e2037e450c9f5c43b8a44b88dc9a882342"
+    },
+    {
+      "path": "94dbdf829d1a4e93e3f31ecb77713392c471388e.json",
+      "sha256": "8d8eeca45dfbc82cfd0dfd08068411079a2f987b976f5088b40ce4a61bdb969a"
+    },
+    {
+      "path": "Lightning-AI--pytorch-lightning.json",
+      "sha256": "60e9e233e9fafb07471a45fdc37300c9020c7e80dcfe7df8b6b090f9798f318c"
+    },
+    {
+      "path": "NVIDIA--physicsnemo.json",
+      "sha256": "25762d6a99ac243eb23dfed9b2af067626ab132451aae272d738294578d3620b"
+    },
+    {
+      "path": "PaddlePaddle--PaddleScience.json",
+      "sha256": "ebe8c06843ac7cc0e69ba8b2b1a39dfc82bc901c94d80884a103185dd2222da1"
+    },
+    {
+      "path": "ecmwf--anemoi-core.json",
+      "sha256": "3044c50df5d0ea6f01ea5c4b945e3269fd6f99e19225c6b14b3cf0f3064aff47"
+    },
+    {
+      "path": "huggingface--accelerate.json",
+      "sha256": "1eafabb12d336d15b6a553d3370edb093479859ccc2add9306b21ba25e456df4"
+    },
+    {
+      "path": "lululxvi--deepxde.json",
+      "sha256": "c503205ac106edebec7bfc7f92652cdc6b736cccaafdfcb823e9a7cb46d529eb"
+    },
+    {
+      "path": "neuraloperator--neuraloperator.json",
+      "sha256": "4bbcce840572d888120708faa29eff95df8b1032f788bd250365f0896b7ea1b6"
+    },
+    {
+      "path": "pr-1344.json",
+      "sha256": "b312de5d782122e15dd6644aeb42dfbc3021bb3974eac9506a6f4a7d51f9bb71"
+    },
+    {
+      "path": "pr-1940.json",
+      "sha256": "8a5efc94ce064bf00407aca85dedea7c2a428add01e161fef60993d63c01e48b"
+    },
+    {
+      "path": "pr-1995.json",
+      "sha256": "1322aaef1c878b578c78081cf723b73ce8ece816e23d68de093edc8f813fe885"
+    },
+    {
+      "path": "pytorch--torchdata.json",
+      "sha256": "4591f7d8e7f4d98bb551366d81b273cedded7ba0dae591b9f6f50ec080b92568"
+    },
+    {
+      "path": "pytorch--torchtune.json",
+      "sha256": "86ab0b8b0da0ee6af7984521004918b80cc24296a9b40cc1dae1833314541842"
+    }
+  ]
+}

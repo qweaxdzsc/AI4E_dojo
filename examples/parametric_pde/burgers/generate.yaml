@@ -4,4 +4,4 @@ train: 100
 test: 20
 nx: 1000
 nt: 320
-output: ../../../../../project_simulation/dojo_train/pibsnet/burgers/datasets
+output: ../data

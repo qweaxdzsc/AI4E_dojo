@@ -10,7 +10,7 @@ uv run python rawprep.py --config config.yaml --check
 
 在仓库外使用时，以已安装 ai4e-core/ai4e-contrib 的 Python 环境运行；uv 可用 `--active` 使用该环境。脚本默认读取旁边的 config.yaml，不依赖当前工作目录。
 
-先修改 `dataset.root`（原始数据）、`data_root`（产物）、`run_root`（运行记录）。`${data_root}/train` 等路径支持任意配置变量插值；各分片可单独改为绝对路径，相对路径以配置文件为基准。
+先修改 `inputs.rawprep.source`（原始数据）、`data_root`（产物）、`run_root`（运行记录）。`${data_root}/train` 等路径支持任意配置变量插值；各分片可单独改为绝对路径，相对路径以配置文件为基准。
 
 `dataset.samples: all` 使用已选分片的全部样本，也可填样本 ID 列表。`dataset.partition: official` 使用官方名单，也可填 `train: [param0/...]`、`test: [...]` 映射或名单 YAML 路径。仅处理 test 时将 rawprep.statistics.mode 改为 reference 或 none；fit 要求非空完整 train。
 
@@ -26,7 +26,7 @@ uv run python rawprep.py --config config.yaml --check
 
 默认 pipeline 依次执行 rawprep、trainprep、train、post。各脚本也可分别运行；train 默认实际拟合。rawprep 调用库既有 datapre 业务方法，文件名不约束库接口。trainprep 写出准备引用，冻结归一化和数据内容摘要，train 消费前校验；每次训练迭代仍动态采样。默认与官方 ShapeNet-Car 预设一致，保留未激活的特征投影参数，以保证初始化随机流一致。旧阶段名 `pre` 已移除，请改用 `rawprep`。
 
-配置只描述用户输入和实验选择：无需预填统计数值、准备摘要、将来的检查点或预测文件名。完整 pipeline 自动交接这些结果；独立运行 train/infer/post 时，分别用 `train.preparation`、`infer.checkpoint` 与 `infer.preparation`、`post.results` 指向已有产物。`model.data_specs.output_dims` 是要预测什么的任务声明，不是要求填写未来预测值。
+配置只描述用户输入和实验选择：无需预填统计数值、准备摘要、将来的检查点或预测文件名。完整 pipeline 自动交接这些结果；独立运行 train/infer/post 时，分别用 `inputs.train.preparation`、`inputs.infer.checkpoint` 与 `inputs.infer.preparation`、`inputs.post.results` 指向已有产物。`model.data_specs.output_dims` 是要预测什么的任务声明，不是要求填写未来预测值。
 
 模型结构版本 3 修正了 RMSNorm、默认绝对位置编码、联合投影和初始化顺序。旧结构权重不能直接续训。逐阶段和完整参考训练证据见 [参考验收](../../.context/mvp/abupt-reference-acceptance.md)。
 
@@ -103,7 +103,12 @@ run.launch 的 config_loader 接收案例加载函数；run 在执行前保存�
 
 ## 物理 PT 跨模型实验
 
-五个独立配置见 `examples/aero_cfd`。五例在脚本中显式使用物理数据准备、训练和完整预测步骤；`components.model` 选择模型，配合字段绑定与模型参数切换实验。新模板不声明 `components.workflow`，历史调用仍可使用兼容包装。已准备物理数据时配置 `train.manifest`，从 trainprep 开始；原始数据可独立执行 rawprep。NASA 的物理 PT 和参考 NPY 两条路径均保留。
+七个独立配置见 `examples/aero_cfd`。原五例保留锚点准备、训练和推理数值路径；ShapeNet-Car 与 NASA CRM 的 MeshGraphNet 案例在同一阶段脚本中通过 `trainprep.topology` 选择图准备、静态图训练和完整分区拼回。`components.model` 选择模型，配合字段绑定与模型参数切换实验。已准备平台数据时配置 `inputs.trainprep.dataset`，从 trainprep 开始；图案例只消费 manifest 声明的逐场 PT、VTKHDF 和实体身份，不读取原始 VTK、HDF5 或 connectivity。
+
+图拓扑不会写回共享平台数据。trainprep 校验 PT 原点 ID 与 VTKHDF 坐标，从真实单元
+派生边和诱导子图，并在准备目录缓存拓扑摘要、核心分区与 halo；删除缓存后可从平台
+资产重建。ShapeNet-Car 使用表面和体积两个独立子网络，NASA CRM 使用表面子网络并
+广播六维工况。两例是工程扩展，不对应 MeshGraphNets 论文精度。
 
 每个 example 一个模型实例。训练准备在 artifacts 中冻结，独立 train 用 `train.preparation`，独立 infer 用 `infer.checkpoint` 指定最后权重，post 用 `post.results` 消费固定结果；默认使用相邻运行目录的冻结准备。比较入口在 `tools/verification/cross_model`，报告写独立输出目录，不增加 recipe。
 
@@ -146,3 +151,8 @@ run.launch 的 config_loader 接收案例加载函数；run 在执行前保存�
 通过 Task 托管时，原始处理正式产物归项目 shared，先填写 `dataset.processed_name`。新任务可绑定该名称后仅执行 trainprep/train/infer，无需重复 rawprep；同名重做必须在本次提交显式指定覆盖。独立运行 Python 脚本仍按原配置的输出路径执行。
 
 处理步骤仍在 rawprep.py 中可编辑。新增字段要完成声明、保存、共享清单读回和另一任务的字段绑定；采样和归一化不写回共享物理数据。扩展示例的 Task 入口声明共享输出与阶段输入，字段扩展通过两任务和仓库外 wheel 实跑验收。
+
+
+## Example 与 Agent 交接
+
+本目录是仓库内 recipe 维护源；可复制的完整研究目录位于对应 `examples/` standalone。公共阶段脚本由案例清单声明并逐文件核对，配置、数据根和研究预算可以不同，但阶段顺序、输入键、恢复交接和产物语义不能漂移。Agent 先在复制目录通过 `ai4e_core.run.launch` 直接运行，再按需用同一目录调用 `ai4e_task` Python API；CLI 只是便利方式。

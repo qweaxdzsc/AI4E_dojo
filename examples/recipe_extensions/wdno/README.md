@@ -1,6 +1,6 @@
 # WDNO 研究变体
 
-先复制完整 `recipes/wdno/` 到自己的研究目录，再用本目录的 `config.yaml`、`pipeline.py`、`audit.py`、`variants.py` 覆盖或补充同名文件。保留模板的配置加载器和五个阶段文件。本目录是扩展覆盖文件集，不能单独当作完整模板。
+先复制完整 `维护源/` 到自己的研究目录，再用本目录的 `config.yaml`、`pipeline.py`、`audit.py`、`variants.py` 覆盖或补充同名文件。保留模板的配置加载器和五个阶段文件。本目录是扩展覆盖文件集，不能单独当作完整模板。
 
 完整配置使用本机冻结来源与名单，外部机器须替换 `inputs.rawprep`。默认宽度8、两次更新是使用验收变体，不代表原正式网络或论文精度；较小数据验收需显式选择原名单的子集，不能擅自把完整轨迹截成时间片。执行前设置自己的 `run_root` 和 `data_root`，已有运行和原数据不覆盖。
 
@@ -16,7 +16,7 @@
 
 ## Task与实验预算
 
-直接脚本与Task执行同一份pipeline；Task复制研究目录后，后续修改应在任务副本进行。新建项目/任务后分别提交准备、训练、推理和post即可；公开使用说明见[主模板](../../../recipes/wdno/README.md)，实际验证工具见[WDNO验证入口](../../../tools/verification/wdno/README.md)。
+直接脚本与Task执行同一份pipeline；Task复制研究目录后，后续修改应在任务副本进行。新建项目/任务后分别提交准备、训练、推理和post即可；公开使用说明见[主模板](../../../维护源/README.md)，实际验证工具见[WDNO验证入口](../../../运行验证说明)。
 
 本次WDNO实验所有训练、采样和验收都用原累计账本监督。`train.seconds`仅限制训练阶段，不能替代总账本。见验证入口中的“续接预算”；不得另建账本或按变体重置预算。变体精度与官方复现分开报告。
 
@@ -56,7 +56,7 @@ path.write_text(yaml.safe_dump(cfg, sort_keys=False))
 
 ## 只替换训练策略
 
-先复制当前完整 `recipes/wdno/`，再覆盖本目录文件。新增 `variant_training.py` 提供普通优化器、调度器和更新函数；默认配置不启用这些变化。在完整 config.yaml 中按需增加：
+先复制当前完整 `维护源/`，再覆盖本目录文件。新增 `variant_training.py` 提供普通优化器、调度器和更新函数；默认配置不启用这些变化。在完整 config.yaml 中按需增加：
 
 ```yaml
 components:
@@ -70,3 +70,18 @@ components:
 局部 update 示例缩放梯度，限单优化器、完整精度、无额外持久状态，不与框架累积/混合精度叠加。数据流、记录、取消和检查点继续复用框架。改动策略后从头训练；同一策略可增大 updates 续训，策略文件来源变化则完整恢复拒绝。预测和 post 不调用训练策略。
 
 也可将本目录现成的 `configure_variant.py` 复制到研究目录后执行：它保留已有 inputs.rawprep，设为四次更新并显式启用网络、损失、能量和三个训练变体。先填写输入来源；脚本会修改复制目录的配置，执行前可直接编辑脚本中的参数。上面的带协议/名单参数代码是另一份数据路径配置示范，勿混用参数约定。
+
+## 物化说明
+
+- `base_case`: `wdno.burgers_base`。该目录是 extension 参考覆盖集，不是独立流程。
+- 物化时先复制完整基案例，再叠加清单声明的覆盖文件，并写出 `.dojo-provenance.json`；未声明冲突、缺少基案例或非空目标会失败。
+- 物化目录随后可以由 Agent 自由修改、用 direct-core 运行或交给 `ai4e_task` Python API；扩展目录本身不会绑定本机数据或自动启动任务。
+
+## Agent Help Center
+
+本目录是 `参考变体`。Agent 先读取帮助主题 `case:recipe_extensions.wdno`，再按主题关联的 workflow 和 API 参考核对输入、函数签名、产物与证据边界。支持 Python 帮助 API 时可调用：
+
+```python
+import ai4e_task as task
+print(task.read_help_topic("case:recipe_extensions.wdno")["content"])
+```

@@ -1,0 +1,37 @@
+seed: 7
+run_root: ../pcno_runs
+data_root: ../pcno_data
+pipeline:
+  stages: [rawprep, trainprep, train, infer, post]
+inputs:
+  rawprep:
+    source: null
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+    pres_resume: null
+    temp_resume: null
+  infer:
+    preparation: null
+    checkpoints: null
+  post:
+    results: null
+model:
+  modes: [1, 1, 1, 1]
+  pres_width: 8
+  temp_width: 8
+train:
+  updates: 21
+  device: cpu
+  threads: 4
+infer:
+  source: training24
+  sample_ids: null
+  device: cpu
+post:
+  temperature_threshold: 75
+  capacity_factor: 0.85
+components:
+  network: ai4e_contrib.ability.model.pcno.build_model
+  objective: ai4e_contrib.application.geothermal.pcno.objective.build_objective
