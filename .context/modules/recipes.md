@@ -6,6 +6,8 @@
 
 # recipes 模板索引
 
+- [经典网络主计划](../../.cursor/plans/classic-networks-main.plan.md)：`recipes/classic_networks/` 三个数据案例、`examples/classic_networks/` 完整复制案例和 `examples/recipe_extensions/network_composition/` 三项重组扩展已形成源码与资源登记。先合并组件再顺序训练；十三组100更新及六项独立wheel/Python/Task流程已完成统一验收，设备和覆盖范围以专项记录为准，未登记平台模型。
+
 ## MeshGraphNets / CylinderFlow
 
 - `recipes/meshgraphnet/`：固定二维网格的 MeshGraphNet 时空预测流程，显式交接 rawprep、trainprep、train、infer、post；Python 决定顺序，YAML 只提供参数。
@@ -87,7 +89,7 @@ README 新增按 post-progress.json 检查部分交付、已有检查点仅补�
 - `docs/ai4s-framework-comparison.md`：Dojo 与五框架的能力比较；后续通过新模型、数据集和科研案例发现共同需求，相关建议按案例触发，不预设接入清单或前置重构。
 - `tests/integration/test_framework_comparison_document.py`：比较文档的索引与仓内证据链接检查；本次只新增参考文档和演进约定，不改变案例执行行为。
 
-examples/aero_cfd/ 下有七个独立配置，阶段脚本基于 recipes/aero_cfd，物理流程以对应公开步骤显式编写；除原五例外，新增 ShapeNet-Car 与 NASA CRM 两个静态 MeshGraphNet 案例。`trainprep.topology` 存在时从平台 VTKHDF 派生图，否则保持原锚点路径。所有 ShapeNet 与 NASA 案例均打开 VTKHDF；NASA HDF 来源使用其物理 rawprep 步骤，数据集清单默认支持网格交付。
+examples/aero_cfd/ 下有九个独立配置，阶段脚本基于 recipes/aero_cfd，物理流程以对应公开步骤显式编写；除原五例外，另有 ShapeNet-Car 与 NASA CRM 两个静态 MeshGraphNet 和两个普通 GALE GeoTransolver 案例。公开配置把原始输入、已处理数据、数据产物和运行记录分别放在复制目录的 `../inputs`、`../datasets`、`../data`、`../runs`，不写进案例代码目录；`infer.seed` 作为公开可选参数保留。公共模板与 AB-UPT 固定锚点链；Transolver、MeshGraphNet、GeoTransolver 固定物理链。`trainprep.topology` 仅控制从平台 VTKHDF 派生图，MeshGraphNet 缺必需拓扑时拒绝。所有 ShapeNet 与 NASA 案例均打开 VTKHDF；NASA HDF 来源使用其物理 rawprep 步骤，数据集清单默认支持网格交付。
 
 状态与圈定测试见 `.context/mvp/cross-model-acceptance.md`。
 
@@ -99,7 +101,7 @@ examples/aero_cfd/ 下有七个独立配置，阶段脚本基于 recipes/aero_cf
 
 平台只复制现有 aero_cfd，经 task 的原 submit_run 覆盖原始处理阶段和固定样本。不修改模板或生成替代脚本。真实接入与输出交接见 `.context/mvp/web-rawprep-acceptance.md`。
 
-- `aero_cfd/configuration.py`：规范模型采样写入 model.sampling；旧 trainprep.sampling 单键兼容，双键拒绝。字段容器和 PT/Zarr 格式保留于 rawprep。
+- `aero_cfd/configuration.py`：规范模型采样写入 model.sampling；旧 trainprep.sampling 由 application 显式转换副本，双键冲突拒绝；Task 保存不自动迁移。字段容器和 PT/Zarr 格式保留于 rawprep。
 
 ## 本机实验存储位置
 
@@ -194,7 +196,7 @@ tools/verification/pibsnet/source_dojo.py执行独立生成、来源预检、实
 
 ## SafeDiffCon
 
-- `recipes/safediffcon/{pipeline.py,config.yaml}`：Task自动发现并执行同一研究正文，不恢复task-entry或专用执行器；公共inputs声明分片/权重/固定结果/求解资源。`tests/integration/test_safediffcon_{task,conventions}.py`覆盖阶段门禁、资源捕获及迁移。
+- `recipes/safediffcon/{pipeline.py,config.yaml}`：Task自动发现并执行同一研究正文，不恢复task-entry或专用执行器；pipeline 与两个安装案例只导入选中阶段，单跑 trainprep 不提前加载 EMA 等训练专属依赖；公共inputs声明分片/权重/固定结果/求解资源。`tests/integration/test_safediffcon_{task,conventions}.py`覆盖阶段门禁、资源捕获及迁移。
 
 - `recipes/safediffcon/{configuration,rawprep,trainprep,train,posttrain,infer,post,pipeline}.py`：显式六阶段研究流程，posttrain正文显示两轮；README导航至模块PRD。
 - `examples/safediffcon/{burgers,tokamak}/`：各含configuration、pipeline及六阶段Python正文、README和config/quick.yaml；可在仓库外独立编辑执行或创建Task。quick保留原科学默认值，耗时须由原累计账本监督。
@@ -252,3 +254,37 @@ WDNO protocol-update补验：recipe、burgers_base example、extension分别复�
 `recipes/pcno_cylinder/`、`examples/pcno/double_cylinder/`：显式阶段正文；`examples/recipe_extensions/pcno_cylinder/`：普通构造器替换和速度模长消费。`examples/pcno/cylinder_flow/README.md`只记录准入阻断，不登记可训练案例。
 
 功能正文见相应模块PRD；实际范围见[圆柱验收](../mvp/pcno-cylinder-acceptance.md)。
+
+## Task 标签扩展示例（实施中）
+
+`examples/recipe_extensions/task_labels/`：以 SafeDiffCon Burgers 为基案例，覆盖本地 application 及配置，在原控制描述上显式增加校准名称条件；由 case-manifest 声明并随 wheel 物化。`test_safediffcon_task_replay.py` 对基案例和外复制扩展实跑准备、训练、恢复、后训练、推理及固定 post，检查候选用途与输入捕获标签。结果见 Task 通用化验收记录，不声明科学精度。
+
+## 通用研究extension
+
+`examples/recipe_extensions/tail_batch`和`research_state`均物化`geotransolver.darcy`；前者替换有限轮次流，后者从训练来源留出验证并配对保存普通/EMA最佳权重。复用公共训练与固定infer/post，不扩大科学精度结论。清单摘要负责初选，README说明覆盖文件和交接。测试`test_research_extensions.py`。
+
+
+## 经典网络三案例与重组扩展
+
+- `recipes/classic_networks/{darcy,shapenet_volume,double_cylinder}/` 与 `examples/classic_networks/`：每例README/config/configuration/rawprep/trainprep/train/infer/post/pipeline九文件，Python显式五阶段、独立inputs、共享训练和固定结果；对应文件按case-manifest声明保持一致。
+- `examples/recipe_extensions/network_composition/{resunet,unet_transformer,cnn_rnn}/`：分别登记可物化的覆盖集，各含配置、README、普通构造器和派生消费者。前两项基于Darcy；CNN-RNN基于double_cylinder，family=custom、sample_points=null。根目录四个Python文件是组件验证入口，覆盖副本同步检查防止漂移。
+- `examples/case-manifest.json`：`classic_networks.*`三项standalone及`recipe_extensions.network_composition.*`三项extension；登记不表示完整训练验收完成。
+- 功能正文：`docs/PRD/recipes/classic_networks/PRD.md`；来源与字段：contrib/application PRD第八章；计算与布局：core/abilities PRD第十一章。
+- 非训练资源核查：`tests/integration/test_classic_network_examples.py`、`test_example_contract.py`、`test_example_discovery.py`；组合前后向：`test_network_recomposition.py`。`test_classic_network_pipeline.py`涉及实际训练，交主控最终串行执行。`tools/verification/classic_networks/installed_replay.py`在真实独立wheel中物化以上六项并由主控串行验证；`run_matrix.py`执行统一科学矩阵，全状态检查见`test_classic_matrix_validation.py`。真实训练、搬移、Task及实际wheel证据由主控在经典网络统一验收记录中逐项汇总。
+
+本批阶段证据与未验范围见[经典网络统一验收](../mvp/classic-networks-acceptance.md)，该记录已按本批缩小验证范围完成。
+
+
+## 算子与普通代理五案例
+
+本批公开流程已实现；非训练组件与合成数据复制检查不能代替真实统一矩阵、安装和 Task 验收。行为正文为 `docs/PRD/recipes/operator_learning/PRD.md` 与 `docs/PRD/recipes/surrogate_modeling/PRD.md`。
+
+- `recipes/operator_learning/{darcy,shapenet_volume,double_cylinder}/`：各含 README、config.yaml、configuration/rawprep/trainprep/train/infer/post/pipeline.py，显式五阶段。前两例支持 FNO/DeepONet，双圆柱为三帧历史通道 FNO；准备复用 classic 公开能力，不从原始样本空间随机分块冒充完整谱域。
+- `recipes/surrogate_modeling/{nasa_crm,double_cylinder}/`：各含 README、config.yaml、configuration/trainprep/train/infer/post/pipeline.py，显式四阶段，无空 rawprep。NASA默认二次RSM，直接读 HDF5 属性；双圆柱默认 POD-RBF，消费 classic 准备。
+- 代理 `train.py` 显式拟合、`save_state`、`record_bundle`；`configuration.py` 中 `fit_context` 交接准备及子清单摘要/字段/统计/组件；`infer.py` 先核上下文再普通重建，`post.py` 只读固定结果。
+- `examples/recipe_extensions/operator_branch_replacement/{branch_replacement.py,config.yaml,user_outputs.py,README.md}`：DeepONet 分支构造替换及派生输出；`operator_physical_loss/{config.yaml,user_outputs.py,README.md}`：Darcy 非负解物理目标与固定派生结果；`pod_surrogate_replacement/{pod_mlp.py,config.yaml,README.md}`：普通拟合/重建替换为 POD-MLP，不把新状态类型加入框架注册表。
+- `tests/integration/test_operator_surrogate_data.py`：两例代理仓库外复制完整流程、相容性失败和独立固定post；`test_operator_physical_loss.py`：约束与实际梯度；公共资源发现仍沿 `test_example_contract.py`、`test_example_discovery.py`。
+- `tools/verification/operator_surrogates/serial_operators.py`：算子真实参考与Dojo对照；`serial_classical.py`：NASA及POD代理参考对照；`serial_matrix.py`：统一串行入口与组合累计预算；`installed_replay.py`：独立 wheel 中复制及Task复核。工具存在不是执行通过证据。
+- `tools/verification/operator_surrogates/sources.json`：独立来源/版本/许可身份；实际证据由主控本批验收记录汇总，不复用经典网络上一批结论。每组合准备、参考、重试及恢复累计最多三小时。
+
+外流三阶段明确连接：公共模板、NASA/ShapeNet AB-UPT 为锚点链；三个 Transolver 与两个 MeshGraphNet 为物理链（后者必需 topology）；GeoTransolver 保留物理链。三阶段脚本可不同，公共输入一致；`test_cross_model_recipe.py`、`test_infer_stage.py`、`test_recipe_explicit_equivalence.py` 覆盖连接与独立数值。

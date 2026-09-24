@@ -144,7 +144,7 @@ print(signature(CompactFNOFinalLayer.forward))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- 案例：`recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`
 
 ### 源码位置
 
@@ -299,7 +299,7 @@ print(signature(FinalLayer.forward))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- 案例：`recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`
 
 ### 源码位置
 
@@ -455,7 +455,7 @@ print(signature(LabelEmbedder.forward))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- 案例：`recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`
 
 ### 源码位置
 
@@ -688,7 +688,7 @@ print(signature(SiTBlock.forward))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- 案例：`recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`
 
 ### 源码位置
 
@@ -1327,7 +1327,7 @@ print(signature(SiT_FNO.forward))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- 案例：`recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`
 
 ### 源码位置
 
@@ -2710,7 +2710,7 @@ print(signature(SpectralConv1d.forward))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- 案例：`recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`
 
 ### 源码位置
 
@@ -2943,7 +2943,7 @@ print(signature(SpectralConv3d.forward))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- 案例：`recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`
 
 ### 源码位置
 
@@ -3096,7 +3096,7 @@ print(signature(TimestepEmbedder.forward))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- 案例：`recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`
 
 ### 源码位置
 

@@ -186,7 +186,7 @@ def probe(config: dict, *, prepare=None, dry_run: bool = False) -> dict:
         sample=result["sample_id"],
         evaluation=True,
         normalization=normalization,
-        data_specs=config["model"]["data_specs"],
+        data_specs=(config.get("model") or {}).get("data_specs"),
         bindings=config["trainprep"],
         geometry_conditioning_dims=config["model"]
         .get("parameters", {})
@@ -250,7 +250,7 @@ def prepare_partition_sample(
         epoch=epoch,
         evaluation=evaluation,
         normalization=normalization,
-        data_specs=config["model"]["data_specs"],
+        data_specs=(config.get("model") or {}).get("data_specs"),
         bindings=config["trainprep"],
         geometry_conditioning_dims=config["model"]
         .get("parameters", {})
@@ -283,6 +283,9 @@ def iter_partition_batches(
     pending = []
     items = range(len(index.partitions[partition]))
     if not evaluation and sampling.get("random_stream") == "global":
+        # 与历史 DataLoader(generator=None) 建立迭代器时生成 base_seed 的
+        # 随机流推进保持一致，随后 RandomSampler 才从同一全局流取顺序种子。
+        torch.empty((), dtype=torch.int64).random_().item()
         items = torch.utils.data.RandomSampler(items)
     from ai4e_core.base.events import sample_context
 

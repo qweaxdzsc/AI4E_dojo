@@ -5,78 +5,82 @@ from pathlib import Path
 from .records import list_runs
 
 
-def list_stage_artifacts(project, task_id: str, roots: dict | None = None) -> list[dict]:
+def list_stage_artifacts(
+    project, task_id: str, roots: dict | None = None, *, include_unmatched: bool = False
+) -> list[dict]:
     """列出成功正式产物及终止运行已提交的恢复权重，不整文件核验。
 
     切步名单只回答还有没有、能不能列。字节是否仍是当初那份留给恢复训练、
     提交推理和读取准备；列举时再打检查点会把切步卡在半分钟。
     """
-    from ..projects.datasets import run_physical_manifest
+    from ai4e_spec.artifacts.indexes import INDEX_VERSION, validate_asset_record
 
+    from ..storage.files import read_json
+    from ..storage.layout import task_dir
+    from .asset_matching import match_asset
+    from .descriptions import describe_recipe
+
+    folder = task_dir(project, task_id)
+    description = describe_recipe(folder / "recipe", cache_dir=folder / ".dojo/descriptions")[
+        "description"
+    ]
+    if description is None:
+        return []
     result = []
     visible = {"project": Path(project).resolve()}
     if roots:
         visible.update({name: Path(root).resolve() for name, root in roots.items()})
     for run in list_runs(project, task_id):
-        if run["status"] not in {"succeeded", "stopped", "failed"} or run.get(
-            "operation_mode", "execute"
-        ) != "execute":
+        if (
+            run["status"] not in {"succeeded", "stopped", "failed"}
+            or run.get("operation_mode", "execute") != "execute"
+        ):
             continue
-        recovery_only = run["status"] != "succeeded"
-        from ..storage.files import read_json
-        from ai4e_spec.artifacts.indexes import INDEX_VERSION, validate_asset_record
-
         index_path = Path(run["run_dir"]) / "artifacts/assets.json"
-        targets = []
-        if index_path.is_file():
-            index = read_json(index_path)
-            if index.get("schema_version") != INDEX_VERSION:
+        if not index_path.is_file():
+            continue
+        index = read_json(index_path)
+        if index.get("schema_version") != INDEX_VERSION:
+            continue
+        for item in index.get("items", {}).values():
+            try:
+                validate_asset_record(item)
+                path = Path(item["path"]).resolve()
+            except (ValueError, TypeError, OSError):
                 continue
-            for item in index.get("items", {}).values():
-                try:
-                    validate_asset_record(item)
-                    path = Path(item["path"])
-                except (ValueError, TypeError, OSError):
-                    continue
-                if item["kind"] == "checkpoint":
-                    bindings = ["inputs.train.resume"]
-                    if not recovery_only:
-                        bindings.insert(0, "inputs.infer.checkpoint")
-                elif recovery_only:
-                    continue
-                elif item["kind"] == "preparation":
-                    bindings = ["inputs.train.preparation", "inputs.infer.preparation"]
-                elif item["kind"] == "dataset":
-                    bindings = ["inputs.trainprep.dataset"]
-                elif item["stage"] == "infer" and item["name"] == "results":
-                    bindings = ["inputs.post.results"]
-                else:
-                    bindings = []
-                targets.extend((binding, path) for binding in bindings)
-        shared = None if recovery_only else run_physical_manifest(project, run)
-        if shared is not None and not any(p == shared for _, p in targets):
-            targets.append(("inputs.trainprep.dataset", shared))
-        for binding, path in targets:
-            if path is None or not path.is_file():
+            if not path.is_file() or any(
+                not Path(p).exists()
+                or not any(Path(p).resolve().is_relative_to(root) for root in visible.values())
+                for p in item.get("dependencies", [])
+            ):
                 continue
-            resolved = path.resolve()
-            match = next(
-                ((name, root) for name, root in visible.items() if resolved.is_relative_to(root)),
-                None,
+            location = next(
+                ((name, root) for name, root in visible.items() if path.is_relative_to(root)), None
             )
-            if not match:
+            if location is None:
                 continue
-            root_id, root = match
-            result.append(
-                {
-                    "run_id": run["id"],
-                    "task_id": task_id,
-                    "binding": binding,
-                    "root": root_id,
-                    "path": str(resolved.relative_to(root)),
-                    "name": path.name,
-                }
-            )
+            root_id, root = location
+            for binding, requirement in description["inputs"].items():
+                matched = match_asset(item, requirement, status=run["status"])
+                if not matched["matches"] and not (
+                    include_unmatched and matched["missing"] and not matched["conflicts"]
+                ):
+                    continue
+                result.append(
+                    {
+                        "run_id": run["id"],
+                        "task_id": task_id,
+                        "binding": binding,
+                        "root": root_id,
+                        "path": str(path.relative_to(root)),
+                        "name": item["name"],
+                        "file_name": path.name,
+                        "kind": item["kind"],
+                        "stage": item["stage"],
+                        "semantics": item.get("semantics", {}),
+                        "matching": matched,
+                    }
+                )
     return result
 
 
@@ -107,26 +111,18 @@ def read_run_metrics(project, run_id: str) -> dict:
     result["evaluation"] = (
         run.get("summary", {}).get("reports", {}).get("post", {}).get("evaluation")
     )
-    physical = root / "artifacts/inference-results.json"
-    if not physical.is_file():
-        physical = root / "artifacts/physical-predictions.json"
-    if physical.is_file():
-        record = read_json(physical)
-        result["evaluation"] = {
-            "metrics": record.get("metrics", {}),
-            "status": record.get("status"),
-        }
-    if physical.is_file():
-        result["evaluation"]["samples"] = [
-            {"sample": r.get("sample", r.get("sample_id")), "metrics": r.get("metrics", {})}
-            for r in record.get("results", [])
-        ]
-    post = root / "artifacts/post-progress.json"
-    if post.is_file():
-        result["post"] = read_json(post)
-    infer = root / "artifacts/inference-progress.json"
-    if infer.is_file():
-        result["infer"] = read_json(infer)
+    from .operation_sources import invoke_source, operation_context
+
+    try:
+        context = operation_context(project, run["task_id"], run=run)
+        description = invoke_source(
+            context["source"], context["recipe"], {"operation": "run_metrics", "run": run}
+        )
+        result.update(
+            {key: description[key] for key in ("evaluation", "post", "infer") if key in description}
+        )
+    except (ValueError, OSError) as exc:
+        result["description_error"] = str(exc)
     if run.get("pid") and run["status"] in {"running", "stopping"}:
         import subprocess
 

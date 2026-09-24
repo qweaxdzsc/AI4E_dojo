@@ -1,0 +1,50 @@
+seed: 42
+run_root: ../outputs/cnn_rnn/runs
+data_root: ../outputs/cnn_rnn/data
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - infer
+  - post
+inputs:
+  rawprep:
+    source: null
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+    resume: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+dataset:
+  case: double_cylinder
+  train_count: 2
+  test_count: 1
+model:
+  family: custom
+  spatial_dims: 2
+  in_channels: 4
+  out_channels: 4
+  parameters:
+    spatial_channels: 16
+    hidden_size: 32
+    num_layers: 2
+train:
+  updates: 100
+  batch_size: 1
+  lr: 0.001
+  device: auto
+  seconds: 9000
+  checkpoint_every: 20
+  sample_points: null
+infer:
+  device: auto
+components:
+  model: cnn_rnn.build_model
+  derived: user_outputs.derive
+  consume: user_outputs.consume

@@ -6,12 +6,12 @@
 ## 能力直达
 
 <!-- capability-menu:start -->
-- **[数据读取、预处理与归一化](capabilities/data.md)**：读取、字段提取、身份校验、筛选、保存、统计及正反归一化。主题 `capability:data`。
+- **[数据读取、预处理与归一化](capabilities/data.md)**：读取、身份校验、保存、统计、正反归一化及普通拟合状态读回。主题 `capability:data`。
 - **[几何与采样](capabilities/sampling.md)**：网格、坐标、法向、距离和一致采样，保留实体身份。主题 `capability:sampling`。
-- **[网络与模型组件](capabilities/model.md)**：构造普通网络，复用网络模块并检查参数与输入输出。主题 `capability:model`。
-- **[损失与物理约束](capabilities/loss.md)**：监督项、权重、可微比较和自定义物理残差。主题 `capability:loss`。
-- **[训练、优化与恢复](capabilities/training.md)**：已有模型接入训练循环、调度、梯度累积、检查点及恢复。主题 `capability:training`。
-- **[推理与多步滚动](capabilities/inference.md)**：无梯度推理、模式与随机状态保护、滚动预测和设备同步计时。主题 `capability:inference`。
+- **[网络与模型组件](capabilities/model.md)**：经典网络、DeepONet/FNO 与传统代理模型；按 block、可复用阶段和完整架构组合。主题 `capability:model`。
+- **[损失与物理约束](capabilities/loss.md)**：监督项、权重、可微比较和独立于模型的物理残差。主题 `capability:loss`。
+- **[训练、优化与恢复](capabilities/training.md)**：神经网络优化与恢复，以及 POD、RSM/RBF、Kriging、LightGBM 非梯度拟合。主题 `capability:training`。
+- **[推理与多步滚动](capabilities/inference.md)**：神经网络执行上下文、普通对象分批预测、多步滚动和设备同步计时。主题 `capability:inference`。
 - **[评价与误差指标](capabilities/evaluation.md)**：具名样本、物理帧和字段的 FP64 误差，显式定义聚合。主题 `capability:evaluation`。
 - **[后处理、图表与结果导出](capabilities/post.md)**：固定预测读回、误差曲线、物理场图、差值和网格导出。主题 `capability:post`。
 - **[运行记录与 Task 管理](capabilities/run-task.md)**：direct-core 启动、报告、资产，以及可选版本、后台、停止、恢复和比较。主题 `capability:run-task`。

@@ -66,7 +66,7 @@ print(signature(HelpIndexError))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:21`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:23`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -140,7 +140,7 @@ print(signature(HelpSymbolNotFoundError))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:29`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:31`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -214,7 +214,7 @@ print(signature(HelpTopicNotFoundError))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:25`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:27`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -230,7 +230,7 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 - **层级**：`task`
 - **稳定性**：`stable`
-- **定义**：`bind_shared_dataset(project: str | Path, task_id: str, name: str, *, revision: str) -> dict`
+- **定义**：`bind_shared_dataset(project: str | Path, task_id: str, name: str, *, revision: str, binding: str | None=None) -> dict`
 - **规范定义名**：`ai4e_task.projects.datasets.bind_shared_dataset`
 
 ### 用途
@@ -244,7 +244,7 @@ from ai4e_task.projects.datasets import bind_shared_dataset
 ```
 
 ```text
-bind_shared_dataset(project: str | Path, task_id: str, name: str, *, revision: str) -> dict
+bind_shared_dataset(project: str | Path, task_id: str, name: str, *, revision: str, binding: str | None=None) -> dict
 ```
 
 ### 参数
@@ -255,6 +255,7 @@ bind_shared_dataset(project: str | Path, task_id: str, name: str, *, revision: s
 | `task_id` | `str` | `必填` |
 | `name` | `str` | `必填` |
 | `revision` | `str` | `必填关键字参数` |
+| `binding` | `str | None` | `None` |
 
 参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
 
@@ -371,7 +372,7 @@ print(signature(cancel_inference))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.inference`
-- 仓库相对路径：`packages/ai4e-task/tasks/inference.py:274`
+- 仓库相对路径：`packages/ai4e-task/tasks/inference.py:292`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -449,7 +450,7 @@ print(signature(cancel_post_metrics))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.post_metrics`
-- 仓库相对路径：`packages/ai4e-task/tasks/post_metrics.py:202`
+- 仓库相对路径：`packages/ai4e-task/tasks/post_metrics.py:221`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -525,7 +526,7 @@ print(signature(check_example))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:326`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:359`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -603,7 +604,7 @@ print(signature(check_inference))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.inference`
-- 仓库相对路径：`packages/ai4e-task/tasks/inference.py:54`
+- 仓库相对路径：`packages/ai4e-task/tasks/inference.py:57`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -619,7 +620,7 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 - **层级**：`task`
 - **稳定性**：`stable`
-- **定义**：`check_processed_name(workspace: str | Path, name: str, *, claim: dict | None=None, config: dict | None=None, overwrite: bool=False) -> dict`
+- **定义**：`check_processed_name(workspace: str | Path, name: str, *, claim: dict | None=None, context: dict | None=None, overwrite: bool=False) -> dict`
 - **规范定义名**：`ai4e_task.storage.processed_datasets.check_processed_name`
 
 ### 用途
@@ -633,7 +634,7 @@ from ai4e_task.storage.processed_datasets import check_processed_name
 ```
 
 ```text
-check_processed_name(workspace: str | Path, name: str, *, claim: dict | None=None, config: dict | None=None, overwrite: bool=False) -> dict
+check_processed_name(workspace: str | Path, name: str, *, claim: dict | None=None, context: dict | None=None, overwrite: bool=False) -> dict
 ```
 
 ### 参数
@@ -643,7 +644,7 @@ check_processed_name(workspace: str | Path, name: str, *, claim: dict | None=Non
 | `workspace` | `str | Path` | `必填` |
 | `name` | `str` | `必填` |
 | `claim` | `dict | None` | `None` |
-| `config` | `dict | None` | `None` |
+| `context` | `dict | None` | `None` |
 | `overwrite` | `bool` | `False` |
 
 参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
@@ -683,7 +684,7 @@ print(signature(check_processed_name))
 ### 源码位置
 
 - 模块：`ai4e_task.storage.processed_datasets`
-- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:121`
+- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:103`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -762,7 +763,7 @@ print(signature(compare_runs))
 ### 源码位置
 
 - 模块：`ai4e_task.versions.compare`
-- 仓库相对路径：`packages/ai4e-task/versions/compare.py:113`
+- 仓库相对路径：`packages/ai4e-task/versions/compare.py:116`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -841,7 +842,7 @@ print(signature(compare_versions))
 ### 源码位置
 
 - 模块：`ai4e_task.versions.compare`
-- 仓库相对路径：`packages/ai4e-task/versions/compare.py:49`
+- 仓库相对路径：`packages/ai4e-task/versions/compare.py:48`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -918,12 +919,90 @@ print(signature(compare_worktree))
 ### 源码位置
 
 - 模块：`ai4e_task.versions.compare`
-- 仓库相对路径：`packages/ai4e-task/versions/compare.py:70`
+- 仓库相对路径：`packages/ai4e-task/versions/compare.py:69`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
 
 通过 `search_help('ai4e_task.versions.compare')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
+
+### 不适用场景与证据边界
+
+API 可导入或最小检查通过只证明符号存在，不证明组件兼容、训练有效、恢复一致或达到论文精度。`internal-visible` 符号不构成兼容承诺。
+
+<a id="symbol-ai4e-task-configuration-context"></a>
+## `ai4e_task.configuration_context`
+
+- **层级**：`task`
+- **稳定性**：`stable`
+- **定义**：`configuration_context(config: dict, config_dir: str | Path, *, name='inspect') -> dict`
+- **规范定义名**：`ai4e_task.tasks.operation_sources.configuration_context`
+
+### 用途
+
+未属于任务的显式配置上下文；必须声明应用及配置来源目录。
+
+### 导入与签名
+
+```python
+from ai4e_task.tasks.operation_sources import configuration_context
+```
+
+```text
+configuration_context(config: dict, config_dir: str | Path, *, name='inspect') -> dict
+```
+
+### 参数
+
+| 参数 | 类型 | 默认值 |
+| --- | --- | --- |
+| `config` | `dict` | `必填` |
+| `config_dir` | `str | Path` | `必填` |
+| `name` | `未标注` | `'inspect'` |
+
+参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
+
+### 返回值
+
+源码返回标注：`dict`。普通 Python 返回值由调用方直接交接；跨阶段文件必须通过案例的 `inputs.<stage>.<name>` 或登记产物交接。
+
+### 异常
+
+`ValueError`
+
+### 副作用与产物
+
+本索引不根据函数名猜测写盘、设备、随机状态或检查点副作用。调用前应阅读下面的源码位置和引用它的完整案例；写运行记录时只能通过公开 run/Task 边界。
+
+### 配置键
+
+源码没有直接读取公共配置键；配置通常由调用它的 application 或 recipe 传入。
+
+### 最小可执行检查
+
+```python
+from inspect import signature
+from ai4e_task.tasks.operation_sources import configuration_context
+
+print(signature(configuration_context))
+```
+
+这段代码只验证当前解释器中的符号和签名。真实调用请按能力教程提供有效输入；需要完整领域交接时再阅读关联案例或工作流。
+
+### Recipe 与案例
+
+- Recipe：无直接 recipe 归属。
+- 案例：机器索引未发现直接文本引用。
+
+### 源码位置
+
+- 模块：`ai4e_task.tasks.operation_sources`
+- 仓库相对路径：`packages/ai4e-task/tasks/operation_sources.py:142`
+- 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
+
+### 相关 API
+
+通过 `search_help('ai4e_task.tasks.operation_sources')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
 
 ### 不适用场景与证据边界
 
@@ -939,7 +1018,7 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 ### 用途
 
-复制 standalone，或物化 extension 的 base-plus-overlay 目录。
+物化完整案例并交付来源可追溯的说明副本，保留原脚本和README字节。
 
 ### 导入与签名
 
@@ -989,13 +1068,13 @@ print(signature(copy_example))
 
 ### Recipe 与案例
 
-- Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- Recipe：`operator_learning/darcy`, `operator_learning/double_cylinder`, `operator_learning/shapenet_volume`
+- 案例：`extension.pcno`, `extension.pcno_cylinder`, `operator_learning.darcy`, `operator_learning.double_cylinder`, `operator_learning.shapenet_volume`, `recipe_extensions.field_mapping`, `recipe_extensions.free_wiring`, `recipe_extensions.gencp`, `recipe_extensions.geotransolver`, `recipe_extensions.geotransolver_aero`, `recipe_extensions.inference_fields`, `recipe_extensions.inference_metrics`, `recipe_extensions.model_block`, `recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.resunet`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`, `recipe_extensions.operator_physical_loss`, `recipe_extensions.physical_visualization`, `recipe_extensions.pod_surrogate_replacement`, `recipe_extensions.research_state`, `recipe_extensions.safediffcon`, `recipe_extensions.sampling`, `recipe_extensions.tail_batch`, `recipe_extensions.task_labels`, `recipe_extensions.wdno`
 
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:380`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:413`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -1088,12 +1167,12 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 - **层级**：`task`
 - **稳定性**：`stable`
-- **定义**：`create_smoke_data(target: str | Path) -> dict[str, Any]`
+- **定义**：`create_smoke_data(target: str | Path, *, case_id: str | None=None) -> dict[str, Any]`
 - **规范定义名**：`ai4e_task.templates.resources.create_smoke_data`
 
 ### 用途
 
-显式加载 contrib，生成 Neumann 最小数据；目标非空时拒绝覆盖。
+通过案例资源声明在隔离进程生成数据；管理进程不加载领域模块。
 
 ### 导入与签名
 
@@ -1102,7 +1181,7 @@ from ai4e_task.templates.resources import create_smoke_data
 ```
 
 ```text
-create_smoke_data(target: str | Path) -> dict[str, Any]
+create_smoke_data(target: str | Path, *, case_id: str | None=None) -> dict[str, Any]
 ```
 
 ### 参数
@@ -1110,6 +1189,7 @@ create_smoke_data(target: str | Path) -> dict[str, Any]
 | 参数 | 类型 | 默认值 |
 | --- | --- | --- |
 | `target` | `str | Path` | `必填` |
+| `case_id` | `str | None` | `None` |
 
 参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
 
@@ -1119,7 +1199,7 @@ create_smoke_data(target: str | Path) -> dict[str, Any]
 
 ### 异常
 
-`RuntimeError`
+`ValueError`
 
 ### 副作用与产物
 
@@ -1148,7 +1228,7 @@ print(signature(create_smoke_data))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:487`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:531`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -1224,7 +1304,7 @@ print(signature(describe_help_symbol))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:250`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:252`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -1301,7 +1381,7 @@ print(signature(describe_processed_dataset))
 ### 源码位置
 
 - 模块：`ai4e_task.storage.processed_datasets`
-- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:57`
+- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:39`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -1317,7 +1397,7 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 - **层级**：`task`
 - **稳定性**：`stable`
-- **定义**：`describe_processed_name(workspace: str | Path, name: str, *, claim: dict | None=None, config: dict | None=None) -> dict`
+- **定义**：`describe_processed_name(workspace: str | Path, name: str, *, claim: dict | None=None, context: dict | None=None) -> dict`
 - **规范定义名**：`ai4e_task.storage.processed_datasets.describe_processed_name`
 
 ### 用途
@@ -1331,7 +1411,7 @@ from ai4e_task.storage.processed_datasets import describe_processed_name
 ```
 
 ```text
-describe_processed_name(workspace: str | Path, name: str, *, claim: dict | None=None, config: dict | None=None) -> dict
+describe_processed_name(workspace: str | Path, name: str, *, claim: dict | None=None, context: dict | None=None) -> dict
 ```
 
 ### 参数
@@ -1341,7 +1421,7 @@ describe_processed_name(workspace: str | Path, name: str, *, claim: dict | None=
 | `workspace` | `str | Path` | `必填` |
 | `name` | `str` | `必填` |
 | `claim` | `dict | None` | `None` |
-| `config` | `dict | None` | `None` |
+| `context` | `dict | None` | `None` |
 
 参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
 
@@ -1380,7 +1460,7 @@ print(signature(describe_processed_name))
 ### 源码位置
 
 - 模块：`ai4e_task.storage.processed_datasets`
-- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:98`
+- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:80`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -1463,6 +1543,84 @@ print(signature(describe_rawprep))
 ### 相关 API
 
 通过 `search_help('ai4e_task.tasks.rawprep')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
+
+### 不适用场景与证据边界
+
+API 可导入或最小检查通过只证明符号存在，不证明组件兼容、训练有效、恢复一致或达到论文精度。`internal-visible` 符号不构成兼容承诺。
+
+<a id="symbol-ai4e-task-describe-recipe"></a>
+## `ai4e_task.describe_recipe`
+
+- **层级**：`task`
+- **稳定性**：`stable`
+- **定义**：`describe_recipe(recipe: str | Path, *, config: dict | None=None, cache_dir: Path | None=None) -> dict`
+- **规范定义名**：`ai4e_task.tasks.descriptions.describe_recipe`
+
+### 用途
+
+缺少应用声明返回空描述；已声明入口出错不伪装成无描述。
+
+### 导入与签名
+
+```python
+from ai4e_task.tasks.descriptions import describe_recipe
+```
+
+```text
+describe_recipe(recipe: str | Path, *, config: dict | None=None, cache_dir: Path | None=None) -> dict
+```
+
+### 参数
+
+| 参数 | 类型 | 默认值 |
+| --- | --- | --- |
+| `recipe` | `str | Path` | `必填` |
+| `config` | `dict | None` | `None` |
+| `cache_dir` | `Path | None` | `None` |
+
+参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
+
+### 返回值
+
+源码返回标注：`dict`。普通 Python 返回值由调用方直接交接；跨阶段文件必须通过案例的 `inputs.<stage>.<name>` 或登记产物交接。
+
+### 异常
+
+AST 未发现显式 `raise`；依赖函数仍可能报告输入、文件或运行错误。
+
+### 副作用与产物
+
+本索引不根据函数名猜测写盘、设备、随机状态或检查点副作用。调用前应阅读下面的源码位置和引用它的完整案例；写运行记录时只能通过公开 run/Task 边界。
+
+### 配置键
+
+源码没有直接读取公共配置键；配置通常由调用它的 application 或 recipe 传入。
+
+### 最小可执行检查
+
+```python
+from inspect import signature
+from ai4e_task.tasks.descriptions import describe_recipe
+
+print(signature(describe_recipe))
+```
+
+这段代码只验证当前解释器中的符号和签名。真实调用请按能力教程提供有效输入；需要完整领域交接时再阅读关联案例或工作流。
+
+### Recipe 与案例
+
+- Recipe：无直接 recipe 归属。
+- 案例：机器索引未发现直接文本引用。
+
+### 源码位置
+
+- 模块：`ai4e_task.tasks.descriptions`
+- 仓库相对路径：`packages/ai4e-task/tasks/descriptions.py:12`
+- 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
+
+### 相关 API
+
+通过 `search_help('ai4e_task.tasks.descriptions')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
 
 ### 不适用场景与证据边界
 
@@ -1610,7 +1768,7 @@ print(signature(export_guide))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:428`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:472`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -1686,7 +1844,7 @@ print(signature(export_help))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:277`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:279`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -1844,7 +2002,7 @@ print(signature(export_post_metrics))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.post_metrics`
-- 仓库相对路径：`packages/ai4e-task/tasks/post_metrics.py:211`
+- 仓库相对路径：`packages/ai4e-task/tasks/post_metrics.py:230`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -2008,7 +2166,7 @@ print(signature(freeze_checkpoint))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.checkpoints`
-- 仓库相对路径：`packages/ai4e-task/tasks/checkpoints.py:192`
+- 仓库相对路径：`packages/ai4e-task/tasks/checkpoints.py:153`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -2084,7 +2242,7 @@ print(signature(freeze_result_item))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.post_results`
-- 仓库相对路径：`packages/ai4e-task/tasks/post_results.py:107`
+- 仓库相对路径：`packages/ai4e-task/tasks/post_results.py:105`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -2316,7 +2474,7 @@ print(signature(get_shared))
 ### 源码位置
 
 - 模块：`ai4e_task.projects.shared`
-- 仓库相对路径：`packages/ai4e-task/projects/shared.py:80`
+- 仓库相对路径：`packages/ai4e-task/projects/shared.py:88`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -2621,7 +2779,7 @@ print(signature(guide_info))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:449`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:493`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -2695,7 +2853,7 @@ print(signature(help_info))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:103`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:105`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -2769,7 +2927,7 @@ print(signature(help_root))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:54`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:56`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -2944,7 +3102,7 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 ### 用途
 
-读取部分/完整结果，完整比较由公开算法检查门面判断。
+应用解释固定结果；Task 只核对运行归属和返回文件引用。
 
 ### 导入与签名
 
@@ -3001,7 +3159,7 @@ print(signature(inference_results))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.inference_results`
-- 仓库相对路径：`packages/ai4e-task/tasks/inference_results.py:41`
+- 仓库相对路径：`packages/ai4e-task/tasks/inference_results.py:27`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -3079,7 +3237,7 @@ print(signature(inference_samples))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.checkpoints`
-- 仓库相对路径：`packages/ai4e-task/tasks/checkpoints.py:156`
+- 仓库相对路径：`packages/ai4e-task/tasks/checkpoints.py:116`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -3156,7 +3314,7 @@ print(signature(initialize_rawprep))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.rawprep`
-- 仓库相对路径：`packages/ai4e-task/tasks/rawprep.py:44`
+- 仓库相对路径：`packages/ai4e-task/tasks/rawprep.py:48`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -3218,7 +3376,7 @@ inspect_task(project, task_id: str, operation: str, *, revision: str, output_dir
 
 ### 配置键
 
-`inputs.infer.checkpoint`, `inputs.train.preparation`, `inputs.trainprep.dataset`, `inputs.trainprep.statistics`
+源码没有直接读取公共配置键；配置通常由调用它的 application 或 recipe 传入。
 
 ### 最小可执行检查
 
@@ -3250,95 +3408,20 @@ print(signature(inspect_task))
 
 API 可导入或最小检查通过只证明符号存在，不证明组件兼容、训练有效、恢复一致或达到论文精度。`internal-visible` 符号不构成兼容承诺。
 
-<a id="symbol-ai4e-task-is-old-official-stage"></a>
-## `ai4e_task.is_old_official_stage`
-
-- **层级**：`task`
-- **稳定性**：`stable`
-- **定义**：`is_old_official_stage(text: str, name: str, *, expected_digest: str | None=None) -> bool`
-- **规范定义名**：`ai4e_task.tasks.official_scripts.is_old_official_stage`
-
-### 用途
-
-只接受明确核验的原件摘要；导入或函数名相同不足以证明正文未修改。
-
-### 导入与签名
-
-```python
-from ai4e_task.tasks.official_scripts import is_old_official_stage
-```
-
-```text
-is_old_official_stage(text: str, name: str, *, expected_digest: str | None=None) -> bool
-```
-
-### 参数
-
-| 参数 | 类型 | 默认值 |
-| --- | --- | --- |
-| `text` | `str` | `必填` |
-| `name` | `str` | `必填` |
-| `expected_digest` | `str | None` | `None` |
-
-参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
-
-### 返回值
-
-源码返回标注：`bool`。普通 Python 返回值由调用方直接交接；跨阶段文件必须通过案例的 `inputs.<stage>.<name>` 或登记产物交接。
-
-### 异常
-
-AST 未发现显式 `raise`；依赖函数仍可能报告输入、文件或运行错误。
-
-### 副作用与产物
-
-本索引不根据函数名猜测写盘、设备、随机状态或检查点副作用。调用前应阅读下面的源码位置和引用它的完整案例；写运行记录时只能通过公开 run/Task 边界。
-
-### 配置键
-
-源码没有直接读取公共配置键；配置通常由调用它的 application 或 recipe 传入。
-
-### 最小可执行检查
-
-```python
-from inspect import signature
-from ai4e_task.tasks.official_scripts import is_old_official_stage
-
-print(signature(is_old_official_stage))
-```
-
-这段代码只验证当前解释器中的符号和签名。真实调用请按能力教程提供有效输入；需要完整领域交接时再阅读关联案例或工作流。
-
-### Recipe 与案例
-
-- Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
-
-### 源码位置
-
-- 模块：`ai4e_task.tasks.official_scripts`
-- 仓库相对路径：`packages/ai4e-task/tasks/official_scripts.py:80`
-- 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
-
-### 相关 API
-
-通过 `search_help('ai4e_task.tasks.official_scripts')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
-
-### 不适用场景与证据边界
-
-API 可导入或最小检查通过只证明符号存在，不证明组件兼容、训练有效、恢复一致或达到论文精度。`internal-visible` 符号不构成兼容承诺。
-
 <a id="symbol-ai4e-task-list-examples"></a>
 ## `ai4e_task.list_examples`
 
 - **层级**：`task`
 - **稳定性**：`stable`
-- **定义**：`list_examples(*, case_type: str | None=None) -> list[dict[str, Any]]`
+- **定义**：`list_examples(*, case_type: str | None=None, query: str | None=None, data_form: str | None=None, training_pattern: str | None=None) -> list[dict[str, Any]]`
 - **规范定义名**：`ai4e_task.templates.resources.list_examples`
 
 ### 用途
 
-列出清单中的 standalone/extension，不导入案例代码。
+按说明子串与标签筛选案例，不导入代码；多项过滤取交集。
+
+query大小写无关，空白视为未指定；标签精确匹配并保留清单顺序。
+旧清单无research仍可按原用途检索，不猜测缺失标签。
 
 ### 导入与签名
 
@@ -3347,7 +3430,7 @@ from ai4e_task.templates.resources import list_examples
 ```
 
 ```text
-list_examples(*, case_type: str | None=None) -> list[dict[str, Any]]
+list_examples(*, case_type: str | None=None, query: str | None=None, data_form: str | None=None, training_pattern: str | None=None) -> list[dict[str, Any]]
 ```
 
 ### 参数
@@ -3355,6 +3438,9 @@ list_examples(*, case_type: str | None=None) -> list[dict[str, Any]]
 | 参数 | 类型 | 默认值 |
 | --- | --- | --- |
 | `case_type` | `str | None` | `None` |
+| `query` | `str | None` | `None` |
+| `data_form` | `str | None` | `None` |
+| `training_pattern` | `str | None` | `None` |
 
 参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
 
@@ -3364,7 +3450,7 @@ list_examples(*, case_type: str | None=None) -> list[dict[str, Any]]
 
 ### 异常
 
-`ValueError`
+`TypeError`, `ValueError`
 
 ### 副作用与产物
 
@@ -3393,7 +3479,7 @@ print(signature(list_examples))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:311`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:313`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -3472,7 +3558,7 @@ print(signature(list_help_topics))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:120`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:122`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -3549,7 +3635,7 @@ print(signature(list_inference_batches))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.inference`
-- 仓库相对路径：`packages/ai4e-task/tasks/inference.py:258`
+- 仓库相对路径：`packages/ai4e-task/tasks/inference.py:276`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -3570,7 +3656,7 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 ### 用途
 
-列出包括训练中已提交权重在内的候选，不伪造轮次文件。
+应用提供候选和科学结论，管理层核验路径、内容修订及缓存来源。
 
 ### 导入与签名
 
@@ -3597,7 +3683,7 @@ list_inference_checkpoints(project: str | Path, task_id: str) -> list[dict]
 
 ### 异常
 
-AST 未发现显式 `raise`；依赖函数仍可能报告输入、文件或运行错误。
+`ValueError`
 
 ### 副作用与产物
 
@@ -3626,7 +3712,7 @@ print(signature(list_inference_checkpoints))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.checkpoints`
-- 仓库相对路径：`packages/ai4e-task/tasks/checkpoints.py:74`
+- 仓库相对路径：`packages/ai4e-task/tasks/checkpoints.py:44`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -3703,7 +3789,7 @@ print(signature(list_post_metrics))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.post_metrics`
-- 仓库相对路径：`packages/ai4e-task/tasks/post_metrics.py:192`
+- 仓库相对路径：`packages/ai4e-task/tasks/post_metrics.py:211`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -3787,7 +3873,7 @@ print(signature(list_post_result_files))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.post_results`
-- 仓库相对路径：`packages/ai4e-task/tasks/post_results.py:706`
+- 仓库相对路径：`packages/ai4e-task/tasks/post_results.py:633`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -3863,7 +3949,7 @@ print(signature(list_processed_datasets))
 ### 源码位置
 
 - 模块：`ai4e_task.storage.processed_datasets`
-- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:78`
+- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:60`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -4016,7 +4102,7 @@ print(signature(list_shared))
 ### 源码位置
 
 - 模块：`ai4e_task.projects.shared`
-- 仓库相对路径：`packages/ai4e-task/projects/shared.py:75`
+- 仓库相对路径：`packages/ai4e-task/projects/shared.py:83`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -4108,7 +4194,7 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 - **层级**：`task`
 - **稳定性**：`stable`
-- **定义**：`list_stage_artifacts(project, task_id: str, roots: dict | None=None) -> list[dict]`
+- **定义**：`list_stage_artifacts(project, task_id: str, roots: dict | None=None, *, include_unmatched: bool=False) -> list[dict]`
 - **规范定义名**：`ai4e_task.tasks.artifacts.list_stage_artifacts`
 
 ### 用途
@@ -4125,7 +4211,7 @@ from ai4e_task.tasks.artifacts import list_stage_artifacts
 ```
 
 ```text
-list_stage_artifacts(project, task_id: str, roots: dict | None=None) -> list[dict]
+list_stage_artifacts(project, task_id: str, roots: dict | None=None, *, include_unmatched: bool=False) -> list[dict]
 ```
 
 ### 参数
@@ -4135,6 +4221,7 @@ list_stage_artifacts(project, task_id: str, roots: dict | None=None) -> list[dic
 | `project` | `未标注` | `必填` |
 | `task_id` | `str` | `必填` |
 | `roots` | `dict | None` | `None` |
+| `include_unmatched` | `bool` | `False` |
 
 参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
 
@@ -4152,7 +4239,7 @@ AST 未发现显式 `raise`；依赖函数仍可能报告输入、文件或运�
 
 ### 配置键
 
-`inputs.infer.checkpoint`, `inputs.infer.preparation`, `inputs.post.results`, `inputs.train.preparation`, `inputs.train.resume`, `inputs.trainprep.dataset`
+源码没有直接读取公共配置键；配置通常由调用它的 application 或 recipe 传入。
 
 ### 最小可执行检查
 
@@ -4168,7 +4255,7 @@ print(signature(list_stage_artifacts))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- 案例：`recipe_extensions.task_labels`
 
 ### 源码位置
 
@@ -4401,12 +4488,90 @@ print(signature(manifest_digest))
 ### 源码位置
 
 - 模块：`ai4e_task.storage.processed_datasets`
-- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:48`
+- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:30`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
 
 通过 `search_help('ai4e_task.storage.processed_datasets')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
+
+### 不适用场景与证据边界
+
+API 可导入或最小检查通过只证明符号存在，不证明组件兼容、训练有效、恢复一致或达到论文精度。`internal-visible` 符号不构成兼容承诺。
+
+<a id="symbol-ai4e-task-match-asset"></a>
+## `ai4e_task.match_asset`
+
+- **层级**：`task`
+- **稳定性**：`stable`
+- **定义**：`match_asset(asset: dict, requirement: dict, *, status: str) -> dict`
+- **规范定义名**：`ai4e_task.tasks.asset_matching.match_asset`
+
+### 用途
+
+返回全部缺失和冲突条件；可选择不等于科学内容已适用。
+
+### 导入与签名
+
+```python
+from ai4e_task.tasks.asset_matching import match_asset
+```
+
+```text
+match_asset(asset: dict, requirement: dict, *, status: str) -> dict
+```
+
+### 参数
+
+| 参数 | 类型 | 默认值 |
+| --- | --- | --- |
+| `asset` | `dict` | `必填` |
+| `requirement` | `dict` | `必填` |
+| `status` | `str` | `必填关键字参数` |
+
+参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
+
+### 返回值
+
+源码返回标注：`dict`。普通 Python 返回值由调用方直接交接；跨阶段文件必须通过案例的 `inputs.<stage>.<name>` 或登记产物交接。
+
+### 异常
+
+AST 未发现显式 `raise`；依赖函数仍可能报告输入、文件或运行错误。
+
+### 副作用与产物
+
+本索引不根据函数名猜测写盘、设备、随机状态或检查点副作用。调用前应阅读下面的源码位置和引用它的完整案例；写运行记录时只能通过公开 run/Task 边界。
+
+### 配置键
+
+源码没有直接读取公共配置键；配置通常由调用它的 application 或 recipe 传入。
+
+### 最小可执行检查
+
+```python
+from inspect import signature
+from ai4e_task.tasks.asset_matching import match_asset
+
+print(signature(match_asset))
+```
+
+这段代码只验证当前解释器中的符号和签名。真实调用请按能力教程提供有效输入；需要完整领域交接时再阅读关联案例或工作流。
+
+### Recipe 与案例
+
+- Recipe：无直接 recipe 归属。
+- 案例：机器索引未发现直接文本引用。
+
+### 源码位置
+
+- 模块：`ai4e_task.tasks.asset_matching`
+- 仓库相对路径：`packages/ai4e-task/tasks/asset_matching.py:6`
+- 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
+
+### 相关 API
+
+通过 `search_help('ai4e_task.tasks.asset_matching')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
 
 ### 不适用场景与证据边界
 
@@ -4486,91 +4651,12 @@ print(signature(metric_catalog))
 
 API 可导入或最小检查通过只证明符号存在，不证明组件兼容、训练有效、恢复一致或达到论文精度。`internal-visible` 符号不构成兼容承诺。
 
-<a id="symbol-ai4e-task-migrate-official-aero-scripts"></a>
-## `ai4e_task.migrate_official_aero_scripts`
-
-- **层级**：`task`
-- **稳定性**：`stable`
-- **定义**：`migrate_official_aero_scripts(project: str | Path, task_id: str, official_recipe: str | Path, *, expected_sources: dict[str, str] | None=None) -> dict`
-- **规范定义名**：`ai4e_task.tasks.official_scripts.migrate_official_aero_scripts`
-
-### 用途
-
-显式迁移已核验的单例阶段；完整树升级使用离线迁移包。
-
-### 导入与签名
-
-```python
-from ai4e_task.tasks.official_scripts import migrate_official_aero_scripts
-```
-
-```text
-migrate_official_aero_scripts(project: str | Path, task_id: str, official_recipe: str | Path, *, expected_sources: dict[str, str] | None=None) -> dict
-```
-
-### 参数
-
-| 参数 | 类型 | 默认值 |
-| --- | --- | --- |
-| `project` | `str | Path` | `必填` |
-| `task_id` | `str` | `必填` |
-| `official_recipe` | `str | Path` | `必填` |
-| `expected_sources` | `dict[str, str] | None` | `None` |
-
-参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
-
-### 返回值
-
-源码返回标注：`dict`。普通 Python 返回值由调用方直接交接；跨阶段文件必须通过案例的 `inputs.<stage>.<name>` 或登记产物交接。
-
-### 异常
-
-`FileNotFoundError`, `ValueError`
-
-### 副作用与产物
-
-本索引不根据函数名猜测写盘、设备、随机状态或检查点副作用。调用前应阅读下面的源码位置和引用它的完整案例；写运行记录时只能通过公开 run/Task 边界。
-
-### 配置键
-
-源码没有直接读取公共配置键；配置通常由调用它的 application 或 recipe 传入。
-
-### 最小可执行检查
-
-```python
-from inspect import signature
-from ai4e_task.tasks.official_scripts import migrate_official_aero_scripts
-
-print(signature(migrate_official_aero_scripts))
-```
-
-这段代码只验证当前解释器中的符号和签名。真实调用请按能力教程提供有效输入；需要完整领域交接时再阅读关联案例或工作流。
-
-### Recipe 与案例
-
-- Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
-
-### 源码位置
-
-- 模块：`ai4e_task.tasks.official_scripts`
-- 仓库相对路径：`packages/ai4e-task/tasks/official_scripts.py:86`
-- 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
-
-### 相关 API
-
-通过 `search_help('ai4e_task.tasks.official_scripts')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
-
-### 不适用场景与证据边界
-
-API 可导入或最小检查通过只证明符号存在，不证明组件兼容、训练有效、恢复一致或达到论文精度。`internal-visible` 符号不构成兼容承诺。
-
 <a id="symbol-ai4e-task-migrate-shared-datasets"></a>
 ## `ai4e_task.migrate_shared_datasets`
 
 - **层级**：`task`
 - **稳定性**：`stable`
-- **定义**：`migrate_shared_datasets(project: str | Path, *, dry_run: bool=True, overwrite: bool=False, sources: dict[str, str] | None=None) -> list[dict]`
+- **定义**：`migrate_shared_datasets(project: str | Path, *, context: dict, dry_run: bool=True, overwrite: bool=False, sources: dict[str, str] | None=None) -> list[dict]`
 - **规范定义名**：`ai4e_task.projects.dataset_migration.migrate_shared_datasets`
 
 ### 用途
@@ -4588,7 +4674,7 @@ from ai4e_task.projects.dataset_migration import migrate_shared_datasets
 ```
 
 ```text
-migrate_shared_datasets(project: str | Path, *, dry_run: bool=True, overwrite: bool=False, sources: dict[str, str] | None=None) -> list[dict]
+migrate_shared_datasets(project: str | Path, *, context: dict, dry_run: bool=True, overwrite: bool=False, sources: dict[str, str] | None=None) -> list[dict]
 ```
 
 ### 参数
@@ -4596,6 +4682,7 @@ migrate_shared_datasets(project: str | Path, *, dry_run: bool=True, overwrite: b
 | 参数 | 类型 | 默认值 |
 | --- | --- | --- |
 | `project` | `str | Path` | `必填` |
+| `context` | `dict` | `必填关键字参数` |
 | `dry_run` | `bool` | `True` |
 | `overwrite` | `bool` | `False` |
 | `sources` | `dict[str, str] | None` | `None` |
@@ -4616,7 +4703,7 @@ migrate_shared_datasets(project: str | Path, *, dry_run: bool=True, overwrite: b
 
 ### 配置键
 
-`inputs.trainprep.dataset`
+源码没有直接读取公共配置键；配置通常由调用它的 application 或 recipe 传入。
 
 ### 最小可执行检查
 
@@ -4637,7 +4724,7 @@ print(signature(migrate_shared_datasets))
 ### 源码位置
 
 - 模块：`ai4e_task.projects.dataset_migration`
-- 仓库相对路径：`packages/ai4e-task/projects/dataset_migration.py:54`
+- 仓库相对路径：`packages/ai4e-task/projects/dataset_migration.py:12`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -4804,6 +4891,86 @@ print(signature(open_project))
 
 API 可导入或最小检查通过只证明符号存在，不证明组件兼容、训练有效、恢复一致或达到论文精度。`internal-visible` 符号不构成兼容承诺。
 
+<a id="symbol-ai4e-task-operation-context"></a>
+## `ai4e_task.operation_context`
+
+- **层级**：`task`
+- **稳定性**：`stable`
+- **定义**：`operation_context(project, task_id, *, name='infer', run=None, batch_id=None) -> dict`
+- **规范定义名**：`ai4e_task.tasks.operation_sources.operation_context`
+
+### 用途
+
+解析明确当前任务或固定运行/批次；历史缺来源时不回填当前入口。
+
+### 导入与签名
+
+```python
+from ai4e_task.tasks.operation_sources import operation_context
+```
+
+```text
+operation_context(project, task_id, *, name='infer', run=None, batch_id=None) -> dict
+```
+
+### 参数
+
+| 参数 | 类型 | 默认值 |
+| --- | --- | --- |
+| `project` | `未标注` | `必填` |
+| `task_id` | `未标注` | `必填` |
+| `name` | `未标注` | `'infer'` |
+| `run` | `未标注` | `None` |
+| `batch_id` | `未标注` | `None` |
+
+参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
+
+### 返回值
+
+源码返回标注：`dict`。普通 Python 返回值由调用方直接交接；跨阶段文件必须通过案例的 `inputs.<stage>.<name>` 或登记产物交接。
+
+### 异常
+
+`ValueError`
+
+### 副作用与产物
+
+本索引不根据函数名猜测写盘、设备、随机状态或检查点副作用。调用前应阅读下面的源码位置和引用它的完整案例；写运行记录时只能通过公开 run/Task 边界。
+
+### 配置键
+
+源码没有直接读取公共配置键；配置通常由调用它的 application 或 recipe 传入。
+
+### 最小可执行检查
+
+```python
+from inspect import signature
+from ai4e_task.tasks.operation_sources import operation_context
+
+print(signature(operation_context))
+```
+
+这段代码只验证当前解释器中的符号和签名。真实调用请按能力教程提供有效输入；需要完整领域交接时再阅读关联案例或工作流。
+
+### Recipe 与案例
+
+- Recipe：无直接 recipe 归属。
+- 案例：机器索引未发现直接文本引用。
+
+### 源码位置
+
+- 模块：`ai4e_task.tasks.operation_sources`
+- 仓库相对路径：`packages/ai4e-task/tasks/operation_sources.py:196`
+- 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
+
+### 相关 API
+
+通过 `search_help('ai4e_task.tasks.operation_sources')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
+
+### 不适用场景与证据边界
+
+API 可导入或最小检查通过只证明符号存在，不证明组件兼容、训练有效、恢复一致或达到论文精度。`internal-visible` 符号不构成兼容承诺。
+
 <a id="symbol-ai4e-task-operation-target"></a>
 ## `ai4e_task.operation_target`
 
@@ -4947,7 +5114,7 @@ print(signature(post_results))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.post_results`
-- 仓库相对路径：`packages/ai4e-task/tasks/post_results.py:455`
+- 仓库相对路径：`packages/ai4e-task/tasks/post_results.py:415`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -4963,12 +5130,12 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 - **层级**：`task`
 - **稳定性**：`stable`
-- **定义**：`processed_claim(config: dict) -> dict`
+- **定义**：`processed_claim(config: dict, *, context: dict) -> dict`
 - **规范定义名**：`ai4e_task.storage.processed_datasets.processed_claim`
 
 ### 用途
 
-用源数据与处理产物语义识别同名是否同一意图；并行线程与列表顺序不进入声明。
+通过明确应用上下文生成处理身份；Task 不解释科学配置。
 
 ### 导入与签名
 
@@ -4977,7 +5144,7 @@ from ai4e_task.storage.processed_datasets import processed_claim
 ```
 
 ```text
-processed_claim(config: dict) -> dict
+processed_claim(config: dict, *, context: dict) -> dict
 ```
 
 ### 参数
@@ -4985,6 +5152,7 @@ processed_claim(config: dict) -> dict
 | 参数 | 类型 | 默认值 |
 | --- | --- | --- |
 | `config` | `dict` | `必填` |
+| `context` | `dict` | `必填关键字参数` |
 
 参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
 
@@ -5023,7 +5191,7 @@ print(signature(processed_claim))
 ### 源码位置
 
 - 模块：`ai4e_task.storage.processed_datasets`
-- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:245`
+- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:256`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -5039,12 +5207,12 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 - **层级**：`task`
 - **稳定性**：`stable`
-- **定义**：`publish_processed_from_run(workspace: str | Path, project: str | Path, task_id: str, run: dict, *, config: dict | None=None, overwrite: bool=False) -> dict | None`
+- **定义**：`publish_processed_from_run(workspace: str | Path, project: str | Path, task_id: str, run: dict, *, context: dict | None=None, overwrite: bool=False) -> dict | None`
 - **规范定义名**：`ai4e_task.storage.processed_datasets.publish_processed_from_run`
 
 ### 用途
 
-成功正式原始处理按配置名称登记；试跑或不完整产物跳过。
+登记捕获计划中的唯一成功共享输出；多输出报选择歧义。
 
 ### 导入与签名
 
@@ -5053,7 +5221,7 @@ from ai4e_task.storage.processed_datasets import publish_processed_from_run
 ```
 
 ```text
-publish_processed_from_run(workspace: str | Path, project: str | Path, task_id: str, run: dict, *, config: dict | None=None, overwrite: bool=False) -> dict | None
+publish_processed_from_run(workspace: str | Path, project: str | Path, task_id: str, run: dict, *, context: dict | None=None, overwrite: bool=False) -> dict | None
 ```
 
 ### 参数
@@ -5064,7 +5232,7 @@ publish_processed_from_run(workspace: str | Path, project: str | Path, task_id: 
 | `project` | `str | Path` | `必填` |
 | `task_id` | `str` | `必填` |
 | `run` | `dict` | `必填` |
-| `config` | `dict | None` | `None` |
+| `context` | `dict | None` | `None` |
 | `overwrite` | `bool` | `False` |
 
 参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
@@ -5075,7 +5243,7 @@ publish_processed_from_run(workspace: str | Path, project: str | Path, task_id: 
 
 ### 异常
 
-AST 未发现显式 `raise`；依赖函数仍可能报告输入、文件或运行错误。
+`ValueError`
 
 ### 副作用与产物
 
@@ -5104,7 +5272,7 @@ print(signature(publish_processed_from_run))
 ### 源码位置
 
 - 模块：`ai4e_task.storage.processed_datasets`
-- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:205`
+- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:216`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -5178,7 +5346,7 @@ print(signature(read_case_manifest))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:291`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:293`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -5331,7 +5499,7 @@ print(signature(read_help_topic))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:225`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:227`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -5409,7 +5577,7 @@ print(signature(read_inference_batch))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.inference`
-- 仓库相对路径：`packages/ai4e-task/tasks/inference.py:242`
+- 仓库相对路径：`packages/ai4e-task/tasks/inference.py:260`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -5564,7 +5732,7 @@ print(signature(read_post_metrics))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.post_metrics`
-- 仓库相对路径：`packages/ai4e-task/tasks/post_metrics.py:161`
+- 仓库相对路径：`packages/ai4e-task/tasks/post_metrics.py:180`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -5641,7 +5809,7 @@ print(signature(read_run_metrics))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.artifacts`
-- 仓库相对路径：`packages/ai4e-task/tasks/artifacts.py:83`
+- 仓库相对路径：`packages/ai4e-task/tasks/artifacts.py:87`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -5718,7 +5886,7 @@ print(signature(read_version_details))
 ### 源码位置
 
 - 模块：`ai4e_task.versions.details`
-- 仓库相对路径：`packages/ai4e-task/versions/details.py:13`
+- 仓库相对路径：`packages/ai4e-task/versions/details.py:12`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -5873,7 +6041,7 @@ print(signature(recover_inference))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.inference`
-- 仓库相对路径：`packages/ai4e-task/tasks/inference.py:294`
+- 仓库相对路径：`packages/ai4e-task/tasks/inference.py:312`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -5965,12 +6133,14 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 - **层级**：`task`
 - **稳定性**：`stable`
-- **定义**：`register_processed_dataset(workspace: str | Path, name: str, *, manifest_path: str | Path, digest: str, provenance: dict | None=None, claim: dict | None=None, overwrite: bool=False) -> dict`
+- **定义**：`register_processed_dataset(workspace: str | Path, name: str, *, manifest_path: str | Path, digest: str, provenance: dict | None=None, claim: dict | None=None, semantics: dict | None=None, stage: str | None=None, overwrite: bool=False) -> dict`
 - **规范定义名**：`ai4e_task.storage.processed_datasets.register_processed_dataset`
 
 ### 用途
 
-登记或复用同名同摘要资源；未确认覆盖时同名不同声明拒绝。
+登记或复用资源，原样保留显式 semantics/stage；缺标签不推断。
+
+同名不同声明未确认覆盖时拒绝；同摘要不同标签须明确覆盖。
 
 ### 导入与签名
 
@@ -5979,7 +6149,7 @@ from ai4e_task.storage.processed_datasets import register_processed_dataset
 ```
 
 ```text
-register_processed_dataset(workspace: str | Path, name: str, *, manifest_path: str | Path, digest: str, provenance: dict | None=None, claim: dict | None=None, overwrite: bool=False) -> dict
+register_processed_dataset(workspace: str | Path, name: str, *, manifest_path: str | Path, digest: str, provenance: dict | None=None, claim: dict | None=None, semantics: dict | None=None, stage: str | None=None, overwrite: bool=False) -> dict
 ```
 
 ### 参数
@@ -5992,6 +6162,8 @@ register_processed_dataset(workspace: str | Path, name: str, *, manifest_path: s
 | `digest` | `str` | `必填关键字参数` |
 | `provenance` | `dict | None` | `None` |
 | `claim` | `dict | None` | `None` |
+| `semantics` | `dict | None` | `None` |
+| `stage` | `str | None` | `None` |
 | `overwrite` | `bool` | `False` |
 
 参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
@@ -6031,7 +6203,7 @@ print(signature(register_processed_dataset))
 ### 源码位置
 
 - 模块：`ai4e_task.storage.processed_datasets`
-- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:143`
+- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:138`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -6047,7 +6219,7 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 - **层级**：`task`
 - **稳定性**：`stable`
-- **定义**：`register_shared(project, name: str, source, *, kind: str='other', copy: bool=False, provenance: dict | None=None, dependencies: list[dict] | None=None, bundle: dict | None=None) -> dict`
+- **定义**：`register_shared(project, name: str, source, *, kind: str='other', copy: bool=False, provenance: dict | None=None, dependencies: list[dict] | None=None, bundle: dict | None=None, semantics: dict | None=None, stage: str | None=None, asset_name: str | None=None) -> dict`
 - **规范定义名**：`ai4e_task.projects.shared.register_shared`
 
 ### 用途
@@ -6061,7 +6233,7 @@ from ai4e_task.projects.shared import register_shared
 ```
 
 ```text
-register_shared(project, name: str, source, *, kind: str='other', copy: bool=False, provenance: dict | None=None, dependencies: list[dict] | None=None, bundle: dict | None=None) -> dict
+register_shared(project, name: str, source, *, kind: str='other', copy: bool=False, provenance: dict | None=None, dependencies: list[dict] | None=None, bundle: dict | None=None, semantics: dict | None=None, stage: str | None=None, asset_name: str | None=None) -> dict
 ```
 
 ### 参数
@@ -6076,6 +6248,9 @@ register_shared(project, name: str, source, *, kind: str='other', copy: bool=Fal
 | `provenance` | `dict | None` | `None` |
 | `dependencies` | `list[dict] | None` | `None` |
 | `bundle` | `dict | None` | `None` |
+| `semantics` | `dict | None` | `None` |
+| `stage` | `str | None` | `None` |
+| `asset_name` | `str | None` | `None` |
 
 参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
 
@@ -6208,7 +6383,7 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 - **层级**：`task`
 - **稳定性**：`stable`
-- **定义**：`replace_configuration(project: str | Path, task_id: str, config: dict, *, revision: str) -> dict`
+- **定义**：`replace_configuration(project: str | Path, task_id: str, config: dict, *, revision: str, script_replacements: dict | None=None) -> dict`
 - **规范定义名**：`ai4e_task.tasks.configuration.replace_configuration`
 
 ### 用途
@@ -6222,7 +6397,7 @@ from ai4e_task.tasks.configuration import replace_configuration
 ```
 
 ```text
-replace_configuration(project: str | Path, task_id: str, config: dict, *, revision: str) -> dict
+replace_configuration(project: str | Path, task_id: str, config: dict, *, revision: str, script_replacements: dict | None=None) -> dict
 ```
 
 ### 参数
@@ -6233,6 +6408,7 @@ replace_configuration(project: str | Path, task_id: str, config: dict, *, revisi
 | `task_id` | `str` | `必填` |
 | `config` | `dict` | `必填` |
 | `revision` | `str` | `必填关键字参数` |
+| `script_replacements` | `dict | None` | `None` |
 
 参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
 
@@ -6277,6 +6453,84 @@ print(signature(replace_configuration))
 ### 相关 API
 
 通过 `search_help('ai4e_task.tasks.configuration')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
+
+### 不适用场景与证据边界
+
+API 可导入或最小检查通过只证明符号存在，不证明组件兼容、训练有效、恢复一致或达到论文精度。`internal-visible` 符号不构成兼容承诺。
+
+<a id="symbol-ai4e-task-replace-scripts"></a>
+## `ai4e_task.replace_scripts`
+
+- **层级**：`task`
+- **稳定性**：`stable`
+- **定义**：`replace_scripts(project: str | Path, task_id: str, files: dict[str, dict]) -> dict`
+- **规范定义名**：`ai4e_task.storage.script_replacement.replace_scripts`
+
+### 用途
+
+按明确文件清单与原件修订执行有备份的替换；失败恢复本次改动。
+
+### 导入与签名
+
+```python
+from ai4e_task.storage.script_replacement import replace_scripts
+```
+
+```text
+replace_scripts(project: str | Path, task_id: str, files: dict[str, dict]) -> dict
+```
+
+### 参数
+
+| 参数 | 类型 | 默认值 |
+| --- | --- | --- |
+| `project` | `str | Path` | `必填` |
+| `task_id` | `str` | `必填` |
+| `files` | `dict[str, dict]` | `必填` |
+
+参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
+
+### 返回值
+
+源码返回标注：`dict`。普通 Python 返回值由调用方直接交接；跨阶段文件必须通过案例的 `inputs.<stage>.<name>` 或登记产物交接。
+
+### 异常
+
+`FileNotFoundError`, `ValueError`
+
+### 副作用与产物
+
+本索引不根据函数名猜测写盘、设备、随机状态或检查点副作用。调用前应阅读下面的源码位置和引用它的完整案例；写运行记录时只能通过公开 run/Task 边界。
+
+### 配置键
+
+源码没有直接读取公共配置键；配置通常由调用它的 application 或 recipe 传入。
+
+### 最小可执行检查
+
+```python
+from inspect import signature
+from ai4e_task.storage.script_replacement import replace_scripts
+
+print(signature(replace_scripts))
+```
+
+这段代码只验证当前解释器中的符号和签名。真实调用请按能力教程提供有效输入；需要完整领域交接时再阅读关联案例或工作流。
+
+### Recipe 与案例
+
+- Recipe：无直接 recipe 归属。
+- 案例：机器索引未发现直接文本引用。
+
+### 源码位置
+
+- 模块：`ai4e_task.storage.script_replacement`
+- 仓库相对路径：`packages/ai4e-task/storage/script_replacement.py:17`
+- 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
+
+### 相关 API
+
+通过 `search_help('ai4e_task.storage.script_replacement')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
 
 ### 不适用场景与证据边界
 
@@ -6345,7 +6599,7 @@ print(signature(resource_root))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:38`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:40`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -6424,7 +6678,7 @@ print(signature(resume_run))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.execution`
-- 仓库相对路径：`packages/ai4e-task/tasks/execution.py:325`
+- 仓库相对路径：`packages/ai4e-task/tasks/execution.py:356`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -6503,7 +6757,7 @@ print(signature(retry_inference))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.inference`
-- 仓库相对路径：`packages/ai4e-task/tasks/inference.py:305`
+- 仓库相对路径：`packages/ai4e-task/tasks/inference.py:323`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -6580,7 +6834,7 @@ print(signature(run_physical_manifest))
 ### 源码位置
 
 - 模块：`ai4e_task.projects.datasets`
-- 仓库相对路径：`packages/ai4e-task/projects/datasets.py:64`
+- 仓库相对路径：`packages/ai4e-task/projects/datasets.py:76`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -6739,7 +6993,7 @@ print(signature(search_help))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:181`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:183`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -6820,7 +7074,7 @@ print(signature(share_run_asset))
 ### 源码位置
 
 - 模块：`ai4e_task.projects.shared`
-- 仓库相对路径：`packages/ai4e-task/projects/shared.py:88`
+- 仓库相对路径：`packages/ai4e-task/projects/shared.py:96`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -6896,7 +7150,7 @@ print(signature(source_location))
 ### 源码位置
 
 - 模块：`ai4e_task.templates.resources`
-- 仓库相对路径：`packages/ai4e-task/templates/resources.py:471`
+- 仓库相对路径：`packages/ai4e-task/templates/resources.py:515`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -6973,7 +7227,7 @@ print(signature(start_captured_run))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.execution`
-- 仓库相对路径：`packages/ai4e-task/tasks/execution.py:245`
+- 仓库相对路径：`packages/ai4e-task/tasks/execution.py:271`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -7051,7 +7305,7 @@ print(signature(stop_run))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.execution`
-- 仓库相对路径：`packages/ai4e-task/tasks/execution.py:286`
+- 仓库相对路径：`packages/ai4e-task/tasks/execution.py:312`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -7129,7 +7383,7 @@ print(signature(submit_inference))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.inference`
-- 仓库相对路径：`packages/ai4e-task/tasks/inference.py:150`
+- 仓库相对路径：`packages/ai4e-task/tasks/inference.py:159`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -7223,7 +7477,7 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 - **层级**：`task`
 - **稳定性**：`stable`
-- **定义**：`submit_run(project, task_id: str, *, overrides: list[str] | None=None, idempotency_key: str | None=None, resumed_from: str | None=None, _code: Path | None=None, expected_revision: str | None=None, operation_mode: str='execute', input_keys: list[str] | None=None, start: bool=True, metadata: dict | None=None, overwrite: bool=False) -> dict`
+- **定义**：`submit_run(project, task_id: str, *, overrides: list[str] | None=None, idempotency_key: str | None=None, resumed_from: str | None=None, _code: Path | None=None, _application_source: dict | None=None, expected_revision: str | None=None, operation_mode: str='execute', input_keys: list[str] | None=None, start: bool=True, metadata: dict | None=None, overwrite: bool=False) -> dict`
 - **规范定义名**：`ai4e_task.tasks.execution.submit_run`
 
 ### 用途
@@ -7237,7 +7491,7 @@ from ai4e_task.tasks.execution import submit_run
 ```
 
 ```text
-submit_run(project, task_id: str, *, overrides: list[str] | None=None, idempotency_key: str | None=None, resumed_from: str | None=None, _code: Path | None=None, expected_revision: str | None=None, operation_mode: str='execute', input_keys: list[str] | None=None, start: bool=True, metadata: dict | None=None, overwrite: bool=False) -> dict
+submit_run(project, task_id: str, *, overrides: list[str] | None=None, idempotency_key: str | None=None, resumed_from: str | None=None, _code: Path | None=None, _application_source: dict | None=None, expected_revision: str | None=None, operation_mode: str='execute', input_keys: list[str] | None=None, start: bool=True, metadata: dict | None=None, overwrite: bool=False) -> dict
 ```
 
 ### 参数
@@ -7250,6 +7504,7 @@ submit_run(project, task_id: str, *, overrides: list[str] | None=None, idempoten
 | `idempotency_key` | `str | None` | `None` |
 | `resumed_from` | `str | None` | `None` |
 | `_code` | `Path | None` | `None` |
+| `_application_source` | `dict | None` | `None` |
 | `expected_revision` | `str | None` | `None` |
 | `operation_mode` | `str` | `'execute'` |
 | `input_keys` | `list[str] | None` | `None` |
@@ -7529,7 +7784,7 @@ print(signature(validate_processed_name))
 ### 源码位置
 
 - 模块：`ai4e_task.storage.processed_datasets`
-- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:38`
+- 仓库相对路径：`packages/ai4e-task/storage/processed_datasets.py:20`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -7608,88 +7863,12 @@ print(signature(validate_rawprep_configuration))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.rawprep`
-- 仓库相对路径：`packages/ai4e-task/tasks/rawprep.py:54`
+- 仓库相对路径：`packages/ai4e-task/tasks/rawprep.py:58`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API
 
 通过 `search_help('ai4e_task.tasks.rawprep')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
-
-### 不适用场景与证据边界
-
-API 可导入或最小检查通过只证明符号存在，不证明组件兼容、训练有效、恢复一致或达到论文精度。`internal-visible` 符号不构成兼容承诺。
-
-<a id="symbol-ai4e-task-verified-old-sources"></a>
-## `ai4e_task.verified_old_sources`
-
-- **层级**：`task`
-- **稳定性**：`stable`
-- **定义**：`verified_old_sources(recipe: str | Path) -> dict[str, str]`
-- **规范定义名**：`ai4e_task.tasks.official_scripts.verified_old_sources`
-
-### 用途
-
-只返回当前正文摘要已核验的旧官方包装；现行模板或用户改过的脚本不进入。
-
-### 导入与签名
-
-```python
-from ai4e_task.tasks.official_scripts import verified_old_sources
-```
-
-```text
-verified_old_sources(recipe: str | Path) -> dict[str, str]
-```
-
-### 参数
-
-| 参数 | 类型 | 默认值 |
-| --- | --- | --- |
-| `recipe` | `str | Path` | `必填` |
-
-参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
-
-### 返回值
-
-源码返回标注：`dict[str, str]`。普通 Python 返回值由调用方直接交接；跨阶段文件必须通过案例的 `inputs.<stage>.<name>` 或登记产物交接。
-
-### 异常
-
-AST 未发现显式 `raise`；依赖函数仍可能报告输入、文件或运行错误。
-
-### 副作用与产物
-
-本索引不根据函数名猜测写盘、设备、随机状态或检查点副作用。调用前应阅读下面的源码位置和引用它的完整案例；写运行记录时只能通过公开 run/Task 边界。
-
-### 配置键
-
-源码没有直接读取公共配置键；配置通常由调用它的 application 或 recipe 传入。
-
-### 最小可执行检查
-
-```python
-from inspect import signature
-from ai4e_task.tasks.official_scripts import verified_old_sources
-
-print(signature(verified_old_sources))
-```
-
-这段代码只验证当前解释器中的符号和签名。真实调用请按能力教程提供有效输入；需要完整领域交接时再阅读关联案例或工作流。
-
-### Recipe 与案例
-
-- Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
-
-### 源码位置
-
-- 模块：`ai4e_task.tasks.official_scripts`
-- 仓库相对路径：`packages/ai4e-task/tasks/official_scripts.py:66`
-- 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
-
-### 相关 API
-
-通过 `search_help('ai4e_task.tasks.official_scripts')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
 
 ### 不适用场景与证据边界
 
@@ -7841,7 +8020,7 @@ print(signature(wait_run))
 ### 源码位置
 
 - 模块：`ai4e_task.tasks.execution`
-- 仓库相对路径：`packages/ai4e-task/tasks/execution.py:269`
+- 仓库相对路径：`packages/ai4e-task/tasks/execution.py:295`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_task')`，再按模块相对路径定位。
 
 ### 相关 API

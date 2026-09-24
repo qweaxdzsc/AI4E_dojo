@@ -2,6 +2,7 @@
 
 import json
 from copy import deepcopy
+from pathlib import Path
 
 import pytest
 import torch
@@ -404,7 +405,7 @@ def test_case_inspect_trace_prepares_network_without_html(tmp_path, monkeypatch)
 
 
 def test_platform_views_export_both_html_or_neither(tmp_path, monkeypatch):
-    from ai4e_viz.inspect.model_graph import export_platform_views
+    from ai4e_contrib.application.aero_cfd.model_inspection import export_platform_views
 
     model = torch.nn.Sequential(torch.nn.Linear(3, 4), torch.nn.Tanh(), torch.nn.Linear(4, 1))
     result = export_platform_views(
@@ -427,7 +428,7 @@ def test_platform_views_export_both_html_or_neither(tmp_path, monkeypatch):
         raise RuntimeError("second view failed")
 
     broken = tmp_path / "broken"
-    monkeypatch.setattr("ai4e_viz.inspect.model_graph._export_one", fail_second)
+    monkeypatch.setattr("ai4e_core.abilities.modeling.inspection._export_one", fail_second)
     with pytest.raises(RuntimeError, match="second view failed"):
         export_platform_views(
             model,
@@ -440,24 +441,22 @@ def test_platform_views_export_both_html_or_neither(tmp_path, monkeypatch):
     assert not (broken / "model-inspection.json").exists()
 
 
-def test_inspection_worker_exports_prepared_network_via_viz(tmp_path):
+def test_inspection_worker_only_accepts_serializable_application_results(tmp_path):
     from ai4e_task.tasks.inspection_worker import render_inspection
 
-    model = torch.nn.Sequential(torch.nn.Linear(3, 4), torch.nn.Tanh(), torch.nn.Linear(4, 1))
+    from ai4e_contrib.application.aero_cfd.model_inspection import export_platform_views
+
+    model = torch.nn.Linear(3, 1)
     result = render_inspection(
-        {"operation": "trace_model", "output_dir": str(tmp_path)},
-        lambda _request: {
-            "network": model,
-            "inputs": torch.ones(2, 3),
-            "revision": "r-worker",
-            "input_source": {"sample": "worker"},
-        },
+        {"operation": "trace_model"},
+        lambda _: export_platform_views(
+            model, torch.ones(2, 3), tmp_path, revision="fixed", input_source={"sample": "real"}
+        ),
     )
     assert result["status"] == "succeeded"
-    assert result["views"]["stage_trunk"]["member"] == "model.stage-trunk.html"
-    assert result["views"]["stage_blocks"]["member"] == "model.stage-blocks.html"
-    assert (tmp_path / "model.stage-trunk.html").is_file()
-    assert (tmp_path / "model.stage-blocks.html").is_file()
+    assert Path(result["path"]).is_file()
+    with pytest.raises(TypeError):
+        render_inspection({}, lambda _: {"network": model})
 
 
 def test_physical_grouped_output_preserves_sample_identity(tmp_path):
@@ -617,8 +616,8 @@ def test_preparation_rejects_selected_different_manifest(tmp_path):
     assert imported["manifest"] == record["manifest"]
 
 
-def test_physical_prepare_rejects_version2_record(tmp_path):
-    """旧物理准备接口遇到现行 version=2 记录时给出定位，不再抛 KeyError('dataset')。"""
+def test_physical_post_imports_generic_version2_record(tmp_path):
+    """历史 post 门面只读导入现行 version=2 准备，不比较冻结业务声明。"""
     from types import SimpleNamespace
 
     from ai4e_core.applications.aero_cfd.trainprep.physical import open_preparation
@@ -635,18 +634,33 @@ def test_physical_prepare_rejects_version2_record(tmp_path):
     model = SimpleNamespace(SOURCE="test-component", prepare_sample=lambda *args, **kwargs: None)
     dataset = SimpleNamespace(open_physical=lambda _: view)
     path = tmp_path / "preparation.json"
-    path.write_text(
-        json.dumps(
-            {
-                "version": 2,
-                "manifest": str(tmp_path / "manifest.json"),
-                "dataset_digest": "unused",
-                "declarations": {},
-            }
-        )
+    from ai4e_core.abilities.data.source.manifest import ManifestIndex
+    from ai4e_core.abilities.transform.normalization import Normalization
+    from ai4e_core.applications.aero_cfd.trainprep.preparation import dataset_digest, digest
+
+    normalization = Normalization(
+        {
+            "version": 2,
+            "fields": {"pos": {"method": "identity", "parameters": {}, "scale": 1}},
+            "source": None,
+            "training_samples": ["s"],
+        }
     )
-    with pytest.raises(ValueError, match="trainprep.preparation"):
-        open_preparation(config, dataset, model, path)
+    record = {
+        "version": 2,
+        "manifest": view.describe()["reference"],
+        "dataset_digest": dataset_digest(ManifestIndex(view.describe()["reference"])),
+        "normalization": normalization.record,
+        "normalization_digest": normalization.digest,
+        "declarations": {},
+        "partitions": view.partitions,
+    }
+    record["digest"] = digest(record)
+    path.write_text(json.dumps(record))
+    imported_view, imported_normalization, imported = open_preparation(config, dataset, model, path)
+    assert imported_view.partitions == view.partitions
+    assert imported_normalization.digest == normalization.digest
+    assert imported == record
 
 
 def test_trace_model_rejects_version1_preparation(tmp_path):
@@ -819,8 +833,8 @@ def test_trace_model_requires_physical_manifest():
         )
 
 
-def test_contrib_inspect_keeps_historical_dataset_root():
-    """历史任务仍带 dataset.root 时，平台检查不因键迁移拒绝描述。"""
+def test_contrib_inspect_requires_explicit_legacy_configuration_conversion():
+    """旧配置键明确拒绝，不在检查时改写历史配置或猜输入位置。"""
     from pathlib import Path
 
     import yaml
@@ -831,6 +845,12 @@ def test_contrib_inspect_keeps_historical_dataset_root():
         (Path(__file__).resolve().parents[2] / "recipes/aero_cfd/config.yaml").read_text()
     )
     config.setdefault("dataset", {})["root"] = "/tmp/legacy-dataset"
+    import pytest
+
+    with pytest.raises(ValueError, match="dataset.root"):
+        inspect({"operation": "describe_case", "config": config})
+    assert config["dataset"]["root"] == "/tmp/legacy-dataset"
+    del config["dataset"]["root"]
     result = inspect({"operation": "describe_case", "config": config})
     assert result["capabilities"]["sampling"]["configurable"] is True
 
@@ -861,7 +881,7 @@ def test_declared_legacy_provider_and_actual_training_capabilities():
     )
     result = execute({"operation": "describe_case", "config": config})
     caps = result["capabilities"]
-    assert caps["training_constraints"]["evaluation_split"]["allowed"] == ["validation"]
+    assert caps["training_constraints"]["evaluation_split"]["allowed"] == ["eval"]
     assert caps["training_constraints"]["optimizer"]["allowed"] == ["adamw"]
     assert {k: caps["losses"][k] for k in ("configurable", "fixed", "reason")} == {
         "configurable": False,

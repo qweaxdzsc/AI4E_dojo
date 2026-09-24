@@ -73,6 +73,7 @@ def main():
     print("RMHD_READY", flush=True)
     for line in sys.stdin:
         request = json.loads(line)["request"]
+        torch.mps.synchronize()
         prediction = np.asarray(predict(np.array(inputs, copy=True)))
         torch.mps.synchronize()
         if (

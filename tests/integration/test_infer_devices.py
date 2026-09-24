@@ -4,7 +4,9 @@ from ai4e_task.tasks import inference
 
 
 def test_known_training_device_is_busy(tmp_path, monkeypatch):
-    monkeypatch.setattr(inference, "inspect_inference", lambda *_: ["cpu", "cuda:0", "cuda:1"])
+    from types import SimpleNamespace
+
+    monkeypatch.setattr(inference.subprocess, "run", lambda *_a, **_k: SimpleNamespace(stdout='["cpu", "cuda:0", "cuda:1"]'))
     monkeypatch.setattr(
         inference,
         "list_runs",

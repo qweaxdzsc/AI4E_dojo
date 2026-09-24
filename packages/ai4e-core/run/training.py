@@ -84,7 +84,17 @@ class TrainingRun:
             label,
             {**payload, "effective_config": deepcopy(self._state["config"])},
             namespace=namespace,
+            semantics=getattr(self, "_checkpoint_semantics", None),
         )
+
+    def with_checkpoint_labels(self, semantics: dict):
+        """返回同一运行的带标签写入视图；标签由调用应用显式提供。"""
+        from copy import copy
+        from ai4e_spec.artifacts.task_operations import json_record
+
+        result = copy(self)
+        result._checkpoint_semantics = json_record(semantics)
+        return result
 
     def artifact(self, name: str, value: dict) -> Path:
         """将阶段交付交给唯一 writer；检查模式不发布成功产物。"""

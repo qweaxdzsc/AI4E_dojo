@@ -70,10 +70,10 @@ def import_run(project: str | Path, directory, *, task_id: str | None = None) ->
 def get_stage_summary(project: str | Path, task_id: str) -> dict:
     """按正式运行事实汇总阶段；已成功不被后来的 unknown 读盘盖成未运行。"""
     get_task(project, task_id)
-    result = {
-        stage: {"status": "not_run", "run_id": None}
-        for stage in ("rawprep", "trainprep", "train", "infer", "post")
-    }
+    from ..templates.materialize import recipe_entry
+
+    entry = recipe_entry(project, task_id)
+    result = {stage: {"status": "not_run", "run_id": None} for stage in entry.get("stages", [])}
     runs = sorted(
         (
             run
@@ -87,15 +87,18 @@ def get_stage_summary(project: str | Path, task_id: str) -> dict:
         if run.get("metadata", {}).get("purpose") == "inference":
             stages = ["infer"]
         for stage in stages:
-            if stage not in result:
-                continue
+            result.setdefault(stage, {"status": "not_run", "run_id": None})
             status = run["status"]
             summary = run.get("summary", {})
             if summary.get("dry_run") or summary.get("research_status") == "unavailable":
                 continue
             events = [item for item in summary.get("stage_events", []) if item["stage"] == stage]
             if events:
-                status = "failed" if any(item["status"] == "failed" for item in events) else events[-1]["status"]
+                status = (
+                    "failed"
+                    if any(item["status"] == "failed" for item in events)
+                    else events[-1]["status"]
+                )
             elif summary.get("research_status") in {"completed", "incomplete", "failed"}:
                 status = "unknown"
             # 多阶段失败的历史摘要不含逐阶段终态；不能由报告存在推测成功。
@@ -111,7 +114,7 @@ def get_stage_summary(project: str | Path, task_id: str) -> dict:
     batches = list_inference_batches(project, task_id)
     if batches:
         batch = batches[0]
-        previous = result["infer"]
+        previous = result.get("infer", {})
         if not (batch.get("status") == "unknown" and previous.get("status") == "succeeded"):
             children = batch.get("children", [])
             result["infer"] = {
@@ -122,25 +125,19 @@ def get_stage_summary(project: str | Path, task_id: str) -> dict:
                 "completed": batch.get("completed", 0),
                 "total": batch.get("total", 0),
             }
-    from ..projects.datasets import list_shared_datasets
+    from omegaconf import OmegaConf
+
+    from ..storage.shared_datasets import resolve_reference
     from .configuration import read_configuration
 
-    selected = read_configuration(project, task_id)["config"].get("inputs", {}).get("trainprep", {}).get("dataset")
-    if selected:
-        match = next(
-            (
-                item
-                for item in list_shared_datasets(project)
-                if Path(item["manifest_path"]).resolve() == Path(selected).resolve()
-            ),
-            None,
-        )
+    config = OmegaConf.create(read_configuration(project, task_id)["config"])
+    for declaration in entry.get("shared_outputs", {}).values():
+        selected = OmegaConf.select(config, declaration["consumer_binding"])
+        match = resolve_reference(project, Path(selected)) if selected else None
         if match:
-            result["rawprep"]["shared_input"] = {
-                "name": match["name"],
-                "status": match["status"],
-                "asset_id": match["id"],
-            }
+            result.setdefault(declaration["stage"], {"status": "not_run", "run_id": None})[
+                "shared_input"
+            ] = {"name": match["name"], "status": match["status"], "asset_id": match["id"]}
     return result
 
 

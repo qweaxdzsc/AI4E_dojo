@@ -30,6 +30,7 @@ solver:
   timeout_seconds: 600
 post: {}
 components:
+  application: ai4e_contrib.application.pde_control.safediffcon.operations
   reader: ai4e_contrib.application.datasets.safediffcon.arrays.read_tokamak
   transform: ai4e_contrib.ability.transform.safediffcon.preparation.prepare_arrays
   model: ai4e_contrib.ability.model.safediffcon.adapters.build_model

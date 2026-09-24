@@ -31,13 +31,25 @@ def register(commands, common) -> None:
     )
     p = datasets.add_parser("migrate")
     common(p)
+    p.add_argument("--task-id", required=True, help="提供明确应用声明的任务")
+    p.add_argument("--sources", help="共享名称到运行 ID 的 JSON 映射；多个候选须明确选择")
     p.add_argument("--execute", action="store_true")
     p.add_argument("--overwrite", action="store_true")
-    p.set_defaults(
-        action=lambda a: migrate_shared_datasets(
-            a.project, dry_run=not a.execute, overwrite=a.overwrite
+
+    def migrate(args):
+        import json
+
+        from ..tasks.operation_sources import operation_context
+
+        return migrate_shared_datasets(
+            args.project,
+            context=operation_context(args.project, args.task_id, name="inspect"),
+            sources=json.loads(args.sources) if args.sources is not None else None,
+            dry_run=not args.execute,
+            overwrite=args.overwrite,
         )
-    )
+
+    p.set_defaults(action=migrate)
     group = commands.add_parser("asset").add_subparsers(dest="asset_action", required=True)
     p = group.add_parser("register")
     common(p)

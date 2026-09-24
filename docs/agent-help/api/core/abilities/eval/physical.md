@@ -213,7 +213,7 @@ print(signature(PhysicalMetrics.update))
 ### Recipe 与案例
 
 - Recipe：`gencp`
-- 案例：`gencp.double_cylinder_cno`, `gencp.double_cylinder_sit_fno`, `gencp.ntcouple_cno`, `gencp.ntcouple_sit_fno`, `gencp.turek_hron_cno`, `gencp.turek_hron_sit_fno`, `recipe_extensions.wdno`
+- 案例：`gencp.double_cylinder_cno`, `gencp.double_cylinder_sit_fno`, `gencp.ntcouple_cno`, `gencp.ntcouple_sit_fno`, `gencp.turek_hron_cno`, `gencp.turek_hron_sit_fno`, `recipe_extensions.research_state`, `recipe_extensions.wdno`
 
 ### 源码位置
 

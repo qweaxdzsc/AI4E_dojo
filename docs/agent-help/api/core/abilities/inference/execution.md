@@ -64,7 +64,7 @@ print(signature(inference_execution))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- 案例：`recipe_extensions.research_state`
 
 ### 源码位置
 

@@ -62,8 +62,8 @@ print(signature(objectives))
 
 ### Recipe 与案例
 
-- Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- Recipe：`operator_learning/darcy`, `operator_learning/double_cylinder`, `operator_learning/shapenet_volume`
+- 案例：`operator_learning.darcy`, `operator_learning.double_cylinder`, `operator_learning.shapenet_volume`
 
 ### 源码位置
 

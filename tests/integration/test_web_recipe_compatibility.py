@@ -1,7 +1,6 @@
 """平台依赖已连接的操作，用户脚本无需匹配官方代码结构。"""
 
 import hashlib
-import json
 from pathlib import Path
 
 import pytest
@@ -10,6 +9,29 @@ from tests.integration.test_web_project_task import platform as _platform
 
 platform = _platform
 LEGACY = Path(__file__).resolve().parents[1] / "fixtures/rawprep_legacy/configuration.py"
+
+
+def test_switch_refuses_to_overwrite_user_scientific_chain(tmp_path):
+    """显式换模可替换官方正文，不能据模型名覆盖用户修改。"""
+    import shutil
+
+    import yaml
+    from ai4e_server.modules.capabilities.official_scripts import model_switch_replacements
+
+    root = Path(__file__).resolve().parents[2]
+    old = root / "examples/aero_cfd/nasa_crm_abupt"
+    new = root / "examples/aero_cfd/nasa_crm_transolver3"
+    recipe = tmp_path / "recipe"
+    shutil.copytree(old, recipe)
+    previous, selected = [yaml.safe_load((p / "config.yaml").read_text()) for p in (old, new)]
+    plan = model_switch_replacements(root / "recipes/aero_cfd", recipe, previous, selected)
+    assert set(plan) == {"trainprep.py", "train.py", "infer.py"}
+    path = recipe / "train.py"
+    path.write_text(path.read_text() + "\n# user extension\n")
+    before = path.read_bytes()
+    with pytest.raises(ValueError, match="model_switch_requires_explicit_script_update"):
+        model_switch_replacements(root / "recipes/aero_cfd", recipe, previous, selected)
+    assert path.read_bytes() == before
 
 
 def digest_tree(root):
@@ -110,7 +132,6 @@ def test_stage_editor_preserves_existing_recipe_extensions(platform):
 def test_legacy_loader_requires_explicit_migration_without_rewriting_task(platform):
     """旧加载器不再由Task隐式适配；真实提交保留失败及原件。"""
     import ai4e_task as task
-    import torch
 
     from ai4e_core.applications.aero_cfd.rawprep.catalog import sample_key
     from tests.integration.test_web_rawprep_handoff import SAMPLE, copy_real

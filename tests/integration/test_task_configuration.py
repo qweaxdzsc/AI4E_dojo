@@ -4,11 +4,49 @@ from pathlib import Path
 
 import ai4e_task as task
 import pytest
+from ai4e_server.modules.capabilities import official_scripts as catalog_scripts
 
 from tests.integration.test_task_management import recipe
 from tests.integration.test_web_project_task import platform as _platform
 
 platform = _platform
+
+
+def test_configuration_and_explicit_scripts_rollback_together(tmp_path, monkeypatch):
+    """源码替换失败时配置、先替换脚本与任务记录一同恢复。"""
+    import hashlib
+
+    from ai4e_task.storage import script_replacement
+
+    project = tmp_path / "p"
+    task.create_project(project)
+    item = task.new_task(project, "atomic", source=recipe(tmp_path))
+    folder = Path(task.get_task(project, item["id"])["directory"]) / "recipe"
+    (folder / "stage.py").write_text("VALUE = 1\n")
+    originals = {name: (folder / name).read_bytes() for name in ("pipeline.py", "stage.py")}
+    replacement = tmp_path / "replacement.py"
+    replacement.write_text("VALUE = 2\n")
+    planned = {name: {"source": str(replacement), "revision": hashlib.sha256(data).hexdigest()}
+               for name, data in originals.items()}
+    before = task.read_configuration(project, item["id"])
+    original_replace = script_replacement._replace_bytes
+    calls = 0
+
+    def failing(path, payload):
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            raise OSError("injected script replacement failure")
+        original_replace(path, payload)
+
+    monkeypatch.setattr(script_replacement, "_replace_bytes", failing)
+    with pytest.raises(OSError, match="injected"):
+        task.replace_configuration(project, item["id"], {**before["config"], "score": 9},
+                                   revision=before["revision"], script_replacements=planned)
+    assert task.read_configuration(project, item["id"]) == before
+    for name, data in originals.items():
+        assert (folder / name).read_bytes() == data
+    assert task.get_task(project, item["id"])["version_id"] == item["version_id"]
 
 
 def test_preserve_configuration_and_task_record(tmp_path):
@@ -61,9 +99,13 @@ def test_replace_model_sections_removes_incompatible_old_tree(tmp_path):
     for key, value in patch.items():
         assert saved["config"][key] == value
     assert saved["config"]["user_extension"] == {"keep": True}
+    saved = task.save_configuration(
+        p, t["id"], {"dataset": {}}, revision=saved["revision"], replace_sections=("dataset",)
+    )
+    assert saved["config"]["dataset"] == {}
     with pytest.raises(ValueError, match="unsupported_configuration_replacement"):
         task.save_configuration(
-            p, t["id"], {"dataset": {}}, revision=saved["revision"], replace_sections=("dataset",)
+            p, t["id"], {}, revision=saved["revision"], replace_sections=("missing",)
         )
     with pytest.raises(ValueError, match="conflict"):
         task.save_configuration(
@@ -207,10 +249,13 @@ def test_migrate_official_aero_scripts_replaces_old_wrapper_only(tmp_path):
     )
     recipe.joinpath("trainprep.py").write_text(rewritten)
     import hashlib
+
     with pytest.raises(ValueError, match="verified_sources_required"):
-        task.migrate_official_aero_scripts(p, created["id"], official)
-    result = task.migrate_official_aero_scripts(
-        p, created["id"], official,
+        catalog_scripts.migrate_official_aero_scripts(p, created["id"], official)
+    result = catalog_scripts.migrate_official_aero_scripts(
+        p,
+        created["id"],
+        official,
         expected_sources={"train.py": hashlib.sha256(old.read_bytes()).hexdigest()},
     )
     assert (Path(result["backup"]) / "original/train.py").read_bytes() == old.read_bytes()
@@ -225,7 +270,7 @@ def test_migrate_official_aero_scripts_replaces_old_wrapper_only(tmp_path):
 def test_verified_old_sources_skip_current_and_match_originals(tmp_path):
     """现行模板没有核验摘要；只有原包装正文才进入替换名单。"""
     official = Path(__file__).resolve().parents[2] / "recipes/aero_cfd"
-    assert task.verified_old_sources(official) == {}
+    assert catalog_scripts.verified_old_sources(official) == {}
     folder = tmp_path / "recipe"
     folder.mkdir()
     old = (
@@ -235,7 +280,7 @@ def test_verified_old_sources_skip_current_and_match_originals(tmp_path):
     )
     (folder / "train.py").write_text(old.read_text())
     (folder / "trainprep.py").write_text("def extra():\n    return 1\n")
-    assert list(task.verified_old_sources(folder)) == ["train.py"]
+    assert list(catalog_scripts.verified_old_sources(folder)) == ["train.py"]
 
 
 def test_save_configuration_refreshes_live_entry(tmp_path):
@@ -287,7 +332,7 @@ def test_official_migration_failure_restores_all_replaced_files(tmp_path, monkey
     import hashlib
     import json
 
-    from ai4e_task.tasks import official_scripts
+    from ai4e_task.storage import script_replacement as official_scripts
 
     official = Path(__file__).resolve().parents[2] / "examples/aero_cfd/nasa_crm_transolver3"
     project = tmp_path / "project"
@@ -313,15 +358,23 @@ def test_official_migration_failure_restores_all_replaced_files(tmp_path, monkey
 
     monkeypatch.setattr(official_scripts, "_replace_bytes", fail_once)
     with pytest.raises(OSError, match="injected"):
-        task.migrate_official_aero_scripts(project, item["id"], candidate,
-            expected_sources={name: hashlib.sha256(raw).hexdigest() for name, raw in originals.items()})
+        catalog_scripts.migrate_official_aero_scripts(
+            project,
+            item["id"],
+            candidate,
+            expected_sources={
+                name: hashlib.sha256(raw).hexdigest() for name, raw in originals.items()
+            },
+        )
     assert {name: (folder / "recipe" / name).read_bytes() for name in names} == originals
     assert (folder / "task.json").read_bytes() == record
     receipt = next((folder / ".dojo/script-migrations").glob("*/receipt.json"))
     assert json.loads(receipt.read_text())["status"] == "rolled_back"
 
 
-@pytest.mark.parametrize("case_name", ["nasa_crm_transolver3", "shapenet_car_transolver3_volume", "nasa_crm_abupt"])
+@pytest.mark.parametrize(
+    "case_name", ["nasa_crm_transolver3", "shapenet_car_transolver3_volume", "nasa_crm_abupt"]
+)
 def test_platform_migration_selects_matching_case(tmp_path, case_name):
     """平台选择领域正文，不把官方旧包装统一换成 AB-UPT 专用流程。"""
     from types import SimpleNamespace
@@ -330,14 +383,16 @@ def test_platform_migration_selects_matching_case(tmp_path, case_name):
 
     root = Path(__file__).resolve().parents[2]
     source = root / "examples/aero_cfd" / case_name
-    original = root / ".context/mvp/recipe-task-conventions-results/original-examples/aero_cfd" / case_name
+    original = (
+        root / ".context/mvp/recipe-task-conventions-results/original-examples/aero_cfd" / case_name
+    )
     project = tmp_path / "project"
     task.create_project(project)
     item = task.new_task(project, "migration", source=source)
     folder = Path(task.get_task(project, item["id"])["directory"]) / "recipe"
     for name in ("train.py", "trainprep.py", "infer.py", "post.py"):
         (folder / name).write_bytes((original / name).read_bytes())
-    expected = task.verified_old_sources(folder)
+    expected = catalog_scripts.verified_old_sources(folder)
     assert expected
     before = task.read_configuration(project, item["id"])
     service = SimpleNamespace(settings=SimpleNamespace(template=root / "recipes/aero_cfd"))

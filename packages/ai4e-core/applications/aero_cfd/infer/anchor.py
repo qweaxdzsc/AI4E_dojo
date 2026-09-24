@@ -214,126 +214,139 @@ def run_selected_batches(config, restored, batches, *, predict, progress, protoc
             prediction = predict(restored["model"], batch["inputs"])
         count = len(batch["metadata"])
         for index, metadata in enumerate(batch["metadata"]):
-            started = perf_counter()
-            name = metadata["sample"]
-            item = SimpleNamespace(name=name, domains={}, payloads={})
-            for domain, binding in config["trainprep"]["domains"].items():
-                positions = batch["inputs"]["domain_anchor_positions"][domain][index].detach().cpu()
-                positions = restored["normalization"].inverse(binding["position"], positions)
-                item.payloads[domain + ".position"] = positions
-                item.payloads[domain + ".ids"] = torch.arange(len(positions))
-                targets = {}
-                for field, source in binding["targets"].items():
-                    if not any(f["domain"] == domain and f["field"] == field for f in selected):
-                        continue
-                    term = terms[source]
-                    key = domain + "." + field
-                    p = restored["normalization"].inverse(
-                        term["normalization"], prediction[source][index].detach().cpu()
-                    )
-                    t = restored["normalization"].inverse(
-                        term["normalization"],
-                        batch["targets"][term["target"]][index].detach().cpu(),
-                    )
-                    item.payloads.update({key + ".prediction": p, key + ".truth": t})
-                    targets[field] = key
-                    if settings["evaluate"]:
-                        all_metrics.update(key, p.numpy(), t.numpy())
-                if targets:
-                    item.domains[domain] = {
-                        "targets": targets,
-                        "position": domain + ".position",
-                        "ids": domain + ".ids",
-                        "identity_basis": "sampled",
-                        "topology": None,
-                        "entity_set": "sampled_anchors",
-                        "units": {f: None for f in targets},
-                    }
-            records = (
-                sample_fn(item, selected, settings.get("metrics")) if settings["evaluate"] else []
-            )
-            timing = {
-                "prediction": elapsed["seconds"] / count,
-                "evaluation": perf_counter() - started,
-            }
-            value = {
-                "sample": name,
-                "sample_id": name,
-                "split": settings["split"],
-                "identity": {"sample": name, "split": settings["split"]},
-                "fields": item.domains,
-                "metrics": {},
-                "metric_records": records,
-                "timings": timing,
-                "manifest": None,
-            }
-            if settings["save_predictions"]:
+            with progress.unit([{"sample_id": metadata["sample"], "partition": settings["split"]}]):
                 started = perf_counter()
-                dest = Path(config["paths"]["datasets"]["predictions"]) / name
-                if not dest.resolve().is_relative_to(
-                    Path(config["paths"]["datasets"]["predictions"]).resolve()
-                ):
-                    raise ValueError("推理样本输出路径越界")
-                keep = {
-                    key
-                    for domain in item.domains.values()
-                    for key in (domain["position"], domain["ids"])
-                }
-                keep |= {
-                    key + s
-                    for domain in item.domains.values()
-                    for key in domain["targets"].values()
-                    for s in (".prediction", ".truth")
-                }
-                arrays = {key: item.payloads[key] for key in keep}
-                filemap = {key: key + ".pt" for key in arrays}
-                saved = {
-                    "identity": value["identity"],
-                    "domains": item.domains,
-                    "protocol": protocol["digest"],
-                    "filemap": filemap,
-                    "metric_records": records,
-                    "component_selection": selected,
-                }
-                write_named_tensors(
-                    dest,
-                    arrays,
-                    filemap,
-                    overwrite=settings.get("overwrite", False),
-                    extra_writers={
-                        "manifest.json": lambda path, saved=saved: save_json(path, saved)
-                    },
-                )
-                value["manifest"] = str(dest / "manifest.json")
-                progress.committed(value["manifest"])
-                if settings.get("export_pointcloud", settings.get("export_vtk", True)):
-                    write_anchor_prediction_vtk(
-                        value["manifest"],
-                        overwrite=settings.get("overwrite", False),
-                        committed=progress.committed,
+                name = metadata["sample"]
+                item = SimpleNamespace(name=name, domains={}, payloads={})
+                for domain, binding in config["trainprep"]["domains"].items():
+                    positions = (
+                        batch["inputs"]["domain_anchor_positions"][domain][index].detach().cpu()
                     )
-                elif not settings.get("export_mesh", settings.get("export_vtk", True)):
-                    skip_vtk(value["manifest"], VTK_DISABLED, channel="pointcloud")
-                    skip_vtk(value["manifest"], VTK_DISABLED, channel="mesh")
-                saved = json.loads(Path(value["manifest"]).read_text())
-                value["vtk"] = saved.get("vtk")
-                timing["save"] = perf_counter() - started
-            if (
-                settings.get("export_pointcloud", settings.get("export_vtk", True))
-                or settings.get("export_mesh", settings.get("export_vtk", True))
-            ) and not value.get("manifest"):
-                value["vtk"] = {"exported": False, "reason": VTK_NO_PREDICTION}
-            value["evidence"] = fingerprint(
-                {
-                    k: value[k]
-                    for k in ("identity", "fields", "metrics", "metric_records", "timings")
+                    positions = restored["normalization"].inverse(binding["position"], positions)
+                    item.payloads[domain + ".position"] = positions
+                    item.payloads[domain + ".ids"] = torch.arange(len(positions))
+                    targets = {}
+                    for field, source in binding["targets"].items():
+                        if not any(f["domain"] == domain and f["field"] == field for f in selected):
+                            continue
+                        term = terms[source]
+                        key = domain + "." + field
+                        p = restored["normalization"].inverse(
+                            term["normalization"], prediction[source][index].detach().cpu()
+                        )
+                        t = restored["normalization"].inverse(
+                            term["normalization"],
+                            batch["targets"][term["target"]][index].detach().cpu(),
+                        )
+                        item.payloads.update({key + ".prediction": p, key + ".truth": t})
+                        targets[field] = key
+                        if settings["evaluate"]:
+                            all_metrics.update(key, p.numpy(), t.numpy())
+                    if targets:
+                        item.domains[domain] = {
+                            "targets": targets,
+                            "position": domain + ".position",
+                            "ids": domain + ".ids",
+                            "identity_basis": "sampled",
+                            "topology": None,
+                            "entity_set": "sampled_anchors",
+                            "units": {f: None for f in targets},
+                        }
+                records = []
+                if settings["evaluate"]:
+                    # 评价与保存共用预测，但各自登记实际交付和失败。
+                    if settings["save_predictions"]:
+                        with (
+                            progress.operation("evaluation"),
+                            progress.unit(
+                                [{"sample_id": metadata["sample"], "partition": settings["split"]}]
+                            ),
+                        ):
+                            records = sample_fn(item, selected, settings.get("metrics"))
+                    else:
+                        records = sample_fn(item, selected, settings.get("metrics"))
+                timing = {
+                    "prediction": elapsed["seconds"] / count,
+                    "evaluation": perf_counter() - started,
                 }
-            )
-            results.append(value)
-            progress.report.update(
-                results=results, completed=len(results), total=len(settings["samples"])
-            )
-            progress.publish()
+                value = {
+                    "sample": name,
+                    "sample_id": name,
+                    "split": settings["split"],
+                    "identity": {"sample": name, "split": settings["split"]},
+                    "fields": item.domains,
+                    "metrics": {},
+                    "metric_records": records,
+                    "timings": timing,
+                    "manifest": None,
+                }
+                if settings["save_predictions"]:
+                    started = perf_counter()
+                    dest = Path(config["paths"]["datasets"]["predictions"]) / name
+                    if not dest.resolve().is_relative_to(
+                        Path(config["paths"]["datasets"]["predictions"]).resolve()
+                    ):
+                        raise ValueError("推理样本输出路径越界")
+                    keep = {
+                        key
+                        for domain in item.domains.values()
+                        for key in (domain["position"], domain["ids"])
+                    }
+                    keep |= {
+                        key + s
+                        for domain in item.domains.values()
+                        for key in domain["targets"].values()
+                        for s in (".prediction", ".truth")
+                    }
+                    arrays = {key: item.payloads[key] for key in keep}
+                    filemap = {key: key + ".pt" for key in arrays}
+                    saved = {
+                        "identity": value["identity"],
+                        "domains": item.domains,
+                        "protocol": protocol["digest"],
+                        "filemap": filemap,
+                        "metric_records": records,
+                        "component_selection": selected,
+                    }
+                    write_named_tensors(
+                        dest,
+                        arrays,
+                        filemap,
+                        overwrite=settings.get("overwrite", False),
+                        extra_writers={
+                            "manifest.json": lambda path, saved=saved: save_json(path, saved)
+                        },
+                    )
+                    value["manifest"] = str(dest / "manifest.json")
+                    progress.committed(value["manifest"])
+                    if settings.get("export_pointcloud", settings.get("export_vtk", True)):
+                        write_anchor_prediction_vtk(
+                            value["manifest"],
+                            overwrite=settings.get("overwrite", False),
+                            committed=progress.committed,
+                        )
+                    elif not settings.get("export_mesh", settings.get("export_vtk", True)):
+                        skip_vtk(value["manifest"], VTK_DISABLED, channel="pointcloud")
+                        skip_vtk(value["manifest"], VTK_DISABLED, channel="mesh")
+                    saved = json.loads(Path(value["manifest"]).read_text())
+                    value["vtk"] = saved.get("vtk")
+                    timing["save"] = perf_counter() - started
+                if (
+                    settings.get("export_pointcloud", settings.get("export_vtk", True))
+                    or settings.get("export_mesh", settings.get("export_vtk", True))
+                ) and not value.get("manifest"):
+                    value["vtk"] = {"exported": False, "reason": VTK_NO_PREDICTION}
+                value["evidence"] = fingerprint(
+                    {
+                        k: value[k]
+                        for k in ("identity", "fields", "metrics", "metric_records", "timings")
+                    }
+                )
+                results.append(value)
+                progress.report.update(
+                    results=results, completed=len(results), total=len(settings["samples"])
+                )
+                progress.publish()
     return {
         "results": results,
         "predictions": results,

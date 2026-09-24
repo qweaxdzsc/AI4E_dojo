@@ -1,10 +1,8 @@
 """任务范围的已交付结果目录；列举训练运行、平台数据集与推理结果，不加载模型或场数组。"""
 
 from datetime import UTC, datetime
-from functools import lru_cache
 from pathlib import Path
 
-from ..storage.files import read_json
 from ..storage.snapshots import digest
 from .checkpoints import file_digest
 from .inference import read_inference_batch
@@ -110,79 +108,51 @@ def freeze_result_item(item):
     return {**item, "files": files}
 
 
-@lru_cache(maxsize=32)
-def _field_headers(references):
-    """按固定修订缓存头部检查，管理进程不读数组。"""
-    from .checkpoints import inspect_inference
-
-    return inspect_inference("result_fields", manifests=[p for p, _ in references])
-
-
 def _fields(record, counts=None):
-    result = []
-    for domain_name, domain in record.get("domains", {}).items():
-        for name, key in domain.get("targets", {}).items():
-            components = [
-                k[len(key) + 1 :] for k in record.get("metrics", {}) if k.startswith(key + "/")
-            ]
-            if counts is not None:
-                count = counts.get(key, 0)
-                components = (
-                    ["scalar"]
-                    if count == 1
-                    else (["magnitude", *map(str, range(count))] if count else [])
-                )
-            if key + ".truth" not in record.get("filemap", {}):
-                components = []
-            for component in components:
-                result.append(
-                    {
-                        "id": f"{domain_name}:{name}:{component}",
-                        "domain": domain_name,
-                        "field": name,
-                        "component": component,
-                        "association": domain.get("association", "point"),
-                        "unit": domain.get("units", {}).get(name),
-                        "label": f"{domain_name} / {name}"
-                        + (
-                            " · 模长"
-                            if component == "magnitude"
-                            else ""
-                            if component == "scalar"
-                            else f" · 分量{component}"
-                        ),
-                        "default": component in {"scalar", "magnitude"},
-                    }
-                )
-    return result
+    return record.get("fields", [])
 
 
 def _manifests(run):
-    root = Path(run["run_dir"])
-    report_path = next(
-        (
-            root / "artifacts" / n
-            for n in ("inference-results.json", "physical-predictions.json")
-            if (root / "artifacts" / n).is_file()
-        ),
-        None,
+    catalog = run.get("result_description")
+    if catalog is None:
+        raise ValueError(
+            run.get("result_description_error")
+            or "operation_unavailable: captured_result_description_missing"
+        )
+    return [(row["sample"], Path(row["manifest"])) for row in catalog["results"]], catalog["report"]
+
+
+def _description(run, manifest):
+    return next(
+        row for row in run["result_description"]["results"] if row["manifest"] == str(manifest)
     )
-    if report_path:
-        _owned(report_path, run)
-        report = read_json(report_path)
-        return [
-            (r.get("sample", r.get("sample_id")), Path(r["manifest"]))
-            for r in report.get("results", [])
-            if r.get("manifest")
-        ], report_path
-    found = []
-    progress = root / "artifacts/inference-progress.json"
-    if progress.is_file():
-        for op in read_json(progress).get("operations", {}).values():
-            found.extend(
-                (None, Path(p)) for p in op.get("artifacts", []) if Path(p).name == "manifest.json"
-            )
-    return found, None
+
+
+def _describe_run(project, task_id, run):
+    from .checkpoints import inspect_inference
+    from .operation_sources import operation_context
+
+    try:
+        context = operation_context(project, task_id, run=run)
+        result = inspect_inference("post_catalog", context=context, run=run)
+        valid = []
+        for row in result["results"]:
+            try:
+                _owned(row["manifest"], run)
+                for member in row["members"]:
+                    _owned(member, run)
+                valid.append(row)
+            except (ValueError, OSError) as exc:
+                result.setdefault("errors", []).append(
+                    {"sample": row.get("sample"), "error": str(exc)}
+                )
+        return {
+            **run,
+            "result_description": {**result, "results": valid},
+            "operation_context": context,
+        }
+    except (ValueError, OSError) as exc:
+        return {**run, "result_description_error": str(exc)}
 
 
 def _visible_entries(path):
@@ -249,14 +219,7 @@ def _has_result_payload(run):
 
 
 def _vtk_skip_note(record, members):
-    """历史或缺网格时给用户看的原因，不能只靠缺文件。"""
-    if any(Path(path).suffix.lower() in MESH_SUFFIXES for path in members):
-        return None
-    status = record.get("vtk") if isinstance(record.get("vtk"), dict) else {}
-    if status.get("exported"):
-        return None
-    reason = status.get("reason") or "该次推理未导出网格"
-    return "未写出VTK：" + reason
+    return record.get("vtk_note")
 
 
 def _run_prefix(kind, run):
@@ -329,13 +292,7 @@ def _search_folder(run, root, tree_base, extra):
 
 
 def _members(manifest, record):
-    members = [manifest]
-    for value in record.get("filemap", {}).values():
-        if Path(value).name != value:
-            raise ValueError("结果成员路径越界")
-        members.append(manifest.parent / value)
-    members.extend(manifest.parent / m["path"] for m in record.get("meshes", {}).values())
-    return list(dict.fromkeys(members))
+    return [Path(path) for path in record["members"]]
 
 
 def _branches(project, task_id):
@@ -356,7 +313,7 @@ def _branches(project, task_id):
     for batch in batches:
         for child in batch["children"]:
             try:
-                run = get_run(project, child["run_id"])
+                run = _describe_run(project, task_id, get_run(project, child["run_id"]))
                 if run["task_id"] != task_id:
                     raise ValueError("结果运行不属于当前任务")
                 owned.add(run["id"])
@@ -383,6 +340,7 @@ def _branches(project, task_id):
     for run in list_runs(project, task_id):
         if run["id"] in owned:
             continue
+        run = _describe_run(project, task_id, run)
         kind = _source_kind(run)
         if kind is None:
             continue
@@ -449,6 +407,8 @@ def _sample_item(branch, sample, manifest, record, members):
         "metrics": record.get("metrics", {}),
         "evaluable": bool(_fields(record)),
         "revision": _item_revision(manifest, members),
+        "operation_context": run.get("operation_context"),
+        "evaluation_error": record.get("evaluation_error"),
     }
 
 
@@ -458,6 +418,10 @@ def post_results(project, task_id):
     _batches, branches, errors, public_batches = _branches(project, task_id)
     items, unknown = [], []
     for branch in branches:
+        errors.extend(
+            {"run_id": branch["run"]["id"], **error}
+            for error in branch["run"].get("result_description", {}).get("errors", [])
+        )
         try:
             manifests, _ = _manifests(branch["run"])
         except (ValueError, OSError, KeyError, TypeError) as exc:
@@ -466,7 +430,7 @@ def post_results(project, task_id):
         for sample, manifest in {str(p): (s, p) for s, p in manifests}.values():
             try:
                 _owned(manifest, branch["run"])
-                record = read_json(manifest)
+                record = _description(branch["run"], manifest)
                 sample = sample or record.get("identity", {}).get("sample") or manifest.parent.name
                 members = _members(manifest, record)
                 for path in members:
@@ -484,18 +448,6 @@ def post_results(project, task_id):
                         "error": str(exc),
                     }
                 )
-    if unknown:
-        try:
-            headers = _field_headers(tuple((i["manifest"], i["revision"]) for i, _ in unknown))
-            for item, record in unknown:
-                header = headers[item["manifest"]]
-                item["fields"] = _fields(record, header.get("components", {}))
-                item["evaluable"] = bool(item["fields"])
-                if header.get("error"):
-                    item["evaluation_error"] = header["error"]
-        except (ValueError, OSError, RuntimeError) as exc:
-            for item, _ in unknown:
-                item["evaluation_error"] = str(exc)
     return {
         "items": items,
         "files": [],
@@ -585,86 +537,61 @@ def _dataset_prefix(item):
 
 def _task_platform_datasets(project, task_id):
     """本任务发布或当前绑定的平台数据集，不含其他任务的共享登记。"""
-    from ..projects.datasets import get_shared_dataset, list_shared_datasets
+    from omegaconf import OmegaConf
+
+    from ..projects.datasets import list_shared_datasets
+    from ..storage.layout import task_dir
     from ..storage.shared_datasets import resolve_reference
+    from ..templates.materialize import recipe_entry
     from .configuration import read_configuration
 
-    names = {}
-    bound = None
-    processed_name = ""
-    try:
-        config = read_configuration(project, task_id).get("config", {})
-        selected = ((config.get("inputs") or {}).get("trainprep") or {}).get("dataset")
-        if selected:
-            bound = str(Path(selected).resolve())
-        processed_name = ((config.get("dataset") or {}).get("processed_name") or "").strip()
-    except (ValueError, KeyError, OSError, TypeError):
-        bound = None
-    if processed_name:
-        try:
-            names[processed_name] = get_shared_dataset(project, processed_name)
-        except (KeyError, TypeError, ValueError, OSError):
-            pass
-    if bound:
-        try:
-            resolved = resolve_reference(project, Path(bound))
-        except (TypeError, ValueError, OSError):
-            resolved = None
-        # 训练配置中的显式绑定是本任务唯一的数据来源。即使项目目录中还保留
-        # 同一任务历史发布的其他登记，也不能在后处理结果树中再次展示。
-        if resolved and resolved.get("status") == "available" and Path(
-            resolved.get("manifest_path") or ""
-        ).is_file():
-            return [resolved]
-        # 跨项目或旧配置可能只能从登记目录反查；仍按清单绝对路径精确匹配，
-        # 不回退到“本任务所有登记”。
-        for item in list_shared_datasets(project):
-            if str(Path(item.get("manifest_path") or "").resolve()) != bound:
-                continue
-            if (
-                item.get("status") == "available"
-                and Path(item.get("manifest_path") or "").is_file()
-            ):
-                return [item]
-        return []
-    for item in list_shared_datasets(project):
-        source = item.get("source") or {}
-        if source.get("task_id") == task_id:
-            names[item["name"]] = item
-    rows = [
-        item
-        for item in names.values()
-        if item.get("status") == "available" and Path(item.get("manifest_path") or "").exists()
-    ]
-    rows.sort(key=lambda item: item.get("name") or "")
-    return rows
+    config = read_configuration(project, task_id).get("config", {})
+    entry = recipe_entry(project, task_id)
+    cfg = OmegaConf.create(config)
+    recipe = task_dir(project, task_id) / "recipe"
+    bound = []
+    for key, kind in entry.get("inputs", {}).items():
+        selected = OmegaConf.select(cfg, key)
+        if kind == "dataset" and isinstance(selected, str):
+            path = Path(selected).expanduser()
+            path = path if path.is_absolute() else recipe / path
+            bound.append(path.resolve())
+    available = list_shared_datasets(project)
+    selected_records = {}
+    for path in bound:
+        resolved = resolve_reference(project, path)
+        if resolved is None:
+            resolved = next(
+                (
+                    item
+                    for item in available
+                    if Path(item.get("manifest_path") or "").resolve() == path
+                ),
+                None,
+            )
+        if resolved and resolved.get("status") == "available":
+            selected_records[resolved["name"]] = resolved
+    if selected_records:
+        return sorted(selected_records.values(), key=lambda item: item["name"])
+    # 本任务已发布的结果可独立浏览；不从科学配置猜共享输出名称。
+    return sorted(
+        [
+            item
+            for item in available
+            if item.get("source", {}).get("task_id") == task_id
+            and item.get("status") == "available"
+        ],
+        key=lambda item: item["name"],
+    )
 
 
-def _dataset_samples(item):
-    """用清单里的 sample 编号对齐原数据与推理 VTK，不另起一套 ID。"""
-    record = read_json(item["manifest_path"])
-    rows = []
-    for entry in record.get("samples") or []:
-        sample = entry.get("sample") or entry.get("sample_id")
-        path = entry.get("path")
-        if not sample or not path:
-            continue
-        rows.append(
-            {
-                "sample_id": str(sample),
-                "path": Path(path),
-                "split": entry.get("partition") or entry.get("split"),
-            }
-        )
-    if rows:
-        return rows
-    root = Path(item["manifest_path"]).parent
-    for split, names in (record.get("partitions") or {}).items():
-        for name in names:
-            candidate = root / split / name
-            if candidate.is_dir():
-                rows.append({"sample_id": str(name), "path": candidate, "split": split})
-    return rows
+def _dataset_samples(item, project, task_id):
+    from .checkpoints import inspect_inference
+    from .operation_sources import operation_context
+
+    context = operation_context(project, task_id)
+    rows = inspect_inference("dataset_samples", context=context, item=item)
+    return [{**row, "path": Path(row["path"])} for row in rows]
 
 
 def _project_light_file(path, project, tree_path, **extra):
@@ -850,7 +777,7 @@ def list_post_result_files(
                     )
         for raw_sample, manifest in {str(p): (s, p) for s, p in manifests}.values():
             try:
-                record = read_json(manifest)
+                record = _description(branch["run"], manifest)
                 current = (
                     raw_sample or record.get("identity", {}).get("sample") or manifest.parent.name
                 )
@@ -914,7 +841,7 @@ def list_post_result_files(
                 continue
             prefix = _dataset_prefix(item)
             try:
-                samples = _dataset_samples(item)
+                samples = _dataset_samples(item, project, task_id)
             except (ValueError, OSError, KeyError, TypeError) as exc:
                 errors.append({"batch_id": extra["batch_id"], "error": str(exc)})
                 continue

@@ -15,6 +15,8 @@ from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any
 
+from ai4e_task.templates.example_docs import DOC_DIRECTORY, write_example_documents
+
 _REQUIRED_COMMON = ("README.md", "config.yaml", "configuration.py", "pipeline.py")
 
 
@@ -308,12 +310,43 @@ def _case_path(case: dict[str, Any]) -> Path:
     return path
 
 
-def list_examples(*, case_type: str | None = None) -> list[dict[str, Any]]:
-    """列出清单中的 standalone/extension，不导入案例代码。"""
+def list_examples(
+    *,
+    case_type: str | None = None,
+    query: str | None = None,
+    data_form: str | None = None,
+    training_pattern: str | None = None,
+) -> list[dict[str, Any]]:
+    """按说明子串与标签筛选案例，不导入代码；多项过滤取交集。
+
+    query大小写无关，空白视为未指定；标签精确匹配并保留清单顺序。
+    旧清单无research仍可按原用途检索，不猜测缺失标签。
+    """
     cases = read_case_manifest()["cases"]
     if case_type is not None and case_type not in {"standalone", "extension"}:
         raise ValueError("案例类型只能是 standalone 或 extension")
-    return [dict(case) for case in cases if case_type is None or case["type"] == case_type]
+    for value in (query, data_form, training_pattern):
+        if value is not None and not isinstance(value, str):
+            raise TypeError("案例查询和标签必须是字符串")
+    query = (query or "").strip().casefold()
+    result = []
+    for case in cases:
+        research = case.get("research") or {}
+        if case_type is not None and case["type"] != case_type:
+            continue
+        if data_form is not None and data_form not in research.get("data_form", []):
+            continue
+        if training_pattern is not None and training_pattern not in research.get(
+            "training_pattern", []
+        ):
+            continue
+        haystack = json.dumps(
+            [case.get(k, "") for k in ("id", "model", "dataset", "purpose")] + [research],
+            ensure_ascii=False,
+        ).casefold()
+        if not query or query in haystack:
+            result.append(dict(case))
+    return result
 
 
 def _find_case(case_id: str) -> dict[str, Any]:
@@ -378,8 +411,18 @@ def _copy_tree(source: Path, target: Path) -> None:
 
 
 def copy_example(case_id: str, target: str | Path) -> dict[str, Any]:
-    """复制 standalone，或物化 extension 的 base-plus-overlay 目录。"""
+    """物化完整案例并交付来源可追溯的说明副本，保留原脚本和README字节。"""
     case = _find_case(case_id)
+    if case["type"] == "extension":
+        base = _find_case(case["base_case"])
+        document_sources = {"base": _case_path(base), "extension": _case_path(case)}
+    else:
+        document_sources = {"case": _case_path(case)}
+    for root in document_sources.values():
+        if (root / DOC_DIRECTORY).exists():
+            raise ValueError(f"案例占用说明保留目录: {DOC_DIRECTORY}")
+        if not (root / "README.md").is_file():
+            raise ValueError("案例缺少README说明")
     destination = Path(target).expanduser().resolve()
     if destination.exists() and any(destination.iterdir()):
         raise FileExistsError(f"目标目录必须为空: {destination}")
@@ -419,6 +462,7 @@ def copy_example(case_id: str, target: str | Path) -> dict[str, Any]:
             "base_case": case["base_case"],
             "override_files": list(case.get("override_files", [])),
         }
+    provenance["documentation"] = write_example_documents(destination, document_sources)
     (destination / ".dojo-provenance.json").write_text(
         json.dumps(provenance, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
@@ -484,24 +528,30 @@ def source_location(module: str) -> dict[str, str]:
     }
 
 
-def create_smoke_data(target: str | Path) -> dict[str, Any]:
-    """显式加载 contrib，生成 Neumann 最小数据；目标非空时拒绝覆盖。"""
-    try:
-        from ai4e_contrib.application.datasets.parametric import generate_dataset
-    except ModuleNotFoundError as exc:  # pragma: no cover - depends on optional install
-        raise RuntimeError("smoke-data 需要安装 ai4e-contrib 的 PDE 数据生成能力") from exc
+def create_smoke_data(target: str | Path, *, case_id: str | None = None) -> dict[str, Any]:
+    """通过案例资源声明在隔离进程生成数据；管理进程不加载领域模块。"""
+    import subprocess
 
-    output = Path(target).expanduser().resolve()
-    manifest = generate_dataset(
-        "neumann_diffusion",
-        {"train": 2, "test": 1, "nx": 7, "nt": 7, "seed": 42, "output": str(output)},
+    candidates = (
+        [case for case in read_case_manifest()["cases"] if case["id"] == case_id]
+        if case_id
+        else [
+            case for case in read_case_manifest()["cases"] if case.get("smoke", {}).get("default")
+        ]
     )
-    return {
-        "case": "neumann_diffusion",
-        "manifest": manifest,
-        "train": 2,
-        "test": 1,
-        "nx": 7,
-        "nt": 7,
-        "device": "cpu",
-    }
+    if len(candidates) != 1 or not candidates[0].get("smoke"):
+        raise ValueError("operation_unavailable: smoke_data")
+    declaration = candidates[0]["smoke"]
+    output = Path(target).expanduser().resolve()
+    request = {key: declaration[key] for key in ("target", "case", "options")}
+    result = subprocess.run(
+        [sys.executable, "-m", "ai4e_task.tasks.inference_inspection"],
+        check=False,
+        input=json.dumps({**request, "output": str(output)}),
+        capture_output=True,
+        text=True,
+        timeout=300,
+    )
+    if result.returncode:
+        raise ValueError(result.stderr.strip().splitlines()[-1])
+    return json.loads(result.stdout)

@@ -12,6 +12,17 @@ create = binding_cases.create
 sources = binding_cases.sources
 
 
+def _context():
+    return task.configuration_context(
+        {"components": {"application": "ai4e_contrib.application.aero_cfd.operations"}},
+        Path(__file__).resolve().parents[2],
+    )
+
+
+def _claim(config):
+    return task.processed_claim(config, context=_context())
+
+
 def _manifest(path: Path, payload: str = "sample") -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     import json
@@ -20,7 +31,8 @@ def _manifest(path: Path, payload: str = "sample") -> Path:
     return path
 
 
-def test_register_visible_to_other_project(binding_platform):
+@pytest.mark.parametrize("labeled", [False, True])
+def test_register_visible_to_other_project(binding_platform, labeled):
     client, base, _, settings = binding_platform
     first = create(client, base, "shapenet_car_abupt")
     project = Path(client.app.state.services.project(base.rsplit("/", 1)[-1]))
@@ -31,6 +43,7 @@ def test_register_visible_to_other_project(binding_platform):
         manifest_path=manifest,
         digest=task.manifest_digest(manifest),
         provenance={"task_id": first["id"], "run_id": "run-a"},
+        semantics={"type": "aero.physical", "format_version": 1} if labeled else None,
     )
     assert record["status"] == "available"
     other = client.post("/api/v1/projects", json={"name": "another"})
@@ -48,7 +61,10 @@ def test_register_visible_to_other_project(binding_platform):
     ]
     assert "shapenet_car" in names
     chosen = next(item for item in inputs if item.get("processed_name") == "shapenet_car")
-    assert chosen["ref"] and chosen["compatibility"]["status"] != "invalid"
+    assert chosen["ref"]
+    assert (chosen["compatibility"]["status"] != "invalid") is labeled
+    if not labeled:
+        assert chosen["compatibility"]["reason"] == "缺少类型／用途信息"
     manifest_ids = [
         item["ref"]["asset_id"]
         for item in inputs
@@ -86,12 +102,16 @@ def test_stage_inputs_keep_platform_name_not_run_duplicate(binding_platform, mon
         ],
     )
     inputs = client.get(base + "/tasks/" + created["id"] + "/stage-inputs").json()
-    manifests = [item for item in inputs if item["binding"] == "inputs.trainprep.dataset" and item.get("ref")]
+    manifests = [
+        item for item in inputs if item["binding"] == "inputs.trainprep.dataset" and item.get("ref")
+    ]
     assert len(manifests) == 1
     assert manifests[0]["origin"] == "platform"
     assert manifests[0]["processed_name"] == "shapenet_car"
     assert not any(
-        item.get("origin") == "run" for item in inputs if item["binding"] == "inputs.trainprep.dataset"
+        item.get("origin") == "run"
+        for item in inputs
+        if item["binding"] == "inputs.trainprep.dataset"
     )
 
 
@@ -311,10 +331,8 @@ def test_resolved_rawprep_and_workers_share_claim():
             "extraction": None,
         },
     }
-    assert task.processed_claim(stored)["identity"] == task.processed_claim(resolved)["identity"]
-    assert (
-        task.processed_claim(stored)["fingerprint"] == task.processed_claim(resolved)["fingerprint"]
-    )
+    assert _claim(stored)["identity"] == _claim(resolved)["identity"]
+    assert _claim(stored)["fingerprint"] == _claim(resolved)["fingerprint"]
 
 
 def test_vtkhdf_difference_explains_conflict(tmp_path):
@@ -348,24 +366,24 @@ def test_vtkhdf_difference_explains_conflict(tmp_path):
         "shapenet_car",
         manifest_path=first,
         digest=task.manifest_digest(first),
-        claim=task.processed_claim(closed),
+        claim=_claim(closed),
         provenance={"project": str(tmp_path / "origin"), "task_id": "task-a"},
     )
     status = task.describe_processed_name(
-        workspace, "shapenet_car", claim=task.processed_claim(opened), config=opened
+        workspace, "shapenet_car", claim=_claim(opened), context=_context()
     )
     assert status["status"] == "conflict"
     assert "VTKHDF" in status["message"]
     assert "并行线程" not in status["message"]
     with pytest.raises(ValueError, match="VTKHDF"):
         task.check_processed_name(
-            workspace, "shapenet_car", claim=task.processed_claim(opened), config=opened
+            workspace, "shapenet_car", claim=_claim(opened), context=_context()
         )
     allowed = task.check_processed_name(
         workspace,
         "shapenet_car",
-        claim=task.processed_claim(opened),
-        config=opened,
+        claim=_claim(opened),
+        context=_context(),
         overwrite=True,
     )
     assert allowed["name"] == "shapenet_car"
@@ -380,16 +398,24 @@ def test_vtkhdf_difference_explains_conflict(tmp_path):
         "data_dir": str(data_dir),
     }
     opened["dataset"]["processed_name"] = "shapenet_car"
+    run["shared_outputs"] = [
+        {
+            "name": "shapenet_car",
+            "path": str(data_dir),
+            "manifest": "manifest.json",
+            "identity": _claim(opened),
+        }
+    ]
     with pytest.raises(ValueError, match="processed_dataset_name_conflict"):
         task.publish_processed_from_run(
-            workspace, tmp_path / "origin", "task-a", run, config=opened
+            workspace, tmp_path / "origin", "task-a", run, context=_context()
         )
     published = task.publish_processed_from_run(
         workspace,
         tmp_path / "origin",
         "task-a",
         run,
-        config=opened,
+        context=_context(),
         overwrite=True,
     )
     assert published["digest"] == task.manifest_digest(replacement)
@@ -405,8 +431,8 @@ def test_workers_do_not_change_processed_claim(tmp_path):
             "fields": {"surface": {"pressure": {"components": 1}}},
         },
     }
-    sequential = task.processed_claim(base)
-    parallel = task.processed_claim({**base, "rawprep": {**base["rawprep"], "workers": 10}})
+    sequential = _claim(base)
+    parallel = _claim({**base, "rawprep": {**base["rawprep"], "workers": 10}})
     assert sequential == parallel
     first = _manifest(tmp_path / "a" / "manifest.json", "one")
     workspace = tmp_path / "workspace"
@@ -533,7 +559,7 @@ def test_other_project_registry_does_not_reserve_local_name(binding_platform):
         "shapenet_car",
         manifest_path=occupied,
         digest=task.manifest_digest(occupied),
-        claim=task.processed_claim({**stored, "rawprep": saved.json()["rawprep"]}),
+        claim=_claim({**stored, "rawprep": saved.json()["rawprep"]}),
     )
     parallel = client.put(
         url + "/rawprep",
@@ -625,3 +651,33 @@ def test_task_offline_shared_publication_and_cross_project_names(binding_platfor
     assert len({x["shared_asset_id"] for x in shared}) == 2
     assert len({x["source_project"] for x in shared}) == 2
     assert all(x["status"] == "available" for x in shared)
+
+
+def test_registration_preserves_labels_and_rejects_ambiguous_publication(tmp_path):
+    manifest = _manifest(tmp_path / "source/manifest.json")
+    tags = {"type": "custom.dataset", "split": "cal"}
+    saved = task.register_processed_dataset(
+        tmp_path,
+        "labeled",
+        manifest_path=manifest,
+        digest=task.manifest_digest(manifest),
+        semantics=tags,
+        stage="prepare",
+    )
+    assert saved["semantics"] == tags and saved["stage"] == "prepare"
+    with pytest.raises(ValueError, match="asset_labels_conflict"):
+        task.register_processed_dataset(
+            tmp_path,
+            "labeled",
+            manifest_path=manifest,
+            digest=task.manifest_digest(manifest),
+            semantics={**tags, "split": "test"},
+        )
+    with pytest.raises(ValueError, match="processed_output_selection_required"):
+        task.publish_processed_from_run(
+            tmp_path,
+            tmp_path,
+            "t",
+            {"status": "succeeded", "shared_outputs": [{"name": "a"}, {"name": "b"}]},
+        )
+    assert task.describe_processed_dataset(tmp_path, "labeled")["semantics"] == tags

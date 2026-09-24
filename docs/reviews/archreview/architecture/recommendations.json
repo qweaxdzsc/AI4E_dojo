@@ -1,19 +1,18 @@
 {
-  "updated_at": "2026-09-21T04:08:21.245136+08:00",
-  "report": "2026-09-21.md",
-  "previous_report": "2026-09-18-global.md",
-  "head": "477c47bc4cba83fd1e903800034d7d58286ee6d8",
-  "workspace_content_sha256": "7d4c5ea0e8470c0bd72589ada98e5e4883ca6119f90ded25c1a05aee98720b0c",
+  "updated_at": "2026-09-24T09:07:50.055018+08:00",
+  "report": "2026-09-24.md",
+  "previous_report": "2026-09-23.md",
+  "head": "9b53fc4cc4e38c128b18489f0b95f85055ceafaf",
+  "workspace_content_sha256": "006772c54ed623d939203143a3a105a614d33aa9d58b35cb7802820a6ae88ca6",
   "notification_reason": [
-    "new_structural_evidence_provider_dispatch",
-    "new_structural_evidence_task_viz_bridge",
-    "recommendation_A_superseded_C_partially_addressed"
+    "R6_new_cross_layer_scientific_description_ownership",
+    "report_reconciled_with_R4_R5_prior_closure"
   ],
   "recommendations": [
     {
       "id": "R1",
       "title": "领域 provider 覆盖完整科学操作链",
-      "status": "open",
+      "status": "addressed_in_source_not_reverified_end_to_end",
       "priority": "high",
       "origin": "B refined; known model-contract seam remains; wider dispatch gap newly observed",
       "baseline": {
@@ -22,23 +21,86 @@
         "default_scientific_calls": 6,
         "default_device_calls": 1
       },
-      "next": "优先讨论该边界；实施需另行授权，不能只修 model 字段"
+      "next": "原默认分派及模型字段判断已迁出；来源完整性另跟踪R5",
+      "updated_at": "2026-09-23T11:07:16.568367+08:00",
+      "current_review_at": "2026-09-24T09:06:52.430923+08:00",
+      "current_review": "source boundary retained; no complete end-to-end rerun in this review"
     },
     {
       "id": "R2",
-      "title": "资产事实目录与领域输入候选映射分离",
-      "status": "open_conditional",
+      "title": "已有标签与步骤声明驱动资产候选",
+      "status": "addressed_in_source_not_reverified_end_to_end",
       "priority": "medium",
       "origin": "B continued; known stage-candidate limitation",
-      "next": "新领域需要候选或平台消费时实施，不阻塞自由 Task 执行"
+      "next": "保留描述和标签匹配；整体安装数值链仍待收口",
+      "refinement": "落实2026-09-21用户澄清；不是新源码变化",
+      "updated_at": "2026-09-23T11:07:16.568367+08:00",
+      "current_review_at": "2026-09-24T09:06:52.430923+08:00",
+      "current_review": "source boundary retained; no complete end-to-end rerun in this review"
     },
     {
       "id": "R3",
-      "title": "检查出图装配移出 Task worker",
-      "status": "open",
+      "title": "专用功能装配移出 Task",
+      "status": "addressed_in_source_not_reverified_end_to_end",
       "priority": "medium",
-      "origin": "newly identified, not proven newly introduced",
-      "next": "保持现有图行为，在独立适配入口生产固定资产"
+      "origin": "previous trace bridge plus newly observed smoke-data direct scientific assembly; introduction time unproven",
+      "next": "图装配与smoke科学预算已迁出；本轮未重跑显示和生成",
+      "baseline": {
+        "task_viz_imports": 1,
+        "task_contrib_imports": 1,
+        "live_network_render_bridges": 1,
+        "hardcoded_scientific_smoke_factories": 1
+      },
+      "updated_at": "2026-09-23T11:07:16.568367+08:00",
+      "current_review_at": "2026-09-24T09:06:52.430923+08:00",
+      "current_review": "source boundary retained; no complete end-to-end rerun in this review"
+    },
+    {
+      "id": "R4",
+      "title": "显式连接科学执行链，拓扑只控制拓扑步骤",
+      "status": "validated_source_wheel_and_formal",
+      "priority": "high",
+      "origin": "用户昨日六项核查与当前三阶段源码",
+      "next": "保持既有范围内验收状态；本轮核对当前源码及历史最终wheel，不重新宣称正式页面验收。",
+      "updated_at": "2026-09-23T18:17:21.334284+08:00",
+      "evidence_root": "/Users/zonghui/work/project_simulation/dojo_train/architecture-repair-20260923/",
+      "current_review_at": "2026-09-24T09:06:52.430923+08:00",
+      "current_review": "source_still_addressed; historical formal scope retained; three explicit Transolver stage chains inspected"
+    },
+    {
+      "id": "R5",
+      "title": "固定application实际依赖及导入解析身份",
+      "status": "validated_source_wheel_and_formal",
+      "priority": "high",
+      "origin": "本轮来源函数探针确认外部依赖变化和新增同名模块均未拒绝",
+      "next": "保持既有范围内验收状态；本轮核对当前源码及历史最终wheel，不重新宣称正式页面验收。",
+      "updated_at": "2026-09-23T18:17:21.334284+08:00",
+      "evidence_root": "/Users/zonghui/work/project_simulation/dojo_train/architecture-repair-20260923/",
+      "current_review_at": "2026-09-24T09:06:52.430923+08:00",
+      "current_review": "source_still_addressed; historical formal scope retained; 6 source-dependency checks passed now"
+    },
+    {
+      "id": "R6",
+      "title": "准备页科学描述、默认值和兼容判断归 application",
+      "status": "proposed",
+      "priority": "medium",
+      "origin": "newly observed existing Server/Web scientific interpretation; introduction time unproven",
+      "updated_at": "2026-09-24T09:06:52.430923+08:00",
+      "next": "下一次准备页科学语义扩展前审议；复用可选provider，不自动新增平台领域或统一科学协议。",
+      "evidence": [
+        "packages/ai4e-server/modules/stages/application.py:63",
+        "packages/ai4e-server/modules/stages/application.py:287",
+        "packages/ai4e-server/modules/stages/domain.py:113",
+        "packages/ai4e-server/modules/stages/domain.py:341",
+        "packages/ai4e-server/modules/stages/domain.py:387",
+        "packages/ai4e-web/src/modules/trainprep/PreparationPanel.tsx:21"
+      ],
+      "measurable_targets": {
+        "platform_model_specific_scale_branches": 0,
+        "platform_owned_domain_shape_compatibility_implementations": 0,
+        "new_task_model_branches": 0
+      },
+      "effects_verified": false
     }
   ],
   "legacy": [
@@ -58,16 +120,80 @@
     {
       "id": "C",
       "status": "partially_addressed",
-      "reason": "帮助中心、案例清单、资源检索源码已有；盲定位与安装本轮未验证"
+      "reason": "九类能力教程与三种接入深度导航有新源码证据；本轮未验证安装和Agent盲定位，仍部分解决"
     }
   ],
-  "implementation": "none",
-  "tests_executed": false,
+  "implementation": "This review is analysis only; R4/R5 were repaired and accepted in the prior work unit.",
+  "tests_executed": true,
   "end_verification": {
-    "verified_at": "2026-09-21T04:08:21.245136+08:00",
-    "changed_outside_review": [],
-    "added_outside_review": [],
-    "unchanged": true
+    "verified_at": "2026-09-24T09:07:50.055018+08:00",
+    "head_at_end": "9b53fc4cc4e38c128b18489f0b95f85055ceafaf",
+    "changed_outside_review": [
+      ".context/mvp/rmhd-factorial-acceptance.md"
+    ],
+    "added_outside_review": [
+      "docs/reviews/tests/2026-09-24/prior-failures-and-recipes.xml"
+    ],
+    "deleted_outside_review": [],
+    "unchanged": false,
+    "workspace_content_sha256": "178cdef3457a73c953f3732e8a10aa2d2417be02bc3ce274848810cc4af69956"
   },
-  "experience_receipt": "receipt_81fbde6dc65040b6a05b400e2c39336d"
+  "experience_receipt": "receipt_ffcfcf3910f94c7a9db1f5ed5853d688",
+  "active_core_recommendations": [
+    "R6"
+  ],
+  "probes_executed": [
+    "6 focused existing source-dependency tests; no training or formal-service invocation"
+  ],
+  "experience_usage": [],
+  "closure_items": [
+    "4 current Transolver assembly failures",
+    "2 frozen AB-UPT reference connection failures",
+    "legacy input paths and equal comparison inputs",
+    "coherent spec/core/contrib wheel verification"
+  ],
+  "repair_verification": {
+    "scope": "Historical 2026-09-23 repair evidence; not tests executed by this review",
+    "acceptance": ".context/mvp/task-generalization-acceptance.md:119",
+    "receipt": "/Users/zonghui/work/project_simulation/dojo_train/architecture-repair-20260923/release/final-verification.json",
+    "formal": "Prior authorized repair recorded completed formal page validation; not rerun 2026-09-24",
+    "current_source_relation": "736 non-resource Python wheel members match current source; full resources and live services excluded"
+  },
+  "previous_state_snapshot": "2026-09-24-state-before.json",
+  "current_review": {
+    "observed_at": "2026-09-24T09:06:52.430923+08:00",
+    "static_python_files": 968,
+    "static_dependency_violations": 0,
+    "wheel_python_members_matching_current_source": 736,
+    "source_dependency_checks": {
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "seconds": 4.62
+    },
+    "formal_services_tested": false,
+    "packages_installed": false,
+    "report_source_identity_comparison": {
+      "added": 11,
+      "deleted": 0,
+      "changed": 178
+    }
+  },
+  "observations": [
+    {
+      "id": "O1",
+      "status": "continued",
+      "subject": "Task rawprep reads dataset.processed_name and components.dataset; minimal application-description delegation pending"
+    },
+    {
+      "id": "O2",
+      "status": "new_static_observation",
+      "subject": "Server _describe_case LRU omits application source revision; actual stale page response not reproduced"
+    },
+    {
+      "id": "O3",
+      "status": "maintenance",
+      "subject": "Some indexes retain historical scope; status report reconciliation completed only within review artifacts"
+    }
+  ]
 }

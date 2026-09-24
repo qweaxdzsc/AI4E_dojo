@@ -22,6 +22,8 @@
 - 加步骤/派生输出：[WDNO 能量审计](wdno/README.md)、[推理字段](inference_fields/README.md)、[推理指标](inference_metrics/README.md)。
 - 模型专属研究：[GenCP](gencp/README.md)、[SafeDiffCon](safediffcon/README.md)。
 - 训练中观察与可视化：[物理场输出](physical_visualization/README.md)。
+- 有限轮次尾批：[tail_batch](tail_batch/README.md)，用户定义有序记录，保留框架训练和精确恢复。
+- 独立验证与用户状态：[research_state](research_state/README.md)，训练内留出验证、普通/EMA选优快照与恢复；不改变框架循环。两例均基于 `geotransolver.darcy` 物化，证据为受控小规模连接。
 
 只改研究变化部分，按研究任务导航圈定前向、短训、恢复与固定输出读回。目录存在或导入成功不是数值验收。
 

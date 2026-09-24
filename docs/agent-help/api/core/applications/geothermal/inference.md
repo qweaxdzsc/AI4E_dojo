@@ -65,8 +65,8 @@ print(signature(predict_fields))
 
 ### Recipe 与案例
 
-- Recipe：`geotransolver/darcy`
-- 案例：`geotransolver.darcy`
+- Recipe：`classic_networks/darcy`, `classic_networks/double_cylinder`, `classic_networks/shapenet_volume`, `geotransolver/darcy`, `operator_learning/darcy`, `operator_learning/double_cylinder`, `operator_learning/shapenet_volume`
+- 案例：`classic_networks.darcy`, `classic_networks.double_cylinder`, `classic_networks.shapenet_volume`, `geotransolver.darcy`, `operator_learning.darcy`, `operator_learning.double_cylinder`, `operator_learning.shapenet_volume`
 
 ### 源码位置
 

@@ -1,0 +1,36 @@
+seed: 42
+run_root: ../outputs/pod_mlp/runs
+data_root: ../outputs/pod_mlp/data
+pipeline:
+  stages:
+  - trainprep
+  - train
+  - infer
+  - post
+inputs:
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+dataset:
+  case: double_cylinder_pod
+  rank: 2
+model:
+  family: custom
+  parameters:
+    hidden:
+    - 16
+    updates: 20
+    seed: 42
+train:
+  seconds: 9000
+infer:
+  batch_size: 256
+components:
+  fit: pod_mlp.fit
+  rebuild: pod_mlp.rebuild

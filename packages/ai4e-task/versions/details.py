@@ -4,7 +4,6 @@ from pathlib import Path
 
 from omegaconf import OmegaConf
 
-from ..storage.files import read_json
 from ..storage.records import fetch
 from ..storage.snapshots import digest, inventory
 from ..tasks.query import list_runs
@@ -24,10 +23,12 @@ def read_version_details(project, version_id: str) -> dict:
         config = OmegaConf.to_container(OmegaConf.load(config_file), resolve=False)
     runs = list_runs(project, version["task_id"])
     stages = []
-    for stage in dict.fromkeys([
-        "rawprep", "trainprep", "model", "train", "infer", "post",
-        *config.get("pipeline", {}).get("stages", []),
-    ]):
+    for stage in dict.fromkeys(
+        [
+            *config.get("pipeline", {}).get("stages", []),
+            *[stage for run in runs for stage in run.get("stages", [])],
+        ]
+    ):
         selected = []
         for run in runs:
             if stage in (run.get("stages") or list(run.get("summary", {}).get("reports", {}))):

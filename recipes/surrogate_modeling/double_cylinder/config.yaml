@@ -1,0 +1,31 @@
+seed: 42
+run_root: ../outputs/double_cylinder/runs
+data_root: ../outputs/double_cylinder/data
+pipeline:
+  stages: [trainprep, train, infer, post]
+inputs:
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+dataset:
+  case: double_cylinder_pod
+  rank: 2
+model:
+  family: rbf
+  parameters:
+    kernel: cubic
+    degree: 1
+    smoothing: 0.0
+train:
+  seconds: 9000
+infer:
+  batch_size: 256
+components:
+  fit: ai4e_contrib.application.surrogate_modeling.fitting.fit_predictor
+  rebuild: ai4e_contrib.application.surrogate_modeling.prediction.rebuild

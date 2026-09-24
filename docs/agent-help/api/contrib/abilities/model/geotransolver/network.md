@@ -301,7 +301,7 @@ print(signature(GeoTransolver))
 ### Recipe 与案例
 
 - Recipe：`geotransolver/bumper_beam`, `geotransolver/darcy`, `geotransolver/nasa_crm`, `geotransolver/shapenet_car`
-- 案例：`aero_cfd.nasa_crm_geotransolver`, `aero_cfd.shapenet_car_geotransolver`, `geotransolver.bumper_beam`, `geotransolver.darcy`, `recipe_extensions.geotransolver_aero`
+- 案例：`aero_cfd.nasa_crm_geotransolver`, `aero_cfd.shapenet_car_geotransolver`, `geotransolver.bumper_beam`, `geotransolver.darcy`, `recipe_extensions.geotransolver_aero`, `recipe_extensions.research_state`, `recipe_extensions.tail_batch`
 
 ### 源码位置
 
@@ -439,7 +439,7 @@ print(signature(GeoTransolver.forward))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- 案例：`recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`
 
 ### 源码位置
 

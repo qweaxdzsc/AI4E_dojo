@@ -106,10 +106,14 @@ def begin(project, plans: list[dict], run: dict) -> None:
                 raise ValueError("shared_dataset_unresolved_rollback")
             backup.mkdir(parents=True)
             old_record = folder / "asset.json"
-            write_json(backup / "journal.json", {
-                "run_id": run["run_id"], "had_content": content.exists(),
-                "record": read_json(old_record) if old_record.is_file() else None,
-            })
+            write_json(
+                backup / "journal.json",
+                {
+                    "run_id": run["run_id"],
+                    "had_content": content.exists(),
+                    "record": read_json(old_record) if old_record.is_file() else None,
+                },
+            )
             if content.exists():
                 content.rename(backup / "content")
             value = {
@@ -131,53 +135,6 @@ def begin(project, plans: list[dict], run: dict) -> None:
         content.mkdir(parents=True)
 
 
-def validate_manifest(manifest: Path) -> dict:
-    """校验完整物理清单和声明成员；张量数值由下游公开读盘能力校验。"""
-    value = read_json(manifest)
-    if value.get("version") != 1 or value.get("state") != "physical" or not value.get("samples"):
-        raise ValueError("shared_dataset_invalid_manifest")
-    root = manifest.parent.resolve()
-    expected = [
-        (str(part), str(name))
-        for part, names in value.get("partitions", {}).items()
-        for name in names
-    ]
-    actual = [
-        (str(sample.get("partition")), str(sample.get("sample"))) for sample in value["samples"]
-    ]
-    if not expected or len(set(actual)) != len(actual) or sorted(actual) != sorted(expected):
-        raise ValueError("shared_dataset_incomplete_partitions")
-    stats = value.get("statistics")
-    if isinstance(stats, dict) and stats.get("path"):
-        statistics = Path(stats["path"])
-        statistics = (
-            statistics.resolve() if statistics.is_absolute() else (root / statistics).resolve()
-        )
-        if not statistics.is_relative_to(root):
-            raise ValueError("shared_dataset_statistics_escape")
-        if not statistics.is_file():
-            raise FileNotFoundError(statistics)
-    for sample in value["samples"]:
-        if not sample.get("written"):
-            raise ValueError("shared_dataset_incomplete_sample")
-        path = Path(sample["path"])
-        path = path.resolve() if path.is_absolute() else (root / path).resolve()
-        if not path.is_relative_to(root):
-            raise ValueError("shared_dataset_member_escape")
-        names = set(sample.get("filemap", {}).values())
-        for mapping in sample.get("format_filemaps", {}).values():
-            names.update(mapping.values())
-        names.update(sample.get("assets", []))
-        names.update(sample.get("identity_assets", []))
-        if not names:
-            raise ValueError("shared_dataset_empty_sample")
-        for name in names:
-            target = inside(path, name)
-            if not target.exists():
-                raise FileNotFoundError(target)
-    return value
-
-
 def publish(project, plan: dict, run_id: str) -> dict:
     """计算完成后发布共享资产；大文件摘要不持有数据库事务。"""
     folder = directory(project, plan["name"])
@@ -185,28 +142,37 @@ def publish(project, plan: dict, run_id: str) -> dict:
     if record["source"]["run_id"] != run_id:
         raise ValueError("shared_dataset_owner_changed")
     manifest = inside(project, record["path"])
-    physical = validate_manifest(manifest)
-    files = inventory(manifest.parent)
+    from ..storage.records import fetch
+    from ..tasks.operation_sources import invoke_source, operation_context
 
-    def portable(value):
-        if isinstance(value, dict):
-            return {key: portable(item) for key, item in value.items()}
-        if isinstance(value, list):
-            return [portable(item) for item in value]
+    context = plan.get("application_context")
+    if context is None:
+        run = fetch(project, "run", run_id)
+        context = operation_context(project, run["task_id"], name="inspect", run=run)
+    description = invoke_source(
+        context["source"],
+        context["recipe"],
+        {"operation": "validate_dataset", "manifest": str(manifest)},
+    )
+    for member in description["members"]:
+        candidate = Path(member)
         if (
-            isinstance(value, str)
-            and Path(value).is_absolute()
-            and Path(value).is_relative_to(manifest.parent)
+            not candidate.resolve().is_relative_to(manifest.parent.resolve())
+            or candidate.is_symlink()
         ):
-            return str(Path(value).relative_to(manifest.parent))
-        return value
-
+            raise ValueError("shared_dataset_member_escape")
+        if not candidate.exists():
+            raise FileNotFoundError(candidate)
+    files = inventory(manifest.parent)
     content_digest = digest(
         {
-            "manifest": portable(physical),
+            "manifest": description["identity"],
             "files": {key: value for key, value in files.items() if key != manifest.name},
         }
     )
+    record["semantics"] = description["semantics"]
+    record["stage"] = plan["stage"]
+    record["application_context"] = context
     dependency = {
         "id": record["id"] + "-content",
         "kind": "dataset",

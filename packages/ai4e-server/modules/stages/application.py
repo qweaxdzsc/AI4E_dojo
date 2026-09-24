@@ -152,13 +152,6 @@ def save(
     current = task.read_configuration(service.project(project), identity)
     if current["revision"] != revision:
         raise ValueError("configuration_revision_conflict")
-    patch = compose_configuration(
-        current["config"],
-        stage,
-        values,
-        edited_paths=edited_paths,
-        removed_paths=removed_paths,
-    )
     loading_prep_combo = stage == "trainprep" and target_case_id is not None
     loading_page_combo = (
         stage in {"model", "train"}
@@ -168,6 +161,19 @@ def save(
     )
     switching = (not loading_prep_combo and not loading_page_combo) and any(
         item is not None for item in (target_case_id, target_model, target_preset)
+    )
+    # 换模提交目标模型的完整正文；旧模型被移除的字段不属于普通页面编辑。
+    # 后续仍核验登记目标、原件修订，并按目标配置与脚本同事务替换。
+    patch = (
+        deepcopy(current["config"])
+        if switching
+        else compose_configuration(
+            current["config"],
+            stage,
+            values,
+            edited_paths=edited_paths,
+            removed_paths=removed_paths,
+        )
     )
     clear_model_inputs = False
     if loading_page_combo:
@@ -284,11 +290,20 @@ def save(
         validate_field_bindings(patch[stage], matching["model_roles"], matching["dataset_fields"])
         validate_field_scales(patch[stage])
         validate_split(patch[stage], manifest)
+    replacements = None
+    if clear_model_inputs:
+        from ..capabilities.official_scripts import model_switch_replacements
+
+        recipe = Path(task.get_task(service.project(project), identity)["directory"]) / "recipe"
+        replacements = model_switch_replacements(
+            service.settings.template, recipe, current["config"], patch
+        )
     saved = task.replace_configuration(
         service.project(project),
         identity,
         patch,
         revision=revision,
+        script_replacements=replacements,
     )
     if stage in {"model", "train"}:
         _record_settings_completion(service, project, identity, stage, saved)
@@ -403,7 +418,6 @@ def model_inspection(project: str, identity: str, body: OperationCommand, servic
     captured = task.read_configuration(service.project(project), identity)
     if captured["revision"] != body.expected_revision:
         raise ValueError("configuration_revision_conflict")
-    _migrate_official_scripts(service, service.project(project), identity)
     captured = _migrate_legacy_slices(service, service.project(project), identity)
     selection, inputs = _trace_selection(service, project, identity)
     return submit_model_inspection(
@@ -490,7 +504,6 @@ def operation(project: str, identity: str, stage: str, body: OperationCommand, s
         raise ValueError("configuration_revision_conflict")
     if task.get_task(base, identity).get("archived") or task.open_project(base).get("archived"):
         raise ValueError("archived")
-    _migrate_official_scripts(service, base, identity)
     captured = _migrate_legacy_slices(service, base, identity)
     revision = captured["revision"]
     for source in body.inputs:
@@ -567,7 +580,9 @@ def _migrate_official_scripts(service, project, identity):
     if template is None:
         return
     recipe = Path(task.get_task(project, identity)["directory"]) / "recipe"
-    expected = task.verified_old_sources(recipe)
+    from ..capabilities.official_scripts import migrate_official_aero_scripts, verified_old_sources
+
+    expected = verified_old_sources(recipe)
     if not expected:
         return
     from ..capabilities.model_cases import current_variant, dataset_id, model_id, resolve_case
@@ -579,7 +594,7 @@ def _migrate_official_scripts(service, project, identity):
     source = Path(template).parent.parent / "examples/aero_cfd" / case
     if not source.is_dir():
         raise ValueError("migration_registered_case_missing")
-    task.migrate_official_aero_scripts(project, identity, source, expected_sources=expected)
+    migrate_official_aero_scripts(project, identity, source, expected_sources=expected)
 
 
 def _migrate_legacy_slices(_service, project, identity):
@@ -768,13 +783,13 @@ def stage_inputs(project: str, identity: str, service):
                 path = None
         if path and item.get("processed_name"):
             names_by_manifest[str(Path(path).resolve())] = item["processed_name"]
-        selected = bool(path and declared.get("inputs.trainprep.dataset") == Path(path).resolve())
+        selected = bool(path and declared.get(item["binding"]) == Path(path).resolve())
         if selected:
-            found.add("inputs.trainprep.dataset")
+            found.add(item["binding"])
         if item.get("ref"):
             covered.add(item["ref"]["asset_id"])
         result.append({**item, "selected": selected})
-    for item in task.list_stage_artifacts(base, identity, visible):
+    for item in task.list_stage_artifacts(base, identity, visible, include_unmatched=True):
         root_id = item.get("root", "project")
         root = visible.get(root_id, Path(base).resolve())
         ref = register(service, project, root_id, item["path"], identity, integrity="stat")
@@ -790,10 +805,14 @@ def stage_inputs(project: str, identity: str, service):
         row = {
             "binding": item["binding"],
             "run_id": item["run_id"],
-            "name": item["name"],
+            "name": item.get("file_name", item["name"]),
             "selected": selected,
             "origin": "run",
-            "compatibility": {"status": "unchecked", "reason": "requires_configuration_check"},
+            "compatibility": (
+                {"status": "invalid", "reason": item["matching"]["reason"]}
+                if not item.get("matching", {}).get("matches", True)
+                else {"status": "unchecked", "reason": "requires_configuration_check"}
+            ),
             "ref": ref,
         }
         if item["binding"] == "inputs.train.preparation":
@@ -928,9 +947,7 @@ def _preparation_normalize_dir(base, run_id, artifacts: Path):
         raw = task.get_run(base, run_id).get("data_dir") or ""
         if raw:
             data_dir = Path(raw)
-            candidates.extend(
-                (data_dir / "trainprep" / "normalize", data_dir / "normalize")
-            )
+            candidates.extend((data_dir / "trainprep" / "normalize", data_dir / "normalize"))
     run_data = artifacts.parent.parent.parent / "data" / artifacts.parent.name
     candidates.extend((run_data / "trainprep" / "normalize", run_data / "normalize"))
     seen = set()

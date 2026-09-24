@@ -17,15 +17,34 @@ from ai4e_core.run.writer import RunWriter
 def test_array_bundle_share_copy_fork_and_relocate(tmp_path):
     project = tmp_path / "project"
     task.create_project(project)
-    path = Path(save_arrays(tmp_path / "physical", {"u": np.arange(12).reshape(3, 4)},
-                            kind="physical", metadata={"ids": [0, 1, 2]}))
+    path = Path(
+        save_arrays(
+            tmp_path / "physical",
+            {"u": np.arange(12).reshape(3, 4)},
+            kind="physical",
+            metadata={"ids": [0, 1, 2]},
+        )
+    )
     writer = RunWriter.create(tmp_path / "runs")
-    index = writer.record_asset("train", path, kind="dataset", stage="rawprep",
-                               dependencies=[path.parent / "u.npy"], bundle_root=path.parent)
+    index = writer.record_asset(
+        "train",
+        path,
+        kind="dataset",
+        stage="rawprep",
+        dependencies=[path.parent / "u.npy"],
+        bundle_root=path.parent,
+    )
     item = json.loads(index.read_text())["items"]["rawprep/train"]
     record = indexed_asset(item, provenance={"run_id": "producer"})
-    shared = task.register_shared(project, "arrays/train", path, kind="dataset", copy=True,
-                                  dependencies=record["dependencies"], bundle=record["bundle"])
+    shared = task.register_shared(
+        project,
+        "arrays/train",
+        path,
+        kind="dataset",
+        copy=True,
+        dependencies=record["dependencies"],
+        bundle=record["bundle"],
+    )
     shared_path = validate_asset(project, shared)
     assert shared_path.read_bytes() == path.read_bytes()
     staged, final = project / "staged", project / "consumer"
@@ -54,8 +73,14 @@ def test_bundle_rejects_external_dependency_and_content_drift(tmp_path):
     outside.write_text("x")
     writer = RunWriter.create(tmp_path / "runs")
     with pytest.raises(ValueError, match="outside_root"):
-        writer.record_asset("data", source, kind="dataset", stage="rawprep",
-                            dependencies=[outside], bundle_root=root)
+        writer.record_asset(
+            "data",
+            source,
+            kind="dataset",
+            stage="rawprep",
+            dependencies=[outside],
+            bundle_root=root,
+        )
     index = writer.record_asset("data", source, kind="dataset", stage="rawprep", bundle_root=root)
     item = json.loads(index.read_text())["items"]["rawprep/data"]
     (root / "new.bin").write_bytes(b"new")
@@ -75,7 +100,7 @@ def test_run_asset_public_share_and_fork_remain_consumable(tmp_path):
     cfg["inputs"] = {"rawprep": {}, "trainprep": {"dataset": None}}
     cfg["pipeline"]["stages"] = ["rawprep"]
     (source / "config.yaml").write_text(yaml.safe_dump(cfg))
-    (source / "pipeline.py").write_text('''from ai4e_core import run
+    (source / "pipeline.py").write_text("""from ai4e_core import run
 from ai4e_core.base.config.conventions import load_recipe_config
 from ai4e_core.abilities.data.save.array_manifest import save_arrays
 from pathlib import Path
@@ -84,22 +109,30 @@ import numpy as np
 def rawprep(cfg):
     session = run.TrainingRun()
     path = Path(save_arrays(session.output_dir("rawprep") / "physical", {"u": np.arange(6)}, kind="physical", metadata={}))
-    session.record_asset("train", path, kind="dataset", stage="rawprep", dependencies=[path.parent / "u.npy"], bundle_root=path.parent)
+    session.record_asset("train", path, kind="dataset", stage="rawprep", dependencies=[path.parent / "u.npy"], bundle_root=path.parent, semantics={"type": "custom.trajectory", "split": "train"})
     session.report({"manifest": str(path)}, stage="rawprep")
 
 if __name__ == "__main__":
     raise SystemExit(run.launch({"rawprep": rawprep}, script=__file__, config_loader=load_recipe_config))
-''')
+""")
     producer = task.new_task(project, "producer", source=source)
     run = task.wait_run(project, task.submit_run(project, producer["id"])["id"], timeout=45)
     assert run["status"] == "succeeded", task.read_log(project, run["id"])
     summary = json.loads((Path(run["run_dir"]) / "summary.json").read_text())
     original = Path(summary["reports"]["rawprep"]["manifest"])
-    shared = task.share_run_asset(project, run["id"], "arrays/train", original, kind="dataset", copy=True)
+    shared = task.share_run_asset(
+        project, run["id"], "arrays/train", original, kind="dataset", copy=True
+    )
+    assert shared["name"] == "train"
+    assert shared["semantics"] == {"type": "custom.trajectory", "split": "train"}
     cfg["inputs"]["trainprep"]["dataset"] = str(validate_asset(project, shared))
     consumer = task.new_task(project, "consumer", source=source, configuration=cfg)
     child = task.fork_task(project, consumer["id"], copy_datasets=True)
-    reference = task.read_configuration(project, child["id"])["config"]["inputs"]["trainprep"]["dataset"]
+    reference = task.read_configuration(project, child["id"])["config"]["inputs"]["trainprep"][
+        "dataset"
+    ]
+    assert child["assets"]["inputs.trainprep.dataset"]["semantics"] == shared["semantics"]
+    assert child["assets"]["inputs.trainprep.dataset"]["name"] == "train"
     shutil.rmtree(original.parent)
     shutil.rmtree(validate_asset(project, shared).parent)
     _, arrays = read_arrays(reference, kind="physical")

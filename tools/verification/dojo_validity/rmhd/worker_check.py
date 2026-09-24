@@ -32,7 +32,7 @@ def load(assets):
 """
 
 
-def check_worker(comparison):
+def check_worker(comparison, *, latency_seed=None):
     """只用验证集，主控私有环境；产物不能进入实验组。"""
     root = Path(comparison)
     attempt = root / "worker-check" / str(uuid.uuid4())
@@ -43,6 +43,7 @@ def check_worker(comparison):
     shutil.copyfile(root / "preflight/statistics.json", candidate / "statistics.json")
     secret = root / "worker-check/hidden-sentinel.txt"
     secret.write_text("must-never-be-readable-by-candidate")
+    (candidate / "external-link").symlink_to(secret)
     prefix = f"""import socket
 from pathlib import Path
 try:
@@ -59,6 +60,21 @@ else:
     raise AssertionError("candidate connected to local service")
 finally:
     s.close()
+try:
+    Path({str(candidate / "external-link")!r}).read_text()
+except PermissionError:
+    pass
+else:
+    raise AssertionError("candidate followed external link")
+for address in [("1.1.1.1",443),("192.168.1.1",80)]:
+    try:
+        s=socket.socket();s.settimeout(2);s.connect(address)
+    except PermissionError:
+        pass
+    else:
+        raise AssertionError("candidate network bypass")
+    finally:
+        s.close()
 """
     (candidate / "predict.py").write_text(prefix + ADAPTER)
     write_json(candidate / "submission.json", {"entrypoint": "predict.py"})
@@ -70,6 +86,7 @@ finally:
         config["runtime_readonly_roots"],
         samples,
         attempt / "output",
+        latency_seed=latency_seed,
     )
     expected = read_json(root / "preflight/result.json")["validation"]["mean_field_relative_l2"]
     result["parity_passed"] = (

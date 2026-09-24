@@ -44,7 +44,15 @@ def validate_asset(project: str | Path, record: dict) -> Path:
     return path
 
 
-def describe_asset(path: Path, *, kind: str, source: dict | None = None) -> dict:
+def describe_asset(
+    path: Path,
+    *,
+    kind: str,
+    source: dict | None = None,
+    semantics: dict | None = None,
+    stage: str | None = None,
+    name: str | None = None,
+) -> dict:
     """记录已存在输入，使用流式内容摘要而不加载训练数据。"""
     if kind not in KINDS:
         raise ValueError(f"invalid_asset_kind: {kind}")
@@ -56,6 +64,9 @@ def describe_asset(path: Path, *, kind: str, source: dict | None = None) -> dict
         "digest": digest(data_inventory(path)),
         "source": source or {},
         "dependencies": [],
+        "semantics": semantics or {},
+        **({"stage": stage} if stage is not None else {}),
+        **({"name": name} if name is not None else {}),
     }
 
 
@@ -75,7 +86,8 @@ def copy_bundle(project, original: dict, destination: Path, final: Path) -> dict
         if not path.is_relative_to(root):
             raise ValueError("asset_bundle_members_outside_root")
         return {
-            **record, "external": False,
+            **record,
+            "external": False,
             "path": str((final / path.relative_to(root)).relative_to(Path(project).resolve())),
             "dependencies": [relocate(dep) for dep in record.get("dependencies", [])],
         }
@@ -92,13 +104,18 @@ def indexed_asset(item: dict, *, provenance: dict) -> dict:
 
     validate_asset_content(item)
     record = describe_asset(Path(item["path"]), kind=item["kind"], source=provenance)
-    record["dependencies"] = [describe_asset(Path(p), kind="other", source=provenance)
-                              for p in item["dependencies"]]
+    record["dependencies"] = [
+        describe_asset(Path(p), kind="other", source=provenance) for p in item["dependencies"]
+    ]
     record["semantics"] = item.get("semantics", {})
+    record.update(stage=item["stage"], name=item["name"])
     if item.get("bundle"):
-        record["bundle"] = describe_asset(Path(item["bundle"]["root"]), kind="other", source=provenance)
+        record["bundle"] = describe_asset(
+            Path(item["bundle"]["root"]), kind="other", source=provenance
+        )
     record["portable"] = bool(record.get("bundle")) or (
-        not record["dependencies"] and Path(item["path"]).suffix != ".json")
+        not record["dependencies"] and Path(item["path"]).suffix != ".json"
+    )
     return record
 
 
@@ -141,6 +158,17 @@ def capture_inputs(
                 (a for a in (shared or []) if asset_path(project, a).resolve() == path.resolve()),
                 None,
             )
+        if old is None and path.resolve().is_relative_to(Path(project).resolve()):
+            from ..storage.files import read_json
+
+            receipt = path.parent / "asset.json"
+            if receipt.is_file():
+                candidate = read_json(receipt)
+                if (
+                    candidate.get("path")
+                    and asset_path(project, candidate).resolve() == path.resolve()
+                ):
+                    old = candidate
         if old and asset_path(project, old).resolve() == path.resolve():
             validate_asset(project, old)
             result[key] = old
@@ -148,7 +176,38 @@ def capture_inputs(
             # 创建时允许模板保留待绑定路径；执行捕获仍要求实际文件。
             if allow_unbound and not path.exists():
                 continue
-            result[key] = describe_asset(path, kind=kind)
+            from ..storage.files import read_json
+            from ..storage.records import listing
+
+            indexed = None
+            for run in listing(project, "run"):
+                index_path = Path(project) / run.get("run_path", "") / "artifacts/assets.json"
+                if not index_path.is_file():
+                    continue
+                for item in read_json(index_path).get("items", {}).values():
+                    if Path(item["path"]).resolve() == path.resolve():
+                        candidate = indexed_asset(
+                            item, provenance={"run_id": run["id"], "task_id": run["task_id"]}
+                        )
+                        if indexed is not None:
+                            from ai4e_spec.artifacts.task_operations import exact_json_equal
+
+                            # writer 的无用途文件索引与应用补充的用途索引可指向同一文件。
+                            # 只采用实际生产者给出的标签；两份非空声明冲突才拒绝。
+                            if not candidate.get("semantics") and indexed.get("semantics"):
+                                continue
+                            keys = ("kind", "stage", "name", "semantics")
+                            if (
+                                indexed.get("semantics")
+                                and candidate.get("semantics")
+                                and not exact_json_equal(
+                                    {k: indexed.get(k) for k in keys},
+                                    {k: candidate.get(k) for k in keys},
+                                )
+                            ):
+                                raise ValueError("asset_labels_conflict")
+                        indexed = candidate
+            result[key] = indexed or describe_asset(path, kind=kind)
     return result
 
 
@@ -164,25 +223,35 @@ def copy_assets(
         if original["kind"] not in kinds:
             result[key] = original
             continue
-        if original.get("dependencies") and not original.get("shared_dataset") and not original.get("bundle"):
+        if (
+            original.get("dependencies")
+            and not original.get("shared_dataset")
+            and not original.get("bundle")
+        ):
             raise ValueError("asset_copy_not_portable: use reference fork")
         if original.get("portable") is False:
             raise ValueError("asset_copy_not_portable: use reference fork")
         folder = inside(stage / "assets", key)
         folder.mkdir(parents=True)
         if original.get("bundle"):
-            value = copy_bundle(project, original, folder / "content",
-                                final / folder.relative_to(stage) / "content")
-            value.update(id=uuid4().hex, source={"asset_id": original["id"], **original.get("source", {})})
+            value = copy_bundle(
+                project, original, folder / "content", final / folder.relative_to(stage) / "content"
+            )
+            value.update(
+                id=uuid4().hex, source={"asset_id": original["id"], **original.get("source", {})}
+            )
             write_json(folder / "asset.json", value)
             result[key] = value
             continue
         target = folder / "content" / source.name if source.is_file() else folder / "content"
         shared_copy = original.get("shared_dataset") and original["kind"] == "dataset"
         if shared_copy:
-            from ..projects.dataset_migration import copy_physical_dataset
+            from ..storage.asset_transfer import copy_declared_dataset
 
-            copy_physical_dataset(source, target.parent)
+            context = original.get("application_context")
+            if context is None:
+                raise ValueError("operation_unavailable: dataset_copy_source_missing")
+            copy_declared_dataset(source, target.parent, context=context)
         else:
             copy_content(source, target)
         if not shared_copy and digest(inventory(target)) != original["digest"]:

@@ -40,18 +40,30 @@ def describe_shared_name(project: str | Path, name: str) -> dict:
     return {"status": "available", "message": ""}
 
 
-def bind_shared_dataset(project: str | Path, task_id: str, name: str, *, revision: str) -> dict:
+def bind_shared_dataset(
+    project: str | Path, task_id: str, name: str, *, revision: str, binding: str | None = None
+) -> dict:
     """将当前共享清单绑定到入口声明的消费键，配置与资产在同一事务保存。"""
     from ..storage.layout import task_dir
     from ..tasks.configuration import save_configuration
-    from ..templates.materialize import read_entry
+    from ..tasks.descriptions import described_entry
 
     value = get_shared_dataset(project, name)
     if value["status"] != "available":
         raise ValueError(f"shared_dataset_unavailable: {name}")
-    entry = read_entry(task_dir(project, task_id) / "recipe")
-    bindings = {item["consumer_binding"] for item in entry.get("shared_outputs", {}).values()}
-    binding = value["consumer_binding"]
+    entry = described_entry(task_dir(project, task_id) / "recipe")
+    from ..tasks.asset_matching import match_asset
+
+    description = entry["task_description"]["description"] or {}
+    bindings = [
+        key
+        for key, requirement in description.get("inputs", {}).items()
+        if match_asset(value, requirement, status="succeeded")["matches"]
+    ]
+    if binding is None:
+        if len(bindings) != 1:
+            raise ValueError("shared_consumer_binding_ambiguous_or_missing")
+        binding = bindings[0]
     if binding not in bindings:
         raise ValueError("shared_consumer_binding_not_declared")
     from omegaconf import OmegaConf

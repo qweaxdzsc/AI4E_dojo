@@ -1,0 +1,56 @@
+seed: 42
+run_root: ./runs
+data_root: ./data
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - infer
+  - post
+inputs:
+  rawprep:
+    source: null
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+    resume: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+model:
+  functional_dim: 3
+  out_dim: 1
+  geometry_dim: 3
+  n_layers: 4
+  n_hidden: 128
+  n_head: 4
+  slice_num: 64
+  use_te: false
+  structured_shape:
+  - 85
+  - 85
+train:
+  updates: 6
+  batch_size: 16
+  lr: 0.001
+  weight_decay: 1.0e-05
+  schedule: warmup_cosine
+  schedule_epochs: 1000
+  end_lr: 0.0001
+  device: cpu
+  seconds: 120
+  checkpoint_every: 3
+  evaluate_every: 2
+  ema_decay: 0.9
+  validation_count: 100
+infer:
+  batch_size: 4
+  device: cpu
+components:
+  loss: ai4e_core.abilities.constraint.relative_norm.relative_norm
+  derived: null
+  consume: null

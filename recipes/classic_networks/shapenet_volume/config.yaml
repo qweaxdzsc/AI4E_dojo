@@ -1,0 +1,53 @@
+seed: 42
+run_root: ../outputs/shapenet_volume/runs
+data_root: ../outputs/shapenet_volume/data
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - infer
+  - post
+inputs:
+  rawprep:
+    source: null
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+    resume: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+dataset:
+  case: shapenet_volume
+  train_count: 8
+  test_count: 2
+  grid_size: 32
+model:
+  family: mlp
+  spatial_dims: 3
+  in_channels: 5
+  out_channels: 3
+  parameters:
+    hidden_features:
+    - 64
+    - 64
+    - 64
+    activation: gelu
+train:
+  updates: 100
+  batch_size: 1
+  lr: 0.001
+  device: auto
+  seconds: 9000
+  checkpoint_every: 20
+  sample_points: null
+infer:
+  device: auto
+components:
+  model: ai4e_contrib.application.classic_networks.binding.build_network
+  derived: null
+  consume: null

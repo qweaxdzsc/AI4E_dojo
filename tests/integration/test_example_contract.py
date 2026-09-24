@@ -61,13 +61,13 @@ def test_agent_resources_define_one_primary_entry_per_agent_capability():
 
     guide_first_screen = "\n".join(guide.splitlines()[:45])
     skill_first_screen = "\n".join(skill.splitlines()[:45])
-    assert "无 Agent Skill 环境的启动页" in guide
-    assert "只负责分流和导航" in guide_first_screen
-    assert "[打开 Dojo Agent Help Center](docs/agent-help/index.md)" in guide_first_screen
-    assert "本 skill 是支持 Agent Skills 环境中的主入口" in skill
-    assert "只负责识别任务、分流和执行纪律" in skill_first_screen
-    assert "[打开 Dojo Agent Help Center](../../../docs/agent-help/index.md)" in skill_first_screen
-    assert "DOJO_AGENT_GUIDE.md" in skill
+    assert "docs/agent-help/index.md" in guide_first_screen
+    assert "../../../docs/agent-help/index.md" in skill_first_screen
+    assert ".agents/skills/dojo-research/SKILL.md" in guide
+    assert "../../../DOJO_AGENT_GUIDE.md" in skill
+    assert "完整新训练任务先选择并复制最接近的 standalone example" in skill_first_screen
+    assert "用户组件与公开扩展点" in skill_first_screen
+    assert "不要求采用某个固定算法工具" in skill_first_screen
     assert "唯一帮助正文" in help_index
 
     help_entry = (ROOT / "docs/agent-help/index.md").resolve()
@@ -86,8 +86,8 @@ def test_agent_resources_define_one_primary_entry_per_agent_capability():
         "reference",
     )
     for help_type in help_types:
-        assert help_type in guide_first_screen, help_type
-        assert help_type in skill_first_screen, help_type
+        assert help_type in guide, help_type
+        assert help_type in skill, help_type
     for api_name in ("search_help", "read_help_topic", "describe_help_symbol"):
         assert api_name in guide, api_name
         assert api_name in skill, api_name

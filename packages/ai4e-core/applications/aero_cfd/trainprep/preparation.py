@@ -388,6 +388,7 @@ def publish(data: Preparation, run=None, *, session=None) -> dict:
         record = {**data.record, "digest": digest(data.record)}
         path = run.artifact("preparation.json", record)
         run.record_asset("preparation", path, kind="preparation", stage="trainprep",
+                         semantics={"type": "aero.preparation", "format_version": 2},
                          dependencies=[data.index.path.parent])
         result = {
             "mode": "trainprep",

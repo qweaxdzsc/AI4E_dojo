@@ -1,0 +1,32 @@
+[
+  {
+    "wheel": "/Users/zonghui/work/project_simulation/dojo_train/architecture-repair-20260923/release/final-wheels/ai4e_contrib-0.1.0-py3-none-any.whl",
+    "sha256": "85a44a3b372fe49a9ba399c9c6cb11dce4c4480510747c96122ff47a726a03d4",
+    "python_files": 226,
+    "differences": []
+  },
+  {
+    "wheel": "/Users/zonghui/work/project_simulation/dojo_train/architecture-repair-20260923/release/final-wheels/ai4e_core-0.1.0-py3-none-any.whl",
+    "sha256": "b0e93f2cc5be2e7f0097e291f5bd4042cf82dfa6224fcda77975b2080bf117ab",
+    "python_files": 358,
+    "differences": []
+  },
+  {
+    "wheel": "/Users/zonghui/work/project_simulation/dojo_train/architecture-repair-20260923/release/final-wheels/ai4e_server-0.1.0-py3-none-any.whl",
+    "sha256": "6a621d059d96fef1d0c0107dcd31a0f4ce23295eee1f13e98cc09ae04047d0a0",
+    "python_files": 68,
+    "differences": []
+  },
+  {
+    "wheel": "/Users/zonghui/work/project_simulation/dojo_train/architecture-repair-20260923/release/final-wheels/ai4e_spec-0.1.0-py3-none-any.whl",
+    "sha256": "24ca6e8c40461f540b2fe499ea4d56069f414a05382c7fe1c83e454aca47f8bc",
+    "python_files": 14,
+    "differences": []
+  },
+  {
+    "wheel": "/Users/zonghui/work/project_simulation/dojo_train/architecture-repair-20260923/release/final-wheels/ai4e_task-0.1.0-py3-none-any.whl",
+    "sha256": "e090c59429d9355cfb8b77a93c27ce85cb0633b8dd2eb9b301cca18a50180e9b",
+    "python_files": 70,
+    "differences": []
+  }
+]

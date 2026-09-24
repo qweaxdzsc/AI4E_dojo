@@ -1,9 +1,17 @@
-<!-- dojo-help: {"case_ids": ["recipe_extensions.inference_fields"], "domain": "recipe_extensions", "kind": "case", "layer": "example", "summary": "参考变体与 Agent 组件组装示例", "title": "recipe_extensions.inference_fields", "topic_id": "case:recipe_extensions.inference_fields"} -->
+<!-- dojo-help: {"case_ids": ["recipe_extensions.inference_fields"], "domain": "recipe_extensions", "kind": "case", "layer": "example", "summary": "固定预测的绝对误差派生函数；先物化完整基案例，再按扩展说明修改。", "tasks": ["mesh", "point_fields", "prediction_fields"], "title": "recipe_extensions.inference_fields", "topic_id": "case:recipe_extensions.inference_fields"} -->
 # `recipe_extensions.inference_fields`
 
 - 类型：`extension`
 - 用途：参考变体与 Agent 组件组装示例
 - 资源路径：`examples/recipe_extensions/inference_fields`
+
+固定预测的绝对误差派生函数；先物化完整基案例，再按扩展说明修改。
+
+- 数据形态：mesh, point_fields
+- 训练机制：epoch
+- 替换入口：prediction_fields
+- 限制：覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。
+- 限制：仅声明扩展演示范围，不据此扩大数值精度验收。
 - 基案例：`aero_cfd.shapenet_car_abupt`
 - 覆盖文件：
   - `fields.py`
@@ -12,3 +20,73 @@
 
 `copy_example` 会先复制完整基案例，再叠加声明的覆盖文件并写 provenance。
 物化后必须重新检查配置、输入和恢复兼容性；不能直接运行原 extension 目录。
+
+## 案例详细说明
+
+来源：案例 README；SHA256 `5665b4e405980675c8fbb46cede096e14ec290934b7bae36f683e70e16a2dc0e`。
+
+### 独立推理派生字段扩展
+
+复制任一 `examples/aero_cfd` 目录到仓库外，再将本目录 `fields.py` 复制到案例目录。
+在 `infer.py` 的物理输出步骤之后、保存步骤之前插入：
+
+```python
+from fields import absolute_error
+job = infer_stage.configure_derived_fields(
+    job, name="pressure_error", domain="surface", unit=None,
+    inputs={"prediction": "surface.pressure.prediction", "truth": "surface.pressure.truth"},
+    operation=absolute_error,
+)
+```
+
+上例适用于 ShapeNet pressure 字段；NASA 使用实际配置的 pressure_coefficient 名称。
+`unit=None` 表示原始数据未声明单位，明确有单位时填写同一物理单位。
+同样可用 `settings={"target": "fields.absolute_error"}` 替换直接传入函数，二者互斥。
+
+执行独立 infer 后，新增数组写入样本清单并随真实 VTP 输出；
+使用 `infer.read_sample(manifest)` 可读回 `surface.pressure_error`。
+新增字段只共享原域实体 ID，不生成新数据集，不修改原训练目标。
+
+派生字段须在 `configure_selection` 前登记，可用 `surface:pressure_error:scalar` 精确选择。未选派生字段不保存；没有独立真值的派生字段保留数组及不可评价原因，不用误差场自身充当真值。字段与普通用户评价一起通过 `test_infer_extensions.py` 外部复制、真实运行、读回和VTK验收。
+
+#### 物化说明
+
+- `base_case`: `aero_cfd.shapenet_car_abupt`。该目录是 extension 参考覆盖集，不是独立流程。
+- 物化时先复制完整基案例，再叠加清单声明的覆盖文件，并写出 `.dojo-provenance.json`；未声明冲突、缺少基案例或非空目标会失败。
+- 物化目录随后可以由 Agent 自由修改、用 direct-core 运行或交给 `ai4e_task` Python API；扩展目录本身不会绑定本机数据或自动启动任务。
+
+#### Agent Help Center
+
+本目录是 `参考变体`。Agent 先读取帮助主题 `case:recipe_extensions.inference_fields`，再按主题关联的 workflow 和 API 参考核对输入、函数签名、产物与证据边界。支持 Python 帮助 API 时可调用：
+
+```python
+import ai4e_task as task
+print(task.read_help_topic("case:recipe_extensions.inference_fields")["content"])
+```
+
+<!-- research-adaptation-details -->
+#### 选择与改写说明
+
+固定预测的绝对误差派生函数；先物化完整基案例，再按扩展说明修改。
+
+数据形态：mesh, point_fields；训练机制：epoch。
+
+##### 具体修改位置
+
+- 基案例：`aero_cfd.shapenet_car_abupt`。先 `copy_example` 物化；返回的 `documentation.entry` 可定位基案例和扩展的说明副本。
+- 本变体可改：`prediction_fields`。
+- 覆盖/新增文件：`fields.py`。逐项读这些文件的输入输出和基案例消费者，其他阶段继续继承。
+- 物化后检查根配置；若扩展没有覆盖配置，按本页前文将本地组件显式接入，复制文件本身不等于采用了组件。
+
+##### 运行与读回
+
+- 运行前填写自己的输入与输出目录；先按本页原有命令/阶段说明执行短程连接验证。更改模型或科学定义时不得沿用不兼容检查点。
+- 核对真实运行报告、检查点和固定预测；存在派生结果时必须从后处理读回。恢复与独立推理分别验证，不以导入成功替代。
+
+##### 适用边界
+
+- 覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。
+- 仅声明扩展演示范围，不据此扩大数值精度验收。
+
+
+基案例完整说明：[本地正文](../aero_cfd/shapenet_car_abupt.md)。

@@ -8,8 +8,8 @@ pipeline:
   - train
   - infer
   - post
-data_root: ./data/car_experiment
-run_root: ./runs/car_experiment
+data_root: ../data/shapenet_car_abupt
+run_root: ../runs/shapenet_car_abupt
 train:
   mode: fit
   max_epochs: 1
@@ -248,14 +248,14 @@ infer:
   device: cpu
 inputs:
   rawprep:
-    source: ./inputs/shapenet_car
+    source: ../inputs/shapenet_car
     manifest: null
     train_h5: null
     test_h5: null
     connectivity_h5: null
   trainprep:
     partition: null
-    dataset: ./data/car_experiment/manifest.json
+    dataset: ../datasets/shapenet_car/manifest.json
     statistics: null
   train:
     preparation: null

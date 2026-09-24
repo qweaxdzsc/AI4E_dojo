@@ -1,0 +1,30 @@
+seed: 42
+run_root: ../outputs/nasa_crm/runs
+data_root: ../outputs/nasa_crm/data
+pipeline:
+  stages: [trainprep, train, infer, post]
+inputs:
+  trainprep:
+    train_h5: null
+    test_h5: null
+  train:
+    preparation: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+dataset:
+  case: nasa_global
+model:
+  family: rsm
+  parameters:
+    degree: 2
+    ridge: 0.0
+train:
+  seconds: 9000
+infer:
+  batch_size: 256
+components:
+  fit: ai4e_contrib.application.surrogate_modeling.fitting.fit_predictor
+  rebuild: ai4e_contrib.application.surrogate_modeling.prediction.rebuild

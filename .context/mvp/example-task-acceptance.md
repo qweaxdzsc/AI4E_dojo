@@ -17,3 +17,13 @@
 ## 未宣称
 
 本记录不宣称 21 个案例都完成真实数据训练，也不宣称论文级精度、生产预算或 Web 验收。Neumann smoke 只证明公开入口、参数接线、固定 preparation、Task 恢复和产物交接；其他案例数值实跑仍需在各自依赖和数据准备齐全后按清单追加证据。
+
+## 2026-09-22 公开案例配置与安装资源一致性
+
+源码清单现为 41 个案例（27 standalone、14 extension）。九个 aero_cfd 配置已统一把原始输入、已处理数据、数据产物和运行记录放在复制目录的 `../inputs`、`../datasets`、`../data/<case-id>`、`../runs/<case-id>`，并保留源码已支持的 `infer.seed`。配置回归不再首错停止，会汇总全部公开 aero 案例并检查四类路径、领域默认值及 seed 透传。
+
+本轮新建的 Task wheel 在仓库外安装后，完整比较源码与安装后的 41 个案例 ID，逐例 `check_example`，并实际复制全部 standalone/extension 到空目录；安装测试 1 项通过。生成 Help 已两次按并行源码变化重建，最终 `--check` 为 492 个生成文件无漂移，帮助/能力/Task 文档组 20 项通过。
+
+当前主 `.venv` 的 Task 安装副本仍少 `pcno.double_cylinder`、`aero_cfd.shapenet_car_geotransolver`、`aero_cfd.nasa_crm_geotransolver`，旧 Core 安装副本仍拒绝两个 GeoTransolver 的 `infer.seed`；这些正是未发布证据，不以隔离 wheel 通过掩盖。主环境重装和正式 Web 冒烟待单独授权。
+
+并行 Task 源码随后新增了对现行 Spec `task_operations` 的公开导入；只安装新 Task wheel、复用主环境旧 Spec 的能力测试因此明确失败。四个现行 Spec/Core/Contrib/Task wheel 一起安装的本轮交付测试仍通过，说明失败属于主安装副本版本混用，不能据此省略完整重装。

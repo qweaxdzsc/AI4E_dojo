@@ -78,6 +78,23 @@ def test_capability_search_and_offline_export(tmp_path, monkeypatch):
         ("归一化", "capability:data"),
     ]:
         assert topic in {hit["topic_id"] for hit in resources.search_help(query, limit=5)}
+    # 每个基础模型必须可从用户名称找到教程，再从教程到真实 API。
+    for query in ("MLP", "CNN", "ResNet", "U-Net", "Transformer", "GNN", "RNN",
+                  "DeepONet", "FNO", "POD", "RSM", "RBF", "Kriging", "LightGBM"):
+        assert "capability:model" in {
+            hit["topic_id"] for hit in resources.search_help(query, limit=5)
+        }, query
+    for query, topic in [("非梯度拟合", "training"), ("普通对象预测", "inference"),
+                         ("代理模型状态保存", "data"), ("PINN", "loss")]:
+        assert "capability:" + topic in {
+            hit["topic_id"] for hit in resources.search_help(query, limit=5)
+        }
+    for page in PAGES:
+        for symbol in metadata(page)["symbols"]:
+            record = resources.describe_help_symbol(symbol)
+            assert record["signature"] and record["source_path"], symbol
+            content = resources.read_help_topic("api:" + symbol)["content"]
+            assert record["signature"] in content, symbol
     symbol = "ai4e_core.applications.base.iteration_training.train_model"
     assert resources.search_help(symbol, limit=1)[0]["topic_id"] == "api:" + symbol
     exported = resources.export_guide(tmp_path / "offline")
@@ -118,6 +135,19 @@ for query, topic in [("归一化", "capability:data"),
                      ("NumPy 预测计算相对 L2", "capability:evaluation"),
                      ("已有 PyTorch 模型和 DataLoader 如何复用训练循环", "capability:training")]:
     assert topic in {h["topic_id"] for h in task.search_help(query, limit=5)}
+# 本次 wheel 必须交付新模型导航、所有声明的 API 和有效离线链接。
+for page in pages:
+    metadata = json.loads(page.read_text().splitlines()[0][len("<!-- dojo-help: "):-len(" -->")])
+    for symbol in metadata["symbols"]:
+        record = task.describe_help_symbol(symbol)
+        assert record["signature"] and record["source_path"], symbol
+        assert record["signature"] in task.read_help_topic("api:" + symbol)["content"]
+    for link in re.findall(r"\\]\\(([^)]+)\\)", page.read_text()):
+        target = (page.parent / link).resolve()
+        assert target.is_relative_to(root) and target.is_file(), link
+for name in ("MLP", "CNN", "ResNet", "U-Net", "Transformer", "GNN", "RNN",
+             "DeepONet", "FNO", "POD", "RSM", "RBF", "Kriging", "LightGBM"):
+    assert "capability:model" in {h["topic_id"] for h in task.search_help(name, limit=5)}, name
 assert "train_model" in task.read_help_topic("capability:training")["content"]
 print(json.dumps({"installed": task.__file__, "capabilities": len(pages), "exported": info}))
 '''

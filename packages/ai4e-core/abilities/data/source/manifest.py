@@ -37,7 +37,12 @@ class ManifestIndex:
                     raise ValueError(f"清单没有唯一已提交样本: {sample}")
 
     def remap_partitions(self, partitions: Mapping[str, Sequence[str]]) -> None:
-        """按样本名重挂分片；张量路径不变，空分片不进入索引。"""
+        """按样本名确定性重挂分片；张量路径不变，空分片不进入索引。
+
+        目标分片优先使用同名来源；``eval`` 与历史 ``validation`` 互为
+        别名。没有精确来源时只允许唯一候选跨分片移动，避免同名多来源
+        因清单顺序不同而静默选错物理样本。
+        """
         by_name: dict[str, list[dict]] = {}
         for (_partition, sample), record in self.records.items():
             by_name.setdefault(sample, []).append(record)
@@ -48,24 +53,26 @@ class ManifestIndex:
             for sample in samples:
                 identity = str(sample)
                 candidates = by_name.get(identity, [])
-                # 同名样本可以来自不同原始来源；目标 test 优先消费原 test
-                # 记录，训练/验证优先消费原 train/validation 记录。
+                aliases = {"eval": "validation", "validation": "eval"}
                 record = next(
                     (item for item in candidates if item.get("partition") == name),
                     None,
                 )
-                if record is None and name == "test":
+                if record is None and str(name) in aliases:
+                    alias = aliases[str(name)]
                     record = next(
-                        (item for item in candidates if item.get("partition") == "test"),
+                        (item for item in candidates if item.get("partition") == alias),
                         None,
                     )
-                if record is None:
-                    record = next(
-                        (item for item in candidates if item.get("partition") != "test"),
-                        None,
-                    )
-                if record is None:
+                if record is None and len(candidates) == 1:
+                    record = candidates[0]
+                if not candidates:
                     raise ValueError(f"重划分片找不到样本 {identity}")
+                if record is None:
+                    sources = sorted(str(item.get("partition")) for item in candidates)
+                    raise ValueError(
+                        f"重划分片样本 {identity} 在目标 {name} 存在歧义，候选来源: {sources}"
+                    )
                 rebuilt[(str(name), identity)] = record
                 kept.append(identity)
             if kept:

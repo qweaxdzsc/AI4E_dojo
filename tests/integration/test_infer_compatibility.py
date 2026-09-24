@@ -148,13 +148,11 @@ def test_infer_paths_are_resolved_without_mutating_train(tmp_path):
     cfg = load_configuration(
         folder / "config.yaml",
         {
-            "infer.checkpoint": "../weight.pt",
-            "infer.preparation": "../prep.json",
-            "infer.results": "../result.json",
-            "post.results": "../result.json",
+            "inputs.infer.checkpoint": "../weight.pt",
+            "inputs.infer.preparation": "../prep.json",
+            "inputs.post.results": "../result.json",
         },
     )
-    assert cfg.infer.checkpoint == str(tmp_path / "weight.pt")
-    assert cfg.infer.preparation == str(tmp_path / "prep.json")
-    assert cfg.infer.results == str(tmp_path / "result.json")
-    assert cfg.post.results == str(tmp_path / "result.json")
+    assert cfg.inputs.infer.checkpoint == str(tmp_path / "weight.pt")
+    assert cfg.inputs.infer.preparation == str(tmp_path / "prep.json")
+    assert cfg.inputs.post.results == str(tmp_path / "result.json")

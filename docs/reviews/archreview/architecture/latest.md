@@ -1,132 +1,96 @@
-# Dojo 框架分层架构复审 · 2026-09-21
-
-复审性质：当前工作树静态架构审查；仅报告与提案，无实现授权。北京时间内容采样：2026-09-21 04:03:23 +08:00。
-
-- Git HEAD：`477c47bc4cba83fd1e903800034d7d58286ee6d8`。
-- 工作区内容 SHA-256：`7d4c5ea0e8470c0bd72589ada98e5e4883ca6119f90ded25c1a05aee98720b0c`。
-- 纳入 3,488 个 Git 跟踪或未忽略的未跟踪路径；437 个 porcelain 状态条目。工作树已有改动不归因于本次复审。
-- 方法：排序后的路径、文件类型、字节摘要与大小；符号链接记录链接目标；缺失路径保留标记。排除复审目录避免报告自引用；未忽略之外的运行环境、安装副本不在身份内。
-- [内容清单与静态调用统计](/Users/zonghui/work/new_code_project/AI4E_Dojo/docs/reviews/archreview/2026-09-21-identity.json)。该身份是内容采样，不是工作区备份。
+# Dojo 框架分层架构复审 · 2026-09-24
 
 ## 全局判断
 
-分层方向仍值得保留：科学计算由 core/contrib 与领域 application 解释，recipe 表达研究顺序，Task 管管理事实，Server 管平台用例，Web 展示稳定接口，Vis 管显示。研究入口和平台开放范围应各自声明，不能要求所有研究依次经过 Recipe→Task→Web 才算有效。
+主干分层已趋于一致：研究计算与专属连接由 core/application/contrib 持有，recipe 明示流程，Task 管固定身份和生命周期，Server 管平台用例，Web/Vis 消费公开交接。原 R1–R3 的 Task 科学解释、标签候选和活网络出图问题在本轮抽查源码中未回退；R4/R5 的修复仍在。本轮只新增 **R6 一项中优先级建议：把准备页的科学描述、默认值和兼容判断收回 application，避免 Server/Web 继续拥有另一套科学解释规则**。
 
-当前问题集中在**领域可选操作已经具备声明入口，但部分管理便捷接口仍把外流科学格式和显示装配内置为默认值**。这是未来扩展平台和 Task 比较能力的结构性成本，不能用“已经隔离到子进程”当成职责已分离。本轮没有证据证明当前五个 Web 案例因此失效，也不把未开放领域的 Web 支持当作既有产品承诺。
+这不是宣称所有平台入口已经领域无关。当前 Web 仍为已登记外流案例服务；真正剩余的分层缺口在具体页面的科学解释所有权，而不是缺一个统一模型协议。无需因本报告新增模型平台入口、DAG、统一张量格式或全环境冻结。
 
-### 八层事实所有权与实际交接
+北京时间起始身份采样：**2026-09-24 07:15:34 +08:00**。Git HEAD：`9b53fc4cc4e38c128b18489f0b95f85055ceafaf`。工作区内容身份：`006772c54ed623d939203143a3a105a614d33aa9d58b35cb7802820a6ae88ca6`，4,195 个 Git 可见路径；包含未提交内容和已删除跟踪路径的 missing 标记，排除复审目录，不涵盖忽略文件、安装环境和外部运行数据。算法及逐文件摘要见 [内容身份](/Users/zonghui/work/new_code_project/AI4E_Dojo/docs/reviews/archreview/2026-09-24-identity.json)。
 
-1. **spec** 拥有资产、指标、请求及来源的持久化形状，不拥有科学算法或通用张量协议。[指标索引](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-spec/artifacts/indexes.py:26)要求 field/unit/split/statistic/data_identity 与资产引用；字段可承载领域自定语义。
-2. **core** 拥有中立计算、领域步骤、顺序执行和运行记录。[writer](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-core/run/writer.py:129)写资产和指标索引；Task 不应另造一份科学运行摘要。core 不拥有项目数据库、官方模型目录或页面状态。
-3. **contrib/application** 拥有模型、数据集与领域配置连接，以及不可中立化的科学解释。[外流操作](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-contrib/application/aero_cfd/operations.py:9)在边界转换配置，再调用 core 领域能力；不应让 Task 重做这次解释。中立能力仍优先归 core。
-4. **recipe** 拥有步骤顺序和局部连接；普通函数返回值无需 Artifact 化。[控制流程交接](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-contrib/application/pde_control/safediffcon/handoff.py:23)已用公开 writer 登记自己的 split/phase，说明保留领域差异与共享管理语言可以同时成立。
-5. **Task** 应拥有项目、版本、配置修订、运行、输入、资产、权重引用、结果、失败/恢复事实。[operations](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/operations.py:11)已从 components.application 解析操作，[inspections](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/inspections.py:46)在独立进程执行。实际仍有下述三类职责泄漏；因此不能写成“已完全模型无关”。
-6. **Server** 拥有平台开放目录、受控路径、业务校验及显示适配。[推理用例](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-server/modules/inference/application.py:11)调用 ai4e_task 公共门面；[官方目录](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-server/modules/capabilities/model_cases.py)属于 Server，不能误归 Task。当前平台的 CFD 门禁本身不是架构错误。
-7. **Web** 拥有草稿和交互，不拥有运行终态或科学指标定义。[结果 API](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-web/src/modules/inference/api.ts:97)透传 comparison/statistics/records，文件使用受控引用；本次抽查链路没有在浏览器重新计算指标。未全量核验所有页面。
-8. **Vis** 拥有场景、渲染、显示配置和导出；物理结果消费固定资产。[Vis 启动](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-server/infrastructure/vis_client.py:26)为独立服务进程。但“整个 Vis 只接固定资产”并非源码全貌：结构跟踪目前接收活网络和输入，桥接代码位于 Task worker，详见 R3；不能隐去这个例外。
+相较 9 月 23 日上午报告的逐文件身份：178 项改变、11 项新增、0 项新删除，HEAD 未变。新增来源依赖模块及三阶段连接修复来自已有工作区，本轮没有实施。建议状态文件在 9 月 23 日晚已将 R4/R5 标为完成，但日期报告仍是上午的问题态，且状态文件的 `active_core_recommendations`、`implementation`、`repair_verification.formal` 残留发布前文字。本轮保留旧报告和原状态快照，在当前状态中区分历史验收与本轮复核。
 
-包清单中 spec 无依赖；core→spec；contrib→core/spec；task→core/spec；server→task/spec；viz→spec（此处只计 ai4e 包）。包清单方向正确不等于所有运行时调用都符合所有权。
+## 五个全局问题
 
-### 进程、固定资产与失败归属
+### 1. 事实归属、调用方向与进程边界
 
-当前主链为 Web HTTP→Server→Task 门面；Task 捕获配置、代码和引用后启动 recipe worker/检查进程/推理协调进程；科学执行写固定结果和运行摘要；Task 记录收据与终态；Server 登记受控来源后交给 Web/独立 Vis。文件来源修订、显示会话状态、科学运行状态是三类不同事实，不应合并。
+- **spec** 拥有持久化和进程交接的最小记录，不拥有算法和所有领域的统一科学对象。现有 [task_operations.py](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-spec/artifacts/task_operations.py:16) 只约束 JSON 描述、输入位置、标签与执行单元；这些是可选管理功能的约定，不是普通组件准入协议。
+- **core** 拥有中立计算、领域步骤、执行机制和运行记录；不拥有任务数据库或官方模型目录。能力组合与 `run` 门面应保留。**contrib/application** 拥有模型/数据/方程专属参数和科学连接；[operations.inspect](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-contrib/application/aero_cfd/operations.py:20) 解释描述、检查及固定结果操作。普通函数继续自行定义输入输出。
+- **recipe** 拥有研究步骤顺序及连接选择。当前 [Transolver trainprep](/Users/zonghui/work/new_code_project/AI4E_Dojo/examples/aero_cfd/nasa_crm_transolver3/trainprep.py:15)、[train](/Users/zonghui/work/new_code_project/AI4E_Dojo/examples/aero_cfd/nasa_crm_transolver3/train.py:18) 与 [infer](/Users/zonghui/work/new_code_project/AI4E_Dojo/examples/aero_cfd/nasa_crm_transolver3/infer.py:15) 显式选择科学链；不能再由图缓存开关间接选择另一条算法路径。
+- **Task** 拥有项目、版本、配置修订、运行收据、固定输入/来源、资产引用及失败恢复。它不应决定坐标、损失、采样、结构或科学兼容性。**Server** 拥有平台授权、路径范围、配置编辑事务、公开目录与 API 投影；官方模型登记是 Server 的合法职责，不是 Task 的模型中心。
+- **Web** 拥有编辑草稿、请求状态和展示；不应再次推导科学兼容性。**Vis** 拥有显示会话、场景及显示变换，读取固定文件，不接管训练对象或重新预测。[runtime.worker](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-viz/runtime/worker.py:14) 实际消费路径、选项和显示来源。
 
-[运行 worker](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/worker.py:60)从 summary 的 failed/research_status 判断失败，[批次结果](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/inference_results.py:174)禁止将未完整成功批次开放为完整比较。这两处应保留，不因提炼 provider 接口而减弱。
+实际主链是 Web HTTP → Server 平台用例 → Task 公共门面 → 捕获来源的独立 application/recipe 进程 → core 计算与 writer → 固定资产/管理收据 → Server/Web/Vis。结构图链为 Server `submit_model_inspection` → Task `inspect_task`/JSON worker → contrib 装配 → core `trace_views` → 固定 HTML/来源；[Task worker](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/inspection_worker.py:8) 不再读取 network/inputs/predict。训练、检查、显示进程分别承担各自故障，不把进程隔离误当作职责自动正确。
 
-### 跨领域管理语言与比较
+当前 968 个存在的 Git 可见包内 Python 文件绝对静态导入扫描未发现逆向 ai4e 包依赖；Task→contrib/Vis 直接导入为 0。三个已不存在的跟踪路径单独记录，不算解析通过或新增删除。扫描不能覆盖动态入口和同包内部越界，详见 [依赖证据](/Users/zonghui/work/new_code_project/AI4E_Dojo/docs/reviews/archreview/2026-09-24-dependencies.json)。
 
-共享输入身份、版本、修订、运行、资产、检查点、固定结果、指标及失败恢复是可行的，已有实现并非空白。[compare_runs](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/versions/compare.py:87)核验固定指标资产内容、运行终态及完整 semantics 相等；缺失或不同口径分别给 missing/incompatible，不把空值当相同。SafeDiffCon 的 J/R 指标可保留自己的定义、约束和数据身份，不必变成 CFD 场指标。
+### 2. Task 是否模型无关
 
-要保留“可共同登记和比较管理事实”与“科学指标可以直接比较”的区别。不同领域并不天然可进行数值优劣排序。当前通用 compare_runs 的谨慎边界值得保留；专用推理结果比较仍被外流默认路由约束，见 R1。
+主链已做到模型无关：[check_inference](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/inference.py:57) 核查内容修订、应用给出的兼容结果和带 scope 的不透明 execution_identity；[asset_matching](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/asset_matching.py:6) 只按 kind/stage/name/semantics 的类型和值匹配，不按文件名、模型名猜用途。[smoke-data](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/templates/resources.py:531) 已按案例资源声明启动隔离入口，预算不再写在 Task。
 
-### Agent 路由与设计真源
+仍有已知配置边界残留：[rawprep.py](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/rawprep.py:12) 直接读取 `dataset.processed_name`，并在创建默认展开中用 `components.dataset` 和 `rawprep` 判断适用性。这不是模型名分支，但仍要求管理层认识某一配置树。最小下沉是 application 描述输出共享名称和默认展开能力，Task 仅处理通用共享身份与固定修订；本轮沿用观察项，不据此重开已解决的 R1，也不声称已造成当前任务失败。
 
-[architecture 短入口](/Users/zonghui/work/new_code_project/AI4E_Dojo/.context/tasks/architecture.md)负责选层和跳转，[唯一架构正文](</Users/zonghui/work/new_code_project/AI4E_Dojo/docs/AI4E_Dojo_ARCHITECTURE (1).md>)负责设计原因；PRD 负责长期功能，模块索引负责源码/调用方/测试定位。短入口含职责摘要和调用图，但未形成独立长篇设计正文；应保留这一级概览。
+### 3. 跨领域管理语言与比较
 
-新增帮助中心、案例清单以及 [resources.py](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/templates/resources.py:109)的检索/符号门面已能从任务进入说明和源码，纯静态资源读取不加载模型。上轮“建立任务导航”不能原样重复；当前应评估真实定位效率。新增数据集和平台接入的短路由仍可改进，但本轮不占核心建议名额。不把帮助中心的 API 用途说明认作第二份架构正文。
+已有输入身份、版本、运行、资产、检查点、固定结果、指标、失败及恢复语言，应保留。[described_entry](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/descriptions.py:61) 接收可选应用声明；没有描述的普通脚本仍可托管。[compare_runs](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/versions/compare.py:113) 比较完整终态、来源资产完整性和已发布 semantics 等值，不重算科学指标。
 
-## 与上次报告的变化
+“管理层可比”表示发布者声明的统计口径和身份一致，不表示 CFD 压力、PDE 解场和控制安全代价可以互换。缺指标仍可比较代码/配置；缺科学语义不能填默认后声称相同。恢复引用、代数拟合状态与神经优化器状态可以同属资产管理，但恢复计算仍各归应用。`InferenceRequest` 的检查点×分片功能是局部产品约定，不应升级成每个领域必用的运行格式。
 
-上次正式报告为 [2026-09-18-global.md](/Users/zonghui/work/new_code_project/AI4E_Dojo/docs/reviews/archreview/2026-09-18-global.md)，HEAD 为 e48bde91ad11fd60d8fb95897a53397827947e8c。本次 HEAD 已前进，且存在大量未提交内容。上轮只存工作区状态摘要，没有逐文件内容清单，故无法用摘要精确证明某处代码“新增于上次之后”；下面区分新观察与新代码。
+### 4. Server、Web 与固定资产
 
-- **A：强制逐级晋级的表述失效。** 依据上轮会后澄清与当前架构正文，采用研究/Task/Web 可选入口支持与科学复现质量分别说明。保留产品开放边界，不再提出强制晋级流程。
-- **B：最小管理交接继续开放，落到 R1/R2。** 上轮已识别 component/model 同批判断与固定资产槽位；本轮重新确认。新增洞见是：provider 选择并未贯穿元信息→结果比较→视图→导出，不能只修一个 model 字段就宣布边界完成。
-- **C：导航已有部分实现，效果待验。** 帮助中心、可复制案例清单及静态检索门面在当前源码存在；没有重跑安装或盲定位，不记为完整解决。
-- **新增 R3：检查 worker 的 Task→Vis 活对象桥接。** 是本轮新识别的跨层所有权问题，不声称本周刚引入。
-- 当前入口已扩展地热、GeoTransolver/PCNO 等研究案例；这支持继续检验跨领域管理交接，不能据此宣布其 Web 能力或论文精度已交付。
+推理链已主要经 [Server inference](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-server/modules/inference/application.py:12) 调用 Task 门面，透传应用提供的样本、指标和兼容结论；结构图注册的是固定文件。Task 管运行状态，Server 管辅助操作和设置保存事实，Web 管草稿与读取状态，Vis 管显示会话；这些状态用途不同，本轮未发现上述抽查链需要合并为一套数据库。
 
-## R1 · 高：让领域 provider 覆盖完整科学操作链
+但准备页还存在真实的事实所有权冲突：Server 从 model/data_specs 与物理清单重新推导角色和兼容性，Web 再实现一份点场形状规则；Server 还识别 AB-UPT 来注入科学默认值。它们并非仅仅展示 provider 结果，见下文 R6。另有 Server 描述缓存只以配置修订为键的观察，不能据 Task 已修来源门禁推断整个显示链缓存都已同步。
 
-**源码与调用链证据。** [checkpoints.py:17](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/checkpoints.py:17)默认 provider 是 ai4e_core.applications.aero_cfd.infer.inspect_artifacts。AST 静态统计共 8 个 inspect_inference 调用点，仅 inputs 显式传入任务 provider；其余 metadata、compare、result_views、export、metric_catalog、result_fields 和 devices 共 7 处使用默认值。devices 可视为通用资源查询，另外 6 处承载科学格式/展示口径。
+### 5. Agent 路由与唯一设计真源
 
-实际链：Web results→Server results→Task inference_results→默认外流适配器→外流 compare_results/result_views；导出复走同样路线。[外流分派](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-core/applications/aero_cfd/infer/artifact_operations.py:12)确实解释这些操作。同时 [inference.py:75](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/inference.py:75)直接比较 preparation.digest 与 contract.component/model。
+当前 [architecture 短路由](/Users/zonghui/work/new_code_project/AI4E_Dojo/.context/tasks/architecture.md) 负责定位职责、模块与修改边界，已撤下过时的“Task component/model 尚待迁出”说明；[唯一架构正文](</Users/zonghui/work/new_code_project/AI4E_Dojo/docs/AI4E_Dojo_ARCHITECTURE (1).md>) 持有设计理由和全局边界。模块索引连接 PRD、源码和测试，案例检索的 [list_examples](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/templates/resources.py:313) 支持文本和标签过滤，无需先导入模型。
 
-**系统性痛点。** 新领域即便提供 components.application.infer，仍不能只靠声明替换整条科学消费链；后半段回到 CFD。管理层知道模型合同键，后续会继续诱发按领域补分支。
+本轮读到的路由没有建立第二套独立架构设计；Vis 内部架构属于子系统正文，不与全局包边界争夺所有权。不过部分模块索引仍累积历史切片，唯一正文第 0 节清单也落后于后文新增能力。这是导航维护观察，不能包装成核心架构建议。未做 Agent 盲定位计时，不宣称检索工时已减少。
 
-**根因。** 事实：显式 provider 只用于一个调用点，同批兼容判断仍在 Task。推断：早期外流便捷接口比后加的可选操作声明更早固化，迁移只覆盖了输入检查；本轮没有查作者意图，不能将此推断当提交历史。
+## 核心建议 R6 · 中：准备页科学解释归 application，平台消费声明和结果
 
-**最小架构动作与职责。** 复用现有 operation_target 和独立进程，不另建协议总线。由领域 provider 返回候选描述、科学可兼容结论及带作用域的不透明执行身份；Task 只核验引用完整性、修订、权限与身份等值。metadata/compare/result_views/export/result_fields/metric_catalog 从任务或固定批次所捕获的声明解析；无声明明确 operation_unavailable，不默选 CFD。devices 单独作为资源能力，不要求科学 provider 实现。批次需保留所用 provider 的来源/版本引用，避免历史结果随当前任务编辑改换解释器。
+**重要性与系统性痛点。** 下一次新增领域页面或准备规则时，不能要求研究者同时修改 Python 科学连接、Server 形状/默认值逻辑和 TypeScript 兼容算法。问题影响平台演进与跨领域接入，不是某个模型的精度或局部性能。建议在下一次准备页科学语义扩展前处理；当前没有证据要求立即重写全部工作台，也不因建议自动开放其他领域。
 
-涉及 Task checkpoints/inference/inference_results/inference_exports/post_results/post_metrics、contrib 的领域 operations、core 的现有科学适配器；Server/Web 保持稳定 API 与显示字段，不引入科学分支。spec 只在真实跨进程返回确需版本化时增加最小记录。相关长期边界位于 Task tasks PRD 第一、三章及 Server modules PRD。
+**源码与调用链事实。**
 
-**科学语义保持与迁移。** 外流兼容检查原样委托给外流 provider；不减少结构、准备或内容校验。不要求其他领域复用外流准备 schema。既有外流任务的兼容适配应显式、可识别且单独验证；历史请求/结果字节不批量改写，旧公开函数参数变化须登记迁移。
+1. Web [readStage/saveStage](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-web/src/modules/stages/api.ts:5) → Server [configuration](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-server/modules/stages/application.py:63) 先取 application `describe_case`，随后自行覆盖/补充 `field_matching`、split，并调用 `normalize_field_scales`。保存时 [application.py:287](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-server/modules/stages/application.py:287) 在持久化之前再次运行本地科学判断。
+2. [domain.model_roles](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-server/modules/stages/domain.py:113) 读取 `model.data_specs`，缺 position_dim 时采用 3；`dataset_fields` 解释 physical_layout/rawprep 字段；[validate_field_bindings](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-server/modules/stages/domain.py:387) 判断物理域及特征轴相容。[abupt_model/default_field_scale](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-server/modules/stages/domain.py:341) 按组件路径含 `abupt` 判断，把缺省 coordinate scale 写成 1000，其余为 1。此为 Server 科学参数分支，不能误报成 Task 分支，也不能与合法官方目录登记混为一谈。
+3. Web [PreparationPanel.shapesCompatible](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-web/src/modules/trainprep/PreparationPanel.tsx:21) 再次实现忽略 N 轴、比较剩余轴的规则，缺角色描述时从配置 domains 重建角色，并据此禁用候选（同文件第 356 行）。因此形状显示和科学适用性判定实际混在一起。
+4. 科学计算已有归属：[contrib operations](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-contrib/application/aero_cfd/operations.py:20) → [core inspection](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-core/applications/aero_cfd/inspection.py:318)，实际变换由 [trainprep normalization](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-core/applications/aero_cfd/trainprep/normalization.py:12) 消费。官方案例 YAML 已显式声明 scale=1000。当前 [Web PRD](/Users/zonghui/work/new_code_project/AI4E_Dojo/docs/PRD/ai4e-web/src/PRD.md:204) 也承诺形状禁选及保存拒绝，迁移不能删掉门禁来“简化分层”。
 
-**验收设计。** 在现有推理候选/批次/结果/导出用例外，增加一个不含 component/model 的 provider，覆盖完整链及缺操作失败；领域决定相容与不相容两条路径。编辑当前 provider 后读取旧批次仍使用原来源；取消、部分交付与幂等保持。真实 wheel 外复制后验证管理进程不加载模型。若实施影响 Web，最后仍须获当次授权后做正式 8000/5173 冒烟。
+**根因：事实与推断分开。** 事实是准备角色、尺度默认值和形状兼容存在于平台 Python/TypeScript，而 application 承担实际科学计算和其他检查。推断是平台初期以外流数据配置直接驱动页面，之后 provider 迁移覆盖了 Task 操作，却未覆盖页面准备契约。本轮未证明这些规则何时引入，也没有证明现有五例发生了新的数值错误；这是新观察，不是本轮新增回归。
 
-**可量化收益与未验证效果。** 基线为 6 个科学操作调用点绕过声明、1 个 Task 同批判断读取模型键；目标均归零，并用第二领域证明无需增加 Task 科学分支。暂不承诺接入耗时或性能百分比；尚未实施或执行上述验收。
+**最小架构动作与文件职责。** 复用现有可选 inspect 连接，让领域 application 返回准备角色、数据字段、已解析科学默认值及候选适用性/原因；保存前由同一应用按当前配置、输入修订检查候选草稿。contrib/application 绑定专属科学语义，core 保留中立形状或变换计算；Task 只固定请求/响应和来源。Server `stages/application` 保留授权、路径解析、编辑合成、修订事务及错误映射，`stages/domain` 保留平台状态与输入选择规则，移出上述科学解释。Web 保留表单、形状字符串展示和草稿，按服务返回的适用性禁选，不独立发明领域规则。新增交接只约束这项可选页面能力，复用现有 API 形状优先；确需新增稳定记录时才更新 spec/传输类型，不建立通用科学算法协议。
 
-## R2 · 中：分离资产事实目录与领域输入候选映射
+**科学语义保持。** 保持 AB-UPT 既有 coordinate scale=1000、其他现行默认、显式用户 scale 优先、错域/特征轴拒绝、未知形状不伪称已验证。点场的 N 轴规则归外流连接；控制时序、规则网格和异形多场可用各自描述，不能为了页面复用改成 `(N,C)`。Python 与平台使用同一科学解释，平台编辑范围仍由 Server 决定。
 
-**源码与调用链证据。** [writer.record_asset](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-core/run/writer.py:129)已经登记 name/stage/kind/semantics/dependencies。Task [list_stage_artifacts](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/artifacts.py:41)却固定将 checkpoint 投影到 inputs.train.resume / inputs.infer.checkpoint，将 preparation 投影到 inputs.train.preparation / inputs.infer.preparation，将 dataset 投影到 inputs.trainprep.dataset。[Server stage-inputs](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-server/modules/stages/application.py:777)随后直接消费 binding。
+**迁移影响。** 影响 contrib/application、现有 core 领域检查、Server stages、Web PreparationPanel 及各自 PRD/模块索引；若扩展管理请求则 Task 只透传。保留旧 API 字段或逐项声明迁移，缓存必须计入应用来源和实际输入修订。旧配置/准备/检查点不批量改写，已有固定运行不切换当前解释器。Server 官方目录和 Task 比较门禁不移走。实施后的正式 Web 验收必须另获当次发布授权，本轮不实施或请求发布。
 
-[SafeDiffCon inputs](/Users/zonghui/work/new_code_project/AI4E_Dojo/recipes/safediffcon/config.yaml:53)实际有 preparation_train/cal/test 与 posttrain.checkpoint；[handoff](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-contrib/application/pde_control/safediffcon/handoff.py:23)已保留 split/phase。相反 [read_entry](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/templates/materialize.py:27)的输入捕获能按 inputs.* 遍历，所以不能据候选投影问题断言 Task 直接执行失败。
+**验收设计。** 先用现行外流准备契约做前后等价：显式/缺省 scale、错域、标量/多轴特征、不明形状和候选草稿均经同一 provider；比较 Python 描述/检查与 Server 响应、Web禁选结果。再用一个不含 `model.data_specs`、具有时间轴或多场角色的最小测试 provider 证明可经相同管理通道表达，不登记新平台模型、不训练。变更 provider 或输入资产而配置不变时描述失效，旧运行来源保持固定；保留现有相关测试，最后做受影响包安装及已开放正式准备页面验证。
 
-**系统性痛点。** 通用资产索引已有领域语义，管理候选投影却丢失消费角色。未来平台加入多准备输入/多阶段权重时，容易在 Task 扩展固定表，造成框架随每个领域修改。
+**可量化收益与未验证效果。** 目标：平台中 AB-UPT 科学默认判断从 1 处降为 0；Server/Web 两份领域形状兼容实现降为 0 份平台自有算法，应用成为唯一科学判定方；外流与一个非点场 provider 共用管理通道，Task 新增模型条件为 0。当前仅确认这些代码位置，未实施，未测接入时间、请求次数、延迟或准确率收益。允许页面缓存已返回的候选结论，但不能为减少请求重新复制算法。
 
-**根因。** 事实：资产类别直接决定科学消费槽位，实际消费不检查原 asset 的 split/phase。推断：当前候选 API 同时承担“管理层有哪些资产”和“领域步骤能消费哪些资产”，两种事实所有权混在一起。
+## 既有建议状态与应保留设计
 
-**最小架构动作与职责。** Task 先提供原样资产事实目录（运行、类别、阶段、名称、摘要、依赖、不透明语义及受控引用）；由 application/provider 描述本步骤可接受的输入角色和候选关系。Server 将其适配为现有 binding/ref 列表，现有外流 UI 不变。复用已投影的 inputs.*，不增加每份 recipe 必填的第二张配置表。Task 仍控制来源、修订、是否完整提交与权限，provider 不接管管理校验。
+- **R1/R2/R3**：继续保持源码已解决的判断，未在本轮重新完整运行其全部科学/页面验收。应保留完整 semantics 比较、标签缺失不可选、多候选显式选择、JSON worker 和固定结构图。
+- **R4**：不再列为待修。当前三例 Transolver 的三阶段显式连接已核对；同批 wheel 中 736 个非资源 Python 成员与当前五包源码比较无差异，见 [只读核对](/Users/zonghui/work/new_code_project/AI4E_Dojo/docs/reviews/archreview/2026-09-24-wheel-source-audit.json)。这是 wheel 成员到源码的字节核对，不是本轮安装测试或完整资源审计。9 月 23 日正式范围见 [当次验收记录](/Users/zonghui/work/new_code_project/AI4E_Dojo/.context/mvp/task-generalization-acceptance.md:119) 及 [原始发布收据](/Users/zonghui/work/project_simulation/dojo_train/architecture-repair-20260923/release/final-verification.json)；本轮未重新训练或打开正式页面。
+- **R5**：继续保留 9 月 23 日晚的范围内验收状态，本轮独立确认 [source_dependencies](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/source_dependencies.py:99) 捕获静态依赖和声明资源，[operation_sources](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/operation_sources.py:180) 校验内容和解析身份。安装中的 operation_sources/source_dependencies/snapshots 与当前源码逐字节一致；本轮针对外部内容变化、同名遮蔽、声明动态模块/资源、复制加无关文件、旧来源不可用的 6 项检查通过，见 [日志](/Users/zonghui/work/new_code_project/AI4E_Dojo/docs/reviews/archreview/2026-09-24-source-check.log)。来源闭环不等于冻结解释器/驱动或任意动态 Python 行为。
 
-涉及 Task artifacts/inspections、已有 spec 资产记录、领域 handoff/operations、Server stages；只在字段缺口确有跨领域证据时扩展 spec。长期行为归 Task tasks/templates 与 Server modules PRD，不另写统一科学生命周期规范。
+保留自由函数和局部协议、run/writer 单一记录方、application 解释科学事实、Task 公共管理门面与终态/完整性门禁、固定结果 post、Server 官方目录、独立 Vis，以及研究/Task/Web 各自明确的支持范围。不要为消除平台重复规则而要求全部组件实现页面协议。
 
-**科学语义保持与迁移。** train/cal/test、posttrain 各自角色保留，不把它们改名为 CFD preparation。保留旧 list_stage_artifacts 返回形状作为兼容投影；历史资产字节不改。无 provider 的自由脚本仍可用通用 Task 执行/资产引用，只是不自动获得阶段候选适配。该建议以新领域候选/平台消费需求为实施触发条件，不阻塞当前研究运行。
+## 观察项
 
-**验收设计。** 用 CFD 单准备记录和控制流程三准备记录/后训练权重作对照：候选只进入声明角色，不误绑定；缺声明不给猜测候选；失败运行仅暴露已提交恢复资产，试跑仍排除。验证复制资产、bundle 依赖、恢复引用与比较索引均不改变。继续保留读取候选时只查文件存在/受控路径、真正消费时核字节的性能边界。
+1. Task rawprep 对配置树的残留读取见前文，延续旧观察；不占新增核心建议名额。
+2. [Server `_describe_case`](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-server/modules/stages/application.py:51) 的进程内 LRU 键只有项目、任务、配置修订和输出根；Task 描述缓存已带来源修订，外层仍可能在 provider 改动且 YAML 不变时返回旧描述。这是源码支持的失效条件推断，未做页面反例。R6 的描述交接应连同该缓存核验，不能据此说实际执行来源门禁已被绕过。
+3. Agent 入口已修旧整改说明；部分索引仍堆积历史进度。建议状态文件的发布前后混合字段本轮已以审计元数据纠正，旧状态另存；普通维护问题不升级为架构建议。
 
-**可量化收益与未验证效果。** 当前投影覆盖 4 类固定分支、6 个去重 binding 路径；三份 preparation 都被映向同两个通用槽位。目标是跨两领域新增候选角色不新增 Task 阶段/字段条件分支，全部声明角色均有准确映射。未测接入工时、UI 完整性或运行成功率；不据此声称新领域平台已支持。
+## 未验证范围与执行边界
 
-## R3 · 中：将检查出图装配移出 Task worker
+本轮完成架构/模块/相关 PRD 与当前源码调用链核对、Git 可见内容比较、静态包依赖扫描、历史最终 wheel 的只读字节核对和 6 项来源针对性检查。没有运行全仓测试、训练、数值恢复矩阵、构建/安装、浏览器或正式 8000/5173/Vis 冒烟；未验证所有动态导入、全部 Web 微领域、Agent 盲定位速度及新建议的运行效果。历史验收只说明当时记录的范围，不计入本轮通过数。
 
-**源码与调用链证据。** [inspection_worker.py:11](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/inspection_worker.py:11)先调用领域 execute，判断 trace_model，读取返回的 network/inputs/predict，再直接 import ai4e_viz.inspect.model_graph.export_platform_views。后者 [model_graph.py](/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-viz/inspect/model_graph.py:1)接收活对象出图。故管理主进程不加载模型成立，但 Task 包内部仍拥有领域对象→显示产物的装配，且发生 Task→Vis 的运行时依赖。
+写入仅复审目录的报告、状态、身份、扫描与检查产物，以及 automation memory。未改框架、源码、配置、规则、PRD、索引、基线、历史证据、提交或服务；未 sync、重装、重启或迁移。Experience 检索回执 `receipt_ffcfcf3910f94c7a9db1f5ed5853d688` 无结果，未应用经验、未归档。
 
-**系统性痛点。** 每种新诊断视图都可能让 Task worker 增加对象字段/渲染分支；仅按包清单查依赖会漏掉延迟 import。该问题涉及检查操作职责，不以某个模型为架构中心。
+通知理由：R6 是新发现的跨层科学解释所有权问题；R4/R5 的旧问题态报告本轮与后续修复证据对齐。结束内容身份复核结果见当前建议状态文件。
 
-**根因。** 事实：worker 同时是通用进程执行器和特定诊断的渲染适配器。推断：将桥接放进子进程解决了加载隔离，却没有解决装配所有权。
-
-**最小架构动作与职责。** Task worker 只执行声明入口并返回可序列化结果。将现有构造→出图连接移到显式选用的 recipe/检查适配入口，由它在生产诊断资产的进程中组合领域检查和 Vis 公开出图 API，最终只向 Task 交付固定 HTML/图资产与修订；不把 Vis 强制加入 core/contrib 依赖，也不要求普通研究组件提供网络。保留现有 Vis 绘图实现和 Server 固定资产登记。若将来需要跨进程图中间格式，另以真实需求论证，本轮不先建统一计算图 schema。
-
-涉及 Task inspection_worker、声明检查适配入口、Vis 公开出图边界、Server visualization 消费；架构正文应明确“诊断资产生产”和“固定结果展示”的不同边界，Task/Vis PRD 随实现同步。
-
-**科学语义保持与迁移。** 现有网络、输入、predict 及随机状态保护不变，只移动连接的所有者。已有两档图、资产名、来源修订和错误传播保持；旧声明可通过显式兼容适配继续运行，历史图不重生成。
-
-**验收设计。** 普通 inspect 在未安装 Vis 时仍能运行；只有显式 trace 适配要求出图能力。验证 worker 不再读取 network/inputs/predict、不导入 Vis；两档图和来源修订可由 Server 继续消费，出图失败无半份成功资产，模型前向及随机流不变。安装与正式 Web 链路需单独授权验证。
-
-**可量化收益与未验证效果。** 当前有 1 个 Task 特定渲染桥接和 1 处该链路的 Vis 导入；目标为零，新增诊断输出不修改 Task worker。未测绘图耗时、数值等价或跨模型覆盖；只提出所有权调整，不宣称已有迁移。
-
-## 应保留的设计与维护观察
-
-保留公开 run 门面、Python recipe 正文、领域内自由函数、通用资产/指标索引、完整修订检查、固定结果 post、独立执行/Vis 进程，以及 Server 的明确官方目录。不要新增全仓科学协议、DAG 调度器或强制模型登记中心来解决这些接缝。
-
-维护观察不占核心名额：架构正文的“五领域/模型清单”已落后于当前 AGENTS 与新目录；Task 模板 PRD 仍夹有旧 task-entry operations 描述，而现行 read_entry/operation_target 走 config.yaml 的 components.application；部分长模块索引仍带历史状态叙述。优先更新各自真源与跳转，不能用文案修正替代 R1/R2/R3 的源码迁移。本轮不修改这些文档。
-
-## 未验证范围与本轮执行边界
-
-- 仅阅读当前源码、PRD、模块导航并做 AST 调用点统计及内容哈希；未运行 pytest、训练、科学复现、wheel 构建、安装验证或浏览器冒烟。测试名称只用于未来验收设计，历史通过数不算本轮结果。
-- 未验证安装副本、8000/5173/Vis 运行时是否与源码一致；未 sync、重装、重启、迁移、提交或改框架文件。
-- 未全面审计每个动态 import、全部 Web 微领域、所有科学领域 provider 或外部用户 recipe。静态调用数量仅限明确命名的 inspect_inference 调用，不是全仓调用图。
-- 未验证建议实施收益或 Agent 盲定位效果；现有帮助资源源码存在不等于 wheel 与使用效果已通过。
-- 写入范围仅本复审目录（日期报告、最新入口、状态与身份）及自动化 memory。历史 2026-09-18 报告原样保留。
-- Experience 查询回执 receipt_81fbde6dc65040b6a05b400e2c39336d 只返回消息聚合习惯，未作为架构证据或采用配置修改；未归档会话。
-
-
-写入后核对：2026-09-21T04:08:21.245136+08:00；上述 3,488 路径逐项重新核验，复审目录外内容及路径集合未变化。
+结束复核：2026-09-24T09:07:50.055018+08:00；复审目录外 Git 可见内容与起始身份存在变化，见状态记录；不归为本轮修改。

@@ -64,7 +64,7 @@ print(signature(read_burgers))
 ### Recipe 与案例
 
 - Recipe：`safediffcon`
-- 案例：`safediffcon.burgers`
+- 案例：`recipe_extensions.task_labels`, `safediffcon.burgers`
 
 ### 源码位置
 

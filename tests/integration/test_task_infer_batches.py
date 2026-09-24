@@ -21,6 +21,33 @@ def wait_batch(project, task_id, identity, timeout=180):
     pytest.fail("inference_timeout: " + json.dumps(value))
 
 
+def test_queued_dependency_change_publishes_failed_batch(tmp_path, monkeypatch):
+    """排队后外部依赖变更必须在创建任何子运行前进入失败终态。"""
+    import shutil
+
+    from ai4e_task.storage.files import read_json, write_json
+    from ai4e_task.tasks.inference_worker import coordinate
+
+    from tests.integration.test_task_source_dependencies import provider
+
+    recipe, external, source = provider(tmp_path, monkeypatch)
+    project = tmp_path / "project"
+    task.create_project(project)
+    folder = project / "tasks/t/.dojo/inference_batches/b"
+    shutil.copytree(recipe, folder / "code")
+    write_json(folder / "request.json", {
+        "request": {}, "application_source": source, "checkpoints": [],
+    })
+    write_json(folder / "state.json", {"id": "b", "status": "queued", "children": []})
+    (external / "dependency.py").write_text("VALUE = 9\n")
+    coordinate(project, "t", "b")
+    result = read_json(folder / "state.json")
+    assert result["status"] == "failed"
+    assert "application_source_changed" in result["error"]
+    assert result["children"] == []
+    assert read_json(folder / "request.json")["application_source"] == source
+
+
 def test_two_checkpoints_two_samples_real_execution(tmp_path, monkeypatch):
     folder, cfg = case(tmp_path, "nasa_crm_abupt")
     # 平台批量推理消费现行 version=2 准备；保留案例专属 rawprep。

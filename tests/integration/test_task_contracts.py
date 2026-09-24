@@ -28,6 +28,17 @@ def test_resume_uses_captured_code_and_keeps_version(tmp_path):
     project = tmp_path / "p"
     task.create_project(project)
     source = recipe(tmp_path)
+    from omegaconf import OmegaConf
+
+    cfg = OmegaConf.load(source / "config.yaml")
+    cfg.components = {"application": "management"}
+    OmegaConf.save(cfg, source / "config.yaml")
+    (source / "management.py").write_text(
+        'def inspect(request):\n'
+        '    return {"schema_version": 1, "stages": ["train", "test"], '
+        '"inputs": {"inputs.train.resume": {"kind": "checkpoint"}, '
+        '"inputs.test.dataset": {"kind": "dataset"}}, '
+        '"resume_inputs": ["inputs.train.resume"], "operations": [], "shared_outputs": {}}\n')
     script = source / "pipeline.py"
     script.write_text(
         script.read_text().replace(

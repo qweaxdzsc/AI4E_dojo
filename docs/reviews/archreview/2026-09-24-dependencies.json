@@ -1,0 +1,19 @@
+{
+  "scope": "Git-visible package Python files, absolute static imports only; dynamic operations, ignored hatch resources and runtime behavior excluded",
+  "files": 968,
+  "edges": {
+    "contrib -> core": 205,
+    "core -> spec": 12,
+    "server -> task": 28,
+    "task -> core": 10,
+    "task -> spec": 13,
+    "viz -> spec": 1
+  },
+  "violations": [],
+  "parse_errors": [],
+  "tracked_missing_paths": [
+    "packages/ai4e-task/tasks/official_scripts.py",
+    "packages/ai4e-viz/inspect/model_graph.py",
+    "packages/ai4e-viz/inspect/stage_display.py"
+  ]
+}

@@ -220,7 +220,7 @@ print(signature(check_report))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.trainprep.preparation`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/preparation.py:402`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/preparation.py:403`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -528,13 +528,13 @@ print(signature(consume))
 
 ### Recipe 与案例
 
-- Recipe：`geotransolver/bumper_beam`, `geotransolver/darcy`
-- 案例：`geotransolver.bumper_beam`, `geotransolver.darcy`, `recipe_extensions.geotransolver`
+- Recipe：`classic_networks/darcy`, `classic_networks/double_cylinder`, `classic_networks/shapenet_volume`, `geotransolver/bumper_beam`, `geotransolver/darcy`, `operator_learning/darcy`, `operator_learning/double_cylinder`, `operator_learning/shapenet_volume`, `surrogate_modeling/double_cylinder`, `surrogate_modeling/nasa_crm`
+- 案例：`classic_networks.darcy`, `classic_networks.double_cylinder`, `classic_networks.shapenet_volume`, `geotransolver.bumper_beam`, `geotransolver.darcy`, `operator_learning.darcy`, `operator_learning.double_cylinder`, `operator_learning.shapenet_volume`, `recipe_extensions.geotransolver`, `recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.resunet`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`, `recipe_extensions.operator_physical_loss`, `recipe_extensions.research_state`, `recipe_extensions.tail_batch`, `surrogate_modeling.double_cylinder`, `surrogate_modeling.nasa_crm`
 
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.trainprep.preparation`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/preparation.py:411`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/preparation.py:412`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -758,7 +758,7 @@ print(signature(declarations))
 ### Recipe 与案例
 
 - Recipe：`aero_cfd`, `geotransolver/nasa_crm`, `geotransolver/shapenet_car`
-- 案例：`aero_cfd.nasa_crm_abupt`, `aero_cfd.nasa_crm_geotransolver`, `aero_cfd.nasa_crm_meshgraphnet`, `aero_cfd.nasa_crm_transolver3`, `aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_geotransolver`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `recipe_extensions.field_mapping`, `recipe_extensions.sampling`
+- 案例：`aero_cfd.nasa_crm_abupt`, `aero_cfd.nasa_crm_geotransolver`, `aero_cfd.nasa_crm_meshgraphnet`, `aero_cfd.nasa_crm_transolver3`, `aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_geotransolver`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `recipe_extensions.field_mapping`, `recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.resunet`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`, `recipe_extensions.operator_physical_loss`, `recipe_extensions.sampling`
 
 ### 源码位置
 
@@ -911,8 +911,8 @@ print(signature(digest))
 
 ### Recipe 与案例
 
-- Recipe：无直接 recipe 归属。
-- 案例：`extension.pcno`
+- Recipe：`classic_networks/darcy`, `classic_networks/double_cylinder`, `classic_networks/shapenet_volume`, `operator_learning/darcy`, `operator_learning/double_cylinder`, `operator_learning/shapenet_volume`, `surrogate_modeling/double_cylinder`, `surrogate_modeling/nasa_crm`
+- 案例：`classic_networks.darcy`, `classic_networks.double_cylinder`, `classic_networks.shapenet_volume`, `extension.pcno`, `operator_learning.darcy`, `operator_learning.double_cylinder`, `operator_learning.shapenet_volume`, `surrogate_modeling.double_cylinder`, `surrogate_modeling.nasa_crm`
 
 ### 源码位置
 

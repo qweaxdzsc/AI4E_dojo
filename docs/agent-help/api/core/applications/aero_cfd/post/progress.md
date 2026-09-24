@@ -146,7 +146,7 @@ print(signature(PostProgress.committed))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.post.progress`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/post/progress.py:81`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/post/progress.py:105`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -222,7 +222,7 @@ print(signature(PostProgress.error))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.post.progress`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/post/progress.py:109`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/post/progress.py:133`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -298,7 +298,7 @@ print(signature(PostProgress.finish))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.post.progress`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/post/progress.py:90`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/post/progress.py:114`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -369,12 +369,12 @@ print(signature(PostProgress.operation))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：`recipe_extensions.field_mapping`, `recipe_extensions.geotransolver_aero`, `recipe_extensions.inference_fields`, `recipe_extensions.physical_visualization`, `recipe_extensions.sampling`
+- 案例：`recipe_extensions.field_mapping`, `recipe_extensions.geotransolver_aero`, `recipe_extensions.inference_fields`, `recipe_extensions.physical_visualization`, `recipe_extensions.sampling`, `recipe_extensions.task_labels`
 
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.post.progress`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/post/progress.py:44`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/post/progress.py:66`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -519,13 +519,13 @@ print(signature(PostProgress.unit))
 
 ### Recipe 与案例
 
-- Recipe：`gencp`, `pcno`
-- 案例：`extension.pcno`, `gencp.double_cylinder_cno`, `gencp.double_cylinder_sit_fno`, `gencp.ntcouple_cno`, `gencp.ntcouple_sit_fno`, `gencp.turek_hron_cno`, `gencp.turek_hron_sit_fno`, `geothermal.pcno`, `recipe_extensions.gencp`, `recipe_extensions.geotransolver_aero`, `recipe_extensions.inference_fields`
+- Recipe：`classic_networks/darcy`, `classic_networks/double_cylinder`, `classic_networks/shapenet_volume`, `gencp`, `operator_learning/darcy`, `operator_learning/double_cylinder`, `operator_learning/shapenet_volume`, `pcno`, `surrogate_modeling/double_cylinder`, `surrogate_modeling/nasa_crm`
+- 案例：`classic_networks.darcy`, `classic_networks.double_cylinder`, `classic_networks.shapenet_volume`, `extension.pcno`, `gencp.double_cylinder_cno`, `gencp.double_cylinder_sit_fno`, `gencp.ntcouple_cno`, `gencp.ntcouple_sit_fno`, `gencp.turek_hron_cno`, `gencp.turek_hron_sit_fno`, `geothermal.pcno`, `operator_learning.darcy`, `operator_learning.double_cylinder`, `operator_learning.shapenet_volume`, `recipe_extensions.gencp`, `recipe_extensions.geotransolver_aero`, `recipe_extensions.inference_fields`, `recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.resunet`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`, `recipe_extensions.operator_physical_loss`, `surrogate_modeling.double_cylinder`, `surrogate_modeling.nasa_crm`
 
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.post.progress`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/post/progress.py:62`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/post/progress.py:85`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API

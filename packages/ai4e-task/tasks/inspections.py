@@ -32,21 +32,19 @@ def inspect_task(
     if selection and selection.get("bindings"):
         from omegaconf import OmegaConf
 
+        from .descriptions import describe_recipe
+
         cfg = OmegaConf.create(captured["config"])
+        description = describe_recipe(recipe, config=captured["config"])["description"] or {}
         for key, value in selection["bindings"].items():
-            if key not in {
-                "inputs.trainprep.dataset",
-                "inputs.train.preparation",
-                "inputs.infer.checkpoint",
-                "inputs.trainprep.statistics",
-            }:
+            if key not in description.get("inputs", {}):
                 raise ValueError("unsupported_inspection_binding")
             OmegaConf.update(cfg, key, value, force_add=True)
         captured["config"] = OmegaConf.to_container(cfg, resolve=False)
-    from .operations import operation_target
+    from .operation_sources import capture_source
 
     request = {
-        "target": operation_target(recipe, "inspect"),
+        "source": capture_source(recipe, "inspect"),
         "operation": operation,
         "config": captured["config"],
         "output_dir": output_dir,

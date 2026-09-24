@@ -1,0 +1,78 @@
+case: burgers
+seed: 42
+run_root: ../runs
+model:
+  dim: 64
+  ddim_steps: 50
+train:
+  updates: 4000
+  batch_size: 16
+  lr: 1.0e-05
+  device: mps
+posttrain:
+  rounds: 2
+  updates_per_round: 320
+  subset_size: 10240
+  batch_size: 32
+  calibration_samples: 200
+  alpha: 0.98
+  weight: 2500.0
+  lr: 0.0001
+infer:
+  device: mps
+  adaptation_updates: 1
+  test_samples: 50
+  batch_size: 10
+  weight: 500.0
+  lr: 1.0e-05
+solver:
+  python: null
+  timeout_seconds: 600
+post: {}
+components:
+  application: task_labels_app
+  reader: ai4e_contrib.application.datasets.safediffcon.arrays.read_burgers
+  transform: ai4e_contrib.ability.transform.safediffcon.preparation.prepare_arrays
+  model: ai4e_contrib.ability.model.safediffcon.adapters.build_model
+  objective: ai4e_contrib.ability.constraint.safediffcon.objective.diffusion_loss
+  guide: ai4e_contrib.ability.inference.safediffcon.control.guidance
+  metrics: ai4e_contrib.ability.eval.safediffcon.control.metrics
+  derived: null
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - posttrain
+  - infer
+  - post
+data_root: ../data
+dataset:
+  name: burgers
+rawprep: {}
+trainprep: {}
+inputs:
+  rawprep:
+    source: ./inputs/1D_burger/1D Burgers_
+  trainprep:
+    dataset_train: null
+    dataset_cal: null
+    dataset_test: null
+  train:
+    preparation_train: null
+    preparation_cal: null
+    preparation_test: null
+    resume: null
+  infer:
+    preparation_train: null
+    preparation_cal: null
+    preparation_test: null
+    checkpoint: null
+    solver_assets: null
+  post:
+    results: null
+  posttrain:
+    preparation_train: null
+    preparation_cal: null
+    preparation_test: null
+    checkpoint: null

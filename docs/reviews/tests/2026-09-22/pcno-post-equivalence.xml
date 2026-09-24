@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="4" failures="0" skipped="0" tests="8" time="0.226" timestamp="2026-09-22T02:06:02.614818+08:00" hostname="zonghuideMacBook-Pro.local"><testcase classname="tests.integration.test_pcno_post" name="test_saved_extension_is_consumed_and_tamper_rejected" time="0.006" /><testcase classname="tests.integration.test_pcno_post" name="test_original_weight_import_is_explicitly_not_resume" time="0.017" /><testcase classname="tests.integration.test_pcno_post" name="test_local_constructor_replacement_changes_real_weights" time="0.003" /><testcase classname="tests.integration.test_pcno_equivalence" name="test_extracted_computations_retain_source_expressions" time="0.069" /><testcase classname="tests.integration.test_pcno_equivalence" name="test_viscosity_preserves_forward_and_active_derivative" time="0.004"><error message="failed on setup with &quot;ModuleNotFoundError: No module named 'iapws'&quot;">@pytest.fixture
+    def original():
+        if not SOURCE.is_dir():
+            pytest.skip("Explicit original PCNO source required")
+        spec = importlib.util.spec_from_file_location("pcno_original", SOURCE / "PCNO_Model_4D.py")
+        module = importlib.util.module_from_spec(spec)
+        source = SOURCE / "PCNO_Model_4D.py"
+&gt;       exec(compile(source.read_text(), str(source), "exec"), module.__dict__)  # noqa: S102 -- 只读原源码，不写pycache
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_pcno_equivalence.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    import torch, math
+    import torch.nn as nn
+    import torch.nn.functional as F
+    import numpy as np
+&gt;   from iapws import IAPWS97
+E   ModuleNotFoundError: No module named 'iapws'
+
+../PCNO/capsule-8000337-code/PCNO_Model_4D.py:5: ModuleNotFoundError</error></testcase><testcase classname="tests.integration.test_pcno_equivalence" name="test_real_network_forward_and_backward[pres]" time="0.004"><error message="failed on setup with &quot;ModuleNotFoundError: No module named 'iapws'&quot;">@pytest.fixture
+    def original():
+        if not SOURCE.is_dir():
+            pytest.skip("Explicit original PCNO source required")
+        spec = importlib.util.spec_from_file_location("pcno_original", SOURCE / "PCNO_Model_4D.py")
+        module = importlib.util.module_from_spec(spec)
+        source = SOURCE / "PCNO_Model_4D.py"
+&gt;       exec(compile(source.read_text(), str(source), "exec"), module.__dict__)  # noqa: S102 -- 只读原源码，不写pycache
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_pcno_equivalence.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    import torch, math
+    import torch.nn as nn
+    import torch.nn.functional as F
+    import numpy as np
+&gt;   from iapws import IAPWS97
+E   ModuleNotFoundError: No module named 'iapws'
+
+../PCNO/capsule-8000337-code/PCNO_Model_4D.py:5: ModuleNotFoundError</error></testcase><testcase classname="tests.integration.test_pcno_equivalence" name="test_real_network_forward_and_backward[temp]" time="0.004"><error message="failed on setup with &quot;ModuleNotFoundError: No module named 'iapws'&quot;">@pytest.fixture
+    def original():
+        if not SOURCE.is_dir():
+            pytest.skip("Explicit original PCNO source required")
+        spec = importlib.util.spec_from_file_location("pcno_original", SOURCE / "PCNO_Model_4D.py")
+        module = importlib.util.module_from_spec(spec)
+        source = SOURCE / "PCNO_Model_4D.py"
+&gt;       exec(compile(source.read_text(), str(source), "exec"), module.__dict__)  # noqa: S102 -- 只读原源码，不写pycache
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_pcno_equivalence.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    import torch, math
+    import torch.nn as nn
+    import torch.nn.functional as F
+    import numpy as np
+&gt;   from iapws import IAPWS97
+E   ModuleNotFoundError: No module named 'iapws'
+
+../PCNO/capsule-8000337-code/PCNO_Model_4D.py:5: ModuleNotFoundError</error></testcase><testcase classname="tests.integration.test_pcno_equivalence" name="test_loss_values_and_gradients" time="0.004"><error message="failed on setup with &quot;ModuleNotFoundError: No module named 'iapws'&quot;">@pytest.fixture
+    def original():
+        if not SOURCE.is_dir():
+            pytest.skip("Explicit original PCNO source required")
+        spec = importlib.util.spec_from_file_location("pcno_original", SOURCE / "PCNO_Model_4D.py")
+        module = importlib.util.module_from_spec(spec)
+        source = SOURCE / "PCNO_Model_4D.py"
+&gt;       exec(compile(source.read_text(), str(source), "exec"), module.__dict__)  # noqa: S102 -- 只读原源码，不写pycache
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_pcno_equivalence.py:27: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    import torch, math
+    import torch.nn as nn
+    import torch.nn.functional as F
+    import numpy as np
+&gt;   from iapws import IAPWS97
+E   ModuleNotFoundError: No module named 'iapws'
+
+../PCNO/capsule-8000337-code/PCNO_Model_4D.py:5: ModuleNotFoundError</error></testcase></testsuite></testsuites>

@@ -67,10 +67,17 @@ def test_shared_reference_keeps_array_dependencies(tmp_path):
     array.write_bytes(b"array contents")
     dependencies = [describe_asset(array, kind="other")]
     with pytest.raises(ValueError, match="asset_copy_not_portable"):
-        task.register_shared(project, "incomplete-copy", manifest, kind="dataset", copy=True,
-                             dependencies=dependencies)
-    shared = task.register_shared(project, "array-reference", manifest, kind="dataset",
-                                  dependencies=dependencies)
+        task.register_shared(
+            project,
+            "incomplete-copy",
+            manifest,
+            kind="dataset",
+            copy=True,
+            dependencies=dependencies,
+        )
+    shared = task.register_shared(
+        project, "array-reference", manifest, kind="dataset", dependencies=dependencies
+    )
     task.get_shared(project, shared["id"])
     array.write_bytes(b"changed")
     with pytest.raises(ValueError, match="asset_changed"):
@@ -96,7 +103,11 @@ def test_rebound_shared_bundle_survives_fork(tmp_path):
     manifest.write_text('{"field":"field.npy"}')
     (bundle / "field.npy").write_bytes(b"complete-array")
     shared = task.register_shared(
-        project, "prepared", manifest, kind="preparation", copy=True,
+        project,
+        "prepared",
+        manifest,
+        kind="preparation",
+        copy=True,
         dependencies=[describe_asset(bundle / "field.npy", kind="other")],
         bundle=describe_asset(bundle, kind="other"),
     )
@@ -104,7 +115,9 @@ def test_rebound_shared_bundle_survives_fork(tmp_path):
     current["config"].setdefault("inputs", {}).setdefault("train", {})["preparation"] = str(
         project / shared["path"]
     )
-    task.replace_configuration(project, parent["id"], current["config"], revision=current["revision"])
+    task.replace_configuration(
+        project, parent["id"], current["config"], revision=current["revision"]
+    )
     child = task.fork_task(project, parent["id"], copy_preparation=True)
     copied = validate_asset(project, child["assets"]["inputs.train.preparation"])
     assert (copied.parent / "field.npy").read_bytes() == b"complete-array"

@@ -1,0 +1,221 @@
+{
+  "schema_version": 1,
+  "scope": "Pinned references for operator and statistical-surrogate integration; not full upstream package or paper-training reproduction.",
+  "training_evidence": "Per-combination serial reports are separate; this manifest does not claim training completion.",
+  "operators": {
+    "evidence_path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/evidence/agent-a-sources.json",
+    "evidence_sha256": "a702ab7b5c68c553d31eac1c0cf2f799b393b32f23e56e9549b9529e3c6f01b5",
+    "files": {
+      "deeponet.py": {
+        "url": "https://raw.githubusercontent.com/lululxvi/deepxde/99b6620386d18cefb1549dddb7b7fe468cfad607/deepxde/nn/pytorch/deeponet.py",
+        "sha256": "1a745a5756b4be3becb0ec5955f57f63070fca698ab496481fb678b8a21a796d",
+        "license": "LGPL-2.1"
+      },
+      "deeponet_strategy.py": {
+        "url": "https://raw.githubusercontent.com/lululxvi/deepxde/99b6620386d18cefb1549dddb7b7fe468cfad607/deepxde/nn/deeponet_strategy.py",
+        "sha256": "f2f4ef0f03b310cdcfe836cb008e360a4f87a3aac4e7219c63d014c5352b183e",
+        "license": "LGPL-2.1"
+      },
+      "spectral_convolution.py": {
+        "url": "https://raw.githubusercontent.com/neuraloperator/neuraloperator/00b7d86f8d74ff0af55da53eb585fe26df9c71f0/neuralop/layers/spectral_convolution.py",
+        "sha256": "9f8987667cf6f1236ee23f1365a883c5916cacac82c1242f91dad84f020aeeaa",
+        "license": "MIT"
+      }
+    },
+    "deeponet_execution_scope": "Pinned DeepXDE strategy, Cartesian merge and concatenate methods plus independent PyTorch encoders; not full DeepXDE package.",
+    "fno_execution_scope": "Pinned NeuralOperator SpectralConv.forward and dense contraction with torch-backed ndim/einsum plus explicit assembly harness; excludes factorization and complexhalf.",
+    "license_scope": "Licenses belong to upstream reference sources; their labels do not relicense the Dojo package."
+  },
+  "algebraic": {
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "scikit_learn": "1.9.0",
+    "licenses": {
+      "numpy": "BSD-3-Clause",
+      "scipy": "BSD-3-Clause",
+      "scikit-learn": "BSD-3-Clause"
+    },
+    "sources": {
+      "scipy_svd": {
+        "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/scipy/linalg/_decomp_svd.py",
+        "sha256": "7bdb48fe1ded88a717e41f0d6b0d3247e20cc129c0686eb89e8de88720ff916a"
+      },
+      "scipy_rbf": {
+        "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/scipy/interpolate/_rbfinterp.py",
+        "sha256": "c8c6ed2b97b00087c3c732fad48602f0830728e6b024abaaf0acdb7a4b9f7793"
+      },
+      "sklearn_polynomial": {
+        "path": "/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/sklearn/preprocessing/_polynomial.py",
+        "sha256": "c42cd2804e9c898884c6c94e4c6ead312e93b519e6b5081ef1f643baf6239cd9"
+      },
+      "sklearn_regression": {
+        "path": "/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/sklearn/linear_model/_base.py",
+        "sha256": "58d81a3fb724059db2d2a834f97ce066c5122f65de07142d20509622b9b580d0"
+      }
+    },
+    "pod_scope": "independent centered weighted SciPy SVD assembly, not EZyRB reproduction",
+    "paper_reproduction": false
+  },
+  "statistical": {
+    "kriging": {
+      "variant": "ordinary/universal GLS, fixed observation noise, plug-in profile ML",
+      "reference": "independent augmented covariance/trend saddle-point equations",
+      "scipy_version": "1.18.1",
+      "scipy_license": "BSD-3-Clause",
+      "scipy_license_url": "https://raw.githubusercontent.com/scipy/scipy/v1.18.1/LICENSE.txt",
+      "scipy_license_sha256": "221e59f5e910fd7f94e44f0dac77436a11338c285c6346232e4a850a50da0e94",
+      "paper_reproduction": false
+    },
+    "lightgbm": {
+      "version": "4.6.0",
+      "commit": "d02a01ac6f51d36c9e62388243bcb75c3b1b1774",
+      "license": "MIT",
+      "license_url": "https://raw.githubusercontent.com/microsoft/LightGBM/v4.6.0/LICENSE",
+      "license_sha256": "b5cb7ff7859e7d282d98fc43ab081b0dda5dc659dc3385cf65740c759a7e6a6c",
+      "engine_sha256": "c5010abf6bef08f407b64d4b1585bd18875213d594a7f068d9ddfc8bf3b47753"
+    }
+  },
+  "kriging_formula": {
+    "variant": "Ordinary unknown constant or universal unknown linear trend; fixed observation noise; squared-exponential covariance; plug-in profile maximum likelihood.",
+    "training_matrix": "C = K + diag(observation_noise_variance) + numerical_jitter * I",
+    "mean": "F_query beta + K_query_train alpha; beta is GLS, alpha solves C alpha = y - F beta",
+    "variance": "diag(K_query_query) - diag(K_query_train C^-1 K_train_query) + diag(R (F^T C^-1 F)^-1 R^T), R = F_query - K_query_train C^-1 F",
+    "independent_reference": "Augmented saddle-point solve [[C,F],[F^T,0]]; product uses Cholesky/GLS. No imported SMT or sklearn zero-mean GP is claimed.",
+    "bibliography": [
+      {
+        "authors": "Carl Edward Rasmussen and Christopher K. I. Williams",
+        "title": "Gaussian Processes for Machine Learning",
+        "year": 2006,
+        "publisher": "MIT Press",
+        "location": "Chapter 2, explicit basis functions",
+        "url": "https://gaussianprocess.org/gpml/chapters/RW2.pdf",
+        "use": "Mathematical background citation; no book text or code redistributed; no paper-level training claimed."
+      }
+    ],
+    "objective": "0.5 * (logdet(C) + residual^T C^-1 residual + N*log(2*pi)); profile ML, not REML or integrated hyperparameter uncertainty.",
+    "gradient": "For each log hyperparameter theta: 0.5*trace(C^-1*dC/dtheta) - 0.5*alpha.T*(dC/dtheta)*alpha. Squared-exponential dK/dlog(length_j)=K*distance_j^2/length_j^2; dK/dlog(variance)=K.",
+    "gradient_implementations": "Product uses Cholesky solves; independent augmented GLS reference uses SciPy LU solves. Both supply analytic Jacobians to L-BFGS-B, without sharing computation code.",
+    "numerical_diagnosis": "Original NumPy slogdet emitted floating-point warnings on three fixed positive definite covariance matrices, yet finite final logdet agreed with Cholesky within 3.3e-10. Replacement LU logdet avoids treating those warnings as proof of NaN; original failed optimization evidence remains retained."
+  },
+  "observed_runtime": {
+    "interpreter": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/bin/python3",
+    "libraries": {
+      "numpy": {
+        "version": "2.5.3",
+        "license_expression": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0",
+        "license_files": [
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/LICENSE.txt",
+            "sha256": "649a589ab31076e79e9ce62ba24eae9959598124176640dbc95f87bd10f34fcf"
+          },
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/numpy/_core/include/numpy/libdivide/LICENSE.txt",
+            "sha256": "fbc539f47d0cf83bc61378080fb873d5c14630126cacbfe754035c3926daa5ec"
+          },
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/numpy/_core/src/common/pythoncapi-compat/COPYING",
+            "sha256": "3f2c1ffa76383a55ae0aac01c9737cd70050dff63e1f026694fbe9d662573c98"
+          },
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/numpy/_core/src/highway/LICENSE",
+            "sha256": "e340270d4f64384569a91d546acb5b094d69ce47f0c015db77abb74dc6f815af"
+          },
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/numpy/_core/src/npysort/x86-simd-sort/LICENSE.md",
+            "sha256": "211e7d737d6179a08f791ebb0a99897ce7cd2457410c542876d125576edfe910"
+          },
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/numpy/_core/src/umath/svml/LICENSE",
+            "sha256": "c17011467b4fe6e20fbfbeda4df09e58c2bca5480a063e55735a4000a379aad9"
+          },
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/numpy/fft/pocketfft/LICENSE.md",
+            "sha256": "a85ca13fdf90160b64a0698215868c13b74d835ad0a4e2ba44713b8c5058a056"
+          },
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/numpy/linalg/lapack_lite/LICENSE.txt",
+            "sha256": "a14cc25e10d40a3aa705b7de2fb764a6535d8ee9b2db4e1724900585457dfd55"
+          },
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/numpy/ma/LICENSE",
+            "sha256": "05f3b88351988ecfad10abe92c0c50e5875c6452d5009a0084cc291551ffcca6"
+          },
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/numpy/random/LICENSE.md",
+            "sha256": "103166b62b80443afb9eb3488e052ea06be0cff566b908f199e561fde49af19f"
+          },
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/numpy/random/src/distributions/LICENSE.md",
+            "sha256": "469778be8f33d54e1bcaab28c281cc472916d2d273f835e55bc487d30503face"
+          },
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/numpy/random/src/mt19937/LICENSE.md",
+            "sha256": "0e111337b25494a773106695f0e799f642b8567aaacca4f116a74a8177179156"
+          },
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/numpy/random/src/pcg64/LICENSE.md",
+            "sha256": "e7d4f4fb20358f314210a892ae17351e04993813646f697ec387385ca2a36918"
+          },
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/numpy/random/src/philox/LICENSE.md",
+            "sha256": "6f5828a57223d4cc7f8ea505a2623e7b978b242752c1515e355f46ba2cec1800"
+          },
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/numpy/random/src/sfc64/LICENSE.md",
+            "sha256": "9d4098846018319cd68e228ee6220361787f73bccbf00237a85e4fc9621b998f"
+          },
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/numpy-2.5.3.dist-info/licenses/numpy/random/src/splitmix64/LICENSE.md",
+            "sha256": "268b0ca06759d31ea3ca68dd35f20e877916e927b1c2a835e4592a3c4354b1f9"
+          }
+        ]
+      },
+      "scipy": {
+        "version": "1.18.1",
+        "license_expression": null,
+        "license_files": [
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/scipy-1.18.1.dist-info/LICENSE.txt",
+            "sha256": "09a1b9e19573045b0784a181cc4bef677039d4f2111631c747bf72b7f19017d4"
+          }
+        ]
+      },
+      "scikit-learn": {
+        "version": "1.9.0",
+        "license_expression": "BSD-3-Clause",
+        "license_files": [
+          {
+            "path": "/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/scikit_learn-1.9.0.dist-info/licenses/COPYING",
+            "sha256": "fc8dc597df0e3f51da65e2a71021e7f92e0b481998ec572a53c03ac0441db040"
+          }
+        ]
+      },
+      "lightgbm": {
+        "version": "4.6.0",
+        "license_expression": null,
+        "license_files": [
+          {
+            "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/lightgbm-4.6.0.dist-info/licenses/LICENSE",
+            "sha256": "b5cb7ff7859e7d282d98fc43ab081b0dda5dc659dc3385cf65740c759a7e6a6c"
+          }
+        ]
+      }
+    },
+    "lightgbm_engine": {
+      "path": "/Users/zonghui/work/project_simulation/dojo_train/operator_surrogates/runtime/lib/python3.12/site-packages/lightgbm/engine.py",
+      "sha256": "c5010abf6bef08f407b64d4b1585bd18875213d594a7f068d9ddfc8bf3b47753"
+    }
+  },
+  "local_reference_files": {
+    "tools/verification/operator_surrogates/reference_operators.py": {
+      "sha256": "7872751b3915443ee063b9419851720b8a4047e0c90350eda07cc20f31554a5b"
+    },
+    "tools/verification/operator_surrogates/reference_algebraic.py": {
+      "sha256": "4182166bbc0dd53c36d832c46788f56d0a52befb8af3afdf5da0910288f11efb"
+    },
+    "tools/verification/operator_surrogates/reference_statistical.py": {
+      "sha256": "96d07b90f89517608c0cfcc5921c5283181614a6641cd782bedb834483743943"
+    }
+  },
+  "paper_reproduction": false
+}

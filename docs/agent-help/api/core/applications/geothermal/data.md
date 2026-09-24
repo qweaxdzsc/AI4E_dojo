@@ -64,7 +64,7 @@ print(signature(prepare_inputs))
 ### Recipe 与案例
 
 - Recipe：`aero_cfd`, `pcno`, `wdno`
-- 案例：`aero_cfd.nasa_crm_abupt`, `aero_cfd.nasa_crm_meshgraphnet`, `aero_cfd.nasa_crm_transolver3`, `aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `geothermal.pcno`, `recipe_extensions.field_mapping`, `recipe_extensions.sampling`, `wdno.burgers_base`
+- 案例：`aero_cfd.nasa_crm_abupt`, `aero_cfd.shapenet_car_abupt`, `geothermal.pcno`, `recipe_extensions.field_mapping`, `recipe_extensions.sampling`, `wdno.burgers_base`
 
 ### 源码位置
 
@@ -299,8 +299,8 @@ print(signature(record_bundle))
 
 ### Recipe 与案例
 
-- Recipe：`geotransolver/bumper_beam`, `geotransolver/darcy`, `pcno`
-- 案例：`geothermal.pcno`, `geotransolver.bumper_beam`, `geotransolver.darcy`
+- Recipe：`classic_networks/darcy`, `classic_networks/double_cylinder`, `classic_networks/shapenet_volume`, `geotransolver/bumper_beam`, `geotransolver/darcy`, `operator_learning/darcy`, `operator_learning/double_cylinder`, `operator_learning/shapenet_volume`, `pcno`, `surrogate_modeling/double_cylinder`, `surrogate_modeling/nasa_crm`
+- 案例：`classic_networks.darcy`, `classic_networks.double_cylinder`, `classic_networks.shapenet_volume`, `geothermal.pcno`, `geotransolver.bumper_beam`, `geotransolver.darcy`, `operator_learning.darcy`, `operator_learning.double_cylinder`, `operator_learning.shapenet_volume`, `recipe_extensions.research_state`, `surrogate_modeling.double_cylinder`, `surrogate_modeling.nasa_crm`
 
 ### 源码位置
 

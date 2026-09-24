@@ -40,7 +40,10 @@ def validate_declarations(entry: dict) -> None:
 
 def selected_inputs(entry: dict, stages: list[str]) -> list[str] | None:
     """只捕获选定阶段的外部输入；同次前序生产的输入不提前索取。"""
-    if entry.get("convention_version") == 1:
+    if (
+        not entry.get("task_description", {}).get("description")
+        and entry.get("convention_version") == 1
+    ):
         return sorted(key for key in entry["inputs"] if key.split(".")[1] in stages)
     declarations = entry.get("stage_inputs")
     if not declarations or any(stage not in declarations for stage in stages):

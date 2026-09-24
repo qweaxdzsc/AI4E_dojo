@@ -59,7 +59,8 @@ class ContinuousSincosEmbed(nn.Module):
         with torch.autocast(device_type=str(coords.device).split(":")[0], enabled=False):
             coordinate_ndim = coords.shape[-1]
             assert self.ndim == coordinate_ndim
-            out = coords.unsqueeze(-1) @ self.omega.unsqueeze(0)
+            # 位置计算沿用 FP32；整体模型转 double 后仅转换运算视图，不改缓冲存储。
+            out = coords.unsqueeze(-1) @ self.omega.to(dtype=coords.dtype).unsqueeze(0)
             emb = torch.concat([torch.sin(out), torch.cos(out)], dim=-1)
             if coords.ndim == 3:
                 emb = einops.rearrange(emb, "bs num_points ndim dim -> bs num_points (ndim dim)")

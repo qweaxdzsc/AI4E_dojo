@@ -26,11 +26,20 @@ def _run_script(folder, cfg, *, entry="train.py", extra=(), timeout=180):
         shutil.copyfile(fixture, folder / "numeric_infer.py")
         entry = "numeric_infer.py"
     public = public_config(cfg)
-    if entry == "train.py" and cfg.train.get("mode", "fit") == "fit" and not cfg.train.get("preparation"):
+    if (
+        entry == "train.py"
+        and cfg.train.get("mode", "fit") == "fit"
+        and not cfg.train.get("preparation")
+    ):
         # 本夹具显式执行准备再训练；独立 train 的缺引用错误由新入口测试覆盖。
         entry = "pipeline.py"
         public.pipeline.stages = ["trainprep", "train"]
-    elif entry == "pipeline.py" and "train" in public.pipeline.stages and "trainprep" not in public.pipeline.stages and not cfg.train.get("preparation"):
+    elif (
+        entry == "pipeline.py"
+        and "train" in public.pipeline.stages
+        and "trainprep" not in public.pipeline.stages
+        and not cfg.train.get("preparation")
+    ):
         public.pipeline.stages = ["trainprep", *public.pipeline.stages]
     OmegaConf.save(public, folder / "config.yaml")
     root = Path(cfg.run_root)
@@ -288,3 +297,40 @@ def test_post_metrics_match_shared_evaluate(tmp_path):
         )
         == 0
     )
+
+
+def test_nested_delivery_progress_preserves_parent_and_failure():
+    """同次预测内评价失败时保留已交付样本，并恢复外层文件归属。"""
+    from copy import deepcopy
+
+    from ai4e_core.applications.aero_cfd.post.progress import PostProgress
+
+    class Writer:
+        def artifact(self, name, value):
+            json.dumps(value)
+            self.saved = deepcopy(value)
+
+        def report(self, value, **kwargs):
+            json.dumps(value)
+
+    progress = PostProgress(Writer(), {"evaluation": True, "predictions": True}, phase="infer")
+    with pytest.raises(ValueError, match="sample failure"), progress.operation("predictions"):
+        with progress.unit([{"sample_id": "first"}]):
+            with progress.operation("evaluation"), progress.unit([{"sample_id": "first"}]):
+                pass
+            progress.committed("first/manifest.json")
+        with (
+            progress.unit([{"sample_id": "second"}]),
+            progress.operation("evaluation"),
+            progress.unit([{"sample_id": "second"}]),
+        ):
+            raise ValueError("sample failure")
+    assert progress.active is None and progress.current is None
+    for name in ("evaluation", "predictions"):
+        record = progress.report["operations"][name]
+        assert record["completed"] == 1 and record["status"] == "failed"
+        assert record["samples"][1]["status"] == "failed"
+    assert progress.report["operations"]["predictions"]["samples"][0]["artifacts"] == [
+        "first/manifest.json"
+    ]
+    assert not progress.report["operations"]["evaluation"]["artifacts"]

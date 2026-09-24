@@ -12,6 +12,11 @@ from tests.integration.test_task_post_metrics import (
 def _project_with_run(tmp_path, *, run_id, stages, files=(), extras=(), status="succeeded"):
     root = tmp_path / "project"
     task.create_project(root)
+    import shutil
+    from pathlib import Path
+
+    shutil.copytree(Path(__file__).resolve().parents[2] / "recipes/aero_cfd", root / "tasks/t/recipe")
+    source = task.configuration_context({"components": {"application": "ai4e_contrib.application.aero_cfd.operations"}}, root / "tasks/t/recipe")["source"]
     with transaction(root) as db:
         put(db, "task", {"id": "t", "version_id": "v", "archived": False})
     run_dir = root / "tasks/t/runs" / run_id
@@ -41,6 +46,8 @@ def _project_with_run(tmp_path, *, run_id, stages, files=(), extras=(), status="
                 "task_id": "t",
                 "status": status,
                 "stages": stages,
+                "code_path": "tasks/t/recipe",
+                "task_description": {"source": source},
                 "run_path": str(run_dir.relative_to(root)),
                 "data_path": str(data_dir.relative_to(root)),
                 "created_at": "2026-09-17T10:00:00+00:00",

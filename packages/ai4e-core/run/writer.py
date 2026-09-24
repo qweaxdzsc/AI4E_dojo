@@ -254,7 +254,8 @@ class RunWriter:
             logger.addHandler(handler)
         return [detail, errors, console]
 
-    def write_checkpoint(self, label: str, payload: dict, *, namespace: str | None = None) -> Path:
+    def write_checkpoint(self, label: str, payload: dict, *, namespace: str | None = None,
+                         semantics: dict | None = None) -> Path:
         """原子提交状态字典检查点；失败时保留旧文件。"""
         import torch
 
@@ -280,6 +281,7 @@ class RunWriter:
         self.record_asset(
             f"{namespace}/{label}" if namespace else label,
             target, kind="checkpoint", stage="train",
+            semantics=semantics,
         )
         return target
 

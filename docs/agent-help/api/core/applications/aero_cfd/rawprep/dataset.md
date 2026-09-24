@@ -144,7 +144,7 @@ print(signature(compute_statistics))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.rawprep.dataset`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/rawprep/dataset.py:300`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/rawprep/dataset.py:301`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -296,7 +296,7 @@ print(signature(encode))
 ### Recipe 与案例
 
 - Recipe：`aero_cfd`, `geotransolver/shapenet_car`
-- 案例：`aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_geotransolver`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `recipe_extensions.field_mapping`, `recipe_extensions.free_wiring`, `recipe_extensions.sampling`
+- 案例：`aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_geotransolver`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `recipe_extensions.field_mapping`, `recipe_extensions.free_wiring`, `recipe_extensions.operator_branch_replacement`, `recipe_extensions.sampling`
 
 ### 源码位置
 
@@ -683,7 +683,7 @@ print(signature(read))
 ### Recipe 与案例
 
 - Recipe：`aero_cfd`, `geotransolver/bumper_beam`, `geotransolver/darcy`, `geotransolver/shapenet_car`, `pcno_cylinder`, `wdno`
-- 案例：`aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_geotransolver`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `geotransolver.bumper_beam`, `geotransolver.darcy`, `pcno.double_cylinder`, `recipe_extensions.field_mapping`, `recipe_extensions.free_wiring`, `recipe_extensions.physical_visualization`, `recipe_extensions.sampling`, `recipe_extensions.wdno`, `wdno.burgers_base`
+- 案例：`aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_geotransolver`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `geotransolver.bumper_beam`, `geotransolver.darcy`, `pcno.double_cylinder`, `recipe_extensions.field_mapping`, `recipe_extensions.free_wiring`, `recipe_extensions.physical_visualization`, `recipe_extensions.research_state`, `recipe_extensions.sampling`, `recipe_extensions.wdno`, `wdno.burgers_base`
 
 ### 源码位置
 

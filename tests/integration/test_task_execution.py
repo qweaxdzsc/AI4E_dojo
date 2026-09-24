@@ -19,6 +19,48 @@ def setup(tmp_path):
     return project, first
 
 
+def test_queued_run_rejects_changed_application_dependency(tmp_path, monkeypatch):
+    """提交后外部应用依赖变化，worker 写失败终态且不执行脚本。"""
+    import os
+
+    source = recipe(tmp_path)
+    external = tmp_path / "external"
+    external.mkdir()
+    (external / "run_dependency.py").write_text("VALUE = 1\n")
+    (source / "custom_app.py").write_text(
+        "from run_dependency import VALUE\ndef inspect(request):\n    return {'value': VALUE}\n"
+    )
+    cfg = OmegaConf.load(source / "config.yaml")
+    cfg.components = {"application": "custom_app"}
+    OmegaConf.save(cfg, source / "config.yaml")
+    monkeypatch.setenv("PYTHONPATH", str(external) + os.pathsep + os.environ.get("PYTHONPATH", ""))
+    project = tmp_path / "project"
+    task.create_project(project)
+    item = task.new_task(project, "captured", source=source)
+    queued = task.submit_run(project, item["id"], start=False)
+    (external / "run_dependency.py").write_text("VALUE = 2\n")
+    task.start_captured_run(project, queued["id"])
+    result = task.wait_run(project, queued["id"])
+    assert result["status"] == "failed", result
+    assert "application_source_changed" in json.dumps(result)
+
+
+def test_resume_missing_captured_source_does_not_backfill_history(tmp_path):
+    """有恢复声明但缺应用来源的旧记录保持不可用，不补写当前应用。"""
+    from ai4e_task.storage.database import transaction
+    from ai4e_task.storage.records import fetch, put
+
+    project, item = setup(tmp_path)
+    queued = task.submit_run(project, item["id"], start=False)
+    historical = fetch(project, "run", queued["id"])
+    historical["task_description"] = {"description": {"resume_inputs": ["inputs.train.resume"]}}
+    with transaction(project) as db:
+        put(db, "run", historical, replace=True)
+    with pytest.raises(ValueError, match="captured_application_source_missing"):
+        task.resume_run(project, queued["id"])
+    assert fetch(project, "run", queued["id"]) == historical
+
+
 def test_execution_snapshot_version_identity_and_comparison(tmp_path):
     project, first = setup(tmp_path)
     a = task.submit_run(project, first["id"], idempotency_key="run-one")
@@ -161,3 +203,23 @@ def test_legacy_descriptor_cannot_change_loader_behavior(tmp_path):
     assert "未知 rawprep 配置" in run["error"]
     request = json.loads((project / run["request_path"]).read_text())
     assert "configuration_adapter" not in request["entry"]
+
+
+def test_queued_input_change_fails_before_user_code(tmp_path):
+    """排队后外部输入变动，执行收据失败且用户流程没有写摘要。"""
+    project, item = setup(tmp_path)
+    queued = task.submit_run(project, item["id"], start=False)
+    request = json.loads((project / queued["request_path"]).read_text())
+    from ai4e_task.tasks.assets import asset_path
+
+    asset = next(iter(request["context"]["assets"].values()))
+    path = asset_path(project, asset)
+    if path.is_dir():
+        (path / "changed.txt").write_text("changed after capture")
+    else:
+        path.write_bytes(b"changed after capture")
+    task.start_captured_run(project, queued["id"])
+    result = task.wait_run(project, queued["id"])
+    assert result["status"] == "failed", result
+    assert "asset_changed" in result["error"]
+    assert not (Path(result["run_dir"]) / "summary.json").exists()

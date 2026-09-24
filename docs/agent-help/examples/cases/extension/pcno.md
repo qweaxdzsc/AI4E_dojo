@@ -1,9 +1,17 @@
-<!-- dojo-help: {"case_ids": ["extension.pcno"], "domain": "extension", "kind": "case", "layer": "example", "summary": "替换网络并保存读回温降数组", "title": "extension.pcno", "topic_id": "case:extension.pcno"} -->
+<!-- dojo-help: {"case_ids": ["extension.pcno"], "domain": "extension", "kind": "case", "layer": "example", "summary": "网络替换与有单位温降数组读回；先物化完整基案例，再按扩展说明修改。", "tasks": ["regular_grid", "coupled_fields", "network", "post"], "title": "extension.pcno", "topic_id": "case:extension.pcno"} -->
 # `extension.pcno`
 
 - 类型：`extension`
 - 用途：替换网络并保存读回温降数组
 - 资源路径：`examples/recipe_extensions/pcno`
+
+网络替换与有单位温降数组读回；先物化完整基案例，再按扩展说明修改。
+
+- 数据形态：regular_grid, coupled_fields
+- 训练机制：iteration
+- 替换入口：network, post
+- 限制：覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。
+- 限制：仅声明扩展演示范围，不据此扩大数值精度验收。
 - 基案例：`geothermal.pcno`
 - 覆盖文件：
   - `pipeline.py`
@@ -14,3 +22,40 @@
 
 `copy_example` 会先复制完整基案例，再叠加声明的覆盖文件并写 provenance。
 物化后必须重新检查配置、输入和恢复兼容性；不能直接运行原 extension 目录。
+
+## 案例详细说明
+
+来源：案例 README；SHA256 `d03ac9d77910876342a5a8c6149da0b1c815463a287251cbb32f18887cb41d96`。
+
+### PCNO 温降扩展
+
+将本目录文件覆盖到 `geothermal.pcno` 完整案例的副本，再在该副本运行。保留基础配置的数据绑定与输出根，将 `components.network` 改为 `local_components.build_model`。该构造器实际改变网络初值；使用原检查点推理时仍由已加载权重决定结果。
+
+新 pipeline 在推理后插入温降分析：计算每例第1年至20年的平均温降，保存带样本身份和K单位的 `temperature_drop.npy`，独立 post 核对摘要并读回统计。基础固定结果保持不变。可同时修改更新次数和经济参数验证配置实际生效。
+
+<!-- research-adaptation-details -->
+#### 选择与改写说明
+
+网络替换与有单位温降数组读回；先物化完整基案例，再按扩展说明修改。
+
+数据形态：regular_grid, coupled_fields；训练机制：iteration。
+
+##### 具体修改位置
+
+- 基案例：`geothermal.pcno`。先 `copy_example` 物化；返回的 `documentation.entry` 可定位基案例和扩展的说明副本。
+- 本变体可改：`network`、`post`。
+- 覆盖/新增文件：`pipeline.py`、`local_components.py`、`README.md`。逐项读这些文件的输入输出和基案例消费者，其他阶段继续继承。
+- 物化后检查根配置；若扩展没有覆盖配置，按本页前文将本地组件显式接入，复制文件本身不等于采用了组件。
+
+##### 运行与读回
+
+- 运行前填写自己的输入与输出目录；先按本页原有命令/阶段说明执行短程连接验证。更改模型或科学定义时不得沿用不兼容检查点。
+- 核对真实运行报告、检查点和固定预测；存在派生结果时必须从后处理读回。恢复与独立推理分别验证，不以导入成功替代。
+
+##### 适用边界
+
+- 覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。
+- 仅声明扩展演示范围，不据此扩大数值精度验收。
+
+
+基案例完整说明：[本地正文](../geothermal/pcno.md)。

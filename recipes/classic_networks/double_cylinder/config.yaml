@@ -1,0 +1,49 @@
+seed: 42
+run_root: ../outputs/double_cylinder/runs
+data_root: ../outputs/double_cylinder/data
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - infer
+  - post
+inputs:
+  rawprep:
+    source: null
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+    resume: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+dataset:
+  case: double_cylinder
+  train_count: 2
+  test_count: 1
+model:
+  family: rnn
+  spatial_dims: 2
+  in_channels: 4
+  out_channels: 4
+  parameters:
+    hidden_size: 32
+    num_layers: 2
+train:
+  updates: 100
+  batch_size: 1
+  lr: 0.001
+  device: auto
+  seconds: 9000
+  checkpoint_every: 20
+  sample_points: 1024
+infer:
+  device: auto
+components:
+  model: ai4e_contrib.application.classic_networks.binding.build_network
+  derived: null
+  consume: null

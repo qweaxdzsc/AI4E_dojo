@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="13" time="6.298" timestamp="2026-09-23T10:59:57.616117+08:00" hostname="zonghuideMacBook-Pro.local"><testcase classname="tests.integration.test_trainprep_split" name="test_open_dataset_applies_random_split" time="0.010" /><testcase classname="tests.integration.test_recipe_conventions" name="test_aero_public_inputs_preserve_domain_defaults" time="3.957" /><testcase classname="tests.integration.test_task_resources" name="test_resource_manifest_and_checks" time="0.002"><failure message="AssertionError: assert {'aero_cfd.na...nsolver', ...} == {'aero_cfd.na...nsolver', ...}&#10;  &#10;  Extra items in the right set:&#10;  'operator_learning.darcy'&#10;  'surrogate_modeling.double_cylinder'&#10;  'operator_learning.double_cylinder'&#10;  'operator_learning.shapenet_volume'&#10;  'surrogate_modeling.nasa_crm'&#10;  Use -v to get more diff">def test_resource_manifest_and_checks():
+        manifest = json.loads(
+            (Path(__file__).resolve().parents[2] / "examples/case-manifest.json").read_text()
+        )
+        expected = {case["id"] for case in manifest["cases"]}
+        for kind in ["standalone", "extension"]:
+&gt;           assert {c["id"] for c in list_examples(case_type=kind)} == {
+                c["id"] for c in manifest["cases"] if c["type"] == kind
+            }
+E           AssertionError: assert {'aero_cfd.na...nsolver', ...} == {'aero_cfd.na...nsolver', ...}
+E             
+E             Extra items in the right set:
+E             'operator_learning.darcy'
+E             'surrogate_modeling.double_cylinder'
+E             'operator_learning.double_cylinder'
+E             'operator_learning.shapenet_volume'
+E             'surrogate_modeling.nasa_crm'
+E             Use -v to get more diff
+
+tests/integration/test_task_resources.py:29: AssertionError</failure></testcase><testcase classname="tests.integration.test_pcno_inference" name="test_joint_fields_only_consume_network_predictions" time="0.006" /><testcase classname="tests.integration.test_pcno_inference" name="test_invalid_author_weights_cannot_be_sanitized_into_predictions" time="0.004" /><testcase classname="tests.integration.test_pcno_post" name="test_saved_extension_is_consumed_and_tamper_rejected" time="0.006" /><testcase classname="tests.integration.test_pcno_post" name="test_original_weight_import_is_explicitly_not_resume" time="0.021" /><testcase classname="tests.integration.test_pcno_post" name="test_local_constructor_replacement_changes_real_weights" time="0.003" /><testcase classname="tests.integration.test_pcno_equivalence" name="test_extracted_computations_retain_source_expressions" time="0.075" /><testcase classname="tests.integration.test_pcno_equivalence" name="test_viscosity_preserves_forward_and_active_derivative" time="0.034" /><testcase classname="tests.integration.test_pcno_equivalence" name="test_real_network_forward_and_backward[pres]" time="0.698" /><testcase classname="tests.integration.test_pcno_equivalence" name="test_real_network_forward_and_backward[temp]" time="0.625" /><testcase classname="tests.integration.test_pcno_equivalence" name="test_loss_values_and_gradients" time="0.014" /></testsuite></testsuites>

@@ -23,6 +23,7 @@ def fit_iterations(
     evaluate=None,
     evaluate_every=100,
     checkpoint=None,
+    checkpoint_every=None,
     deadline=None,
     history=None,
     max_grad_norm=1.0,
@@ -38,11 +39,16 @@ def fit_iterations(
 
     epoch_end(stream) 在取批后报告真实轮次末尾，用于丢弃不足一组的尾批。
     未传表示连续无限流；自定义更新限无状态、完整精度且不叠加累积。
+    checkpoint_every 未指定时沿用评价周期；同一步先评价后保存。
     """
     if any(type(x) is not int for x in (updates, start, evaluate_every)):
         raise ValueError("更新次数和评价间隔须为整数")
     if updates < start or start < 0 or evaluate_every < 1:
         raise ValueError("更新次数或评价间隔非法")
+    if checkpoint_every is None:
+        checkpoint_every = evaluate_every
+    if type(checkpoint_every) is not int or checkpoint_every < 1:
+        raise ValueError("检查点间隔须为正整数")
     if type(accumulate) is not int or accumulate < 1:
         raise ValueError("梯度累积步必须为正整数")
     if accumulation_reduction not in {"mean", "sum"}:
@@ -128,11 +134,10 @@ def fit_iterations(
             after_update(completed, model)
         loss = event.result
         losses.append(float(loss.detach()) if isinstance(loss, torch.Tensor) else float(loss))
-        if completed % evaluate_every == 0 or completed == updates:
-            if evaluate:
-                evaluate(completed, model)
-            if checkpoint:
-                checkpoint(completed, losses, "running" if completed < updates else "complete")
+        if (completed % evaluate_every == 0 or completed == updates) and evaluate:
+            evaluate(completed, model)
+        if (completed % checkpoint_every == 0 or completed == updates) and checkpoint:
+            checkpoint(completed, losses, "running" if completed < updates else "complete")
     if completed < updates:
         if checkpoint:
             checkpoint(completed, losses, "interrupted")

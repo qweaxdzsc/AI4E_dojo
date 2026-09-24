@@ -31,7 +31,7 @@ dev = [
     "ruff>=0.6",
     "ai4e-spec",
     "ai4e-core[post]",
-    "ai4e-contrib[abupt,transolver3,pibsnet,gencp]",
+    "ai4e-contrib[abupt,transolver3,pibsnet,gencp,pcno]",
     "ai4e-task",
     "ai4e-server",
     "ai4e-viz[workbench]",

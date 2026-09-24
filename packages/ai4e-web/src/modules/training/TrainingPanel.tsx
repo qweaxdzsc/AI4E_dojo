@@ -160,8 +160,9 @@ export function TrainingPanel({
   const sliceKnown = selectedSlice?.count != null;
   const canStart =
     Boolean(selectedPreparation) &&
+    selectedPreparation?.compatibility?.status !== "invalid" &&
     (!sliceKnown || (selectedSlice?.count ?? 0) > 0) &&
-    (trainMode === "restart" || Boolean(selectedCheckpoint));
+    (trainMode === "restart" || (Boolean(selectedCheckpoint) && selectedCheckpoint?.compatibility?.status !== "invalid"));
   const hint = preparations.length
     ? selectedPreparation
       ? sliceKnown && !(selectedSlice?.count ?? 0)
@@ -360,7 +361,8 @@ export function TrainingPanel({
               disabled={busy}
               options={preparations.map((item) => ({
                 value: item.ref.asset_id,
-                label: preparedDatasetLabel(item),
+                label: item.compatibility?.status === "invalid" ? `${preparedDatasetLabel(item)} · ${item.compatibility.reason}` : preparedDatasetLabel(item),
+                disabled: item.compatibility?.status === "invalid",
               }))}
               onChange={(id) => {
                 const item = preparations.find((row) => row.ref?.asset_id === id);
@@ -415,7 +417,8 @@ export function TrainingPanel({
                 disabled={busy || !checkpoints.length}
                 options={checkpoints.map((item) => ({
                   value: item.ref.asset_id,
-                  label: checkpointLabel(item),
+                  label: item.compatibility?.status === "invalid" ? `${checkpointLabel(item)} · ${item.compatibility.reason}` : checkpointLabel(item),
+                  disabled: item.compatibility?.status === "invalid",
                 }))}
                 onChange={(id) =>
                   onCheckpoint?.(

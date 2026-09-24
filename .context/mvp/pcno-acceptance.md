@@ -52,3 +52,15 @@
 - 案例/资源/公共配置回归首轮25通过、3失败。其中Task安装因隔离环境无torch_geometric失败，改用现有图依赖环境与实际wheel复验通过，见 `task-install.xml`。
 - 剩余2失败属于当前工作区其他案例：`test_aero_public_inputs_preserve_domain_defaults` 的外流配置将data_root放入recipe代码目录；`test_declared_recipe_stage_files_are_byte_identical` 的 `aero_cfd.nasa_crm_meshgraphnet/rawprep.py` 与所声明公共模板不同。未为PCNO改写这些并行工作，故不能宣称全仓验收通过。
 - 未运行全仓测试、全仓mypy/Sphinx、Web冒烟或250轮训练。当前使用范围为本机Python/Task发布小数据代码集成验证。末次源码/文档/完整案例复验12项通过，见last-tests.xml。可直接使用的本机目录为 `/Users/zonghui/work/project_simulation/dojo_train/pcno/study/`，已绑定数据并通过公开入口dry-run；实际计算证据仍以以上运行记录为准。
+
+## 2026-09-22 默认开发环境依赖修复
+
+根 `dev` 组已选择现有 `ai4e-contrib[pcno]` extra，锁文件同步更新；contrib 仍通过 `ai4e-core[geothermal]` 取得 `iapws==1.5.4`，没有新增第二份依赖清单。静态回归检查根开发组与 contrib extra 的交接。
+
+隔离 wheel 环境从本轮 Core/Contrib/Task wheel 加载，并实际导入 `iapws 1.5.4`。全部 19 个 `test_pcno_*.py` 为 **63 通过、4 跳过**；推理测试主体已经实际执行。跳过项分别要求真实 PCNO Cylinder wheel 运行报告 1 项，以及显式 `DOJO_PCNO_REFERENCE_ROOT` 的真实参考产物 3 项，不计为通过，也不改变既有科学结论。
+
+授权前主 `.venv` 尚未 sync，因此当时不能把锁文件和隔离环境证据称为默认主环境已经兑现。
+
+用户随后明确授权正式发布测试。已按完整 `uv sync --group dev --group visualization` 规则重装受影响的 Spec/Core/Contrib/Task/Server；同步成功，主 `.venv` 实际导入 `iapws 1.5.4`。发布后全部 19 个 `test_pcno_*.py` 为 **63 通过、4 跳过**，推理主体在主环境实际执行；4 个跳过仍分别要求真实 PCNO Cylinder wheel 报告或显式真实参考产物，不计为通过。随机切分、公开配置、Task 资源与 PCNO 文档组合另有 38 项通过。
+
+正式服务 8000（PID `90789`）和 5173（PID `93327`）健康检查均为 HTTP 200；本次 PCNO 修复是默认环境依赖兑现，没有新增 PCNO Web 操作或启动长时参考任务，正式页面验收由同次发布的随机切分链完成。同步后其他 Agent 继续修改共享源码，尤其 Task 资源已不同于安装快照；上述 PCNO 结果只证明同步时快照与主环境，不扩大为后来并行树、外部参考材料、论文精度或生产规模验收。

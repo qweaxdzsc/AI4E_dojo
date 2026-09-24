@@ -22,7 +22,9 @@ def operation_target(recipe: str | Path, name: str) -> str:
 def load_operation(target: str):
     """在执行子进程加载已捕获的入口，不推测模型或组件类型。"""
     module, name = target.rsplit(".", 1)
-    operation = getattr(import_module(module), name)
+    operation = getattr(import_module(module), name, None)
+    if operation is None:
+        raise ValueError(f"operation_unavailable: {name}")
     if not callable(operation):
         raise TypeError(f"任务操作不可调用: {target}")
     return operation

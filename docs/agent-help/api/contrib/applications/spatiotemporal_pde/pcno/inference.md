@@ -219,8 +219,8 @@ print(signature(predictor))
 
 ### Recipe 与案例
 
-- Recipe：`pcno_cylinder`
-- 案例：`pcno.double_cylinder`
+- Recipe：`pcno_cylinder`, `surrogate_modeling/double_cylinder`, `surrogate_modeling/nasa_crm`
+- 案例：`pcno.double_cylinder`, `surrogate_modeling.double_cylinder`, `surrogate_modeling.nasa_crm`
 
 ### 源码位置
 
@@ -296,7 +296,7 @@ print(signature(reader))
 ### Recipe 与案例
 
 - Recipe：`gencp`, `pcno_cylinder`, `safediffcon`, `wdno`
-- 案例：`gencp.double_cylinder_cno`, `gencp.double_cylinder_sit_fno`, `gencp.ntcouple_cno`, `gencp.ntcouple_sit_fno`, `gencp.turek_hron_cno`, `gencp.turek_hron_sit_fno`, `pcno.double_cylinder`, `recipe_extensions.wdno`, `safediffcon.burgers`, `safediffcon.tokamak`, `wdno.burgers_base`
+- 案例：`gencp.double_cylinder_cno`, `gencp.double_cylinder_sit_fno`, `gencp.ntcouple_cno`, `gencp.ntcouple_sit_fno`, `gencp.turek_hron_cno`, `gencp.turek_hron_sit_fno`, `pcno.double_cylinder`, `recipe_extensions.task_labels`, `recipe_extensions.wdno`, `safediffcon.burgers`, `safediffcon.tokamak`, `wdno.burgers_base`
 
 ### 源码位置
 

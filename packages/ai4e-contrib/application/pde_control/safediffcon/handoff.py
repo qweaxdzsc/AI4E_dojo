@@ -29,14 +29,15 @@ def register_splits(session, values, *, stage, kind):
             kind=kind,
             stage=stage,
             dependencies=[Path(path).parent],
-            semantics={"split": split},
+            semantics={"type": "control.preparation" if kind == "preparation" else "control.trajectory", "split": split},
             bundle_root=Path(path).parent,
         )
 
 
 def register_checkpoint(session, path, *, stage, phase):
     """登记完成阶段的权重身份，保留通用writer的原命名空间索引。"""
-    session.record_asset(phase, path, kind="checkpoint", stage=stage, semantics={"phase": phase})
+    session.record_asset(phase, path, kind="checkpoint", stage=stage,
+                         semantics={"type": "control.checkpoint", "phase": phase})
 
 
 def register_metrics(session, results, report, *, evaluate):

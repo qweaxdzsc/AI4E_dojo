@@ -53,8 +53,9 @@ def resolve(config, *, validate=True):
     if validate:
         if train["batch_size"] != 1 or train["num_workers"] != 0 or train["accumulate"] != 1:
             raise ValueError("参考流程需要批次 1、零读取子进程和无梯度累积")
-        if train["evaluation_split"] != "validation" or train["precision"] != "fp32":
-            raise ValueError("参考流程需要 validation 选优和 fp32")
+        # 现行准备将 validation 命名为 eval；两者指向同一评价切片。
+        if train["evaluation_split"] not in {"validation", "eval"} or train["precision"] != "fp32":
+            raise ValueError("参考流程需要 eval（旧名 validation）选优和 fp32")
         if train["max_epochs"] < 1 or train["validation_interval"] < 1:
             raise ValueError("训练轮数和验证间隔必须为正")
         if train["scheduler_unit"] != "epoch" or train["optimizer"] != "adamw":

@@ -9,6 +9,7 @@ PHASES = (
     "environment_setup",
     "data_preparation",
     "idle_or_wait",
+    "unclassified",
 )
 TOKEN_PHASES = ("coding", "training_observation", "evaluation", "environment_setup", "mixed")
 
@@ -39,17 +40,25 @@ def summarize_time(events, start, stop):
         union_seconds([(a, b)])
         by_phase[phase].append((a, b))
     result = {f"{k}_seconds": union_seconds(v) for k, v in by_phase.items()}
-    active = [i for phase, values in by_phase.items() if phase != "idle_or_wait" for i in values]
-    all_intervals = active + by_phase["idle_or_wait"]
+    active = [
+        i
+        for phase, values in by_phase.items()
+        if phase not in {"idle_or_wait", "unclassified"}
+        for i in values
+    ]
+    unknown = by_phase["unclassified"]
+    all_intervals = active + unknown + by_phase["idle_or_wait"]
     covered = union_seconds(all_intervals)
     # 等待区间与活动重叠的部分不能再次计费。
-    result["idle_or_wait_seconds"] = covered - union_seconds(active)
+    result["idle_or_wait_seconds"] = covered - union_seconds(active + unknown)
+    # 有阶段收据覆盖时采用具体活动；余下未知不能改称等待或编码。
+    result["unclassified_seconds"] = union_seconds(active + unknown) - union_seconds(active)
     result.update(
         end_to_end_seconds=wall,
         accounted_wall_seconds=covered,
         unaccounted_seconds=wall - covered,
         overlapping_activity_seconds=sum(
-            union_seconds(by_phase[p]) for p in PHASES if p != "idle_or_wait"
+            union_seconds(by_phase[p]) for p in PHASES if p not in {"idle_or_wait", "unclassified"}
         )
         - union_seconds(active),
         training_process_seconds=sum(b - a for a, b in by_phase["training"]),

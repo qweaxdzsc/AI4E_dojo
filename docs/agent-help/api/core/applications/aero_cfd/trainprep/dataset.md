@@ -326,7 +326,7 @@ print(signature(open_splits_step))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.trainprep.dataset`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/dataset.py:374`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/dataset.py:377`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -563,7 +563,7 @@ print(signature(probe))
 ### Recipe 与案例
 
 - Recipe：`aero_cfd`
-- 案例：`aero_cfd.nasa_crm_abupt`, `aero_cfd.nasa_crm_meshgraphnet`, `aero_cfd.nasa_crm_transolver3`, `aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `recipe_extensions.field_mapping`, `recipe_extensions.sampling`
+- 案例：`aero_cfd.nasa_crm_abupt`, `aero_cfd.shapenet_car_abupt`, `recipe_extensions.field_mapping`, `recipe_extensions.sampling`
 
 ### 源码位置
 
@@ -644,7 +644,7 @@ print(signature(read_probe_sample_step))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.trainprep.dataset`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/dataset.py:402`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/dataset.py:405`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -729,7 +729,7 @@ print(signature(read_probe_stage))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.trainprep.dataset`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/dataset.py:340`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/dataset.py:343`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -805,7 +805,7 @@ print(signature(repeat_seed_epoch))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.trainprep.dataset`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/dataset.py:333`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/dataset.py:336`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -1046,7 +1046,7 @@ print(signature(select_abupt_step))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.trainprep.dataset`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/dataset.py:363`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/dataset.py:366`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API

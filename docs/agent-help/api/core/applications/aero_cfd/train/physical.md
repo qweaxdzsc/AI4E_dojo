@@ -217,12 +217,12 @@ print(signature(build_model))
 ### Recipe 与案例
 
 - Recipe：`aero_cfd`, `geotransolver/bumper_beam`, `geotransolver/darcy`, `geotransolver/nasa_crm`, `geotransolver/shapenet_car`, `pcno`, `pcno_cylinder`, `safediffcon`
-- 案例：`aero_cfd.nasa_crm_abupt`, `aero_cfd.nasa_crm_geotransolver`, `aero_cfd.nasa_crm_meshgraphnet`, `aero_cfd.nasa_crm_transolver3`, `aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_geotransolver`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `extension.pcno`, `extension.pcno_cylinder`, `geothermal.pcno`, `geotransolver.bumper_beam`, `geotransolver.darcy`, `pcno.double_cylinder`, `recipe_extensions.field_mapping`, `recipe_extensions.geotransolver_aero`, `recipe_extensions.safediffcon`, `recipe_extensions.sampling`, `safediffcon.burgers`, `safediffcon.tokamak`
+- 案例：`aero_cfd.nasa_crm_abupt`, `aero_cfd.nasa_crm_geotransolver`, `aero_cfd.nasa_crm_meshgraphnet`, `aero_cfd.nasa_crm_transolver3`, `aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_geotransolver`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `extension.pcno`, `extension.pcno_cylinder`, `geothermal.pcno`, `geotransolver.bumper_beam`, `geotransolver.darcy`, `pcno.double_cylinder`, `recipe_extensions.field_mapping`, `recipe_extensions.geotransolver_aero`, `recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.resunet`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`, `recipe_extensions.research_state`, `recipe_extensions.safediffcon`, `recipe_extensions.sampling`, `recipe_extensions.tail_batch`, `recipe_extensions.task_labels`, `safediffcon.burgers`, `safediffcon.tokamak`
 
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.train.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:128`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:129`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -298,7 +298,7 @@ print(signature(check_report))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.train.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:121`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:122`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -375,7 +375,7 @@ print(signature(configure_callbacks))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.train.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:112`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:113`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -452,7 +452,7 @@ print(signature(configure_evaluation))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.train.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:232`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:233`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -530,7 +530,7 @@ print(signature(configure_objectives))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.train.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:161`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:162`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -611,7 +611,7 @@ print(signature(configure_optimization))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.train.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:177`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:178`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -688,7 +688,7 @@ print(signature(configure_resume))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.train.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:277`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:278`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -764,7 +764,7 @@ print(signature(execute_training))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.train.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:297`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/train/physical.py:298`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API

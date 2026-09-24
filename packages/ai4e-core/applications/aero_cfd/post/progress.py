@@ -33,6 +33,28 @@ class PostProgress:
     def publish(self):
         """会话负责快照隔离；避免在业务层重复深拷贝完整账本。"""
         value = self.report
+        if self.phase == "infer":
+            operations = value.get("operations", {})
+            delivery = next(
+                (
+                    operations[key]
+                    for key in ("save", "evaluation", "predictions", "prediction")
+                    if key in operations and operations[key].get("status") != "skipped"
+                ),
+                {},
+            )
+            self.run.artifact(
+                "task-progress.json",
+                {
+                    "schema_version": 1,
+                    "stage": self.phase,
+                    "status": value["status"],
+                    "completed": value.get("completed", delivery.get("completed")),
+                    "total": value.get("total", delivery.get("expected")),
+                    "results": value.get("results", []),
+                    "operations": operations,
+                },
+            )
         self.run.report(value, stage=self.phase)
         if self.protocol is not None:
             self.run.artifact("comparison-protocol.json", self.protocol)
@@ -43,6 +65,7 @@ class PostProgress:
     @contextmanager
     def operation(self, name):
         """开始一个已启用分支，捕获错误时保留本分支已完成样本。"""
+        previous = self.active
         self.active = name
         record = self.report["operations"][name]
         record["status"] = "running"
@@ -56,7 +79,7 @@ class PostProgress:
             record["error"] = self.error(exc)
             raise
         finally:
-            self.active = None
+            self.active = previous
 
     @contextmanager
     def unit(self, samples, *, operation=None):
@@ -64,6 +87,7 @@ class PostProgress:
         record = self.report["operations"][self.active]
         unit = {"samples": deepcopy(samples), "status": "running", "artifacts": []}
         record["samples"].append(unit)
+        previous = self.current
         self.current = unit
         try:
             with sample_context(operation or self.active, samples):
@@ -76,7 +100,7 @@ class PostProgress:
             unit["error"] = self.error(exc)
             raise
         finally:
-            self.current = None
+            self.current = previous
 
     def committed(self, path):
         """仅在保存函数已成功返回后登记交付，不扫描历史文件推断成功。"""

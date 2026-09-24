@@ -30,3 +30,26 @@
 import ai4e_task as task
 print(task.read_help_topic("case:safediffcon.burgers")["content"])
 ```
+
+<!-- research-adaptation-details -->
+## 选择与改写说明
+
+控制轨迹；含预训练、安全校准及控制响应，区别于普通预测。
+
+数据形态：field_sequence, control_trajectory；训练机制：iteration, diffusion_control。
+
+### 具体修改位置
+
+- 数据来源、预算和设备参数先在 `config.yaml` 调整；配置加载规则见 `configuration.py`，步骤调用和返回值交接见 `pipeline.py`。
+- 配置已声明的可替换入口：`application`、`reader`、`transform`、`model`、`objective`、`guide`、`metrics`、`derived`。读取对应阶段实际消费位置，再替换普通用户函数/对象；名称出现在列表不代表能跳过科学兼容检查。
+- 保留原准备引用、训练运行记录与恢复交接；新增输出由计算步骤保存，推理与后处理从明确产物读回，不重写训练循环。
+
+### 运行与读回
+
+- 运行前填写自己的输入与输出目录；先按本页原有命令/阶段说明执行短程连接验证。更改模型或科学定义时不得沿用不兼容检查点。
+- 核对真实运行报告、检查点和固定预测；存在派生结果时必须从后处理读回。恢复与独立推理分别验证，不以导入成功替代。
+
+### 适用边界
+
+- 数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。
+- 工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。

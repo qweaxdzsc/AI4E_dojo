@@ -144,7 +144,7 @@ print(signature(SavePhysical))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.rawprep.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/rawprep/physical.py:196`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/rawprep/physical.py:197`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -222,7 +222,7 @@ print(signature(SavePhysical.begin))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.rawprep.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/rawprep/physical.py:208`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/rawprep/physical.py:209`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -301,7 +301,7 @@ print(signature(SavePhysical.preflight))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.rawprep.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/rawprep/physical.py:202`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/rawprep/physical.py:203`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -378,7 +378,7 @@ print(signature(actual_layout))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.rawprep.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/rawprep/physical.py:173`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/rawprep/physical.py:174`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -451,13 +451,13 @@ print(signature(execute))
 
 ### Recipe 与案例
 
-- Recipe：`aero_cfd`, `gencp`, `geotransolver/nasa_crm`, `geotransolver/shapenet_car`, `parametric_pde`
-- 案例：`aero_cfd.nasa_crm_abupt`, `aero_cfd.nasa_crm_geotransolver`, `aero_cfd.nasa_crm_meshgraphnet`, `aero_cfd.nasa_crm_transolver3`, `aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_geotransolver`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `gencp.double_cylinder_cno`, `gencp.double_cylinder_sit_fno`, `gencp.ntcouple_cno`, `gencp.ntcouple_sit_fno`, `gencp.turek_hron_cno`, `gencp.turek_hron_sit_fno`, `parametric_pde.advection`, `parametric_pde.burgers`, `parametric_pde.convection_diffusion`, `parametric_pde.diffusion_trapezoid`, `parametric_pde.neumann_diffusion`, `recipe_extensions.field_mapping`, `recipe_extensions.geotransolver_aero`, `recipe_extensions.sampling`
+- Recipe：`aero_cfd`, `gencp`, `geotransolver/nasa_crm`, `geotransolver/shapenet_car`, `parametric_pde`, `safediffcon`
+- 案例：`aero_cfd.nasa_crm_abupt`, `aero_cfd.nasa_crm_geotransolver`, `aero_cfd.nasa_crm_meshgraphnet`, `aero_cfd.nasa_crm_transolver3`, `aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_geotransolver`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `gencp.double_cylinder_cno`, `gencp.double_cylinder_sit_fno`, `gencp.ntcouple_cno`, `gencp.ntcouple_sit_fno`, `gencp.turek_hron_cno`, `gencp.turek_hron_sit_fno`, `parametric_pde.advection`, `parametric_pde.burgers`, `parametric_pde.convection_diffusion`, `parametric_pde.diffusion_trapezoid`, `parametric_pde.neumann_diffusion`, `recipe_extensions.field_mapping`, `recipe_extensions.geotransolver_aero`, `recipe_extensions.sampling`, `safediffcon.burgers`, `safediffcon.tokamak`
 
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.rawprep.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/rawprep/physical.py:321`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/rawprep/physical.py:322`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -760,7 +760,7 @@ print(signature(read))
 ### Recipe 与案例
 
 - Recipe：`aero_cfd`, `geotransolver/bumper_beam`, `geotransolver/darcy`, `geotransolver/shapenet_car`, `pcno_cylinder`, `wdno`
-- 案例：`aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_geotransolver`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `geotransolver.bumper_beam`, `geotransolver.darcy`, `pcno.double_cylinder`, `recipe_extensions.field_mapping`, `recipe_extensions.free_wiring`, `recipe_extensions.physical_visualization`, `recipe_extensions.sampling`, `recipe_extensions.wdno`, `wdno.burgers_base`
+- 案例：`aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_geotransolver`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `geotransolver.bumper_beam`, `geotransolver.darcy`, `pcno.double_cylinder`, `recipe_extensions.field_mapping`, `recipe_extensions.free_wiring`, `recipe_extensions.physical_visualization`, `recipe_extensions.research_state`, `recipe_extensions.sampling`, `recipe_extensions.wdno`, `wdno.burgers_base`
 
 ### 源码位置
 

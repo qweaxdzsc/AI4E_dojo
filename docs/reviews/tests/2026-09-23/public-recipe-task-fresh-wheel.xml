@@ -1,0 +1,1047 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="17" skipped="0" tests="206" time="765.156" timestamp="2026-09-23T11:03:57.425005+08:00" hostname="zonghuideMacBook-Pro.local"><testcase classname="tests.integration.test_agent_help" name="test_generated_help_is_current" time="12.718" /><testcase classname="tests.integration.test_agent_help" name="test_ability_application_and_recipe_symbols_are_covered" time="0.320" /><testcase classname="tests.integration.test_agent_help" name="test_core_run_and_task_public_exports_are_covered" time="0.017" /><testcase classname="tests.integration.test_agent_help" name="test_topic_schema_paths_and_coverage_counts_are_consistent" time="0.295" /><testcase classname="tests.integration.test_agent_help" name="test_every_symbol_has_page_anchor_and_required_sections" time="0.329" /><testcase classname="tests.integration.test_agent_help" name="test_all_manifest_cases_have_help_pages" time="0.015" /><testcase classname="tests.integration.test_agent_help" name="test_installable_help_has_no_repository_only_dependency" time="0.039" /><testcase classname="tests.integration.test_agent_capabilities" name="test_menu_links_and_symbols_are_reachable" time="0.035" /><testcase classname="tests.integration.test_agent_capabilities" name="test_documented_examples_execute[data]" time="1.061" /><testcase classname="tests.integration.test_agent_capabilities" name="test_documented_examples_execute[evaluation]" time="0.815" /><testcase classname="tests.integration.test_agent_capabilities" name="test_documented_examples_execute[inference]" time="0.759" /><testcase classname="tests.integration.test_agent_capabilities" name="test_documented_examples_execute[loss]" time="0.934" /><testcase classname="tests.integration.test_agent_capabilities" name="test_documented_examples_execute[model]" time="0.605" /><testcase classname="tests.integration.test_agent_capabilities" name="test_documented_examples_execute[post]" time="1.016" /><testcase classname="tests.integration.test_agent_capabilities" name="test_documented_examples_execute[run-task]" time="0.191" /><testcase classname="tests.integration.test_agent_capabilities" name="test_documented_examples_execute[sampling]" time="0.114" /><testcase classname="tests.integration.test_agent_capabilities" name="test_documented_examples_execute[training]" time="1.234" /><testcase classname="tests.integration.test_agent_capabilities" name="test_capability_search_and_offline_export" time="0.003"><failure message="ImportError: attempted relative import with no known parent package">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_capability_search_and_off0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x1630fdaf0&gt;
+
+    def test_capability_search_and_offline_export(tmp_path, monkeypatch):
+        import importlib.util
+    
+        spec = importlib.util.spec_from_file_location(
+            "capability_resources", ROOT / "packages/ai4e-task/templates/resources.py"
+        )
+        resources = importlib.util.module_from_spec(spec)
+&gt;       spec.loader.exec_module(resources)
+
+tests/integration/test_agent_capabilities.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+&lt;frozen importlib._bootstrap_external&gt;:999: in exec_module
+    ???
+&lt;frozen importlib._bootstrap&gt;:488: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """安装资源与可复制案例门面。
+    
+    本模块只读取清单、文本和文件树，不导入案例、模型或训练栈。案例运行仍由
+    ``ai4e_core.run.launch`` 或 ``ai4e_task`` 的公开 Python API 负责。
+    """
+    
+    from __future__ import annotations
+    
+    import importlib.util
+    import json
+    import re
+    import shutil
+    import sys
+    from importlib.metadata import PackageNotFoundError, version
+    from pathlib import Path
+    from typing import Any
+    
+&gt;   from .example_docs import DOC_DIRECTORY, write_example_documents
+E   ImportError: attempted relative import with no known parent package
+
+packages/ai4e-task/templates/resources.py:18: ImportError</failure></testcase><testcase classname="tests.integration.test_agent_capabilities" name="test_capabilities_in_real_wheel_outside_checkout" time="1.048"><failure message="AssertionError: WARN `--no-project` was provided, but no project was found&#10;  warning: `--no-sync` has no effect when used alongside `--no-project`&#10;  Traceback (most recent call last):&#10;    File &quot;&lt;string&gt;&quot;, line 4, in &lt;module&gt;&#10;  AssertionError&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['uv', 'run', '--no-project', '--no-sync', '--python', '/private/var/folders/c4/hryn27sx61b7y785...longside `--no-project`\nTraceback (most recent call last):\n  File &quot;&lt;string&gt;&quot;, line 4, in &lt;module&gt;\nAssertionError\n').returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_capabilities_in_real_whee0')
+
+    def test_capabilities_in_real_wheel_outside_checkout(tmp_path):
+        """独立安装本轮 Task wheel，不重装用户正在使用的正式环境。"""
+        wheels = tmp_path / "wheels"
+        subprocess.run(
+            ["uv", "build", "--package", "ai4e-task", "--wheel", "--out-dir", str(wheels)],
+            cwd=ROOT, check=True, capture_output=True, text=True,
+        )
+        env = tmp_path / "environment"
+        subprocess.run(["uv", "venv", "--python", sys.executable, str(env)], check=True,
+                       capture_output=True)
+        python = env / "bin/python"
+        subprocess.run(["uv", "pip", "install", "--python", str(python), "--no-deps",
+                        str(next(wheels.glob("ai4e_task-*.whl")))], check=True, capture_output=True)
+        site = env / "lib" / f"python{sys.version_info.major}.{sys.version_info.minor}" / "site-packages"
+        (site / "third-party.pth").write_text(sysconfig.get_path("purelib") + "\n")
+        script = '''import json, re
+    from pathlib import Path
+    import ai4e_task as task
+    assert Path(task.__file__).is_relative_to(Path("environment").resolve())
+    info = task.export_guide("offline")
+    root = Path("offline").resolve()
+    pages = list((root / "docs/agent-help/capabilities").glob("*.md"))
+    assert len(pages) == 9
+    for key in ("guide", "skill", "entry"):
+        page = Path(info[key])
+        links = re.findall(r"\\]\\(([^)]+)\\)", page.read_text())
+        for link in links:
+            assert (page.parent / link).resolve().is_file(), link
+    for query, topic in [("归一化", "capability:data"),
+                         ("NumPy 预测计算相对 L2", "capability:evaluation"),
+                         ("已有 PyTorch 模型和 DataLoader 如何复用训练循环", "capability:training")]:
+        assert topic in {h["topic_id"] for h in task.search_help(query, limit=5)}
+    assert "train_model" in task.read_help_topic("capability:training")["content"]
+    print(json.dumps({"installed": task.__file__, "capabilities": len(pages), "exported": info}))
+    '''
+        result = subprocess.run(
+            ["uv", "run", "--no-project", "--no-sync", "--python", str(python), "python", "-c", script],
+            cwd=tmp_path, capture_output=True, text=True, timeout=60, check=False,
+        )
+&gt;       assert result.returncode == 0, result.stdout + result.stderr
+E       AssertionError: WARN `--no-project` was provided, but no project was found
+E         warning: `--no-sync` has no effect when used alongside `--no-project`
+E         Traceback (most recent call last):
+E           File "&lt;string&gt;", line 4, in &lt;module&gt;
+E         AssertionError
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['uv', 'run', '--no-project', '--no-sync', '--python', '/private/var/folders/c4/hryn27sx61b7y785...longside `--no-project`\nTraceback (most recent call last):\n  File "&lt;string&gt;", line 4, in &lt;module&gt;\nAssertionError\n').returncode
+
+tests/integration/test_agent_capabilities.py:128: AssertionError</failure></testcase><testcase classname="tests.integration.test_public_api_stability" name="test_fixed_user_code_against_installed_framework" time="0.852" /><testcase classname="tests.integration.test_public_api_stability" name="test_local_adapter_and_failure_context" time="0.005" /><testcase classname="tests.integration.test_public_api_stability" name="test_configuration_adapter_is_explicit_and_scoped" time="0.000" /><testcase classname="tests.integration.test_public_api_stability" name="test_progress_publishes_one_snapshot_without_double_copy" time="0.005" /><testcase classname="tests.integration.test_public_api_stability" name="test_current_templates_use_public_session_facade" time="0.020" /><testcase classname="tests.integration.test_recipe_conventions" name="test_public_paths_overrides_and_invalid_inputs" time="0.003" /><testcase classname="tests.integration.test_recipe_conventions" name="test_inference_preparation_owns_source_without_mutating_training" time="0.000" /><testcase classname="tests.integration.test_recipe_conventions" name="test_imported_physical_manifest_overrides_selected_path" time="0.001" /><testcase classname="tests.integration.test_recipe_conventions" name="test_stage_outputs_assets_metrics_and_readback" time="0.006" /><testcase classname="tests.integration.test_recipe_conventions" name="test_missing_stage_is_not_research_completion" time="0.003" /><testcase classname="tests.integration.test_recipe_conventions" name="test_metric_requires_semantics_and_real_asset" time="0.001" /><testcase classname="tests.integration.test_recipe_conventions" name="test_aero_public_inputs_preserve_domain_defaults" time="0.884" /><testcase classname="tests.integration.test_recipe_conventions" name="test_asset_dependency_content_is_required" time="0.003" /><testcase classname="tests.integration.test_recipe_conventions" name="test_coupled_iteration_slice_rejects_invalid_before_reading_data[0]" time="0.005" /><testcase classname="tests.integration.test_recipe_conventions" name="test_coupled_iteration_slice_rejects_invalid_before_reading_data[-1]" time="0.000" /><testcase classname="tests.integration.test_recipe_conventions" name="test_coupled_iteration_slice_rejects_invalid_before_reading_data[True]" time="0.000" /><testcase classname="tests.integration.test_recipe_conventions" name="test_coupled_iteration_slice_rejects_invalid_before_reading_data[1.5]" time="0.000" /><testcase classname="tests.integration.test_recipe_explicit_equivalence" name="test_five_examples_match_frozen_workflow_and_resume[shapenet_car_abupt]" time="13.679"><failure message="AssertionError: Tensor-likes are not equal!&#10;&#10;Mismatched elements: 226 / 576 (39.2%)&#10;Greatest absolute difference: 0.00010200217366218567 at index (3, 13)&#10;Greatest relative difference: 0.5975580811500549 at index (19, 4)">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze0')
+name = 'shapenet_car_abupt'
+
+    @pytest.mark.parametrize("name", NAMES)
+    def test_five_examples_match_frozen_workflow_and_resume(tmp_path, name):
+        folder, config = case(tmp_path, name)
+        baseline = ROOT / "tests/fixtures/recipe_before_explicit"
+        shutil.copyfile(baseline / "physical_workflow.py", folder / "baseline_workflow.py")
+        shutil.copyfile(baseline / "physical_post.py", folder / "baseline_post.py")
+        runner = """from configuration import load_configuration, application_parameters, load_components
+    from ai4e_core import run
+    from ai4e_core.run.training import TrainingRun
+    from omegaconf import OmegaConf
+    import baseline_workflow, baseline_post
+    import shutil
+    from pathlib import Path
+    original = TrainingRun.checkpoint
+    def checkpoint(self, label, payload):
+        result = original(self, label, payload)
+        if label == "latest" and payload["epoch"] == 1:
+            shutil.copyfile(result, Path(__file__).parent.parent / "baseline-epoch1.pt")
+        return result
+    TrainingRun.checkpoint = checkpoint
+    
+    def pipeline(cfg):
+        component = load_components(cfg)
+        values = OmegaConf.create(application_parameters(cfg))
+        values.post.update(values.infer)
+        session = TrainingRun()
+        common = dict(dataset_component=component.dataset, model_component=component.model, session=session)
+        prepared = run.stage("trainprep", lambda _: baseline_workflow.trainprep(values, **common), cfg)
+        trained = run.stage("train", lambda _: baseline_workflow.train(values, prepared, **common), cfg)
+        values.post.checkpoint = trained["checkpoints"]["last"]
+        return run.stage("post", lambda _: baseline_post.execute(OmegaConf.to_container(values, resolve=True), component.dataset, component.model, session), cfg)
+    if __name__ == "__main__":
+        raise SystemExit(run.launch(pipeline, script=__file__, config_loader=load_configuration))
+    """
+        (folder / "baseline.py").write_text(runner)
+        config["pipeline"]["stages"] = ["trainprep", "train", "post"]
+        directories = []
+        for mode in ("baseline", "explicit"):
+            config["pipeline"]["stages"] = (
+                ["trainprep", "train", "post"]
+                if mode == "baseline"
+                else ["trainprep", "train", "infer", "post"]
+            )
+            config["infer"]["device"] = "cpu"
+            config["run_root"] = str(tmp_path / (mode + "-runs"))
+            config["data_root"] = str(tmp_path / (mode + "-data"))
+            (folder / "config.yaml").write_text(yaml.safe_dump(config, sort_keys=False))
+            result = script(folder, "baseline.py" if mode == "baseline" else "pipeline.py")
+            assert result.returncode == 0, result.stdout + result.stderr
+            directories.append(next(Path(config["run_root"]).iterdir()))
+        left, right = [
+            torch.load(path / "checkpoints/last.pt", weights_only=False) for path in directories
+        ]
+        assert left["updates"] == right["updates"] and left["epoch"] == right["epoch"] == 2
+        for key in left["model"]:
+&gt;           torch.testing.assert_close(left["model"][key], right["model"][key], rtol=0, atol=0)
+E           AssertionError: Tensor-likes are not equal!
+E           
+E           Mismatched elements: 226 / 576 (39.2%)
+E           Greatest absolute difference: 0.00010200217366218567 at index (3, 13)
+E           Greatest relative difference: 0.5975580811500549 at index (19, 4)
+
+tests/integration/test_recipe_explicit_equivalence.py:128: AssertionError</failure></testcase><testcase classname="tests.integration.test_recipe_explicit_equivalence" name="test_five_examples_match_frozen_workflow_and_resume[nasa_crm_transolver3]" time="12.314"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze1/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze1/explicit-runs/2026-09-23T11-04-50_3d27df；生效配置=inputs/config.yaml&#10;  INFO [trainprep/阶段/开始] &#10;  ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'Sample001', 'index': 0}]；原因='data_specs'&#10;  ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.024秒&#10;  ERROR 运行失败：'data_specs'&#10;  INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.026秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.024秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.026秒\n&quot;).returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze1')
+name = 'nasa_crm_transolver3'
+
+    @pytest.mark.parametrize("name", NAMES)
+    def test_five_examples_match_frozen_workflow_and_resume(tmp_path, name):
+        folder, config = case(tmp_path, name)
+        baseline = ROOT / "tests/fixtures/recipe_before_explicit"
+        shutil.copyfile(baseline / "physical_workflow.py", folder / "baseline_workflow.py")
+        shutil.copyfile(baseline / "physical_post.py", folder / "baseline_post.py")
+        runner = """from configuration import load_configuration, application_parameters, load_components
+    from ai4e_core import run
+    from ai4e_core.run.training import TrainingRun
+    from omegaconf import OmegaConf
+    import baseline_workflow, baseline_post
+    import shutil
+    from pathlib import Path
+    original = TrainingRun.checkpoint
+    def checkpoint(self, label, payload):
+        result = original(self, label, payload)
+        if label == "latest" and payload["epoch"] == 1:
+            shutil.copyfile(result, Path(__file__).parent.parent / "baseline-epoch1.pt")
+        return result
+    TrainingRun.checkpoint = checkpoint
+    
+    def pipeline(cfg):
+        component = load_components(cfg)
+        values = OmegaConf.create(application_parameters(cfg))
+        values.post.update(values.infer)
+        session = TrainingRun()
+        common = dict(dataset_component=component.dataset, model_component=component.model, session=session)
+        prepared = run.stage("trainprep", lambda _: baseline_workflow.trainprep(values, **common), cfg)
+        trained = run.stage("train", lambda _: baseline_workflow.train(values, prepared, **common), cfg)
+        values.post.checkpoint = trained["checkpoints"]["last"]
+        return run.stage("post", lambda _: baseline_post.execute(OmegaConf.to_container(values, resolve=True), component.dataset, component.model, session), cfg)
+    if __name__ == "__main__":
+        raise SystemExit(run.launch(pipeline, script=__file__, config_loader=load_configuration))
+    """
+        (folder / "baseline.py").write_text(runner)
+        config["pipeline"]["stages"] = ["trainprep", "train", "post"]
+        directories = []
+        for mode in ("baseline", "explicit"):
+            config["pipeline"]["stages"] = (
+                ["trainprep", "train", "post"]
+                if mode == "baseline"
+                else ["trainprep", "train", "infer", "post"]
+            )
+            config["infer"]["device"] = "cpu"
+            config["run_root"] = str(tmp_path / (mode + "-runs"))
+            config["data_root"] = str(tmp_path / (mode + "-data"))
+            (folder / "config.yaml").write_text(yaml.safe_dump(config, sort_keys=False))
+            result = script(folder, "baseline.py" if mode == "baseline" else "pipeline.py")
+&gt;           assert result.returncode == 0, result.stdout + result.stderr
+E           AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze1/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze1/explicit-runs/2026-09-23T11-04-50_3d27df；生效配置=inputs/config.yaml
+E             INFO [trainprep/阶段/开始] 
+E             ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'Sample001', 'index': 0}]；原因='data_specs'
+E             ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.024秒
+E             ERROR 运行失败：'data_specs'
+E             INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.026秒
+E             
+E           assert 1 == 0
+E            +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.024秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.026秒\n").returncode
+
+tests/integration/test_recipe_explicit_equivalence.py:121: AssertionError</failure></testcase><testcase classname="tests.integration.test_recipe_explicit_equivalence" name="test_five_examples_match_frozen_workflow_and_resume[nasa_crm_abupt]" time="14.836"><failure message="AssertionError: Tensor-likes are not equal!&#10;&#10;Mismatched elements: 561 / 576 (97.4%)&#10;Greatest absolute difference: 0.00039229169487953186 at index (7, 1)&#10;Greatest relative difference: 6.12642765045166 at index (4, 13)">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze2')
+name = 'nasa_crm_abupt'
+
+    @pytest.mark.parametrize("name", NAMES)
+    def test_five_examples_match_frozen_workflow_and_resume(tmp_path, name):
+        folder, config = case(tmp_path, name)
+        baseline = ROOT / "tests/fixtures/recipe_before_explicit"
+        shutil.copyfile(baseline / "physical_workflow.py", folder / "baseline_workflow.py")
+        shutil.copyfile(baseline / "physical_post.py", folder / "baseline_post.py")
+        runner = """from configuration import load_configuration, application_parameters, load_components
+    from ai4e_core import run
+    from ai4e_core.run.training import TrainingRun
+    from omegaconf import OmegaConf
+    import baseline_workflow, baseline_post
+    import shutil
+    from pathlib import Path
+    original = TrainingRun.checkpoint
+    def checkpoint(self, label, payload):
+        result = original(self, label, payload)
+        if label == "latest" and payload["epoch"] == 1:
+            shutil.copyfile(result, Path(__file__).parent.parent / "baseline-epoch1.pt")
+        return result
+    TrainingRun.checkpoint = checkpoint
+    
+    def pipeline(cfg):
+        component = load_components(cfg)
+        values = OmegaConf.create(application_parameters(cfg))
+        values.post.update(values.infer)
+        session = TrainingRun()
+        common = dict(dataset_component=component.dataset, model_component=component.model, session=session)
+        prepared = run.stage("trainprep", lambda _: baseline_workflow.trainprep(values, **common), cfg)
+        trained = run.stage("train", lambda _: baseline_workflow.train(values, prepared, **common), cfg)
+        values.post.checkpoint = trained["checkpoints"]["last"]
+        return run.stage("post", lambda _: baseline_post.execute(OmegaConf.to_container(values, resolve=True), component.dataset, component.model, session), cfg)
+    if __name__ == "__main__":
+        raise SystemExit(run.launch(pipeline, script=__file__, config_loader=load_configuration))
+    """
+        (folder / "baseline.py").write_text(runner)
+        config["pipeline"]["stages"] = ["trainprep", "train", "post"]
+        directories = []
+        for mode in ("baseline", "explicit"):
+            config["pipeline"]["stages"] = (
+                ["trainprep", "train", "post"]
+                if mode == "baseline"
+                else ["trainprep", "train", "infer", "post"]
+            )
+            config["infer"]["device"] = "cpu"
+            config["run_root"] = str(tmp_path / (mode + "-runs"))
+            config["data_root"] = str(tmp_path / (mode + "-data"))
+            (folder / "config.yaml").write_text(yaml.safe_dump(config, sort_keys=False))
+            result = script(folder, "baseline.py" if mode == "baseline" else "pipeline.py")
+            assert result.returncode == 0, result.stdout + result.stderr
+            directories.append(next(Path(config["run_root"]).iterdir()))
+        left, right = [
+            torch.load(path / "checkpoints/last.pt", weights_only=False) for path in directories
+        ]
+        assert left["updates"] == right["updates"] and left["epoch"] == right["epoch"] == 2
+        for key in left["model"]:
+&gt;           torch.testing.assert_close(left["model"][key], right["model"][key], rtol=0, atol=0)
+E           AssertionError: Tensor-likes are not equal!
+E           
+E           Mismatched elements: 561 / 576 (97.4%)
+E           Greatest absolute difference: 0.00039229169487953186 at index (7, 1)
+E           Greatest relative difference: 6.12642765045166 at index (4, 13)
+
+tests/integration/test_recipe_explicit_equivalence.py:128: AssertionError</failure></testcase><testcase classname="tests.integration.test_recipe_explicit_equivalence" name="test_five_examples_match_frozen_workflow_and_resume[shapenet_car_transolver3_surface]" time="10.942"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze3/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze3/explicit-runs/2026-09-23T11-05-15_3f72dd；生效配置=inputs/config.yaml&#10;  INFO [trainprep/阶段/开始] &#10;  ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'a', 'index': 0}]；原因='data_specs'&#10;  ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.011秒&#10;  ERROR 运行失败：'data_specs'&#10;  INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.013秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.011秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.013秒\n&quot;).returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze3')
+name = 'shapenet_car_transolver3_surface'
+
+    @pytest.mark.parametrize("name", NAMES)
+    def test_five_examples_match_frozen_workflow_and_resume(tmp_path, name):
+        folder, config = case(tmp_path, name)
+        baseline = ROOT / "tests/fixtures/recipe_before_explicit"
+        shutil.copyfile(baseline / "physical_workflow.py", folder / "baseline_workflow.py")
+        shutil.copyfile(baseline / "physical_post.py", folder / "baseline_post.py")
+        runner = """from configuration import load_configuration, application_parameters, load_components
+    from ai4e_core import run
+    from ai4e_core.run.training import TrainingRun
+    from omegaconf import OmegaConf
+    import baseline_workflow, baseline_post
+    import shutil
+    from pathlib import Path
+    original = TrainingRun.checkpoint
+    def checkpoint(self, label, payload):
+        result = original(self, label, payload)
+        if label == "latest" and payload["epoch"] == 1:
+            shutil.copyfile(result, Path(__file__).parent.parent / "baseline-epoch1.pt")
+        return result
+    TrainingRun.checkpoint = checkpoint
+    
+    def pipeline(cfg):
+        component = load_components(cfg)
+        values = OmegaConf.create(application_parameters(cfg))
+        values.post.update(values.infer)
+        session = TrainingRun()
+        common = dict(dataset_component=component.dataset, model_component=component.model, session=session)
+        prepared = run.stage("trainprep", lambda _: baseline_workflow.trainprep(values, **common), cfg)
+        trained = run.stage("train", lambda _: baseline_workflow.train(values, prepared, **common), cfg)
+        values.post.checkpoint = trained["checkpoints"]["last"]
+        return run.stage("post", lambda _: baseline_post.execute(OmegaConf.to_container(values, resolve=True), component.dataset, component.model, session), cfg)
+    if __name__ == "__main__":
+        raise SystemExit(run.launch(pipeline, script=__file__, config_loader=load_configuration))
+    """
+        (folder / "baseline.py").write_text(runner)
+        config["pipeline"]["stages"] = ["trainprep", "train", "post"]
+        directories = []
+        for mode in ("baseline", "explicit"):
+            config["pipeline"]["stages"] = (
+                ["trainprep", "train", "post"]
+                if mode == "baseline"
+                else ["trainprep", "train", "infer", "post"]
+            )
+            config["infer"]["device"] = "cpu"
+            config["run_root"] = str(tmp_path / (mode + "-runs"))
+            config["data_root"] = str(tmp_path / (mode + "-data"))
+            (folder / "config.yaml").write_text(yaml.safe_dump(config, sort_keys=False))
+            result = script(folder, "baseline.py" if mode == "baseline" else "pipeline.py")
+&gt;           assert result.returncode == 0, result.stdout + result.stderr
+E           AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze3/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze3/explicit-runs/2026-09-23T11-05-15_3f72dd；生效配置=inputs/config.yaml
+E             INFO [trainprep/阶段/开始] 
+E             ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'a', 'index': 0}]；原因='data_specs'
+E             ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.011秒
+E             ERROR 运行失败：'data_specs'
+E             INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.013秒
+E             
+E           assert 1 == 0
+E            +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.011秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.013秒\n").returncode
+
+tests/integration/test_recipe_explicit_equivalence.py:121: AssertionError</failure></testcase><testcase classname="tests.integration.test_recipe_explicit_equivalence" name="test_five_examples_match_frozen_workflow_and_resume[shapenet_car_transolver3_volume]" time="11.503"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze4/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze4/explicit-runs/2026-09-23T11-05-27_6b3ffd；生效配置=inputs/config.yaml&#10;  INFO [trainprep/阶段/开始] &#10;  ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'a', 'index': 0}]；原因='data_specs'&#10;  ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.015秒&#10;  ERROR 运行失败：'data_specs'&#10;  INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.016秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.015秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.016秒\n&quot;).returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze4')
+name = 'shapenet_car_transolver3_volume'
+
+    @pytest.mark.parametrize("name", NAMES)
+    def test_five_examples_match_frozen_workflow_and_resume(tmp_path, name):
+        folder, config = case(tmp_path, name)
+        baseline = ROOT / "tests/fixtures/recipe_before_explicit"
+        shutil.copyfile(baseline / "physical_workflow.py", folder / "baseline_workflow.py")
+        shutil.copyfile(baseline / "physical_post.py", folder / "baseline_post.py")
+        runner = """from configuration import load_configuration, application_parameters, load_components
+    from ai4e_core import run
+    from ai4e_core.run.training import TrainingRun
+    from omegaconf import OmegaConf
+    import baseline_workflow, baseline_post
+    import shutil
+    from pathlib import Path
+    original = TrainingRun.checkpoint
+    def checkpoint(self, label, payload):
+        result = original(self, label, payload)
+        if label == "latest" and payload["epoch"] == 1:
+            shutil.copyfile(result, Path(__file__).parent.parent / "baseline-epoch1.pt")
+        return result
+    TrainingRun.checkpoint = checkpoint
+    
+    def pipeline(cfg):
+        component = load_components(cfg)
+        values = OmegaConf.create(application_parameters(cfg))
+        values.post.update(values.infer)
+        session = TrainingRun()
+        common = dict(dataset_component=component.dataset, model_component=component.model, session=session)
+        prepared = run.stage("trainprep", lambda _: baseline_workflow.trainprep(values, **common), cfg)
+        trained = run.stage("train", lambda _: baseline_workflow.train(values, prepared, **common), cfg)
+        values.post.checkpoint = trained["checkpoints"]["last"]
+        return run.stage("post", lambda _: baseline_post.execute(OmegaConf.to_container(values, resolve=True), component.dataset, component.model, session), cfg)
+    if __name__ == "__main__":
+        raise SystemExit(run.launch(pipeline, script=__file__, config_loader=load_configuration))
+    """
+        (folder / "baseline.py").write_text(runner)
+        config["pipeline"]["stages"] = ["trainprep", "train", "post"]
+        directories = []
+        for mode in ("baseline", "explicit"):
+            config["pipeline"]["stages"] = (
+                ["trainprep", "train", "post"]
+                if mode == "baseline"
+                else ["trainprep", "train", "infer", "post"]
+            )
+            config["infer"]["device"] = "cpu"
+            config["run_root"] = str(tmp_path / (mode + "-runs"))
+            config["data_root"] = str(tmp_path / (mode + "-data"))
+            (folder / "config.yaml").write_text(yaml.safe_dump(config, sort_keys=False))
+            result = script(folder, "baseline.py" if mode == "baseline" else "pipeline.py")
+&gt;           assert result.returncode == 0, result.stdout + result.stderr
+E           AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze4/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_five_examples_match_froze4/explicit-runs/2026-09-23T11-05-27_6b3ffd；生效配置=inputs/config.yaml
+E             INFO [trainprep/阶段/开始] 
+E             ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'a', 'index': 0}]；原因='data_specs'
+E             ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.015秒
+E             ERROR 运行失败：'data_specs'
+E             INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.016秒
+E             
+E           assert 1 == 0
+E            +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.015秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.016秒\n").returncode
+
+tests/integration/test_recipe_explicit_equivalence.py:121: AssertionError</failure></testcase><testcase classname="tests.integration.test_example_contract" name="test_case_manifest_has_only_two_case_types_and_complete_standalones" time="0.006" /><testcase classname="tests.integration.test_example_contract" name="test_examples_do_not_contain_development_paths_or_internal_navigation" time="0.034" /><testcase classname="tests.integration.test_example_contract" name="test_declared_recipe_stage_files_are_byte_identical" time="0.014" /><testcase classname="tests.integration.test_example_contract" name="test_agent_resources_are_public_and_portable[DOJO_AGENT_GUIDE.md]" time="0.001" /><testcase classname="tests.integration.test_example_contract" name="test_agent_resources_are_public_and_portable[.agents/skills/dojo-research/SKILL.md]" time="0.001" /><testcase classname="tests.integration.test_example_contract" name="test_agent_resources_define_one_primary_entry_per_agent_capability" time="0.001" /><testcase classname="tests.integration.test_example_contract" name="test_agent_resources_contain_executable_python_api_contract" time="0.017" /><testcase classname="tests.integration.test_example_discovery" name="test_maintained_catalog_explains_every_case" time="0.025"><failure message="assert '改写' in '# darcy 算子网络研究\n\n完整流程为rawprep → trainprep → train → infer → post，Python正文显示每步交接。使用 `copy_example(&quot;operator_learning....\n\n默认100更新是工程短训起点，每模型/数据组合的参考、训练、准备、恢复、重试和安装验证累计不超过3小时。train.seconds只约束单次调用；组合总账本由验证主控维护。实际结果见专项验收，不宣称论文精度或Web模型开放。\n'">def test_maintained_catalog_explains_every_case():
+        for case in resources.list_examples():
+            description = case["research"]
+            assert all(
+                description[k]
+                for k in ("summary", "data_form", "training_pattern", "extension_points", "limitations")
+            )
+            source = resources.resource_root() / "examples" / case["path"] / "README.md"
+            content = source.read_text()
+&gt;           assert "改写" in content
+E           assert '改写' in '# darcy 算子网络研究\n\n完整流程为rawprep → trainprep → train → infer → post，Python正文显示每步交接。使用 `copy_example("operator_learning....\n\n默认100更新是工程短训起点，每模型/数据组合的参考、训练、准备、恢复、重试和安装验证累计不超过3小时。train.seconds只约束单次调用；组合总账本由验证主控维护。实际结果见专项验收，不宣称论文精度或Web模型开放。\n'
+
+tests/integration/test_example_discovery.py:20: AssertionError</failure></testcase><testcase classname="tests.integration.test_example_discovery" name="test_query_tags_intersection_and_original_order" time="0.005" /><testcase classname="tests.integration.test_example_discovery" name="test_old_manifest_does_not_invent_tags" time="0.000" /><testcase classname="tests.integration.test_example_discovery" name="test_copy_preserves_originals_and_delivers_readmes[recipe_extensions.wdno]" time="0.022" /><testcase classname="tests.integration.test_example_discovery" name="test_copy_preserves_originals_and_delivers_readmes[extension.pcno]" time="0.019" /><testcase classname="tests.integration.test_example_discovery" name="test_copy_preserves_originals_and_delivers_readmes[geotransolver.darcy]" time="0.011" /><testcase classname="tests.integration.test_example_discovery" name="test_reserved_document_directory_is_preflighted" time="0.002" /><testcase classname="tests.integration.test_example_discovery" name="test_copied_document_link_targets_and_missing_reference" time="0.002" /><testcase classname="tests.integration.test_example_discovery" name="test_exported_help_contains_real_case_body" time="0.310" /><testcase classname="tests.integration.test_research_extensions" name="test_validation_split_is_disjoint_and_preserves_source" time="0.003" /><testcase classname="tests.integration.test_research_extensions" name="test_research_selection_rejects_unpaired_state_without_mutation[missing_weights]" time="0.001" /><testcase classname="tests.integration.test_research_extensions" name="test_research_selection_rejects_unpaired_state_without_mutation[wrong_source]" time="0.001" /><testcase classname="tests.integration.test_research_extensions" name="test_research_selection_rejects_unpaired_state_without_mutation[wrong_shape]" time="0.001" /><testcase classname="tests.integration.test_research_extensions" name="test_external_copy_direct_task_resume_and_fixed_post[tail_batch]" time="40.055" /><testcase classname="tests.integration.test_research_extensions" name="test_external_copy_direct_task_resume_and_fixed_post[research_state]" time="37.377" /><testcase classname="tests.integration.test_framework_evolution_installation" name="test_installed_state_hooks_and_portable_discovery" time="3.776" /><testcase classname="tests.integration.test_dojo_compare_skill" name="test_controller_skill_is_portable_with_local_references" time="0.004" /><testcase classname="tests.integration.test_dojo_compare_skill" name="test_participant_guide_export_does_not_include_controller_skill" time="0.141" /><testcase classname="tests.integration.test_dojo_factorial" name="test_expanded_reuse_counts_imported_body_and_deduplicates_copy" time="0.001" /><testcase classname="tests.integration.test_dojo_factorial" name="test_responsibility_import_only_not_use_and_unknown_not_zero" time="0.000" /><testcase classname="tests.integration.test_dojo_factorial" name="test_round_cost_uses_interval_union_and_preserves_missing_tokens" time="0.004" /><testcase classname="tests.integration.test_dojo_factorial" name="test_replay_includes_local_script_glue_but_not_unused_definitions" time="0.003" /><testcase classname="tests.integration.test_dojo_factorial" name="test_latency_windows_reproducible_balanced_and_varied" time="0.001" /><testcase classname="tests.integration.test_dojo_factorial" name="test_independent_material_copy_is_not_hardlink" time="0.018" /><testcase classname="tests.integration.test_dojo_factorial" name="test_runtime_gate_is_required_before_formal_dispatch" time="0.010" /><testcase classname="tests.integration.test_dojo_factorial" name="test_runtime_file_alias_chain_does_not_open_sibling_files" time="0.049" /><testcase classname="tests.integration.test_dojo_factorial" name="test_open_model_materials_do_not_inherit_unet_recipe" time="0.000" /><testcase classname="tests.integration.test_dojo_factorial" name="test_authority_comes_from_controller_and_tamper_is_rejected" time="0.011" /><testcase classname="tests.integration.test_dojo_factorial" name="test_fake_24_candidates_before_hidden_and_selection_is_immutable" time="0.189" /><testcase classname="tests.integration.test_dojo_factorial" name="test_candidate_links_and_modified_frozen_bytes_rejected" time="0.021" /><testcase classname="tests.integration.test_dojo_factorial" name="test_four_group_report_keeps_validation_selection_and_unknown_audit" time="0.221" /><testcase classname="tests.integration.test_dojo_factorial" name="test_detail_series_preserves_unknown_and_expanded_numerator_denominator" time="0.000" /><testcase classname="tests.integration.test_dojo_factorial" name="test_trace_positions_deduplicates_paths_excludes_imports_and_rejects_drift" time="0.001" /><testcase classname="tests.integration.test_dojo_factorial" name="test_descriptive_interaction_requires_four_eligible_positive_scores" time="0.001" /><testcase classname="tests.integration.test_dojo_factorial" name="test_verified_storage_clone_preserves_bytes_mode_and_independence" time="0.110" /><testcase classname="tests.integration.test_dojo_implementation_coverage" name="test_called_implementation_excludes_unused_and_deduplicates" time="0.003" /><testcase classname="tests.integration.test_dojo_implementation_coverage" name="test_sloc_keeps_code_ignores_docs_comments_and_blank_lines" time="0.000" /><testcase classname="tests.integration.test_dojo_recipe_probe" name="test_window_stream_keeps_tail_and_recovers_inside_epoch" time="0.004" /><testcase classname="tests.integration.test_dojo_recipe_probe" name="test_block_rollout_keeps_future_gradient" time="0.031" /><testcase classname="tests.integration.test_dojo_recipe_probe" name="test_recipe_config_handles_launch_container_and_components" time="0.001"><failure message="AttributeError: module 'configuration' has no attribute 'validate'">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x16674f8f0&gt;
+
+    def test_recipe_config_handles_launch_container_and_components(monkeypatch):
+        monkeypatch.syspath_prepend(str(OVERLAY))
+        module = importlib.import_module("configuration")
+        raw = {
+            "science": {"fields": ["Psi", "u", "zj", "omega", "rho", "T"], "history": 10, "future": 40},
+            "train": {"updates": 5, "batch_size": 16},
+        }
+&gt;       result = module.validate(OmegaConf.create(raw))
+                 ^^^^^^^^^^^^^^^
+E       AttributeError: module 'configuration' has no attribute 'validate'
+
+tests/integration/test_dojo_recipe_probe.py:67: AttributeError</failure></testcase><testcase classname="tests.integration.test_dojo_recipe_probe" name="test_fixed_post_reads_arrays_without_a_model" time="0.032" /><testcase classname="tests.integration.test_dojo_recipe_probe" name="test_infer_post_public_asset_handoff" time="0.006"><failure message="ImportError: cannot import name 'component' from 'configuration' (/Users/zonghui/work/new_code_project/AI4E_Dojo/recipes/aero_cfd/configuration.py)">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_infer_post_public_asset_h0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x1665bb3e0&gt;
+
+    def test_infer_post_public_asset_handoff(tmp_path, monkeypatch):
+        """以真实运行写入器贯通资产枚举、冻结数组与独立后处理。"""
+        monkeypatch.syspath_prepend(str(OVERLAY))
+&gt;       infer = importlib.import_module("infer")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_dojo_recipe_probe.py:100: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+&lt;frozen importlib._bootstrap&gt;:1387: in _gcd_import
+    ???
+&lt;frozen importlib._bootstrap&gt;:1360: in _find_and_load
+    ???
+&lt;frozen importlib._bootstrap&gt;:1331: in _find_and_load_unlocked
+    ???
+&lt;frozen importlib._bootstrap&gt;:935: in _load_unlocked
+    ???
+&lt;frozen importlib._bootstrap_external&gt;:999: in exec_module
+    ???
+&lt;frozen importlib._bootstrap&gt;:488: in _call_with_frames_removed
+    ???
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    """冻结权重推理与物理预测交付；全窗口延迟包含正反变换与传输。"""
+    
+    import torch
+&gt;   from configuration import component
+E   ImportError: cannot import name 'component' from 'configuration' (/Users/zonghui/work/new_code_project/AI4E_Dojo/recipes/aero_cfd/configuration.py)
+
+tools/verification/dojo_validity/rmhd/recipe_probe/overlay/infer.py:4: ImportError</failure></testcase><testcase classname="tests.integration.test_task_descriptions" name="test_two_applications_describe_without_task_domain_branch" time="2.223" /><testcase classname="tests.integration.test_task_descriptions" name="test_labels_are_typed[1-True-False]" time="0.001" /><testcase classname="tests.integration.test_task_descriptions" name="test_labels_are_typed[1-1-True]" time="0.001" /><testcase classname="tests.integration.test_task_descriptions" name="test_labels_are_typed[1-1-False]" time="0.001" /><testcase classname="tests.integration.test_task_descriptions" name="test_missing_split_and_wrong_phase_are_not_candidates" time="0.000" /><testcase classname="tests.integration.test_task_descriptions" name="test_source_is_verified_and_local_copy_relocates" time="0.934" /><testcase classname="tests.integration.test_task_descriptions" name="test_plain_script_has_no_invented_description" time="0.003" /><testcase classname="tests.integration.test_task_descriptions" name="test_new_unrelated_source_does_not_invalidate_capture" time="0.758" /><testcase classname="tests.integration.test_task_descriptions" name="test_execution_plan_rejects_incomplete_or_ambiguous_units" time="0.000" /><testcase classname="tests.integration.test_task_descriptions" name="test_configuration_conversion_is_explicit_and_does_not_mutate_input" time="0.000" /><testcase classname="tests.integration.test_task_descriptions" name="test_coordinator_source_drift_publishes_terminal_failure" time="0.005" /><testcase classname="tests.integration.test_task_descriptions" name="test_capture_rejects_conflicting_producer_labels" time="0.006" /><testcase classname="tests.integration.test_task_array_bundles" name="test_array_bundle_share_copy_fork_and_relocate" time="0.026" /><testcase classname="tests.integration.test_task_array_bundles" name="test_bundle_rejects_external_dependency_and_content_drift" time="0.003" /><testcase classname="tests.integration.test_task_array_bundles" name="test_run_asset_public_share_and_fork_remain_consumable" time="0.956" /><testcase classname="tests.integration.test_task_assets" name="test_shared_reference_copy_and_change_detection" time="0.009" /><testcase classname="tests.integration.test_task_assets" name="test_copy_switches_and_execution_binding" time="0.092" /><testcase classname="tests.integration.test_task_assets" name="test_shared_reference_keeps_array_dependencies" time="0.006" /><testcase classname="tests.integration.test_task_assets" name="test_rebound_shared_bundle_survives_fork" time="0.055" /><testcase classname="tests.integration.test_task_configuration" name="test_preserve_configuration_and_task_record" time="0.038" /><testcase classname="tests.integration.test_task_configuration" name="test_replace_model_sections_removes_incompatible_old_tree" time="0.058" /><testcase classname="tests.integration.test_task_configuration" name="test_inspection_failure_keeps_keyerror_field_name" time="0.000" /><testcase classname="tests.integration.test_task_configuration" name="test_candidate_configuration_cannot_execute" time="0.031" /><testcase classname="tests.integration.test_task_configuration" name="test_export_model_preset_is_reusable_on_same_dataset" time="19.364" /><testcase classname="tests.integration.test_task_configuration" name="test_export_model_preset_rejects_empty_duplicate_and_stale" time="8.942" /><testcase classname="tests.integration.test_task_configuration" name="test_migrate_official_aero_scripts_replaces_old_wrapper_only" time="3.521" /><testcase classname="tests.integration.test_task_configuration" name="test_verified_old_sources_skip_current_and_match_originals" time="0.002" /><testcase classname="tests.integration.test_task_configuration" name="test_save_configuration_refreshes_live_entry" time="0.032" /><testcase classname="tests.integration.test_task_configuration" name="test_complete_configuration_does_not_merge_or_migrate" time="0.025" /><testcase classname="tests.integration.test_task_configuration" name="test_official_migration_failure_restores_all_replaced_files" time="3.703" /><testcase classname="tests.integration.test_task_configuration" name="test_platform_migration_selects_matching_case[nasa_crm_transolver3]" time="3.580" /><testcase classname="tests.integration.test_task_configuration" name="test_platform_migration_selects_matching_case[shapenet_car_transolver3_volume]" time="3.400" /><testcase classname="tests.integration.test_task_configuration" name="test_platform_migration_selects_matching_case[nasa_crm_abupt]" time="3.535" /><testcase classname="tests.integration.test_task_contracts" name="test_shared_identity_and_tampered_version" time="0.021" /><testcase classname="tests.integration.test_task_contracts" name="test_resume_uses_captured_code_and_keeps_version" time="3.604" /><testcase classname="tests.integration.test_task_contracts" name="test_cli_and_incompatible_quantity" time="0.521" /><testcase classname="tests.integration.test_task_contracts" name="test_explicit_crash_recovery_does_not_remove_registered_task" time="0.007" /><testcase classname="tests.integration.test_task_contracts" name="test_declared_missing_comparison_condition_is_not_available" time="0.393" /><testcase classname="tests.integration.test_task_execution" name="test_execution_snapshot_version_identity_and_comparison" time="0.178" /><testcase classname="tests.integration.test_task_execution" name="test_failure_stop_unknown_and_incompatible" time="0.313" /><testcase classname="tests.integration.test_task_execution" name="test_script_start_failure_and_import_conflict" time="0.150" /><testcase classname="tests.integration.test_task_execution" name="test_legacy_descriptor_cannot_change_loader_behavior" time="0.149" /><testcase classname="tests.integration.test_task_execution" name="test_queued_input_change_fails_before_user_code" time="0.145" /><testcase classname="tests.integration.test_task_installation" name="test_wheel_install_outside_checkout" time="17.446"><failure message="AssertionError: Traceback (most recent call last):&#10;    File &quot;&lt;string&gt;&quot;, line 23, in &lt;module&gt;&#10;  AssertionError: (&quot;ModuleNotFoundError: No module named 'ema_pytorch'&quot;, '')&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_whe...le &quot;&lt;string&gt;&quot;, line 23, in &lt;module&gt;\nAssertionError: (&quot;ModuleNotFoundError: No module named \'ema_pytorch\'&quot;, \'\')\n').returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_wheel_install_outside_che0')
+
+    def test_wheel_install_outside_checkout(tmp_path):
+        root = Path(__file__).resolve().parents[2]
+        source_manifest = json.loads((root / "examples/case-manifest.json").read_text())
+        expected_case_ids = sorted(case["id"] for case in source_manifest["cases"])
+        configured = os.environ.get("DOJO_TASK_WHEELS")
+        wheels = Path(configured) if configured else tmp_path / "wheels"
+        if not configured:
+            subprocess.run(
+                ["uv", "build", "--all-packages", "--wheel", "--out-dir", str(wheels)],
+                cwd=Path(__file__).resolve().parents[2],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+        names = ["ai4e_spec", "ai4e_core", "ai4e_contrib", "ai4e_task"]
+        files = [next(wheels.glob(name + "-*.whl"), None) for name in names]
+        if any(file is None for file in files):
+            pytest.fail("先构建四个 workspace wheel，并用 DOJO_TASK_WHEELS 指定目录")
+        envdir = tmp_path / "venv"
+        # 只复用机器已有第三方训练依赖；四个产品包必须安装到新环境。
+        subprocess.run(
+            [sys.executable, "-m", "venv", "--system-site-packages", str(envdir)],
+            check=True,
+            capture_output=True,
+        )
+        python = envdir / "bin/python"
+        # venv 的 system-site-packages 指向基础 Python，并不包含父 venv。
+        # 显式复用已安装第三方依赖；下方断言仍要求所有产品包来自新 wheel。
+        target_site = (
+            envdir
+            / "lib"
+            / f"python{sys.version_info.major}.{sys.version_info.minor}"
+            / "site-packages"
+        )
+        (target_site / "third_party.pth").write_text(sysconfig.get_path("purelib") + "\n")
+        ema = importlib.util.find_spec("ema_pytorch")
+        if ema is not None and ema.origin:
+            # 控制 extra 可由调用方安装在独立测试目录；仅复用该第三方依赖。
+            (target_site / "control_extra.pth").write_text(str(Path(ema.origin).parent.parent) + "\n")
+        clean = {k: v for k, v in os.environ.items() if k not in {"PYTHONPATH", "VIRTUAL_ENV"}}
+        subprocess.run(
+            [
+                str(python),
+                "-m",
+                "pip",
+                "install",
+                "--no-index",
+                "--no-deps",
+                "--force-reinstall",
+                *[str(f) for f in files],
+            ],
+            cwd=tmp_path,
+            env=clean,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        probe = subprocess.run(
+            [
+                str(python),
+                "-c",
+                'import sys, ai4e_task, ai4e_core, ai4e_spec; import json; print(json.dumps({"path":ai4e_task.__file__,"core":ai4e_core.__file__,"spec":ai4e_spec.__file__,"torch":"torch" in sys.modules} ))',
+            ],
+            cwd=tmp_path,
+            env=clean,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        info = json.loads(probe.stdout)
+        assert all(str(envdir) in info[key] for key in ("path", "core", "spec"))
+        assert info["torch"] is False
+        help_probe = subprocess.run(
+            [
+                str(python),
+                "-c",
+                """import json, sys, ai4e_task as task
+    info = task.help_info()
+    hit = task.search_help('ai4e_core.run.launch', limit=1)[0]
+    symbol = task.describe_help_symbol('ai4e_core.run.launch')
+    topic = task.read_help_topic('workflow:parametric-pde')
+    print(json.dumps({
+        'symbols': info['coverage']['symbols'],
+        'hit': hit['topic_id'],
+        'signature': symbol['signature'],
+        'topic': topic['title'],
+        'torch': 'torch' in sys.modules,
+        'contrib': 'ai4e_contrib' in sys.modules,
+    }))
+    """,
+            ],
+            cwd=tmp_path,
+            env=clean,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        help_result = json.loads(help_probe.stdout)
+        assert help_result["symbols"] &gt; 1_000
+        assert help_result["hit"] == "api:ai4e_core.run.launch"
+        assert help_result["signature"].startswith("launch(")
+        assert help_result["topic"] == "参数化 PDE 研究流程"
+        assert help_result["torch"] is False
+        assert help_result["contrib"] is False
+        resource_probe = subprocess.run(
+            [
+                str(python),
+                "-c",
+                """import json, sys
+    from pathlib import Path
+    import ai4e_task as task
+    expected = json.loads(sys.argv[1])
+    actual = sorted(case['id'] for case in task.list_examples())
+    checks = {case_id: task.check_example(case_id)['ok'] for case_id in actual}
+    copies = {}
+    for case_id in actual:
+        target = Path('installed-cases') / case_id.replace('.', '__')
+        task.copy_example(case_id, target)
+        copies[case_id] = target.is_dir() and any(target.iterdir())
+    print(json.dumps({'actual': actual, 'checks': checks, 'copies': copies}))
+    """,
+                json.dumps(expected_case_ids),
+            ],
+            cwd=tmp_path,
+            env=clean,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        resource_result = json.loads(resource_probe.stdout)
+        assert resource_result["actual"] == expected_case_ids
+        assert all(resource_result["checks"].values())
+        assert all(resource_result["copies"].values())
+        cli = envdir / "bin/ai4e"
+        project = tmp_path / "installed-study"
+    
+        def invoke(*args):
+            return json.loads(
+                subprocess.run(
+                    [str(cli), *map(str, args), "--json"],
+                    cwd=tmp_path,
+                    env=clean,
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                ).stdout
+            )
+    
+        invoke("project", "new", project)
+        first = invoke("new", "root", "--project", project)
+        second = invoke("fork", first["id"], "--project", project)
+        assert second["parent_version_id"] == first["version_id"]
+        assert len(invoke("tree", "--project", project)) == 2
+        from tests.integration.test_task_management import recipe
+    
+        source = recipe(tmp_path)
+        runnable = invoke("new", "runnable", "--project", project, "--from", source)
+        subprocess.run(
+            [
+                str(python),
+                "-c",
+                """import sys
+    import ai4e_task as task
+    project, identity = sys.argv[1:]
+    original = task.read_configuration(project, identity)
+    config = original["config"]
+    config["platform_probe"] = {"removed": True}
+    saved = task.replace_configuration(project, identity, config, revision=original["revision"])
+    config.pop("platform_probe")
+    saved = task.replace_configuration(project, identity, config, revision=saved["revision"])
+    assert "platform_probe" not in task.read_configuration(project, identity)["config"]
+    """,
+                str(project),
+                runnable["id"],
+            ],
+            cwd=tmp_path,
+            env=clean,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        completed = invoke("run", runnable["id"], "--project", project, "--wait", "--timeout", "30")
+        assert completed["status"] == "succeeded", completed
+        assert completed["lineage"]["version_id"] == runnable["version_id"]
+    
+        # 同一真实 wheel 环境执行仓库外完整用户字段扩展，覆盖安装包与模板交接。
+        from tests.integration.test_recipe_extensions import extension_case
+    
+        folder, _ = extension_case(tmp_path / "extension", "field_mapping")
+        result = subprocess.run(
+            [str(python), "-B", str(folder / "pipeline.py")],
+            cwd=tmp_path,
+            env={**clean, "OMP_NUM_THREADS": "1", "VECLIB_MAXIMUM_THREADS": "1"},
+            capture_output=True,
+            text=True,
+            timeout=90,
+            check=False,
+        )
+        assert result.returncode == 0, result.stdout + result.stderr
+        summaries = list((tmp_path / "extension/records").glob("*/summary.json"))
+        summary = json.loads(summaries[-1].read_text())
+        physical = Path(summary["reports"]["rawprep"]["manifest"]).parent
+        assert (physical / "train/a/volume_speed.pt").is_file()
+        assert (summaries[-1].parent / "checkpoints/last.pt").is_file()
+    
+        # 从安装资源复制本地 application 扩展，真实生产准备并读回候选与捕获标签。
+        label_probe = subprocess.run(
+            [
+                str(python),
+                "-B",
+                "-c",
+                """
+    from pathlib import Path
+    import json
+    import numpy as np
+    import ai4e_task as task
+    from omegaconf import OmegaConf
+    from ai4e_core.applications.pde_control.contracts import save_arrays, read_arrays
+    recipe = Path.cwd() / 'installed-labels'
+    task.copy_example('recipe_extensions.task_labels', recipe)
+    config = OmegaConf.to_container(OmegaConf.load(recipe / 'config.yaml'), resolve=True)
+    physical = {}
+    for split in ('train', 'cal', 'test'):
+        physical[split] = save_arrays(Path.cwd() / 'label-data' / split,
+            {'states': np.zeros((2, 11, 128), dtype=np.float32),
+             'controls': np.zeros((2, 10, 128), dtype=np.float32)},
+            kind='control_physical_v1', metadata={'case': 'burgers', 'split': split, 'count': 2})
+    config['inputs']['trainprep'] = {'dataset_' + k: v for k, v in physical.items()}
+    config['pipeline'] = {'stages': ['trainprep']}
+    project = Path.cwd() / 'label-project'
+    task.create_project(project)
+    item = task.new_task(project, 'installed labels', source=recipe, configuration=config)
+    run = task.wait_run(project, task.submit_run(project, item['id'])['id'], timeout=60)
+    assert run['status'] == 'succeeded', (run.get('error'), task.read_log(project, run['id']))
+    rows = task.list_stage_artifacts(project, item['id'])
+    cal = [row for row in rows if row['binding'] == 'inputs.posttrain.preparation_cal']
+    assert len(cal) == 1 and cal[0]['semantics']['split'] == 'cal', rows
+    assert cal[0]['name'] == 'cal' and cal[0]['file_name'] == 'manifest.json'
+    prepared = run['summary']['reports']['trainprep']['prepared']['cal']
+    _, arrays = read_arrays(prepared, kind='control_prepared_v1')
+    assert arrays['model'].shape == (2, 3, 16, 128)
+    assert arrays['target'].shape == (2, 11, 128)
+    current = task.read_configuration(project, item['id'])
+    task.save_configuration(project, item['id'], {'inputs': {'posttrain': {'preparation_cal': prepared}}}, revision=current['revision'])
+    queued = task.submit_run(project, item['id'], start=False,
+                             overrides=['pipeline.stages=[posttrain]'], input_keys=['inputs.posttrain.preparation_cal'])
+    captured = json.loads((project / queued['request_path']).read_text())
+    assert captured['context']['assets']['inputs.posttrain.preparation_cal']['semantics']['split'] == 'cal'
+    task.stop_run(project, queued['id'])
+    print(json.dumps({'preparation_run': run['id'], 'calibration_candidates': len(cal)}))
+    """,
+            ],
+            cwd=tmp_path,
+            env=clean,
+            capture_output=True,
+            text=True,
+            timeout=120,
+            check=False,
+        )
+&gt;       assert label_probe.returncode == 0, label_probe.stdout + label_probe.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "&lt;string&gt;", line 23, in &lt;module&gt;
+E         AssertionError: ("ModuleNotFoundError: No module named 'ema_pytorch'", '')
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_whe...le "&lt;string&gt;", line 23, in &lt;module&gt;\nAssertionError: ("ModuleNotFoundError: No module named \'ema_pytorch\'", \'\')\n').returncode
+
+tests/integration/test_task_installation.py:273: AssertionError</failure></testcase><testcase classname="tests.integration.test_task_post_metrics" name="test_real_worker_multi_batch_export_and_immutable_inputs" time="50.714" /><testcase classname="tests.integration.test_task_post_metrics" name="test_revision_conflict_and_partial_field_failure" time="68.959" /><testcase classname="tests.integration.test_task_post_metrics" name="test_cancel_keeps_completed_rows_and_checks_changed_member" time="11.134" /><testcase classname="tests.integration.test_task_post_results" name="test_catalog_complete_and_noncolliding" time="33.177" /><testcase classname="tests.integration.test_task_post_results" name="test_missing_member_keeps_other_samples" time="22.091" /><testcase classname="tests.integration.test_task_post_results" name="test_corrupt_batch_state_keeps_other_batch" time="6.380" /><testcase classname="tests.integration.test_task_post_results" name="test_vector_header_and_missing_truth" time="32.033" /><testcase classname="tests.integration.test_task_post_results" name="test_train_data_results_listed_without_inference" time="15.160" /><testcase classname="tests.integration.test_task_post_results" name="test_train_without_result_files_still_lists_run" time="10.878" /><testcase classname="tests.integration.test_task_post_results" name="test_failed_train_listed_without_fake_results" time="8.627" /><testcase classname="tests.integration.test_task_post_results" name="test_rawprep_run_not_listed_as_result_files" time="3.576" /><testcase classname="tests.integration.test_task_post_results" name="test_platform_dataset_listed_with_sample_id" time="17.220" /><testcase classname="tests.integration.test_task_post_results" name="test_standalone_infer_run_without_batch_is_listed" time="5.483" /><testcase classname="tests.integration.test_task_post_results" name="test_infer_sample_without_vtk_lists_reason" time="3.165" /><testcase classname="tests.integration.test_task_resources" name="test_resource_manifest_and_checks" time="0.118" /><testcase classname="tests.integration.test_task_resources" name="test_copy_standalone_rejects_non_empty_target" time="0.006" /><testcase classname="tests.integration.test_task_resources" name="test_copy_extension_materializes_base_and_provenance" time="0.008" /><testcase classname="tests.integration.test_task_resources" name="test_guide_export_and_source_location_do_not_create_agents" time="0.234" /><testcase classname="tests.integration.test_task_resources" name="test_help_search_topic_symbol_and_export" time="0.217" /><testcase classname="tests.integration.test_task_resources" name="test_resource_commands_do_not_import_training_stack" time="0.136" /><testcase classname="tests.integration.test_task_resources" name="test_help_cli_wraps_python_api" time="0.635" /><testcase classname="tests.integration.test_task_resources" name="test_documented_agent_python_apis_are_public" time="0.000" /><testcase classname="tests.integration.test_task_shared_dataset_installation" name="test_installed_shared_extension_two_tasks" time="41.199" /><testcase classname="tests.integration.test_task_shared_dataset_migration" name="test_migrate_formal_only_preserves_original_and_is_idempotent" time="6.993" /><testcase classname="tests.integration.test_task_shared_dataset_migration" name="test_explicit_registered_names_preserve_exact_runs" time="11.151" /><testcase classname="tests.integration.test_task_shared_dataset_migration" name="test_migration_failure_conflict_and_corrupt_repeat" time="7.471" /><testcase classname="tests.integration.test_task_shared_execution" name="test_shared_output_and_private_preparation" time="2.715" /><testcase classname="tests.integration.test_task_shared_execution" name="test_second_task_prepares_without_raw_and_overwrite_refreshes" time="7.314" /><testcase classname="tests.integration.test_task_shared_execution" name="test_trial_and_check_do_not_touch_formal" time="4.330" /><testcase classname="tests.integration.test_task_shared_execution" name="test_failed_overwrite_unavailable_and_idempotency" time="3.464" /><testcase classname="tests.integration.test_task_shared_execution" name="test_same_name_queued_producer_blocks_other" time="3.931" /><testcase classname="tests.integration.test_task_shared_execution" name="test_invalid_name_rejected[dataset.processed_name=null-ValueError]" time="1.709" /><testcase classname="tests.integration.test_task_shared_execution" name="test_invalid_name_rejected[dataset.processed_name=../bad-ValueError]" time="1.651" /><testcase classname="tests.integration.test_task_shared_execution" name="test_submission_rechecks_name_and_launch_failure_releases_only_reservation" time="3.134" /><testcase classname="tests.integration.test_task_shared_execution" name="test_stage_inputs_only_skip_earlier_producer" time="0.000" /><testcase classname="tests.integration.test_task_shared_execution" name="test_unknown_placeholder_and_escape_rejected" time="0.861" /><testcase classname="tests.integration.test_task_shared_execution" name="test_parallel_submissions_have_one_writer" time="1.918" /><testcase classname="tests.integration.test_infer_compatibility" name="test_infer_parameters_isolate_training_and_legacy_values" time="0.000" /><testcase classname="tests.integration.test_infer_compatibility" name="test_invalid_settings_are_rejected[settings0]" time="0.000" /><testcase classname="tests.integration.test_infer_compatibility" name="test_invalid_settings_are_rejected[settings1]" time="0.000" /><testcase classname="tests.integration.test_infer_compatibility" name="test_invalid_settings_are_rejected[settings2]" time="0.000" /><testcase classname="tests.integration.test_infer_compatibility" name="test_invalid_settings_are_rejected[settings3]" time="0.000" /><testcase classname="tests.integration.test_infer_compatibility" name="test_invalid_settings_are_rejected[settings4]" time="0.000" /><testcase classname="tests.integration.test_infer_compatibility" name="test_invalid_settings_are_rejected[settings5]" time="0.000" /><testcase classname="tests.integration.test_infer_compatibility" name="test_metadata_never_exports_tensors_and_does_not_change_rng" time="0.002" /><testcase classname="tests.integration.test_infer_compatibility" name="test_comparison_rejects_incomplete_or_changed_protocol[None-comparable]" time="0.001" /><testcase classname="tests.integration.test_infer_compatibility" name="test_comparison_rejects_incomplete_or_changed_protocol[partial-insufficient]" time="0.001" /><testcase classname="tests.integration.test_infer_compatibility" name="test_comparison_rejects_incomplete_or_changed_protocol[samples-insufficient]" time="0.001" /><testcase classname="tests.integration.test_infer_compatibility" name="test_comparison_rejects_incomplete_or_changed_protocol[device-incompatible]" time="0.001" /><testcase classname="tests.integration.test_infer_compatibility" name="test_comparison_rejects_incomplete_or_changed_protocol[aggregate-incompatible]" time="0.001" /><testcase classname="tests.integration.test_infer_compatibility" name="test_comparison_rejects_incomplete_or_changed_protocol[missing-insufficient]" time="0.001" /><testcase classname="tests.integration.test_infer_compatibility" name="test_infer_paths_are_resolved_without_mutating_train" time="0.168" /><testcase classname="tests.integration.test_infer_devices" name="test_known_training_device_is_busy" time="0.001" /><testcase classname="tests.integration.test_infer_installation" name="test_installed_task_and_server_inference" time="4.257" /><testcase classname="tests.integration.test_infer_stage" name="test_native_infer_matches_old_post_and_consumes_results[shapenet_car_abupt]" time="8.530"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_0/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_0/legacy-runs/2026-09-23T11-14-43_b88268；生效配置=inputs/config.yaml&#10;  INFO [trainprep/阶段/开始] &#10;  INFO [trainprep/阶段/结束] 耗时=0.035秒&#10;  INFO [train/阶段/开始] &#10;  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.&#10;    warnings.warn(&#10;  INFO [train/训练/进度] 轮次=1；更新=1；损失=3.4460201263427734；学习率=1e-06；耗时=0.0070749170845374465；峰值内存=711884800；在线={'surface_pressure': 0.4602280557155609, 'volume_velocity': 2.9857921600341797}&#10;  INFO [train/训练/进度] 轮次=2；更新=2；损失=3.2932357788085938；学习率=1e-06；耗时=0.00442479201592505；峰值内存=711884800；在线={'surface_pressure': 0.3526982069015503, 'volume_velocity': 2.940537452697754}&#10;  INFO [train/阶段/结束] 耗时=0.951秒&#10;  INFO [post/阶段/开始] &#10;  ERROR [post/阶段/失败] 样本=；原因=现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口；耗时=0.010秒&#10;  ERROR 运行失败：现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口&#10;  INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.998秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...接口；耗时=0.010秒\nERROR 运行失败：现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.998秒\n&quot;).returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_0')
+name = 'shapenet_car_abupt'
+
+    @pytest.mark.parametrize("name", NAMES)
+    def test_native_infer_matches_old_post_and_consumes_results(tmp_path, name):
+        folder, cfg = case(tmp_path, name)
+        cfg["pipeline"]["stages"] = ["trainprep", "train", "post"]
+        cfg["run_root"] = str(tmp_path / "legacy-runs")
+        cfg["data_root"] = str(tmp_path / "legacy-data")
+        (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
+        import shutil
+    
+        reference = (
+            Path(__file__).resolve().parents[1] / "fixtures/recipe_before_explicit/physical_post.py"
+        )
+        shutil.copyfile(reference, folder / "reference_prediction.py")
+        original_post = (folder / "post.py").read_text()
+        (
+            folder / "post.py"
+        ).write_text("""from configuration import application_parameters, load_components
+    from ai4e_core import run
+    from reference_prediction import execute
+    
+    def post(cfg, trained=None):
+        component = load_components(cfg)
+        config = application_parameters(cfg)
+        if trained:
+            config['post']['checkpoint'] = trained['checkpoints']['last']
+        return execute(config, component.dataset, component.model, run.TrainingRun())
+    """)
+        completed = script(folder)
+        (folder / "post.py").write_text(original_post)
+&gt;       assert completed.returncode == 0, completed.stdout + completed.stderr
+E       AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_0/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_0/legacy-runs/2026-09-23T11-14-43_b88268；生效配置=inputs/config.yaml
+E         INFO [trainprep/阶段/开始] 
+E         INFO [trainprep/阶段/结束] 耗时=0.035秒
+E         INFO [train/阶段/开始] 
+E         /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+E           warnings.warn(
+E         INFO [train/训练/进度] 轮次=1；更新=1；损失=3.4460201263427734；学习率=1e-06；耗时=0.0070749170845374465；峰值内存=711884800；在线={'surface_pressure': 0.4602280557155609, 'volume_velocity': 2.9857921600341797}
+E         INFO [train/训练/进度] 轮次=2；更新=2；损失=3.2932357788085938；学习率=1e-06；耗时=0.00442479201592505；峰值内存=711884800；在线={'surface_pressure': 0.3526982069015503, 'volume_velocity': 2.940537452697754}
+E         INFO [train/阶段/结束] 耗时=0.951秒
+E         INFO [post/阶段/开始] 
+E         ERROR [post/阶段/失败] 样本=；原因=现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口；耗时=0.010秒
+E         ERROR 运行失败：现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口
+E         INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.998秒
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...接口；耗时=0.010秒\nERROR 运行失败：现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.998秒\n").returncode
+
+tests/integration/test_infer_stage.py:45: AssertionError</failure></testcase><testcase classname="tests.integration.test_infer_stage" name="test_native_infer_matches_old_post_and_consumes_results[nasa_crm_transolver3]" time="7.613"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_1/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_1/legacy-runs/2026-09-23T11-14-52_76254b；生效配置=inputs/config.yaml&#10;  INFO [trainprep/阶段/开始] &#10;  ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'Sample001', 'index': 0}]；原因='data_specs'&#10;  ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.023秒&#10;  ERROR 运行失败：'data_specs'&#10;  INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.025秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.023秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.025秒\n&quot;).returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_1')
+name = 'nasa_crm_transolver3'
+
+    @pytest.mark.parametrize("name", NAMES)
+    def test_native_infer_matches_old_post_and_consumes_results(tmp_path, name):
+        folder, cfg = case(tmp_path, name)
+        cfg["pipeline"]["stages"] = ["trainprep", "train", "post"]
+        cfg["run_root"] = str(tmp_path / "legacy-runs")
+        cfg["data_root"] = str(tmp_path / "legacy-data")
+        (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
+        import shutil
+    
+        reference = (
+            Path(__file__).resolve().parents[1] / "fixtures/recipe_before_explicit/physical_post.py"
+        )
+        shutil.copyfile(reference, folder / "reference_prediction.py")
+        original_post = (folder / "post.py").read_text()
+        (
+            folder / "post.py"
+        ).write_text("""from configuration import application_parameters, load_components
+    from ai4e_core import run
+    from reference_prediction import execute
+    
+    def post(cfg, trained=None):
+        component = load_components(cfg)
+        config = application_parameters(cfg)
+        if trained:
+            config['post']['checkpoint'] = trained['checkpoints']['last']
+        return execute(config, component.dataset, component.model, run.TrainingRun())
+    """)
+        completed = script(folder)
+        (folder / "post.py").write_text(original_post)
+&gt;       assert completed.returncode == 0, completed.stdout + completed.stderr
+E       AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_1/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_1/legacy-runs/2026-09-23T11-14-52_76254b；生效配置=inputs/config.yaml
+E         INFO [trainprep/阶段/开始] 
+E         ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'Sample001', 'index': 0}]；原因='data_specs'
+E         ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.023秒
+E         ERROR 运行失败：'data_specs'
+E         INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.025秒
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.023秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.025秒\n").returncode
+
+tests/integration/test_infer_stage.py:45: AssertionError</failure></testcase><testcase classname="tests.integration.test_infer_stage" name="test_native_infer_matches_old_post_and_consumes_results[nasa_crm_abupt]" time="9.139"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_2/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_2/legacy-runs/2026-09-23T11-15-00_2dda12；生效配置=inputs/config.yaml&#10;  INFO [trainprep/阶段/开始] &#10;  INFO [trainprep/阶段/结束] 耗时=0.057秒&#10;  INFO [train/阶段/开始] &#10;  /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.&#10;    warnings.warn(&#10;  INFO [train/训练/进度] 轮次=1；更新=4；损失=1.9940982162952423；学习率=2.00482371180703e-05；耗时=0.020538791082799435；峰值内存=728121344；在线={'surface_cp': 1.095705270767212, 'surface_cf': 0.898392915725708}&#10;  INFO [train/训练/进度] 轮次=2；更新=8；损失=2.447370082139969；学习率=1e-06；耗时=0.014798999996855855；峰值内存=728121344；在线={'surface_cp': 1.0116634368896484, 'surface_cf': 1.435706615447998}&#10;  INFO [train/阶段/结束] 耗时=1.015秒&#10;  INFO [post/阶段/开始] &#10;  ERROR [post/阶段/失败] 样本=；原因=现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口；耗时=0.008秒&#10;  ERROR 运行失败：现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口&#10;  INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=1.082秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...接口；耗时=0.008秒\nERROR 运行失败：现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=1.082秒\n&quot;).returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_2')
+name = 'nasa_crm_abupt'
+
+    @pytest.mark.parametrize("name", NAMES)
+    def test_native_infer_matches_old_post_and_consumes_results(tmp_path, name):
+        folder, cfg = case(tmp_path, name)
+        cfg["pipeline"]["stages"] = ["trainprep", "train", "post"]
+        cfg["run_root"] = str(tmp_path / "legacy-runs")
+        cfg["data_root"] = str(tmp_path / "legacy-data")
+        (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
+        import shutil
+    
+        reference = (
+            Path(__file__).resolve().parents[1] / "fixtures/recipe_before_explicit/physical_post.py"
+        )
+        shutil.copyfile(reference, folder / "reference_prediction.py")
+        original_post = (folder / "post.py").read_text()
+        (
+            folder / "post.py"
+        ).write_text("""from configuration import application_parameters, load_components
+    from ai4e_core import run
+    from reference_prediction import execute
+    
+    def post(cfg, trained=None):
+        component = load_components(cfg)
+        config = application_parameters(cfg)
+        if trained:
+            config['post']['checkpoint'] = trained['checkpoints']['last']
+        return execute(config, component.dataset, component.model, run.TrainingRun())
+    """)
+        completed = script(folder)
+        (folder / "post.py").write_text(original_post)
+&gt;       assert completed.returncode == 0, completed.stdout + completed.stderr
+E       AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_2/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_2/legacy-runs/2026-09-23T11-15-00_2dda12；生效配置=inputs/config.yaml
+E         INFO [trainprep/阶段/开始] 
+E         INFO [trainprep/阶段/结束] 耗时=0.057秒
+E         INFO [train/阶段/开始] 
+E         /Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+E           warnings.warn(
+E         INFO [train/训练/进度] 轮次=1；更新=4；损失=1.9940982162952423；学习率=2.00482371180703e-05；耗时=0.020538791082799435；峰值内存=728121344；在线={'surface_cp': 1.095705270767212, 'surface_cf': 0.898392915725708}
+E         INFO [train/训练/进度] 轮次=2；更新=8；损失=2.447370082139969；学习率=1e-06；耗时=0.014798999996855855；峰值内存=728121344；在线={'surface_cp': 1.0116634368896484, 'surface_cf': 1.435706615447998}
+E         INFO [train/阶段/结束] 耗时=1.015秒
+E         INFO [post/阶段/开始] 
+E         ERROR [post/阶段/失败] 样本=；原因=现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口；耗时=0.008秒
+E         ERROR 运行失败：现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口
+E         INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=1.082秒
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...接口；耗时=0.008秒\nERROR 运行失败：现行准备记录需用 trainprep.preparation 消费，不能走旧物理准备接口\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=1.082秒\n").returncode
+
+tests/integration/test_infer_stage.py:45: AssertionError</failure></testcase><testcase classname="tests.integration.test_infer_stage" name="test_native_infer_matches_old_post_and_consumes_results[shapenet_car_transolver3_surface]" time="7.446"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_3/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_3/legacy-runs/2026-09-23T11-15-09_744817；生效配置=inputs/config.yaml&#10;  INFO [trainprep/阶段/开始] &#10;  ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'a', 'index': 0}]；原因='data_specs'&#10;  ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.011秒&#10;  ERROR 运行失败：'data_specs'&#10;  INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.013秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.011秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.013秒\n&quot;).returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_3')
+name = 'shapenet_car_transolver3_surface'
+
+    @pytest.mark.parametrize("name", NAMES)
+    def test_native_infer_matches_old_post_and_consumes_results(tmp_path, name):
+        folder, cfg = case(tmp_path, name)
+        cfg["pipeline"]["stages"] = ["trainprep", "train", "post"]
+        cfg["run_root"] = str(tmp_path / "legacy-runs")
+        cfg["data_root"] = str(tmp_path / "legacy-data")
+        (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
+        import shutil
+    
+        reference = (
+            Path(__file__).resolve().parents[1] / "fixtures/recipe_before_explicit/physical_post.py"
+        )
+        shutil.copyfile(reference, folder / "reference_prediction.py")
+        original_post = (folder / "post.py").read_text()
+        (
+            folder / "post.py"
+        ).write_text("""from configuration import application_parameters, load_components
+    from ai4e_core import run
+    from reference_prediction import execute
+    
+    def post(cfg, trained=None):
+        component = load_components(cfg)
+        config = application_parameters(cfg)
+        if trained:
+            config['post']['checkpoint'] = trained['checkpoints']['last']
+        return execute(config, component.dataset, component.model, run.TrainingRun())
+    """)
+        completed = script(folder)
+        (folder / "post.py").write_text(original_post)
+&gt;       assert completed.returncode == 0, completed.stdout + completed.stderr
+E       AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_3/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_3/legacy-runs/2026-09-23T11-15-09_744817；生效配置=inputs/config.yaml
+E         INFO [trainprep/阶段/开始] 
+E         ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'a', 'index': 0}]；原因='data_specs'
+E         ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.011秒
+E         ERROR 运行失败：'data_specs'
+E         INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.013秒
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.011秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.013秒\n").returncode
+
+tests/integration/test_infer_stage.py:45: AssertionError</failure></testcase><testcase classname="tests.integration.test_infer_stage" name="test_native_infer_matches_old_post_and_consumes_results[shapenet_car_transolver3_volume]" time="7.440"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_4/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_4/legacy-runs/2026-09-23T11-15-16_a7a935；生效配置=inputs/config.yaml&#10;  INFO [trainprep/阶段/开始] &#10;  ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'a', 'index': 0}]；原因='data_specs'&#10;  ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.011秒&#10;  ERROR 运行失败：'data_specs'&#10;  INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.012秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.011秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.012秒\n&quot;).returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_4')
+name = 'shapenet_car_transolver3_volume'
+
+    @pytest.mark.parametrize("name", NAMES)
+    def test_native_infer_matches_old_post_and_consumes_results(tmp_path, name):
+        folder, cfg = case(tmp_path, name)
+        cfg["pipeline"]["stages"] = ["trainprep", "train", "post"]
+        cfg["run_root"] = str(tmp_path / "legacy-runs")
+        cfg["data_root"] = str(tmp_path / "legacy-data")
+        (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
+        import shutil
+    
+        reference = (
+            Path(__file__).resolve().parents[1] / "fixtures/recipe_before_explicit/physical_post.py"
+        )
+        shutil.copyfile(reference, folder / "reference_prediction.py")
+        original_post = (folder / "post.py").read_text()
+        (
+            folder / "post.py"
+        ).write_text("""from configuration import application_parameters, load_components
+    from ai4e_core import run
+    from reference_prediction import execute
+    
+    def post(cfg, trained=None):
+        component = load_components(cfg)
+        config = application_parameters(cfg)
+        if trained:
+            config['post']['checkpoint'] = trained['checkpoints']['last']
+        return execute(config, component.dataset, component.model, run.TrainingRun())
+    """)
+        completed = script(folder)
+        (folder / "post.py").write_text(original_post)
+&gt;       assert completed.returncode == 0, completed.stdout + completed.stderr
+E       AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_4/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_native_infer_matches_old_4/legacy-runs/2026-09-23T11-15-16_a7a935；生效配置=inputs/config.yaml
+E         INFO [trainprep/阶段/开始] 
+E         ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'a', 'index': 0}]；原因='data_specs'
+E         ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.011秒
+E         ERROR 运行失败：'data_specs'
+E         INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.012秒
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.011秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.012秒\n").returncode
+
+tests/integration/test_infer_stage.py:45: AssertionError</failure></testcase><testcase classname="tests.integration.test_infer_stage" name="test_anchor_template_has_independent_infer_and_fixed_post[False]" time="10.138" /><testcase classname="tests.integration.test_infer_stage" name="test_anchor_template_has_independent_infer_and_fixed_post[True]" time="10.181" /><testcase classname="tests.integration.test_infer_stage" name="test_wheel_installed_external_recipe_infer_and_post" time="7.596"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_wheel_installed_external_0/outside/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_wheel_installed_external_0/train-runs/2026-09-23T11-15-44_4d5034；生效配置=inputs/config.yaml&#10;  INFO [trainprep/阶段/开始] &#10;  ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'Sample001', 'index': 0}]；原因='data_specs'&#10;  ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.022秒&#10;  ERROR 运行失败：'data_specs'&#10;  INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.024秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.022秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.024秒\n&quot;).returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_wheel_installed_external_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x16eed6f00&gt;
+
+    def test_wheel_installed_external_recipe_infer_and_post(tmp_path, monkeypatch):
+        """真实构建安装到隔离目标，外部复制案例不依赖仓库源码导入。"""
+        import hashlib
+        import os
+        import subprocess
+        import sys
+    
+        from tests.integration.test_recipe_extensions import ROOT
+    
+        wheels = tmp_path / "wheels"
+        done = subprocess.run(
+            ["uv", "build", "--package", "ai4e-core", "--wheel", "--out-dir", str(wheels)],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            timeout=90,
+            check=False,
+        )
+        assert done.returncode == 0, done.stdout + done.stderr
+        installed = tmp_path / "installed"
+        done = subprocess.run(
+            [
+                "uv",
+                "pip",
+                "install",
+                "--python",
+                sys.executable,
+                "--no-deps",
+                "--target",
+                str(installed),
+                str(next(wheels.glob("*.whl"))),
+            ],
+            capture_output=True,
+            text=True,
+            timeout=90,
+            check=False,
+        )
+        assert done.returncode == 0, done.stdout + done.stderr
+        monkeypatch.setenv("PYTHONPATH", str(installed))
+        done = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                "import ai4e_core; from pathlib import Path; import os; assert Path(ai4e_core.__file__).is_relative_to(Path(os.environ['PYTHONPATH']))",
+            ],
+            env=dict(os.environ),
+            cwd=tmp_path,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+        )
+        assert done.returncode == 0, done.stderr
+    
+        def snapshot():
+            return {
+                str(p.relative_to(installed)): hashlib.sha256(p.read_bytes()).hexdigest()
+                for p in (installed / "ai4e_core").rglob("*")
+                if p.is_file() and "__pycache__" not in p.parts
+            }
+    
+        before = snapshot()
+        (tmp_path / "outside").mkdir()
+        folder, cfg = case(tmp_path / "outside", "nasa_crm_transolver3")
+        cfg["pipeline"]["stages"] = ["trainprep", "train"]
+        cfg["run_root"] = str(tmp_path / "train-runs")
+        (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
+        done = script(folder)
+&gt;       assert done.returncode == 0, done.stdout + done.stderr
+E       AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_wheel_installed_external_0/outside/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-948/test_wheel_installed_external_0/train-runs/2026-09-23T11-15-44_4d5034；生效配置=inputs/config.yaml
+E         INFO [trainprep/阶段/开始] 
+E         ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'Sample001', 'index': 0}]；原因='data_specs'
+E         ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.022秒
+E         ERROR 运行失败：'data_specs'
+E         INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.024秒
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.022秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.024秒\n").returncode
+
+tests/integration/test_infer_stage.py:231: AssertionError</failure></testcase><testcase classname="tests.integration.test_post_inference" name="test_rebuild_loads_weights_only" time="0.276" /><testcase classname="tests.integration.test_post_inference" name="test_rebuild_rejects_semantic_conflict" time="0.001" /><testcase classname="tests.integration.test_post_inference" name="test_pointcloud_rejects_mismatched_fields" time="0.001" /><testcase classname="tests.integration.test_post_inference" name="test_anchor_eval_save_and_pointcloud" time="9.937" /><testcase classname="tests.integration.test_post_inference" name="test_missing_checkpoint_uses_current_run_last" time="5.590" /><testcase classname="tests.integration.test_post_inference" name="test_semantic_conflict_writes_no_predictions" time="10.130" /><testcase classname="tests.integration.test_post_inference" name="test_dry_run_does_not_write_predictions" time="9.233" /><testcase classname="tests.integration.test_post_inference" name="test_export_vtk_can_be_disabled" time="10.970" /><testcase classname="tests.integration.test_post_inference" name="test_post_metrics_match_shared_evaluate" time="11.518" /><testcase classname="tests.integration.test_post_inference" name="test_nested_delivery_progress_preserves_parent_and_failure" time="0.001" /></testsuite></testsuites>

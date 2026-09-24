@@ -11,34 +11,15 @@ from ai4e_core.run import TrainingRun
 
 def trainprep(cfg, dataset=None):
     """返回可被训练和独立后处理消费的准备引用。"""
-    if cfg.trainprep.get("topology"):
-        from ai4e_core.applications.aero_cfd.trainprep import physical as prep
-    else:
-        from ai4e_core.applications.aero_cfd.trainprep import preparation as prep
+    from ai4e_core.applications.aero_cfd.trainprep import physical as prep
 
     components = load_components(cfg)
     session = TrainingRun()
     config = application_parameters(cfg, session=run.TrainingRun())
-    if cfg.trainprep.get("topology"):
-        data = prep.open_dataset(
-            config,
-            components.dataset,
-            components.model,
-            dataset=dataset,
-            version=2,
-        )
-    else:
-        data = prep.open_dataset(config, dataset)
+    data = prep.open_dataset(
+        config, components.dataset, components.model, dataset=dataset, version=2
+    )
     data = prep.bind_fields(data, settings=cfg.trainprep)
-    if cfg.trainprep.get("topology"):
-        from ai4e_core.applications.aero_cfd.trainprep.topology import bind_topology
-
-        data = bind_topology(
-            data,
-            settings=cfg.trainprep.topology,
-            output=session.output_dir("trainprep") / "topology",
-            sampling=config["sampling"],
-        )
     data = prep.freeze_normalization(data, settings=config["normalization"])
     # 这里登记模型输入组织；每轮实际取样发生在训练迭代中。
     data = prep.configure_sampling(

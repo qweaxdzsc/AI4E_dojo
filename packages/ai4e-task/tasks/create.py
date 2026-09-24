@@ -152,6 +152,10 @@ def _create(
             from .rawprep import expand_rawprep_defaults
 
             expand_rawprep_defaults(stage / "recipe")
+        if entry:
+            from .descriptions import described_entry
+
+            entry = described_entry(stage / "recipe")
         inputs = capture_inputs(
             stage / "recipe",
             entry,

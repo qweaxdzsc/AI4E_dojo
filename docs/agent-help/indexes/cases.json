@@ -23,6 +23,25 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "dataset",
+        "model",
+        "application"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "外流网格和逐点物理场；保留准备、训练、固定推理与后处理交接。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "shared_stage_files": [
       "trainprep.py",
       "train.py",
@@ -66,6 +85,25 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "dataset",
+        "model",
+        "application"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "外流网格和逐点物理场；保留准备、训练、固定推理与后处理交接。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "shared_stage_files": [
       "trainprep.py",
       "train.py",
@@ -109,6 +147,25 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "dataset",
+        "model",
+        "application"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "外流网格和逐点物理场；保留准备、训练、固定推理与后处理交接。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "shared_stage_files": [
       "rawprep.py",
       "trainprep.py",
@@ -153,6 +210,25 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "dataset",
+        "model",
+        "application"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "外流网格和逐点物理场；保留准备、训练、固定推理与后处理交接。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "shared_stage_files": [
       "trainprep.py",
       "train.py",
@@ -196,6 +272,25 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "dataset",
+        "model",
+        "application"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "外流网格和逐点物理场；保留准备、训练、固定推理与后处理交接。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "shared_stage_files": [
       "rawprep.py",
       "trainprep.py",
@@ -241,6 +336,31 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "field_sequence",
+        "control_trajectory"
+      ],
+      "extension_points": [
+        "application",
+        "reader",
+        "transform",
+        "model",
+        "objective",
+        "guide",
+        "metrics",
+        "derived"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "控制轨迹；含预训练、安全校准及控制响应，区别于普通预测。",
+      "training_pattern": [
+        "iteration",
+        "diffusion_control"
+      ]
+    },
     "shared_stage_files": [
       "rawprep.py",
       "trainprep.py",
@@ -288,6 +408,31 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "field_sequence",
+        "control_trajectory"
+      ],
+      "extension_points": [
+        "application",
+        "reader",
+        "transform",
+        "model",
+        "objective",
+        "guide",
+        "metrics",
+        "derived"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "控制轨迹；含预训练、安全校准及控制响应，区别于普通预测。",
+      "training_pattern": [
+        "iteration",
+        "diffusion_control"
+      ]
+    },
     "shared_stage_files": [
       "rawprep.py",
       "trainprep.py",
@@ -334,6 +479,30 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "field_sequence"
+      ],
+      "extension_points": [
+        "reader",
+        "transform",
+        "network",
+        "objective",
+        "predict",
+        "metrics",
+        "derived"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "Burgers时空小波基础预测；可参考网络、目标与局部训练策略替换。",
+      "training_pattern": [
+        "iteration",
+        "diffusion_prediction"
+      ]
+    },
     "shared_stage_files": [
       "rawprep.py",
       "trainprep.py",
@@ -380,6 +549,24 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "parametric_field"
+      ],
+      "extension_points": [
+        "configuration"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "参数化PDE；使用案例自己的样条表示、方程和边界目标。",
+      "training_pattern": [
+        "iteration",
+        "physics_residual"
+      ]
+    },
     "shared_stage_files": [
       "generate.py",
       "rawprep.py",
@@ -429,6 +616,24 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "parametric_field"
+      ],
+      "extension_points": [
+        "configuration"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "参数化PDE；使用案例自己的样条表示、方程和边界目标。",
+      "training_pattern": [
+        "iteration",
+        "physics_residual"
+      ]
+    },
     "shared_stage_files": [
       "generate.py",
       "rawprep.py",
@@ -478,6 +683,24 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "parametric_field"
+      ],
+      "extension_points": [
+        "configuration"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "参数化PDE；使用案例自己的样条表示、方程和边界目标。",
+      "training_pattern": [
+        "iteration",
+        "physics_residual"
+      ]
+    },
     "shared_stage_files": [
       "generate.py",
       "rawprep.py",
@@ -527,6 +750,24 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "parametric_field"
+      ],
+      "extension_points": [
+        "configuration"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "参数化PDE；使用案例自己的样条表示、方程和边界目标。",
+      "training_pattern": [
+        "iteration",
+        "physics_residual"
+      ]
+    },
     "shared_stage_files": [
       "generate.py",
       "rawprep.py",
@@ -576,6 +817,24 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "parametric_field"
+      ],
+      "extension_points": [
+        "configuration"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "参数化PDE；使用案例自己的样条表示、方程和边界目标。",
+      "training_pattern": [
+        "iteration",
+        "physics_residual"
+      ]
+    },
     "shared_stage_files": [
       "generate.py",
       "rawprep.py",
@@ -584,6 +843,18 @@
       "infer.py",
       "post.py"
     ],
+    "smoke": {
+      "case": "neumann_diffusion",
+      "default": true,
+      "options": {
+        "nt": 7,
+        "nx": 7,
+        "seed": 42,
+        "test": 1,
+        "train": 2
+      },
+      "target": "ai4e_contrib.application.parametric_pde.resources.generate_smoke_data"
+    },
     "stages": [
       "generate.py",
       "rawprep.py",
@@ -625,6 +896,28 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "field_sequence",
+        "coupled_fields"
+      ],
+      "extension_points": [
+        "model",
+        "objective",
+        "neutron_condition",
+        "solid_condition",
+        "fluid_condition"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "耦合物理场；独立场训练后以明确顺序组合生成。",
+      "training_pattern": [
+        "iteration",
+        "flow_matching"
+      ]
+    },
     "shared_stage_files": [
       "rawprep.py",
       "trainprep.py",
@@ -674,6 +967,28 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "field_sequence",
+        "coupled_fields"
+      ],
+      "extension_points": [
+        "model",
+        "objective",
+        "neutron_condition",
+        "solid_condition",
+        "fluid_condition"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "耦合物理场；独立场训练后以明确顺序组合生成。",
+      "training_pattern": [
+        "iteration",
+        "flow_matching"
+      ]
+    },
     "shared_stage_files": [
       "rawprep.py",
       "trainprep.py",
@@ -723,6 +1038,28 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "field_sequence",
+        "coupled_fields"
+      ],
+      "extension_points": [
+        "model",
+        "objective",
+        "neutron_condition",
+        "solid_condition",
+        "fluid_condition"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "耦合物理场；独立场训练后以明确顺序组合生成。",
+      "training_pattern": [
+        "iteration",
+        "flow_matching"
+      ]
+    },
     "shared_stage_files": [
       "rawprep.py",
       "trainprep.py",
@@ -772,6 +1109,28 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "field_sequence",
+        "coupled_fields"
+      ],
+      "extension_points": [
+        "model",
+        "objective",
+        "neutron_condition",
+        "solid_condition",
+        "fluid_condition"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "耦合物理场；独立场训练后以明确顺序组合生成。",
+      "training_pattern": [
+        "iteration",
+        "flow_matching"
+      ]
+    },
     "shared_stage_files": [
       "rawprep.py",
       "trainprep.py",
@@ -821,6 +1180,28 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "field_sequence",
+        "coupled_fields"
+      ],
+      "extension_points": [
+        "model",
+        "objective",
+        "neutron_condition",
+        "solid_condition",
+        "fluid_condition"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "耦合物理场；独立场训练后以明确顺序组合生成。",
+      "training_pattern": [
+        "iteration",
+        "flow_matching"
+      ]
+    },
     "shared_stage_files": [
       "rawprep.py",
       "trainprep.py",
@@ -870,6 +1251,28 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "field_sequence",
+        "coupled_fields"
+      ],
+      "extension_points": [
+        "model",
+        "objective",
+        "neutron_condition",
+        "solid_condition",
+        "fluid_condition"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "耦合物理场；独立场训练后以明确顺序组合生成。",
+      "training_pattern": [
+        "iteration",
+        "flow_matching"
+      ]
+    },
     "shared_stage_files": [
       "rawprep.py",
       "trainprep.py",
@@ -909,6 +1312,23 @@
     "path": "recipe_extensions/field_mapping",
     "purpose": "参考变体与 Agent 组件组装示例",
     "recipe_source": null,
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "field_transform"
+      ],
+      "limitations": [
+        "覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。",
+        "仅声明扩展演示范围，不据此扩大数值精度验收。"
+      ],
+      "summary": "物理字段派生与保存、统计和归一化交接；先物化完整基案例，再按扩展说明修改。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "type": "extension",
     "verification": {
       "acceptance": "example-task-smoke",
@@ -930,6 +1350,24 @@
     "path": "recipe_extensions/free_wiring",
     "purpose": "参考变体与 Agent 组件组装示例",
     "recipe_source": null,
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "steps",
+        "components"
+      ],
+      "limitations": [
+        "覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。",
+        "仅声明扩展演示范围，不据此扩大数值精度验收。"
+      ],
+      "summary": "普通函数自由连接与阶段返回值交接；先物化完整基案例，再按扩展说明修改。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "type": "extension",
     "verification": {
       "acceptance": "example-task-smoke",
@@ -948,6 +1386,26 @@
     "path": "recipe_extensions/gencp",
     "purpose": "参考变体与 Agent 组件组装示例",
     "recipe_source": null,
+    "research": {
+      "data_form": [
+        "field_sequence",
+        "coupled_fields"
+      ],
+      "extension_points": [
+        "condition",
+        "post",
+        "field_retraining"
+      ],
+      "limitations": [
+        "覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。",
+        "仅声明扩展演示范围，不据此扩大数值精度验收。"
+      ],
+      "summary": "耦合条件替换、派生输出和单场重训；先物化完整基案例，再按扩展说明修改。",
+      "training_pattern": [
+        "iteration",
+        "flow_matching"
+      ]
+    },
     "type": "extension",
     "verification": {
       "acceptance": "example-task-smoke",
@@ -964,6 +1422,23 @@
     "path": "recipe_extensions/inference_fields",
     "purpose": "参考变体与 Agent 组件组装示例",
     "recipe_source": null,
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "prediction_fields"
+      ],
+      "limitations": [
+        "覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。",
+        "仅声明扩展演示范围，不据此扩大数值精度验收。"
+      ],
+      "summary": "固定预测的绝对误差派生函数；先物化完整基案例，再按扩展说明修改。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "type": "extension",
     "verification": {
       "acceptance": "example-task-smoke",
@@ -980,6 +1455,23 @@
     "path": "recipe_extensions/inference_metrics",
     "purpose": "参考变体与 Agent 组件组装示例",
     "recipe_source": null,
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "metrics"
+      ],
+      "limitations": [
+        "覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。",
+        "仅声明扩展演示范围，不据此扩大数值精度验收。"
+      ],
+      "summary": "物理字段评价函数的局部替换；先物化完整基案例，再按扩展说明修改。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "type": "extension",
     "verification": {
       "acceptance": "example-task-smoke",
@@ -996,6 +1488,23 @@
     "path": "recipe_extensions/model_block",
     "purpose": "参考变体与 Agent 组件组装示例",
     "recipe_source": null,
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "model_block"
+      ],
+      "limitations": [
+        "覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。",
+        "仅声明扩展演示范围，不据此扩大数值精度验收。"
+      ],
+      "summary": "AB-UPT内部前馈激活替换；先物化完整基案例，再按扩展说明修改。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "type": "extension",
     "verification": {
       "acceptance": "example-task-smoke",
@@ -1013,6 +1522,23 @@
     "path": "recipe_extensions/physical_visualization",
     "purpose": "参考变体与 Agent 组件组装示例",
     "recipe_source": null,
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "renderer"
+      ],
+      "limitations": [
+        "覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。",
+        "仅声明扩展演示范围，不据此扩大数值精度验收。"
+      ],
+      "summary": "固定物理场的可视化渲染替换；先物化完整基案例，再按扩展说明修改。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "type": "extension",
     "verification": {
       "acceptance": "example-task-smoke",
@@ -1029,6 +1555,26 @@
     "path": "recipe_extensions/safediffcon",
     "purpose": "参考变体与 Agent 组件组装示例",
     "recipe_source": null,
+    "research": {
+      "data_form": [
+        "field_sequence",
+        "control_trajectory"
+      ],
+      "extension_points": [
+        "network",
+        "objective",
+        "diagnostics"
+      ],
+      "limitations": [
+        "覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。",
+        "仅声明扩展演示范围，不据此扩大数值精度验收。"
+      ],
+      "summary": "控制网络、安全目标和安全裕量计算替换；先物化完整基案例，再按扩展说明修改。",
+      "training_pattern": [
+        "iteration",
+        "diffusion_control"
+      ]
+    },
     "type": "extension",
     "verification": {
       "acceptance": "example-task-smoke",
@@ -1053,6 +1599,23 @@
     "path": "recipe_extensions/sampling",
     "purpose": "参考变体与 Agent 组件组装示例",
     "recipe_source": null,
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "sampling"
+      ],
+      "limitations": [
+        "覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。",
+        "仅声明扩展演示范围，不据此扩大数值精度验收。"
+      ],
+      "summary": "几何点采样函数替换和身份交接；先物化完整基案例，再按扩展说明修改。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "type": "extension",
     "verification": {
       "acceptance": "example-task-smoke",
@@ -1074,6 +1637,28 @@
     "path": "recipe_extensions/wdno",
     "purpose": "参考变体与 Agent 组件组装示例",
     "recipe_source": null,
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "field_sequence"
+      ],
+      "extension_points": [
+        "network",
+        "objective",
+        "optimizer",
+        "update_step",
+        "post"
+      ],
+      "limitations": [
+        "覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。",
+        "仅声明扩展演示范围，不据此扩大数值精度验收。"
+      ],
+      "summary": "小波预测网络、目标、训练局部策略与能量审计；先物化完整基案例，再按扩展说明修改。",
+      "training_pattern": [
+        "iteration",
+        "diffusion_prediction"
+      ]
+    },
     "type": "extension",
     "verification": {
       "acceptance": "example-task-smoke",
@@ -1105,6 +1690,25 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "dataset",
+        "model",
+        "application"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "外流网格和逐点物理场；保留准备、训练、固定推理与后处理交接。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "shared_stage_files": [
       "rawprep.py",
       "trainprep.py",
@@ -1149,6 +1753,25 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "dataset",
+        "model",
+        "application"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "外流网格和逐点物理场；保留准备、训练、固定推理与后处理交接。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "shared_stage_files": [
       "trainprep.py",
       "train.py",
@@ -1192,6 +1815,25 @@
       "post.py",
       "pipeline.py"
     ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "scalar_field"
+      ],
+      "extension_points": [
+        "loss",
+        "derived",
+        "consume"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "具名坐标、渗透率与解场；适合静态网格监督及模型、目标的局部替换。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
     "shared_stage_files": [
       "README.md",
       "config.yaml",
@@ -1240,6 +1882,25 @@
       "post.py",
       "pipeline.py"
     ],
+    "research": {
+      "data_form": [
+        "point_fields",
+        "field_sequence"
+      ],
+      "extension_points": [
+        "loss",
+        "derived",
+        "consume"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "保险杠节点轨迹；保留实体、坐标和条件字段的交接。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
     "shared_stage_files": [
       "README.md",
       "config.yaml",
@@ -1273,6 +1934,24 @@
     "path": "recipe_extensions/geotransolver",
     "purpose": "平方相对损失与固定误差数组读回",
     "recipe_source": null,
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "scalar_field"
+      ],
+      "extension_points": [
+        "objective",
+        "post"
+      ],
+      "limitations": [
+        "覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。",
+        "仅声明扩展演示范围，不据此扩大数值精度验收。"
+      ],
+      "summary": "平方相对损失及固定误差数组读回；先物化完整基案例，再按扩展说明修改。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
     "type": "extension",
     "verification": {
       "acceptance": "geotransolver-extension",
@@ -1304,6 +1983,24 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "coupled_fields"
+      ],
+      "extension_points": [
+        "network",
+        "objective"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "发布地热双场与技术经济研究；读取案例特定物理字段。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
     "shared_stage_files": [
       "configuration.py",
       "pipeline.py",
@@ -1336,6 +2033,24 @@
     ],
     "path": "recipe_extensions/pcno",
     "purpose": "替换网络并保存读回温降数组",
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "coupled_fields"
+      ],
+      "extension_points": [
+        "network",
+        "post"
+      ],
+      "limitations": [
+        "覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。",
+        "仅声明扩展演示范围，不据此扩大数值精度验收。"
+      ],
+      "summary": "网络替换与有单位温降数组读回；先物化完整基案例，再按扩展说明修改。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
     "type": "extension"
   },
   {
@@ -1362,6 +2077,25 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "dataset",
+        "model",
+        "application"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "外流网格和逐点物理场；保留准备、训练、固定推理与后处理交接。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "shared_stage_files": [
       "rawprep.py",
       "trainprep.py",
@@ -1407,6 +2141,25 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "dataset",
+        "model",
+        "application"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "外流网格和逐点物理场；保留准备、训练、固定推理与后处理交接。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "shared_stage_files": [
       "rawprep.py",
       "trainprep.py",
@@ -1440,6 +2193,25 @@
     "path": "recipe_extensions/geotransolver_aero",
     "purpose": "外流L1训练与固定绝对误差场读回",
     "recipe_source": null,
+    "research": {
+      "data_form": [
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "objective",
+        "inference_fields",
+        "post"
+      ],
+      "limitations": [
+        "覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。",
+        "仅声明扩展演示范围，不据此扩大数值精度验收。"
+      ],
+      "summary": "外流L1目标与固定绝对误差场读回；先物化完整基案例，再按扩展说明修改。",
+      "training_pattern": [
+        "epoch"
+      ]
+    },
     "type": "extension",
     "verification": {
       "acceptance": "geotransolver-aero-extension",
@@ -1471,6 +2243,23 @@
       "infer.py",
       "post.py"
     ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "field_sequence"
+      ],
+      "extension_points": [
+        "network"
+      ],
+      "limitations": [
+        "数据字段、科学目标与检查点兼容性按本案例定义；不能直接套到另一任务。",
+        "工程运行、缩小预算与论文精度范围以案例正文和对应证据为准。"
+      ],
+      "summary": "双圆柱二维时序监督；窗口、速度与连续性约束由案例明确定义。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
     "shared_stage_files": [
       "rawprep.py",
       "trainprep.py",
@@ -1502,9 +2291,905 @@
     "path": "recipe_extensions/pcno_cylinder",
     "purpose": "替换网络并保存读回速度模长",
     "recipe_source": null,
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "field_sequence"
+      ],
+      "extension_points": [
+        "network",
+        "post"
+      ],
+      "limitations": [
+        "覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。",
+        "仅声明扩展演示范围，不据此扩大数值精度验收。"
+      ],
+      "summary": "网络替换与速度模长数组读回；先物化完整基案例，再按扩展说明修改。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
     "type": "extension",
     "verification": {
       "acceptance": "pcno-cylinder-extension",
+      "contract": "example-contract",
+      "materialization": "base-plus-overlay"
+    }
+  },
+  {
+    "base_case": "safediffcon.burgers",
+    "id": "recipe_extensions.task_labels",
+    "override_files": [
+      "config.yaml",
+      "task_labels_app.py"
+    ],
+    "path": "recipe_extensions/task_labels",
+    "purpose": "本地 application 声明校准标签需求，复用控制完整流程",
+    "recipe_source": null,
+    "research": {
+      "data_form": [
+        "field_sequence",
+        "control_trajectory"
+      ],
+      "extension_points": [
+        "application",
+        "input_declaration"
+      ],
+      "limitations": [
+        "覆盖文件集不能直接当完整案例运行；未声明的行为沿用基案例。",
+        "仅声明扩展演示范围，不据此扩大数值精度验收。"
+      ],
+      "summary": "本地应用显式声明校准标签需求，保留控制流程；先物化完整基案例，再按扩展说明修改。",
+      "training_pattern": [
+        "iteration",
+        "diffusion_control"
+      ]
+    },
+    "type": "extension",
+    "verification": {
+      "acceptance": "task-generalization-in-progress",
+      "contract": "example-contract",
+      "materialization": "base-plus-overlay"
+    }
+  },
+  {
+    "base_case": "geotransolver.darcy",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "id": "recipe_extensions.tail_batch",
+    "override_files": [
+      "config.yaml",
+      "train.py",
+      "local_components.py"
+    ],
+    "path": "recipe_extensions/tail_batch",
+    "purpose": "基于Darcy完整案例替换有限轮次数据流，演示尾批、局部目标和精确恢复。",
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "scalar_field"
+      ],
+      "extension_points": [
+        "stream",
+        "objective"
+      ],
+      "limitations": [
+        "仅小规模机制验收，不代表Darcy或其他数据集科学精度。",
+        "先物化完整基案例；数据来源、输出路径和科学参数由用户声明。"
+      ],
+      "summary": "基于Darcy完整案例替换有限轮次数据流，演示尾批、局部目标和精确恢复。",
+      "training_pattern": [
+        "iteration",
+        "finite_epoch"
+      ]
+    },
+    "type": "extension"
+  },
+  {
+    "base_case": "geotransolver.darcy",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "id": "recipe_extensions.research_state",
+    "override_files": [
+      "config.yaml",
+      "configuration.py",
+      "rawprep.py",
+      "train.py",
+      "local_components.py"
+    ],
+    "path": "recipe_extensions/research_state",
+    "purpose": "基于Darcy完整案例留出验证分片，比较普通/EMA权重并配对恢复最佳快照。",
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "scalar_field"
+      ],
+      "extension_points": [
+        "state_bindings",
+        "evaluate",
+        "ema",
+        "objective"
+      ],
+      "limitations": [
+        "仅小规模机制验收，不代表Darcy或其他数据集科学精度。",
+        "先物化完整基案例；数据来源、输出路径和科学参数由用户声明。"
+      ],
+      "summary": "基于Darcy完整案例留出验证分片，比较普通/EMA权重并配对恢复最佳快照。",
+      "training_pattern": [
+        "iteration",
+        "validation_selection"
+      ]
+    },
+    "type": "extension"
+  },
+  {
+    "dataset": "darcy",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "entry": "pipeline.py",
+    "id": "classic_networks.darcy",
+    "model": "MLP/CNN/ResNet/U-Net/Transformer/GNN",
+    "optional_files": [],
+    "path": "classic_networks/darcy",
+    "purpose": "二维系数到解场的经典基础结构研究",
+    "recipe_source": "classic_networks/darcy",
+    "required_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "rawprep.py",
+      "trainprep.py",
+      "train.py",
+      "infer.py",
+      "post.py",
+      "pipeline.py"
+    ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "scalar_field"
+      ],
+      "extension_points": [
+        "model",
+        "derived",
+        "consume"
+      ],
+      "limitations": [
+        "当前源码和非训练检查范围；真实训练、安装及完整流程待统一验收。",
+        "小样本结构集成，不表示论文复现、生产精度或Web模型开放。"
+      ],
+      "summary": "二维系数到解场；保留原始物理输入、训练分片统计和固定结果消费。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
+    "shared_stage_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "rawprep.py",
+      "trainprep.py",
+      "train.py",
+      "infer.py",
+      "post.py",
+      "pipeline.py"
+    ],
+    "stages": [
+      "rawprep.py",
+      "trainprep.py",
+      "train.py",
+      "infer.py",
+      "post.py"
+    ],
+    "type": "standalone",
+    "verification": {
+      "acceptance": "classic-networks-pending",
+      "contract": "example-contract"
+    }
+  },
+  {
+    "dataset": "shapenet_volume",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "entry": "pipeline.py",
+    "id": "classic_networks.shapenet_volume",
+    "model": "MLP/CNN/ResNet/U-Net/Transformer/GNN",
+    "optional_files": [],
+    "path": "classic_networks/shapenet_volume",
+    "purpose": "三维规则格体速度的经典基础结构研究",
+    "recipe_source": "classic_networks/shapenet_volume",
+    "required_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "rawprep.py",
+      "trainprep.py",
+      "train.py",
+      "infer.py",
+      "post.py",
+      "pipeline.py"
+    ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "mesh",
+        "point_fields"
+      ],
+      "extension_points": [
+        "model",
+        "derived",
+        "consume"
+      ],
+      "limitations": [
+        "当前源码和非训练检查范围；真实训练、安装及完整流程待统一验收。",
+        "小样本结构集成，不表示论文复现、生产精度或Web模型开放。"
+      ],
+      "summary": "三维规则格体速度；保留原始物理输入、训练分片统计和固定结果消费。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
+    "shared_stage_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "rawprep.py",
+      "trainprep.py",
+      "train.py",
+      "infer.py",
+      "post.py",
+      "pipeline.py"
+    ],
+    "stages": [
+      "rawprep.py",
+      "trainprep.py",
+      "train.py",
+      "infer.py",
+      "post.py"
+    ],
+    "type": "standalone",
+    "verification": {
+      "acceptance": "classic-networks-pending",
+      "contract": "example-contract"
+    }
+  },
+  {
+    "dataset": "double_cylinder",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "entry": "pipeline.py",
+    "id": "classic_networks.double_cylinder",
+    "model": "RNN",
+    "optional_files": [],
+    "path": "classic_networks/double_cylinder",
+    "purpose": "双圆柱历史三帧预测一帧的经典基础结构研究",
+    "recipe_source": "classic_networks/double_cylinder",
+    "required_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "rawprep.py",
+      "trainprep.py",
+      "train.py",
+      "infer.py",
+      "post.py",
+      "pipeline.py"
+    ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "field_sequence"
+      ],
+      "extension_points": [
+        "model",
+        "derived",
+        "consume"
+      ],
+      "limitations": [
+        "当前源码和非训练检查范围；真实训练、安装及完整流程待统一验收。",
+        "小样本结构集成，不表示论文复现、生产精度或Web模型开放。"
+      ],
+      "summary": "双圆柱历史三帧预测一帧；保留原始物理输入、训练分片统计和固定结果消费。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
+    "shared_stage_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "rawprep.py",
+      "trainprep.py",
+      "train.py",
+      "infer.py",
+      "post.py",
+      "pipeline.py"
+    ],
+    "stages": [
+      "rawprep.py",
+      "trainprep.py",
+      "train.py",
+      "infer.py",
+      "post.py"
+    ],
+    "type": "standalone",
+    "verification": {
+      "acceptance": "classic-networks-pending",
+      "contract": "example-contract"
+    }
+  },
+  {
+    "base_case": "classic_networks.darcy",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "id": "recipe_extensions.network_composition.resunet",
+    "override_files": [
+      "README.md",
+      "config.yaml",
+      "resunet.py",
+      "user_outputs.py"
+    ],
+    "path": "recipe_extensions/network_composition/resunet",
+    "purpose": "残差阶段替换U-Net编码器和瓶颈",
+    "recipe_source": null,
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "scalar_field"
+      ],
+      "extension_points": [
+        "model",
+        "derived",
+        "consume"
+      ],
+      "limitations": [
+        "仅组件非训练检查通过，完整复制后训练、恢复与安装流程待主控验收。",
+        "派生预测范数为通用数组演示，单位未声明时保留unknown；混合物理分量不解释为速度模长。"
+      ],
+      "summary": "残差阶段替换U-Net编码器和瓶颈；先物化完整基案例，再用公开计算阶段改写网络。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
+    "type": "extension",
+    "verification": {
+      "acceptance": "classic-networks-composition-pending",
+      "contract": "example-contract",
+      "materialization": "base-plus-overlay"
+    }
+  },
+  {
+    "base_case": "classic_networks.darcy",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "id": "recipe_extensions.network_composition.unet_transformer",
+    "override_files": [
+      "README.md",
+      "config.yaml",
+      "unet_transformer.py",
+      "user_outputs.py"
+    ],
+    "path": "recipe_extensions/network_composition/unet_transformer",
+    "purpose": "标准注意力阶段替换U-Net瓶颈",
+    "recipe_source": null,
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "scalar_field"
+      ],
+      "extension_points": [
+        "model",
+        "derived",
+        "consume"
+      ],
+      "limitations": [
+        "仅组件非训练检查通过，完整复制后训练、恢复与安装流程待主控验收。",
+        "派生预测范数为通用数组演示，单位未声明时保留unknown；混合物理分量不解释为速度模长。"
+      ],
+      "summary": "标准注意力阶段替换U-Net瓶颈；先物化完整基案例，再用公开计算阶段改写网络。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
+    "type": "extension",
+    "verification": {
+      "acceptance": "classic-networks-composition-pending",
+      "contract": "example-contract",
+      "materialization": "base-plus-overlay"
+    }
+  },
+  {
+    "base_case": "classic_networks.double_cylinder",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "id": "recipe_extensions.network_composition.cnn_rnn",
+    "override_files": [
+      "README.md",
+      "config.yaml",
+      "cnn_rnn.py",
+      "user_outputs.py"
+    ],
+    "path": "recipe_extensions/network_composition/cnn_rnn",
+    "purpose": "逐帧卷积与真实时间循环预测下一帧",
+    "recipe_source": null,
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "field_sequence"
+      ],
+      "extension_points": [
+        "model",
+        "derived",
+        "consume"
+      ],
+      "limitations": [
+        "仅组件非训练检查通过，完整复制后训练、恢复与安装流程待主控验收。",
+        "派生预测范数为通用数组演示，单位未声明时保留unknown；混合物理分量不解释为速度模长。"
+      ],
+      "summary": "逐帧卷积与真实时间循环预测下一帧；先物化完整基案例，再用公开计算阶段改写网络。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
+    "type": "extension",
+    "verification": {
+      "acceptance": "classic-networks-composition-pending",
+      "contract": "example-contract",
+      "materialization": "base-plus-overlay"
+    }
+  },
+  {
+    "dataset": "darcy",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "entry": "pipeline.py",
+    "id": "operator_learning.darcy",
+    "model": "DeepONet/FNO",
+    "optional_files": [],
+    "path": "operator_learning/darcy",
+    "purpose": "darcy的算子学习研究",
+    "recipe_source": "operator_learning/darcy",
+    "required_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "pipeline.py",
+      "post.py",
+      "rawprep.py",
+      "train.py",
+      "trainprep.py"
+    ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "scalar_field"
+      ],
+      "extension_points": [
+        "model",
+        "derived",
+        "consume"
+      ],
+      "limitations": [
+        "工程短预算；不表示论文精度或Web开放。",
+        "真实矩阵及安装状态以专项验收为准。"
+      ],
+      "summary": "Darcy参数场到解场的算子学习研究基线",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
+    "shared_stage_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "pipeline.py",
+      "post.py",
+      "rawprep.py",
+      "train.py",
+      "trainprep.py"
+    ],
+    "stages": [
+      "rawprep.py",
+      "trainprep.py",
+      "train.py",
+      "infer.py",
+      "post.py"
+    ],
+    "type": "standalone",
+    "verification": {
+      "acceptance": "operator-surrogates-acceptance",
+      "contract": "example-contract"
+    }
+  },
+  {
+    "dataset": "double_cylinder",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "entry": "pipeline.py",
+    "id": "operator_learning.double_cylinder",
+    "model": "DeepONet/FNO",
+    "optional_files": [],
+    "path": "operator_learning/double_cylinder",
+    "purpose": "double_cylinder的算子学习研究",
+    "recipe_source": "operator_learning/double_cylinder",
+    "required_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "pipeline.py",
+      "post.py",
+      "rawprep.py",
+      "train.py",
+      "trainprep.py"
+    ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "scalar_field"
+      ],
+      "extension_points": [
+        "model",
+        "derived",
+        "consume"
+      ],
+      "limitations": [
+        "工程短预算；不表示论文精度或Web开放。",
+        "真实矩阵及安装状态以专项验收为准。"
+      ],
+      "summary": "double_cylinder的算子学习研究",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
+    "shared_stage_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "pipeline.py",
+      "post.py",
+      "rawprep.py",
+      "train.py",
+      "trainprep.py"
+    ],
+    "stages": [
+      "rawprep.py",
+      "trainprep.py",
+      "train.py",
+      "infer.py",
+      "post.py"
+    ],
+    "type": "standalone",
+    "verification": {
+      "acceptance": "operator-surrogates-acceptance",
+      "contract": "example-contract"
+    }
+  },
+  {
+    "dataset": "shapenet_volume",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "entry": "pipeline.py",
+    "id": "operator_learning.shapenet_volume",
+    "model": "DeepONet/FNO",
+    "optional_files": [],
+    "path": "operator_learning/shapenet_volume",
+    "purpose": "shapenet_volume的算子学习研究",
+    "recipe_source": "operator_learning/shapenet_volume",
+    "required_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "pipeline.py",
+      "post.py",
+      "rawprep.py",
+      "train.py",
+      "trainprep.py"
+    ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "scalar_field"
+      ],
+      "extension_points": [
+        "model",
+        "derived",
+        "consume"
+      ],
+      "limitations": [
+        "工程短预算；不表示论文精度或Web开放。",
+        "真实矩阵及安装状态以专项验收为准。"
+      ],
+      "summary": "shapenet_volume的算子学习研究",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
+    "shared_stage_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "pipeline.py",
+      "post.py",
+      "rawprep.py",
+      "train.py",
+      "trainprep.py"
+    ],
+    "stages": [
+      "rawprep.py",
+      "trainprep.py",
+      "train.py",
+      "infer.py",
+      "post.py"
+    ],
+    "type": "standalone",
+    "verification": {
+      "acceptance": "operator-surrogates-acceptance",
+      "contract": "example-contract"
+    }
+  },
+  {
+    "dataset": "nasa_crm",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "entry": "pipeline.py",
+    "id": "surrogate_modeling.nasa_crm",
+    "model": "POD/RSM/RBF/Kriging/LightGBM",
+    "optional_files": [],
+    "path": "surrogate_modeling/nasa_crm",
+    "purpose": "nasa_crm的传统代理与降阶研究",
+    "recipe_source": "surrogate_modeling/nasa_crm",
+    "required_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "pipeline.py",
+      "post.py",
+      "train.py",
+      "trainprep.py"
+    ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "scalar_field"
+      ],
+      "extension_points": [
+        "fit",
+        "rebuild"
+      ],
+      "limitations": [
+        "工程短预算；不表示论文精度或Web开放。",
+        "真实矩阵及安装状态以专项验收为准。"
+      ],
+      "summary": "nasa_crm的传统代理与降阶研究",
+      "training_pattern": [
+        "algebraic_fit"
+      ]
+    },
+    "shared_stage_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "pipeline.py",
+      "post.py",
+      "train.py",
+      "trainprep.py"
+    ],
+    "stages": [
+      "trainprep.py",
+      "train.py",
+      "infer.py",
+      "post.py"
+    ],
+    "type": "standalone",
+    "verification": {
+      "acceptance": "operator-surrogates-acceptance",
+      "contract": "example-contract"
+    }
+  },
+  {
+    "dataset": "double_cylinder",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "entry": "pipeline.py",
+    "id": "surrogate_modeling.double_cylinder",
+    "model": "POD/RSM/RBF/Kriging/LightGBM",
+    "optional_files": [],
+    "path": "surrogate_modeling/double_cylinder",
+    "purpose": "double_cylinder的传统代理与降阶研究",
+    "recipe_source": "surrogate_modeling/double_cylinder",
+    "required_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "pipeline.py",
+      "post.py",
+      "train.py",
+      "trainprep.py"
+    ],
+    "research": {
+      "data_form": [
+        "regular_grid",
+        "scalar_field"
+      ],
+      "extension_points": [
+        "fit",
+        "rebuild"
+      ],
+      "limitations": [
+        "工程短预算；不表示论文精度或Web开放。",
+        "真实矩阵及安装状态以专项验收为准。"
+      ],
+      "summary": "double_cylinder的传统代理与降阶研究",
+      "training_pattern": [
+        "algebraic_fit"
+      ]
+    },
+    "shared_stage_files": [
+      "README.md",
+      "config.yaml",
+      "configuration.py",
+      "infer.py",
+      "pipeline.py",
+      "post.py",
+      "train.py",
+      "trainprep.py"
+    ],
+    "stages": [
+      "trainprep.py",
+      "train.py",
+      "infer.py",
+      "post.py"
+    ],
+    "type": "standalone",
+    "verification": {
+      "acceptance": "operator-surrogates-acceptance",
+      "contract": "example-contract"
+    }
+  },
+  {
+    "base_case": "operator_learning.shapenet_volume",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "id": "recipe_extensions.operator_branch_replacement",
+    "override_files": [
+      "README.md",
+      "branch_replacement.py",
+      "config.yaml",
+      "user_outputs.py"
+    ],
+    "path": "recipe_extensions/operator_branch_replacement",
+    "purpose": "DeepONet分支重组",
+    "recipe_source": null,
+    "research": {
+      "data_form": [
+        "regular_grid"
+      ],
+      "extension_points": [
+        "model"
+      ],
+      "limitations": [
+        "短预算工程集成，不代表论文或生产精度。"
+      ],
+      "summary": "DeepONet分支重组；先物化完整基案例再运行。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
+    "type": "extension",
+    "verification": {
+      "acceptance": "operator-surrogates-acceptance",
+      "contract": "example-contract",
+      "materialization": "base-plus-overlay"
+    }
+  },
+  {
+    "base_case": "operator_learning.darcy",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "id": "recipe_extensions.operator_physical_loss",
+    "override_files": [
+      "README.md",
+      "config.yaml",
+      "user_outputs.py"
+    ],
+    "path": "recipe_extensions/operator_physical_loss",
+    "purpose": "共享物理约束",
+    "recipe_source": null,
+    "research": {
+      "data_form": [
+        "regular_grid"
+      ],
+      "extension_points": [
+        "model"
+      ],
+      "limitations": [
+        "短预算工程集成，不代表论文或生产精度。"
+      ],
+      "summary": "共享物理约束；先物化完整基案例再运行。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
+    "type": "extension",
+    "verification": {
+      "acceptance": "operator-surrogates-acceptance",
+      "contract": "example-contract",
+      "materialization": "base-plus-overlay"
+    }
+  },
+  {
+    "base_case": "surrogate_modeling.double_cylinder",
+    "dependencies": [
+      "ai4e-core",
+      "ai4e-contrib"
+    ],
+    "id": "recipe_extensions.pod_surrogate_replacement",
+    "override_files": [
+      "README.md",
+      "config.yaml",
+      "pod_mlp.py"
+    ],
+    "path": "recipe_extensions/pod_surrogate_replacement",
+    "purpose": "POD系数代理替换",
+    "recipe_source": null,
+    "research": {
+      "data_form": [
+        "regular_grid"
+      ],
+      "extension_points": [
+        "fit",
+        "rebuild"
+      ],
+      "limitations": [
+        "短预算工程集成，不代表论文或生产精度。"
+      ],
+      "summary": "POD系数代理替换；先物化完整基案例再运行。",
+      "training_pattern": [
+        "iteration"
+      ]
+    },
+    "type": "extension",
+    "verification": {
+      "acceptance": "operator-surrogates-acceptance",
       "contract": "example-contract",
       "materialization": "base-plus-overlay"
     }

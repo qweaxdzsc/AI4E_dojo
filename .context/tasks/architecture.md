@@ -56,12 +56,7 @@ web → server API → task 公共门面
 
 已具备：包依赖方向、core 的稳定 run 门面、recipe 的 Python 主流程、Task 的项目/任务/运行/资产管理、`components.application` 操作入口、Server 的受控 API、Web 的稳定传输类型，以及 Vis 的独立进程交接。
 
-仍需补齐的架构工作：
-
-- 为 provider 明确定义“描述、检查、评价、导出、兼容性”的最小返回边界，让 Server/Web 不必猜模型字段。
-- 将 Task 推理批次中目前读取 `contract.component/model` 的同批次兼容判断下沉到 provider，Task 改为只消费不透明的执行身份和结果。这是现有实现的边界接缝，不应继续扩展为模型分支。
-- 为跨领域比较固定管理维度（输入、版本、运行、资产、结果、指标、失败、恢复）的最小索引，缺少科学比较条件时返回不可比，不填空值伪装相同。
-- 为 Agent 在 `.context/modules/` 中补齐“调用方—被调用方—交接—测试—PRD”索引；本页只做入口，不复制模块正文。
+当前复审与修复状态见 [架构复审](../../docs/reviews/archreview/2026-09-23.md) 和 [Task 通用化验收](../mvp/task-generalization-acceptance.md)。模型兼容判断、标签候选与活网络出图已在源码归位；三阶段科学连接和应用依赖来源的本轮实现及未验范围以验收记录为准。本页不重复维护整改清单。
 
 ## 6. 阅读顺序
 

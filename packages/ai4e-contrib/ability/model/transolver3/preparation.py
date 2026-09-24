@@ -65,6 +65,68 @@ def prepare_sample(
     }
 
 
+def prepare_inputs(
+    fields,
+    sampling,
+    *,
+    sample,
+    bindings,
+    normalization=None,
+    evaluation=False,
+    **_kwargs,
+):
+    """把通用准备链的归一化平面字段组织为单域 Transolver 样本。
+
+    通用链已经变换点场；这里只对 ``scope=condition`` 的样本条件应用
+    冻结变换。返回未拼批张量，批次维由组件 ``collate`` 统一添加。
+    """
+    domains = bindings.get("domains") or {}
+    if len(domains) != 1:
+        raise ValueError("Transolver 单实例需要一个域；不同域请使用独立 example")
+    domain, binding = next(iter(domains.items()))
+
+    def point_field(name):
+        if name not in fields:
+            raise ValueError(f"绑定字段不存在: {name}")
+        value = fields[name]
+        if not isinstance(value, torch.Tensor) or value.ndim not in (1, 2):
+            raise ValueError(f"绑定字段形状不一致: {name}")
+        return value.reshape(len(value), -1)
+
+    chunks = [point_field(binding["position"])]
+    chunks.extend(point_field(name) for name in binding.get("features", {}).values())
+    count = len(chunks[0])
+    for name, declaration in (bindings.get("conditioning") or {}).items():
+        source = declaration.get("field")
+        if source is None or source not in fields:
+            raise ValueError(f"条件缺样本字段: {sample}/{source or name}")
+        value = torch.as_tensor(fields[source], dtype=torch.float32).reshape(1, -1)
+        if normalization is None or source not in normalization.transforms:
+            raise ValueError(f"条件必须声明冻结变换或恒等变换: {source}")
+        chunks.append(normalization.transforms[source].apply(value).expand(count, -1))
+    if any(len(value) != count for value in chunks):
+        raise ValueError(f"{sample}/{domain}: 输入字段实体数量不一致")
+    targets = [point_field(name) for name in binding.get("targets", {}).values()]
+    if not targets or any(len(value) != count for value in targets):
+        raise ValueError(f"{sample}/{domain}: 监督字段实体数量不一致")
+
+    features = torch.cat(chunks, dim=-1)
+    target = torch.cat(targets, dim=-1)
+    parts = int(sampling.get("chunk_count", 20))
+    stride = int(sampling.get("stride", 4))
+    part = 0 if evaluation else random.randrange(parts)
+    offset = 0 if evaluation else random.randrange(stride)
+    selected = torch.from_numpy(indices(count, parts, part))[offset::stride]
+    if not len(selected):
+        raise ValueError(f"{sample}: 分块抽稀后为空")
+    return {
+        "inputs": {"features": features[selected]},
+        "targets": {"fields": target[selected]},
+        "metadata": {"sample": sample, "chunk": part, "offset": offset},
+        "point_ids": selected,
+    }
+
+
 def loss(model, batch: dict, config: dict) -> dict:
     """等权标准化逐元素均方误差。"""
     from .model import predict
@@ -99,7 +161,9 @@ def predict_sample(
             yield ids, {"features": x[ids][None]}
 
     result = torch.empty(count, config["model"]["parameters"]["out_dim"])
-    for ids, prediction in SurfaceInference(model).predict(chunks, query_chunk_size=(config.get("infer") or {}).get("query_chunk_size")):
+    for ids, prediction in SurfaceInference(model).predict(
+        chunks, query_chunk_size=(config.get("infer") or {}).get("query_chunk_size")
+    ):
         result[ids] = prediction["fields"][0].cpu()
     output = {}
     offset = 0

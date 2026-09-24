@@ -61,7 +61,7 @@ def infer(cfg, prepared=None, checkpoint=None):
     session.record_asset(
         "results",
         value,
-        kind="other",
+        kind="other", semantics={"type": "control.results"},
         stage="infer",
         dependencies=[Path(value).parent],
         bundle_root=Path(value).parent,

@@ -88,6 +88,7 @@ class PhysicalTraining:
 
 def open_training(config, *, reference, dataset_component, model_component, session):
     """只消费准备并检查现有训练限制；缺少引用不隐藏执行另一条准备链。"""
+    session = session.with_checkpoint_labels({"type": "aero.checkpoint"})
     config = model_component.resolve(config)
     settings = config["train"]
     if (

@@ -116,6 +116,9 @@ docs/PRD/
 | ai4e-core | [base](ai4e-core/base/PRD.md)、tools | base 已交付配置与事件；tools 待编写 |
 | ai4e-spec | [components](ai4e-spec/components/PRD.md)、[artifacts](ai4e-spec/artifacts/PRD.md)、data、check | components 与 artifacts 已有契约；data 检查描述见下方导航，check 待编写 |
 | recipes | [aero_cfd](recipes/aero_cfd/PRD.md) | 已交付：显式处理/准备/训练/推理/结果消费、字段映射和自由连接 |
+| recipes | [classic_networks](recipes/classic_networks/PRD.md) | 三数据案例与三项网络重组源码/复制资源；真实训练、安装及完整流程待统一验收 |
+| recipes | [operator_learning](recipes/operator_learning/PRD.md) | 三个算子案例与物理/分支扩展已实现；真实矩阵、安装及 Task 待本批统一验收 |
+| recipes | [surrogate_modeling](recipes/surrogate_modeling/PRD.md) | NASA 全局代理与双圆柱 POD 代理已实现，合成复制流程已检查；真实矩阵和安装待验 |
 | recipes | [meshgraphnet](recipes/meshgraphnet/PRD.md) | 已交付：CylinderFlow 固定网格工程流程；论文级精度按专项证据限定 |
 | ai4e-task / viz / server / web | 见下方模块导航 | 平台扩展实施中，按专项验收限定交付 |
 

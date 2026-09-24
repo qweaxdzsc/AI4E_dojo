@@ -73,7 +73,7 @@ print(signature(ContinuousSincosEmbed))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- 案例：`recipe_extensions.network_composition.unet_transformer`
 
 ### 源码位置
 
@@ -156,7 +156,7 @@ print(signature(ContinuousSincosEmbed.forward))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- 案例：`recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`
 
 ### 源码位置
 
@@ -246,7 +246,7 @@ print(signature(RopeFrequency))
 ### 源码位置
 
 - 模块：`ai4e_core.abilities.modeling.modules.position_encoding`
-- 仓库相对路径：`packages/ai4e-core/abilities/modeling/modules/position_encoding.py:76`
+- 仓库相对路径：`packages/ai4e-core/abilities/modeling/modules/position_encoding.py:77`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -317,12 +317,12 @@ print(signature(RopeFrequency.forward))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- 案例：`recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`
 
 ### 源码位置
 
 - 模块：`ai4e_core.abilities.modeling.modules.position_encoding`
-- 仓库相对路径：`packages/ai4e-core/abilities/modeling/modules/position_encoding.py:111`
+- 仓库相对路径：`packages/ai4e-core/abilities/modeling/modules/position_encoding.py:112`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API

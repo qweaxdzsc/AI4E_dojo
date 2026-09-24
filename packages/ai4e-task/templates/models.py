@@ -14,4 +14,6 @@ class Entry(TypedDict):
     outputs: dict[str, str]
     convention_version: int
     components: NotRequired[dict[str, str]]
-    resume_key: NotRequired[str]
+    resume_inputs: NotRequired[list[str]]
+    stages: NotRequired[list[str]]
+    task_description: NotRequired[dict]

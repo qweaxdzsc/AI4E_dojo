@@ -14,6 +14,7 @@ def shared_recipe(tmp_path):
     source = recipe(tmp_path)
     cfg = OmegaConf.load(source / "config.yaml")
     cfg.dataset = {"processed_name": "sample_data"}
+    cfg.components = {"application": "ai4e_contrib.application.aero_cfd.operations"}
     cfg.pipeline.stages = ["rawprep"]
     cfg.train = {"manifest": None, "snapshot": False}
     OmegaConf.save(cfg, source / "config.yaml")

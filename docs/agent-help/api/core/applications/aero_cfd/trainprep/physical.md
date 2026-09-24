@@ -450,13 +450,13 @@ print(signature(consume))
 
 ### Recipe 与案例
 
-- Recipe：`geotransolver/bumper_beam`, `geotransolver/darcy`
-- 案例：`geotransolver.bumper_beam`, `geotransolver.darcy`, `recipe_extensions.geotransolver`
+- Recipe：`classic_networks/darcy`, `classic_networks/double_cylinder`, `classic_networks/shapenet_volume`, `geotransolver/bumper_beam`, `geotransolver/darcy`, `operator_learning/darcy`, `operator_learning/double_cylinder`, `operator_learning/shapenet_volume`, `surrogate_modeling/double_cylinder`, `surrogate_modeling/nasa_crm`
+- 案例：`classic_networks.darcy`, `classic_networks.double_cylinder`, `classic_networks.shapenet_volume`, `geotransolver.bumper_beam`, `geotransolver.darcy`, `operator_learning.darcy`, `operator_learning.double_cylinder`, `operator_learning.shapenet_volume`, `recipe_extensions.geotransolver`, `recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.resunet`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`, `recipe_extensions.operator_physical_loss`, `recipe_extensions.research_state`, `recipe_extensions.tail_batch`, `surrogate_modeling.double_cylinder`, `surrogate_modeling.nasa_crm`
 
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.trainprep.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/physical.py:242`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/physical.py:243`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -610,7 +610,7 @@ print(signature(normalized_fields))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.trainprep.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/physical.py:268`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/physical.py:296`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -712,7 +712,7 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 ### 用途
 
-兼容旧三元组入口；与显式步骤共用实现。
+兼容旧三元组入口，并只读导入现行通用 version=2 准备。
 
 ### 导入与签名
 
@@ -741,7 +741,7 @@ open_preparation(config, dataset_component, model_component, reference=None)
 
 ### 异常
 
-AST 未发现显式 `raise`；依赖函数仍可能报告输入、文件或运行错误。
+`ValueError`
 
 ### 副作用与产物
 
@@ -770,7 +770,7 @@ print(signature(open_preparation))
 ### 源码位置
 
 - 模块：`ai4e_core.applications.aero_cfd.trainprep.physical`
-- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/physical.py:262`
+- 仓库相对路径：`packages/ai4e-core/applications/aero_cfd/trainprep/physical.py:263`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API

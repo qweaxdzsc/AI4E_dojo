@@ -99,3 +99,9 @@ artifacts/platform.py 增加 RawprepDescriptor 与检查范围、缺项及原生
 `artifacts/inference.py`：跨分片请求、字段/指标选择与固定结果身份，拒绝新旧名单同时提交。
 
 专项状态与证据见 `.context/mvp/inference-ui-acceptance.md`，不沿用旧验收结论。
+
+## Task 通用化交接（实施中）
+
+- `artifacts/task_operations.py`：JSON 管理描述、执行计划验证、类型敏感的身份/标签等值。只依赖标准库。
+
+公开接口变化、圈定测试与未验范围见 [本轮验收](../mvp/task-generalization-acceptance.md)，功能正文更新既有对应 PRD。

@@ -81,14 +81,14 @@ assert "volume_speed" in index.read("train")
 current=task.read_configuration(project,b["id"])
 task.bind_shared_dataset(project,b["id"],"extended_fields",revision=current["revision"])
 # 原始网格不可见后，另一个任务仍能准备、训练和独立推理。
-raw=Path(current["config"]["dataset"]["root"])
+raw=Path(current["config"]["inputs"]["rawprep"]["source"])
 raw.rename(raw.with_name(raw.name+"-not-visible"))
 second=execute(b,["pipeline.stages=[trainprep,train]"])
 prep=Path(second["run_dir"])/"artifacts/preparation.json"
 weight=Path(second["run_dir"])/"checkpoints/last.pt"
 record=json.loads(prep.read_text())
 assert "volume_speed" in record["normalization"]["fields"]
-third=execute(b,["pipeline.stages=[infer]","infer.checkpoint="+str(weight),"infer.preparation="+str(prep),"train.preparation="+str(prep),"infer.query=false"])
+third=execute(b,["pipeline.stages=[infer]","inputs.infer.checkpoint="+str(weight),"inputs.infer.preparation="+str(prep),"inputs.train.preparation="+str(prep),"infer.query=false"])
 assert (Path(third["run_dir"])/"artifacts/inference-results.json").is_file()
 # 显式重做物理数据后，消费任务的配置、准备、检查点与推理结果不得被回写。
 frozen=[project/"tasks"/b["id"]/"recipe/config.yaml",prep,weight,Path(third["run_dir"])/"artifacts/inference-results.json"]

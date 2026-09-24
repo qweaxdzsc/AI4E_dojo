@@ -11,7 +11,7 @@ def register_results(session, path, report, *, stage="infer"):
     dependencies = sorted({str(Path(row["manifest"]).parent)
                            for row in report["results"] if row.get("manifest")})
     session.record_asset("results", path, kind="other", stage=stage,
-                         dependencies=dependencies)
+                         dependencies=dependencies, semantics={"type": "aero.inference"})
     protocol = report["protocol"]
     groups = defaultdict(list)
     for sample in report["results"]:

@@ -11,6 +11,12 @@ import yaml
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def test_scientific_chains_are_explicit_in_documentation():
+    text = (ROOT / "docs/PRD/recipes/aero_cfd/PRD.md").read_text()
+    assert "缺少该配置时保持原锚点" not in text
+    assert "三个 Transolver" in text and "只负责图缓存" in text
+
+
 def test_authoring_rule_and_development_entry():
     path = ROOT / ".cursor/rules/ai4e-recipe-authoring.mdc"
     header = yaml.safe_load(path.read_text().split("---")[1])

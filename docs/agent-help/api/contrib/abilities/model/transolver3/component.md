@@ -63,12 +63,12 @@ print(signature(collate))
 ### Recipe 与案例
 
 - Recipe：`aero_cfd`
-- 案例：`aero_cfd.nasa_crm_abupt`, `aero_cfd.nasa_crm_meshgraphnet`, `aero_cfd.nasa_crm_transolver3`, `aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `recipe_extensions.field_mapping`, `recipe_extensions.sampling`
+- 案例：`aero_cfd.nasa_crm_abupt`, `aero_cfd.shapenet_car_abupt`, `recipe_extensions.field_mapping`, `recipe_extensions.sampling`
 
 ### 源码位置
 
 - 模块：`ai4e_contrib.ability.model.transolver3.component`
-- 仓库相对路径：`packages/ai4e-contrib/ability/model/transolver3/component.py:12`
+- 仓库相对路径：`packages/ai4e-contrib/ability/model/transolver3/component.py:8`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_contrib')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -144,7 +144,7 @@ print(signature(training_parameters))
 ### 源码位置
 
 - 模块：`ai4e_contrib.ability.model.transolver3.component`
-- 仓库相对路径：`packages/ai4e-contrib/ability/model/transolver3/component.py:37`
+- 仓库相对路径：`packages/ai4e-contrib/ability/model/transolver3/component.py:43`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_contrib')`，再按模块相对路径定位。
 
 ### 相关 API

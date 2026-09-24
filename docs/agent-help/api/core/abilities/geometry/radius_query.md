@@ -143,7 +143,7 @@ print(signature(BallQuery.forward))
 ### Recipe 与案例
 
 - Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- 案例：`recipe_extensions.network_composition.cnn_rnn`, `recipe_extensions.network_composition.unet_transformer`, `recipe_extensions.operator_branch_replacement`
 
 ### 源码位置
 
@@ -455,7 +455,7 @@ print(signature(install_prepared_queries))
 ### Recipe 与案例
 
 - Recipe：`geotransolver/bumper_beam`, `geotransolver/darcy`
-- 案例：`geotransolver.bumper_beam`, `geotransolver.darcy`
+- 案例：`geotransolver.bumper_beam`, `geotransolver.darcy`, `recipe_extensions.research_state`, `recipe_extensions.tail_batch`
 
 ### 源码位置
 

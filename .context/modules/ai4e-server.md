@@ -169,3 +169,14 @@ modules/datasets/registry.py 汇聚 Task 项目共享资源；rawprep 传显式�
 
 
 训练指标编辑：`modules/stages/configuration.py` 允许 `evaluation_metrics` 明确编辑及显式空选择，算法描述透传指标目录。交接测试见 `tests/integration/test_model_evaluation.py` 与 `test_web_configuration_composition.py`。
+
+## Task 通用化交接（实施中）
+
+- `modules/capabilities/official_scripts.py`：官方源码特征与已核验摘要，生成明确迁移清单；不由检查/执行自动触发。
+- `modules/stages/application.py`：消费标签匹配及固定图引用，当前 Web 工作台顺序仍由 Server/Web 持有。
+
+公开接口变化、圈定测试与未验范围见 [本轮验收](../mvp/task-generalization-acceptance.md)，功能正文更新既有对应 PRD。
+
+官方换模完整交接：`modules/capabilities/official_scripts.py::model_switch_replacements` 仅在明确换模时生成当前官方三阶段清单；`modules/stages/application.py` 与配置共同提交。历史源码白名单不扩大，创建仍使用案例原文件。用 `test_web_stage_consistency.py` 的双向换模及 `test_web_recipe_compatibility.py` 用户修改保护验收。
+
+`stages/application.py` 的显式换模按目标完整草稿执行，兼容页面附带旧字段删除清单；普通保存仍使用受控编辑路径。`test_web_stage_consistency.py` 双向四方向同时覆盖旧请求和页面路径请求。

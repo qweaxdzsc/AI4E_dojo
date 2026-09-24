@@ -8,7 +8,7 @@
 
 - **层级**：`core.ability`
 - **稳定性**：`extension`
-- **定义**：`fit_iterations(model, optimizer, stream, batch, objective, *, updates, start=0, scheduler=None, ema=None, evaluate=None, evaluate_every=100, checkpoint=None, deadline=None, history=None, max_grad_norm=1.0, after_update=None, cancelled=None, update_step=None, accumulate=1, accumulation_reduction='mean', scaler=None, epoch_end=None)`
+- **定义**：`fit_iterations(model, optimizer, stream, batch, objective, *, updates, start=0, scheduler=None, ema=None, evaluate=None, evaluate_every=100, checkpoint=None, checkpoint_every=None, deadline=None, history=None, max_grad_norm=1.0, after_update=None, cancelled=None, update_step=None, accumulate=1, accumulation_reduction='mean', scaler=None, epoch_end=None)`
 - **规范定义名**：`ai4e_core.abilities.training.iterations.fit_iterations`
 
 ### 用途
@@ -17,6 +17,7 @@
 
 epoch_end(stream) 在取批后报告真实轮次末尾，用于丢弃不足一组的尾批。
 未传表示连续无限流；自定义更新限无状态、完整精度且不叠加累积。
+checkpoint_every 未指定时沿用评价周期；同一步先评价后保存。
 
 ### 导入与签名
 
@@ -25,7 +26,7 @@ from ai4e_core.abilities.training.iterations import fit_iterations
 ```
 
 ```text
-fit_iterations(model, optimizer, stream, batch, objective, *, updates, start=0, scheduler=None, ema=None, evaluate=None, evaluate_every=100, checkpoint=None, deadline=None, history=None, max_grad_norm=1.0, after_update=None, cancelled=None, update_step=None, accumulate=1, accumulation_reduction='mean', scaler=None, epoch_end=None)
+fit_iterations(model, optimizer, stream, batch, objective, *, updates, start=0, scheduler=None, ema=None, evaluate=None, evaluate_every=100, checkpoint=None, checkpoint_every=None, deadline=None, history=None, max_grad_norm=1.0, after_update=None, cancelled=None, update_step=None, accumulate=1, accumulation_reduction='mean', scaler=None, epoch_end=None)
 ```
 
 ### 参数
@@ -44,6 +45,7 @@ fit_iterations(model, optimizer, stream, batch, objective, *, updates, start=0, 
 | `evaluate` | `未标注` | `None` |
 | `evaluate_every` | `未标注` | `100` |
 | `checkpoint` | `未标注` | `None` |
+| `checkpoint_every` | `未标注` | `None` |
 | `deadline` | `未标注` | `None` |
 | `history` | `未标注` | `None` |
 | `max_grad_norm` | `未标注` | `1.0` |

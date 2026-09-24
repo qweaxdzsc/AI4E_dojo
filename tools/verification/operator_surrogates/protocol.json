@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "scope": "engineering integration, not paper reproduction",
+  "sequence": "integrate, review, serial fit/train",
+  "combinations": 11,
+  "limit_seconds_per_combination": 10800,
+  "neural_updates": 100,
+  "neural_precision": "CPU FP32",
+  "neural_tolerance": {
+    "rtol": 1e-05,
+    "atol": 1e-06
+  },
+  "classical_tolerances_source": "serial_classical.TOLERANCES",
+  "physics": "Darcy maximum principle nonnegative solution, no sampled zero-boundary penalty",
+  "physical_weight_comparison": [
+    0,
+    0.1
+  ],
+  "reserved_unmetered_setup_seconds_per_combination": 60,
+  "independent_reference": "locked upstream operator arithmetic in independent harness; scipy/sklearn algebra; augmented GLS; official LightGBM",
+  "kriging_maxiter": 200,
+  "kriging_maxfun": 1000,
+  "kriging_termination": "explicit optimizer convergence, not 4-step trajectory only"
+}

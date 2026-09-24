@@ -144,7 +144,7 @@ print(signature(diffusion_loss))
 ### Recipe 与案例
 
 - Recipe：`safediffcon`
-- 案例：`safediffcon.burgers`, `safediffcon.tokamak`
+- 案例：`recipe_extensions.task_labels`, `safediffcon.burgers`, `safediffcon.tokamak`
 
 ### 源码位置
 

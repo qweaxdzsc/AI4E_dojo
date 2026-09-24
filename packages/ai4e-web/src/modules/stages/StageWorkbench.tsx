@@ -580,7 +580,8 @@ export function StageWorkbench({
             }
             options={choices(binding).map((i) => ({
               value: bindingOptionKey(i),
-              label:
+              disabled: i.compatibility?.status === "invalid",
+              label: i.compatibility?.status === "invalid" ? `${i.processed_name || i.name} · ${i.compatibility.reason}` :
                 binding === "inputs.train.preparation"
                   ? preparedDatasetLabel(i)
                   : i.origin === "platform"
@@ -701,8 +702,7 @@ export function StageWorkbench({
           preparations={inputs.filter(
             (item: any) =>
               item.ref &&
-              item.binding === "inputs.train.preparation" &&
-              item.compatibility?.status !== "invalid",
+              item.binding === "inputs.train.preparation",
           )}
           selectedPreparation={inputs.find(
             (item: any) =>
@@ -714,8 +714,7 @@ export function StageWorkbench({
           checkpoints={inputs.filter(
             (item: any) =>
               item.ref &&
-              item.binding === "inputs.infer.checkpoint" &&
-              item.compatibility?.status !== "invalid",
+              item.binding === "inputs.infer.checkpoint",
           )}
           selectedCheckpoint={inputs.find(
             (item: any) =>

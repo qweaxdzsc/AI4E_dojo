@@ -15,7 +15,7 @@ from ..storage.files import read_json, write_json
 from ..storage.layout import inside, task_dir
 from ..storage.records import all_records, get, put, remember, replay
 from ..storage.snapshots import digest, snapshot
-from .checkpoints import inference_samples, inspect_inference, list_inference_checkpoints
+from .checkpoints import inference_samples, list_inference_checkpoints
 from .configuration import read_configuration
 from .records import get_run, get_task, list_runs
 
@@ -28,22 +28,25 @@ def _folder(project, task_id, identity):
 
 def inference_devices(project: str | Path) -> list[dict]:
     """列出实际可用设备及已知 Dojo 运行占用，不保证识别外部进程。"""
-    devices = inspect_inference("devices")
+    result = subprocess.run(
+        [sys.executable, "-m", "ai4e_task.tasks.inference_inspection"],
+        input=__import__("json").dumps(
+            {
+                "target": "ai4e_core.abilities.training.resources.inspect_resources",
+                "operation": "devices",
+            }
+        ),
+        capture_output=True,
+        text=True,
+        check=True,
+        timeout=60,
+    )
+    devices = __import__("json").loads(result.stdout)
     busy = set()
     for run in list_runs(project):
         if run["status"] not in {"running", "pending", "stopping"}:
             continue
         value = run.get("metadata", {}).get("device")
-        cfg = Path(run["run_dir"]) / "inputs/config.yaml"
-        if not value and cfg.is_file():
-            from omegaconf import OmegaConf
-
-            config = OmegaConf.load(cfg)
-            value = (
-                OmegaConf.select(config, "infer.device")
-                if "infer" in run.get("stages", [])
-                else OmegaConf.select(config, "train.device")
-            )
         if value == "auto":
             busy.update(v for v in devices if v != "cpu")
         elif value:
@@ -72,29 +75,35 @@ def check_inference(project: str | Path, task_id: str, request: dict) -> dict:
         if c["revision"] in seen:
             raise ValueError("duplicate_checkpoint_content: 请选择不同内容的检查点")
         seen.add(c["revision"])
-        if chosen and (
-            c["preparation"]["digest"] != chosen[0]["preparation"]["digest"]
-            or c["contract"].get("component", c["contract"].get("model"))
-            != chosen[0]["contract"].get("component", chosen[0]["contract"].get("model"))
+        from ai4e_spec.artifacts.task_operations import exact_json_equal
+
+        if not c.get("execution_identity"):
+            raise ValueError("inference_execution_identity_missing")
+        execution_identity = c["execution_identity"]
+        if (
+            not isinstance(execution_identity, dict)
+            or not isinstance(execution_identity.get("scope"), str)
+            or not execution_identity["scope"].strip()
+            or "value" not in execution_identity
+            or execution_identity["value"] is None
         ):
-            raise ValueError("incompatible_checkpoint_preparation_or_model")
+            raise ValueError("inference_execution_identity_invalid")
+        if chosen and not exact_json_equal(
+            c["execution_identity"], chosen[0]["execution_identity"]
+        ):
+            raise ValueError("incompatible_checkpoint_batch")
         chosen.append(c)
-    if (value.fields is not None or value.metrics is not None) and not (
-        task_dir(project, task_id) / "recipe/infer.py"
-    ).is_file():
-        raise ValueError(
-            "legacy_inference_selection_unavailable: 旧post模板不支持字段/指标选择，请使用独立infer模板；旧请求仍可执行"
-        )
     sample_info = inference_samples(project, task_id, chosen[0]["id"])
+    if (value.fields is not None or value.metrics is not None) and not sample_info.get(
+        "selection_supported"
+    ):
+        raise ValueError("inference_selection_unavailable: application 未声明字段/指标选择")
     if sample_info.get("compatibility", {}).get("status") == "invalid":
         raise ValueError(sample_info["compatibility"]["reason"])
     groups = []
     refs = value.selections()
     partitions = sample_info.get("partitions", {})
-    for split in dict.fromkeys(
-        [s for s in ("train", "validation", "eval", "test") if any(r["split"] == s for r in refs)]
-        + [r["split"] for r in refs]
-    ):
+    for split in dict.fromkeys(r["split"] for r in refs):
         samples = [r["sample"] for r in refs if r["split"] == split]
         allowed = partitions.get(split)
         if allowed is None or not set(samples) <= set(allowed):
@@ -196,9 +205,18 @@ def submit_inference(project: str | Path, task_id: str, request: dict) -> dict:
                 "children": [],
                 "error": None,
             }
+            from .operation_sources import capture_source
+
+            application_source = capture_source(folder / "code", "infer")
             write_json(
                 folder / "request.json",
-                {**checked, "task_id": task_id, "id": identity, "code_digest": captured["digest"]},
+                {
+                    **checked,
+                    "task_id": task_id,
+                    "id": identity,
+                    "code_digest": captured["digest"],
+                    "application_source": application_source,
+                },
             )
             write_json(folder / "state.json", record)
             put(db, "inference_batch", record)

@@ -146,7 +146,7 @@ print(signature(burgers))
 ### Recipe 与案例
 
 - Recipe：`parametric_pde`, `safediffcon`, `wdno`
-- 案例：`parametric_pde.advection`, `parametric_pde.burgers`, `parametric_pde.convection_diffusion`, `parametric_pde.diffusion_trapezoid`, `parametric_pde.neumann_diffusion`, `recipe_extensions.safediffcon`, `recipe_extensions.wdno`, `safediffcon.burgers`, `wdno.burgers_base`
+- 案例：`parametric_pde.advection`, `parametric_pde.burgers`, `parametric_pde.convection_diffusion`, `parametric_pde.diffusion_trapezoid`, `parametric_pde.neumann_diffusion`, `recipe_extensions.safediffcon`, `recipe_extensions.task_labels`, `recipe_extensions.wdno`, `safediffcon.burgers`, `wdno.burgers_base`
 
 ### 源码位置
 

@@ -65,7 +65,7 @@ src 中按用户任务组织微领域；e2e 浏览器流程，scripts 架构与�
 - `tests/integration/test_web_integrated_pipeline.py`：主 Agent 独立跨包与显式 HTTP 四阶段验收。
 
 - `e2e/platform-integrated.spec.ts`：复用真实运行检查阶段配置、固定交接、提取草稿与六页原型矩形对照。
-- `e2e/model-inspection.spec.ts`：生成加载样式、两档切换与历史单图不假切换。
+- `e2e/model-inspection.spec.ts`：生成加载样式、两档固定内容切换与历史单图不假切换；快速载入不要求瞬时占位被测试捕获。
 - `e2e/task-dataset-binding.spec.ts`：从项目页点击完成五案例简洁创建（模型在前，含体场），绑定改为选择公开数据集与本机副本；弹窗校验/重试/约定尺寸，以及 1440/1920 任务表对照整合 HTML。证据见 `.context/mvp/web-integrated-results/task-binding-correction/`。
 - `e2e/visualization-difference.spec.ts`、`visualization-export.spec.ts`：真实 NASA 差值及完整导出网格。
 - `e2e/visualization-safety.spec.ts`、`visualization-subscriptions.spec.ts`：资源/上下文恢复及明确标注的订阅协议夹具。
@@ -165,3 +165,7 @@ rawprep 复用覆盖弹窗并按来源身份浏览；stages/inputChoices 按项�
 
 
 训练指标与曲线：`TrainingPanel.tsx` 按算法目录保存实际评估选择；`TrainingMonitor.tsx` 提供 Loss／累计更新步／学习率页签及各自空配置面板，独立处理缺失值。圈定 `e2e/execution-monitor.spec.ts`、`e2e/stage-consistency.spec.ts`；发布状态见 `.context/mvp/training-metrics-ui-acceptance.md`。
+
+## Task 标签候选消费
+
+`src/modules/stages/{inputChoices,StageWorkbench}.tsx`（inputChoices 为 `.ts`）及 `src/modules/training/TrainingPanel.tsx`：缺标签显示原因并禁选，多个有效候选不自动选择；`e2e/task-labels.spec.ts` 验证。结构图继续通过原固定引用消费两档 HTML。本轮状态见 Task 通用化验收记录。

@@ -21,12 +21,21 @@ from ai4e_task.templates.resources import (
 
 
 def test_resource_manifest_and_checks():
-    manifest = json.loads((Path(__file__).resolve().parents[2] / 'examples/case-manifest.json').read_text())
-    for kind in ['standalone', 'extension']:
-        assert {c['id'] for c in list_examples(case_type=kind)} == {
-            c['id'] for c in manifest['cases'] if c['type'] == kind
+    manifest = json.loads(
+        (Path(__file__).resolve().parents[2] / "examples/case-manifest.json").read_text()
+    )
+    expected = {case["id"] for case in manifest["cases"]}
+    for kind in ["standalone", "extension"]:
+        assert {c["id"] for c in list_examples(case_type=kind)} == {
+            c["id"] for c in manifest["cases"] if c["type"] == kind
         }
-    assert check_example("parametric_pde.neumann_diffusion")["ok"]
+    assert {case["id"] for case in list_examples()} == expected
+    failures = {
+        case_id: result
+        for case_id in sorted(expected)
+        if not (result := check_example(case_id))["ok"]
+    }
+    assert not failures
 
 
 def test_copy_standalone_rejects_non_empty_target(tmp_path):

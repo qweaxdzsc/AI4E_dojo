@@ -16,6 +16,19 @@ from tools.verification.transolver3.compare import require
 ROOT = Path(__file__).resolve().parents[2]
 
 
+@pytest.mark.parametrize("split", ["eval", "validation"])
+def test_current_evaluation_slice_and_legacy_alias(split):
+    """平台规范化后的 eval 与旧名 validation 通过同一科学约束。"""
+    from ai4e_contrib.ability.model.transolver3.component import TRAINING_CONSTRAINTS
+    from ai4e_contrib.application.aero_cfd.transolver3 import resolve
+
+    config = {"train": {"evaluation_split": split}}
+    assert resolve(config)["train"]["evaluation_split"] == split
+    assert TRAINING_CONSTRAINTS["evaluation_split"]["allowed"] == ["eval"]
+    with pytest.raises(ValueError, match="选优和 fp32"):
+        resolve({"train": {"evaluation_split": "test"}})
+
+
 def reference_module(filename):
     """仅验收工具动态读取参考算法，正式包没有这个依赖。"""
     path = ROOT.parent / "Transolver-3/models" / filename

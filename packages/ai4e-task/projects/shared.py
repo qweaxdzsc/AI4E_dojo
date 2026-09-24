@@ -23,13 +23,19 @@ def register_shared(
     provenance: dict | None = None,
     dependencies: list[dict] | None = None,
     bundle: dict | None = None,
+    semantics: dict | None = None,
+    stage: str | None = None,
+    asset_name: str | None = None,
 ) -> dict:
     """按资产名登记或复制共享内容；目标存在时拒绝覆盖。"""
     open_project(project)
     project = Path(project).resolve()
     target = inside(project / "shared", name)
-    value = describe_asset(Path(source), kind=kind, source=provenance)
-    value["name"] = name
+    value = describe_asset(
+        Path(source), kind=kind, source=provenance, semantics=semantics, stage=stage
+    )
+    value["name"] = asset_name if asset_name is not None else name
+    value["registration_name"] = name
     value["dependencies"] = dependencies or []
     if bundle is not None:
         value["bundle"] = bundle
@@ -38,7 +44,9 @@ def register_shared(
         validate_asset(project, dep)
     if copy and value["dependencies"] and not bundle:
         # 不猜测领域清单中的引用位置；复制主文件不能冒充可迁移的完整资产。
-        raise ValueError("asset_copy_not_portable: publish a self-contained bundle or use reference")
+        raise ValueError(
+            "asset_copy_not_portable: publish a self-contained bundle or use reference"
+        )
     stage = project / ".dojo" / f"asset-{uuid4().hex}.tmp"
     published = False
     try:
@@ -107,10 +115,14 @@ def share_run_asset(
 
     dependencies = []
     bundle = None
+    labels = {}
     index = Path(run["run_dir"]) / "artifacts/assets.json"
     if index.is_file():
-        matches = [item for item in read_json(index)["items"].values()
-                   if Path(item["path"]).resolve() == source]
+        matches = [
+            item
+            for item in read_json(index)["items"].values()
+            if Path(item["path"]).resolve() == source
+        ]
         for item in matches:
             validate_asset_content(item)
             if item["kind"] != kind:
@@ -118,6 +130,19 @@ def share_run_asset(
             for dependency in item["dependencies"]:
                 dependencies.append(describe_asset(Path(dependency), kind="other"))
             candidate = indexed_asset(item, provenance={"run_id": run_id})
+            incoming_labels = {
+                "semantics": candidate.get("semantics", {}),
+                "stage": candidate.get("stage"),
+                "asset_name": candidate.get("name"),
+            }
+            if (
+                labels.get("semantics")
+                and incoming_labels["semantics"]
+                and labels != incoming_labels
+            ):
+                raise ValueError("asset_labels_conflict")
+            if incoming_labels["semantics"] or not labels:
+                labels = incoming_labels
             if candidate.get("bundle"):
                 bundle = candidate["bundle"]
     return register_shared(
@@ -129,4 +154,5 @@ def share_run_asset(
         dependencies=dependencies,
         bundle=bundle,
         provenance={"run_id": run_id, "task_id": run["task_id"], "version_id": run["version_id"]},
+        **labels,
     )

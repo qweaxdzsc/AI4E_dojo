@@ -232,6 +232,7 @@ def publish(data, *, session):
         path,
         kind="preparation",
         stage="trainprep",
+        semantics={"type": "aero.preparation", "format_version": 2},
         dependencies=[Path(data.record["manifest"]).parent],
     )
     result = {"preparation": str(path), "split_counts": data.record["split_counts"]}
@@ -260,7 +261,34 @@ def consume(config, dataset_component, model_component, reference=None):
 
 
 def open_preparation(config, dataset_component, model_component, reference=None):
-    """兼容旧三元组入口；与显式步骤共用实现。"""
+    """兼容旧三元组入口，并只读导入现行通用 version=2 准备。"""
+    if isinstance(reference, dict):
+        reference = reference["preparation"]
+    if reference:
+        frozen = json.loads(Path(reference).read_text())
+        if frozen.get("version") == 2 and frozen.get("kind") != "physical_fields":
+            from ai4e_core.abilities.data.source.manifest import ManifestIndex
+            from ai4e_core.abilities.transform.normalization import Normalization
+
+            from .preparation import dataset_digest, digest
+
+            payload = {key: value for key, value in frozen.items() if key != "digest"}
+            if not frozen.get("digest") or digest(payload) != frozen["digest"]:
+                raise ValueError("现行准备记录摘要不一致")
+            manifest = frozen.get("manifest")
+            if not isinstance(manifest, str):
+                raise ValueError("现行准备记录缺少物理数据清单引用")
+            index = ManifestIndex(manifest)
+            if dataset_digest(index) != frozen.get("dataset_digest"):
+                raise ValueError("现行准备记录的数据内容摘要不一致")
+            normalization = Normalization(frozen.get("normalization") or {})
+            if normalization.digest != frozen.get("normalization_digest"):
+                raise ValueError("现行准备记录的归一化摘要不一致")
+            current = deepcopy(config)
+            current.setdefault("train", {})["manifest"] = manifest
+            view = dataset_component.open_physical(current)
+            apply_declared_split(view, current, frozen.get("partitions"))
+            return view, normalization, frozen
     data = consume(config, dataset_component, model_component, reference)
     return data.view, data.normalization, data.record
 

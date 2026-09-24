@@ -93,6 +93,10 @@ def test_trial_and_multistage_failure_do_not_claim_completion(monkeypatch, tmp_p
             },
         ],
     )
+    monkeypatch.setattr(
+        "ai4e_task.templates.materialize.recipe_entry",
+        lambda *_: {"stages": ["rawprep", "trainprep", "train", "post"]},
+    )
     result = query.get_stage_summary(tmp_path, "t")
     assert result["post"]["status"] == "not_run"
     assert result["rawprep"]["status"] == "unknown"
@@ -219,9 +223,7 @@ def test_stage_files_list_preparation_and_normalized_pt_copies(platform, monkeyp
         base, params={"role": "preparation", "run_id": "prep1", "path": "normalize/train/s1"}
     ).json()
     assert {item["name"] for item in files} == {"field_0.pt"}
-    assert files[0]["source_path"].endswith(
-        "data/prep1/trainprep/normalize/train/s1/field_0.pt"
-    )
+    assert files[0]["source_path"].endswith("data/prep1/trainprep/normalize/train/s1/field_0.pt")
 
 
 def test_stage_files_list_legacy_data_dir_normalize(platform, monkeypatch):
@@ -344,7 +346,7 @@ def test_relative_binding_restores_from_task_configuration_directory(platform, m
     monkeypatch.setattr(
         task,
         "list_stage_artifacts",
-        lambda *_: [
+        lambda *_a, **_k: [
             {
                 "binding": "inputs.trainprep.dataset",
                 "run_id": "r",
@@ -394,7 +396,10 @@ def test_stage_save_atomically_persists_or_clears_controlled_bindings(platform):
     assert c.put(base + "/configuration", json=body).status_code == 409
     body["expected_revision"] = saved.json()["revision"]
     body["bindings"] = {"inputs.trainprep.dataset": None}
-    assert c.put(base + "/configuration", json=body).json()["config"]["inputs"]["trainprep"]["dataset"] is None
+    assert (
+        c.put(base + "/configuration", json=body).json()["config"]["inputs"]["trainprep"]["dataset"]
+        is None
+    )
     assert len(c.get(f"/api/v1/projects/{p}/lineage").json()) == 1
 
 
@@ -578,7 +583,9 @@ def test_template_manifest_placeholder_is_not_bound_source(platform):
     task.save_configuration(
         root,
         t["id"],
-        public_patch({"train": {"manifest": "/no-such-dojo-root/missing-placeholder/manifest.json"}}),
+        public_patch(
+            {"train": {"manifest": "/no-such-dojo-root/missing-placeholder/manifest.json"}}
+        ),
         revision=cfg["revision"],
     )
     items = c.get(f"/api/v1/projects/{p}/tasks/{t['id']}/stage-inputs").json()
@@ -612,6 +619,18 @@ def test_run_manifest_on_registered_root_is_listed(platform, monkeypatch):
 
     c, p, t, data, _ = platform
     (data / "manifest.json").write_text("{}")
+    from ai4e_core.run.writer import RunWriter
+
+    run_dir = data / "indexed-run"
+    run_dir.mkdir()
+    writer = RunWriter(run_dir)
+    writer.record_asset(
+        "physical",
+        data / "manifest.json",
+        kind="dataset",
+        stage="rawprep",
+        semantics={"type": "aero.physical", "format_version": 1},
+    )
     monkeypatch.setattr(
         artifacts,
         "list_runs",
@@ -621,7 +640,7 @@ def test_run_manifest_on_registered_root_is_listed(platform, monkeypatch):
                 "status": "succeeded",
                 "operation_mode": "execute",
                 "data_dir": str(data),
-                "run_dir": str(data / "missing-run"),
+                "run_dir": str(run_dir),
             }
         ],
     )
@@ -665,8 +684,9 @@ def test_stat_register_does_not_read_file_bytes(platform, monkeypatch):
 
 def test_stage_inputs_skip_content_digest(platform, monkeypatch):
     """切步列表不得把检查点整文件打进内容摘要。"""
-    from ai4e_core.run import indexes
     from ai4e_server.modules.visualization import application as vis
+
+    from ai4e_core.run import indexes
 
     def forbidden(path):
         raise AssertionError(f"content digest during listing: {path}")
@@ -684,9 +704,10 @@ def test_list_stage_artifacts_does_not_reread_checkpoint_bytes(platform, monkeyp
     import json
     from pathlib import Path
 
+    from ai4e_task.tasks import artifacts
+
     from ai4e_core.run import indexes
     from ai4e_spec.artifacts.indexes import INDEX_VERSION
-    from ai4e_task.tasks import artifacts
 
     c, p, t, data, _ = platform
     run_dir = data / "ckpt-list-run"
@@ -704,6 +725,7 @@ def test_list_stage_artifacts_does_not_reread_checkpoint_bytes(platform, monkeyp
                         "stage": "train",
                         "path": str(ckpt.resolve()),
                         "digest": "listed-without-reread",
+                        "semantics": {"type": "aero.checkpoint"},
                         "dependencies": [],
                     }
                 },
@@ -744,14 +766,15 @@ def test_list_stage_artifacts_does_not_reread_checkpoint_bytes(platform, monkeyp
     )
     assert reads["n"] == 0
     assert any(
-        item["binding"] == "inputs.infer.checkpoint" and item["name"] == "last.pt"
+        item["binding"] == "inputs.infer.checkpoint"
+        and item["name"] == "last"
+        and item["file_name"] == "last.pt"
         for item in listed
     )
     items = c.get(f"/api/v1/projects/{p}/tasks/{t['id']}/stage-inputs").json()
     assert reads["n"] == 0
     assert any(
-        item["binding"] == "inputs.infer.checkpoint" and item["name"] == "last.pt"
-        for item in items
+        item["binding"] == "inputs.infer.checkpoint" and item["name"] == "last.pt" for item in items
     )
 
 
@@ -764,9 +787,11 @@ def test_preparation_stage_inputs_use_processed_dataset_name(platform, monkeypat
     (run_dir / "artifacts").mkdir(parents=True)
     (run_dir / "artifacts" / "preparation.json").write_text("{}")
     from ai4e_core.run.writer import RunWriter
+
     writer = RunWriter(run_dir)
-    writer.record_asset("preparation", run_dir / "artifacts/preparation.json",
-                        kind="preparation", stage="trainprep")
+    writer.record_asset(
+        "preparation", run_dir / "artifacts/preparation.json", kind="preparation", stage="trainprep"
+    )
     (run_dir / "inputs").mkdir()
     (run_dir / "inputs" / "config.yaml").write_text("dataset:\n  processed_name: my_cars\n")
     monkeypatch.setattr(
@@ -800,9 +825,30 @@ def test_published_slices_catalog_reads_existing_v2_record():
             "split": {"method": "original", "seed": 1},
         }
     ) == [
-        {"name": "train", "role": "train", "label": "训练集", "count": 1, "method": "original", "seed": 1},
-        {"name": "test", "role": "test", "label": "测试集", "count": 0, "method": "original", "seed": 1},
-        {"name": "eval", "role": "eval", "label": "评价集", "count": 1, "method": "original", "seed": 1},
+        {
+            "name": "train",
+            "role": "train",
+            "label": "训练集",
+            "count": 1,
+            "method": "original",
+            "seed": 1,
+        },
+        {
+            "name": "test",
+            "role": "test",
+            "label": "测试集",
+            "count": 0,
+            "method": "original",
+            "seed": 1,
+        },
+        {
+            "name": "eval",
+            "role": "eval",
+            "label": "评价集",
+            "count": 1,
+            "method": "original",
+            "seed": 1,
+        },
     ]
 
 
@@ -818,7 +864,11 @@ def test_preparation_stage_inputs_expose_saved_slices(platform, monkeypatch):
             {
                 "version": 2,
                 "partitions": {"train": ["a", "b"], "test": ["c"]},
-                "split": {"method": "random", "seed": 7, "counts": {"train": 2, "test": 1, "eval": 0}},
+                "split": {
+                    "method": "random",
+                    "seed": 7,
+                    "counts": {"train": 2, "test": 1, "eval": 0},
+                },
                 "split_counts": {"train": 2, "test": 1},
             }
         )
@@ -854,9 +904,30 @@ def test_preparation_stage_inputs_expose_saved_slices(platform, monkeypatch):
     if "slices" not in item:
         pytest.skip("安装副本尚未附带切片目录")
     assert item["slices"] == [
-        {"name": "train", "role": "train", "label": "训练集", "count": 2, "method": "random", "seed": 7},
-        {"name": "test", "role": "test", "label": "测试集", "count": 1, "method": "random", "seed": 7},
-        {"name": "eval", "role": "eval", "label": "评价集", "count": 0, "method": "random", "seed": 7},
+        {
+            "name": "train",
+            "role": "train",
+            "label": "训练集",
+            "count": 2,
+            "method": "random",
+            "seed": 7,
+        },
+        {
+            "name": "test",
+            "role": "test",
+            "label": "测试集",
+            "count": 1,
+            "method": "random",
+            "seed": 7,
+        },
+        {
+            "name": "eval",
+            "role": "eval",
+            "label": "评价集",
+            "count": 0,
+            "method": "random",
+            "seed": 7,
+        },
     ]
 
 
@@ -1120,8 +1191,9 @@ def test_trainprep_configuration_exposes_matching_and_rejects_bad_binding(platfo
         ("nasa_crm_transolver3", "abupt"),
     ],
 )
+@pytest.mark.parametrize("explicit_paths", [False, True])
 def test_registered_model_switch_replaces_defaults_and_preserves_identity(
-    platform, source, target_model
+    platform, source, target_model, explicit_paths
 ):
     """真实案例描述、双向替换及保存回读，不以创建来源冒充当前模型。"""
     from copy import deepcopy
@@ -1140,21 +1212,23 @@ def test_registered_model_switch_replaces_defaults_and_preserves_identity(
     cfg = task.save_configuration(
         root,
         t["id"],
-        public_patch({
-            "dataset": {"root": str(data), "custom_binding": "keep"},
-            "train": {
-                "manifest": str(data / "physical.json"),
-                "preparation": str(old),
-                "resume": str(data / "old.pt"),
-                "max_epochs": 999,
-                "old_optimizer_key": 1,
-            },
-            "model": {"initial_weights": str(data / "old.pt"), "old_extension": True},
-            "trainprep": {"old_role": True, "normalization": {"statistics": str(old)}},
-            "post": {"checkpoint": str(data / "old.pt"), "user_output_option": True},
-            "run_root": str(data.parent / "runs"),
-            "data_root": str(data.parent / "outputs"),
-        }),
+        public_patch(
+            {
+                "dataset": {"root": str(data), "custom_binding": "keep"},
+                "train": {
+                    "manifest": str(data / "physical.json"),
+                    "preparation": str(old),
+                    "resume": str(data / "old.pt"),
+                    "max_epochs": 999,
+                    "old_optimizer_key": 1,
+                },
+                "model": {"initial_weights": str(data / "old.pt"), "old_extension": True},
+                "trainprep": {"old_role": True, "normalization": {"statistics": str(old)}},
+                "post": {"checkpoint": str(data / "old.pt"), "user_output_option": True},
+                "run_root": str(data.parent / "runs"),
+                "data_root": str(data.parent / "outputs"),
+            }
+        ),
         revision=captured["revision"],
     )
     options = c.get(url + "/model-options")
@@ -1176,6 +1250,10 @@ def test_registered_model_switch_replaces_defaults_and_preserves_identity(
             "expected_revision": cfg["revision"],
             "target_model": target_model,
             "values": values,
+            **({
+                "edited_paths": [[key] for key in values],
+                "removed_paths": [[key] for key in cfg["config"]["model"] if key not in values],
+            } if explicit_paths else {}),
         },
     )
     assert response.status_code == 200, response.text
@@ -1205,6 +1283,13 @@ def test_registered_model_switch_replaces_defaults_and_preserves_identity(
     assert task.get_task(root, t["id"])["version_id"] == t["version_id"]
     assert task.read_configuration(root, t["id"]) == saved
     assert c.get(url + "/model-options").json()["current_model_id"] == target_model
+    from ai4e_server.modules.capabilities.model_cases import resolve_case
+
+    target_case = resolve_case(options["dataset_id"], target_model)
+    official = service.settings.template.parent.parent / "examples/aero_cfd" / target_case
+    live_recipe = Path(task.get_task(root, t["id"])["directory"]) / "recipe"
+    for filename in ("trainprep.py", "train.py", "infer.py"):
+        assert (live_recipe / filename).read_bytes() == (official / filename).read_bytes()
     reread = c.get(url + "/configuration?stage=model")
     assert reread.status_code == 200, reread.text
     assert reread.json()["values"]["parameters"][parameter] == 96
@@ -1282,7 +1367,9 @@ def test_checkpoint_tags_are_not_binding_file_paths(platform, tag):
     saved = task.save_configuration(
         root,
         t["id"],
-        public_patch({"post": {"checkpoint": tag}, "train": {"manifest": str(data / "missing.json")}}),
+        public_patch(
+            {"post": {"checkpoint": tag}, "train": {"manifest": str(data / "missing.json")}}
+        ),
         revision=cfg["revision"],
     )
     url = f"/api/v1/projects/{p}/tasks/{t['id']}/stage-inputs"
@@ -1292,7 +1379,8 @@ def test_checkpoint_tags_are_not_binding_file_paths(platform, tag):
         for i in items
     )
     assert any(
-        i["binding"] == "inputs.trainprep.dataset" and i["compatibility"]["reason"] == "binding_file_missing"
+        i["binding"] == "inputs.trainprep.dataset"
+        and i["compatibility"]["reason"] == "binding_file_missing"
         for i in items
     )
     task.save_configuration(
@@ -1302,7 +1390,8 @@ def test_checkpoint_tags_are_not_binding_file_paths(platform, tag):
         revision=saved["revision"],
     )
     assert any(
-        i["binding"] == "inputs.infer.checkpoint" and i["compatibility"]["reason"] == "binding_file_missing"
+        i["binding"] == "inputs.infer.checkpoint"
+        and i["compatibility"]["reason"] == "binding_file_missing"
         for i in c.get(url).json()
     )
 
@@ -1355,12 +1444,14 @@ def test_model_switch_real_preparation_handoff(platform, case):
     captured = task.save_configuration(
         root,
         item["id"],
-        public_patch({
-            "dataset": dataset,
-            "run_root": str(data.parent / "runs"),
-            "data_root": str(data.parent / "outputs"),
-            "train": {"device": "cpu"},
-        }),
+        public_patch(
+            {
+                "dataset": dataset,
+                "run_root": str(data.parent / "runs"),
+                "data_root": str(data.parent / "outputs"),
+                "train": {"device": "cpu"},
+            }
+        ),
         revision=original["revision"],
     )
 
@@ -1436,7 +1527,10 @@ def test_model_switch_real_preparation_handoff(platform, case):
             "validate_configuration",
             revision=switched["revision"],
             output_dir=str(data.parent / "missing-field-check"),
-            selection={"stage": "model", "bindings": {"inputs.trainprep.dataset": str(incomplete_path)}},
+            selection={
+                "stage": "model",
+                "bindings": {"inputs.trainprep.dataset": str(incomplete_path)},
+            },
         )
     new_run = execute("trainprep")
     new = str(Path(new_run["run_dir"]) / "artifacts/preparation.json")
@@ -1447,7 +1541,10 @@ def test_model_switch_real_preparation_handoff(platform, case):
     )
     assert Path(old).read_bytes() == old_content
     saved = task.save_configuration(
-        root, item["id"], public_patch({"train": {"preparation": new}}), revision=switched["revision"]
+        root,
+        item["id"],
+        public_patch({"train": {"preparation": new}}),
+        revision=switched["revision"],
     )
     described = task.inspect_task(
         root,
@@ -1932,13 +2029,15 @@ def test_train_execute_composes_manifest_from_selected_preparation(platform, mon
     task.save_configuration(
         root,
         t["id"],
-        public_patch({
-            "train": {
-                **(cfg["config"].get("train") or {}),
-                "manifest": str(leftover),
-                "resume": str(data / "old.pt"),
+        public_patch(
+            {
+                "train": {
+                    **(cfg["config"].get("train") or {}),
+                    "manifest": str(leftover),
+                    "resume": str(data / "old.pt"),
+                }
             }
-        }),
+        ),
         revision=cfg["revision"],
     )
     captured = {}
@@ -1986,19 +2085,21 @@ def test_train_execute_composes_from_saved_preparation_without_bindings(platform
     task.save_configuration(
         root,
         t["id"],
-        public_patch({
-            "inputs": {
-                **(cfg["config"].get("inputs") or {}),
-                "train": {
-                    **((cfg["config"].get("inputs") or {}).get("train") or {}),
-                    "preparation": str(prep),
+        public_patch(
+            {
+                "inputs": {
+                    **(cfg["config"].get("inputs") or {}),
+                    "train": {
+                        **((cfg["config"].get("inputs") or {}).get("train") or {}),
+                        "preparation": str(prep),
+                    },
+                    "trainprep": {"dataset": str(leftover)},
                 },
-                "trainprep": {"dataset": str(leftover)},
-            },
-            "train": {
-                **(cfg["config"].get("train") or {}),
-            },
-        }),
+                "train": {
+                    **(cfg["config"].get("train") or {}),
+                },
+            }
+        ),
         revision=cfg["revision"],
     )
     captured = {}
@@ -2062,14 +2163,14 @@ def test_train_execute_rejects_version1_preparation(platform, monkeypatch):
     assert "声明已变化" not in body["error"]["message"]
 
 
-def test_train_execute_writes_explicit_scale_and_migrates_official_script(platform, monkeypatch):
+def test_train_execute_writes_explicit_scale_and_preserves_historical_script(platform, monkeypatch):
     """补显式 scale；旧官方包装升级到当前模型案例，保留该领域的训练流程。"""
     import json
     from pathlib import Path
 
     from ai4e_server.modules.stages.domain import normalize_field_scales
 
-    c, p, t, data, settings = platform
+    c, p, t, data, _ = platform
     filled = normalize_field_scales(
         {
             "components": {"model": "ai4e_contrib.ability.model.abupt.component"},
@@ -2138,9 +2239,7 @@ def test_train_execute_writes_explicit_scale_and_migrates_official_script(platfo
     dumped = json.loads(_last_override(captured["overrides"], "trainprep").split("=", 1)[1])
     assert dumped["normalization"]["fields"]["surface_position"]["scale"] == 1000
     text = recipe.joinpath("train.py").read_text()
-    current_case = settings.template.parent.parent / "examples/aero_cfd/shapenet_car_abupt"
-    assert text == current_case.joinpath("train.py").read_text()
-    assert text != old.read_text()
+    assert text == old.read_text()
 
 
 def test_user_rewritten_official_script_is_not_replaced(platform, monkeypatch):
@@ -2390,17 +2489,19 @@ def test_preparation_combos_follow_dataset_and_load_official_trainprep(platform)
     stored = task.save_configuration(
         root,
         t["id"],
-        public_patch({
-            "train": {
-                **captured["config"].get("train", {}),
-                "preparation": str(old),
-                "resume": str(data / "old.pt"),
-            },
-            "model": {
-                **captured["config"].get("model", {}),
-                "initial_weights": str(data / "old.pt"),
-            },
-        }),
+        public_patch(
+            {
+                "train": {
+                    **captured["config"].get("train", {}),
+                    "preparation": str(old),
+                    "resume": str(data / "old.pt"),
+                },
+                "model": {
+                    **captured["config"].get("model", {}),
+                    "initial_weights": str(data / "old.pt"),
+                },
+            }
+        ),
         revision=captured["revision"],
     )
     same = c.put(
@@ -2474,17 +2575,19 @@ def test_model_and_train_official_combos_are_page_local(platform):
     stored = task.save_configuration(
         root,
         t["id"],
-        public_patch({
-            "train": {
-                **captured["config"].get("train", {}),
-                "preparation": str(old_prep),
-                "learning_rate": 0.123,
-            },
-            "model": {
-                **captured["config"].get("model", {}),
-                "initial_weights": str(old_weights),
-            },
-        }),
+        public_patch(
+            {
+                "train": {
+                    **captured["config"].get("train", {}),
+                    "preparation": str(old_prep),
+                    "learning_rate": 0.123,
+                },
+                "model": {
+                    **captured["config"].get("model", {}),
+                    "initial_weights": str(old_weights),
+                },
+            }
+        ),
         revision=captured["revision"],
     )
     before = stored["config"]
@@ -2568,6 +2671,7 @@ def test_terminal_run_only_exposes_committed_resume_checkpoint(
 ):
     """停止/异常后的完整权重可恢复；残留准备和未登记权重不可选。"""
     import json
+
     from ai4e_task.tasks import artifacts
 
     c, p, t, data, _ = platform
@@ -2581,14 +2685,15 @@ def test_terminal_run_only_exposes_committed_resume_checkpoint(
         ("preparation", "preparation.json"),
         ("dataset", "manifest.json"),
     ]:
-        items[name] = dict(
-            name=name,
-            kind=kind,
-            stage="train",
-            path=str(run_dir / name),
-            digest="committed",
-            dependencies=[],
-        )
+        items[name] = {
+            "name": name,
+            "kind": kind,
+            "stage": "train",
+            "path": str(run_dir / name),
+            "digest": "committed",
+            "semantics": {"type": "aero.checkpoint"} if kind == "checkpoint" else {},
+            "dependencies": [],
+        }
     (run_dir / "artifacts/assets.json").write_text(
         json.dumps({"schema_version": 1, "items": items})
     )
@@ -2596,14 +2701,14 @@ def test_terminal_run_only_exposes_committed_resume_checkpoint(
         artifacts,
         "list_runs",
         lambda *_a, **_k: [
-            dict(
-                id="interrupted",
-                task_id=t["id"],
-                status=status,
-                operation_mode=mode,
-                run_dir=str(run_dir),
-                data_dir=str(run_dir),
-            )
+            {
+                "id": "interrupted",
+                "task_id": t["id"],
+                "status": status,
+                "operation_mode": mode,
+                "run_dir": str(run_dir),
+                "data_dir": str(run_dir),
+            }
         ],
     )
     listed = artifacts.list_stage_artifacts(

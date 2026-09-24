@@ -111,6 +111,8 @@ def application_parameters(config, *, stage="train"):
     )
     input_bindings(value)
     inputs = value.pop("inputs")
+    # 管理入口声明不属于控制算法构造参数；只在局部连接消去。
+    value["components"].pop("application", None)
     output = value.pop("data_root")
     for name in ("dataset", "rawprep", "trainprep"):
         value.pop(name, None)

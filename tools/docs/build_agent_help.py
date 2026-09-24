@@ -9,12 +9,15 @@ from __future__ import annotations
 
 import argparse
 import ast
+import hashlib
 import json
+import os
 import re
 from collections.abc import Iterable
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
+from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[2]
 HELP_ROOT = ROOT / "docs/agent-help"
@@ -517,6 +520,39 @@ def _api_pages(symbols: list[Symbol]) -> dict[str, str]:
     return pages
 
 
+def _case_readme(case: dict[str, Any], page: str, cases: list[dict[str, Any]]) -> str:
+    """内嵌真实案例正文；转换可导出链接，显式标出未交付的历史参考。"""
+    source = ROOT / "examples" / case["path"] / "README.md"
+    original = source.read_bytes()
+    targets = {
+        (ROOT / "examples" / item["path"] / "README.md").resolve(): HELP_ROOT
+        / f"examples/cases/{item['id'].replace('.', '/')}.md"
+        for item in cases
+    }
+
+    def link(match):
+        marker, label, raw = match.groups()
+        raw = raw.strip().removeprefix("<").removesuffix(">")
+        if raw.startswith(("https://", "http://", "mailto:", "#")):
+            return match.group(0)
+        path, separator, anchor = raw.partition("#")
+        resolved = (source.parent / unquote(path)).resolve()
+        target = targets.get(resolved)
+        if target is None and resolved.is_relative_to(HELP_ROOT.resolve()) and resolved.is_file():
+            target = resolved
+        if target is not None:
+            relative = Path(os.path.relpath(target, (HELP_ROOT / page).parent)).as_posix()
+            # README标题加深但文字不变，Markdown标题锚点仍保持。
+            return f"{marker}[{label}](<{relative}{separator + anchor if separator else ''}>)"
+        return f"{label}（原参考 `{raw}` 未随此帮助交付；实际阶段源码请在复制案例内阅读）"
+
+    text = re.sub(r"(!?)\[([^\]\n]+)\]\((<[^>]+>|[^)\n]+)\)", link, original.decode("utf-8"))
+    text = re.sub(
+        r"^(#{1,6}) ", lambda m: "#" * min(6, len(m[1]) + 2) + " ", text, flags=re.MULTILINE
+    )
+    return f"来源：案例 README；SHA256 `{hashlib.sha256(original).hexdigest()}`。\n\n{text}"
+
+
 def _case_pages(cases: list[dict[str, Any]]) -> dict[str, str]:
     pages: dict[str, str] = {}
     for case in cases:
@@ -528,7 +564,13 @@ def _case_pages(cases: list[dict[str, Any]]) -> dict[str, str]:
             "layer": "example",
             "domain": case_id.split(".", 1)[0],
             "title": case_id,
-            "summary": case.get("purpose", "Dojo 研究案例"),
+            "summary": case.get("research", {}).get(
+                "summary", case.get("purpose", "Dojo 研究案例")
+            ),
+            "tasks": [
+                *case.get("research", {}).get("data_form", []),
+                *case.get("research", {}).get("extension_points", []),
+            ],
             "case_ids": [case_id],
         }
         lines = [
@@ -539,6 +581,19 @@ def _case_pages(cases: list[dict[str, Any]]) -> dict[str, str]:
             f"- 用途：{case.get('purpose', '未声明')}",
             f"- 资源路径：`examples/{case['path']}`",
         ]
+        research = case.get("research", {})
+        if research:
+            lines.extend(
+                [
+                    "",
+                    research["summary"],
+                    "",
+                    f"- 数据形态：{', '.join(research['data_form'])}",
+                    f"- 训练机制：{', '.join(research['training_pattern'])}",
+                    f"- 替换入口：{', '.join(research['extension_points'])}",
+                    *[f"- 限制：{value}" for value in research["limitations"]],
+                ]
+            )
         if case["type"] == "standalone":
             lines.extend(
                 [
@@ -575,7 +630,13 @@ def _case_pages(cases: list[dict[str, Any]]) -> dict[str, str]:
                     "物化后必须重新检查配置、输入和恢复兼容性；不能直接运行原 extension 目录。",
                 ]
             )
-        pages[path] = "\n".join(lines) + "\n"
+        lines.extend(["", "## 案例详细说明", "", _case_readme(case, path, cases)])
+        if case["type"] == "extension":
+            base = next(item for item in cases if item["id"] == case["base_case"])
+            base_path = f"examples/cases/{base['id'].replace('.', '/')}.md"
+            relative = Path(os.path.relpath(base_path, Path(path).parent)).as_posix()
+            lines.extend(["", f"基案例完整说明：[本地正文]({relative})。", ""])
+        pages[path] = "\n".join(lines).rstrip() + "\n"
     return pages
 
 
@@ -639,8 +700,7 @@ def navigation_outputs() -> dict[str, str]:
         if content.count(start) != 1 or content.count(end) != 1:
             raise ValueError(f"能力菜单标记缺失或重复: {name}")
         menu = "\n".join(
-            f"- **[{p['title']}]({prefix}{p['path']})**：{p['summary']}。"
-            f"主题 `{p['topic_id']}`。"
+            f"- **[{p['title']}]({prefix}{p['path']})**：{p['summary']}。主题 `{p['topic_id']}`。"
             for p in pages
         )
         before, rest = content.split(start)
@@ -717,8 +777,11 @@ def build_outputs() -> dict[str, str]:
         )
         if symbol.layer == "recipe":
             relative_recipe = Path(symbol.source_path).relative_to("recipes").as_posix()
-            matches = [source for source in recipe_by_case.values()
-                       if relative_recipe.startswith(source.rstrip("/") + "/")]
+            matches = [
+                source
+                for source in recipe_by_case.values()
+                if relative_recipe.startswith(source.rstrip("/") + "/")
+            ]
             recipe = max(matches, key=len) if matches else Path(relative_recipe).parts[0]
             symbol.recipe_ids = [recipe]
             symbol.case_ids = sorted(
@@ -849,7 +912,8 @@ def main() -> None:
         return
     failures = check_outputs(outputs)
     failures.extend(
-        name for name, content in navigation.items()
+        name
+        for name, content in navigation.items()
         if (ROOT / name).read_text(encoding="utf-8") != content
     )
     if failures:

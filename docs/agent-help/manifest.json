@@ -1,8 +1,8 @@
 {
   "coverage": {
-    "cases": 41,
-    "symbols": 1829,
-    "topics": 2375
+    "cases": 58,
+    "symbols": 2156,
+    "topics": 2795
   },
   "default_entry": "index.md",
   "help_contract_version": 1,

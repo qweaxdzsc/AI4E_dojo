@@ -44,15 +44,18 @@ def save_configuration(
 
 
 def replace_configuration(
-    project: str | Path, task_id: str, config: dict, *, revision: str
+    project: str | Path, task_id: str, config: dict, *, revision: str,
+    script_replacements: dict | None = None,
 ) -> dict:
     """按修订原子保存完整配置，不合并旧值或解释业务参数；返回配置和新修订。"""
     if not isinstance(config, dict):
         raise TypeError("configuration must be a mapping")
-    return _save_configuration(project, task_id, config, revision, (), complete=True)
+    return _save_configuration(project, task_id, config, revision, (), complete=True,
+                               script_replacements=script_replacements)
 
 
-def _save_configuration(project, task_id, patch, revision, replace_sections, *, complete):
+def _save_configuration(project, task_id, patch, revision, replace_sections, *, complete,
+                        script_replacements=None):
     """两种保存方式共用事务、受控文件及共享资产维护。"""
     with transaction(project) as db:
         task = get(db, "task", task_id)
@@ -64,15 +67,10 @@ def _save_configuration(project, task_id, patch, revision, replace_sections, *, 
             raise ValueError("configuration_revision_conflict")
         original = OmegaConf.create(data.decode())
         for section in replace_sections:
-            if section not in {"rawprep", "model", "train", "trainprep"} or section not in patch:
+            if not isinstance(section, str) or not section.isidentifier() or section not in patch:
                 raise ValueError("unsupported_configuration_replacement")
             # 被替换的旧树不得参与递归合并，连类型不兼容的旧节点也应移除。
             original.pop(section, None)
-        if not complete and "sampling" in patch.get("model", {}):
-            if "sampling" in patch.get("trainprep", {}):
-                raise ValueError("model.sampling: 新旧采样声明不能同时存在")
-            if "sampling" in original.get("trainprep", {}):
-                del original.trainprep["sampling"]
         cfg = (
             OmegaConf.create(patch)
             if complete
@@ -80,6 +78,26 @@ def _save_configuration(project, task_id, patch, revision, replace_sections, *, 
         )
         payload = OmegaConf.to_yaml(cfg, resolve=False).encode()
         temp = path.with_name(f".{path.name}.{uuid4().hex}.tmp")
+        originals, replacements = {}, {}
+        replaced = []
+        backup = None
+        task_file = task_dir(project, task_id) / "task.json"
+        old_task_bytes = task_file.read_bytes()
+        if script_replacements:
+            import shutil
+
+            for name, item in script_replacements.items():
+                target = inside(path.parent, name)
+                if target.suffix != ".py":
+                    raise ValueError("replacement_python_file_required")
+                original_bytes = target.read_bytes()
+                if hashlib.sha256(original_bytes).hexdigest() != item["revision"]:
+                    raise ValueError("migration_source_changed: " + name)
+                originals[name] = original_bytes
+                replacements[name] = Path(item["source"]).read_bytes()
+            backup = path.parent.parent / ".dojo/script-migrations" / uuid4().hex
+            shutil.copytree(path.parent, backup / "original")
+            write_json(backup / "receipt.json", {"status": "preparing", "files": script_replacements})
         try:
             temp.write_bytes(payload)
             # 显式共享绑定同时更新当前资产；创建快照与历史运行不回写。
@@ -97,6 +115,7 @@ def _save_configuration(project, task_id, patch, revision, replace_sections, *, 
                         raise ValueError("shared_dataset_unavailable")
                     task.setdefault("assets", {})[key] = item
             from ai4e_core.base.config.conventions import input_bindings
+
             from ..storage.shared_datasets import resolve_reference
 
             live_keys = set(input_bindings(incoming_cfg))
@@ -112,6 +131,14 @@ def _save_configuration(project, task_id, patch, revision, replace_sections, *, 
                 task["assets"] = {
                     key: item for key, item in task["assets"].items() if key in live_keys
                 }
+            if replacements:
+                from ..storage.script_replacement import _replace_bytes
+
+                for name, payload_bytes in replacements.items():
+                    if (path.parent / name).read_bytes() != originals[name]:
+                        raise ValueError("migration_source_changed: " + name)
+                    _replace_bytes(path.parent / name, payload_bytes)
+                    replaced.append(name)
             temp.replace(path)
             live = read_entry(path.parent)
             kept = {
@@ -123,6 +150,18 @@ def _save_configuration(project, task_id, patch, revision, replace_sections, *, 
             task["updated_at"] = datetime.now(UTC).isoformat()
             put(db, "task", task, replace=True)
             write_json(task_dir(project, task_id) / "task.json", task)
+            if backup:
+                write_json(backup / "receipt.json", {"status": "applied", "files": script_replacements})
+        except BaseException:
+            if backup:
+                from ..storage.script_replacement import _replace_bytes
+
+                for name in reversed(replaced):
+                    _replace_bytes(path.parent / name, originals[name])
+                _replace_bytes(path, data)
+                _replace_bytes(task_file, old_task_bytes)
+                write_json(backup / "receipt.json", {"status": "rolled_back", "files": script_replacements})
+            raise
         finally:
             temp.unlink(missing_ok=True)
     return {

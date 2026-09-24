@@ -32,6 +32,11 @@ def policy(writable, readonly=(), *, proxy_port=None):
         resolved = Path(path).resolve(strict=True)
         matcher = "subpath" if resolved.is_dir() else "literal"
         body += f"\n(allow file-read* file-map-executable ({matcher} {json.dumps(str(resolved))}))"
+        # dyld在解析符号链接前按原始安装名检查沙箱；仅补登记文件的精确别名。
+        aliases = {Path(path).absolute(), Path(path).parent.resolve() / Path(path).name}
+        for alias in aliases:
+            if resolved.is_file() and alias != resolved:
+                body += f"\n(allow file-read* file-map-executable (literal {json.dumps(str(alias))}))"
         body += f"\n(allow file-read-metadata (path-ancestors {json.dumps(str(resolved))}))"
         body += f"\n(allow file-read-metadata (path-ancestors {json.dumps(str(Path(path).absolute()))}))"
     for path in writable:
@@ -65,6 +70,7 @@ def clean_environment(experiment, extra=None):
         "HOME": str(root / "home"),
         "CODEX_HOME": str(root / "agent-state"),
         "TMPDIR": str(root / "tmp"),
+        "TMPPREFIX": str(root / "tmp/zsh"),
         "XDG_CACHE_HOME": str(root / "cache"),
         "UV_CACHE_DIR": str(root / "cache/uv"),
         "UV_LINK_MODE": "copy",

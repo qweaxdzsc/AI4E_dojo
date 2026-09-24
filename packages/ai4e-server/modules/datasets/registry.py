@@ -32,6 +32,9 @@ def synchronize(service) -> list[dict]:
                 "source_project_name": info.get("name", info["id"]),
                 "shared_asset_id": item["id"],
                 "claim": {},
+                "kind": item.get("kind", "dataset"),
+                "stage": item.get("stage"),
+                "semantics": item.get("semantics", {}),
                 "provenance": {
                     "project": str(project.resolve()),
                     "task_id": source.get("task_id"),

@@ -25,6 +25,7 @@ def submit_run(
     idempotency_key: str | None = None,
     resumed_from: str | None = None,
     _code: Path | None = None,
+    _application_source: dict | None = None,
     expected_revision: str | None = None,
     operation_mode: str = "execute",
     input_keys: list[str] | None = None,
@@ -52,6 +53,7 @@ def submit_run(
             "operation_mode": operation_mode,
             "expected_revision": expected_revision,
             "input_keys": input_keys,
+            "application_source": _application_source,
             **({"start": start, "metadata": metadata} if not start or metadata is not None else {}),
         }
     )
@@ -87,9 +89,27 @@ def submit_run(
         cfg = OmegaConf.load(cfgpath)
         if overrides:
             cfg = OmegaConf.merge(cfg, OmegaConf.from_dotlist(overrides))
+        from .descriptions import described_entry
+
+        entry = described_entry(stage / "code", config=OmegaConf.to_container(cfg, resolve=False))
+        if _application_source is not None:
+            from .operation_sources import same_source, verify_source, with_operation
+
+            expected_source = with_operation(_application_source, "inspect")
+            verify_source(expected_source, stage / "code")
+            actual_source = entry["task_description"].get("source")
+            if (
+                not actual_source
+                or not same_source(expected_source, actual_source)
+            ):
+                raise ValueError("application_source_conflict")
+            entry["task_description"]["source"] = expected_source
         from ai4e_core.base.config.conventions import input_bindings
 
-        entry["inputs"] = input_bindings(OmegaConf.to_container(cfg, resolve=False))
+        entry["inputs"] = {
+            **dict.fromkeys(input_bindings(OmegaConf.to_container(cfg, resolve=False)), "other"),
+            **entry["inputs"],
+        }
         from .output_bindings import allocate_outputs, selected_inputs
 
         run_dir = folder / "runs" / identity
@@ -156,7 +176,9 @@ def submit_run(
             "version": version,
             "assets": inputs,
             "resumed_from": resumed_from,
-            "stage_outputs": {plan["stage"]: str(project / plan["path"]) for plan in shared_outputs},
+            "stage_outputs": {
+                plan["stage"]: str(project / plan["path"]) for plan in shared_outputs
+            },
         }
         from ..storage.shared_datasets import reserve
 
@@ -186,7 +208,11 @@ def submit_run(
             "stages": list(OmegaConf.select(cfg, "pipeline.stages", default=[])),
             "source_snapshot": captured,
             "code_digest": digest(inventory(stage / "code")),
-            "metadata": metadata or {},
+            "metadata": {
+                **(entry["task_description"].get("description") or {}).get("resources", {}),
+                **(metadata or {}),
+            },
+            "task_description": entry["task_description"],
             "shared_outputs": shared_outputs,
         }
         if not start:
@@ -315,10 +341,15 @@ def stop_run(project: str | Path, run_id: str, *, timeout: float = 10) -> dict:
         # 模块导入时信号处理器尚未安装，worker无法写收据。只有持有真实
         # Popen并确认SIGTERM退出时才记录停止；裸PID消失依然是unknown。
         if code == -signal.SIGTERM and not (request.parent / "finished.json").exists():
-            write_json(request.parent / "finished.json", {
-                "run_id": run_id, "status": "stopped",
-                "error": "terminated_before_worker_receipt", "exit_code": code,
-            })
+            write_json(
+                request.parent / "finished.json",
+                {
+                    "run_id": run_id,
+                    "status": "stopped",
+                    "error": "terminated_before_worker_receipt",
+                    "exit_code": code,
+                },
+            )
     return wait_run(project, run_id, timeout=timeout)
 
 
@@ -330,10 +361,13 @@ def resume_run(
     source = Path(project).resolve() / previous["code_path"]
     if digest(inventory(source)) != previous.get("code_digest"):
         raise ValueError("run_snapshot_changed")
-    entry = read_entry(source)
-    resume_key = entry.get("resume_key")
-    if not resume_key:
+    declaration = previous.get("task_description", {}).get("description") or {}
+    if declaration and not previous.get("task_description", {}).get("source"):
+        raise ValueError("operation_unavailable: captured_application_source_missing")
+    resume_inputs = declaration.get("resume_inputs", [])
+    if len(resume_inputs) != 1:
         raise ValueError("entry_does_not_support_resume")
+    resume_key = resume_inputs[0]
     path = inside(Path(project) / previous["run_path"] / "checkpoints", checkpoint)
     if not path.is_file():
         raise FileNotFoundError(path)
@@ -344,4 +378,5 @@ def resume_run(
         resumed_from=run_id,
         idempotency_key=idempotency_key,
         _code=source,
+        _application_source=previous.get("task_description", {}).get("source"),
     )

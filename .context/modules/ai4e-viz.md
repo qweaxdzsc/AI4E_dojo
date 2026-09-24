@@ -49,8 +49,6 @@ render/comparison.py：共色标表面、切面和曲线；compose/comparison.py
 - `packages/ai4e-viz/inspect/mesh.py`：真实文件检查、预览及独立执行。
 - `packages/ai4e-viz/inspect/tensor.py`：真实文件检查、预览及独立执行。
 - `packages/ai4e-viz/inspect/text.py`：真实文件检查、预览及独立执行。
-- `packages/ai4e-viz/inspect/model_graph.py`：平台两档官方结构图；只接收可前向网络和输入，一次写出阶段主干与阶段压缩块，失败不留半份页。
-- `packages/ai4e-viz/inspect/stage_display.py`：网络公开编码器/几何块/物理块/解码/读出时，按这些子模块收成阶段盒再交给两档参数；不实现模型前向。
 - `packages/ai4e-viz/preview/__init__.py`：真实文件检查、预览及独立执行。
 - `packages/ai4e-viz/preview/mesh.py`：真实文件检查、预览及独立执行。
 - `packages/ai4e-viz/preview/tensor.py`：真实文件检查、预览及独立执行。
@@ -150,3 +148,9 @@ render/comparison.py：共色标表面、切面和曲线；compose/comparison.py
 工作台小修复收口（2026-09-17）：删线/种子拖动残留；四条交接（按下分类、刷新不带相机、窗口类型、当前物理量）写入包内 PRD。验收入口 `.context/mvp/phys-workbench-acceptance.md`。正式 8000/5173 须换 Vis 后点验。
 
 正式发布/Web 冒烟硬规则：根 AGENTS 同名段。Agent 必须自己在正式宿主 5173→8000 验收双层嵌入；未重装 `ai4e-viz`、未换 Vis 子进程、只跑 7999/5172 或标「待发布」都是未验收。
+
+## Task 通用化交接（实施中）
+
+- `inspect/model_graph.py` 与 `inspect/stage_display.py` 已移出：通用生成在 core modeling inspection，平台双档及专属包装在 contrib application。Vis 仅消费固定结果，不留反向导入 core 的包装。
+
+公开接口变化、圈定测试与未验范围见 [本轮验收](../mvp/task-generalization-acceptance.md)，功能正文更新既有对应 PRD。

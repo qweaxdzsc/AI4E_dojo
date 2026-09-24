@@ -155,8 +155,8 @@ print(signature(rebuild))
 
 ### Recipe 与案例
 
-- Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- Recipe：`surrogate_modeling/double_cylinder`, `surrogate_modeling/nasa_crm`
+- 案例：`recipe_extensions.pod_surrogate_replacement`, `surrogate_modeling.double_cylinder`, `surrogate_modeling.nasa_crm`
 
 ### 源码位置
 

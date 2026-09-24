@@ -92,7 +92,7 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 - **层级**：`core.ability`
 - **稳定性**：`extension`
-- **定义**：`capture_iteration(model, optimizer, *, updates, stream, contract, history, ema=None, scheduler=None, scaler=None)`
+- **定义**：`capture_iteration(model, optimizer, *, updates, stream, contract, history, ema=None, scheduler=None, scaler=None, state_bindings=None)`
 - **规范定义名**：`ai4e_core.abilities.training.checkpoint.capture_iteration`
 
 ### 用途
@@ -106,7 +106,7 @@ from ai4e_core.abilities.training.checkpoint import capture_iteration
 ```
 
 ```text
-capture_iteration(model, optimizer, *, updates, stream, contract, history, ema=None, scheduler=None, scaler=None)
+capture_iteration(model, optimizer, *, updates, stream, contract, history, ema=None, scheduler=None, scaler=None, state_bindings=None)
 ```
 
 ### 参数
@@ -122,6 +122,7 @@ capture_iteration(model, optimizer, *, updates, stream, contract, history, ema=N
 | `ema` | `未标注` | `None` |
 | `scheduler` | `未标注` | `None` |
 | `scaler` | `未标注` | `None` |
+| `state_bindings` | `未标注` | `None` |
 
 参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
 
@@ -160,7 +161,83 @@ print(signature(capture_iteration))
 ### 源码位置
 
 - 模块：`ai4e_core.abilities.training.checkpoint`
-- 仓库相对路径：`packages/ai4e-core/abilities/training/checkpoint.py:114`
+- 仓库相对路径：`packages/ai4e-core/abilities/training/checkpoint.py:121`
+- 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
+
+### 相关 API
+
+通过 `search_help('ai4e_core.abilities.training.checkpoint')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
+
+### 不适用场景与证据边界
+
+API 可导入或最小检查通过只证明符号存在，不证明组件兼容、训练有效、恢复一致或达到论文精度。`internal-visible` 符号不构成兼容承诺。
+
+<a id="symbol-ai4e-core-abilities-training-checkpoint-capture-user-state"></a>
+## `ai4e_core.abilities.training.checkpoint.capture_user_state`
+
+- **层级**：`core.ability`
+- **稳定性**：`extension`
+- **定义**：`capture_user_state(bindings: dict) -> dict`
+- **规范定义名**：`ai4e_core.abilities.training.checkpoint.capture_user_state`
+
+### 用途
+
+冻结具名用户状态，与固定algorithm_state兼容声明分离。
+
+### 导入与签名
+
+```python
+from ai4e_core.abilities.training.checkpoint import capture_user_state
+```
+
+```text
+capture_user_state(bindings: dict) -> dict
+```
+
+### 参数
+
+| 参数 | 类型 | 默认值 |
+| --- | --- | --- |
+| `bindings` | `dict` | `必填` |
+
+参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
+
+### 返回值
+
+源码返回标注：`dict`。普通 Python 返回值由调用方直接交接；跨阶段文件必须通过案例的 `inputs.<stage>.<name>` 或登记产物交接。
+
+### 异常
+
+AST 未发现显式 `raise`；依赖函数仍可能报告输入、文件或运行错误。
+
+### 副作用与产物
+
+本索引不根据函数名猜测写盘、设备、随机状态或检查点副作用。调用前应阅读下面的源码位置和引用它的完整案例；写运行记录时只能通过公开 run/Task 边界。
+
+### 配置键
+
+源码没有直接读取公共配置键；配置通常由调用它的 application 或 recipe 传入。
+
+### 最小可执行检查
+
+```python
+from inspect import signature
+from ai4e_core.abilities.training.checkpoint import capture_user_state
+
+print(signature(capture_user_state))
+```
+
+这段代码只验证当前解释器中的符号和签名。真实调用请按能力教程提供有效输入；需要完整领域交接时再阅读关联案例或工作流。
+
+### Recipe 与案例
+
+- Recipe：无直接 recipe 归属。
+- 案例：机器索引未发现直接文本引用。
+
+### 源码位置
+
+- 模块：`ai4e_core.abilities.training.checkpoint`
+- 仓库相对路径：`packages/ai4e-core/abilities/training/checkpoint.py:249`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -213,7 +290,7 @@ restore(path, model, optimizer, *, contract, ema=None, scaler=None, scheduler=No
 
 ### 异常
 
-`ValueError`
+AST 未发现显式 `raise`；依赖函数仍可能报告输入、文件或运行错误。
 
 ### 副作用与产物
 
@@ -258,7 +335,7 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 - **层级**：`core.ability`
 - **稳定性**：`extension`
-- **定义**：`restore_iteration(path, model, optimizer, *, stream, contract, ema=None, scheduler=None, scaler=None)`
+- **定义**：`restore_iteration(path, model, optimizer, *, stream, contract, ema=None, scheduler=None, scaler=None, state_bindings=None)`
 - **规范定义名**：`ai4e_core.abilities.training.checkpoint.restore_iteration`
 
 ### 用途
@@ -272,7 +349,7 @@ from ai4e_core.abilities.training.checkpoint import restore_iteration
 ```
 
 ```text
-restore_iteration(path, model, optimizer, *, stream, contract, ema=None, scheduler=None, scaler=None)
+restore_iteration(path, model, optimizer, *, stream, contract, ema=None, scheduler=None, scaler=None, state_bindings=None)
 ```
 
 ### 参数
@@ -287,6 +364,7 @@ restore_iteration(path, model, optimizer, *, stream, contract, ema=None, schedul
 | `ema` | `未标注` | `None` |
 | `scheduler` | `未标注` | `None` |
 | `scaler` | `未标注` | `None` |
+| `state_bindings` | `未标注` | `None` |
 
 参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
 
@@ -296,7 +374,7 @@ restore_iteration(path, model, optimizer, *, stream, contract, ema=None, schedul
 
 ### 异常
 
-`ValueError`
+`RuntimeError`, `ValueError`
 
 ### 副作用与产物
 
@@ -325,7 +403,7 @@ print(signature(restore_iteration))
 ### 源码位置
 
 - 模块：`ai4e_core.abilities.training.checkpoint`
-- 仓库相对路径：`packages/ai4e-core/abilities/training/checkpoint.py:133`
+- 仓库相对路径：`packages/ai4e-core/abilities/training/checkpoint.py:154`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -403,7 +481,86 @@ print(signature(restore_selection))
 ### 源码位置
 
 - 模块：`ai4e_core.abilities.training.checkpoint`
-- 仓库相对路径：`packages/ai4e-core/abilities/training/checkpoint.py:79`
+- 仓库相对路径：`packages/ai4e-core/abilities/training/checkpoint.py:86`
+- 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
+
+### 相关 API
+
+通过 `search_help('ai4e_core.abilities.training.checkpoint')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
+
+### 不适用场景与证据边界
+
+API 可导入或最小检查通过只证明符号存在，不证明组件兼容、训练有效、恢复一致或达到论文精度。`internal-visible` 符号不构成兼容承诺。
+
+<a id="symbol-ai4e-core-abilities-training-checkpoint-validate-state-bindings"></a>
+## `ai4e_core.abilities.training.checkpoint.validate_state_bindings`
+
+- **层级**：`core.ability`
+- **稳定性**：`extension`
+- **定义**：`validate_state_bindings(bindings: dict | None) -> dict`
+- **规范定义名**：`ai4e_core.abilities.training.checkpoint.validate_state_bindings`
+
+### 用途
+
+核对具名save/validate/load函数，不调用用户代码；返回连接表副本。
+
+validate必须无副作用，load只修改由save完整描述的内存状态。
+不要求组件继承基类；此约定只适用于显式启用的检查点连接。
+
+### 导入与签名
+
+```python
+from ai4e_core.abilities.training.checkpoint import validate_state_bindings
+```
+
+```text
+validate_state_bindings(bindings: dict | None) -> dict
+```
+
+### 参数
+
+| 参数 | 类型 | 默认值 |
+| --- | --- | --- |
+| `bindings` | `dict | None` | `必填` |
+
+参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
+
+### 返回值
+
+源码返回标注：`dict`。普通 Python 返回值由调用方直接交接；跨阶段文件必须通过案例的 `inputs.<stage>.<name>` 或登记产物交接。
+
+### 异常
+
+`TypeError`, `ValueError`
+
+### 副作用与产物
+
+本索引不根据函数名猜测写盘、设备、随机状态或检查点副作用。调用前应阅读下面的源码位置和引用它的完整案例；写运行记录时只能通过公开 run/Task 边界。
+
+### 配置键
+
+源码没有直接读取公共配置键；配置通常由调用它的 application 或 recipe 传入。
+
+### 最小可执行检查
+
+```python
+from inspect import signature
+from ai4e_core.abilities.training.checkpoint import validate_state_bindings
+
+print(signature(validate_state_bindings))
+```
+
+这段代码只验证当前解释器中的符号和签名。真实调用请按能力教程提供有效输入；需要完整领域交接时再阅读关联案例或工作流。
+
+### Recipe 与案例
+
+- Recipe：无直接 recipe 归属。
+- 案例：机器索引未发现直接文本引用。
+
+### 源码位置
+
+- 模块：`ai4e_core.abilities.training.checkpoint`
+- 仓库相对路径：`packages/ai4e-core/abilities/training/checkpoint.py:227`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API

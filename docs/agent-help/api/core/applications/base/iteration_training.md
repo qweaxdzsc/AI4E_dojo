@@ -8,12 +8,15 @@
 
 - **层级**：`core.application`
 - **稳定性**：`extension`
-- **定义**：`train_model(model, optimizer, stream, batch, objective, *, updates, session, contract, namespace, scheduler=None, ema=None, resume=None, algorithm_state=None, max_grad_norm=1.0, deadline=None, iterate=fit_iterations, cancelled=None, update_step=None, accumulate=1, accumulation_reduction='mean', scaler=None, epoch_end=None, checkpoint_every=500, evaluate=None, evaluate_every=None)`
+- **定义**：`train_model(model, optimizer, stream, batch, objective, *, updates, session, contract, namespace, scheduler=None, ema=None, resume=None, algorithm_state=None, state_bindings=None, max_grad_norm=1.0, deadline=None, iterate=fit_iterations, cancelled=None, update_step=None, accumulate=1, accumulation_reduction='mean', scaler=None, epoch_end=None, checkpoint_every=500, evaluate=None, evaluate_every=None)`
 - **规范定义名**：`ai4e_core.applications.base.iteration_training.train_model`
 
 ### 用途
 
-显式恢复后执行训练并交付当前完整状态，writer 独占检查点写入。
+显式恢复后训练，writer独占写入；验证与保存周期独立。
+
+state_bindings可选绑定用户内存状态的save/validate/load；与静态
+algorithm_state分离。自定义iterate不支持独立周期时只允许等周期。
 
 ### 导入与签名
 
@@ -22,7 +25,7 @@ from ai4e_core.applications.base.iteration_training import train_model
 ```
 
 ```text
-train_model(model, optimizer, stream, batch, objective, *, updates, session, contract, namespace, scheduler=None, ema=None, resume=None, algorithm_state=None, max_grad_norm=1.0, deadline=None, iterate=fit_iterations, cancelled=None, update_step=None, accumulate=1, accumulation_reduction='mean', scaler=None, epoch_end=None, checkpoint_every=500, evaluate=None, evaluate_every=None)
+train_model(model, optimizer, stream, batch, objective, *, updates, session, contract, namespace, scheduler=None, ema=None, resume=None, algorithm_state=None, state_bindings=None, max_grad_norm=1.0, deadline=None, iterate=fit_iterations, cancelled=None, update_step=None, accumulate=1, accumulation_reduction='mean', scaler=None, epoch_end=None, checkpoint_every=500, evaluate=None, evaluate_every=None)
 ```
 
 ### 参数
@@ -42,6 +45,7 @@ train_model(model, optimizer, stream, batch, objective, *, updates, session, con
 | `ema` | `未标注` | `None` |
 | `resume` | `未标注` | `None` |
 | `algorithm_state` | `未标注` | `None` |
+| `state_bindings` | `未标注` | `None` |
 | `max_grad_norm` | `未标注` | `1.0` |
 | `deadline` | `未标注` | `None` |
 | `iterate` | `未标注` | `fit_iterations` |
@@ -86,13 +90,13 @@ print(signature(train_model))
 
 ### Recipe 与案例
 
-- Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- Recipe：`classic_networks/darcy`, `classic_networks/double_cylinder`, `classic_networks/shapenet_volume`, `operator_learning/darcy`, `operator_learning/double_cylinder`, `operator_learning/shapenet_volume`
+- 案例：`classic_networks.darcy`, `classic_networks.double_cylinder`, `classic_networks.shapenet_volume`, `operator_learning.darcy`, `operator_learning.double_cylinder`, `operator_learning.shapenet_volume`, `recipe_extensions.pod_surrogate_replacement`, `recipe_extensions.research_state`, `recipe_extensions.tail_batch`
 
 ### 源码位置
 
 - 模块：`ai4e_core.applications.base.iteration_training`
-- 仓库相对路径：`packages/ai4e-core/applications/base/iteration_training.py:7`
+- 仓库相对路径：`packages/ai4e-core/applications/base/iteration_training.py:13`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API

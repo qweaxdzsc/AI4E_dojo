@@ -148,6 +148,20 @@ def _public(config: dict, declarations=None) -> dict:
     return public_inputs(cfg)
 
 
+def convert_configuration(config: dict) -> dict:
+    """显式转换旧采样位置，返回新副本；冲突拒绝，不修改历史文件。"""
+    from copy import deepcopy
+
+    result = deepcopy(config)
+    preparation = result.get("trainprep", {})
+    if "sampling" in preparation:
+        model = result.setdefault("model", {})
+        if "sampling" in model:
+            raise ValueError("model.sampling 与旧 trainprep.sampling 不能同时存在")
+        model["sampling"] = preparation.pop("sampling")
+    return result
+
+
 def load_configuration(path: str | Path, overrides=None, *, declarations=None):
     """合并覆盖和默认值，以配置文件位置解析路径，返回唯一五段生效配置。"""
     from ai4e_core.base.config.conventions import load_recipe_config

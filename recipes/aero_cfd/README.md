@@ -1,5 +1,7 @@
 # Aero CFD 全流程 Recipe
 
+本模板明确使用 AB-UPT 锚点准备、训练和推理。可选拓扑只服务图缓存。独立阶段引用使用 `inputs.train.preparation`、`inputs.infer.checkpoint/preparation` 和 `inputs.post.results`；post 只读固定结果。
+
 安装仓库 workspace 后，可将本目录整体复制到任意工作目录；模板无需安装。
 
 ```bash

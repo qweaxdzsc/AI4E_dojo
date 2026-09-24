@@ -1,0 +1,53 @@
+seed: 42
+run_root: ../outputs/darcy/runs
+data_root: ../outputs/darcy/data
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - infer
+  - post
+inputs:
+  rawprep:
+    source: null
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+    resume: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+dataset:
+  case: darcy
+  train_count: 32
+  test_count: 8
+  stride: 5
+model:
+  family: mlp
+  spatial_dims: 2
+  in_channels: 3
+  out_channels: 1
+  parameters:
+    hidden_features:
+    - 64
+    - 64
+    - 64
+    activation: gelu
+train:
+  updates: 100
+  batch_size: 1
+  lr: 0.001
+  device: auto
+  seconds: 9000
+  checkpoint_every: 20
+  sample_points: null
+infer:
+  device: auto
+components:
+  model: ai4e_contrib.application.classic_networks.binding.build_network
+  derived: null
+  consume: null

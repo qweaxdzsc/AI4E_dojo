@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="2" tests="52" time="14.150" timestamp="2026-09-22T02:03:45.173718+08:00" hostname="zonghuideMacBook-Pro.local"><testcase classname="tests.integration.test_agent_help" name="test_generated_help_is_current" time="7.828" /><testcase classname="tests.integration.test_agent_help" name="test_ability_application_and_recipe_symbols_are_covered" time="0.217" /><testcase classname="tests.integration.test_agent_help" name="test_core_run_and_task_public_exports_are_covered" time="0.032" /><testcase classname="tests.integration.test_agent_help" name="test_topic_schema_paths_and_coverage_counts_are_consistent" time="0.224" /><testcase classname="tests.integration.test_agent_help" name="test_every_symbol_has_page_anchor_and_required_sections" time="0.205" /><testcase classname="tests.integration.test_agent_help" name="test_all_manifest_cases_have_help_pages" time="0.010" /><testcase classname="tests.integration.test_agent_help" name="test_installable_help_has_no_repository_only_dependency" time="0.027" /><testcase classname="tests.integration.test_example_contract" name="test_case_manifest_has_only_two_case_types_and_complete_standalones" time="0.002" /><testcase classname="tests.integration.test_example_contract" name="test_examples_do_not_contain_development_paths_or_internal_navigation" time="0.017" /><testcase classname="tests.integration.test_example_contract" name="test_declared_recipe_stage_files_are_byte_identical" time="0.007" /><testcase classname="tests.integration.test_example_contract" name="test_agent_resources_are_public_and_portable[DOJO_AGENT_GUIDE.md]" time="0.000" /><testcase classname="tests.integration.test_example_contract" name="test_agent_resources_are_public_and_portable[.agents/skills/dojo-research/SKILL.md]" time="0.000" /><testcase classname="tests.integration.test_example_contract" name="test_agent_resources_define_one_primary_entry_per_agent_capability" time="0.000" /><testcase classname="tests.integration.test_example_contract" name="test_agent_resources_contain_executable_python_api_contract" time="0.010" /><testcase classname="tests.integration.test_example_core_runs" name="test_five_research_workflows_expose_direct_core_entry[aero_cfd.shapenet_car_transolver3_surface]" time="0.001" /><testcase classname="tests.integration.test_example_core_runs" name="test_five_research_workflows_expose_direct_core_entry[parametric_pde.neumann_diffusion]" time="0.001" /><testcase classname="tests.integration.test_example_core_runs" name="test_five_research_workflows_expose_direct_core_entry[gencp.turek_hron_cno]" time="0.001" /><testcase classname="tests.integration.test_example_core_runs" name="test_five_research_workflows_expose_direct_core_entry[safediffcon.burgers]" time="0.001" /><testcase classname="tests.integration.test_example_core_runs" name="test_five_research_workflows_expose_direct_core_entry[wdno.burgers_base]" time="0.001" /><testcase classname="tests.integration.test_example_core_runs" name="test_neumann_stage_scripts_use_public_launch" time="0.000" /><testcase classname="tests.integration.test_example_core_runs" name="test_neumann_direct_core_smoke" time="0.000"><skipped type="pytest.skip" message="显式开启仓库外 Neumann smoke">/Users/zonghui/work/new_code_project/AI4E_Dojo/tests/integration/test_example_core_runs.py:46: 显式开启仓库外 Neumann smoke</skipped></testcase><testcase classname="tests.integration.test_example_task_runs" name="test_task_api_accepts_copied_case" time="0.029" /><testcase classname="tests.integration.test_example_task_runs" name="test_neumann_task_smoke_and_resume" time="0.000"><skipped type="pytest.skip" message="显式开启 Neumann Task smoke">/Users/zonghui/work/new_code_project/AI4E_Dojo/tests/integration/test_example_task_runs.py:24: 显式开启 Neumann Task smoke</skipped></testcase><testcase classname="tests.integration.test_task_resources" name="test_resource_manifest_and_checks" time="0.001"><failure message="AssertionError: assert {'aero_cfd.na...surface', ...} == {'aero_cfd.na...nsolver', ...}&#10;  &#10;  Extra items in the right set:&#10;  'pcno.double_cylinder'&#10;  'aero_cfd.shapenet_car_geotransolver'&#10;  'aero_cfd.nasa_crm_geotransolver'&#10;  Use -v to get more diff">def test_resource_manifest_and_checks():
+        manifest = json.loads((Path(__file__).resolve().parents[2] / 'examples/case-manifest.json').read_text())
+        for kind in ['standalone', 'extension']:
+&gt;           assert {c['id'] for c in list_examples(case_type=kind)} == {
+                c['id'] for c in manifest['cases'] if c['type'] == kind
+            }
+E           AssertionError: assert {'aero_cfd.na...surface', ...} == {'aero_cfd.na...nsolver', ...}
+E             
+E             Extra items in the right set:
+E             'pcno.double_cylinder'
+E             'aero_cfd.shapenet_car_geotransolver'
+E             'aero_cfd.nasa_crm_geotransolver'
+E             Use -v to get more diff
+
+tests/integration/test_task_resources.py:26: AssertionError</failure></testcase><testcase classname="tests.integration.test_task_resources" name="test_copy_standalone_rejects_non_empty_target" time="0.006" /><testcase classname="tests.integration.test_task_resources" name="test_copy_extension_materializes_base_and_provenance" time="0.007" /><testcase classname="tests.integration.test_task_resources" name="test_guide_export_and_source_location_do_not_create_agents" time="0.193" /><testcase classname="tests.integration.test_task_resources" name="test_help_search_topic_symbol_and_export" time="0.153" /><testcase classname="tests.integration.test_task_resources" name="test_resource_commands_do_not_import_training_stack" time="0.102" /><testcase classname="tests.integration.test_task_resources" name="test_help_cli_wraps_python_api" time="0.461" /><testcase classname="tests.integration.test_task_resources" name="test_documented_agent_python_apis_are_public" time="0.000" /><testcase classname="tests.integration.test_research_navigation" name="test_research_task_routes_and_links" time="0.002" /><testcase classname="tests.integration.test_research_navigation" name="test_inventory_signatures_are_locatable" time="0.001" /><testcase classname="tests.integration.test_research_navigation" name="test_every_configuration_is_classified_without_claiming_runtime" time="0.084" /><testcase classname="tests.integration.test_research_navigation" name="test_history_remains_accessible_and_current_rules_are_small" time="0.003" /><testcase classname="tests.integration.test_public_api_stability" name="test_fixed_user_code_against_installed_framework" time="0.596" /><testcase classname="tests.integration.test_public_api_stability" name="test_local_adapter_and_failure_context" time="0.004" /><testcase classname="tests.integration.test_public_api_stability" name="test_configuration_adapter_is_explicit_and_scoped" time="0.000" /><testcase classname="tests.integration.test_public_api_stability" name="test_progress_publishes_one_snapshot_without_double_copy" time="0.802" /><testcase classname="tests.integration.test_public_api_stability" name="test_current_templates_use_public_session_facade" time="0.011" /><testcase classname="tests.integration.test_recipe_conventions" name="test_public_paths_overrides_and_invalid_inputs" time="0.002" /><testcase classname="tests.integration.test_recipe_conventions" name="test_inference_preparation_owns_source_without_mutating_training" time="0.000" /><testcase classname="tests.integration.test_recipe_conventions" name="test_imported_physical_manifest_overrides_selected_path" time="0.001" /><testcase classname="tests.integration.test_recipe_conventions" name="test_stage_outputs_assets_metrics_and_readback" time="0.005" /><testcase classname="tests.integration.test_recipe_conventions" name="test_missing_stage_is_not_research_completion" time="0.002" /><testcase classname="tests.integration.test_recipe_conventions" name="test_metric_requires_semantics_and_real_asset" time="0.001" /><testcase classname="tests.integration.test_recipe_conventions" name="test_aero_public_inputs_preserve_domain_defaults" time="2.891"><failure message="ValueError: 数据产物不能位于 recipe 代码目录内">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-901/test_aero_public_inputs_preser0')
+
+    def test_aero_public_inputs_preserve_domain_defaults(tmp_path):
+        from omegaconf import OmegaConf
+    
+        from ai4e_contrib.application.aero_cfd.configuration import (
+            application_parameters,
+            load_configuration,
+        )
+    
+        root = Path(__file__).resolve().parents[2]
+        for path in (root / "examples/aero_cfd").glob("*/config.yaml"):
+&gt;           config = load_configuration(path)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/integration/test_recipe_conventions.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.12/site-packages/ai4e_contrib/application/aero_cfd/configuration.py:167: in load_configuration
+    internal = resolve_paths(internal, path)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+config = {'dataset': {'processed_name': None, 'chunk_count': 20, 'validation_fraction': 0.2, 'split_seed': 42, ...}, 'pipeline'...'run_root': '/Users/zonghui/work/new_code_project/AI4E_Dojo/examples/aero_cfd/nasa_crm_abupt/runs/nasa_crm_abupt', ...}
+path = PosixPath('/Users/zonghui/work/new_code_project/AI4E_Dojo/examples/aero_cfd/nasa_crm_abupt/config.yaml')
+
+    def resolve_paths(config: dict, path: str | Path) -&gt; dict:
+        """按配置文件位置解析既有业务输入中的路径，并检查归一化声明。"""
+        path = Path(path).resolve()
+        cfg = deepcopy(config)
+    
+        def absolute(value):
+            p = Path(value).expanduser()
+            return str((p if p.is_absolute() else path.parent / p).resolve())
+    
+        for key in ("data_root", "run_root"):
+            cfg[key] = absolute(cfg[key])
+        cfg["dataset"]["root"] = absolute(cfg["dataset"]["root"])
+        for key in ("manifest", "partition"):
+            value = cfg["dataset"].get(key)
+            if isinstance(value, str) and value not in {"official", "unsplit"}:
+                cfg["dataset"][key] = absolute(value)
+    
+        def paths(node):
+            return {k: paths(v) if isinstance(v, dict) else absolute(v) for k, v in node.items()}
+    
+        cfg["paths"] = paths(cfg["paths"])
+        normalization = cfg.get("normalization", {})
+        if normalization.get("statistics"):
+            normalization["statistics"] = absolute(normalization["statistics"])
+        if cfg.get("train", {}).get("manifest"):
+            cfg["train"]["manifest"] = absolute(cfg["train"]["manifest"])
+        for section, key in (
+            ("train", "preparation"),
+            ("train", "resume"),
+            ("model", "initial_weights"),
+            ("post", "checkpoint"),
+            ("post", "results"),
+            ("infer", "checkpoint"),
+            ("infer", "preparation"),
+            ("infer", "results"),
+        ):
+            value = cfg.get(section, {}).get(key)
+            if value and str(value) not in {"last", "best", "latest"}:
+                cfg[section][key] = absolute(value)
+        for group in ("conditioning", "geometry_conditioning"):
+            for declaration in cfg.get("trainprep", {}).get(group, {}).values():
+                if declaration.get("path"):
+                    declaration["path"] = absolute(declaration["path"])
+        fields = normalization.get("fields", {})
+        if not isinstance(fields, dict):
+            raise TypeError("normalization.fields 必须为字段到变换声明的映射")
+        for field, declaration in fields.items():
+            if not isinstance(declaration, dict) or not isinstance(declaration.get("method"), str):
+                raise TypeError(f"非法归一化字段声明: {field}")
+            if not isinstance(declaration.get("parameters", {}), dict):
+                raise TypeError(f"归一化 parameters 必须为映射: {field}")
+        run_root = Path(cfg["run_root"])
+        code = path.parent
+        raw = Path(cfg["dataset"]["root"])
+        for target in cfg["paths"]["datasets"].values():
+            if isinstance(target, str):
+                dest = Path(target)
+                if dest == code or dest.is_relative_to(code):
+&gt;                   raise ValueError("数据产物不能位于 recipe 代码目录内")
+E                   ValueError: 数据产物不能位于 recipe 代码目录内
+
+.venv/lib/python3.12/site-packages/ai4e_core/applications/aero_cfd/configuration.py:69: ValueError</failure></testcase><testcase classname="tests.integration.test_recipe_conventions" name="test_asset_dependency_content_is_required" time="0.003" /><testcase classname="tests.integration.test_recipe_conventions" name="test_coupled_iteration_slice_rejects_invalid_before_reading_data[0]" time="0.005" /><testcase classname="tests.integration.test_recipe_conventions" name="test_coupled_iteration_slice_rejects_invalid_before_reading_data[-1]" time="0.000" /><testcase classname="tests.integration.test_recipe_conventions" name="test_coupled_iteration_slice_rejects_invalid_before_reading_data[True]" time="0.000" /><testcase classname="tests.integration.test_recipe_conventions" name="test_coupled_iteration_slice_rejects_invalid_before_reading_data[1.5]" time="0.000" /></testsuite></testsuites>

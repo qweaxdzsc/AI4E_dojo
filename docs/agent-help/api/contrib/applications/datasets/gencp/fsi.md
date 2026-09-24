@@ -62,8 +62,8 @@ print(signature(coordinates))
 
 ### Recipe 与案例
 
-- Recipe：无直接 recipe 归属。
-- 案例：机器索引未发现直接文本引用。
+- Recipe：`operator_learning/darcy`, `operator_learning/double_cylinder`, `operator_learning/shapenet_volume`
+- 案例：`operator_learning.darcy`, `operator_learning.double_cylinder`, `operator_learning.shapenet_volume`
 
 ### 源码位置
 
@@ -221,7 +221,7 @@ print(signature(read_sample))
 ### Recipe 与案例
 
 - Recipe：`gencp`
-- 案例：`gencp.double_cylinder_cno`, `gencp.double_cylinder_sit_fno`, `gencp.ntcouple_cno`, `gencp.ntcouple_sit_fno`, `gencp.turek_hron_cno`, `gencp.turek_hron_sit_fno`, `recipe_extensions.inference_fields`
+- 案例：`gencp.double_cylinder_cno`, `gencp.double_cylinder_sit_fno`, `gencp.ntcouple_cno`, `gencp.ntcouple_sit_fno`, `gencp.turek_hron_cno`, `gencp.turek_hron_sit_fno`, `recipe_extensions.inference_fields`, `recipe_extensions.research_state`
 
 ### 源码位置
 

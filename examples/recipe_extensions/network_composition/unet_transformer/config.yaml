@@ -1,0 +1,53 @@
+seed: 42
+run_root: ../outputs/unet_transformer/runs
+data_root: ../outputs/unet_transformer/data
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - infer
+  - post
+inputs:
+  rawprep:
+    source: null
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+    resume: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+dataset:
+  case: darcy
+  train_count: 32
+  test_count: 8
+  stride: 5
+model:
+  family: unet
+  spatial_dims: 2
+  in_channels: 3
+  out_channels: 1
+  parameters:
+    base_channels: 8
+    levels: 3
+    attention_dim: 64
+    num_heads: 4
+    attention_layers: 2
+train:
+  updates: 100
+  batch_size: 1
+  lr: 0.001
+  device: auto
+  seconds: 9000
+  checkpoint_every: 20
+  sample_points: null
+infer:
+  device: auto
+components:
+  model: unet_transformer.build_model
+  derived: user_outputs.derive
+  consume: user_outputs.consume

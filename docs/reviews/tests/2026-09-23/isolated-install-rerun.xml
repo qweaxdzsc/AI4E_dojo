@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="3" time="29.922" timestamp="2026-09-23T11:21:29.832645+08:00" hostname="zonghuideMacBook-Pro.local"><testcase classname="tests.integration.test_agent_capabilities" name="test_capabilities_in_real_wheel_outside_checkout" time="1.470" /><testcase classname="tests.integration.test_task_installation" name="test_wheel_install_outside_checkout" time="17.385"><failure message="AssertionError: Traceback (most recent call last):&#10;    File &quot;&lt;string&gt;&quot;, line 23, in &lt;module&gt;&#10;  AssertionError: (&quot;ModuleNotFoundError: No module named 'ema_pytorch'&quot;, '')&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-950/test_whe...le &quot;&lt;string&gt;&quot;, line 23, in &lt;module&gt;\nAssertionError: (&quot;ModuleNotFoundError: No module named \'ema_pytorch\'&quot;, \'\')\n').returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-950/test_wheel_install_outside_che0')
+
+    def test_wheel_install_outside_checkout(tmp_path):
+        root = Path(__file__).resolve().parents[2]
+        source_manifest = json.loads((root / "examples/case-manifest.json").read_text())
+        expected_case_ids = sorted(case["id"] for case in source_manifest["cases"])
+        configured = os.environ.get("DOJO_TASK_WHEELS")
+        wheels = Path(configured) if configured else tmp_path / "wheels"
+        if not configured:
+            subprocess.run(
+                ["uv", "build", "--all-packages", "--wheel", "--out-dir", str(wheels)],
+                cwd=Path(__file__).resolve().parents[2],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+        names = ["ai4e_spec", "ai4e_core", "ai4e_contrib", "ai4e_task"]
+        files = [next(wheels.glob(name + "-*.whl"), None) for name in names]
+        if any(file is None for file in files):
+            pytest.fail("先构建四个 workspace wheel，并用 DOJO_TASK_WHEELS 指定目录")
+        envdir = tmp_path / "venv"
+        # 只复用机器已有第三方训练依赖；四个产品包必须安装到新环境。
+        subprocess.run(
+            [sys.executable, "-m", "venv", "--system-site-packages", str(envdir)],
+            check=True,
+            capture_output=True,
+        )
+        python = envdir / "bin/python"
+        # venv 的 system-site-packages 指向基础 Python，并不包含父 venv。
+        # 显式复用已安装第三方依赖；下方断言仍要求所有产品包来自新 wheel。
+        target_site = (
+            envdir
+            / "lib"
+            / f"python{sys.version_info.major}.{sys.version_info.minor}"
+            / "site-packages"
+        )
+        (target_site / "third_party.pth").write_text(sysconfig.get_path("purelib") + "\n")
+        ema = importlib.util.find_spec("ema_pytorch")
+        if ema is not None and ema.origin:
+            # 控制 extra 可由调用方安装在独立测试目录；仅复用该第三方依赖。
+            (target_site / "control_extra.pth").write_text(str(Path(ema.origin).parent.parent) + "\n")
+        clean = {k: v for k, v in os.environ.items() if k not in {"PYTHONPATH", "VIRTUAL_ENV"}}
+        subprocess.run(
+            [
+                str(python),
+                "-m",
+                "pip",
+                "install",
+                "--no-index",
+                "--no-deps",
+                "--force-reinstall",
+                *[str(f) for f in files],
+            ],
+            cwd=tmp_path,
+            env=clean,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        probe = subprocess.run(
+            [
+                str(python),
+                "-c",
+                'import sys, ai4e_task, ai4e_core, ai4e_spec; import json; print(json.dumps({"path":ai4e_task.__file__,"core":ai4e_core.__file__,"spec":ai4e_spec.__file__,"torch":"torch" in sys.modules} ))',
+            ],
+            cwd=tmp_path,
+            env=clean,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        info = json.loads(probe.stdout)
+        assert all(str(envdir) in info[key] for key in ("path", "core", "spec"))
+        assert info["torch"] is False
+        help_probe = subprocess.run(
+            [
+                str(python),
+                "-c",
+                """import json, sys, ai4e_task as task
+    info = task.help_info()
+    hit = task.search_help('ai4e_core.run.launch', limit=1)[0]
+    symbol = task.describe_help_symbol('ai4e_core.run.launch')
+    topic = task.read_help_topic('workflow:parametric-pde')
+    print(json.dumps({
+        'symbols': info['coverage']['symbols'],
+        'hit': hit['topic_id'],
+        'signature': symbol['signature'],
+        'topic': topic['title'],
+        'torch': 'torch' in sys.modules,
+        'contrib': 'ai4e_contrib' in sys.modules,
+    }))
+    """,
+            ],
+            cwd=tmp_path,
+            env=clean,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        help_result = json.loads(help_probe.stdout)
+        assert help_result["symbols"] &gt; 1_000
+        assert help_result["hit"] == "api:ai4e_core.run.launch"
+        assert help_result["signature"].startswith("launch(")
+        assert help_result["topic"] == "参数化 PDE 研究流程"
+        assert help_result["torch"] is False
+        assert help_result["contrib"] is False
+        resource_probe = subprocess.run(
+            [
+                str(python),
+                "-c",
+                """import json, sys
+    from pathlib import Path
+    import ai4e_task as task
+    expected = json.loads(sys.argv[1])
+    actual = sorted(case['id'] for case in task.list_examples())
+    checks = {case_id: task.check_example(case_id)['ok'] for case_id in actual}
+    copies = {}
+    for case_id in actual:
+        target = Path('installed-cases') / case_id.replace('.', '__')
+        task.copy_example(case_id, target)
+        copies[case_id] = target.is_dir() and any(target.iterdir())
+    print(json.dumps({'actual': actual, 'checks': checks, 'copies': copies}))
+    """,
+                json.dumps(expected_case_ids),
+            ],
+            cwd=tmp_path,
+            env=clean,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        resource_result = json.loads(resource_probe.stdout)
+        assert resource_result["actual"] == expected_case_ids
+        assert all(resource_result["checks"].values())
+        assert all(resource_result["copies"].values())
+        cli = envdir / "bin/ai4e"
+        project = tmp_path / "installed-study"
+    
+        def invoke(*args):
+            return json.loads(
+                subprocess.run(
+                    [str(cli), *map(str, args), "--json"],
+                    cwd=tmp_path,
+                    env=clean,
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                ).stdout
+            )
+    
+        invoke("project", "new", project)
+        first = invoke("new", "root", "--project", project)
+        second = invoke("fork", first["id"], "--project", project)
+        assert second["parent_version_id"] == first["version_id"]
+        assert len(invoke("tree", "--project", project)) == 2
+        from tests.integration.test_task_management import recipe
+    
+        source = recipe(tmp_path)
+        runnable = invoke("new", "runnable", "--project", project, "--from", source)
+        subprocess.run(
+            [
+                str(python),
+                "-c",
+                """import sys
+    import ai4e_task as task
+    project, identity = sys.argv[1:]
+    original = task.read_configuration(project, identity)
+    config = original["config"]
+    config["platform_probe"] = {"removed": True}
+    saved = task.replace_configuration(project, identity, config, revision=original["revision"])
+    config.pop("platform_probe")
+    saved = task.replace_configuration(project, identity, config, revision=saved["revision"])
+    assert "platform_probe" not in task.read_configuration(project, identity)["config"]
+    """,
+                str(project),
+                runnable["id"],
+            ],
+            cwd=tmp_path,
+            env=clean,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        completed = invoke("run", runnable["id"], "--project", project, "--wait", "--timeout", "30")
+        assert completed["status"] == "succeeded", completed
+        assert completed["lineage"]["version_id"] == runnable["version_id"]
+    
+        # 同一真实 wheel 环境执行仓库外完整用户字段扩展，覆盖安装包与模板交接。
+        from tests.integration.test_recipe_extensions import extension_case
+    
+        folder, _ = extension_case(tmp_path / "extension", "field_mapping")
+        result = subprocess.run(
+            [str(python), "-B", str(folder / "pipeline.py")],
+            cwd=tmp_path,
+            env={**clean, "OMP_NUM_THREADS": "1", "VECLIB_MAXIMUM_THREADS": "1"},
+            capture_output=True,
+            text=True,
+            timeout=90,
+            check=False,
+        )
+        assert result.returncode == 0, result.stdout + result.stderr
+        summaries = list((tmp_path / "extension/records").glob("*/summary.json"))
+        summary = json.loads(summaries[-1].read_text())
+        physical = Path(summary["reports"]["rawprep"]["manifest"]).parent
+        assert (physical / "train/a/volume_speed.pt").is_file()
+        assert (summaries[-1].parent / "checkpoints/last.pt").is_file()
+    
+        # 从安装资源复制本地 application 扩展，真实生产准备并读回候选与捕获标签。
+        label_probe = subprocess.run(
+            [
+                str(python),
+                "-B",
+                "-c",
+                """
+    from pathlib import Path
+    import json
+    import numpy as np
+    import ai4e_task as task
+    from omegaconf import OmegaConf
+    from ai4e_core.applications.pde_control.contracts import save_arrays, read_arrays
+    recipe = Path.cwd() / 'installed-labels'
+    task.copy_example('recipe_extensions.task_labels', recipe)
+    config = OmegaConf.to_container(OmegaConf.load(recipe / 'config.yaml'), resolve=True)
+    physical = {}
+    for split in ('train', 'cal', 'test'):
+        physical[split] = save_arrays(Path.cwd() / 'label-data' / split,
+            {'states': np.zeros((2, 11, 128), dtype=np.float32),
+             'controls': np.zeros((2, 10, 128), dtype=np.float32)},
+            kind='control_physical_v1', metadata={'case': 'burgers', 'split': split, 'count': 2})
+    config['inputs']['trainprep'] = {'dataset_' + k: v for k, v in physical.items()}
+    config['pipeline'] = {'stages': ['trainprep']}
+    project = Path.cwd() / 'label-project'
+    task.create_project(project)
+    item = task.new_task(project, 'installed labels', source=recipe, configuration=config)
+    run = task.wait_run(project, task.submit_run(project, item['id'])['id'], timeout=60)
+    assert run['status'] == 'succeeded', (run.get('error'), task.read_log(project, run['id']))
+    rows = task.list_stage_artifacts(project, item['id'])
+    cal = [row for row in rows if row['binding'] == 'inputs.posttrain.preparation_cal']
+    assert len(cal) == 1 and cal[0]['semantics']['split'] == 'cal', rows
+    assert cal[0]['name'] == 'cal' and cal[0]['file_name'] == 'manifest.json'
+    prepared = run['summary']['reports']['trainprep']['prepared']['cal']
+    _, arrays = read_arrays(prepared, kind='control_prepared_v1')
+    assert arrays['model'].shape == (2, 3, 16, 128)
+    assert arrays['target'].shape == (2, 11, 128)
+    current = task.read_configuration(project, item['id'])
+    task.save_configuration(project, item['id'], {'inputs': {'posttrain': {'preparation_cal': prepared}}}, revision=current['revision'])
+    queued = task.submit_run(project, item['id'], start=False,
+                             overrides=['pipeline.stages=[posttrain]'], input_keys=['inputs.posttrain.preparation_cal'])
+    captured = json.loads((project / queued['request_path']).read_text())
+    assert captured['context']['assets']['inputs.posttrain.preparation_cal']['semantics']['split'] == 'cal'
+    task.stop_run(project, queued['id'])
+    print(json.dumps({'preparation_run': run['id'], 'calibration_candidates': len(cal)}))
+    """,
+            ],
+            cwd=tmp_path,
+            env=clean,
+            capture_output=True,
+            text=True,
+            timeout=120,
+            check=False,
+        )
+&gt;       assert label_probe.returncode == 0, label_probe.stdout + label_probe.stderr
+E       AssertionError: Traceback (most recent call last):
+E           File "&lt;string&gt;", line 23, in &lt;module&gt;
+E         AssertionError: ("ModuleNotFoundError: No module named 'ema_pytorch'", '')
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-950/test_whe...le "&lt;string&gt;", line 23, in &lt;module&gt;\nAssertionError: ("ModuleNotFoundError: No module named \'ema_pytorch\'", \'\')\n').returncode
+
+tests/integration/test_task_installation.py:273: AssertionError</failure></testcase><testcase classname="tests.integration.test_infer_stage" name="test_wheel_installed_external_recipe_infer_and_post" time="7.055"><failure message="AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-950/test_wheel_installed_external_0/outside/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-950/test_wheel_installed_external_0/train-runs/2026-09-23T11-21-59_9504d3；生效配置=inputs/config.yaml&#10;  INFO [trainprep/阶段/开始] &#10;  ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'Sample001', 'index': 0}]；原因='data_specs'&#10;  ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.021秒&#10;  ERROR 运行失败：'data_specs'&#10;  INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.023秒&#10;  &#10;assert 1 == 0&#10; +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.021秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.023秒\n&quot;).returncode">tmp_path = PosixPath('/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-950/test_wheel_installed_external_0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x1645505f0&gt;
+
+    def test_wheel_installed_external_recipe_infer_and_post(tmp_path, monkeypatch):
+        """真实构建安装到隔离目标，外部复制案例不依赖仓库源码导入。"""
+        import hashlib
+        import os
+        import subprocess
+        import sys
+    
+        from tests.integration.test_recipe_extensions import ROOT
+    
+        wheels = tmp_path / "wheels"
+        done = subprocess.run(
+            ["uv", "build", "--package", "ai4e-core", "--wheel", "--out-dir", str(wheels)],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            timeout=90,
+            check=False,
+        )
+        assert done.returncode == 0, done.stdout + done.stderr
+        installed = tmp_path / "installed"
+        done = subprocess.run(
+            [
+                "uv",
+                "pip",
+                "install",
+                "--python",
+                sys.executable,
+                "--no-deps",
+                "--target",
+                str(installed),
+                str(next(wheels.glob("*.whl"))),
+            ],
+            capture_output=True,
+            text=True,
+            timeout=90,
+            check=False,
+        )
+        assert done.returncode == 0, done.stdout + done.stderr
+        monkeypatch.setenv("PYTHONPATH", str(installed))
+        done = subprocess.run(
+            [
+                sys.executable,
+                "-c",
+                "import ai4e_core; from pathlib import Path; import os; assert Path(ai4e_core.__file__).is_relative_to(Path(os.environ['PYTHONPATH']))",
+            ],
+            env=dict(os.environ),
+            cwd=tmp_path,
+            capture_output=True,
+            text=True,
+            timeout=30,
+            check=False,
+        )
+        assert done.returncode == 0, done.stderr
+    
+        def snapshot():
+            return {
+                str(p.relative_to(installed)): hashlib.sha256(p.read_bytes()).hexdigest()
+                for p in (installed / "ai4e_core").rglob("*")
+                if p.is_file() and "__pycache__" not in p.parts
+            }
+    
+        before = snapshot()
+        (tmp_path / "outside").mkdir()
+        folder, cfg = case(tmp_path / "outside", "nasa_crm_transolver3")
+        cfg["pipeline"]["stages"] = ["trainprep", "train"]
+        cfg["run_root"] = str(tmp_path / "train-runs")
+        (folder / "config.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
+        done = script(folder)
+&gt;       assert done.returncode == 0, done.stdout + done.stderr
+E       AssertionError: INFO [运行/开始] 脚本=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-950/test_wheel_installed_external_0/outside/case/pipeline.py；运行目录=/private/var/folders/c4/hryn27sx61b7y785lvj4pkqc0000gn/T/pytest-of-zonghui/pytest-950/test_wheel_installed_external_0/train-runs/2026-09-23T11-21-59_9504d3；生效配置=inputs/config.yaml
+E         INFO [trainprep/阶段/开始] 
+E         ERROR [trainprep/数据准备/失败] 样本=[{'sample_id': 'Sample001', 'index': 0}]；原因='data_specs'
+E         ERROR [trainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.021秒
+E         ERROR 运行失败：'data_specs'
+E         INFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.023秒
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/bin/python', '-B', '/private/var/folders/...ainprep/阶段/失败] 样本=；原因='data_specs'；耗时=0.021秒\nERROR 运行失败：'data_specs'\nINFO [运行/结束] 状态=失败；成功=0；失败=0；未执行=0；耗时=0.023秒\n").returncode
+
+tests/integration/test_infer_stage.py:231: AssertionError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="9" time="2.680" timestamp="2026-09-24T09:38:14.690920+08:00" hostname="zonghuideMacBook-Pro.local"><testcase classname="tests.integration.test_algorithm_platform_contract" name="test_declared_legacy_provider_and_actual_training_capabilities" time="2.064"><failure message="AssertionError: assert ['eval'] == ['validation']&#10;  &#10;  At index 0 diff: 'eval' != 'validation'&#10;  Use -v to get more diff">def test_declared_legacy_provider_and_actual_training_capabilities():
+        from pathlib import Path
+    
+        import yaml
+    
+        from ai4e_core.applications.aero_cfd.inspection import execute
+    
+        root = Path(__file__).resolve().parents[2]
+        legacy = yaml.safe_load((root / "recipes/aero_cfd/config.yaml").read_text())
+        legacy.pop("components")
+        legacy["trainprep"]["sampling"] = legacy["model"].pop("sampling")
+        result = execute(
+            {
+                "operation": "describe_case",
+                "config": legacy,
+                "component_provider": "ai4e_contrib.application.aero_cfd",
+            }
+        )
+        assert "sampling" in result["configuration"]["model"]
+        assert "sampling" not in result["configuration"]["trainprep"]
+        assert result["capabilities"]["losses"]["configurable"] is True
+        config = yaml.safe_load(
+            (root / "examples/aero_cfd/nasa_crm_transolver3/config.yaml").read_text()
+        )
+        result = execute({"operation": "describe_case", "config": config})
+        caps = result["capabilities"]
+&gt;       assert caps["training_constraints"]["evaluation_split"]["allowed"] == ["validation"]
+E       AssertionError: assert ['eval'] == ['validation']
+E         
+E         At index 0 diff: 'eval' != 'validation'
+E         Use -v to get more diff
+
+tests/integration/test_algorithm_platform_contract.py:884: AssertionError</failure></testcase><testcase classname="tests.integration.test_transolver_training" name="test_current_evaluation_slice_and_legacy_alias[eval]" time="0.000" /><testcase classname="tests.integration.test_transolver_training" name="test_current_evaluation_slice_and_legacy_alias[validation]" time="0.000" /><testcase classname="tests.integration.test_transolver_training" name="test_model_gradient_update[False]" time="0.411" /><testcase classname="tests.integration.test_transolver_training" name="test_model_gradient_update[True]" time="0.013" /><testcase classname="tests.integration.test_transolver_training" name="test_singleton_stride_fingerprint" time="0.000" /><testcase classname="tests.integration.test_transolver_training" name="test_resume_keeps_previous_best_when_validation_worsens" time="0.015" /><testcase classname="tests.integration.test_transolver_training" name="test_best_tie_policy_and_legacy_resume[False]" time="0.005" /><testcase classname="tests.integration.test_transolver_training" name="test_best_tie_policy_and_legacy_resume[True]" time="0.004" /></testsuite></testsuites>

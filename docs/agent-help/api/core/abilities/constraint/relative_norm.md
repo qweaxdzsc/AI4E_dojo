@@ -66,7 +66,7 @@ print(signature(relative_norm))
 ### Recipe 与案例
 
 - Recipe：`geotransolver/bumper_beam`, `geotransolver/darcy`
-- 案例：`geotransolver.bumper_beam`, `geotransolver.darcy`, `recipe_extensions.geotransolver`
+- 案例：`geotransolver.bumper_beam`, `geotransolver.darcy`, `recipe_extensions.geotransolver`, `recipe_extensions.research_state`, `recipe_extensions.tail_batch`
 
 ### 源码位置
 
@@ -147,7 +147,7 @@ print(signature(supervised_objective))
 ### Recipe 与案例
 
 - Recipe：`geotransolver/bumper_beam`, `geotransolver/darcy`
-- 案例：`geotransolver.bumper_beam`, `geotransolver.darcy`
+- 案例：`geotransolver.bumper_beam`, `geotransolver.darcy`, `recipe_extensions.research_state`, `recipe_extensions.tail_batch`
 
 ### 源码位置
 

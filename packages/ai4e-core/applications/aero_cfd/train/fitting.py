@@ -71,6 +71,7 @@ class TrainingJob:
 
 def open_training(config, run, *, factory, predict, prepare, collate, source, reference=None):
     """消费持久化准备交付；兼容调用未提供引用时先完整准备。"""
+    run = run.with_checkpoint_labels({"type": "aero.checkpoint"})
     config = apply_resolved(config, validate=True)
     if run.dry_run:
         raise ValueError("fit 检查请使用 trainprep；不会更新模型")
@@ -137,6 +138,9 @@ def build_model(job, *, settings=None):
         initial=initial,
         entrypoint=getattr(job.run, "entrypoint", None),
     )
+    # 训练协议沿用历史逐批输入证据；推理阶段会建立独立协议，二者不共用
+    # ``inputs`` 的分支结构。
+    job.protocol["inputs"] = []
     if config["sampling"].get("target") or not job.data.prepare.__module__.startswith(
         "ai4e_contrib."
     ):
@@ -268,6 +272,19 @@ def configure_evaluation(job, *, step=None, callbacks=(), settings=None, operati
 
     def actual_step(network, batch):
         with batch_scope(batch):
+            job.protocol["inputs"].append(
+                {
+                    "identity": [
+                        {
+                            key: value
+                            for key, value in item.items()
+                            if key in {"sample", "partition", "index", "chunk", "offset"}
+                        }
+                        for item in batch.get("metadata", [])
+                    ],
+                    "digest": fingerprint({"inputs": batch["inputs"], "targets": batch["targets"]}),
+                }
+            )
             return (step or default_step)(network, batch)
 
     def default_step(network, batch):
@@ -389,6 +406,10 @@ def configure_evaluation(job, *, step=None, callbacks=(), settings=None, operati
             }
         },
     }
+    # 历史 physical_fields 检查点把总轮次作为恢复合同的一部分；现行
+    # 通用准备仍允许把 max_epochs 作为累计目标提高后继续训练。
+    if job.data.record.get("kind") == "physical_fields":
+        contract["train"]["max_epochs"] = int(settings.get("max_epochs", 2))
     settings = {
         **settings,
         "split_counts": {name: len(items) for name, items in index.partitions.items()},

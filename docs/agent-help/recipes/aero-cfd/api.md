@@ -607,7 +607,7 @@ print(signature(observe_epoch))
 ### 源码位置
 
 - 模块：`recipes.aero_cfd.train`
-- 仓库相对路径：`recipes/aero_cfd/train.py:85`
+- 仓库相对路径：`recipes/aero_cfd/train.py:72`
 - 安装源码：先调用 `ai4e_task.source_location('recipes')`，再按模块相对路径定位。
 
 ### 相关 API

@@ -1,5 +1,6 @@
 """真实 wheel 在源码之外安装，并核对 Python/CLI 管理操作。"""
 
+import importlib.util
 import json
 import os
 import subprocess
@@ -11,6 +12,9 @@ import pytest
 
 
 def test_wheel_install_outside_checkout(tmp_path):
+    root = Path(__file__).resolve().parents[2]
+    source_manifest = json.loads((root / "examples/case-manifest.json").read_text())
+    expected_case_ids = sorted(case["id"] for case in source_manifest["cases"])
     configured = os.environ.get("DOJO_TASK_WHEELS")
     wheels = Path(configured) if configured else tmp_path / "wheels"
     if not configured:
@@ -42,6 +46,10 @@ def test_wheel_install_outside_checkout(tmp_path):
         / "site-packages"
     )
     (target_site / "third_party.pth").write_text(sysconfig.get_path("purelib") + "\n")
+    ema = importlib.util.find_spec("ema_pytorch")
+    if ema is not None and ema.origin:
+        # 控制 extra 可由调用方安装在独立测试目录；仅复用该第三方依赖。
+        (target_site / "control_extra.pth").write_text(str(Path(ema.origin).parent.parent) + "\n")
     clean = {k: v for k, v in os.environ.items() if k not in {"PYTHONPATH", "VIRTUAL_ENV"}}
     subprocess.run(
         [
@@ -64,7 +72,7 @@ def test_wheel_install_outside_checkout(tmp_path):
         [
             str(python),
             "-c",
-            'import sys, ai4e_task, ai4e_core, ai4e_spec; import json; print(json.dumps({"path":ai4e_task.__file__,"core":ai4e_core.__file__,"spec":ai4e_spec.__file__,"torch":"torch" in sys.modules} ))',
+            'import sys, ai4e_task, ai4e_core, ai4e_spec, ai4e_contrib; import json; print(json.dumps({"path":ai4e_task.__file__,"core":ai4e_core.__file__,"spec":ai4e_spec.__file__,"contrib":ai4e_contrib.__file__,"torch":"torch" in sys.modules} ))',
         ],
         cwd=tmp_path,
         env=clean,
@@ -73,7 +81,7 @@ def test_wheel_install_outside_checkout(tmp_path):
         text=True,
     )
     info = json.loads(probe.stdout)
-    assert all(str(envdir) in info[key] for key in ("path", "core", "spec"))
+    assert all(str(envdir) in info[key] for key in ("path", "core", "spec", "contrib"))
     assert info["torch"] is False
     help_probe = subprocess.run(
         [
@@ -107,6 +115,35 @@ print(json.dumps({
     assert help_result["topic"] == "参数化 PDE 研究流程"
     assert help_result["torch"] is False
     assert help_result["contrib"] is False
+    resource_probe = subprocess.run(
+        [
+            str(python),
+            "-c",
+            """import json, sys
+from pathlib import Path
+import ai4e_task as task
+expected = json.loads(sys.argv[1])
+actual = sorted(case['id'] for case in task.list_examples())
+checks = {case_id: task.check_example(case_id)['ok'] for case_id in actual}
+copies = {}
+for case_id in actual:
+    target = Path('installed-cases') / case_id.replace('.', '__')
+    task.copy_example(case_id, target)
+    copies[case_id] = target.is_dir() and any(target.iterdir())
+print(json.dumps({'actual': actual, 'checks': checks, 'copies': copies}))
+""",
+            json.dumps(expected_case_ids),
+        ],
+        cwd=tmp_path,
+        env=clean,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    resource_result = json.loads(resource_probe.stdout)
+    assert resource_result["actual"] == expected_case_ids
+    assert all(resource_result["checks"].values())
+    assert all(resource_result["copies"].values())
     cli = envdir / "bin/ai4e"
     project = tmp_path / "installed-study"
 
@@ -132,7 +169,10 @@ print(json.dumps({
     source = recipe(tmp_path)
     runnable = invoke("new", "runnable", "--project", project, "--from", source)
     subprocess.run(
-        [str(python), "-c", """import sys
+        [
+            str(python),
+            "-c",
+            """import sys
 import ai4e_task as task
 project, identity = sys.argv[1:]
 original = task.read_configuration(project, identity)
@@ -142,8 +182,15 @@ saved = task.replace_configuration(project, identity, config, revision=original[
 config.pop("platform_probe")
 saved = task.replace_configuration(project, identity, config, revision=saved["revision"])
 assert "platform_probe" not in task.read_configuration(project, identity)["config"]
-""", str(project), runnable["id"]],
-        cwd=tmp_path, env=clean, check=True, capture_output=True, text=True,
+""",
+            str(project),
+            runnable["id"],
+        ],
+        cwd=tmp_path,
+        env=clean,
+        check=True,
+        capture_output=True,
+        text=True,
     )
     completed = invoke("run", runnable["id"], "--project", project, "--wait", "--timeout", "30")
     assert completed["status"] == "succeeded", completed
@@ -168,6 +215,62 @@ assert "platform_probe" not in task.read_configuration(project, identity)["confi
     physical = Path(summary["reports"]["rawprep"]["manifest"]).parent
     assert (physical / "train/a/volume_speed.pt").is_file()
     assert (summaries[-1].parent / "checkpoints/last.pt").is_file()
+
+    # 从安装资源复制本地 application 扩展，真实生产准备并读回候选与捕获标签。
+    label_probe = subprocess.run(
+        [
+            str(python),
+            "-B",
+            "-c",
+            """
+from pathlib import Path
+import json
+import numpy as np
+import ai4e_task as task
+from omegaconf import OmegaConf
+from ai4e_core.applications.pde_control.contracts import save_arrays, read_arrays
+recipe = Path.cwd() / 'installed-labels'
+task.copy_example('recipe_extensions.task_labels', recipe)
+config = OmegaConf.to_container(OmegaConf.load(recipe / 'config.yaml'), resolve=True)
+physical = {}
+for split in ('train', 'cal', 'test'):
+    physical[split] = save_arrays(Path.cwd() / 'label-data' / split,
+        {'states': np.zeros((2, 11, 128), dtype=np.float32),
+         'controls': np.zeros((2, 10, 128), dtype=np.float32)},
+        kind='control_physical_v1', metadata={'case': 'burgers', 'split': split, 'count': 2})
+config['inputs']['trainprep'] = {'dataset_' + k: v for k, v in physical.items()}
+config['pipeline'] = {'stages': ['trainprep']}
+project = Path.cwd() / 'label-project'
+task.create_project(project)
+item = task.new_task(project, 'installed labels', source=recipe, configuration=config)
+run = task.wait_run(project, task.submit_run(project, item['id'])['id'], timeout=60)
+assert run['status'] == 'succeeded', (run.get('error'), task.read_log(project, run['id']))
+rows = task.list_stage_artifacts(project, item['id'])
+cal = [row for row in rows if row['binding'] == 'inputs.posttrain.preparation_cal']
+assert len(cal) == 1 and cal[0]['semantics']['split'] == 'cal', rows
+assert cal[0]['name'] == 'cal' and cal[0]['file_name'] == 'manifest.json'
+prepared = run['summary']['reports']['trainprep']['prepared']['cal']
+_, arrays = read_arrays(prepared, kind='control_prepared_v1')
+assert arrays['model'].shape == (2, 3, 16, 128)
+assert arrays['target'].shape == (2, 11, 128)
+current = task.read_configuration(project, item['id'])
+task.save_configuration(project, item['id'], {'inputs': {'posttrain': {'preparation_cal': prepared}}}, revision=current['revision'])
+queued = task.submit_run(project, item['id'], start=False,
+                         overrides=['pipeline.stages=[posttrain]'], input_keys=['inputs.posttrain.preparation_cal'])
+captured = json.loads((project / queued['request_path']).read_text())
+assert captured['context']['assets']['inputs.posttrain.preparation_cal']['semantics']['split'] == 'cal'
+task.stop_run(project, queued['id'])
+print(json.dumps({'preparation_run': run['id'], 'calibration_candidates': len(cal)}))
+""",
+        ],
+        cwd=tmp_path,
+        env=clean,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    assert label_probe.returncode == 0, label_probe.stdout + label_probe.stderr
 
     subprocess.run(
         [str(python), "-m", "ai4e_task", "--help"],

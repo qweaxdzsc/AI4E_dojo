@@ -43,21 +43,29 @@ def _source_compose():
     return module
 
 
-def write_physical_manifest(root, partitions):
+def write_physical_manifest(root, partitions, *, values=None):
     """写出最小物理清单，每个样本一个坐标张量。"""
+    values = values or {}
+    repeated = {
+        name
+        for names in partitions.values()
+        for name in names
+        if sum(name in group for group in partitions.values()) > 1
+    }
     samples = []
     for partition, names in partitions.items():
         for name in names:
-            directory = root / name
-            directory.mkdir()
-            tensor = torch.zeros(2, 3)
+            relative = Path(partition) / name if name in repeated else Path(name)
+            directory = root / relative
+            directory.mkdir(parents=True)
+            tensor = torch.full((2, 3), float(values.get((partition, name), 0)))
             write_tensor_file(directory / "pos.pt", tensor)
             samples.append(
                 {
                     "partition": partition,
                     "sample": name,
                     "written": True,
-                    "path": name,
+                    "path": relative.as_posix(),
                     "filemap": {"pos": "pos.pt"},
                     "fields": {
                         "pos": {
@@ -111,7 +119,12 @@ def test_random_split_is_reproducible_and_original_keeps_members():
     assert scoped == {"train": ["a"], "test": ["c"]}
     drawn = resolve_split(
         partitions,
-        {"method": "random", "seed": 0, "samples": ["b", "c"], "counts": {"train": 2, "test": 0, "eval": 0}},
+        {
+            "method": "random",
+            "seed": 0,
+            "samples": ["b", "c"],
+            "counts": {"train": 2, "test": 0, "eval": 0},
+        },
     )
     assert set(drawn["train"]) == {"b", "c"}
     with pytest.raises(ValueError, match="指定样本不在当前清单"):
@@ -122,11 +135,13 @@ def test_random_split_rejects_sum_mismatch_and_empty_train():
     partitions = {"train": ["a", "b"], "test": ["c"]}
     with pytest.raises(ValueError, match="之和必须等于全部样本"):
         resolve_split(
-            partitions, {"method": "random", "seed": 0, "counts": {"train": 1, "test": 1, "eval": 0}}
+            partitions,
+            {"method": "random", "seed": 0, "counts": {"train": 1, "test": 1, "eval": 0}},
         )
     with pytest.raises(ValueError, match="训练分片至少需要 1"):
         resolve_split(
-            partitions, {"method": "random", "seed": 0, "counts": {"train": 0, "test": 3, "eval": 0}}
+            partitions,
+            {"method": "random", "seed": 0, "counts": {"train": 0, "test": 3, "eval": 0}},
         )
 
 
@@ -141,9 +156,65 @@ def test_manifest_overlay_can_read_remapped_sample(tmp_path):
     assert list(kept["pos"].shape) == [2, 3]
 
 
+def test_manifest_remap_prefers_exact_and_validation_alias(tmp_path):
+    path = write_physical_manifest(
+        tmp_path,
+        {"train": ["same"], "test": ["same"], "validation": ["checked"]},
+        values={("train", "same"): 1, ("test", "same"): 2, ("validation", "checked"): 3},
+    )
+    index = ManifestIndex(path)
+    index.remap_partitions({"train": ["same"], "test": ["same"], "eval": ["checked"]})
+    assert index.read("train", 0, fields=["pos"])["pos"].unique().item() == 1
+    assert index.read("test", 0, fields=["pos"])["pos"].unique().item() == 2
+    assert index.read("eval", 0, fields=["pos"])["pos"].unique().item() == 3
+
+
+def test_manifest_remap_moves_only_unique_cross_partition_candidate(tmp_path):
+    path = write_physical_manifest(
+        tmp_path,
+        {"train": ["from-train"], "test": ["from-test"]},
+        values={("train", "from-train"): 4, ("test", "from-test"): 5},
+    )
+    before_manifest = path.read_bytes()
+    original = ManifestIndex(path)
+    before_records = {
+        identity: (record["path"], (tmp_path / record["path"] / "pos.pt").read_bytes())
+        for identity, record in original.records.items()
+    }
+
+    original.remap_partitions({"train": ["from-test"], "eval": ["from-train"]})
+
+    assert original.read("train", 0, fields=["pos"])["pos"].unique().item() == 5
+    assert original.read("eval", 0, fields=["pos"])["pos"].unique().item() == 4
+    assert path.read_bytes() == before_manifest
+    assert {
+        (record["partition"], record["sample"]): (
+            record["path"],
+            (tmp_path / record["path"] / "pos.pt").read_bytes(),
+        )
+        for record in original.records.values()
+    } == before_records
+
+
+def test_manifest_remap_rejects_missing_and_ambiguous_sources(tmp_path):
+    path = write_physical_manifest(
+        tmp_path,
+        {"train": ["same"], "test": ["same"]},
+        values={("train", "same"): 1, ("test", "same"): 2},
+    )
+    index = ManifestIndex(path)
+    with pytest.raises(ValueError, match="找不到样本 missing"):
+        index.remap_partitions({"eval": ["missing"]})
+    with pytest.raises(ValueError, match=r"样本 same 在目标 eval 存在歧义") as error:
+        index.remap_partitions({"eval": ["same"]})
+    assert "train" in str(error.value) and "test" in str(error.value)
+
+
 def test_open_dataset_allows_train_only_manifest(tmp_path):
     path = write_physical_manifest(tmp_path, {"train": ["only"]})
-    data = open_dataset({"train": {"manifest": str(path), "evaluation_split": "test"}, "trainprep": {}})
+    data = open_dataset(
+        {"train": {"manifest": str(path), "evaluation_split": "test"}, "trainprep": {}}
+    )
     assert list(data.index.partitions["train"]) == ["only"]
     assert "test" not in data.index.partitions
 
@@ -154,7 +225,11 @@ def test_open_dataset_applies_random_split(tmp_path):
         {
             "train": {"manifest": str(path)},
             "trainprep": {
-                "split": {"method": "random", "seed": 0, "counts": {"train": 2, "test": 0, "eval": 1}}
+                "split": {
+                    "method": "random",
+                    "seed": 0,
+                    "counts": {"train": 2, "test": 0, "eval": 1},
+                }
             },
         }
     )
@@ -185,7 +260,11 @@ def test_open_dataset_overlay_uses_stored_partitions(tmp_path):
         {
             "train": {"manifest": str(path)},
             "trainprep": {
-                "split": {"method": "random", "seed": 0, "counts": {"train": 1, "test": 1, "eval": 0}}
+                "split": {
+                    "method": "random",
+                    "seed": 0,
+                    "counts": {"train": 1, "test": 1, "eval": 0},
+                }
             },
         },
         overlay={"train": ["b"], "eval": ["a"]},

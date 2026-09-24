@@ -1,6 +1,8 @@
 # ai4e-contrib 模块索引
 ## 当前职责与本轮变更
 
+- [经典网络主计划](../../.cursor/plans/classic-networks-main.plan.md)：`application/classic_networks/` 已按配置、Darcy、ShapeNet体场、Double Cylinder及准备/预测形成源码连接；中立网络本体归core，业务布局与监督语义留在此层。十三组100更新及六项独立wheel/Python/Task流程已完成统一验收，设备和覆盖范围以专项记录为准，具体文件见下方经典网络小节。
+
 ability 中不可中立化的模型/方程与 application 中的数据适配、模型专属配置、步骤和局部连接。来自单个模型源码的通用计算优先进入 ai4e-core/abilities；contrib 不承载通用图构造、批处理、rollout 或评价。
 
 ## MeshGraphNets / CylinderFlow 与静态外流扩展
@@ -13,7 +15,7 @@ ability 中不可中立化的模型/方程与 application 中的数据适配、�
 
 - `packages/ai4e-contrib/application/aero_cfd/configuration.py`：官方配置分组转换和本地扩展参数连接。
 - `packages/ai4e-contrib/application/aero_cfd/abupt.py`：AB-UPT 默认布局和专属参数校验。
-- `packages/ai4e-contrib/application/aero_cfd/transolver3.py`：Transolver-3 专属配置连接。
+- `packages/ai4e-contrib/application/aero_cfd/transolver3.py`：Transolver-3 专属配置连接，接受现行 eval 与旧 validation 评价切片名；组件平台约束发布 eval。回归见 `test_transolver_training.py`。
 - `packages/ai4e-contrib/application/aero_cfd/loader_adapter.py`：显式旧外流加载适配，不反向转导出通用 run。
 - `packages/ai4e-contrib/application/parametric_pde/pibsnet.py`：PDE 准备参数连接，不约束其他组件。
 - 本轮文件与回归清单：`.context/mvp/architecture-alignment-acceptance.md`。
@@ -102,7 +104,7 @@ source_cases.py装配原Neumann/Advection；neumann_numerics.py/advection_numeri
 
 ## 推理工作台选择与统计
 
-`ability/model/transolver3/{inference,preparation,component}.py`：缓存后解码查询块；`application/datasets/{shapenet_car,nasa_crm}/{physical,__init__}.py`：字段、分量、单位描述。
+`ability/model/transolver3/{inference,preparation,component}.py`：缓存后解码查询块；同时提供物理视图 `prepare_sample` 与通用准备链的平面字段 `prepare_inputs`，后者不要求 AB-UPT `data_specs`，组件拼批兼容两种入口。`application/datasets/{shapenet_car,nasa_crm}/{physical,__init__}.py`：字段、分量、单位描述。
 
 专项状态与证据见 `.context/mvp/inference-ui-acceptance.md`，不沿用旧验收结论。
 
@@ -160,6 +162,8 @@ WDNO handoff.py共用数组依赖解析；指标绑定清单与全部数组，�
 
 `ability/model/pcno/`：组合、严格原权重导入、GPL许可证与source.json；`application/datasets/geothermal_cmg/adapter.py`：24/18例身份及字段校验；`application/geothermal/pcno/`：configuration、protocol、objective、training、inference、economy、post。计算主要在core。PRD见ability/application正文。
 
+根 `dev` 组选择 `ai4e-contrib[pcno]`，默认开发环境由现有 extra 继续取得 `ai4e-core[geothermal]`、`iapws==1.5.4` 与 pandas；依赖仍只在各包 `pyproject.toml` 和根锁文件维护，不在测试中临时安装。
+
 
 ## GeoTransolver 外流扩展
 
@@ -172,3 +176,38 @@ WDNO handoff.py共用数组依赖解析；指标绑定清单与全部数组，�
 `ability/model/pcno/cylinder.py`：变体组合；`application/datasets/cylinder_flow/download.py`：官方子集；`datasets/gencp/cylinder.py`：5/1轨迹及未清零速度；`application/spatiotemporal_pde/pcno/`：configuration/objective/training/inference/post。CylinderFlow物理准入未通过。
 
 功能正文见相应模块PRD；实际范围见[圆柱验收](../mvp/pcno-cylinder-acceptance.md)。
+
+## Task 通用化交接（实施中）
+
+- `application/aero_cfd/task_description.py`、`task_inference.py`：输入标签和输出声明、检查点科学身份及子运行计划。
+- `application/aero_cfd/task_results.py`、`task_post.py`、`task_datasets.py`：固定结果、指标/字段、处理身份、科学清单及副本转换。
+- `application/aero_cfd/model_inspection.py`、`abupt_stage_display.py`：两档图与特定网络阶段包装；调用 core ability。
+- `application/pde_control/safediffcon/{operations,task_description}.py`：同一管理入口的控制用途/权重标签，未实现操作明确不可用。
+- `application/parametric_pde/resources.py`：清单显式 smoke 数据生产。
+
+公开接口变化、圈定测试与未验范围见 [本轮验收](../mvp/task-generalization-acceptance.md)，功能正文更新既有对应 PRD。
+
+
+## 经典网络数据与研究连接
+
+- `application/classic_networks/configuration.py`：按配置位置加载/覆盖、数据与模型局部校验、全限定普通构造器；不增加全仓网络注册。
+- `darcy.py`：共同原ID采样坐标/系数/解；`shapenet_volume.py`：官方分片、体网格/表面距离、真实单元插值与有效域回贴（距离为来源顶点场插值近似）；`double_cylinder.py`：来源时间/坐标身份、三帧历史与一帧目标及独立轨迹分片。
+- `preparation.py`：物理来源、训练分片有效域统计、模型独立准备和可搬移数组清单读回、ShapeNet物理快照；`binding.py`：网络构造、末轴场/卷积/token/图/真实序列布局、取批及监督。
+- `prediction.py`：固定推理、反变换、派生声明保存、original_*拼接/offsets以及独立分场/原点覆盖评价。普通派生范数默认unknown，不将混合物理分量解释为速度模长。
+- 消费者：`recipes/classic_networks/`与`examples/classic_networks/`三案例；扩展登记：`examples/recipe_extensions/network_composition/`，见recipes索引。
+- 功能正文：`docs/PRD/ai4e-contrib/application/PRD.md`第八章。圈定来源检查为`test_classic_network_data.py`；运行/资源检查为`test_classic_network_pipeline.py`与`test_classic_network_examples.py`。源码和非训练证据不能代替主控真实训练、安装与Task验收。
+
+本批阶段证据与未验范围见[经典网络统一验收](../mvp/classic-networks-acceptance.md)，该记录已按本批缩小验证范围完成。
+
+
+## 算子学习与普通代理应用
+
+新增应用只绑定领域输入、训练目标及配置，计算正文由 core 持有。功能正文见 `docs/PRD/ai4e-contrib/application/PRD.md` 第九、十章；真实数据矩阵和安装仍待本批统一验收。
+
+- `packages/ai4e-contrib/application/operator_learning/configuration.py`：本地模型/网格/完整场/物理权重检查；`preparation.py`：复用 classic 场准备公开入口；`binding.py`：固定传感器、逐样本坐标、FNO通道和真实历史顺序，完整网络普通构造器替换。
+- `application/operator_learning/objectives.py`：复用 core `residual_loss`；Darcy 反变换物理解后计算非负违约及监督。来源支持正系数、非负源和零 Dirichlet 的最大值原理，不把采样外圈当精确零边界，不宣称完整 PDE 或新增 PINN。
+- `application/surrogate_modeling/preparation.py`：NASA 六工况/三响应属性表、来源身份和训练统计；从 classic 双圆柱准备去重训练快照、冻结 POD、三帧系数输入与下一帧目标；`preparation_identity` 绑定顶层、分片与基状态内容并允许搬移。
+- `application/surrogate_modeling/fitting.py`：RSM/RBF/独立目标 Kriging/LightGBM 的显式拟合装配；`configuration.py`：案例、预算和普通全限定组件解析，不增加框架注册表。
+- `application/surrogate_modeling/prediction.py`：普通状态重建与 `predict_prepared(..., predictor=...)` 注入；NASA物理响应、POD固定解码，Kriging NASA物理 latent 方差及POD系数 latent 方差；固定结果继续交由 classic `prediction.evaluate` 消费。
+- 调用方：`recipes/operator_learning/{darcy,shapenet_volume,double_cylinder}/` 与 `recipes/surrogate_modeling/{nasa_crm,double_cylinder}/`。NASA表不是平台网格准备，不能借此省略真正场数据的VTKHDF/实体交付。
+- 圈定测试：`test_operator_blocks.py`、`test_operator_physical_loss.py`、`test_operator_surrogate_data.py`、`test_surrogate_source_identity.py`（NASA跨分片完整属性重复拒绝，同工况异响应诊断）。数据流程用例含训练独立统计/轨迹身份、POD基、目录搬移、方差与自定义预测器、两例仓库外复制和无模型独立post；使用合成夹具，不算真实数据训练验收。

@@ -30,6 +30,13 @@ def test_five_independent_examples():
             assert "load_components" in source
         assert "open_results" in (folder / "post.py").read_text()
         assert "legacy_predict" not in (folder / "post.py").read_text()
+        for filename in ("trainprep.py", "train.py", "infer.py"):
+            body = (folder / filename).read_text()
+            assert "topology" not in body
+            if "transolver3" in name:
+                assert "physical as" in body if filename != "infer.py" else "import infer as infer_stage" in body
+            else:
+                assert "physical as" not in body
         # 共享交接与配置保持一致；领域步骤允许明确的来源/模型差异。
         for filename in ("configuration.py", "pipeline.py"):
             assert (ROOT / "recipes/aero_cfd" / filename).read_bytes() == (
@@ -47,15 +54,17 @@ def test_copied_generic_pipeline_and_independent_post(tmp_path):
     import subprocess
     import sys
 
-    from tests.transolver_assets import write_source
+    from tests.transolver_assets import write_connectivity, write_source
 
     folder = tmp_path / "copied"
     shutil.copytree(ROOT / "examples/aero_cfd/nasa_crm_transolver3", folder)
     raw = tmp_path / "raw"
     raw.mkdir()
-    write_source(raw / "train.h5", 5, 80, offset=0)
-    write_source(raw / "test.h5", 2, 80, offset=100)
+    write_source(raw / "train.h5", 5, 81, offset=0)
+    write_source(raw / "test.h5", 2, 81, offset=100)
+    write_connectivity(raw / "connectivity.h5", 81)
     config = yaml.safe_load((folder / "config.yaml").read_text())
+    config["inputs"]["rawprep"]["connectivity_h5"] = str(raw / "connectivity.h5")
     config["inputs"]["rawprep"].update(
         source=str(raw), train_h5=str(raw / "train.h5"), test_h5=str(raw / "test.h5")
     )
@@ -80,9 +89,9 @@ def test_copied_generic_pipeline_and_independent_post(tmp_path):
     assert result.returncode == 0, result.stdout + result.stderr
     run = next((tmp_path / "runs").iterdir())
     report = json.loads((run / "artifacts/physical-predictions.json").read_text())
-    assert report["metrics"]["surface.cp"]["count"] == 160
+    assert report["metrics"]["surface.cp"]["count"] == 162
     assert len(report["results"]) == 2
-    assert not list(tmp_path.rglob("*.vtp")) and not list(tmp_path.rglob("*.vtu"))
+    assert not list((tmp_path / "data" / "infer").rglob("*.vtp"))
     # 固定结果已交付，即使权重不再存在，独立 post 仍应可读且不生成预测。
     (run / "checkpoints/last.pt").unlink()
     result = subprocess.run(

@@ -183,7 +183,7 @@ def test_trial_mode_and_stale_revision_submission(tmp_path):
     assert task.list_stage_artifacts(root, created["id"]) == []
 
 
-def test_sampling_save_migrates_old_single_key(platform):
+def test_sampling_conversion_is_explicit_before_generic_save(platform):
     import ai4e_task as task
 
     c, p, t, _, _ = platform
@@ -199,12 +199,11 @@ def test_sampling_save_migrates_old_single_key(platform):
     raw.trainprep.sampling = raw.model.pop("sampling")
     OmegaConf.save(raw, path)
     cfg = task.read_configuration(base, t["id"])
-    saved = task.save_configuration(
-        base,
-        t["id"],
-        {"model": {"sampling": dict(cfg["config"]["trainprep"]["sampling"])}},
-        revision=cfg["revision"],
-    )
+    from ai4e_contrib.application.aero_cfd.configuration import convert_configuration
+
+    candidate = convert_configuration(cfg["config"])
+    assert "sampling" in cfg["config"]["trainprep"]
+    saved = task.replace_configuration(base, t["id"], candidate, revision=cfg["revision"])
     assert "sampling" not in saved["config"]["trainprep"]
     assert saved["config"]["model"]["sampling"]
 
@@ -332,8 +331,25 @@ def test_shared_workflow_metrics_read_real_physical_report(tmp_path, monkeypatch
     (folder / "physical-predictions.json").write_text(
         json.dumps({"status": "succeeded", "metrics": metrics})
     )
+    import ai4e_task as task
+
+    code = tmp_path / "captured-code"
+    code.mkdir()
+    context = task.configuration_context(
+        {"components": {"application": "ai4e_contrib.application.aero_cfd.operations"}},
+        code,
+        name="infer",
+    )
     monkeypatch.setattr(
-        query, "get_run", lambda *args: {"status": "succeeded", "run_dir": str(tmp_path)}
+        query,
+        "get_run",
+        lambda *args: {
+            "task_id": "source-task",
+            "status": "succeeded",
+            "run_dir": str(tmp_path),
+            "code_path": "captured-code",
+            "task_description": {"source": context["source"]},
+        },
     )
     assert read_run_metrics(tmp_path, "actual")["evaluation"]["metrics"] == metrics
 

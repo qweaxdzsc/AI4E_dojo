@@ -3,6 +3,8 @@
 
 base 通用配置与事件；abilities 原子计算；applications 领域步骤；run 执行与唯一记录写入。
 
+- 建模组合尺度见[唯一架构5.2](../../docs/AI4E_Dojo_ARCHITECTURE%20%281%29.md#52-建模能力的组合尺度block网络阶段与完整架构)。经典网络的 `abilities/modeling/modules/`、`stages/` 和 `models/` 已形成源码实现，圈定组件检查、十三组真实100更新和实际wheel/Python/Task流程已通过；设备与科学精度范围见专项验收。新增目录与接口见下方“经典网络计算与网格插值”；分工见[主计划](../../.cursor/plans/classic-networks-main.plan.md)。
+
 - `packages/ai4e-core/run/__init__.py`：稳定运行门面：launch/stage/TrainingRun/execute_operation/managed_run/configuration_adapter。
 - `packages/ai4e-core/run/operation.py`：独立操作的日志、取消、样本循环和 writer 生命周期。
 - `packages/ai4e-core/applications/aero_cfd/infer/anchor_stage.py`：锚点预测实现；post 旧导入只保留门面。
@@ -54,7 +56,7 @@ base 通用配置与事件；abilities 原子计算；applications 领域步骤�
 - `packages/ai4e-core/abilities/data/filter/`：按约定单元类型核对 VTK 单元并生成有效点 mask；`coincident.py` 标与表面坐标精确重合的体积点（`exterior_mask`）；`select.py` 筛普通数组；`records.py` 对字段记录与身份统一筛选，前后校验。不删原数组。
 - `packages/ai4e-core/abilities/data/validate/`：`aligned.py` 校验首维；`fields.py` 校验组来源、归属、数量、身份与分量，返回结构化报告；`output.py` 共用输出预检。
 - `packages/ai4e-core/abilities/data/save/`：`encode.py` 编码单场；`store.py` 按映射读写张量或打包载荷，临时目录/备份/提升/恢复，不认识 cell 名字；必需项缺失失败，可选性由调用方声明。
-- `packages/ai4e-core/abilities/data/source/split.py`：按传入名单列分片并校验人数，不扫盘冒充官方顺序；准备阶段可按 `trainprep.split` 先限定执行样本再重划 train/test/eval，不改张量。阅读准备时固定给出三个切片，空切片人数为 0。旧 `validation` 并进评价集。
+- `packages/ai4e-core/abilities/data/source/split.py`：按传入名单列分片并校验人数，不扫盘冒充官方顺序；准备阶段可按 `trainprep.split` 先限定执行样本再重划 train/test/eval，不改张量。`ManifestIndex` 先匹配目标分片及 eval/validation 别名，只有唯一来源才允许跨分片移动，缺失或歧义明确失败。阅读准备时固定给出三个切片，空切片人数为 0。
 - `packages/ai4e-core/abilities/data/stats/`：`load.py` 读写 YAML/JSON；`moments.py` 保留尾维流式累计；`fit.py` 对具名数组流累计，不解释目录或训练分片。支持按冻结记录在训练和推理应用正反变换。
 - `packages/ai4e-core/abilities/transform/`：字段变换和可追踪逆变换；`scale.py` 是方法之后的可见放大。
 - `packages/ai4e-core/abilities/geometry/`：本切片已交付。`surface.py` 为全二维面门禁、私有表面转换及原 point ID；`nearest.py` 为点到最近表面顶点（只吃坐标）；`mesh_sdf.py` 先校验全部单元为支持的二维面再算有符号距离、面上最近点与方向；`surface_normals.py` 按原点身份回贴法向及有效性 mask，参与面法向非有限/零长度拒绝。不加 sklearn / trimesh / meshio。
@@ -268,7 +270,7 @@ abilities/data/source/physical.py 与 data/stats/physical.py：具名物理视�
 - `abilities/transform/minmax.py`：通用冻结 Min-Max，坐标兼容入口共享算术。
 - `abilities/modeling/inspection.py`：真实 TorchVista HTML 原子发布；中等体量压缩模块图（一层模块折叠），并把初始缩放改成按宽度适配。
 - `abilities/postproc/difference.py`：同身份同单位差值门禁。
-- `applications/aero_cfd/inspection.py`：task 调用的检查公开门面；原始处理描述只回已保存的 `dataset.processed_name`；训练设置预检不要求准备记录；模型跟踪先读 `inputs.train.preparation` / `inputs.trainprep.dataset`，再回退内部旧键；现行 version=2 准备走 `trainprep.preparation`，旧物理准备仍走 `trainprep.physical`；`trace_model` 只取样组网，不写 HTML、不设 TorchVista 参数；案例能力含损失与采样声明。
+- `applications/aero_cfd/inspection.py`：贡献 application 调用的领域检查门面；原始处理描述只回已保存的 `dataset.processed_name`；训练设置预检不要求准备记录；模型跟踪先读 `inputs.train.preparation` / `inputs.trainprep.dataset`，再回退内部旧键；现行 version=2 准备走 `trainprep.preparation`，旧物理准备仍走 `trainprep.physical`；`trace_model` 只取样组网，不写 HTML、不设 TorchVista 参数；案例能力含损失与采样声明。
 - `applications/aero_cfd/rawprep/extraction.py`：提取容器到成员路由编译。
 - `.context/mvp/web-algorithm-acceptance.md`、`web-algorithm-results/`：四组合新提取/准备/正式短训/后处理、四份真实模型跟踪与严格差值证据；不替代 HTTP/浏览器验收。
 - `applications/aero_cfd/post/mesh_export.py`：共享物理后处理的真实来源网格回贴，按原身份写 VTP/VTU 并登记 `manifest.meshes`；`test_physical_mesh_export.py` 验证表面/体拓扑和字段身份。
@@ -279,7 +281,7 @@ abilities/data/source/physical.py 与 data/stats/physical.py：具名物理视�
 - `base/config/steps.py`：通用参数声明校验、target/parameters 解析、能力来源与重建。
 - `applications/aero_cfd/rawprep/mapping.py`：FieldMapParameters 与 map_fields；只读数组到继承身份的具名字段。
 - `applications/aero_cfd/rawprep/dataset.py`、`rawprep/physical.py`：登记步骤、事务保存、统计与发布分离。
-- `applications/aero_cfd/trainprep/preparation.py`、`trainprep/physical.py`：字段绑定、冻结变换、采样和拼批声明、准备分片、准备校验与发布。`declarations` 只写准备真正消费的冻结项；`consume` 只检查现行记录能否导入，按当前平台配置组计算，不拿冻结声明挡现行参数。模型页采样预算不写入。
+- `applications/aero_cfd/trainprep/preparation.py`、`trainprep/physical.py`：字段绑定、冻结变换、采样和拼批声明、准备分片、准备校验与发布。`declarations` 只写准备真正消费的冻结项；`consume` 只检查现行记录能否导入，按当前平台配置组计算，不拿冻结声明挡现行参数。历史 post 兼容门面可在摘要、数据内容与归一化摘要通过后只读打开通用 version=2 准备，并保留原准备 digest。模型页采样预算不写入。
 - `applications/aero_cfd/train/fitting.py`、`train/physical.py`：显式模型、目标、优化、评价、恢复和执行。
 - `applications/aero_cfd/infer/anchor_stage.py`、`infer/stage.py`：按登记顺序执行推理，逐样本交接预测与保存；旧 post/stage.py、post/physical.py 为兼容门面，新 post 只读取固定结果。
 - `abilities/transform/normalization.py`：可重建自定义正反变换及来源校验。
@@ -319,7 +321,7 @@ applications/parametric_pde/train.py的epoch_sum先顺序汇总损失图再一�
 - `infer/configuration.py`：独立参数与旧模型内部交接。
 - `infer/inspection.py`：inspect_checkpoint、inspect_inputs、available_devices，供独立检查进程使用。预检与检查点 `effective_config` 只比权重结构、数据规格、字段角色和采样方法，不整段比 `model+sampling` 点数。
 - `infer/configuration.py`：检查进程可从保存的 `inputs.*` 公共配置重建最小业务视图，不要求管理进程依赖 contrib 装配器。
-- `abilities/data/source/manifest.py`：重挂分片时按目标分片选择同名来源记录，允许 train/test 来源各自存在同名样本。
+- `abilities/data/source/manifest.py`：重挂分片时按目标分片及 eval/validation 别名选择同名来源；无精确来源时仅唯一候选可移动，缺失或同名多来源歧义明确失败。原记录分片、路径、资产、张量和 manifest 字节均不改。
 - `tests/integration/test_infer_inspect_contract.py`：采样点数不同可通过预检，dim/blocks 或 data_specs 不同必须拒绝。
 - `infer/fields.py`：具名派生点场的实体、单位及分量校验。
 - `infer/results.py`：固定结果读取、数组读回及严格 compare_results。
@@ -390,7 +392,7 @@ WDNO已使用公共base/config/conventions和TrainingRun.data_dir/output_dir/rec
 ## 共享训练执行
 
 - `abilities/training/execution.py`：内部工作单元推进、有效更新事实和预算；loop/iterations 保留各自恢复与事件顺序。
-- `applications/base/iteration_training.py`：可选局部更新、累积/精度选择，默认不向旧迭代器增加参数。
+- `applications/base/iteration_training.py`：可选局部更新、累积/精度与用户state_bindings；验证/保存周期独立。旧自定义迭代器等周期保持参数约定，不同周期却不支持新增参数时更新前拒绝。`abilities/training/checkpoint.py`保存与恢复具名内存状态并在加载失败时回滚。
 - `abilities/training/checkpoint.py`：迭代合同/游标副本预检、缩放器恢复；不变更旧容器默认合同。
 - `tests/integration/test_training_execution.py`：跳步、预算、有限流、尾批、同轨迹与恢复拒绝。现状见 [专项验收](../mvp/training-execution-acceptance.md)。
 
@@ -434,3 +436,76 @@ WDNO已使用公共base/config/conventions和TrainingRun.data_dir/output_dir/rec
 `abilities/data/source/record_download.py`：版本固定的范围记录下载；`data/stats/masked_fields.py`：流式有效域统计；`modeling/models/fourier_unet3d.py`：二维时空网络；`constraint/{continuity,field_supervision}.py`：散度及监督；`eval/field_windows.py`：窗口误差；`training/iteration_stream.py`：计数恢复；`applications/spatiotemporal_pde/window_results.py`：固定结果及派生消费。
 
 功能正文见相应模块PRD；实际范围见[圆柱验收](../mvp/pcno-cylinder-acceptance.md)。
+
+## 精简基础能力：尾批与独立选优
+
+- `abilities/training/epoch_stream.py`：`EpochBatchStream`，用户有序有限记录收批、尾批、独立 PCG64 与预检后恢复；来源语义由用户声明。
+- `abilities/training/selection.py`：`BestMetric`，min/max、平局政策、保存后显式提交与选择元信息恢复；不管理模型或文件。
+- `tests/integration/test_epoch_stream.py`、`test_metric_selection.py`、`test_foundational_installation.py`：独立参考、两种机制短训梯度/参数轨迹、恢复失败不修改、真实 writer 和隔离 wheel。
+- 功能正文：现有 abilities PRD 第三章第6/7项；使用入口：`docs/agent-help/capabilities/{data,training}.md`。
+- [验收记录](../mvp/foundational-capabilities-minimal-acceptance.md)：独立组件与安装证据，以及自动用户状态接入和正式extension联合实跑。框架周期/恢复改动的正式Web范围见[框架验收](../mvp/framework-skill-evolution-acceptance.md)。
+
+## Task 通用化交接（实施中）
+
+- `abilities/modeling/inspection.py`：通用单档/多档跟踪、模型/RNG 保护、固定 HTML 与来源提交及失败回退。
+- `abilities/training/resources.py`：通用设备目录；无任务上下文指标目录来自 `abilities/eval/catalog.py`。
+- `run/training.py`、`run/writer.py`：不透明检查点标签交接；外流 application 在生产时提供标签。
+
+公开接口变化、圈定测试与未验范围见 [本轮验收](../mvp/task-generalization-acceptance.md)，功能正文更新既有对应 PRD。
+
+
+## 经典网络计算与网格插值
+
+功能正文见 [abilities PRD第十一章](../../docs/PRD/ai4e-core/abilities/PRD.md#十一可组合建模能力)，有拓扑插值与回贴见同文第一章第14项。设计只引用唯一架构5.2；本节定位源码、消费者与验证，不复制架构正文。
+
+### 计算块与独立网络阶段
+
+- `abilities/modeling/modules/feed_forward.py`：新增 `FeedForward` 复用已有 `projected_mlp`，末轴前馈、显式隐藏宽度和末层激活；旧 `Mlp` 的算术与权重保留。
+- `abilities/modeling/modules/recurrent.py`：`RecurrentBlock`，单层Elman双曲正切循环及显式末状态；`stages/recurrent.py` 的 `RecurrentStage` 注册逐层循环，返回序列和 `[L,B,H]` 状态，不藏跨样本状态。
+- `abilities/modeling/modules/{convolution,residual}.py`：二维/三维 `ConvBlock`、基本残差和瓶颈；瓶颈采用v1.5中间空间卷积步长。`stages/convolution.py` 的 `ConvStage/ResidualStage` 使用注册序列，不是业务运行Stage。
+- `abilities/modeling/modules/{spatial_resampling,skip_fusion}.py`：显式空间尺寸的池化/插值投影及跳连对齐融合；`stages/multiscale.py` 的 `MultiScaleEncoder` 交付 `(bottom_input,skip_features,spatial_sizes)`，特征浅到深；`SkipDecoder` 反向消费，拒绝层数/尺寸错误。
+- `abilities/modeling/modules/{attention,transformer}.py`：标准自注意力与后规范化编码块；`stages/transformer.py` 为注册编码块顺序。普通前馈复用公共 `FeedForward`，不改已有几何/物理注意力。
+- `abilities/modeling/modules/{patch_embedding,patch_reconstruction}.py`：末轴通道规则格的显式分块、padding mask、空间信息及裁补齐重建；`position_encoding.py` 保留原FP32位置计算，只兼容模块整体double后的运算视图。
+- `abilities/modeling/modules/{graph_encoding,graph_message_passing}.py`：图编码/读出、公开边/节点更新及交互；`stages/graph.py` 顺序传播节点/边。新变体先边残差再聚合完整新边，明确区别只聚合边增量；旧 `GraphMessagePassingBlock` 保留。
+
+### 完整模型与跨族消费
+
+- `abilities/modeling/models/mlp.py`：`MLP` 保持所有前导维度，默认三层64宽，可替换公共前馈映射。
+- `abilities/modeling/models/rnn.py`：`RNN` 输入 `[B,T,C]`，返回完整预测序列及末状态；输入映射、循环段和输出映射可替换。
+- `abilities/modeling/models/{cnn,resnet,unet}.py`：二维/三维CNN、小输入ResNet18场变体与三级U-Net；真实复用公共块/阶段。CNN/ResNet开放encoder/head，U-Net开放encoder/bottleneck/decoder/head；后者另可直接消费多尺度特征。旧 `modules/unet_volume.py` 与谱网络未被默认替换。
+- `abilities/modeling/models/transformer.py`：`PatchTransformer`，分块→标准编码→空间重建；可替换分块、位置、编码及读出。
+- `abilities/modeling/models/gnn.py`：`GraphNetwork`，节点/边编码→处理→节点读出，明确有向索引与聚合口径。
+- `examples/recipe_extensions/network_composition/{resunet,unet_transformer,cnn_rnn,user_outputs}.py`：公共阶段跨族示例与派生数组消费；普通构造器由本地连接注入，CF网格/末轴网格/token/循环布局显式转换，运行与保存由完整案例负责。
+
+### 有拓扑数据取样与回贴
+
+- `abilities/data/extract/mesh_probe.py`：`regular_coordinates` 生成C序xyz规则格；`probe_fields` 基于真实单元插值明确点场并返回有效标记，不最近点补洞；`probe_regular` 先保留全部顶点有效的单元再回贴，保持原查询行序，无完整支撑时返回全无效。
+- 该数据能力由 `packages/ai4e-contrib/application/classic_networks/shapenet_volume.py` 绑定ShapeNet字段/分片/单位，`preparation.py` 组织派生准备；网络块不依赖可视化探针，`postproc/visualization/probe.py` 原消费链继续保留。
+- 占位零必须连同mask消费，不能当零真值；投影误差、原点覆盖与网络预测误差分列。共享物理来源及既有冻结记录不改写。
+
+### 圈定证据与未验范围
+
+- `tests/integration/test_modeling_feature_blocks.py`、`test_modeling_recurrent_stages.py`、`test_classic_mlp_rnn.py`：前馈/循环来源对照、显式状态及基础模型。
+- `tests/integration/test_modeling_convolution_blocks.py`、`test_modeling_multiscale.py`、`test_classic_spatial_models.py`：卷积/残差独立前向反向、有序跳连、注入和六种空间结构；`test_network_recomposition.py` 验证跨族及状态保存读回。
+- `tests/integration/test_modeling_interaction_blocks.py`、`test_modeling_graph.py`、`test_classic_interaction_models.py`：注意力/分块/图变体对照及中立完整模型；`test_classic_network_data.py`：来源、映射、有效域与统计的独立核查。
+- `tools/verification/classic_networks/reference_{features,spatial,interactions}.py`：独立参考；来源记录在前馈/交互参考模块和 `reference_spatial_sources.json` 中列版本、许可与本轮变体，不能把新参考重建称为完整上游论文复现。
+- 本批源码、真实十三组短训及独立wheel/Python/Task六案例已完成统一串行验收，具体设备与数值范围见专项记录。空间分支非训练证据见 `/Users/zonghui/work/project_simulation/dojo_train/classic_networks/acceptance/agent-b/`；本机绝对路径仅为证据导航，不进入可移植模型默认配置。
+
+经典网络组合边界补充测试：`tests/integration/test_classic_modeling_boundaries.py`（模块依赖方向、跨族共享FeedForward实际调用、公开子模块替换/注册/状态），及独立参考长轨迹的 `test_classic_matrix_validation.py`。来源与实际设备范围见 `.context/mvp/classic-networks-acceptance.md`，不按类存在推断数值验收。
+
+- `applications/aero_cfd/infer/anchor.py` 与 `applications/aero_cfd/post/progress.py`：合并推理的逐样本评价/保存分别交付进度，嵌套上下文恢复文件归属；圈定 `test_infer_stage.py` 的锚点入口及 `test_post_inference.py` 的失败账本，正式证据见 Task 通用化验收。
+
+
+## 算子与普通状态建模能力
+
+本批新增计算实现及圈定组件检查；真实数据统一矩阵、实际 wheel 和 Task 使用仍由主控验收。长期行为融合于 `docs/PRD/ai4e-core/abilities/PRD.md` 的数据、训练、推理及可组合建模章节，不新增平行能力正文。
+
+- `packages/ai4e-core/abilities/modeling/modules/branch_trunk.py`：`BranchTrunkReadout`，共享/逐样本查询和显式多输出分组；`models/deeponet.py`：实际组合公共 `FeedForward` 与读出，分支/主干/读出可替换。
+- `abilities/modeling/modules/spectral.py`：`SpectralConv/FourierBlock`，二维/三维实频谱及逐点支路，显式模态、FFT规范和激活；`stages/fourier.py`：`FourierStage` 有序组合；`models/fno.py`：可替换升维/谱阶段/读出与逐轴右补齐，不覆盖旧地热/时空谱模型。
+- `abilities/modeling/modules/polynomial.py`：常数/一次/二次多项式特征；`radial.py`：三次径向核；`reduced_basis.py`：固定加权降维表示及可微冻结解码；`covariance.py`：平方指数协方差和固定 Kriging 条件预测。
+- `abilities/modeling/models/{pod,rsm,rbf,kriging,lightgbm}.py`：完整普通状态模型，实际消费共享基/核/条件；LightGBM 按需调用官方引擎恢复原生模型文本，不要求其他模型安装 boosting 依赖。
+- `abilities/training/reduced_basis.py`：训练快照 POD 拟合；`algebraic.py`：最小二乘/RSM/RBF求解与显式诊断；`kriging.py`：固定条件求解和有界参数估计；`boosting.py`：官方 LightGBM 各目标拟合、原生接续及取消/截止，不伪造神经优化器语义。
+- `abilities/data/save/surrogate.py`：JSON结构与具名数组的原子整体保存/校验读回，普通状态及上下文内容摘要；`abilities/inference/callable_prediction.py`：普通数组/元组批预测、尾批、布局与有限值检查、缓冲副本保护。
+- `abilities/constraint/physical.py` 的既有 `residual_loss` 被 Darcy 应用复用；本批没有新增 PINN 网络类或全仓物理协议，准入条件与非负解语义归应用层。
+- 圈定测试：`tests/integration/test_operator_blocks.py`（前后向、谱模态与组件替换）、`test_operator_physical_loss.py`（Darcy物理尺度与梯度）、`test_algebraic_surrogates.py`（POD/RSM/RBF、独立数学参考及状态）、`test_statistical_surrogates.py`（Kriging/官方树后端及截止）、`test_surrogate_execution.py`（保存/批预测）。
+- 独立对照：`tools/verification/operator_surrogates/{reference_operators,reference_algebraic,reference_statistical}.py` 与 `sources.json`。代数 POD 是独立数学装配，不能声称完整上游训练工程复现；测试通过不替代统一真实矩阵。

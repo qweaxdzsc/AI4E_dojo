@@ -6,6 +6,8 @@
 
 历史数值验收按 `.context/mvp/` 原记录保留，当前入口不复制历史进度。全局架构唯一正文为 `docs/AI4E_Dojo_ARCHITECTURE (1).md`，本轮源码—功能—文档—测试核对及最终结果见 `.context/mvp/architecture-alignment-acceptance.md`。
 
+经典网络能力已按公开block、网络阶段及完整模型接入core，提供MLP/CNN/ResNet/U-Net/Transformer/GNN/RNN和三个重组案例；真实十三组合及安装进度见[专项验收](.context/mvp/classic-networks-acceptance.md)。本批不登记Web模型，不把短训视为论文或生产精度。
+
 ## 注意事项
 
 默认禁止 `uv sync`。不要为跑测试、改普通源码或“保险起见”重装环境。测试一律 `uv run --no-sync pytest <相关路径>`。
@@ -21,20 +23,31 @@
 
 ## 组件自由与稳定公开边界
 
+网络集成按[唯一架构第5.2节](docs/AI4E_Dojo_ARCHITECTURE%20%281%29.md#52-建模能力的组合尺度block网络阶段与完整架构)审查计算块、可复用网络阶段与完整架构，明确公共组件的实际复用、可替换位置及跨表示交接。网络阶段不等于运行阶段，不建立统一组件协议。经典网络本批[主计划](.cursor/plans/classic-networks-main.plan.md)及三份子计划的实际执行状态以[经典网络验收](.context/mvp/classic-networks-acceptance.md)为准，计划本身不作为已交付证据。
+
+DeepONet/FNO及POD/RSM/RBF/Kriging/LightGBM沿用建模组合尺度；拟合、普通预测批次与安全状态保存进入各自core能力。物理损失复用既有constraint，不新增PINN模型。五套Python/Task案例的真实矩阵与安装进度见[专项验收](.context/mvp/operator-surrogates-acceptance.md)，不登记Web模型。
+
 core 另提供可选 FLARE++ 注意力组件，普通张量显式调用，不默认替换已有模型，不表示平台或 GeoTransolver 已开放该后端。组件验收见 `.context/mvp/flare-attention-acceptance.md`。
 
 - 不建立全仓统一组件协议。普通函数/对象自行定义输入输出，recipe 或局部连接负责转换，application 负责领域绑定；只有选用特定业务步骤才承担其实际调用约定。
 - 稳定门面为 `ai4e_core.run` 的 launch、stage、TrainingRun、execute_operation、managed_run。配置加载器显式传入，不在通用运行器解释外流、模型或 PDE 参数。可选 configuration_adapter 仅在显式托管上下文生效，退出恢复。
 - 不读取框架私有会话字典或跨层内部实现。新官方模板的配置转换及模型专属参数归 contrib/application；自由研究脚本不需要使用官方配置树。
 - 平台操作按任务声明调用；源码摘要用于来源记录，新增能力文件或编辑连接不以模板全文/AST 不同拒绝。缺 operations 的旧副本只复用创建来源已有声明，显式空声明不回填；不迁移历史任务目录。
+- Task 的可选 `describe_task` 按配置与应用来源修订返回输入标签、阶段、共享输出和管理操作。资产沿用 kind/stage/name/semantics，缺标签不得匹配，多个候选须显式选择；复制、共享与输入捕获保留标签。科学检查、执行参数、结果解释、处理数据身份与清单转换归 application；Task 只保留路径、修订、状态、事务及带作用域身份的等值门禁。新运行、推理批次、评价和恢复固定入口及实际依赖来源；内容、动态资源或导入解析位置变化拒绝，新增无关能力文件允许。动态模块/资源由应用可选 SOURCE_DEPENDENCIES 声明，不冻结整个运行环境；历史来源覆盖不足明确不可用，不默认外流，也不回写历史补来源。
+- 结构图由 application 组装真实输入并调用 core modeling inspection，特定网络的阶段包装归 contrib application；Task worker 只交接 JSON 与固定引用，Vis 展示固定文件，不接收活网络。生成须恢复参数、缓冲区、模式及随机状态；失败回退旧完整文件。
+- 官方脚本识别和已核验摘要归 Server 官方目录；Task 只接受明确文件清单及原件修订执行备份替换。检查或执行不触发历史源码自动迁移。
 - 新外流 infer 负责预测，post 只读固定结果；历史公开导入保留薄门面，计算实现在 infer。组件中间值不强制 Artifact 化。
 - 改内部实现须运行固定用户源码基线及安装测试；不得同步修改基线摘要来通过测试。真正公开接口变更逐项记录参数、返回值、异常及迁移范围。
 
 ## 工作入口与阅读顺序
 
+设计或汇总Dojo与白板对照实验时，主控使用 [dojo-compare](.agents/skills/dojo-compare/SKILL.md)：按本次目标选择数据、基线和实验设计，确认真实训练/推理时间、独立会话隔离、隐藏测试及精度/编码成本/代码复用报告。它不固定数据集、模型或DOE方法，不注入实验组、不随研究指南导出；实验组仍仅获得协议指定的研究Skill和材料。制定计划不自动授权创建会话或训练。
+
 模型集成使用仓库 skill [dojo-integrate-model](.agents/skills/dojo-integrate-model/SKILL.md)，完整标准见 [模型集成目标与验收原则](docs/model-integration-goals.md)。Codex 可调用 `$dojo-integrate-model`；其他 Agent 可直接阅读同一 SKILL.md。先阅读 Dojo 框架、模型原仓库与论文，数据集、明确指标、对应源码三项齐备才考虑集成；原代码按论文设置复现通过后才正式迁移。已有记录按证据续接，技能调用不扩大本次授权范围。 阶段交付按 skill 追加[改进日志](.context/model-integration-learning.md)，区分事实错误与流程候选；后续更新遵循 skill 的三个部分，不把个案方法自动变成通用要求。
 
-一般研究使用 [dojo-research](.agents/skills/dojo-research/SKILL.md)，无 skill 环境从 `DOJO_AGENT_GUIDE.md` 进入同一 [Agent Help Center](docs/agent-help/index.md)。首屏按数据、几何采样、模型、损失、训练恢复、推理、评价、后处理、run/Task 九类能力直达教程；这些菜单从能力教程元数据生成。先选能力和接入深度：单个工具直接调用；已有研究代码保留模型与科学目标，优先用公开批次/损失连接复用训练；需要完整流程才复制 standalone 并物化 extension。调用前核对现行签名、输入输出、设备和数值/恢复语义，适配成本小且语义一致时优先复用，具体缺口允许自定义并说明。需要运行记录时 direct-core；有版本、资产、后台、停止、恢复或比较需求时再用同目录 Task。CLI 是便利包装，读取帮助或导入成功不能替代真实调用和产物读回证据。
+一般研究使用 [dojo-research](.agents/skills/dojo-research/SKILL.md)，无 skill 环境从 `DOJO_AGENT_GUIDE.md` 进入同一 [Agent Help Center](docs/agent-help/index.md)。完整新训练任务先选择并复制最接近的 standalone，参考 extension 时物化基案例；按 Dojo recipe 与训练框架改写，以本地用户组件和公开扩展点表达差异，不强制某个算法工具。只有网络源码不等于已有完整训练工程；成熟工程的局部修改和单工具请求保留直接接入。首屏九类能力菜单由教程元数据生成。调用前核对现行签名、输入输出、设备与数值/恢复语义，同时参考相关外部资料。recipe 表达阶段、参数和交接，算法与业务适配进入本地组件，不能把整段自写流程套入 launch 冒充框架复用。先 direct-core 实跑及产物读回，再按版本、资产、后台、停止、恢复或比较需求使用同目录 Task。CLI 是便利包装，读取帮助或导入成功不能替代真实调用证据。 改写按“框架与 Web 形成初案 → 检索能力更新计划 → 复核框架写法后实施并检查实际代码”推进；代码量分析仅为可选附属能力。
+
+案例发现先读清单`research`摘要，再进入README与阶段正文；可用`list_examples`的文本/标签过滤定位。复制后由`documentation.entry`进入本地说明，extension同时交付基案例和变体正文；离线Help包含由真实README生成的详情。Skill只补这一导航，不增加下一轮改进或选优/调度决策要求。两项局部变体见`tail_batch`与`research_state`，其流程证据与正式Web未验范围见`.context/mvp/framework-skill-evolution-acceptance.md`。
 
 每次工作按以下顺序阅读，当前用户指令优先级最高：
 
@@ -79,6 +92,8 @@ uv run pytest tests/integration/test_train_loop.py tests/integration/test_train_
 uv run pytest tests/integration/test_post_inference.py tests/integration/test_abupt_recipe.py tests/integration/test_post_mesh.py
 uv run pytest tests/integration/test_train_formal_two_epoch.py
 ```
+
+**Agent 帮助同步是每次改动的交付检查。** 每次修改均评估 Agent 使用文档影响；新增或改变公开能力、架构组合、参数/返回值、数据与状态语义、案例或扩展方式时，同步源码 Docstring、`docs/agent-help/` 的 API 与相关能力教程，并按发现需求更新 `DOJO_AGENT_GUIDE.md` 导航。仅内部实现变化且使用约定不变时可注明不适用，不为留痕机械改 Guide。API/索引/菜单由 `uv run --no-sync python tools/docs/build_agent_help.py --write` 生成，再以 `--check` 和圈定帮助测试核验；资源交付变化须验证真实 wheel 中的查询、离线导出和链接，不能只确认页面存在。详细用法集中在 Help Center，Guide/Skill 保持导航职责。
 
 ## 技术基线
 
@@ -220,7 +235,7 @@ PI-BSNet 文献参数验证：参考配置不得额外加入原目标没有的�
 
 模型设置进页（2026-09-17）：已保存参数随配置先出，不必等候选列表；`model-options` 只读官方 YAML 与预设目录，点选再描述目标默认值与能力，同任务短时复用。不把结构跟踪或全量核验准备产物当作列出下拉的前提。圈定 `test_web_stage_consistency.py`、`packages/ai4e-web/e2e/model-picker.spec.ts`。改 `ai4e-server` 后须重装该包，正式 8000 才出快目录。
 
-模型设置两档结构图（2026-09-18）：可视化模块按官方 TorchVista 参数一次写出阶段主干与阶段压缩块；网络公开编码器/几何块/物理块/解码/读出时，先按这些子模块收成阶段盒再出图，不跟踪正式 predict 里的校验算子。检查进程在案例检查取出网络后引用 viz 出图，core 不写 HTML、不设看图参数。页面两按钮切换已发布档，生成或载入时视窗只显示加载样式；历史单图不假切换。圈定 `tests/integration/test_algorithm_platform_contract.py`、`tests/integration/test_viz_model_graph.py`、`packages/ai4e-web/e2e/model-inspection.spec.ts`。2026-09-18 15:08 按当次授权重装 `ai4e-viz` 并只重启 8000（PID **5784**，5173 未动）；对照任务重新生成后阶段主干 17 节点与 E 一致，阶段压缩块见 encoder/物理块与 REPEAT，无 isfinite。证据 `.context/mvp/model-picker-acceptance.md`。
+模型设置两档结构图当前边界：application 读取真实输入、组装网络与显示参数，调用 core ability 一次写出阶段主干、阶段压缩块与来源。AB-UPT 阶段盒包装归 contrib，通用 ability 不猜模型属性，保护权重和随机流并负责失败清理；Task worker 不读取网络、不导入 Vis。页面切换已发布固定图，历史单图不假切换。圈定 `tests/integration/test_algorithm_platform_contract.py`、`tests/integration/test_viz_model_graph.py`、`packages/ai4e-web/e2e/model-inspection.spec.ts`。2026-09-18 的授权、节点与浏览器证据保留在 `.context/mvp/model-picker-acceptance.md`；本轮迁移及正式未验范围见 `.context/mvp/task-generalization-acceptance.md`。
 
 推理 VTK 与后处理对照（2026-09-17）：平台推理默认写出 VTK（锚点场名 `.prediction`/`.truth`，完整网格 `pred_`/`gt_`）；用户关闭导出须在清单、日志和页面写明原因。缺拓扑或点数对不上则该样本失败，原因进清单，整批不冒充全部成功。后处理结果文件并列平台数据集、训练 run 与推理批次，样本 ID 用 `param1/<设计号>`。圈定 `test_infer_vtk_identity.py`、`test_infer_stage.py`、`test_task_post_results.py`、`test_post_mesh.py`、`e2e/post-files.spec.ts`。正式 8000 须重装 `ai4e-core`/`ai4e-server`/`ai4e-contrib`/`ai4e-task` 并重启后才生效。源码圈定 133 项通过、2 项跳过，e2e 29 项通过。2026-09-17 23:50 已按当次授权重装并只重启 8000（PID 33633，5173 未动）；对照任务五页冒烟通过：全部 889、准备可见归一化副本、模型参数先出且点数不挡检查、推理仍报权重结构、后处理三根与「未写出VTK」。新默认网格因结构不对未新跑，历史关网格批次不回写。证据 `.context/mvp/post-workspace-acceptance.md`。
 

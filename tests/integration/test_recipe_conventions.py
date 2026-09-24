@@ -17,7 +17,9 @@ from ai4e_core.run.session import run_recipe
 
 def test_public_paths_overrides_and_invalid_inputs(tmp_path, monkeypatch):
     config = tmp_path / "config.yaml"
-    config.write_text("run_root: runs\ndata_root: data\npipeline:\n  stages: [train]\ninputs:\n  train:\n    preparation: prepared.json\n")
+    config.write_text(
+        "run_root: runs\ndata_root: data\npipeline:\n  stages: [train]\ninputs:\n  train:\n    preparation: prepared.json\n"
+    )
     monkeypatch.chdir(tmp_path.parent)
     value = load_recipe_config(config, ["inputs.train.resume=weights.pt"])
     assert value["inputs"]["train"]["preparation"] == str(tmp_path / "prepared.json")
@@ -25,7 +27,9 @@ def test_public_paths_overrides_and_invalid_inputs(tmp_path, monkeypatch):
     with pytest.raises(TypeError, match="路径或 null"):
         normalize_recipe_config({"inputs": {"train": {"resume": {"fluid": "a.pt"}}}}, base=tmp_path)
     with pytest.raises(ValueError, match="旧配置键"):
-        require_current_keys({"train": {"resume": None}, "inputs": {}}, {"train.resume": "inputs.train.resume"})
+        require_current_keys(
+            {"train": {"resume": None}, "inputs": {}}, {"train.resume": "inputs.train.resume"}
+        )
     with pytest.raises(ValueError, match="输入冲突"):
         resolve_input("a.json", "b.json", name="prepared")
 
@@ -33,8 +37,10 @@ def test_public_paths_overrides_and_invalid_inputs(tmp_path, monkeypatch):
 def test_inference_preparation_owns_source_without_mutating_training():
     from ai4e_core.applications.aero_cfd.infer.configuration import inference_parameters
 
-    cfg = {"infer": {"preparation": "chosen.json"},
-           "train": {"manifest": "other-stage.json", "preparation": "training.json"}}
+    cfg = {
+        "infer": {"preparation": "chosen.json"},
+        "train": {"manifest": "other-stage.json", "preparation": "training.json"},
+    }
     value = inference_parameters(cfg)
     assert value["train"]["manifest"] is None
     assert value["train"]["preparation"] == "chosen.json"
@@ -47,8 +53,9 @@ def test_imported_physical_manifest_overrides_selected_path(tmp_path):
     from ai4e_core.applications.aero_cfd.trainprep.physical import open_dataset
 
     prepared = tmp_path / "prepared.json"
-    prepared.write_text(json.dumps({"version": 1, "dataset": "fixed",
-                                    "manifest": str(tmp_path / "original.json")}))
+    prepared.write_text(
+        json.dumps({"version": 1, "dataset": "fixed", "manifest": str(tmp_path / "original.json")})
+    )
     view = SimpleNamespace(partitions={"train": ["s"]})
     data = open_dataset(
         {"train": {"manifest": str(tmp_path / "missing.json")}},
@@ -65,14 +72,17 @@ def test_stage_outputs_assets_metrics_and_readback(tmp_path):
     code.mkdir()
     script = code / "pipeline.py"
     script.write_text("# provenance\n")
-    cfg = {"run_root": str(tmp_path / "runs"), "data_root": str(tmp_path / "data"),
-           "pipeline": {"stages": ["infer", "post"]}}
+    cfg = {
+        "run_root": str(tmp_path / "runs"),
+        "data_root": str(tmp_path / "data"),
+        "pipeline": {"stages": ["infer", "post"]},
+    }
     captured = {}
 
     def infer(cfg):
         session = run.TrainingRun()
         path = session.output_dir("infer") / "prediction.json"
-        path.write_text('[3, 4]')
+        path.write_text("[3, 4]")
         session.record_asset("prediction", path, kind="other", stage="infer")
         return path
 
@@ -80,12 +90,21 @@ def test_stage_outputs_assets_metrics_and_readback(tmp_path):
         session = run.TrainingRun()
         assert json.loads(source.read_text()) == [3, 4]
         path = session.output_dir("post") / "magnitude.json"
-        path.write_text('5')
+        path.write_text("5")
         session.record_asset("magnitude", path, kind="other", stage="post", dependencies=[source])
-        session.record_metric("magnitude", 5.0, stage="post", assets=[path], semantics={
-            "field": "velocity", "unit": "m/s", "split": "test", "statistic": "norm",
-            "data_identity": "fixed_sample_0",
-        })
+        session.record_metric(
+            "magnitude",
+            5.0,
+            stage="post",
+            assets=[path],
+            semantics={
+                "field": "velocity",
+                "unit": "m/s",
+                "split": "test",
+                "statistic": "norm",
+                "data_identity": "fixed_sample_0",
+            },
+        )
         captured["run"] = session.run_dir
         captured["data"] = session.data_dir
 
@@ -117,6 +136,7 @@ def test_missing_stage_is_not_research_completion(tmp_path):
 
 def test_metric_requires_semantics_and_real_asset(tmp_path):
     from ai4e_core.run.writer import RunWriter
+
     writer = RunWriter.create(tmp_path)
     path = tmp_path / "data.json"
     path.write_text("{}")
@@ -135,15 +155,34 @@ def test_aero_public_inputs_preserve_domain_defaults(tmp_path):
     )
 
     root = Path(__file__).resolve().parents[2]
-    for path in (root / "examples/aero_cfd").glob("*/config.yaml"):
-        config = load_configuration(path)
-        domain = application_parameters(config)
-        assert domain["model"]["initial_weights"] is None
-        assert "statistics" not in domain["normalization"]
-        if "shapenet" in path.parent.name:
-            assert domain["dataset"]["partition"] == "official"
-            assert config.inputs.trainprep.partition is None
-    user = OmegaConf.to_container(config, resolve=True)
+    errors = []
+    loaded = []
+    for path in sorted((root / "examples/aero_cfd").glob("*/config.yaml")):
+        try:
+            public = OmegaConf.load(path)
+            assert Path(public.data_root).parts[:2] == ("..", "data")
+            assert Path(public.data_root).name == path.parent.name
+            assert Path(public.run_root).parts[:2] == ("..", "runs")
+            assert Path(public.run_root).name == path.parent.name
+            assert Path(public.inputs.rawprep.source).parts[:2] == ("..", "inputs")
+            assert Path(public.inputs.trainprep.dataset).parts[:2] == ("..", "datasets")
+
+            config = load_configuration(path)
+            domain = application_parameters(config)
+            assert domain["model"]["initial_weights"] is None
+            assert "statistics" not in domain["normalization"]
+            if "seed" in public.infer:
+                assert config.infer.seed == public.infer.seed
+            if "shapenet" in path.parent.name:
+                assert domain["dataset"]["partition"] == "official"
+                assert config.inputs.trainprep.partition is None
+            loaded.append(config)
+        except Exception as exc:  # noqa: BLE001 - 汇总全部案例，避免首错隐藏配置漂移。
+            errors.append(f"{path.parent.name}: {type(exc).__name__}: {exc}")
+    assert not errors, "\n".join(errors)
+    assert loaded
+
+    user = OmegaConf.to_container(loaded[-1], resolve=True)
     user["dataset"]["partitions"] = {"train": ["a"], "test": ["b"]}
     user["inputs"]["trainprep"]["partition"] = str(tmp_path / "partition.yaml")
     with pytest.raises(ValueError, match="不能同时"):
@@ -160,7 +199,9 @@ def test_asset_dependency_content_is_required(tmp_path):
     array = tmp_path / "array.bin"
     array.write_bytes(b"original")
     writer.record_asset("dataset", manifest, kind="dataset", stage="rawprep", dependencies=[array])
-    item = json.loads((writer.run_dir / "artifacts/assets.json").read_text())["items"]["rawprep/dataset"]
+    item = json.loads((writer.run_dir / "artifacts/assets.json").read_text())["items"][
+        "rawprep/dataset"
+    ]
     validate_asset_content(item)
     array.write_bytes(b"changed")
     with pytest.raises(ValueError, match="asset_content_changed"):
@@ -175,5 +216,12 @@ def test_coupled_iteration_slice_rejects_invalid_before_reading_data(value):
     from ai4e_core.applications.coupled_physics.train import train_field
 
     with pytest.raises(ValueError, match="updates_per_run"):
-        train_field({"updates": 3, "batch_size": 1, "updates_per_run": value}, "/missing",
-                    field="field", construct=None, reader=None, objective=None, session=None)
+        train_field(
+            {"updates": 3, "batch_size": 1, "updates_per_run": value},
+            "/missing",
+            field="field",
+            construct=None,
+            reader=None,
+            objective=None,
+            session=None,
+        )

@@ -68,6 +68,8 @@ test("正式模型检查操作到沙箱图形渲染", async ({ page }, info) => 
     .toBeGreaterThan(0);
   await expect(page.getByRole("button", { name: "阶段主干" })).toBeVisible();
   await expect(page.getByRole("button", { name: "阶段压缩块" })).toBeVisible();
+  const trunkHtml = await iframe.getAttribute("srcdoc");
+  await page.screenshot({ path: info.outputPath("real-torchvista-trunk.png"), fullPage: true });
   const posts: string[] = [];
   page.on("request", (request) => {
     if (
@@ -77,8 +79,8 @@ test("正式模型检查操作到沙箱图形渲染", async ({ page }, info) => 
       posts.push(request.url());
   });
   await page.getByRole("button", { name: "阶段压缩块" }).click();
-  await expect(page.locator('iframe[title="真实模型结构"]')).toHaveCount(0);
-  await expect(page.getByText("正在载入结构图…")).toBeVisible();
+  // 正式本机文件可能在下一次断言前载入；核对固定内容确实切换，不依赖瞬时加载态。
+  await expect.poll(() => iframe.getAttribute("srcdoc")).not.toBe(trunkHtml);
   await expect(iframe).toBeVisible({ timeout: 30000 });
   await expect(content.locator("svg").first()).toBeVisible({ timeout: 30000 });
   expect(posts).toEqual([]);

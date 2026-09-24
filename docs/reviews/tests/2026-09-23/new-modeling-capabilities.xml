@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="8" failures="0" skipped="0" tests="8" time="5.128" timestamp="2026-09-23T11:00:37.794361+08:00" hostname="zonghuideMacBook-Pro.local"><testcase classname="" name="tests.integration.test_algebraic_surrogates" time="0.000"><error message="collection failure">ImportError while importing test module '/Users/zonghui/work/new_code_project/AI4E_Dojo/tests/integration/test_algebraic_surrogates.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_algebraic_surrogates.py:10: in &lt;module&gt;
+    from ai4e_core.abilities.modeling.models.pod import POD
+E   ModuleNotFoundError: No module named 'ai4e_core.abilities.modeling.models.pod'</error></testcase><testcase classname="" name="tests.integration.test_operator_blocks" time="0.000"><error message="collection failure">ImportError while importing test module '/Users/zonghui/work/new_code_project/AI4E_Dojo/tests/integration/test_operator_blocks.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_operator_blocks.py:16: in &lt;module&gt;
+    from ai4e_core.abilities.modeling.models.deeponet import DeepONet
+E   ModuleNotFoundError: No module named 'ai4e_core.abilities.modeling.models.deeponet'</error></testcase><testcase classname="" name="tests.integration.test_operator_physical_loss" time="0.000"><error message="collection failure">ImportError while importing test module '/Users/zonghui/work/new_code_project/AI4E_Dojo/tests/integration/test_operator_physical_loss.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_operator_physical_loss.py:6: in &lt;module&gt;
+    from ai4e_contrib.application.operator_learning.binding import OperatorField, build_network
+E   ModuleNotFoundError: No module named 'ai4e_contrib.application.operator_learning'</error></testcase><testcase classname="" name="tests.integration.test_operator_surrogate_data" time="0.000"><error message="collection failure">ImportError while importing test module '/Users/zonghui/work/new_code_project/AI4E_Dojo/tests/integration/test_operator_surrogate_data.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_operator_surrogate_data.py:15: in &lt;module&gt;
+    from ai4e_contrib.application.surrogate_modeling import preparation
+E   ModuleNotFoundError: No module named 'ai4e_contrib.application.surrogate_modeling'</error></testcase><testcase classname="" name="tests.integration.test_operator_surrogate_recipe" time="0.000"><error message="collection failure">ImportError while importing test module '/Users/zonghui/work/new_code_project/AI4E_Dojo/tests/integration/test_operator_surrogate_recipe.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_operator_surrogate_recipe.py:13: in &lt;module&gt;
+    from ai4e_contrib.application.operator_learning.binding import construct
+E   ModuleNotFoundError: No module named 'ai4e_contrib.application.operator_learning'</error></testcase><testcase classname="" name="tests.integration.test_statistical_surrogates" time="0.000"><error message="collection failure">ImportError while importing test module '/Users/zonghui/work/new_code_project/AI4E_Dojo/tests/integration/test_statistical_surrogates.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_statistical_surrogates.py:8: in &lt;module&gt;
+    from ai4e_core.abilities.modeling.models.kriging import Kriging
+E   ModuleNotFoundError: No module named 'ai4e_core.abilities.modeling.models.kriging'</error></testcase><testcase classname="" name="tests.integration.test_surrogate_execution" time="0.000"><error message="collection failure">ImportError while importing test module '/Users/zonghui/work/new_code_project/AI4E_Dojo/tests/integration/test_surrogate_execution.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_surrogate_execution.py:9: in &lt;module&gt;
+    from ai4e_core.abilities.data.save.surrogate import read_state, save_state
+E   ModuleNotFoundError: No module named 'ai4e_core.abilities.data.save.surrogate'</error></testcase><testcase classname="" name="tests.integration.test_surrogate_source_identity" time="0.000"><error message="collection failure">ImportError while importing test module '/Users/zonghui/work/new_code_project/AI4E_Dojo/tests/integration/test_surrogate_source_identity.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.12/3.12.14/Frameworks/Python.framework/Versions/3.12/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_surrogate_source_identity.py:15: in &lt;module&gt;
+    from ai4e_contrib.application.surrogate_modeling.preparation import prepare_nasa, read_prepared
+E   ModuleNotFoundError: No module named 'ai4e_contrib.application.surrogate_modeling'</error></testcase></testsuite></testsuites>

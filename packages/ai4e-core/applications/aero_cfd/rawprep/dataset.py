@@ -261,6 +261,7 @@ def publish_dataset(results: dict, *, statistics: StatisticsResult | None = None
             if session is not None:
                 path = Path(results["output"]["root"]) / "manifest.json"
                 session.record_asset("dataset", path, kind="dataset", stage="rawprep",
+                         semantics={"type": "aero.physical", "format_version": 1},
                                      dependencies=[path.parent])
                 session.report({"manifest": str(path), "split_counts": {
                     name: len(samples) for name, samples in statistics.manifest["partitions"].items()

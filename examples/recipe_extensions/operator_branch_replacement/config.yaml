@@ -1,0 +1,62 @@
+seed: 42
+run_root: ../outputs/operator_branch_replacement/runs
+data_root: ../outputs/operator_branch_replacement/data
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - infer
+  - post
+inputs:
+  rawprep:
+    source: null
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+    resume: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+dataset:
+  case: shapenet_volume
+  train_count: 8
+  test_count: 2
+  grid_size: 32
+model:
+  family: deeponet
+  spatial_dims: 3
+  in_channels: 5
+  out_channels: 3
+  parameters:
+    sensor_stride: 8
+    latent_dim: 16
+    branch_hidden:
+    - 32
+    - 32
+    trunk_hidden:
+    - 32
+    - 32
+  grid_shape:
+  - 32
+  - 32
+  - 32
+  history: 1
+train:
+  updates: 100
+  batch_size: 1
+  lr: 0.001
+  device: cpu
+  seconds: 9000
+  checkpoint_every: 20
+  sample_points: null
+  physical_weight: 0.0
+infer:
+  device: cpu
+components:
+  model: branch_replacement.build_model
+  derived: user_outputs.derive
+  consume: user_outputs.consume

@@ -1,14 +1,12 @@
 """独立推理批次协调器；计算始终由现有冻结运行执行。"""
 
 import fcntl
-import json
 import sys
 import time
 from pathlib import Path
 
 from ..storage.files import read_json, write_json
 from ..storage.layout import task_dir
-from ..templates.materialize import read_entry
 from .checkpoints import file_digest, freeze_checkpoint
 from .execution import start_captured_run, stop_run, submit_run
 from .inference import TERMINAL, _folder, list_inference_batches
@@ -16,29 +14,16 @@ from .records import get_run, list_runs
 
 
 def _progress(run: dict) -> dict:
-    """读取 writer 已提交账本，新旧推理均不从日志估算样本数。"""
-    root = Path(run["run_dir"]) / "artifacts"
-    for name in ("inference-progress.json", "infer-progress.json", "post-progress.json"):
-        path = root / name
-        if path.is_file():
-            return read_json(path)
-    return {}
+    """只读取应用交付的通用管理进度，不解释科学分支。"""
+    path = Path(run["run_dir"]) / "artifacts/task-progress.json"
+    return read_json(path) if path.is_file() else {"completed": None}
 
 
-def _completed(progress: dict) -> int:
-    if "completed" in progress:
-        return int(progress["completed"])
-    ops = progress.get("operations", {})
-    # 保存后才交付；无保存分支时按实际预测完成计数。
-    record = next(
-        (
-            ops[k]
-            for k in ("save", "evaluation", "predictions", "prediction")
-            if k in ops and ops[k].get("status") != "skipped"
-        ),
-        {},
-    )
-    return int(record.get("completed", 0))
+def _completed(progress: dict):
+    value = progress.get("completed")
+    if value is not None and (type(value) is not int or value < 0):
+        raise ValueError("invalid_execution_progress")
+    return value
 
 
 def coordinate(project: Path, task_id: str, identity: str) -> None:
@@ -57,15 +42,14 @@ def coordinate(project: Path, task_id: str, identity: str) -> None:
     request = read_json(folder / "request.json")
     selection = request["request"]
 
-    groups = request.get("groups") or [
-        {"split": selection.get("split", "test"), "samples": selection.get("samples", [])}
-    ]
-    work = request.get("retry_children") or [
-        {"checkpoint_id": cp["id"], **group} for cp in request["checkpoints"] for group in groups
-    ]
+    from .checkpoints import inspect_inference
+    from .operation_sources import operation_context, verify_source
+
+    work = request.get("execution_plan", [])
 
     def publish():
-        value["completed"] = sum(_completed(c.get("progress", {})) for c in value["children"])
+        counts = [_completed(c.get("progress", {})) for c in value["children"]]
+        value["completed"] = sum(counts) if all(n is not None for n in counts) else None
         value["finished_subruns"] = sum(c["status"] == "succeeded" for c in value["children"])
         value["finished_checkpoints"] = sum(
             all(
@@ -84,6 +68,14 @@ def coordinate(project: Path, task_id: str, identity: str) -> None:
 
     task_lock = None
     try:
+        from ai4e_spec.artifacts.task_operations import validate_execution_plan
+
+        context = operation_context(project, task_id, batch_id=identity)
+        verify_source(context["source"], context["recipe"])
+        if not work:
+            work = validate_execution_plan(
+                inspect_inference("plan_execution", context=context, request=request)
+            )
         if len(value["children"]) < len(work):
             for checkpoint in request["checkpoints"]:
                 if canceled():
@@ -103,43 +95,26 @@ def coordinate(project: Path, task_id: str, identity: str) -> None:
                 write_json(folder / "request.json", request)
                 publish()
             code = folder / "code"
-            stage = "infer"
-            entry = read_entry(code)
-            declared = entry.get("inputs", {})
-            for index, unit in enumerate(work):
+            work = validate_execution_plan(
+                inspect_inference("plan_execution", context=context, request=request)
+            )
+            request["execution_plan"] = work
+            write_json(folder / "request.json", request)
+            for unit in work:
                 checkpoint = next(
                     c for c in request["checkpoints"] if c["id"] == unit["checkpoint_id"]
                 )
-                if any(c["id"] == str(index) for c in value["children"]):
+                if any(c["id"] == unit["id"] for c in value["children"]):
                     continue
-                params = {
-                    **selection["options"],
-                    "samples": unit["samples"],
-                    "split": unit["split"],
-                    **{k: selection[k] for k in ("fields", "metrics") if k in selection},
-                }
-                overrides = ["pipeline.stages=" + json.dumps([stage])]
-                overrides += [stage + "." + k + "=" + json.dumps(v) for k, v in params.items()]
-                overrides += [
-                    "inputs.infer.preparation=" + json.dumps(checkpoint["preparation"]["path"]),
-                    "inputs.infer.checkpoint=" + json.dumps(checkpoint["fixed"]["path"]),
-                    "infer.device=" + json.dumps(selection["device"]),
-                ]
-                keys = sorted(
-                    set(declared)
-                    & {
-                        "inputs.infer.preparation",
-                        "inputs.infer.checkpoint",
-                    }
-                )
                 run = submit_run(
                     project,
                     task_id,
-                    overrides=overrides,
+                    overrides=unit["overrides"],
                     _code=code,
-                    idempotency_key="inference:" + identity + ":" + str(index),
+                    _application_source=context["source"],
+                    idempotency_key="inference:" + identity + ":" + unit["id"],
                     start=False,
-                    input_keys=keys,
+                    input_keys=unit["input_keys"],
                     metadata={
                         "purpose": "inference",
                         "split": unit["split"],
@@ -151,13 +126,13 @@ def coordinate(project: Path, task_id: str, identity: str) -> None:
                 )
                 value["children"].append(
                     {
-                        "id": str(index),
+                        "id": unit["id"],
                         "checkpoint": checkpoint,
                         "split": unit["split"],
                         "samples": unit["samples"],
                         "run_id": run["id"],
                         "status": "queued",
-                        "progress": {},
+                        "progress": {"completed": 0},
                         "error": None,
                     }
                 )

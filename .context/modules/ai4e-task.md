@@ -8,7 +8,7 @@ cli/projects/tasks/versions/templates/storage 六类功能；任务运行、版�
 - `packages/ai4e-task/tasks/query.py`：日志/离线导入/阶段状态，保留记录查询公开导出。
 - `packages/ai4e-task/tasks/worker.py`：执行捕获脚本及显式配置适配。
 - `packages/ai4e-task/tasks/post_metrics_worker.py`：加载任务评价/导出连接；由 run 管运行外围。
-- `packages/ai4e-task/tasks/official_scripts.py`：只替换摘要已核验的旧官方包装；`verified_old_sources` 列出可迁文件，现行模板和用户改过的脚本不进入。
+- `packages/ai4e-task/storage/script_replacement.py`：按明确文件清单核验修订、备份、替换与回退；官方识别归 Server 目录。
 - `packages/ai4e-task/templates/materialize.py`：`recipe_entry` 按当前 `config.yaml` 投影公共 `inputs.*`，不使用创建时冻结的旧键。
 - `packages/ai4e-task/tasks/configuration.py`：保存成功后刷新任务入口，去掉 `dataset.root` / `train.manifest` 旧快照。
 - 本轮文件与回归清单：`.context/mvp/architecture-alignment-acceptance.md`。
@@ -41,7 +41,7 @@ cli/projects/tasks/versions/templates/storage 六类功能；任务运行、版�
 
 - `cli/main.py` 注册命令；`project/task/version/template.py` 转换各类命令；`output.py` 输出文本／JSON。
 - `projects/project.py` 创建、打开、清理中断项目；`shared.py` 共享引用及来源；`models.py` 项目类型。
-- `tasks/create.py` 编排 new/fork；`assets.py` 核验及复制，共享资产 `kind` 含 `model_preset`；`query.py` 运行查询／导入；`execution.py` 调度；`local.py` 进程身份；`worker.py` 执行；`official_scripts.py` 只替换核验摘要的旧包装；`models.py` 记录类型。
+- `tasks/create.py` 编排 new/fork；`assets.py` 核验及复制，共享资产 `kind` 含 `model_preset`；`query.py` 运行查询／导入；`execution.py` 调度；`local.py` 进程身份；`worker.py` 执行；`storage/script_replacement.py` 执行明确清单事务；`models.py` 记录类型。
 - `versions/records.py` 正式版本校验；`tree.py` 子树；`compare.py` 三类差异；`models.py` 版本类型。
 - `templates/catalog.py` 模板登记；`materialize.py` 展开、`recipe_entry` 与输入定位；`models.py` 入口类型。
 - `storage/database.py` SQLite；`records.py` 持久化及幂等；`layout.py` 路径门禁；`files.py` 原子 JSON 与复制；`snapshots.py` 摘要。
@@ -62,7 +62,7 @@ versions/compare.py 对全部已声明 quantity_config 条件检查缺失；新�
 
 ## 平台阶段交接
 
-- `tasks/inspections.py`、`tasks/inspection_worker.py`、`tasks/operations.py`：固定配置的公开检查及独立算法进程；失败文案保留 KeyError 字段名；入口由 `components.application` 指定，缺失时该操作不可用，不从旧描述或创建快照回填；不猜测领域。`trace_model` 在案例检查取出网络后引用可视化模块出两档结构图。
+- `tasks/inspections.py`、`tasks/inspection_worker.py`、`tasks/operations.py`：固定配置的公开检查及独立算法进程；失败文案保留 KeyError 字段名；入口由 `components.application` 指定，缺失时该操作不可用，不从旧描述或创建快照回填；不猜测领域。结构图由 application 调用 core ability；worker 只返回固定文件描述。
 - `tasks/artifacts.py`：成功正式运行的物理清单、准备记录和检查点候选；停止/失败正式运行仅开放已提交的训练恢复检查点，排除试跑与未登记残留。可见根内文件即可，不限项目相对路径。
 - `tasks/execution.py`：事务内核对预期配置修订，管理记录保存正式或试跑模式。
 
@@ -111,7 +111,7 @@ tasks/rawprep.py 提供 describe_rawprep、initialize_rawprep、validate_rawprep
 
 - `tasks/post_results.py`：评价目录只读推理清单；`list_post_result_files` 按层列举本任务平台数据集、推理固定结果与训练运行输出文件夹。有写出则展开 `data_dir` 的预测、网格、导出；无写出仍保留「训练运行 ·」短号文件夹并说明空态。推理样本缺网格时列出「未写出VTK」原因。不列举检查点、日志、原始处理或数据准备副本；提交评价时 `freeze_result_item` 才做内容修订。不读数组。
 - `tasks/post_metrics.py`：公开提交、查询、取消、幂等及导出；`post_metrics_worker.py`：独立core调用。
-- `tasks/inference_inspection.py` 扩展指标目录和固定修订的张量头部检查，`__init__.py` 导出公开门面。
+- 显式 application 解释固定修订的结果字段，无上下文指标目录使用 core 通用能力，`__init__.py` 导出公开门面。
 - task/tasks及storage PRD记录所有权；圈定 `test_task_post_results.py`、`test_task_post_metrics.py`。
 
 验收导航：`.context/mvp/post-workspace-acceptance.md`。
@@ -149,11 +149,11 @@ WDNO公共约定使用方：直接发现pipeline.py/config.yaml，阶段输入�
 
 - `tools/migration/recipe_conventions/configuration.py`：离线公共路径转换。
 - `tools/migration/recipe_conventions/transaction.py`：逐文件候选、原件备份、内容漂移检查、原子目录切换及回滚；只在运行器停止后显式应用。
-- `tasks/official_scripts.py`：只替换摘要已核验的 train/trainprep/infer/post/rawprep 包装；无核验摘要则不调用迁移。
+- `storage/script_replacement.py`：只接受明确文件与原件修订进行备份替换；官方识别在 Server。
 - `tasks/artifacts.py` 与 `tasks/assets.py`：公共资产及全部依赖内容校验；缺索引只失去发现，损坏不能作为可用输入。
 - 验收入口：`../mvp/recipe-task-conventions-acceptance.md`；`test_recipe_migration.py`、`test_recipe_conventions.py`、`test_task_convention_execution.py`。
 
-公共数组资产：`tasks/assets.py` 的 `indexed_asset/copy_bundle` 与 `projects/shared.py` 保留发布者声明的自包含目录，复制共享和fork时原样复制科学文件、重定位管理引用。`tests/integration/test_task_array_bundles.py` 验证删除原件、移动项目和篡改拒绝。`tasks/official_scripts.py` 的阶段事务与平台同案例选择由 `test_task_configuration.py` 覆盖故障恢复与模型差异。
+公共数组资产：`tasks/assets.py` 的 `indexed_asset/copy_bundle` 与 `projects/shared.py` 保留发布者声明的自包含目录，复制共享和fork时原样复制科学文件、重定位管理引用。`tests/integration/test_task_array_bundles.py` 验证删除原件、移动项目和篡改拒绝。`storage/script_replacement.py` 的阶段事务与平台同案例选择由 `test_task_configuration.py` 覆盖故障恢复与模型差异。
 
 ## WDNO最新公共约定补验（2026-09-17）
 
@@ -161,7 +161,7 @@ WDNO使用现有公开new/fork/submit/resume/compare和CLI；task_management.py�
 
 ## 安装资源与案例门面
 
-- `templates/resources.py`：清单读取、standalone 检查/复制、extension base-plus-overlay 物化、provenance、Agent Help Center 检索/读取/导出、guide/skill 导出、源码定位和显式 smoke 数据生成；除 smoke 数据函数外不 import 案例或训练栈。
+- `templates/resources.py`：清单读取、standalone 检查/复制、extension base-plus-overlay 物化、provenance、Agent Help Center 检索/读取/导出、guide/skill 导出、源码定位和显式 smoke 数据生成；包内说明资源使用稳定绝对导入，使该公共资源文件也可按文件路径独立探测；除 smoke 数据函数外不 import 案例或训练栈。
 - `cli/resources.py`：`guide search/topic/symbol/export`、`source`、`example list/copy/check/smoke-data create` 的薄解析层；CLI 不是研究入口。
 - `build_hook.py`：把清单允许的 examples、guide、skill 和完整 `docs/agent-help` 构建副本收入 wheel，排除 recipes、.context、缓存和开发路径。
 - `case-manifest.json`：仅有 standalone/extension 两类，verification 是证据字段，不是发布状态。
@@ -171,3 +171,25 @@ WDNO使用现有公开new/fork/submit/resume/compare和CLI；task_management.py�
 - `tasks/assets.py`：输入槽改绑后重新匹配当前共享资产，保留新准备的依赖闭包及 bundle；覆盖 `test_task_assets.py::test_rebound_shared_bundle_survives_fork`，GeoTransolver 真实复制见 `.context/mvp/geotransolver-acceptance.md`。
 
 - `docs/agent-help/capabilities/`：九类能力的输入输出、真实调用例子和边界；教程元数据生成 skill/GUIDE/帮助首页菜单。`tests/integration/test_agent_capabilities.py` 覆盖链接、符号、九例实跑、查询及离线导出；验收见 `.context/mvp/agent-capabilities-acceptance.md`。
+
+## Task 通用化交接（实施中）
+
+- `tasks/descriptions.py`：可选描述缓存与输入/阶段/输出投影；`operation_sources.py`：显式来源捕获、验证、隔离调用及历史上下文。
+- `tasks/asset_matching.py`：类型敏感的标签条件匹配；`assets.py` 保留复制/共享/捕获标签，冲突拒绝。
+- `storage/asset_transfer.py`：应用提供复制与新文档清单，Task 核验文件及目标范围；`script_replacement.py`：明确源码清单的备份、修订检查和回退。
+- `projects/dataset_migration.py`：显式上下文的历史迁移事务，领域识别与清单转换交给 application；本轮未执行历史迁移。
+- `tasks/inspection_worker.py`：固定入口与严格 JSON 交接，不读取网络，不导入 Vis。
+
+公开接口变化、圈定测试与未验范围见 [本轮验收](../mvp/task-generalization-acceptance.md)，功能正文更新既有对应 PRD。
+
+## 案例研究说明与物化正文
+
+`templates/resources.py`提供query/data_form/training_pattern可选过滤，`templates/example_docs.py`交付带来源摘要的.dojo-docs基案例/变体正文，根README及脚本保留字节。`tools/docs/build_agent_help.py`由清单摘要与真实README生成可导出正文。使用说明见`docs/agent-help/workflows/case-discovery.md`；测试`test_example_discovery.py`，安装和恢复范围见框架Skill验收。
+
+应用依赖闭环：`tasks/source_dependencies.py` 在隔离进程解析静态依赖与 SOURCE_DEPENDENCIES；`operation_sources.py` 记录版本和解析身份；`descriptions.py`、`rawprep.py` 按完整来源修订缓存，`execution.py` 比较固定依赖。反例见 `tests/integration/test_task_source_dependencies.py`，状态见 Task 通用化验收。
+
+`tasks/configuration.py::replace_configuration` 新增可选 `script_replacements`：明确文件及原件修订与完整配置一起提交，保留备份并在失败时恢复。返回值保持 config/revision；新增错误为原件修订冲突及非 Python 文件拒绝。测试 `test_task_configuration.py` 覆盖中途写入失败回退。
+
+`operation_sources.invoke_source` 的运行交接剔除内嵌 summary/lineage，应用按 run_dir 读取固定原件；防止未评价的非有限占位阻断检查点目录、固定结果与进度读取。反例见 `test_task_descriptions.py::test_run_handoff_keeps_scientific_summary_in_fixed_file`。
+
+- 基础能力帮助补齐：`docs/agent-help/capabilities/{model,training,inference,data,loss}.md` 连接经典/算子/传统模型的组合尺度与拟合、预测、状态、物理约束 API；测试沿用 `test_agent_capabilities.py`，当前证据见 `.context/mvp/foundational-agent-help-acceptance.md`。

@@ -142,7 +142,7 @@ print(signature(ManifestIndex.content_digest))
 ### 源码位置
 
 - 模块：`ai4e_core.abilities.data.source.manifest`
-- 仓库相对路径：`packages/ai4e-core/abilities/data/source/manifest.py:146`
+- 仓库相对路径：`packages/ai4e-core/abilities/data/source/manifest.py:153`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -216,7 +216,7 @@ print(signature(ManifestIndex.describe))
 ### 源码位置
 
 - 模块：`ai4e_core.abilities.data.source.manifest`
-- 仓库相对路径：`packages/ai4e-core/abilities/data/source/manifest.py:142`
+- 仓库相对路径：`packages/ai4e-core/abilities/data/source/manifest.py:149`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -290,12 +290,12 @@ print(signature(ManifestIndex.read))
 ### Recipe 与案例
 
 - Recipe：`aero_cfd`, `geotransolver/bumper_beam`, `geotransolver/darcy`, `geotransolver/shapenet_car`, `pcno_cylinder`, `wdno`
-- 案例：`aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_geotransolver`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `geotransolver.bumper_beam`, `geotransolver.darcy`, `pcno.double_cylinder`, `recipe_extensions.field_mapping`, `recipe_extensions.free_wiring`, `recipe_extensions.physical_visualization`, `recipe_extensions.sampling`, `recipe_extensions.wdno`, `wdno.burgers_base`
+- 案例：`aero_cfd.shapenet_car_abupt`, `aero_cfd.shapenet_car_geotransolver`, `aero_cfd.shapenet_car_meshgraphnet`, `aero_cfd.shapenet_car_transolver3_surface`, `aero_cfd.shapenet_car_transolver3_volume`, `geotransolver.bumper_beam`, `geotransolver.darcy`, `pcno.double_cylinder`, `recipe_extensions.field_mapping`, `recipe_extensions.free_wiring`, `recipe_extensions.physical_visualization`, `recipe_extensions.research_state`, `recipe_extensions.sampling`, `recipe_extensions.wdno`, `wdno.burgers_base`
 
 ### 源码位置
 
 - 模块：`ai4e_core.abilities.data.source.manifest`
-- 仓库相对路径：`packages/ai4e-core/abilities/data/source/manifest.py:76`
+- 仓库相对路径：`packages/ai4e-core/abilities/data/source/manifest.py:83`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -316,7 +316,11 @@ API 可导入或最小检查通过只证明符号存在，不证明组件兼容�
 
 ### 用途
 
-按样本名重挂分片；张量路径不变，空分片不进入索引。
+按样本名确定性重挂分片；张量路径不变，空分片不进入索引。
+
+目标分片优先使用同名来源；``eval`` 与历史 ``validation`` 互为
+别名。没有精确来源时只允许唯一候选跨分片移动，避免同名多来源
+因清单顺序不同而静默选错物理样本。
 
 ### 导入与签名
 
@@ -452,7 +456,7 @@ print(signature(ManifestIndex.resolve_asset))
 ### 源码位置
 
 - 模块：`ai4e_core.abilities.data.source.manifest`
-- 仓库相对路径：`packages/ai4e-core/abilities/data/source/manifest.py:119`
+- 仓库相对路径：`packages/ai4e-core/abilities/data/source/manifest.py:126`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API

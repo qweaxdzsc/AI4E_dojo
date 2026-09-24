@@ -22,7 +22,13 @@ def export_inference(project, task_id, batch_id, request):
         raise ValueError("inference_metrics_not_available")
     name = uuid4().hex + "." + request["format"]
     path = task_dir(project, task_id) / "data/inference_exports" / batch_id / name
-    result = inspect_inference("export", arguments={"value": value, "path": str(path), **request})
+    from .operation_sources import operation_context
+
+    result = inspect_inference(
+        "export",
+        context=operation_context(project, task_id, batch_id=batch_id),
+        arguments={"value": value, "path": str(path), **request},
+    )
     receipt = {
         **result,
         "name": name,

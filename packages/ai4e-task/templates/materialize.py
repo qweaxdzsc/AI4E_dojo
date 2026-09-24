@@ -8,8 +8,10 @@ from ..storage.snapshots import snapshot
 def recipe_entry(project: str | Path, task_id: str) -> dict:
     """读取任务当前 recipe 投影的入口；不使用创建时冻结的旧键快照。"""
     from ..storage.layout import task_dir
+    from ..tasks.descriptions import described_entry
 
-    return read_entry(task_dir(project, task_id) / "recipe")
+    folder = task_dir(project, task_id)
+    return described_entry(folder / "recipe", cache_dir=folder / ".dojo/descriptions")
 
 
 def read_entry(recipe: Path) -> dict:
@@ -24,11 +26,12 @@ def read_entry(recipe: Path) -> dict:
     cfg = OmegaConf.to_container(OmegaConf.load(path), resolve=False)
     if not isinstance(cfg, dict):
         raise TypeError("configuration_must_be_mapping")
-    inputs = input_bindings(cfg)
+    inputs = dict.fromkeys(input_bindings(cfg), "other")
     # 这是从公共结构投影的内部查询结果，用户无需维护第二份声明。
     return {
-        "script": "pipeline.py", "config": "config.yaml", "convention_version": 1,
-        "resume_key": "inputs.train.resume",
+        "script": "pipeline.py",
+        "config": "config.yaml",
+        "convention_version": 1,
         "inputs": inputs,
         "outputs": {"run_root": "{run_root}", "data_root": "{data_dir}"},
         "stage_inputs": {
@@ -36,12 +39,8 @@ def read_entry(recipe: Path) -> dict:
             for name in cfg.get("inputs", {})
         },
         "components": cfg.get("components", {}),
-        "shared_outputs": ({
-            "physical_dataset": {
-                "kind": "dataset", "stage": "rawprep", "name_key": "dataset.processed_name",
-                "manifest": "manifest.json", "consumer_binding": "inputs.trainprep.dataset",
-            }
-        } if isinstance(cfg.get("dataset"), dict) and "processed_name" in cfg["dataset"] else {}),
+        "stages": list(cfg.get("pipeline", {}).get("stages", [])),
+        "shared_outputs": {},
     }
 
 

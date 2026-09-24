@@ -164,7 +164,8 @@ def publish_dataset(results, *, source, session):
         "split_counts": {key: len(values) for key, values in source.raw.partitions.items()},
     }
     session.record_asset(
-        "dataset", path, kind="dataset", stage="rawprep", dependencies=[path.parent]
+        "dataset", path, kind="dataset", stage="rawprep",
+                         semantics={"type": "aero.physical", "format_version": 1}, dependencies=[path.parent]
     )
     session.report(report, stage="rawprep")
     return report

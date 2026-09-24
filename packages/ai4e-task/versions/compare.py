@@ -1,7 +1,6 @@
 """固定引用的配置、文本和指标比较；不重新计算物理指标。"""
 
 import difflib
-import math
 from pathlib import Path
 from uuid import uuid4
 
@@ -104,7 +103,11 @@ def _metrics(project: str | Path, run: dict) -> dict:
                 if item.get("asset_digests", {}).get(source) != content_digest(source):
                     raise ValueError("metric_source_changed")
         except (TypeError, ValueError, OSError):
-            result[key] = {"value": None, "quantity": item.get("semantics", {}), "status": "missing"}
+            result[key] = {
+                "value": None,
+                "quantity": item.get("semantics", {}),
+                "status": "missing",
+            }
             continue
         result[key] = {"value": item["value"], "quantity": item["semantics"], "status": "available"}
     return result

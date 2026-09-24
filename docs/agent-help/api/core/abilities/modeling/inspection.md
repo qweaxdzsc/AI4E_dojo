@@ -68,7 +68,83 @@ print(signature(fit_graph_viewport))
 ### 源码位置
 
 - 模块：`ai4e_core.abilities.modeling.inspection`
-- 仓库相对路径：`packages/ai4e-core/abilities/modeling/inspection.py:20`
+- 仓库相对路径：`packages/ai4e-core/abilities/modeling/inspection.py:156`
+- 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
+
+### 相关 API
+
+通过 `search_help('ai4e_core.abilities.modeling.inspection')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
+
+### 不适用场景与证据边界
+
+API 可导入或最小检查通过只证明符号存在，不证明组件兼容、训练有效、恢复一致或达到论文精度。`internal-visible` 符号不构成兼容承诺。
+
+<a id="symbol-ai4e-core-abilities-modeling-inspection-preserve-model-state"></a>
+## `ai4e_core.abilities.modeling.inspection.preserve_model_state`
+
+- **层级**：`core.ability`
+- **稳定性**：`extension`
+- **定义**：`preserve_model_state(model)`
+- **规范定义名**：`ai4e_core.abilities.modeling.inspection.preserve_model_state`
+
+### 用途
+
+跟踪成功或失败都恢复参数、缓冲区、逐模块模式及随机流。
+
+### 导入与签名
+
+```python
+from ai4e_core.abilities.modeling.inspection import preserve_model_state
+```
+
+```text
+preserve_model_state(model)
+```
+
+### 参数
+
+| 参数 | 类型 | 默认值 |
+| --- | --- | --- |
+| `model` | `未标注` | `必填` |
+
+参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
+
+### 返回值
+
+源码返回标注：`未标注`。普通 Python 返回值由调用方直接交接；跨阶段文件必须通过案例的 `inputs.<stage>.<name>` 或登记产物交接。
+
+### 异常
+
+AST 未发现显式 `raise`；依赖函数仍可能报告输入、文件或运行错误。
+
+### 副作用与产物
+
+本索引不根据函数名猜测写盘、设备、随机状态或检查点副作用。调用前应阅读下面的源码位置和引用它的完整案例；写运行记录时只能通过公开 run/Task 边界。
+
+### 配置键
+
+源码没有直接读取公共配置键；配置通常由调用它的 application 或 recipe 传入。
+
+### 最小可执行检查
+
+```python
+from inspect import signature
+from ai4e_core.abilities.modeling.inspection import preserve_model_state
+
+print(signature(preserve_model_state))
+```
+
+这段代码只验证当前解释器中的符号和签名。真实调用请按能力教程提供有效输入；需要完整领域交接时再阅读关联案例或工作流。
+
+### Recipe 与案例
+
+- Recipe：无直接 recipe 归属。
+- 案例：机器索引未发现直接文本引用。
+
+### 源码位置
+
+- 模块：`ai4e_core.abilities.modeling.inspection`
+- 仓库相对路径：`packages/ai4e-core/abilities/modeling/inspection.py:21`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API
@@ -149,7 +225,91 @@ print(signature(trace))
 ### 源码位置
 
 - 模块：`ai4e_core.abilities.modeling.inspection`
-- 仓库相对路径：`packages/ai4e-core/abilities/modeling/inspection.py:27`
+- 仓库相对路径：`packages/ai4e-core/abilities/modeling/inspection.py:163`
+- 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
+
+### 相关 API
+
+通过 `search_help('ai4e_core.abilities.modeling.inspection')` 查询同模块符号，通过案例 ID 查询完整阶段连接。
+
+### 不适用场景与证据边界
+
+API 可导入或最小检查通过只证明符号存在，不证明组件兼容、训练有效、恢复一致或达到论文精度。`internal-visible` 符号不构成兼容承诺。
+
+<a id="symbol-ai4e-core-abilities-modeling-inspection-trace-views"></a>
+## `ai4e_core.abilities.modeling.inspection.trace_views`
+
+- **层级**：`core.ability`
+- **稳定性**：`extension`
+- **定义**：`trace_views(model, inputs, output_dir: Path, *, revision: str, input_source: dict, views, default_view: str, predict=None, model_type: str | None=None) -> dict`
+- **规范定义名**：`ai4e_core.abilities.modeling.inspection.trace_views`
+
+### 用途
+
+按调用方显示参数生成固定页面；任一失败回退全部旧文件与来源记录。
+
+### 导入与签名
+
+```python
+from ai4e_core.abilities.modeling.inspection import trace_views
+```
+
+```text
+trace_views(model, inputs, output_dir: Path, *, revision: str, input_source: dict, views, default_view: str, predict=None, model_type: str | None=None) -> dict
+```
+
+### 参数
+
+| 参数 | 类型 | 默认值 |
+| --- | --- | --- |
+| `model` | `未标注` | `必填` |
+| `inputs` | `未标注` | `必填` |
+| `output_dir` | `Path` | `必填` |
+| `revision` | `str` | `必填关键字参数` |
+| `input_source` | `dict` | `必填关键字参数` |
+| `views` | `未标注` | `必填关键字参数` |
+| `default_view` | `str` | `必填关键字参数` |
+| `predict` | `未标注` | `None` |
+| `model_type` | `str | None` | `None` |
+
+参数的物理单位、实体身份和路径相对基准只有在源码 Docstring 或所选案例明确声明时才成立；不能仅根据参数名推断。
+
+### 返回值
+
+源码返回标注：`dict`。普通 Python 返回值由调用方直接交接；跨阶段文件必须通过案例的 `inputs.<stage>.<name>` 或登记产物交接。
+
+### 异常
+
+`ValueError`
+
+### 副作用与产物
+
+本索引不根据函数名猜测写盘、设备、随机状态或检查点副作用。调用前应阅读下面的源码位置和引用它的完整案例；写运行记录时只能通过公开 run/Task 边界。
+
+### 配置键
+
+源码没有直接读取公共配置键；配置通常由调用它的 application 或 recipe 传入。
+
+### 最小可执行检查
+
+```python
+from inspect import signature
+from ai4e_core.abilities.modeling.inspection import trace_views
+
+print(signature(trace_views))
+```
+
+这段代码只验证当前解释器中的符号和签名。真实调用请按能力教程提供有效输入；需要完整领域交接时再阅读关联案例或工作流。
+
+### Recipe 与案例
+
+- Recipe：无直接 recipe 归属。
+- 案例：机器索引未发现直接文本引用。
+
+### 源码位置
+
+- 模块：`ai4e_core.abilities.modeling.inspection`
+- 仓库相对路径：`packages/ai4e-core/abilities/modeling/inspection.py:65`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_core')`，再按模块相对路径定位。
 
 ### 相关 API

@@ -206,6 +206,18 @@ def test_evaluation_clock_not_overwritten_by_window_start(tmp_path, monkeypatch)
     }
 
 
+def test_hidden_factory_requires_both_locks_before_reading_data(tmp_path):
+    from tools.verification.dojo_validity.rmhd.evaluate import evaluator_for
+
+    write_json(tmp_path / "state.json", {"phase": "running"})
+    with pytest.raises(ValueError, match="双方最终冻结"):
+        evaluator_for(tmp_path)
+    write_json(tmp_path / "state.json", {"phase": "both_finals_locked"})
+    write_json(tmp_path / "final-selections/plain.json", {"round": 5})
+    with pytest.raises(FileNotFoundError):
+        evaluator_for(tmp_path)
+
+
 @pytest.mark.parametrize("bad", ["zero", "nan", "shape"])
 def test_bad_prediction_never_drops_samples(bad):
     target = np.ones((40, 6, 2, 2))

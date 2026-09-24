@@ -10,6 +10,20 @@
 
 ## 包与模块入口
 
+- [算子与传统代理主计划](../.cursor/plans/operator-surrogates-main.plan.md)：已完成11组合真实串行对照与八项独立安装/Task验收；范围见[专项记录](mvp/operator-surrogates-acceptance.md)。A负责DeepONet/FNO，B负责POD/RSM/RBF，C负责Kriging/LightGBM；主控归并物理损失复用、拟合、推理和状态保存后串行验证。三份子计划及拟文件职责见[辅助目录](modules/repository.md#算子与传统代理计划)。不新增PINN模型，不把计划当验收证据。
+
+- [经典网络主实施计划](../.cursor/plans/classic-networks-main.plan.md)：MLP、CNN、ResNet、U-Net、Transformer、GNN与RNN按block/网络阶段/完整模型集成；A负责前馈与循环，B负责卷积与多尺度，C负责注意力与图，主Agent归并及重组审查后串行验证十三组。设计见唯一架构第5.2节；源码、三案例/三扩展与十三组合100更新、独立wheel/Python/Task完整流程已验收，设备及精度范围见专项记录；不含Web开放。[进行中验收](mvp/classic-networks-acceptance.md)，来源总表、串行矩阵与安装重放定位见[辅助目录](modules/repository.md#经典网络可复制资源)。
+
+- [JOREK recipe 实跑与复用审计](mvp/jorek-rmhd-recipe-proof-acceptance.md)：复制完整 example 后经用户组件改写，500 epoch MPS、恢复和固定后处理验证；区分调用行占比与源码来源复用，非新五轮实验或正式案例集成。
+- [Dojo 框架与Skill验收](mvp/framework-skill-evolution-acceptance.md)：独立保存/评价周期、可选用户状态、案例筛选与可携带正文、两项extension已实现；Skill只补案例导航。源码、安装与正式Web现有训练消费链兼容性已验；Agent采用率提升尚未实测。[实施计划](../.cursor/plans/dojo-framework-skill-evolution.plan.md)。
+- [Dojo 基础能力验收](mvp/foundational-capabilities-minimal-acceptance.md)：可恢复尾批流与独立选优已完成独立和两extension联合验证；第3组损失暂不扩充。[实施计划](../.cursor/plans/dojo-foundational-capabilities-minimal.plan.md)、[原能力审计](../.cursor/plans/dojo-general-reuse-capacity.plan.md)保留决策依据。
+
+- [Skill 逐轮研究验收](mvp/dojo-skill-study-acceptance.md)：新训练框架优先评估、双来源参考；隔离单组 RMHD baseline 与真实五轮、隐藏复算、利用率科学图；科学运行完成，完整成本证据仍有缺口。
+
+- [RMHD 四会话 Skill 实验计划](../.cursor/plans/jorek-rmhd-skill-factorial.plan.md)：提供U-Net/不提供参考模型 × 白板/Dojo，四条初始方案加五轮轨迹、24个隐藏评价已完成且均满足50ms；预测逐值重放、整流程复用与主控能力替换核验已交付。2026-09-24复核24候选无串组、独立评分一致；已纠正复合命令编码误计并补齐九图中文说明。后续补齐24候选基础模型/改动与本地职责比例，BD部署接入冻结推理工具的45窗口一致性和延迟检查通过；导航缺口及因果边界单列。报告分别列科学结果、有限代码覆盖和历史成本缺口，不能宣称完整成本或Skill独立因果收益；结果与证据见[四会话验收](mvp/rmhd-factorial-acceptance.md)。
+
+- [通用Dojo对照实验Skill](../.agents/skills/dojo-compare/SKILL.md)：主控实验设计与报告入口；参数化选型、基线/自主选模、实际测速、独立会话和隐藏评分、精度/编码时间/token曲线与真实实现复用量。不注入实验组，验收见[技能交付记录](mvp/dojo-compare-skill-acceptance.md)。 产物实体及逐轮冻结留在独立组内，主控仅存索引、修订摘要和报告，不重复备份数据或运行环境。
+
 - [Agent 能力导航验收](mvp/agent-capabilities-acceptance.md)：九类能力直达、三种接入深度、可执行教程和安装导出。
 
 - [可选 FLARE++ 注意力](mvp/flare-attention-acceptance.md)：core 组件数值、恢复与独立 wheel 验收；不改变默认模型或平台选择。
@@ -28,7 +42,7 @@
 - [ai4e-server](modules/ai4e-server.md)：bootstrap 装配，infrastructure 受控存储与传输，modules 平台业务用例。
 - [ai4e-web](modules/ai4e-web.md)：src 中按用户任务组织微领域；e2e 浏览器流程，scripts 架构与传输类型检查。
 - [ai4e-viz](modules/ai4e-viz.md)：算法库与迁入可视化应用并存；包内 .context、PRD 和 architecture 为内部真源。
-- [recipes](modules/recipes.md)：普通研究脚本、七个外流案例、五个 PDE 案例、GenCP 六组、SafeDiffCon 两个完整可复制案例、WDNO 基础预测、MeshGraphNet/CylinderFlow 工程流程及自由连接扩展。
+- [recipes](modules/recipes.md)：经典网络三数据案例与三项可物化重组扩展、普通研究脚本、七个外流案例、五个 PDE 案例、GenCP 六组、SafeDiffCon 两个完整可复制案例、WDNO 基础预测、MeshGraphNet/CylinderFlow 工程流程及自由连接扩展。
 - [MeshGraphNet 静态外流验收](mvp/meshgraphnet-aero-cfd-acceptance.md)：ShapeNet-Car/NASA CRM 的平台网格、真实短训、NASA 454,404 点完整拼回与分区缓存、Task/wheel，以及正式 Web rawprep 证据；Web 模型训练/推理仍未开放。
 - [全仓辅助目录](modules/repository.md)：examples、tools、tests、docs、构建和规则导航。
 - [Example / Task 资源验收](mvp/example-task-acceptance.md)：standalone/extension 清单、wheel 资源、Agent 文档、direct-core 与 Task smoke 证据及未验范围。
@@ -50,6 +64,8 @@
 工作台切步加载（2026-09-17）：配置先出，产物列表并行补齐；登记用文件戳。列举成功运行产物时不再调用内容核验。准备处理结果认现行 `data_dir/trainprep/normalize`，历史运行回退 `data_dir/normalize`。正式 8000/5173 已于 20:46–20:54 重装 `ai4e-task`/`ai4e-viz` 并重启后冒烟：`stage-inputs` 21 条 0.18s，训练设置约 1.56s。该训练设置耗时不能当成模型页已经够快。模型设置进页先反显已保存参数；`model-options` 只出 YAML 目录，点选再 `describe_case`，同任务短时复用。圈定 `test_web_stage_consistency.py` 与 `e2e/model-picker.spec.ts`。证据见 `.context/mvp/post-workspace-acceptance.md`、`.context/mvp/model-picker-acceptance.md`。原始处理 RawprepWorkbench 已对齐同一语义：三栏与已保存配置先出，文件树/处理结果/运行名单栏内补齐，不整页等待 `listRuns`、目录检查或 `stage-inputs`；同任务复用阶段工作台的 `stage-inputs` 合并。圈定 `packages/ai4e-web/e2e/rawprep-consistency.spec.ts`。已接入数据集缺 VTKHDF 键时页面默认勾选；对照任务已把保存成关的开关改回默认开。只改 web 源码时正式 5173 读源码即可冒烟。原始处理输入是绑定数据集官方/自身分片，页面只存可见处理配置；当次执行或发布的样本名单不得写回下次输入。`samples=all` 不吃任务里看不见的 `dataset.partitions` 子集。平台提交非 NASA 案例写 `unsplit`，产物不按官方 train/test 落盘，切分只在数据准备。`unsplit` 与 `official` 一样是分片模式名，配置加载不得展开成文件路径。圈定 `test_web_rawprep.py`、`test_web_dataset_binding.py`、`test_web_rawprep_handoff.py`、`test_train_shapenet_contract.py`。正式入口冒烟见 [准备导入验收](mvp/preparation-import-acceptance.md)。
 
 ## 当前专项导航
+
+- [Task 通用化交接](mvp/task-generalization-acceptance.md)：标签需求、固定应用来源、推理/结果/共享数据与结构图归位；2026-09-23 已修复三阶段装配、独立参考连接和实际依赖闭环，原六项、五例数值/恢复、同批安装及本轮正式 5173→8000 单样本完整链通过；保留昨日失败、更正和本轮三项页面交接修复证据。
 
 - [JOREK RMHD 双组五轮验收](mvp/jorek-rmhd-validity-acceptance.md)：独立前处理、MPS真实预实验、50ms门槛、公网代理、双方最终冻结后隐藏评价；工具实现见辅助目录索引，正式进度与工具验收分别记录。
 
@@ -144,10 +160,14 @@
 
 - Neumann 正式 CLI 适配与运行进度见 [Dojo 有效性实验验收](mvp/dojo-validity-acceptance.md)；整进程隔离、两组独立状态和冻结推理位于验证工具。
 
-- [JOREK RMHD 下一轮双组实验计划](../.cursor/plans/jorek-rmhd-dojo-validity.plan.md)：原始数据核查、独立前处理、整轨迹隐藏测试、MPS U-Net 和延迟准入；正式运行进度见对应验收记录。
+- [JOREK RMHD 双组实验计划](../.cursor/plans/jorek-rmhd-dojo-validity.plan.md)：独立前处理、隐藏测试及MPS延迟准入；[实际验收](mvp/jorek-rmhd-validity-acceptance.md)记录两条五轮轨迹、隐藏结果、曲线及成本证据缺口。
 
 - [GeoTransolver 外流接入](mvp/geotransolver-aero-acceptance.md)：ShapeNet-Car 双域和 NASA CRM 表面基础 GALE；真实五轮参考对照、完整预测及安装公开入口的逐项证据，不登记 Web，不宣称论文精度。
 
 ## PCNO 圆柱方法变体
 
 [圆柱验收](mvp/pcno-cylinder-acceptance.md)：Double Cylinder配对短训、真实入口与清理；CylinderFlow官方子集已取得，但P1散度未通过1%门槛，未进入训练。代码导航见core/contrib/recipes/辅助目录索引。
+
+2026-09-23 架构修复：外流三阶段连接见 [recipes 索引](modules/recipes.md)，应用依赖与来源校验见 [Task 索引](modules/ai4e-task.md)，参考/安装支持见 [辅助目录](modules/repository.md)；进度与未完成项见 [验收记录](mvp/task-generalization-acceptance.md)。
+
+- [基础模型 Agent 帮助验收](mvp/foundational-agent-help-acceptance.md)：Guide、能力教程、公开 API 检索与离线 wheel 资源同步；帮助维护规则见 AGENTS 与算法/recipe 规则。

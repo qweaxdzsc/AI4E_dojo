@@ -1,0 +1,38 @@
+{
+  "scope": "current source function level probe; no training or formal service",
+  "source": "/Users/zonghui/work/new_code_project/AI4E_Dojo/packages/ai4e-task/tasks/operation_sources.py",
+  "source_sha256": "4c474f6455071d7c2b5bb6ecdd19717ce9821fa11e619a1ab29cea4cd4b98252",
+  "captured_roots": [
+    {
+      "local": true,
+      "root": null,
+      "file_count": 1
+    },
+    {
+      "local": false,
+      "root": "/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/ai4e_core",
+      "file_count": 338
+    },
+    {
+      "local": false,
+      "root": "/Users/zonghui/work/new_code_project/AI4E_Dojo/.venv/lib/python3.12/site-packages/ai4e_spec",
+      "file_count": 14
+    }
+  ],
+  "captured_revision": "045d1d5e0fdc4cf127b1ea35c3e6e487a71c73bc3ba3af720f49c41ff79a65a2",
+  "baseline": {
+    "value": 1
+  },
+  "external_dependency_change": {
+    "verification": "accepted",
+    "result": {
+      "value": 2
+    }
+  },
+  "new_local_shadow_module": {
+    "verification": "accepted",
+    "result": {
+      "value": 3
+    }
+  }
+}

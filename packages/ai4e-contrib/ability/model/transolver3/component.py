@@ -2,18 +2,24 @@
 
 from .inference import SurfaceInference
 from .model import SOURCE, construct, describe, predict
-from .preparation import prepare_sample
-
-# core 的训练/推理装配使用统一的 prepare_inputs/collate 门面；Transolver
-# 的算法实现名称保持 prepare_sample，适配层在这里明确完成名称交接。
-prepare_inputs = prepare_sample
+from .preparation import prepare_inputs, prepare_sample
 
 
 def collate(items):
     """收集 Transolver 单样本批次，保留点 ID 和样本元数据。"""
     if len(items) != 1:
         raise ValueError("Transolver 参考流程当前只支持 batch_size=1")
-    return items[0]
+    item = items[0]
+    if isinstance(item["metadata"], list):
+        return item
+    return {
+        **item,
+        "inputs": {name: value[None] for name, value in item["inputs"].items()},
+        "targets": {name: value[None] for name, value in item["targets"].items()},
+        "metadata": [item["metadata"]],
+        "point_ids": item["point_ids"][None],
+    }
+
 
 __all__ = [
     "SOURCE",
@@ -45,7 +51,7 @@ TRAINING_CONSTRAINTS = {
     "num_workers": {"allowed": [0], "readOnly": True},
     "accumulate": {"allowed": [1], "readOnly": True},
     "precision": {"allowed": ["fp32"], "readOnly": True},
-    "evaluation_split": {"allowed": ["validation"], "readOnly": True},
+    "evaluation_split": {"allowed": ["eval"], "readOnly": True},
     "scheduler_unit": {"allowed": ["epoch"], "readOnly": True},
     "optimizer": {"allowed": ["adamw"], "readOnly": True},
 }

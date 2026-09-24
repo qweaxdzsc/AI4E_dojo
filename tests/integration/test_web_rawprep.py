@@ -292,7 +292,6 @@ def test_save_execute_publish_do_not_write_output_list_back(binding_platform, mo
             "stages": ["rawprep"],
             "data_dir": str(project / "missing-rawprep-output"),
         },
-        config=after_execute["config"],
     )
     assert published is None
     assert task.read_configuration(project, created["id"])["config"]["dataset"]["partitions"] == (

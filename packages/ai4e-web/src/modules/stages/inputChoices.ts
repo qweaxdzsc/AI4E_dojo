@@ -59,7 +59,7 @@ export function unavailableBindingItems(inputs: any[], bindingKeys: string[]) {
 
 export function uniqueManifestChoices(items: any[]) {
   const valid = items.filter(
-    (item) => item.ref && item.compatibility?.status !== "invalid",
+    (item) => item.ref,
   );
   const platform = valid
     .filter((item) => item.origin === "platform")

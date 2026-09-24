@@ -10,8 +10,8 @@ pipeline:
   - train
   - infer
   - post
-data_root: ./data/nasa_crm_geotransolver
-run_root: ./runs/nasa_crm_geotransolver
+data_root: ../data/nasa_crm_geotransolver
+run_root: ../runs/nasa_crm_geotransolver
 train:
   mode: fit
   max_epochs: 2
@@ -168,14 +168,14 @@ infer:
   export_mesh: true
 inputs:
   rawprep:
-    source: ./inputs/nasa_crm
+    source: ../inputs/nasa_crm
     manifest: null
     train_h5: ./inputs/nasa_crm/trainingData_NASA-CRM.h5
     test_h5: ./inputs/nasa_crm/testData_NASA-CRM.h5
     connectivity_h5: ./inputs/nasa_crm/connectivity_NASA-CRM.h5
   trainprep:
     partition: null
-    dataset: ./data/nasa_physical/manifest.json
+    dataset: ../datasets/nasa_crm/manifest.json
     statistics: null
   train:
     preparation: null

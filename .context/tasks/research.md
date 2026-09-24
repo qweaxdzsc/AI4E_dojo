@@ -12,8 +12,15 @@
 - 验证：[轮次行为](../../tests/integration/test_train_loop.py)、[边界恢复](../../tests/integration/test_train_boundary_alignment.py)、[WDNO 安装复制](../../tests/integration/test_wdno_recipe.py)。选择当前训练路线，不为单次调参跑全部模型。
 - 交接：已准备数据进入训练，检查点与报告由 writer 写入；输入冲突或恢复合同变化明确失败。
 
+## 设计和汇总Dojo对照实验
+
+- 主控入口：[dojo-compare](../../.agents/skills/dojo-compare/SKILL.md)。按当前问题确定数据、基线、对照设计及训练/推理要求；计划与正式执行分开。
+- 按需读取技能内方案骨架与计量报告，交付精度、编码时间、编码token和Dojo利用率/展开实现量。保持独立会话、隐藏评价与主控记录边界。
+- 该技能不交付实验组；参与组按协议使用研究技能，主控不逐轮修改干预。当前RMHD四会话计划是一次实例，不是通用默认参数。
+
 ## 组装 recipe
 
+- 定位案例先看[列表摘要与详细正文](../../docs/agent-help/workflows/case-discovery.md)；物化后从 `documentation.entry` 读取可携带说明，extension同时保留基案例和变体正文。
 - 必读：[编写规则](../../.cursor/rules/ai4e-recipe-authoring.mdc)、所选模板 pipeline.py 与 configuration.py。
 - 最少修改：复制完整模板，在 Python 中连接步骤；YAML 只选参数和能力，`pipeline.stages` 只选择执行范围。
 - 示例：[自由连接](../../examples/recipe_extensions/free_wiring/README.md)、[WDNO 插入审计](../../examples/recipe_extensions/wdno/README.md)。扩展覆盖集须覆盖到完整模板，不单独运行残缺目录。
@@ -33,6 +40,7 @@
 - 换整网或损失：[WDNO 变体](../../examples/recipe_extensions/wdno/variants.py)；保持模型自己的输入约定，不要求任意网络都能无适配接入。
 - 换内部部件：[AB-UPT 前馈激活](../../examples/recipe_extensions/model_block/README.md)；只改本地组件，验证参数、缓存与恢复。
 - 换优化器/调度/更新：[局部训练函数](../../examples/recipe_extensions/wdno/variant_training.py)；只选择变化部分，默认保存、数据流和恢复继续复用。
+- 有限轮次尾批：[tail_batch](../../examples/recipe_extensions/tail_batch/README.md)；用户内存状态、独立验证周期和选优快照：[research_state](../../examples/recipe_extensions/research_state/README.md)。两者均物化到 `geotransolver.darcy` 后运行，示范连接不代表科学精度。
 - 加研究步骤/输出：[WDNO 审计](../../examples/recipe_extensions/wdno/audit.py)和同目录 pipeline.py，结果通过固定数组读回，注明身份、单位和轴。
 - 验证：[策略与部件实跑](../../tests/integration/test_training_strategy_extensions.py)、[共享执行](../../tests/integration/test_training_execution.py)。至少前向、短训、连续/恢复对照、推理与固定输出读回；不复制框架循环。
 
@@ -42,9 +50,11 @@
 
 ## 可组合 Dojo 案例与 Agent 路由
 
-Dojo 研究入口首先按能力和接入深度分流：单工具、已有研究代码、完整领域流程。九类能力教程位于 `docs/agent-help/capabilities/`，元数据是 skill、GUIDE、帮助首页菜单的唯一来源；生成器 `tools/docs/build_agent_help.py --write/--check` 同步导航及索引。不要要求局部工具用户先复制完整案例。
+Dojo 研究 Skill 对完整新训练任务先选择并复制最接近的 standalone，按 recipe 阶段与训练框架改写，通过本地用户组件实现差异；用户已有成熟工程的局部修改或单工具请求允许局部接入。Guide 只提供能力地图与边界。改写先参考训练框架与 Web 形成初案，再按计划检索并接入已有能力，更新计划后核对框架写法，实施后复核实际代码；代码量统计仅为可选附属能力。九类能力教程位于 `docs/agent-help/capabilities/`，元数据是 skill、GUIDE、帮助首页菜单的唯一来源；生成器 `tools/docs/build_agent_help.py --write/--check` 同步导航及索引。不要要求局部工具用户先复制完整案例。
 
-支持 Agent Skills 时使用 `.agents/skills/dojo-research/SKILL.md`，否则从 `DOJO_AGENT_GUIDE.md` 进入相同帮助中心。直接读能力教程，再用 `describe_help_symbol` 核对现行签名、源码和稳定性；搜索用于补充定位。已有 PyTorch 模型优先阅读 training 的真实短训/恢复例子，已有 NumPy 预测优先阅读 evaluation 的 FP64 复算例子。具体不兼容时允许局部适配或自定义，不把搜索无结果视为能力缺失。
+支持 Agent Skills 时使用 `.agents/skills/dojo-research/SKILL.md`，否则从 `DOJO_AGENT_GUIDE.md` 进入相同帮助中心。直接读能力教程，再用 `describe_help_symbol` 核对现行签名、源码和稳定性；搜索用于补充定位。已有 PyTorch 网络不等于已有完整训练工程：完整新任务仍从复制案例起步，training 的短训/恢复例子用于组件接线；已有 NumPy 预测的单工具请求可直接阅读 evaluation 的 FP64 复算例子。具体不兼容时允许局部适配或自定义，不把搜索无结果视为能力缺失。
+
+权重初始化/映射入口为 `docs/agent-help/api/core/abilities/modeling/weights.md`；与模型构造、结构变换和训练状态恢复分别判断。本次单组五轮之后补入该直达提示，导出可验不代表已验证新提示对研究行为的效果；版本证据见 Skill 研究验收。
 
 完整流程仍选 standalone、物化 extension、阅读阶段正文并 direct-core 验证；按需交给同目录 Task。单个工具只需真实输入输出证据，训练与恢复验证状态，post 固定预测读回。工程接线、学习效果和论文精度分别陈述。
 

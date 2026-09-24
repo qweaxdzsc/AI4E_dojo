@@ -1,0 +1,48 @@
+{
+  "scope": "New independent PyTorch field-prediction implementations, not copied PCNO or paper reproduction",
+  "upstream": {
+    "repository": "https://github.com/pytorch/vision",
+    "tag": "v0.23.0",
+    "commit": "824e8c8726b65fd9d5abdc9702f81c2b0c4c0dc8",
+    "license": "BSD-3-Clause",
+    "files": [
+      {
+        "url": "https://raw.githubusercontent.com/pytorch/vision/824e8c8726b65fd9d5abdc9702f81c2b0c4c0dc8/torchvision/models/resnet.py",
+        "sha256": "9faf2f321fdaf7edbd791aedc6e3610c7edf9c892112cbd75861beae1e9518d1",
+        "bytes": 38920
+      },
+      {
+        "url": "https://raw.githubusercontent.com/pytorch/vision/824e8c8726b65fd9d5abdc9702f81c2b0c4c0dc8/LICENSE",
+        "sha256": "6502f676851cfe25f8af75531dfb32375b7325b73c37e7b43741fa422893e71d",
+        "bytes": 1517
+      }
+    ]
+  },
+  "papers": [
+    {
+      "title": "Deep Residual Learning for Image Recognition",
+      "url": "https://arxiv.org/abs/1512.03385",
+      "retrieved_sha256": "818e6e7c7934ebdc143f0e50b5f4d96cb1229e53932a9d3c7f7c86bcc2d37f16"
+    },
+    {
+      "title": "U-Net: Convolutional Networks for Biomedical Image Segmentation",
+      "url": "https://arxiv.org/abs/1505.04597",
+      "retrieved_sha256": "b14839b0cf710fe2ad80735f1a838d7e819f33ad23f74616b01440e1a6488ff0"
+    },
+    {
+      "title": "3D U-Net: Learning Dense Volumetric Segmentation from Sparse Annotation",
+      "url": "https://arxiv.org/abs/1606.06650",
+      "retrieved_sha256": "b3a9e942d93120a119192fee1956c34b4fa7781187d3bc481df0b48ab038af64"
+    }
+  ],
+  "adaptations": [
+    "CNN: four hidden 3-kernel GELU layers, width16, no normalization, linear pointwise field head",
+    "ResNet18: 3-kernel stride1 stem without pool, widths16/32/64/128, basic counts2/2/2/2, linear pointwise field head, explicit interpolation to input size",
+    "Bottleneck follows torchvision v1.5 middle-convolution stride, not original v1 stride; component only, no ResNet50 training claim",
+    "UNet: three pools, base8, double same-padding GELU convolutions, bilinear/trilinear interpolation align_corners=False, no normalization, field regression",
+    "3D residual/CNN are explicit dimensional lifts; no claim to a 3D classification reference",
+    "Existing PCNO GPL implementation and checkpoints unchanged"
+  ],
+  "reference": "reference_spatial.py independently reconstructs agreed variants with torch primitives and imports no Dojo computational modules",
+  "status": "source inspected; only non-training component validation authorized here; dataset training by parent after integration"
+}

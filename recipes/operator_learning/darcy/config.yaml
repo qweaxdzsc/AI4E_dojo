@@ -1,0 +1,61 @@
+seed: 42
+run_root: ../outputs/darcy/runs
+data_root: ../outputs/darcy/data
+pipeline:
+  stages:
+  - rawprep
+  - trainprep
+  - train
+  - infer
+  - post
+inputs:
+  rawprep:
+    source: null
+  trainprep:
+    dataset: null
+  train:
+    preparation: null
+    resume: null
+  infer:
+    preparation: null
+    checkpoint: null
+  post:
+    results: null
+dataset:
+  case: darcy
+  train_count: 32
+  test_count: 8
+  stride: 5
+model:
+  family: fno
+  spatial_dims: 2
+  in_channels: 3
+  out_channels: 1
+  parameters:
+    modes:
+    - 4
+    - 4
+    width: 8
+    depth: 2
+    padding:
+    - 2
+    - 2
+  grid_shape:
+  - 85
+  - 85
+  history: 1
+train:
+  updates: 100
+  batch_size: 1
+  lr: 0.001
+  device: cpu
+  seconds: 9000
+  checkpoint_every: 20
+  sample_points: null
+  physical_weight: 0.0
+infer:
+  device: cpu
+components:
+  model: ai4e_contrib.application.operator_learning.binding.build_network
+  derived: null
+  consume: null

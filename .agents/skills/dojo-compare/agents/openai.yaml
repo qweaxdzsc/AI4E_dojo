@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dojo 对照实验设计"
+  short_description: "设计隔离的 Dojo 与白板实验，核验精度、开发成本和实际代码复用"
+  default_prompt: "使用 $dojo-compare 按我的目标生成 Dojo 与白板独立会话对照实验计划，并明确预实验、隔离、指标及最终报告要求。"

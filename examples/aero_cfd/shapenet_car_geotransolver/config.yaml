@@ -8,8 +8,8 @@ pipeline:
   - train
   - infer
   - post
-data_root: ./data/shapenet_car_geotransolver
-run_root: ./runs/shapenet_car_geotransolver
+data_root: ../data/shapenet_car_geotransolver
+run_root: ../runs/shapenet_car_geotransolver
 train:
   mode: fit
   max_epochs: 2
@@ -225,14 +225,14 @@ infer:
   export_mesh: true
 inputs:
   rawprep:
-    source: ./inputs/shapenet_car
+    source: ../inputs/shapenet_car
     manifest: null
     train_h5: null
     test_h5: null
     connectivity_h5: null
   trainprep:
     partition: null
-    dataset: ./data/car_experiment/manifest.json
+    dataset: ../datasets/shapenet_car/manifest.json
     statistics: null
   train:
     preparation: null

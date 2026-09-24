@@ -150,7 +150,7 @@ print(signature(register_metrics))
 ### 源码位置
 
 - 模块：`ai4e_contrib.application.pde_control.safediffcon.handoff`
-- 仓库相对路径：`packages/ai4e-contrib/application/pde_control/safediffcon/handoff.py:42`
+- 仓库相对路径：`packages/ai4e-contrib/application/pde_control/safediffcon/handoff.py:43`
 - 安装源码：先调用 `ai4e_task.source_location('ai4e_contrib')`，再按模块相对路径定位。
 
 ### 相关 API

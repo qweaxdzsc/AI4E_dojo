@@ -14,7 +14,7 @@ from ..storage.files import read_json, write_json
 from ..storage.layout import inside, task_dir
 from ..storage.records import fetch, get, listing, put, remember, replay
 from ..storage.snapshots import digest
-from .operations import operation_target
+from .operation_sources import verify_source, with_operation
 from .post_results import freeze_result_item, post_results
 from .records import get_task
 
@@ -27,9 +27,9 @@ def _folder(project, task, identity):
 
 def metric_catalog():
     """在检查子进程查询core指标目录，管理进程不加载算法栈。"""
-    from .checkpoints import inspect_inference
+    from ai4e_core.abilities.eval.catalog import metric_catalog as catalog
 
-    return inspect_inference("metric_catalog")
+    return catalog()
 
 
 def _writable(project, task_id):
@@ -80,10 +80,21 @@ def submit_post_metrics(project, task_id, request):
         raise ValueError("物理量选择不存在或重复")
     identity, run_id = uuid4().hex, uuid4().hex
     root = task_dir(project, task_id)
+    contexts = [item.get("operation_context") for item in inputs]
+    if any(not context for context in contexts):
+        raise ValueError("operation_unavailable: captured_application_source_missing")
+    source = with_operation(contexts[0]["source"], "evaluate")
+    if any(with_operation(context["source"], "evaluate") != source for context in contexts):
+        raise ValueError("post_application_sources_differ")
+    from ..storage.snapshots import snapshot
+
+    verify_source(source, contexts[0]["recipe"])
+    code = _folder(project, task_id, identity) / "code"
     now = datetime.now(UTC).isoformat()
     job = {
         "id": identity,
-        "target": operation_target(root / "recipe", "evaluate"),
+        "target": source["target"],
+        "operation_context": {"source": source, "recipe": str(code)},
         "task_id": task_id,
         "version_id": task["version_id"],
         "run_id": run_id,
@@ -102,7 +113,15 @@ def submit_post_metrics(project, task_id, request):
         prior = replay(db, key, fingerprint)
         if prior:
             return prior
-        write_json(_folder(project, task_id, identity) / "request.json", job)
+        try:
+            snapshot(Path(contexts[0]["recipe"]), code)
+            verify_source(source, code)
+            write_json(_folder(project, task_id, identity) / "request.json", job)
+        except BaseException:
+            import shutil
+
+            shutil.rmtree(code.parent, ignore_errors=True)
+            raise
         put(db, "post_metric_job", job)
         put(
             db,
@@ -132,7 +151,7 @@ def submit_post_metrics(project, task_id, request):
                     task_id,
                     identity,
                 ],
-                cwd=root / "recipe",
+                cwd=code,
                 stdout=log,
                 stderr=log,
                 stdin=subprocess.DEVNULL,
@@ -220,7 +239,10 @@ def export_post_metrics(project, task_id, identity, request):
     name = "export-" + uuid4().hex + "." + format
     path = Path(job["data_dir"]) / name
     payload = {
-        "target": operation_target(task_dir(project, task_id) / "recipe", "export"),
+        "operation_context": {
+            **job["operation_context"],
+            "source": with_operation(job["operation_context"]["source"], "export"),
+        },
         "record": str(Path(job["data_dir"]) / "metrics.json"),
         "path": str(path),
         "format": format,
@@ -228,7 +250,7 @@ def export_post_metrics(project, task_id, identity, request):
     }
     result = subprocess.run(
         [sys.executable, "-m", "ai4e_task.tasks.post_metrics_worker", "--export"],
-        cwd=task_dir(project, task_id) / "recipe",
+        cwd=job["operation_context"]["recipe"],
         input=json.dumps(payload),
         capture_output=True,
         text=True,

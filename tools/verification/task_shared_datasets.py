@@ -8,15 +8,16 @@ import ai4e_task as task
 from ai4e_task.storage.snapshots import inventory
 
 
-def migrate(project: Path, reports: Path, *, execute: bool) -> list[dict]:
+def migrate(project: Path, reports: Path, *, execute: bool, task_id: str) -> list[dict]:
     """先记录正式候选；执行时核验源文件不变及每个复制成员的 SHA256。"""
     reports.mkdir(parents=True, exist_ok=True)
-    plan = task.migrate_shared_datasets(project)
+    context = task.operation_context(project, task_id, name="inspect")
+    plan = task.migrate_shared_datasets(project, context=context)
     (reports / "migration-plan.json").write_text(json.dumps(plan, ensure_ascii=False, indent=2))
     if not execute:
         return plan
     sources = {item["name"]: inventory(Path(item["source_manifest"]).parent) for item in plan}
-    result = task.migrate_shared_datasets(project, dry_run=False)
+    result = task.migrate_shared_datasets(project, context=context, sources={item["name"]: item["run_id"] for item in plan}, dry_run=False)
     for item in result:
         before = sources[item["name"]]
         after = inventory(Path(item["source_manifest"]).parent)
@@ -37,7 +38,7 @@ def migrate(project: Path, reports: Path, *, execute: bool) -> list[dict]:
     (reports / "migration-result.json").write_text(json.dumps(result, ensure_ascii=False, indent=2))
     assert all(
         item["status"] == "already_migrated"
-        for item in task.migrate_shared_datasets(project, dry_run=False)
+        for item in task.migrate_shared_datasets(project, context=context, sources={item["name"]: item["run_id"] for item in plan}, dry_run=False)
     )
     return result
 
@@ -54,7 +55,6 @@ def consume(project: Path, reports: Path, name: str, workdir: Path) -> list[dict
     reports.mkdir(parents=True, exist_ok=True)
     source.mkdir(parents=True, exist_ok=True)
     shutil.copytree(root / "examples/aero_cfd/shapenet_car_abupt", source, dirs_exist_ok=True)
-    shutil.copyfile(root / "recipes/aero_cfd/task-entry.json", source / "task-entry.json")
     shared = task.get_shared_dataset(project, name)
     forbidden = shared.get("migration", {}).get("source_manifest")
     if forbidden:
@@ -73,7 +73,6 @@ def consume(project: Path, reports: Path, name: str, workdir: Path) -> list[dict
         processed_name=name,
     )
     cfg["train"].update(
-        manifest=shared["manifest_path"],
         device="cpu",
         max_epochs=1,
         test_repeat=1,
@@ -93,6 +92,7 @@ def consume(project: Path, reports: Path, name: str, workdir: Path) -> list[dict
     for v in s["domains"].values():
         v["anchor"]["num_points"] = 8
         v["query"]["num_points"] = 16
+    cfg["inputs"]["trainprep"]["dataset"] = shared["manifest_path"]
     cfg["infer"].update(
         samples=[test],
         split="test",
@@ -126,9 +126,9 @@ def consume(project: Path, reports: Path, name: str, workdir: Path) -> list[dict
                 item["id"],
                 overrides=[
                     "pipeline.stages=[infer]",
-                    "train.preparation=" + prep,
-                    "infer.preparation=" + prep,
-                    "infer.checkpoint=" + weight,
+                    "inputs.train.preparation=" + prep,
+                    "inputs.infer.preparation=" + prep,
+                    "inputs.infer.checkpoint=" + weight,
                 ],
             )["id"],
             timeout=240,
@@ -164,6 +164,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("project", type=Path)
     parser.add_argument("--reports", type=Path, required=True)
+    parser.add_argument("--task-id", required=True)
     parser.add_argument("--execute", action="store_true")
     parser.add_argument("--consume", action="store_true")
     parser.add_argument("--dataset", default="shapenet_car4")
@@ -174,7 +175,7 @@ def main():
             parser.error("--consume requires --workdir")
         result = consume(args.project, args.reports, args.dataset, args.workdir)
     else:
-        result = migrate(args.project, args.reports, execute=args.execute)
+        result = migrate(args.project, args.reports, execute=args.execute, task_id=args.task_id)
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 

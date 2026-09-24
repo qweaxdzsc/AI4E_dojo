@@ -32,3 +32,10 @@ def test_task_documents_and_entry_links():
     assert (ROOT / "recipes/aero_cfd" / entry["config"]).is_file()
     assert (ROOT / "docs/adr/0003-task-local-package.md").is_file()
     assert (ROOT / "examples/task_lifecycle.py").is_file()
+
+
+def test_source_dependency_contract_is_documented():
+    """文档明确来源覆盖和历史不足，不把新增无关文件当成漂移。"""
+    text = (ROOT / "docs/PRD/ai4e-task/tasks/PRD.md").read_text()
+    for phrase in ("SOURCE_DEPENDENCIES", "导入解析位置", "新增无关", "不自动补写来源"):
+        assert phrase in text

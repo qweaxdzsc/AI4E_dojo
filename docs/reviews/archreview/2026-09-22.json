@@ -1,0 +1,80 @@
+{
+  "updated_at": "2026-09-22T04:09:58.504032+08:00",
+  "report": "2026-09-22.md",
+  "previous_report": "2026-09-21.md",
+  "head": "9b53fc4cc4e38c128b18489f0b95f85055ceafaf",
+  "workspace_content_sha256": "d2b2667318f6d4ee2276726b4c9f6167584e43eca4b6b01ea1954b0133bc3095",
+  "notification_reason": [
+    "new_structural_evidence_task_smoke_data_scientific_assembly",
+    "R3_scope_refined"
+  ],
+  "recommendations": [
+    {
+      "id": "R1",
+      "title": "领域 provider 覆盖完整科学操作链",
+      "status": "open",
+      "priority": "high",
+      "origin": "B refined; known model-contract seam remains; wider dispatch gap newly observed",
+      "baseline": {
+        "inspect_inference_calls": 8,
+        "explicit_provider_calls": 1,
+        "default_scientific_calls": 6,
+        "default_device_calls": 1
+      },
+      "next": "贯通6处科学默认分派并下沉同批科学判断；保留Task身份/完整性检查"
+    },
+    {
+      "id": "R2",
+      "title": "已有标签与步骤声明驱动资产候选",
+      "status": "open_conditional",
+      "priority": "medium",
+      "origin": "B continued; known stage-candidate limitation",
+      "next": "新领域候选需求出现时实施；优先声明式通用匹配，复杂科学检查才调用provider",
+      "refinement": "落实2026-09-21用户澄清；不是新源码变化"
+    },
+    {
+      "id": "R3",
+      "title": "专用功能装配移出 Task",
+      "status": "open",
+      "priority": "medium",
+      "origin": "previous trace bridge plus newly observed smoke-data direct scientific assembly; introduction time unproven",
+      "next": "保留便利命令与图行为，将领域/显示装配迁入显式入口，Task只管理执行与固定结果",
+      "baseline": {
+        "task_viz_imports": 1,
+        "task_contrib_imports": 1,
+        "live_network_render_bridges": 1,
+        "hardcoded_scientific_smoke_factories": 1
+      }
+    }
+  ],
+  "legacy": [
+    {
+      "id": "A",
+      "status": "superseded",
+      "reason": "强制晋级路径已撤回；入口支持与科学质量分别声明"
+    },
+    {
+      "id": "B",
+      "status": "refined",
+      "successors": [
+        "R1",
+        "R2"
+      ]
+    },
+    {
+      "id": "C",
+      "status": "partially_addressed",
+      "reason": "九类能力教程与三种接入深度导航有新源码证据；本轮未验证安装和Agent盲定位，仍部分解决"
+    }
+  ],
+  "implementation": "none",
+  "tests_executed": false,
+  "end_verification": {
+    "verified_at": "2026-09-22T04:09:58.504032+08:00",
+    "changed_outside_review": [],
+    "added_outside_review": [],
+    "head_at_end": "9b53fc4cc4e38c128b18489f0b95f85055ceafaf",
+    "unchanged": true
+  },
+  "experience_receipt": "receipt_ecd86ac720cd40e48ea4807c59354a08"
+}

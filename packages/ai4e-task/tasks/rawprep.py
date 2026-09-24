@@ -12,7 +12,11 @@ from .records import get_task
 def describe_rawprep(project, task_id):
     """固定当前修订后返回默认配置和处理描述，不修改任务。"""
     captured = read_configuration(project, task_id)
-    value = deepcopy(_describe(str(project), task_id, captured["revision"]))
+    from .operation_sources import capture_source
+
+    recipe = Path(get_task(project, task_id)["directory"]) / "recipe"
+    source = capture_source(recipe, "inspect")
+    value = deepcopy(_describe(str(project), task_id, captured["revision"], source["revision"]))
     name = (captured["config"].get("dataset") or {}).get("processed_name")
     from ..projects.datasets import describe_shared_name
 
@@ -25,7 +29,7 @@ def describe_rawprep(project, task_id):
 
 
 @lru_cache(maxsize=128)
-def _describe(project, task_id, revision):
+def _describe(project, task_id, revision, source_revision):
     """同任务同修订复用纯描述，避免每个读取请求启动数值检查进程。"""
     import yaml
 
@@ -90,6 +94,9 @@ def expand_rawprep_defaults(recipe):
         "config_dir": str(recipe),
         "output_dir": str(recipe.parent / "inspections"),
     }
+    from .operation_sources import capture_source
+
+    request["source"] = capture_source(recipe, "inspect")
     result = subprocess.run(
         [sys.executable, "-m", "ai4e_task.tasks.inspection_worker"],
         input=json.dumps(request),

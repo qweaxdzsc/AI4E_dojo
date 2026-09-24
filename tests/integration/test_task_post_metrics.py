@@ -23,6 +23,7 @@ def results_project(tmp_path):
     import shutil
 
     shutil.copytree(Path(__file__).resolve().parents[2] / "recipes/aero_cfd", root / "tasks/t/recipe")
+    source = task.configuration_context({"components": {"application": "ai4e_contrib.application.aero_cfd.operations"}}, root / "tasks/t/recipe")["source"]
     for batch in range(2):
         children = []
         for cp in range(2):
@@ -84,6 +85,8 @@ def results_project(tmp_path):
                         "stages": ["infer"],
                         "run_path": str(run_dir.relative_to(root)),
                         "data_path": str(data.relative_to(root)),
+                        "code_path": "tasks/t/recipe",
+                        "task_description": {"source": source},
                     },
                 )
         value = {
@@ -107,6 +110,41 @@ def wait_job(root, identity):
             return job
         time.sleep(0.1)
     pytest.fail(str(job))
+
+
+def test_fixed_evaluation_and_export_reject_changed_dependency(tmp_path, monkeypatch):
+    """评价与导出都核验固定来源；失败不能留下运行中状态或导出文件。"""
+    import subprocess
+    import sys
+
+    from ai4e_task.tasks.operation_sources import with_operation
+
+    from tests.integration.test_task_source_dependencies import provider
+
+    recipe, external, source = provider(tmp_path, monkeypatch)
+    root = tmp_path / "project"
+    task.create_project(root)
+    job = {
+        "id": "metric", "task_id": "t", "run_id": "r", "status": "pending",
+        "data_dir": str(root / "data"), "exports": [],
+        "operation_context": {"source": with_operation(source, "evaluate"), "recipe": str(recipe)},
+    }
+    with transaction(root) as db:
+        put(db, "task", {"id": "t", "archived": False})
+        put(db, "run", {"id": "r", "status": "pending"})
+        put(db, "post_metric_job", job)
+    write_json(root / "tasks/t/.dojo/post_metrics/metric/request.json", job)
+    (external / "dependency.py").write_text("VALUE = 9\n")
+    result = subprocess.run(
+        [sys.executable, "-m", "ai4e_task.tasks.post_metrics_worker", str(root), "t", "metric"],
+        cwd=recipe, capture_output=True, text=True, check=False, timeout=60,
+    )
+    assert result.returncode != 0 and "application_source_changed" in result.stderr
+    failed = task.read_post_metrics(root, "t", "metric")
+    assert failed["status"] == "failed" and "application_source_changed" in failed["error"]
+    with pytest.raises(ValueError, match="application_source_changed"):
+        task.export_post_metrics(root, "t", "metric", {"format": "json"})
+    assert not list((root / "data").glob("export-*"))
 
 
 def request_for(root):

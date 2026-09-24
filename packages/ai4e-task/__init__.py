@@ -213,12 +213,17 @@ __all__ += [
 ]
 
 from .projects.dataset_migration import migrate_shared_datasets
-from .tasks.official_scripts import (
-    is_old_official_stage,
-    migrate_official_aero_scripts,
-    verified_old_sources,
-)
+from .storage.script_replacement import replace_scripts
 from .templates.materialize import recipe_entry
 
 __all__ += ["migrate_shared_datasets", "recipe_entry"]
-__all__ += ["is_old_official_stage", "migrate_official_aero_scripts", "verified_old_sources"]
+__all__ += ["replace_scripts"]
+
+from .tasks.descriptions import describe_recipe
+from .tasks.operation_sources import configuration_context, operation_context
+
+__all__ += ["configuration_context", "describe_recipe", "operation_context"]
+
+from .tasks.asset_matching import match_asset
+
+__all__ += ["match_asset"]

@@ -1,14 +1,44 @@
 """SafeDiffCon 研究步骤，可独立执行或由 pipeline 交接。"""
 
 from configuration import load_configuration
-from infer import infer
-from post import post
-from posttrain import posttrain
-from rawprep import rawprep
-from train import train
-from trainprep import trainprep
 
 from ai4e_core import run
+
+
+def rawprep(*args, **kwargs):
+    from rawprep import rawprep as execute
+
+    return execute(*args, **kwargs)
+
+
+def trainprep(*args, **kwargs):
+    from trainprep import trainprep as execute
+
+    return execute(*args, **kwargs)
+
+
+def train(*args, **kwargs):
+    from train import train as execute
+
+    return execute(*args, **kwargs)
+
+
+def posttrain(*args, **kwargs):
+    from posttrain import posttrain as execute
+
+    return execute(*args, **kwargs)
+
+
+def infer(*args, **kwargs):
+    from infer import infer as execute
+
+    return execute(*args, **kwargs)
+
+
+def post(*args, **kwargs):
+    from post import post as execute
+
+    return execute(*args, **kwargs)
 
 
 def pipeline(cfg):

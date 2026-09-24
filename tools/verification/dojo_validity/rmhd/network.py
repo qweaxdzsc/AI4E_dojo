@@ -43,6 +43,7 @@ class PublicProxy:
     def __init__(self, log):
         self.log = log
         self.lock = threading.Lock()
+        self.stopping = threading.Event()
         owner = self
 
         class Handler(BaseHTTPRequestHandler):
@@ -80,17 +81,24 @@ class PublicProxy:
                 self.close_connection = True
                 with upstream:
                     sockets = [self.connection, upstream]
-                    while True:
-                        ready, _, _ = select.select(sockets, [], [], 60)
+                    while not owner.stopping.is_set():
+                        ready, _, _ = select.select(sockets, [], [], 1)
                         if not ready:
-                            return
+                            # 长推理可能没有响应字节；静默不是断连，不能人为触发模型重试。
+                            continue
                         for source in ready:
-                            data = source.recv(65536)
-                            if not data:
+                            try:
+                                data = source.recv(65536)
+                                if not data:
+                                    return
+                                (
+                                    upstream if source is self.connection else self.connection
+                                ).sendall(data)
+                            except OSError as error:
+                                owner.record(
+                                    parsed.hostname, parsed.port or 443, None, type(error).__name__
+                                )
                                 return
-                            (upstream if source is self.connection else self.connection).sendall(
-                                data
-                            )
 
             def do_GET(self):
                 self.forward_http()
@@ -165,6 +173,7 @@ class PublicProxy:
         return self
 
     def __exit__(self, *args):
+        self.stopping.set()
         self.server.shutdown()
         self.server.server_close()
         self.thread.join()

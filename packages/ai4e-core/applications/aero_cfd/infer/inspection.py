@@ -211,13 +211,10 @@ def inspect_inputs(checkpoint, preparation, config, config_dir) -> dict:
 
 
 def available_devices() -> list[str]:
-    """仅列实际可用设备，任务层另行决定占用和排队。"""
-    devices = ["cpu"]
-    if torch.backends.mps.is_available():
-        devices.append("mps")
-    if torch.cuda.is_available():
-        devices.extend(f"cuda:{index}" for index in range(torch.cuda.device_count()))
-    return devices
+    """历史公开入口；设备发现由通用资源能力提供。"""
+    from ai4e_core.abilities.training.resources import available_devices as discover
+
+    return discover()
 
 
 def _checkpoint_evaluation(state):
